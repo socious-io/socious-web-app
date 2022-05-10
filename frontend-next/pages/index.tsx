@@ -1,18 +1,15 @@
-import type { NextPage } from 'next';
-import Image from 'next/image';
+import type { NextPage } from "next";
+import Image from "next/image";
 
-import { Greeter } from '../components/Greeter';
-import { Symfoni } from '../hardhat/SymfoniContext';
+import { Greeter } from "../components/Greeter";
+import { Symfoni } from "../hardhat/SymfoniContext";
 
 const Home: NextPage = () => {
   return (
-    <div className="App">
+    <div className="App bg-offWhite">
       <header className="App-header">
-        <Symfoni autoInit={true} >
-          <div className="App-logo-wrapper">
-            <Image src="/logo.svg" className="App-logo" alt="logo" layout="fill" />
-          </div>
-          <p>
+        <Symfoni autoInit={true}>
+          <p className="font-extrabold text-3xl text-primary">
             Edit <code>src/App.tsx</code> and save to reload.
           </p>
           <a
@@ -27,7 +24,7 @@ const Home: NextPage = () => {
         </Symfoni>
       </header>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
