@@ -6,18 +6,10 @@ import { Symfoni } from "../hardhat/SymfoniContext";
 
 const Home: NextPage = () => {
   return (
-    <div className="App">
+    <div className="App bg-offWhite">
       <header className="App-header">
         <Symfoni autoInit={true}>
-          <div className="App-logo-wrapper">
-            <Image
-              src="/logo.svg"
-              className="App-logo"
-              alt="logo"
-              layout="fill"
-            />
-          </div>
-          <p className="font-extrabold text-3xl">
+          <p className="font-extrabold text-3xl text-primary">
             Edit <code>src/App.tsx</code> and save to reload.
           </p>
           <a
