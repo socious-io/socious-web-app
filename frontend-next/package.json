@@ -9,16 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^1.0.6",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
+    "@web3-react/core": "^6.1.9",
+    "@web3-react/injected-connector": "^6.0.7",
     "ethers": "^5.5.1",
     "next": "12.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-scripts": "3.4.3",
+    "web3": "^1.7.3",
     "web3modal": "^1.9.1"
   },
   "devDependencies": {

@@ -24,10 +24,10 @@
   },
   "scripts": {
     "test": "npx hardhat test",
-    "node": "npx hardhat node --watch",
-    "frontend": "cd frontend && npm run start"
+    "hardhat": "npx hardhat node --watch",
+    "frontend": "cd frontend-next && npm run dev"
   },
-  "author": "Jeremy Tong",
+  "author": "Socious",
   "license": "MIT",
   "dependencies": {
     "@heroicons/react": "^1.0.6",
