@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import Image from "next/image";
 
 import { Greeter } from "../components/Greeter";
-import { Symfoni } from "../hardhat/SymfoniContext";
 
 const Home: NextPage = () => {
   return (
