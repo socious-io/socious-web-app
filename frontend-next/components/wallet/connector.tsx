@@ -6,7 +6,6 @@ export const injected = new InjectedConnector({
 });
 
 export const walletconnect = new WalletConnectConnector({
-  rpcUrl: "https://mainnet.infura.io/v3/889b5884688e4db589d44dbd47a7f15b",
   bridge: "https://bridge.walletconnect.org",
   qrcode: true,
 });
