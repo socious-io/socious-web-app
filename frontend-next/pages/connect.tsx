@@ -4,7 +4,7 @@ import Button from "../components/common/Button/Button";
 import Image from "next/image";
 import metamask from "../asset/images/metamask@3x.png";
 import { useWeb3React } from "@web3-react/core";
-import { injected } from "../components/wallet/connector";
+import { walletconnect } from "../components/wallet/connector";
 
 const Connect: NextPage = () => {
   const {
@@ -18,7 +18,8 @@ const Connect: NextPage = () => {
 
   const connect = async () => {
     try {
-      await activate(injected);
+      console.log("trigger");
+      await activate(walletconnect);
     } catch (ex) {
       console.log(ex);
     }
