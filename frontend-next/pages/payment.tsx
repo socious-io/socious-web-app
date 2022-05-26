@@ -5,7 +5,7 @@ import {
   DotsHorizontalIcon,
 } from "@heroicons/react/outline";
 import Button from "../components/common/Button/Button";
-import Image from "next/image";
+// import Image from "next/image";
 import metamask from "../asset/images/metamask@3x.png";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "../components/wallet/connector";
@@ -71,7 +71,7 @@ const Payment: NextPage = () => {
         </div>
         <div className="bg-white rounded-lg my-5 space-y-4 border border-borderGray">
           <div className="bg-white rounded-lg flex items-center justify-between p-3">
-            <Image src={metamask} alt="Metamask" width={24} height={24} />
+            {/* <Image src={metamask} alt="Metamask" width={24} height={24} /> */}
             <p className="text-primary text-base font-semibold">
               {`${account?.substring(0, 17)}...${account?.substring(
                 account.length - 5

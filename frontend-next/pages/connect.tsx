@@ -1,8 +1,7 @@
 import type { NextPage } from "next";
 import { DotsHorizontalIcon } from "@heroicons/react/solid";
 import Button from "../components/common/Button/Button";
-import Image from "next/image";
-import metamask from "../asset/images/metamask@3x.png";
+// import metamask from "../asset/images/metamask@3x.png";
 import { useWeb3React } from "@web3-react/core";
 import { walletconnect } from "../components/wallet/connector";
 
@@ -65,7 +64,6 @@ const Connect: NextPage = () => {
     <>
       <div className="h-screen py-8 px-4 bg-whiteGray space-y-5">
         <div className="bg-white rounded-lg flex items-center justify-between p-3">
-          <Image src={metamask} alt="Metamask" width={24} height={24} />
           <p className="text-primary text-base font-semibold">
             {`${account?.substring(0, 17)}...${account?.substring(
               account.length - 5
