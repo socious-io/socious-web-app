@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import { useEffect, useRef } from "react";
 import { ethers } from "ethers";
 import abi from "../abis/Escrow.json";
-import { useWeb3React } from "@web3-react/core";
 import { getAddress } from "../utils/storage";
 
 const Test: NextPage = () => {
@@ -33,15 +32,7 @@ const Test: NextPage = () => {
   return (
     <div id="calendar">
       <div className="wrapper">
-        <h1>How About Them Apples</h1>
-        <form>
-          <fieldset>
-            <label>
-              <p>{getAddress("address")}</p>
-            </label>
-          </fieldset>
-          <button type="submit">Submit</button>
-        </form>
+        <p>{getAddress("address")}</p>
       </div>
     </div>
   );
