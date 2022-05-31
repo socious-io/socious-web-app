@@ -2,9 +2,12 @@ import type { NextPage } from "next";
 import { useEffect, useRef } from "react";
 import { ethers } from "ethers";
 import abi from "../abis/Escrow.json";
+import { useWeb3React } from "@web3-react/core";
+import { getAddress } from "../utils/storage";
 
 const Test: NextPage = () => {
   const noImpactContFee = useRef(null);
+
   const getData = async () => {
     if (window.ethereum) {
       const contractAddress = "0xA3561De6Ebf7954eF118bc438DD348aB75989639";
@@ -34,8 +37,7 @@ const Test: NextPage = () => {
         <form>
           <fieldset>
             <label>
-              <p>Name</p>
-              <p></p>
+              <p>{getAddress("address")}</p>
             </label>
           </fieldset>
           <button type="submit">Submit</button>

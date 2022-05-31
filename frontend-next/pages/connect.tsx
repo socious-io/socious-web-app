@@ -4,6 +4,9 @@ import Button from "../components/common/Button/Button";
 // import metamask from "../asset/images/metamask@3x.png";
 import { useWeb3React } from "@web3-react/core";
 import { walletconnect } from "../components/wallet/connector";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useWalletContext } from "../context/useWalletContext";
+import { deleteAddress, setAddress } from "../utils/storage";
 
 const Connect: NextPage = () => {
   const {
@@ -15,22 +18,30 @@ const Connect: NextPage = () => {
     deactivate,
   } = useWeb3React();
 
-  const connect = async () => {
+  const addressRef = useRef<string | undefined | null>("");
+  const [walletAddress, setWalletAddress] = useWalletContext();
+  const [isConnected, setIsConnected] = useState(false);
+
+  const connect = useCallback(async () => {
     try {
-      console.log("trigger");
       await activate(walletconnect);
     } catch (ex) {
       console.log(ex);
     }
-  };
+  }, [activate]);
 
-  const disconnect = async () => {
+  const disconnect = useCallback(async () => {
     try {
       deactivate();
+      deleteAddress("address");
     } catch (ex) {
       console.log(ex);
     }
-  };
+  }, [deactivate]);
+
+  useEffect(() => {
+    if (account) setAddress(account);
+  }, [account]);
 
   return !active ? (
     <>
@@ -66,7 +77,7 @@ const Connect: NextPage = () => {
         <div className="bg-white rounded-lg flex items-center justify-between p-3">
           <p className="text-primary text-base font-semibold">
             {`${account?.substring(0, 17)}...${account?.substring(
-              account.length - 5
+              account?.length - 5
             )}`}
           </p>
           <div className="p-2 rounded-full bg-borderGray" onClick={disconnect}>
