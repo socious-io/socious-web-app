@@ -38,13 +38,14 @@ const Offer = () => {
       const pageAddress = getData("address");
       const projectId = getData("project_id");
 
+      //alert(pageAddress);
       let _escrow = await contract.newEscrow(
         "0x02993657D1DA5913Cf3c15671C71348207BB0870",
         "3",
         "1"
       );
       let escrow = await _escrow.toString();
-      console.log(escrow);
+
       if (escrow) {
         await sendSuccessOffer("offered");
       } else {
