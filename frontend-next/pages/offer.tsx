@@ -1,41 +1,45 @@
 import type { NextPage } from "next";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ethers } from "ethers";
 import abi from "../abis/Escrow.json";
 import { getAddress } from "../utils/storage";
 import Button from "../components/common/Button/Button";
 
-const Offer: NextPage = () => {
-  const [hasResponse, setHasResponse] = useState(null);
+const Offer = () => {
+  const [loading, setLoading] = useState<boolean | undefined>(false);
 
-  const sendSuccessOffer = (data: string) => {
-    console.log("success offer", hasResponse);
+  const sendSuccessOffer = async (data: string) => {
     window?.ReactNativeWebView?.postMessage(data);
   };
 
   const sendOffer = async () => {
-    if (window.ethereum) {
+    try {
+      setLoading(true);
       const contractAddress = "0xA3561De6Ebf7954eF118bc438DD348aB75989639";
       const contractABI = abi.abi;
       const provider = new ethers.providers.JsonRpcProvider(
         "https://rinkeby.infura.io/v3/889b5884688e4db589d44dbd47a7f15b"
       );
+      //const provider = new ethers.providers.Web3Provider(window?.ethereum);
+
       const contract = new ethers.Contract(
         contractAddress,
         contractABI,
         provider
       );
-      console.log(getAddress("address"));
-      setHasResponse(await contract.getNoImpactContFee());
-    }
-    sendSuccessOffer("offered");
-  };
+      let _fee = await contract.getNoImpactContFee();
+      let fFee = await _fee.toString();
 
-  useEffect(() => {
-    if (hasResponse) {
-      sendSuccessOffer("offered");
+      if (fFee) {
+        await sendSuccessOffer("offered");
+      } else {
+        await sendSuccessOffer("failed");
+      }
+      setLoading(false);
+    } catch (error) {
+      await sendSuccessOffer("failed");
     }
-  }, [hasResponse]);
+  };
 
   return (
     <Button
@@ -44,7 +48,7 @@ const Offer: NextPage = () => {
       className="w-full justify-center font-bold rounded-full px-10"
       onClick={sendOffer}
     >
-      Send offer
+      {"Send offer"}
     </Button>
   );
 };

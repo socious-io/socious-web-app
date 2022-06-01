@@ -16,7 +16,7 @@ const defaultBtnClass =
 
 const variantClass = {
   fill:
-    "bg-primary border-transparent text-white hover:bg-primary focus:bg-primaryLight focus:shadow-md",
+    "bg-primary border-transparent text-white hover:bg-primary hover:text-white focus:bg-primaryLight focus:shadow-md",
   outline:
     "bg-none border-primary text-primary hover:bg-primary focus:bg-primaryLight focus:shadow-md",
   ghost:
