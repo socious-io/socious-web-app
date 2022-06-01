@@ -5,7 +5,7 @@ import Button from "../components/common/Button/Button";
 import { useWeb3React } from "@web3-react/core";
 import { walletconnect } from "../components/wallet/connector";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { deleteAddress, setAddress } from "../utils/storage";
+import { deleteData, setData } from "../utils/storage";
 
 const Connect: NextPage = () => {
   const { active, account, activate, deactivate } = useWeb3React();
@@ -20,7 +20,7 @@ const Connect: NextPage = () => {
   const disconnect = useCallback(async () => {
     try {
       deactivate();
-      deleteAddress("address");
+      deleteData("address");
       sendDataToApp("disconnected");
     } catch (ex) {
       console.log(ex);
@@ -31,12 +31,26 @@ const Connect: NextPage = () => {
     window?.ReactNativeWebView?.postMessage(data);
   };
 
+  const handleReceivedMessage = (message: any) => {
+    setData("project_id", message.data);
+  };
+
   useEffect(() => {
-    if (account) {
-      setAddress(account);
+    if (typeof window !== undefined) {
+      window?.addEventListener("message", handleReceivedMessage);
+
+      return () => {
+        window?.removeEventListener("message", handleReceivedMessage);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (account || active) {
+      setData("address", account);
       sendDataToApp("connected");
     }
-  }, [account]);
+  }, [account, active]);
 
   return !active ? (
     <>

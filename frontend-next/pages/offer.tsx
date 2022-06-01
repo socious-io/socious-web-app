@@ -1,9 +1,16 @@
 import type { NextPage } from "next";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState, CSSProperties } from "react";
 import { ethers } from "ethers";
 import abi from "../abis/Escrow.json";
-import { getAddress } from "../utils/storage";
+import { getData } from "../utils/storage";
+import ClipLoader from "react-spinners/ClipLoader";
 import Button from "../components/common/Button/Button";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "#FCFCFC",
+};
 
 const Offer = () => {
   const [loading, setLoading] = useState<boolean | undefined>(false);
@@ -27,10 +34,18 @@ const Offer = () => {
         contractABI,
         provider
       );
-      let _fee = await contract.getNoImpactContFee();
-      let fFee = await _fee.toString();
+      console.log(contract);
+      const pageAddress = getData("address");
+      const projectId = getData("project_id");
 
-      if (fFee) {
+      let _escrow = await contract.newEscrow(
+        "0x02993657D1DA5913Cf3c15671C71348207BB0870",
+        "3",
+        "1"
+      );
+      let escrow = await _escrow.toString();
+      console.log(escrow);
+      if (escrow) {
         await sendSuccessOffer("offered");
       } else {
         await sendSuccessOffer("failed");
@@ -47,8 +62,13 @@ const Offer = () => {
       variant="fill"
       className="w-full justify-center font-bold rounded-full px-10"
       onClick={sendOffer}
+      disabled={loading}
     >
-      {"Send offer"}
+      {loading ? (
+        <ClipLoader color={"#FCFCFC"} loading={true} css={override} size={23} />
+      ) : (
+        "Send offer"
+      )}
     </Button>
   );
 };
