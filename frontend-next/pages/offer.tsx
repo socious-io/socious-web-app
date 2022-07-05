@@ -5,10 +5,18 @@ import { ethers } from "ethers";
 import abi from "../abis/Escrow.json";
 import { getData } from "../utils/storage";
 import ClipLoader from "react-spinners/ClipLoader";
-import { Button, Checkbox, Avatar, Chip } from "@components/common";
+import {
+  Button,
+  Checkbox,
+  Avatar,
+  Chip,
+  Switch,
+  TextInput,
+} from "@components/common";
 import { useToggle } from "hooks";
 
 import WalletIcon from "../asset/icons/wallet.svg";
+import { PaperAirplaneIcon } from "@heroicons/react/outline";
 
 const override = {
   display: "block",
@@ -124,6 +132,19 @@ const Offer = () => {
         contentClassName="text-secondary"
         size="m"
       />
+
+      <Switch onChange={toggle} value={toggleState} />
+      <div className="flex flex-row items-center space-x-4">
+        <div>
+          <Avatar size="m" />
+        </div>
+        <div>
+          <TextInput />
+        </div>
+        <div className="rotate-45">
+          <PaperAirplaneIcon className="w-5 text-grayDisableButton" />
+        </div>
+      </div>
     </>
   );
 };
