@@ -15,7 +15,7 @@ import {
 } from "@components/common";
 import { useToggle } from "hooks";
 
-import WalletIcon from "../asset/icons/wallet.svg";
+import { ReactComponent as WalletIcon } from "../asset/icons/wallet.svg";
 import { PaperAirplaneIcon } from "@heroicons/react/outline";
 
 const override = {
@@ -98,7 +98,7 @@ const Offer = () => {
   };
 
   return (
-    <>
+    <div className="mt-10 h-auto">
       <Button
         size="lg"
         variant="fill"
@@ -115,7 +115,7 @@ const Offer = () => {
           />
         ) : (
           <>
-            <WalletIcon fill="#e12" />
+            <WalletIcon />
             <p>Send Offer</p>
           </>
         )}
@@ -145,7 +145,7 @@ const Offer = () => {
           <PaperAirplaneIcon className="w-5 text-grayDisableButton" />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

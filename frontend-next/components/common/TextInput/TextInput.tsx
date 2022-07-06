@@ -12,10 +12,11 @@ export interface TextInputProps
   labelFloat?: boolean;
   register?: UseFormRegisterReturn;
   invalid?: boolean;
+  styleClass?: string;
 }
 
 export const TextInput = ({
-  label,
+  label = "",
   labelFloat = false,
   type = "text",
   disabled = false,
@@ -24,6 +25,7 @@ export const TextInput = ({
   name,
   register,
   invalid,
+  styleClass,
   ...props
 }: TextInputProps) => {
   return (
@@ -52,9 +54,10 @@ export const TextInput = ({
           aria-label={label}
           data-testid={`${label}-testid`}
           className={twMerge(
-            "block w-full p-3 text-sm border rounded-md disabled:text-slate-500",
+            "block w-full py-1.5 text-sm rounded-lg ",
             invalid ? "border-red-500" : "border-gray-300",
-            disabled ? "text-gray-400" : ""
+            disabled ? "text-gray-400" : "",
+            styleClass && styleClass
           )}
           {...register}
         />
