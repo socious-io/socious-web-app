@@ -20,7 +20,7 @@ function Navbar() {
                 </Link>
               </div>
               <div className="flex space-between items-center">
-                <TextInput styleClass="py-1.5 w-72" />
+                <TextInput styleClass="py-1.5 w-72 rounded-full" />
               </div>
             </div>
             <div className="flex items-center justify-end w-4/6 space-x-6">
