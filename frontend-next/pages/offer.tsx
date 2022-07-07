@@ -17,6 +17,7 @@ import { useToggle } from "hooks";
 
 import { ReactComponent as WalletIcon } from "../asset/icons/wallet.svg";
 import { PaperAirplaneIcon } from "@heroicons/react/outline";
+import PostCard from "layout/screen/PostCard/PostCard";
 
 const override = {
   display: "block",
@@ -99,7 +100,7 @@ const Offer = () => {
 
   return (
     <div className="mt-10 h-auto">
-      <Button
+      {/* <Button
         size="lg"
         variant="fill"
         className="w-full justify-center font-bold rounded-full px-10"
@@ -144,7 +145,13 @@ const Offer = () => {
         <div className="rotate-45">
           <PaperAirplaneIcon className="w-5 text-grayDisableButton" />
         </div>
-      </div>
+      </div> */}
+      <PostCard
+        name="Jayson Ilagan"
+        time="1 hour ago"
+        passion="Child Health"
+        content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh aliquet nullam odio maecenas semper. Dui felis suspendisse nunc, in vel enim nunc adipiscing donec. Pellentesque a magna venenatis ut ut semper dictum sit sem. Suspendisse lacus, pulvinar elit ipsum fermentum. Ipsum, orci, faucibus nibh et commodo et, dignissim erat. Adipiscing fusce et fames aliquam condimentum. "
+      />
     </div>
   );
 };
