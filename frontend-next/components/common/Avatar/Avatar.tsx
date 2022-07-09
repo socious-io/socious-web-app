@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge";
 
 export interface AvatarProps {
   src?: string;
-  size?: "s" | "m" | "l" | "xl";
+  size?: "s" | "m" | "l" | "xl" | "xxl";
   status?: "offline" | "online" | "busy";
   type?: 0 | 1;
   rounded?: boolean;
@@ -27,6 +27,10 @@ const SIZE_LIST = {
   },
   xl: {
     imageSize: "w-12 h-12",
+    statusSize: "h-3 w-3",
+  },
+  xxl: {
+    imageSize: "w-24 h-24",
     statusSize: "h-3 w-3",
   },
 };
