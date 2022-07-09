@@ -18,6 +18,10 @@ import { useToggle } from "hooks";
 import { ReactComponent as WalletIcon } from "../asset/icons/wallet.svg";
 import { PaperAirplaneIcon } from "@heroicons/react/outline";
 import PostCard from "layout/screen/PostCard/PostCard";
+import ProfileCard from "layout/screen/ProfileCard/ProfileCard";
+import NotificationCard from "layout/screen/NotificationCard/NotificationCard";
+import ProjectCard from "layout/screen/ProjectCard/ProjectCard";
+import Comment from "layout/screen/Comment/COmment";
 
 const override = {
   display: "block",
@@ -99,59 +103,43 @@ const Offer = () => {
   };
 
   return (
-    <div className="mt-10 h-auto">
-      {/* <Button
-        size="lg"
-        variant="fill"
-        className="w-full justify-center font-bold rounded-full px-10"
-        onClick={sendOffer}
-        disabled={loading}
-      >
-        {loading ? (
-          <ClipLoader
-            color={"#FCFCFC"}
-            loading={true}
-            css={override}
-            size={23}
+    <div className="mt-10 h-auto flex flex-row space-x-4">
+      <div className="w-1/3">
+        <ProfileCard
+          name="Childhood Cancer"
+          content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh aliquet nullam odio maecenas semper. Dui felis suspendisse nunc, in vel enim nunc adipiscing donec. Pellentesque a magna venenatis ut ut semper dictum sit sem. Suspendisse lacus, pulvinar elit ipsum fermentum. Ipsum, orci, faucibus nibh et commodo et, dignissim erat. Adipiscing fusce et fames aliquam condimentum. "
+        />
+      </div>
+      <div className="w-2/3 space-y-4">
+        <PostCard
+          name="Jayson Ilagan"
+          time="1 hour ago"
+          passion="Child Health"
+          content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh aliquet nullam odio maecenas semper. Dui felis suspendisse nunc, in vel enim nunc adipiscing donec. Pellentesque a magna venenatis ut ut semper dictum sit sem. Suspendisse lacus, pulvinar elit ipsum fermentum. Ipsum, orci, faucibus nibh et commodo et, dignissim erat. Adipiscing fusce et fames aliquam condimentum. "
+        />
+
+        <Comment name="User" time="1 min ago" />
+
+        <div className="py-2 px-4 rounded-2xl border border-grayLineBased">
+          <NotificationCard
+            name="User One"
+            time="1 min ago"
+            action="liked your post"
           />
-        ) : (
-          <>
-            <WalletIcon />
-            <p>Send Offer</p>
-          </>
-        )}
-      </Button>
-
-      <Checkbox checked={toggleState} onChange={toggle} />
-
-      <h4 className="text-primary">OOOO{toggleState.toString()}</h4>
-      <Avatar size="xl" type={1} />
-
-      <Chip
-        content="Demo"
-        containerClassName="bg-offWhite"
-        contentClassName="text-secondary"
-        size="m"
-      />
-
-      <Switch onChange={toggle} value={toggleState} />
-      <div className="flex flex-row items-center space-x-4">
-        <div>
-          <Avatar size="m" />
         </div>
-        <div>
-          <TextInput />
-        </div>
-        <div className="rotate-45">
-          <PaperAirplaneIcon className="w-5 text-grayDisableButton" />
-        </div>
-      </div> */}
-      <PostCard
-        name="Jayson Ilagan"
-        time="1 hour ago"
-        passion="Child Health"
-        content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh aliquet nullam odio maecenas semper. Dui felis suspendisse nunc, in vel enim nunc adipiscing donec. Pellentesque a magna venenatis ut ut semper dictum sit sem. Suspendisse lacus, pulvinar elit ipsum fermentum. Ipsum, orci, faucibus nibh et commodo et, dignissim erat. Adipiscing fusce et fames aliquam condimentum. "
-      />
+        <ProjectCard
+          title={""}
+          description={""}
+          country_id={0}
+          project_type={0}
+          project_length={0}
+          payment_type={0}
+          payment_scheme={0}
+          payment_range_lower={""}
+          payment_range_higher={""}
+          experience_level={0}
+        />
+      </div>
     </div>
   );
 };
