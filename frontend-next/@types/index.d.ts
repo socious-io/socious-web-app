@@ -9,3 +9,9 @@ declare module "*.png" {
   export const ReactComponent: any;
   export default content;
 }
+
+declare global {
+  interface Window {
+    ReactNativeWebView: any;
+  }
+}
