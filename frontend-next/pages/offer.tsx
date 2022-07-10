@@ -31,7 +31,7 @@ const override = {
 
 const Offer = () => {
   const [loading, setLoading] = useState<boolean | undefined>(false);
-  const [toggleState, { toggle }] = useToggle();
+  const [toggleState] = useToggle();
 
   const sendSuccessOffer = async (data: string) => {
     //window?.ReactNativeWebView?.postMessage(data);
@@ -90,7 +90,7 @@ const Offer = () => {
         //let escrow = await _escrow.toString();
         console.log("Response---> ", _escrow);
 
-        if (escrow) {
+        if (_escrow) {
           await sendSuccessOffer("offered");
         } else {
           await sendSuccessOffer("failed");
