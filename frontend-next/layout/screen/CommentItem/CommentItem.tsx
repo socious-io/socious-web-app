@@ -13,7 +13,7 @@ export interface CommentProps {
   passion?: string;
 }
 
-export function Comment({
+export function CommentItem({
   content,
   name = "User Name",
   time,
@@ -45,4 +45,4 @@ export function Comment({
   );
 }
 
-export default Comment;
+export default CommentItem;

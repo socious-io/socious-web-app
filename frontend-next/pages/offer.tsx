@@ -21,7 +21,7 @@ import PostCard from "layout/screen/PostCard/PostCard";
 import ProfileCard from "layout/screen/ProfileCard/ProfileCard";
 import NotificationCard from "layout/screen/NotificationCard/NotificationCard";
 import ProjectCard from "layout/screen/ProjectCard/ProjectCard";
-import Comment from "layout/screen/Comment/COmment";
+import CommentItem from "layout/screen/CommentItem/CommentItem";
 
 const override = {
   display: "block",
@@ -34,7 +34,7 @@ const Offer = () => {
   const [toggleState, { toggle }] = useToggle();
 
   const sendSuccessOffer = async (data: string) => {
-    window?.ReactNativeWebView?.postMessage(data);
+    //window?.ReactNativeWebView?.postMessage(data);
   };
 
   const sendOffer = async () => {
@@ -118,7 +118,7 @@ const Offer = () => {
           content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh aliquet nullam odio maecenas semper. Dui felis suspendisse nunc, in vel enim nunc adipiscing donec. Pellentesque a magna venenatis ut ut semper dictum sit sem. Suspendisse lacus, pulvinar elit ipsum fermentum. Ipsum, orci, faucibus nibh et commodo et, dignissim erat. Adipiscing fusce et fames aliquam condimentum. "
         />
 
-        <Comment name="User" time="1 min ago" />
+        <CommentItem name="User" time="1 min ago" />
 
         <div className="py-2 px-4 rounded-2xl border border-grayLineBased">
           <NotificationCard
