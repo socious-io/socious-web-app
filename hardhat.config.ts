@@ -1,11 +1,8 @@
 import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-ethers';
-import 'hardhat-deploy-ethers';
-import 'hardhat-deploy';
-import '@symfoni/hardhat-react';
-import 'hardhat-typechain';
-import '@typechain/ethers-v5';
-import * as dotenv from "dotenv";
+import '@typechain/hardhat';
+
+import dotenv from "dotenv";
 
 import { HardhatUserConfig } from 'hardhat/config';
 
@@ -13,30 +10,6 @@ import { HardhatUserConfig } from 'hardhat/config';
 dotenv.config()
 
 const config: HardhatUserConfig = {
-  react: {
-    providerPriority: ["web3modal", "hardhat"],
-  },
-  typechain: {
-    "outDir": "./frontend-next/hardhat/typechain",
-    "target": "ethers-v5"
-  },
-  defaultNetwork: "goerli",
-  networks: {
-    goerli: {
-      url: `${process.env.ALCHEMY_URL}`,
-      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : []
-    },
-  },
-  paths: {
-    artifacts: "./artifacts",
-    cache: "./cache",
-    sources: "./contracts",
-    tests: "./test",
-    react: "./frontend-next/hardhat"
-  },
-  mocha: {
-    timeout: 60000,
-  },
   solidity: {
     compilers: [
       {
@@ -49,7 +22,32 @@ const config: HardhatUserConfig = {
           },
         },
       ],
+  },
+  defaultNetwork: "goerli",
+  networks: {
+    goerli: {
+      url: `${process.env.GOERLI_URL}`,
+      accounts: process.env.GOERLI_PRIVATE_KEY !== undefined ? [process.env.GOERLI_PRIVATE_KEY] : []
     },
-  };
+    milkomedaTest: {
+      url: 'https://rpc-devnet-cardano-evm.c1.milkomeda.com',
+      chainId: 200101,
+      accounts: process.env.MILKOMEDA_TESTNET_PRIVATE_KEY !== undefined ? [process.env.MILKOMEDA_TESTNET_PRIVATE_KEY] : []
+    }
+  },
+  mocha: {
+    timeout: 60000,
+  },
+  paths: {
+    artifacts: "./artifacts",
+    cache: "./cache",
+    sources: "./contracts",
+    tests: "./test",
+  },
+  typechain: {
+    outDir: "./typechain",
+    target: "ethers-v5"
+  }
+};
 
 export default config;
