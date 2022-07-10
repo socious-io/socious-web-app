@@ -1,11 +1,10 @@
+import { HardhatUserConfig } from 'hardhat/config';
 import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-ethers';
 import '@typechain/hardhat';
-
 import dotenv from "dotenv";
 
-import { HardhatUserConfig } from 'hardhat/config';
-
+import "./tasks";
 
 dotenv.config()
 
@@ -23,16 +22,17 @@ const config: HardhatUserConfig = {
         },
       ],
   },
-  defaultNetwork: "goerli",
+  defaultNetwork: "milkomedaTest",
   networks: {
-    goerli: {
-      url: `${process.env.GOERLI_URL}`,
-      accounts: process.env.GOERLI_PRIVATE_KEY !== undefined ? [process.env.GOERLI_PRIVATE_KEY] : []
-    },
     milkomedaTest: {
-      url: 'https://rpc-devnet-cardano-evm.c1.milkomeda.com',
+      url: `${process.env.MILKOMEDAT_URL}`,
       chainId: 200101,
-      accounts: process.env.MILKOMEDA_TESTNET_PRIVATE_KEY !== undefined ? [process.env.MILKOMEDA_TESTNET_PRIVATE_KEY] : []
+      accounts: process.env.MILKOMEDAT_PK !== undefined ? [process.env.MILKOMEDAT_PK] : []
+    },
+    milkomedaMain: {
+      url: `${process.env.MILKOMEDAM_URL}`,
+      chainId: 2001,
+      accounts: process.env.MILKOMEDAM_PK !== undefined ? [process.env.MILKOMEDAM_PK] : []
     }
   },
   mocha: {
