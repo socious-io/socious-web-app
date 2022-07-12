@@ -1,3 +1,3 @@
 export * from "./escrow";
-export * from "./utils";
+export * from "./contracts";
 export * from "./donations";

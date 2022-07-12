@@ -5,11 +5,11 @@
       "strict": true,
       "esModuleInterop": true,
       "outDir": "dist",
-      "rootDirs": ["./scripts", "./tasks", "./test"],
+      "rootDirs": ["./scripts", "./tasks", "./test", "./utils"],
       "declaration": true
     },
     "exclude": ["dist", "node_modules"],
-    "include": ["./scripts", "./tasks", "./test", "./typechain"],
+    "include": ["./scripts", "./tasks", "./test", "./typechain", "./utils"],
     "files": ["./hardhat.config.ts"]
   }
   

@@ -1,7 +1,7 @@
 import type { Wallet, ContractFactory, Contract } from "ethers";
 
 import { task } from "hardhat/config";
-import { getAccount, getEnvVariable, writeJsonFile } from "../scripts/utils";
+import { getAccount, getEnvVariable, writeJsonFile } from "../utils";
 
 task("deploy", "Deploys the indicated contract name")
   .addParam("name", "Name of the contract to be deployed")

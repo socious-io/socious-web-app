@@ -2,7 +2,7 @@ import type { Wallet } from "ethers";
 
 import { task } from "hardhat/config";
 import { utils } from "ethers"
-import { getAccount, getProvider } from "../scripts/utils";
+import { getAccount, getProvider } from "../utils";
 
 task("accounts", "Prints the list of accounts")
     .setAction(async (_, _hre) => {
