@@ -52,8 +52,8 @@ export function Avatar({
   const statusColor = status && STATUS_COLOR[status];
 
   const imgSrc = require(type === 1
-    ? "../../../asset/images/company-avatar-filled.png?resize&size=100"
-    : "../../../asset/images/user.png?resize&size=100");
+    ? "../../../asset/images/user.png"
+    : "../../../asset/images/user.png");
 
   return (
     <span
@@ -65,7 +65,7 @@ export function Avatar({
     >
       <img
         className={twMerge("w-full h-full", rounded && "rounded-full")}
-        src={src || imgSrc.default.src}
+        src={src || imgSrc}
         alt="avatar"
       />
 
