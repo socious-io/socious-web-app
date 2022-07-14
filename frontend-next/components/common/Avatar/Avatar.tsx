@@ -51,6 +51,10 @@ export function Avatar({
   const { imageSize, statusSize } = SIZE_LIST[size];
   const statusColor = status && STATUS_COLOR[status];
 
+  const imgSrc = require(type === 1
+    ? "../../../asset/images/company-avatar-filled.png?resize&size=100"
+    : "../../../asset/images/user.png?resize&size=100");
+
   return (
     <span
       className={twMerge(
@@ -59,10 +63,9 @@ export function Avatar({
         imageSize
       )}
     >
-      <Image
+      <img
         className={twMerge("w-full h-full", rounded && "rounded-full")}
-        // @TODO: this needs to be checked as it fails during build if src is not a string
-        src={src ?? type === 0 ? AvatarDefault : OraganizationDefault}
+        src={src || imgSrc.default.src}
         alt="avatar"
       />
 

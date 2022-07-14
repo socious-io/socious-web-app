@@ -21,11 +21,10 @@ export function NotificationCard({
       </div>
       <div className="flex flex-col w-4/5">
         <p className="text-sm text-start">
-          <p>
-            <label className="pr-2 font-semibold">{name}</label>
-            {action}
-          </p>
+          <label className="pr-2 font-semibold">{name}</label>
+          <label>{action}</label>
         </p>
+
         <p className="text-sm text-graySubtitle">{time}</p>
       </div>
       <div>
