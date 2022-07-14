@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { Signer } from "ethers";
 import { useAccount, useSigner } from "wagmi";
 import { Button } from "@components/common";
-import { donateContract, funcDonate, funcGetFee, funcGetHistory } from "../scripts";
+import { getDonateContract, funcDonate, funcGetFee, funcGetHistory } from "../scripts";
 
 const Offer: NextPage = () => {
   const { data } = useSigner(
@@ -11,7 +11,7 @@ const Offer: NextPage = () => {
       onError(error) {
         console.log('Error', error)
   }});
-  const contract = donateContract.connect(data as Signer);
+  const contract = getDonateContract().connect(data as Signer);
   const { address, isConnected } = useAccount();
   /* We are expecting the implementation to read this data from React-Native */
   const [contAdrs, setcontAdrs] = useState("");
@@ -29,7 +29,7 @@ const Offer: NextPage = () => {
 
   const getHistory = async () => {
     if (isConnected) {
-      const result = await funcGetHistory(address as string, userType);
+      const result = await funcGetHistory(contract, address as string, userType);
       /* Here goes the publishing of data to React-Native */
       console.log(result); // Just for testing
     } else {
@@ -38,7 +38,7 @@ const Offer: NextPage = () => {
   }
 
   const getFee = async () => {
-    const result = await funcGetFee();
+    const result = await funcGetFee(contract);
     /* Here goes the publishing of data to React-Native */
     console.log(result) // Just for testing
   }

@@ -1,9 +1,10 @@
 import * as ethers from "ethers";
-import { getAbi } from "./utils";
 
-const contractAddress = "0xE1bF07E88D873E943755595E5401DCB222eF4725"
-const contractAbi = getAbi("Donate");
-export const donateContract = new ethers.Contract(contractAddress, contractAbi);
+export function getDonateContract() {
+    const contractAddress = "0xE1bF07E88D873E943755595E5401DCB222eF4725"
+    const contractAbi = require("../asset/abis/Donate.json");
+    return new ethers.Contract(contractAddress, contractAbi);
+}
 
 export async function funcDonate(signedContract: ethers.Contract,
     projectId: number, targetAddress: string,
@@ -19,14 +20,15 @@ export async function funcDonate(signedContract: ethers.Contract,
         }
 };
 
-export async function funcGetHistory(targetAddress: string, userType: string) {
+export async function funcGetHistory(signedContract: ethers.Contract,
+    targetAddress: string, userType: string) {
     let output;
     try {
         if (userType === "organization") {
-            output = await donateContract.getRecievedDonations(targetAddress);
+            output = await signedContract.getRecievedDonations(targetAddress);
             return output;
         } else if (userType == "individual") {
-            output = await donateContract.getSentDonations(targetAddress);
+            output = await signedContract.getSentDonations(targetAddress);
             return output;
         } else {
             throw TypeError(`${userType} is not a valid 'type'...\n`)
@@ -36,6 +38,6 @@ export async function funcGetHistory(targetAddress: string, userType: string) {
     }
 };
 
-export async function funcGetFee() {
-    return donateContract.getFee();
+export async function funcGetFee(signedContract: ethers.Contract) {
+    return signedContract.getFee();
 };
