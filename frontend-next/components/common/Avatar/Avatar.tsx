@@ -1,7 +1,7 @@
 // @TODO: render wrong when use SVG, will fix it later
-import Image from "next/image";
-import AvatarDefault from "../../../asset/images/user.png";
-import OraganizationDefault from "../../../asset/images/company-avatar-filled.png";
+//import Image from "next/image";
+// import AvatarDefault from "../../../asset/images/user.png";
+// import OraganizationDefault from "../../../asset/images/company-avatar-filled.png";
 import { twMerge } from "tailwind-merge";
 
 export interface AvatarProps {
