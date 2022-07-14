@@ -1,15 +1,15 @@
-import type { Result } from "@ethersproject/abi";
-import { getProvider, getContract, loadJsonFile } from "../utils";
-import { Donate } from "../typechain/contracts/Donate"
+import * as ethers from "ethers";
+import { getAbi } from "./utils";
 
-const contractAddress: string = loadJsonFile('addresses/Donate-milkomedat.json')['contractName'];
-const donations = <Donate>getContract('Donate', contractAddress, 'Donations');
-donations.connect(getProvider());
+const contractAddress = "0xE1bF07E88D873E943755595E5401DCB222eF4725"
+const contractAbi = getAbi("Donate");
+export const donateContract = new ethers.Contract(contractAddress, contractAbi);
 
-export async function funcDonate(projectId: number, targetAddress: string, 
-    userAddress: string, ammount: number) {
+export async function funcDonate(signedContract: ethers.Contract,
+    projectId: number, targetAddress: string,
+    ammount: number, userAddress: string) {
     try {
-        await donations.donate(projectId, targetAddress, 
+        await signedContract.donate(projectId, targetAddress, 
             { from: userAddress, value: ammount }
             );
         console.log(`Donation to Organization with address ${targetAddress}\
@@ -19,14 +19,14 @@ export async function funcDonate(projectId: number, targetAddress: string,
         }
 };
 
-export async function getHistory(targetAddress: string, userType: string) {
-    let output: Result;
+export async function funcGetHistory(targetAddress: string, userType: string) {
+    let output;
     try {
         if (userType === "organization") {
-            output = await donations.getRecievedDonations(targetAddress);
+            output = await donateContract.getRecievedDonations(targetAddress);
             return output;
         } else if (userType == "individual") {
-            output = await donations.getSentDonations(targetAddress);
+            output = await donateContract.getSentDonations(targetAddress);
             return output;
         } else {
             throw TypeError(`${userType} is not a valid 'type'...\n`)
@@ -37,7 +37,5 @@ export async function getHistory(targetAddress: string, userType: string) {
 };
 
 export async function funcGetFee() {
-    return donations.getFee();
+    return donateContract.getFee();
 };
-
-export default donations;
