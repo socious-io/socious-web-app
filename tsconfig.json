@@ -1,15 +1,27 @@
 {
-    "compilerOptions": {
-      "target": "es2018",
-      "module": "commonjs",
-      "strict": true,
-      "esModuleInterop": true,
-      "outDir": "dist",
-      "rootDirs": ["./scripts", "./tasks", "./test", "./utils"],
-      "declaration": true
-    },
-    "exclude": ["dist", "node_modules"],
-    "include": ["./scripts", "./tasks", "./test", "./typechain", "./utils"],
-    "files": ["./hardhat.config.ts"]
-  }
-  
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@icons/*": ["asset/icons/*"],
+      "@components/*": ["components/*"],
+      "@hooks": ["hooks/index.ts"]
+    }
+  },
+  "include": ["index.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "next-env.d.ts"]
+}
