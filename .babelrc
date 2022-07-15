@@ -10,6 +10,10 @@
         }
       }
     ]
+<<<<<<< HEAD:.babelrc
   ],
   "plugins": ["inline-react-svg"]
+=======
+  ]
+>>>>>>> main:frontend-next/.babelrc
 }

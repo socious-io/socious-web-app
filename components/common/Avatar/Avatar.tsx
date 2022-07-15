@@ -1,7 +1,7 @@
 // @TODO: render wrong when use SVG, will fix it later
-import Image from "next/image";
-import AvatarDefault from "../../../asset/images/user.png";
-import OraganizationDefault from "../../../asset/images/company-avatar-filled.png";
+//import Image from "next/image";
+// import AvatarDefault from "../../../asset/images/user.png";
+// import OraganizationDefault from "../../../asset/images/company-avatar-filled.png";
 import { twMerge } from "tailwind-merge";
 
 export interface AvatarProps {
@@ -51,6 +51,10 @@ export function Avatar({
   const { imageSize, statusSize } = SIZE_LIST[size];
   const statusColor = status && STATUS_COLOR[status];
 
+  const imgSrc = require(type === 1
+    ? "../../../asset/images/user.png"
+    : "../../../asset/images/user.png");
+
   return (
     <span
       className={twMerge(
@@ -59,10 +63,9 @@ export function Avatar({
         imageSize
       )}
     >
-      <Image
+      <img
         className={twMerge("w-full h-full", rounded && "rounded-full")}
-        // @TODO: this needs to be checked as it fails during build if src is not a string
-        src={src ?? type === 0 ? AvatarDefault : OraganizationDefault}
+        src={src || imgSrc}
         alt="avatar"
       />
 
