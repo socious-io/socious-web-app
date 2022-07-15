@@ -1,9 +1,10 @@
 import { useState } from "react";
 import type { NextPage } from "next";
-import { Signer, Contract } from "ethers";
+import { Signer, Contract, utils } from "ethers";
 import { useAccount, useSigner } from "wagmi";
 import { Button } from "@components/common";
 import { getDonateContract, funcDonate, funcGetFee, funcGetHistory } from "../scripts";
+import { Donate } from "../@types/contracts/Donate";
 
 const Offer: NextPage = () => {
   const { data } = useSigner(
@@ -12,7 +13,7 @@ const Offer: NextPage = () => {
         console.log('Error', error)
   }});
   const { contractAddress, contractAbi } = getDonateContract();
-  const contract = new Contract(contractAddress, contractAbi, data as Signer);
+  const contract = new Contract(contractAddress, contractAbi, data as Signer) as Donate;
   const { address, isConnected } = useAccount();
   /* We are expecting the implementation to read this data from React-Native */
   const [orgAdrs, setOrgAdrs] = useState("");
@@ -22,7 +23,7 @@ const Offer: NextPage = () => {
 
   const makeDonation = async () => {
     if (isConnected) {
-      await funcDonate(contract, projectId, orgAdrs, ammount, address as string);
+      await funcDonate(contract, projectId, orgAdrs, utils.parseUnits(`${ammount}`, "gwei"));
     } else {
       console.log('Wallet is not connected');
     }

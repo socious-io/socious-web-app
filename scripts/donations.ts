@@ -1,26 +1,27 @@
-import * as ethers from "ethers";
+import { providers, BigNumber } from "ethers";
+import { Donate } from "../@types/contracts/Donate";
 
 export function getDonateContract() {
-    const contractAddress = "0xE1bF07E88D873E943755595E5401DCB222eF4725"
+    const contractAddress = "0xeb20711725A61A75E660A046beBe5E19d45b422B";
     const contractAbi = require("../asset/abis/Donate.json");
     return { contractAddress, contractAbi };
 }
 
-export async function funcDonate(signedContract: ethers.Contract,
-    projectId: number, targetAddress: string,
-    ammount: number, userAddress: string) {
+export async function funcDonate(signedContract: Donate,
+    projectId: number, targetAddress: string, ammount: BigNumber) {
     try {
-        await signedContract.donate(projectId, targetAddress, 
-            { from: userAddress, value: ammount }
+        const txResponse: providers.TransactionResponse = await signedContract.donate(projectId, targetAddress, 
+            { value: ammount, gasLimit: 10_000_000 }
             );
+        const txReceipt: providers.TransactionReceipt = await txResponse.wait();
         console.log(`Donation to Organization with address ${targetAddress}\
-        for the ammount of ${ammount} was successful.\n`)
+        for the ammount of ${ammount} was successful with ${txReceipt.confirmations} confirmations.\n`)
         } catch (e) {
             console.error(e);
         }
 };
 
-export async function funcGetHistory(signedContract: ethers.Contract,
+export async function funcGetHistory(signedContract: Donate,
     targetAddress: string, userType: string) {
     let output;
     try {
@@ -38,6 +39,6 @@ export async function funcGetHistory(signedContract: ethers.Contract,
     }
 };
 
-export async function funcGetFee(signedContract: ethers.Contract) {
+export async function funcGetFee(signedContract: Donate) {
     return signedContract.getFee();
 };
