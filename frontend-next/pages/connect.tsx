@@ -28,7 +28,7 @@ const Connect: NextPage = () => {
   }, [deactivate]);
 
   const sendDataToApp = (data: string) => {
-    window?.ReactNativeWebView?.postMessage(data);
+    //window?.ReactNativeWebView?.postMessage(data);
   };
 
   const handleReceivedMessage = (message: any) => {
@@ -47,7 +47,7 @@ const Connect: NextPage = () => {
 
   useEffect(() => {
     if (account || active) {
-      setData("address", account);
+      setData("address", account ?? "");
       sendDataToApp("connected");
     }
   }, [account, active]);
