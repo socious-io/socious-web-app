@@ -1,20 +1,26 @@
 import { useState } from "react";
 import type { NextPage } from "next";
 import { Signer, Contract, utils } from "ethers";
-import { useAccount, useSigner } from "wagmi";
+import { useAccount, useProvider, useSigner } from "wagmi";
 import { Button } from "@components/common";
 import { getDonateContract, funcDonate, funcGetFee, funcGetHistory } from "../scripts";
 import { Donate } from "../@types/contracts/Donate";
 
-const Offer: NextPage = () => {
-  const { data } = useSigner(
-    {
-      onError(error) {
-        console.log('Error', error)
-  }});
-  const { contractAddress, contractAbi } = getDonateContract();
-  const contract = new Contract(contractAddress, contractAbi, data as Signer) as Donate;
+const Donation: NextPage = () => {
   const { address, isConnected } = useAccount();
+  const { contractAddress, contractAbi } = getDonateContract();
+  let contract: Donate;
+  if (isConnected) {
+    const { data } = useSigner(
+      {
+        onError(error) {
+          console.log('Error', error)
+    }});
+    contract = new Contract(contractAddress, contractAbi, data as Signer) as Donate;
+  } else {
+    const provider = useProvider();
+    contract = new Contract(contractAddress, contractAbi, provider) as Donate;
+  };
   /* We are expecting the implementation to read this data from React-Native */
   const [orgAdrs, setOrgAdrs] = useState("");
   const [projectId, setProjectId] = useState(0);
@@ -69,4 +75,4 @@ const Offer: NextPage = () => {
   );
 };
 
-export default Offer;
+export default Donation;
