@@ -3,7 +3,7 @@ import * as ethers from "ethers";
 export function getDonateContract() {
     const contractAddress = "0xE1bF07E88D873E943755595E5401DCB222eF4725"
     const contractAbi = require("../asset/abis/Donate.json");
-    return new ethers.Contract(contractAddress, contractAbi);
+    return { contractAddress, contractAbi };
 }
 
 export async function funcDonate(signedContract: ethers.Contract,
