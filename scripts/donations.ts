@@ -29,7 +29,7 @@ export async function funcGetHistory(signedContract: Donate,
             output = await signedContract.getRecievedDonations(targetAddress);
             return output;
         } else if (userType == "individual") {
-            output = await signedContract.getSentDonations(targetAddress);
+            output =  await signedContract.getSentDonations(targetAddress);
             return output;
         } else {
             throw TypeError(`${userType} is not a valid 'type'...\n`)

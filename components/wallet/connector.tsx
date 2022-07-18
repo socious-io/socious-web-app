@@ -41,8 +41,10 @@ const milkomedaMain: Chain = {
 export const { chains, provider } = configureChains([milkomedaTest, milkomedaMain], 
     [jsonRpcProvider({ 
       rpc: (chain) => { 
-        return { http: chain.rpcUrls.default } }
-     })]
+        return { http: chain.rpcUrls.default } },
+      static: true
+    }),
+    ]
   );
 
 export const connector = new WalletConnectConnector({

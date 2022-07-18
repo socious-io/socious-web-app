@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { NextPage } from "next";
-import { Signer, Contract, utils } from "ethers";
+import { Contract, utils } from "ethers";
 import { useAccount, useProvider, useSigner } from "wagmi";
 import { Button } from "@components/common";
 import { getDonateContract, funcDonate, funcGetFee, funcGetHistory } from "../scripts";
@@ -11,21 +11,22 @@ const Donation: NextPage = () => {
   const { contractAddress, contractAbi } = getDonateContract();
   let contract: Donate;
   if (isConnected) {
-    const { data } = useSigner(
-      {
-        onError(error) {
-          console.log('Error', error)
-    }});
-    contract = new Contract(contractAddress, contractAbi, data as Signer) as Donate;
-  } else {
-    const provider = useProvider();
-    contract = new Contract(contractAddress, contractAbi, provider) as Donate;
-  };
+    const { data: signer } = useSigner({
+        onSettled(data, error) {
+          console.log('Settled', data, error)
+        },
+      });
+    contract = new Contract(contractAddress, contractAbi, signer) as Donate;
+    } else {
+      const provider = useProvider();
+      contract = new Contract(contractAddress, contractAbi, provider) as Donate;
+    };
+
   /* We are expecting the implementation to read this data from React-Native */
   const [orgAdrs, setOrgAdrs] = useState("");
   const [projectId, setProjectId] = useState(0);
   const [ammount, setAmmount] = useState(0);
-  const [userType, setUserType] = useState("");
+  const [userType, setUserType] = useState("individual");
 
   const makeDonation = async () => {
     if (isConnected) {
@@ -46,7 +47,8 @@ const Donation: NextPage = () => {
   }
 
   const getFee = async () => {
-    const result = await funcGetFee(contract);
+    /* Feel free to modify the output units based on your UI preferences */
+    const result = utils.formatUnits(await funcGetFee(contract), "gwei");
     /* Here goes the publishing of data to React-Native */
     console.log(result) // Just for testing
   }

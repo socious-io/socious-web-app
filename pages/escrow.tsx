@@ -1,10 +1,10 @@
 import { useState } from "react";
 import type { NextPage } from "next";
-import { Signer, Contract, utils, ethers, BigNumber } from "ethers";
+import { Contract, utils, ethers, BigNumber } from "ethers";
 import { useAccount, useSigner, useProvider } from "wagmi";
 import { Button } from "@components/common";
 import { getEscrowContract, funcNewEscrow, funcGetfees, 
-  funcTransferFunds } from "scripts/escrow";
+  funcTransferFunds } from "scripts";
 import { Escrow } from "../@types/contracts/Escrow";
 
 const Payment: NextPage = () => {
@@ -12,12 +12,12 @@ const Payment: NextPage = () => {
   const { contractAddress, contractAbi } = getEscrowContract();
   let contract: Escrow;
   if (isConnected) {
-    const { data } = useSigner(
-      {
-        onError(error) {
-          console.log('Error', error)
-    }});
-    contract = new Contract(contractAddress, contractAbi, data as Signer) as Escrow;
+    const { data: signer } = useSigner({
+      onSettled(data, error) {
+        console.log('Settled', data, error)
+        }
+      });
+    contract = new Contract(contractAddress, contractAbi, signer) as Escrow;
   } else {
     const provider = useProvider();
     contract = new Contract(contractAddress, contractAbi, provider) as Escrow;

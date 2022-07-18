@@ -1,6 +1,6 @@
 import { WagmiConfig, createClient } from "wagmi";
 import type { AppProps } from "next/app";
-import Layout from "layout/Wrapper/Wrapper";
+import Layout from "../layout/Wrapper/Wrapper";
 import { connector, provider } from "../components/wallet/connector";
 import "../asset/css/global.css";
 import "../styles/index.css";
