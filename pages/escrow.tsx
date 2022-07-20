@@ -25,8 +25,8 @@ const Payment: NextPage = () => {
   /* We are expecting the implementation to read this data from React-Native */
   const [contAdrs, setContAdrs] = useState("");
   const [projectId, setProjectId] = useState(0);
-  const [ammount, setAmmount] = useState(0);
-  const [orgType, setOrgType] = useState(0);
+  const [ammount, setAmmount] = useState(utils.parseUnits(`${0}`, "ether"));
+  const [orgType, setOrgType] = useState(1); // 1 Is for Non-impact and 2 is for Impact
 
   const getFess = async () => {
     let result: ethers.BigNumber[] = new Array<BigNumber>;
@@ -40,17 +40,15 @@ const Payment: NextPage = () => {
 
   const createEscrow = async () => {
     if (isConnected) {
-      await funcNewEscrow(contract, contAdrs, projectId, orgType, 
-        utils.parseUnits(`${ammount}`, "gwei"));
+      await funcNewEscrow(contract, contAdrs, projectId, orgType, ammount);
     } else {
       console.log("Wallet is not connected");
     }
   }
 
-  const endEscrow =async () => {
+  const endEscrow = async () => {
     if (isConnected) {
-      await funcTransferFunds(contract, contAdrs, projectId, 
-        utils.parseUnits(`${ammount}`, "gwei"));
+      await funcTransferFunds(contract, contAdrs, projectId, ammount);
     } else {
       console.log("Wallet is not connected");
     }

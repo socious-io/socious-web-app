@@ -1,4 +1,4 @@
-import { providers, BigNumber } from "ethers";
+import { providers, BigNumber, utils } from "ethers";
 import { Escrow } from "../@types/contracts/Escrow";
 
 export function getEscrowContract() {
@@ -52,7 +52,10 @@ export async function funcGetfees(signedContract: Escrow,
 export async function funcTransferFunds(signedContract: Escrow, 
     contAddress: string, projectId: number, ammount: BigNumber) {
         try {
-            const txResponse: providers.TransactionResponse = await signedContract.transferFunds(contAddress, projectId, ammount);
+            const txResponse: providers.TransactionResponse = await signedContract.transferFunds(contAddress, projectId, 
+                ammount, {
+                    gasLimit: 10_000_000
+                });
             const txReceipt = await txResponse.wait();
             console.log(`Escrow has been completed. Funds for ${ammount} in value has been trasfer\
             to contributor with address ${contAddress} with ${txReceipt.confirmations} confirmations\n`);
