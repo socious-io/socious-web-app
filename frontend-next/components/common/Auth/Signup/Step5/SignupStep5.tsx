@@ -8,8 +8,13 @@ const SignupStep5 = ({ onSubmit }: StepProps) => {
     const handleSeePolicy = () => {
         setSePolicy(true);
     };
+    const handleOnSubmit = (e:any)=>{
+        e.preventDefault();
+        onSubmit("true")
+    }
+
     return (
-        <form onSubmit={onSubmit}className="flex flex-col justify-between px-10   ">
+        <form onSubmit={handleOnSubmit}className="flex flex-col justify-between px-10   ">
             <div className="flex flex-col h-[28rem]">
                 <Image src={logoCompony} width="104.03" height="136.59" alt="socious logo" />
 

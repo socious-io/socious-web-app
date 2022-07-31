@@ -6,8 +6,13 @@ const SignupStep4 = ({ onSubmit }: StepProps) => {
     const handleSeeConditions = () => {
         setSeeConditions(true);
     };
+
+    const handleOnSubmit = (e:any)=>{
+        e.preventDefault();
+        onSubmit("true")
+    }
     return (
-        <form onSubmit={onSubmit}className="flex flex-col justify-between px-10   ">
+        <form onSubmit={handleOnSubmit}className="flex flex-col justify-between px-10   ">
             <div className="flex flex-col h-[28rem]">
                 <h1 className="font-helmet">Review our policy</h1>
                 <p className="text-base flex flex-wrap my-6">

@@ -13,11 +13,6 @@ const OnboardingStep7 = ({  onSubmit }: StepProps) => {
   };
   const items = [
     { id: 1, name: "Japan" },
-    { id: 2, name: "Japan" },
-    { id: 3, name: "Japan" },
-    { id: 4, name: "Japan" },
-    { id: 5, name: "Japan" },
-    { id: 6, name: "Japan" },
   ];
   return (
     <form

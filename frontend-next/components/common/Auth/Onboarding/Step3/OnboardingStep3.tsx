@@ -3,13 +3,19 @@ import { useState } from 'react';
 import { StepProps } from '@models/stepProps';
 const OnboardingStep3 = ({ onSubmit }: StepProps) => {
     const [selecteds, setSelecteds] = useState<any[]>([]);
+
+    const handleOnSubmit = (e:any)=>{
+        e.preventDefault();
+        onSubmit("true")
+    }
+    
     const handleSelecteds = (itemSelected: any) => {
         selecteds?.includes(itemSelected)
             ? setSelecteds(selecteds?.filter((i) => i === itemSelected))
             : setSelecteds([...selecteds, itemSelected]);
     };
     return (
-        <form onSubmit={onSubmit}className="flex flex-col justify-between  px-10    ">
+        <form onSubmit={handleOnSubmit}className="flex flex-col justify-between  px-10    ">
             <div className="flex flex-col h-[28rem]">
                 {' '}
                 <h1 className="font-helmet ">What are your social causes?</h1>

@@ -9,18 +9,22 @@ import { twMerge } from "tailwind-merge";
 
 import { EyeIcon, EyeOffIcon, ChevronLeftIcon } from "@heroicons/react/outline";
 import { schemaChangePassword } from "utils/validate";
+import useUser from "services/useUser";
 
 const ChangePassword: NextPage = () => {
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [newPasswordShown, setNewPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const { register, handleSubmit, formState, watch } = useForm({
+  
+  const { changePassword } = useUser();
+
+  const { register, handleSubmit, formState, watch ,getValues } = useForm({
     resolver: joiResolver(schemaChangePassword),
   });
 
   const onSubmit = (data: any) => {
-    handleToggleModal();
+    handleChangePasswordRequest();
   };
 
   const handleToggleModal = () => {
@@ -36,6 +40,18 @@ const ChangePassword: NextPage = () => {
   }, []);
 
   const handleBack = () => {};
+
+  const handleChangePasswordRequest = () => {
+    const currentPassword = getValues('currentPassword');
+    const newPassword = getValues('newPassword');
+
+    const user = { currentPassword, newPassword };
+
+    changePassword(user).then(() => {
+        handleToggleModal();
+    });
+};
+
 
   const newPassword = watch("newPassword");
 

@@ -5,11 +5,18 @@ import logoCompony from 'asset/icons/logo-color.svg';
 import { StepProps } from '@models/stepProps';
 const   OnboardingStep1 = ({ onSubmit }: StepProps) => {
     const [seePolicy, setSePolicy] = useState<boolean>(false);
+
+    
+    const handleOnSubmit = (e:any)=>{
+        e.preventDefault();
+        onSubmit("true")
+    }
+
     const handleSeePolicy = () => {
         setSePolicy(true);
     };
     return (
-        <form onSubmit={onSubmit}className="flex flex-col justify-between  px-10    ">
+        <form onSubmit={handleOnSubmit}className="flex flex-col justify-between  px-10    ">
             <div className="flex flex-col h-[28rem]">
                 {' '}
                 <Image src={logoCompony} width="104.03" height="136.59" alt="socious logo" />

@@ -2,9 +2,15 @@ import { Button } from "@components/common";
 import { BellIcon } from "@heroicons/react/outline";
 import { StepProps } from "@models/stepProps";
 const OnboardingStep10 = ({ onSubmit }: StepProps) => {
+
+    const handleOnSubmit = (e:any)=>{
+        e.preventDefault();
+        onSubmit("true")
+    }
+
   return (
     <form
-      onSubmit={onSubmit}
+      onSubmit={handleOnSubmit}
       className="flex flex-col justify-between  px-10     "
     >
       <div className="flex flex-col h-[28rem]">
