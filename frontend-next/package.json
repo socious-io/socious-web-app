@@ -39,7 +39,8 @@
     "sharp": "^0.30.7",
     "tailwind-merge": "^1.2.1",
     "web3": "^1.7.3",
-    "web3modal": "^1.9.1"
+    "web3modal": "^1.9.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@ethersproject/contracts": "^5.5.0",
