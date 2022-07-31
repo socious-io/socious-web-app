@@ -2,10 +2,10 @@ import * as React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import { ExclamationCircleIcon } from "@heroicons/react/solid";
-export interface TextInputProps
+export interface TextAreaProps
   extends React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
+    React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+    HTMLTextAreaElement
   > {
   label?: string;
   disabled?: boolean;
@@ -17,10 +17,9 @@ export interface TextInputProps
   errorMessage?: any;
 }
 
-export const TextInput = ({
+export const TextArea = ({
   label = "",
   labelFloat = false,
-  type = "text",
   disabled = false,
   placeholder,
   id,
@@ -32,7 +31,7 @@ export const TextInput = ({
   errorMessage,
   required,
   ...props
-}: TextInputProps) => {
+}: TextAreaProps) => {
   return (
     <div
       className={`${labelFloat ? "relative" : ""} ${
@@ -53,10 +52,9 @@ export const TextInput = ({
         </label>
       )}
 
-      <input
+      <textarea
         {...props}
         disabled={disabled}
-        type={type}
         id={id || name}
         name={name || id}
         placeholder={placeholder || label}
@@ -83,4 +81,4 @@ export const TextInput = ({
   );
 };
 
-export default TextInput;
+export default TextArea;

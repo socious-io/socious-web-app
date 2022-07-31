@@ -12,13 +12,13 @@ export interface ButtonProps
 }
 
 const defaultBtnClass =
-  "inline-flex items-center font-medium rounded-md border";
+  "inline-flex items-center font-medium rounded-3xl border text-base";
 
 const variantClass = {
   fill:
-    "bg-primary border-transparent text-white hover:bg-primary hover:text-white focus:bg-primaryLight focus:shadow-md",
+    "bg-primary border-transparent text-white hover:bg-primaryDark  focus:bg-primaryDark   focus:shadow-md ",
   outline:
-    "bg-none border-primary text-primary hover:bg-primary focus:bg-primaryLight focus:shadow-md",
+    "bg-white border-grayLineBased text-primary hover:bg-primaryLight hover:border-transparent focus:bg-primaryLight focus:border-transparent focus:shadow-md",
   ghost:
     "bg-transparent border-transparent text-primary hover:text-orange-600 focus:text-orange-600 focus:bg-orange-100",
   link:
@@ -29,8 +29,8 @@ const variantClass = {
 };
 
 const disableClass = {
-  fill: "bg-gray-300 text-gray-400 pointer-events-none",
-  outline: "border-gray-400 text-gray-400 pointer-events-none",
+  fill: "disabled:bg-opacity-40 disabled:text-opacity-40 disabled:cursor-not-allowed",
+  outline: "disabled:bg-white disabled:bg-opacity-40 disabled:text-opacity-40 disabled:border-grayLineBased disabled:cursor-not-allowed ",
   ghost: "text-gray-400 pointer-events-none",
   link: "text-gray-400 pointer-events-none",
   simple: "border-gray-400 text-gray-400 pointer-events-none",

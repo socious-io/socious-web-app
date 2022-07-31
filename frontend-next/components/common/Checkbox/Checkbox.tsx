@@ -12,7 +12,7 @@ export interface CheckboxProps
 }
 
 const defaultCheckboxClass =
-  "w-4 h-4 mr-2  focus:ring-transparent text-secondary accent-primary hover:accent-primaryLight";
+  "w-4 h-4 mr-2   focus:ring-transparent text-secondary accent-primary hover:accent-primaryLight cursor-pointer";
 const disabledClass = "border-gray-500 bg-gray-400";
 
 export function Checkbox({
@@ -23,7 +23,7 @@ export function Checkbox({
   ...props
 }: CheckboxProps) {
   return (
-    <label className="flex items-center">
+    <label className="flex items-center cursor-pointer ">
       <input
         {...props}
         type="checkbox"

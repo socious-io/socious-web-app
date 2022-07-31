@@ -1,5 +1,5 @@
 import { UseFormRegisterReturn } from "react-hook-form";
-
+import { ExclamationCircleIcon } from "@heroicons/react/solid";
 /* eslint-disable-next-line */
 export interface RadioInputProps
   extends React.DetailedHTMLProps<
@@ -9,33 +9,38 @@ export interface RadioInputProps
   label: string;
   name?: string;
   id?: string;
-  checked: boolean;
+  checked?: boolean;
   register?: UseFormRegisterReturn;
+  errorMessage?: any;
 }
 
 export function Radio({
   label,
-  name,
   id,
   register,
-  checked = false,
+  errorMessage,
   ...props
 }: RadioInputProps) {
   return (
-    <label className="flex items-center">
-      <div className="mr-2 -mt-1">
-        <input
-          {...props}
-          type="radio"
-          className="w-4 h-4 text-orange-500 rounded-full focus:ring-transparent"
-          name={name}
-          id={id}
-          checked={checked}
-          {...register}
-        />
-      </div>
-      <div>{label}</div>
-    </label>
+    <>
+      <label className="flex items-center cursor-pointer align-middle">
+        <div className="mr-2 ">
+          <input
+            {...props}
+            type="radio"
+            className="w-4 h-4  text-orange-500 rounded-full focus:ring-transparent accent-primary"
+            id={id}
+            {...register}
+          />
+        </div>
+        <div>{label}</div>
+      </label>
+      {errorMessage && (
+        <div className="text-error flex items-center">
+          <ExclamationCircleIcon className="w-5 h-5 mr-1" /> {errorMessage}
+        </div>
+      )}
+    </>
   );
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 // @TODO: render wrong when use SVG, will fix it later
 //import Image from "next/image";
 // import AvatarDefault from "../../../asset/images/user.png";

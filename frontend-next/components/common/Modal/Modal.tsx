@@ -1,10 +1,9 @@
 import * as React from "react";
-import { Dialog } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/solid";
-import { twMerge } from "tailwind-merge";
+import { Fragment } from "react";
 
 export interface ModalProps {
-  className?: string;
   isOpen?: boolean;
   onClose?: () => void;
   children?: React.ReactNode;
@@ -17,32 +16,42 @@ export interface IModalCloseButton {
 export function Modal({
   isOpen = false,
   onClose = () => null,
-  className,
   children,
 }: ModalProps) {
   return (
-    <Dialog
-      as="div"
-      className="fixed inset-0 z-10 overflow-y-auto"
-      onClose={onClose}
-      open={isOpen}
-    >
-      <div className="min-h-screen text-center md:px-4">
-        <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-
-        <span className="inline-block h-screen align-middle" aria-hidden="true">
-          &#8203;
-        </span>
-        <div
-          className={twMerge(
-            "inline-block w-full overflow-hidden text-left align-middle bg-white rounded shadow-xl md:my-8 transition-all transform max-w-max",
-            className
-          )}
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={onClose}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
         >
-          {children}
+          <div className="fixed inset-0 bg-black bg-opacity-25" />
+        </Transition.Child>
+
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                {children}
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
         </div>
-      </div>
-    </Dialog>
+      </Dialog>
+    </Transition>
   );
 }
 
@@ -50,11 +59,14 @@ const Title = ({ children }: ModalProps) => {
   return (
     <Dialog.Title
       as="h3"
-      className="text-2xl font-bold leading-6 text-center text-gray-900 lg:text-3xl"
+      className="text-lg font-medium leading-6 text-gray-900"
     >
       {children}
     </Dialog.Title>
   );
+};
+const Description = ({ children }: ModalProps) => {
+  return <Dialog.Description>{children}</Dialog.Description>;
 };
 
 const CloseButton = ({ onClose }: IModalCloseButton) => {
@@ -67,6 +79,7 @@ const CloseButton = ({ onClose }: IModalCloseButton) => {
 };
 
 Modal.Title = Title;
+Modal.Description = Description;
 Modal.CloseButton = CloseButton;
 
 export default Modal;
