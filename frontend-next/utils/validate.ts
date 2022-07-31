@@ -347,3 +347,11 @@ export const schemaSignupStep3 = Joi.object({
         'any.required': `Confirm password is a required field`,
     }),
 });
+
+
+export const stringSingleSpace = (source?: string) => {
+    if (typeof source !== 'string') {
+      return '';
+    }
+    return source.trim().replace(/  +/g, ' ');
+  };
