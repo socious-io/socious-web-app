@@ -37,8 +37,8 @@ export const APP_MODE_URL = {
 export type AppModeType = keyof typeof APP_MODE_URL;
 
 export const ApiConstants = {
-  LOGIN: '/auth/login',
-  LOGOUT: '/api/logout',
+  LOGIN: '/auth/web/login',
+  LOGOUT: '/auth/web/logout',
   CHECK_EMAIL_EXIST: '/api/checkEmail',
   CHANGE_PASSWORD: '/api/change-password',
   CHANGE_PASSWORD_DIRECT: '/api/change-password-direct',

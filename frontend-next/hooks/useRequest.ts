@@ -5,6 +5,7 @@ const useRequest = () => {
   const request = useMemo(() => {
     return axios.create({
       // baseURL: process.env.baseURL ,
+      withCredentials: true,
       timeout: 10000,
       headers: {
         'content-type': 'application/json',
@@ -21,39 +22,24 @@ const useRequest = () => {
     },
   );
 
-  const setHeaders = () => {
-    const token = localStorage.getItem('token');
-    const identity = localStorage.getItem('identity');
-
-    request.defaults.headers = {
-      'content-type': 'application/json',
-      Authorization: token ? `Bearer ${token}` : undefined,
-      'Current-Identity': identity || undefined,
-    };
-  };
 
   const get = (arg: string) => {
-    setHeaders();
     return request?.get(arg);
   };
 
   const deleteRequest = (arg: string) => {
-    setHeaders();
     return request?.delete(arg);
   };
 
   const post = (arg: string, body: any) => {
-    setHeaders();
     return request?.post(arg, body);
   };
 
   const patch = (arg: string, body: any) => {
-    setHeaders();
     return request?.patch(arg, body);
   };
 
   const put = (arg: string, body: any) => {
-    setHeaders();
     return request?.put(arg, body);
   };
 

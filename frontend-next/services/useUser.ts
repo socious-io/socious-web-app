@@ -1,15 +1,16 @@
 import useRequest from 'hooks/useRequest';
 import {ApiConstants, DEV_MODE_API} from 'utils/api';
+import useSWR from 'swr'
 
 const useUser = () => {
   const request = useRequest();
 
   const getProfile = () => {
+  
     return new Promise((resolve: (response: any) => void, reject) => {
       request
         .get(DEV_MODE_API + '/user/profile')
         .then((response: any) => {
-          localStorage.setItem('user', response);
           resolve(response);
         })
         .catch((error: any) => {

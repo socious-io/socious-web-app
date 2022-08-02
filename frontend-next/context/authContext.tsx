@@ -1,22 +1,25 @@
 import Router from 'next/router';
 import {createContext, useEffect, useState} from 'react';
+import useAuth from 'services/useAuth';
 import useUser from 'services/useUser';
 
 const AuthContext = createContext({
   user: null,
-  signin: (token: string) => {},
+  signin: (email: string, password: string) => {},
   signout: () => {},
   authVerified: false,
 });
 
 export const AuthContextProvider = ({children}) => {
   const {getProfile} = useUser();
+  const {login} = useAuth();
   const [user, setUser] = useState(null);
   const [authVerified, setAuth] = useState(false);
 
   useEffect(() => {
     getProfile()
       .then((response: any) => {
+        console.log(response)
         setUser(response);
         setAuth(true);
       })
@@ -26,17 +29,16 @@ export const AuthContextProvider = ({children}) => {
       });
   }, []);
 
-  const signin = async (token: string) => {
-    localStorage.setItem('token', token);
+  const signin = async (email: string, password: string) => {
+    await login({email, password});
     Router.push('/');
   };
 
-  const signout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('identity');
-    setAuth(false);
+  const signout = async () => {
+    setAuth(false)
     Router.push('/auth/login');
   };
+
 
   const context = {user, signin, signout, authVerified};
 

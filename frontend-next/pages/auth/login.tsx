@@ -12,7 +12,6 @@ import {EyeIcon, EyeOffIcon} from '@heroicons/react/outline';
 import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
 import {schemaLogin} from 'utils/validate';
-import useAuth from 'services/useAuth';
 import AuthContext from 'context/authContext';
 
 const Login: NextPage = () => {
@@ -24,8 +23,6 @@ const Login: NextPage = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const [errorMessage, setError] = useState<string>('');
-
-  const {login} = useAuth();
 
   const {register, handleSubmit, formState, getValues} = useForm({
     resolver: joiResolver(schemaLogin),
@@ -42,9 +39,8 @@ const Login: NextPage = () => {
     const email = getValues('email');
     const password = getValues('password');
     try {
-      const response = await login({email, password});
-      await signin(response.access_token);
-    } catch (err: Error) {
+      await signin(email, password);
+    } catch (err) {
       setError(err?.error);
       setShowModal(!showModal);
     }
