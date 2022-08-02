@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Fragment, useEffect, useState } from "react";
-import { Combobox as UiCombobox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronDownIcon } from "@heroicons/react/solid";
-import { twMerge } from "tailwind-merge";
-import { ExclamationCircleIcon } from "@heroicons/react/solid";
-import useDebounce from "hooks/useDebounce";
+import {Fragment, useEffect, useState} from 'react';
+import {Combobox as UiCombobox, Transition} from '@headlessui/react';
+import {CheckIcon, ChevronDownIcon} from '@heroicons/react/solid';
+import {twMerge} from 'tailwind-merge';
+import {ExclamationCircleIcon} from '@heroicons/react/solid';
+import useDebounce from 'hooks/useDebounce';
 
 export interface ComboboxProps
   extends React.DetailedHTMLProps<
@@ -23,7 +23,7 @@ export interface ComboboxProps
 }
 
 export default function Combobox({
-  label = "",
+  label = '',
   disabled = false,
   items,
   id,
@@ -35,7 +35,7 @@ export default function Combobox({
   onSelected,
   onChangeInputSearch,
 }: ComboboxProps) {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
   const debouncedAmount = useDebounce(query, 500);
 
@@ -61,15 +61,15 @@ export default function Combobox({
       name={name}
       disabled={disabled}
     >
-      {({ open }) => (
-        <div className={twMerge("relative mt-1", className && className)}>
+      {({open}) => (
+        <div className={twMerge('relative mt-1', className && className)}>
           {label && (
             <UiCombobox.Label
               htmlFor={id || name}
               className={twMerge(
-                "block font-base",
-                errorMessage ? "text-error" : "text-black",
-                disabled && "text-opacity-40 "
+                'block font-base',
+                errorMessage ? 'text-error' : 'text-black',
+                disabled && 'text-opacity-40 ',
               )}
             >
               {label} {required && <span className="text-error">*</span>}
@@ -98,10 +98,10 @@ export default function Combobox({
             leave="transition duration-75 ease-out"
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-95 opacity-0"
-            afterLeave={() => setQuery("")}
+            afterLeave={() => setQuery('')}
           >
             <UiCombobox.Options className="z-10 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {filteredItems.length === 0 && query !== "" ? (
+              {filteredItems.length === 0 && query !== '' ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                   Nothing found.
                 </div>
@@ -109,20 +109,20 @@ export default function Combobox({
                 filteredItems.map((item) => (
                   <UiCombobox.Option
                     key={item.id}
-                    className={({ active, selected }) =>
+                    className={({active, selected}) =>
                       `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
                         active || selected
-                          ? "bg-offWhite text-gray-900"
-                          : "text-gray-900"
+                          ? 'bg-offWhite text-gray-900'
+                          : 'text-gray-900'
                       }`
                     }
                     value={item}
                   >
-                    {({ selected, active }) => (
+                    {({selected, active}) => (
                       <>
                         <span
                           className={`block truncate ${
-                            selected ? "font-medium" : "font-normal"
+                            selected ? 'font-medium' : 'font-normal'
                           }`}
                         >
                           {item?.name}
@@ -130,7 +130,7 @@ export default function Combobox({
                         {selected ? (
                           <span
                             className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                              active ? "text-gray-700" : "text-gray-700"
+                              active ? 'text-gray-700' : 'text-gray-700'
                             }`}
                           >
                             <CheckIcon className="h-5 w-5" aria-hidden="true" />

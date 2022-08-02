@@ -1,7 +1,7 @@
-import * as React from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/solid";
-import { Fragment } from "react";
+import * as React from 'react';
+import {Dialog, Transition} from '@headlessui/react';
+import {XIcon} from '@heroicons/react/solid';
+import {Fragment} from 'react';
 
 export interface ModalProps {
   isOpen?: boolean;
@@ -55,7 +55,7 @@ export function Modal({
   );
 }
 
-const Title = ({ children }: ModalProps) => {
+const Title = ({children}: ModalProps) => {
   return (
     <Dialog.Title
       as="h3"
@@ -65,11 +65,11 @@ const Title = ({ children }: ModalProps) => {
     </Dialog.Title>
   );
 };
-const Description = ({ children }: ModalProps) => {
+const Description = ({children}: ModalProps) => {
   return <Dialog.Description>{children}</Dialog.Description>;
 };
 
-const CloseButton = ({ onClose }: IModalCloseButton) => {
+const CloseButton = ({onClose}: IModalCloseButton) => {
   return (
     <XIcon
       className="absolute w-6 h-6 text-black cursor-pointer top-8 right-4 lg:right-8"

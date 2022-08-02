@@ -1,10 +1,9 @@
-import { UseFormReturn } from 'react-hook-form';
+import {UseFormReturn} from 'react-hook-form';
 
 export interface StepProps {
-    onSubmit: (value: any) => void;
+  onSubmit: (value: any) => void;
 }
 export interface StepFormProps {
-    formMethods: UseFormReturn;
-    onSubmit: (value: any) => void;
+  formMethods: UseFormReturn;
+  onSubmit: (value: any) => void;
 }
-

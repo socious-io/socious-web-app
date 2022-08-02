@@ -1,9 +1,9 @@
-import { InputFiled, Button } from "@components/common";
-import { StepProps } from "@models/stepProps";
-import { useFormContext } from "react-hook-form";
-const SignupStep2 = ({ onSubmit }: StepProps) => {
+import {InputFiled, Button} from '@components/common';
+import {StepProps} from '@models/stepProps';
+import {useFormContext} from 'react-hook-form';
+const SignupStep2 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const { handleSubmit, formState, register } = formMethods;
+  const {handleSubmit, formState, register} = formMethods;
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -15,8 +15,8 @@ const SignupStep2 = ({ onSubmit }: StepProps) => {
           label="Email"
           type="email"
           placeholder="Email"
-          register={register("email")}
-          errorMessage={formState?.errors?.["email"]?.message}
+          register={register('email')}
+          errorMessage={formState?.errors?.['email']?.message}
           required
           className="my-6"
         />

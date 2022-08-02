@@ -1,25 +1,24 @@
-import type { NextPage } from "next";
-import { useState, useMemo, useCallback } from "react";
-import { useForm } from "react-hook-form";
-import { joiResolver } from "@hookform/resolvers/joi";
+import type {NextPage} from 'next';
+import {useState, useMemo, useCallback} from 'react';
+import {useForm} from 'react-hook-form';
+import {joiResolver} from '@hookform/resolvers/joi';
 
-import { InputFiled, Button, Modal } from "@components/common";
-import { rxHasNumber } from "utils/regex";
-import { twMerge } from "tailwind-merge";
+import {InputFiled, Button, Modal} from '@components/common';
+import {rxHasNumber} from 'utils/regex';
+import {twMerge} from 'tailwind-merge';
 
-import { EyeIcon, EyeOffIcon, ChevronLeftIcon } from "@heroicons/react/outline";
-import { schemaChangePassword } from "utils/validate";
-import useUser from "services/useUser";
+import {EyeIcon, EyeOffIcon, ChevronLeftIcon} from '@heroicons/react/outline';
+import {schemaChangePassword} from 'utils/validate';
+import useUser from 'services/useUser';
 
 const ChangePassword: NextPage = () => {
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [newPasswordShown, setNewPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  
-  const { changePassword } = useUser();
+  const {changePassword} = useUser();
 
-  const { register, handleSubmit, formState, watch ,getValues } = useForm({
+  const {register, handleSubmit, formState, watch, getValues} = useForm({
     resolver: joiResolver(schemaChangePassword),
   });
 
@@ -45,24 +44,23 @@ const ChangePassword: NextPage = () => {
     const currentPassword = getValues('currentPassword');
     const newPassword = getValues('newPassword');
 
-    const user = { currentPassword, newPassword };
+    const user = {currentPassword, newPassword};
 
     changePassword(user).then(() => {
-        handleToggleModal();
+      handleToggleModal();
     });
-};
+  };
 
-
-  const newPassword = watch("newPassword");
+  const newPassword = watch('newPassword');
 
   const isValidPasswordLength = useMemo<boolean>(
     () => newPassword && newPassword.length >= 7,
-    [newPassword]
+    [newPassword],
   );
 
   const isValidPasswordHasNumber = useMemo<boolean>(
     () => newPassword && rxHasNumber.test(newPassword),
-    [newPassword]
+    [newPassword],
   );
 
   return (
@@ -88,10 +86,10 @@ const ChangePassword: NextPage = () => {
         <div className="flex flex-col h-[28rem]">
           <InputFiled
             label="Current password"
-            type={passwordShown ? "text" : "password"}
+            type={passwordShown ? 'text' : 'password'}
             placeholder="Current password"
-            register={register("currentPassword")}
-            errorMessage={formState?.errors?.["currentPassword"]?.message}
+            register={register('currentPassword')}
+            errorMessage={formState?.errors?.['currentPassword']?.message}
             required
             className="pb-6"
             suffixContent={
@@ -108,10 +106,10 @@ const ChangePassword: NextPage = () => {
           />
           <InputFiled
             label="New password"
-            type={newPasswordShown ? "text" : "password"}
+            type={newPasswordShown ? 'text' : 'password'}
             placeholder="New password"
-            register={register("newPassword")}
-            errorMessage={formState?.errors?.["newPassword"]?.message}
+            register={register('newPassword')}
+            errorMessage={formState?.errors?.['newPassword']?.message}
             required
             className="pb-6"
             suffixContent={
@@ -130,24 +128,24 @@ const ChangePassword: NextPage = () => {
             label="Confirm new password"
             type="password"
             placeholder="Confirm new password"
-            register={register("confirmNewPassword")}
-            errorMessage={formState?.errors?.["confirmNewPassword"]?.message}
+            register={register('confirmNewPassword')}
+            errorMessage={formState?.errors?.['confirmNewPassword']?.message}
             required
             className="pb-6"
           />
           <div className="grid grid-cols-2 gap-3  py-5 w-full">
             <div
               className={twMerge(
-                "flex flex-col  border-t-4 py-3 border-t-success",
-                !isValidPasswordLength && "border-opacity-40"
+                'flex flex-col  border-t-4 py-3 border-t-success',
+                !isValidPasswordLength && 'border-opacity-40',
               )}
             >
               <p className="text-sm">・7 characters </p>
             </div>
             <div
               className={twMerge(
-                "flex flex-col border-t-4 py-3 border-t-success",
-                !isValidPasswordHasNumber && "border-opacity-40"
+                'flex flex-col border-t-4 py-3 border-t-success',
+                !isValidPasswordHasNumber && 'border-opacity-40',
               )}
             >
               <p className="text-sm">・1 number </p>

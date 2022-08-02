@@ -1,29 +1,29 @@
-import { InputFiled, Button } from "@components/common";
-import { useState, useMemo, useCallback } from "react";
-import { rxHasNumber } from "utils/regex";
-import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline";
-import { twMerge } from "tailwind-merge";
-import { StepProps } from "@models/stepProps";
-import { useFormContext } from "react-hook-form";
-const SignupStep3 = ({ onSubmit }: StepProps) => {
+import {InputFiled, Button} from '@components/common';
+import {useState, useMemo, useCallback} from 'react';
+import {rxHasNumber} from 'utils/regex';
+import {EyeIcon, EyeOffIcon} from '@heroicons/react/outline';
+import {twMerge} from 'tailwind-merge';
+import {StepProps} from '@models/stepProps';
+import {useFormContext} from 'react-hook-form';
+const SignupStep3 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const { handleSubmit, formState, register, watch } = formMethods;
+  const {handleSubmit, formState, register, watch} = formMethods;
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
 
   const onTogglePassword = useCallback(() => {
     setPasswordShown((v) => !v);
   }, []);
 
-  const password = watch("password");
+  const password = watch('password');
 
   const isValidPasswordLength = useMemo<boolean>(
     () => password && password.length >= 7,
-    [password]
+    [password],
   );
 
   const isValidPasswordHasNumber = useMemo<boolean>(
     () => password && rxHasNumber.test(password),
-    [password]
+    [password],
   );
 
   return (
@@ -35,10 +35,10 @@ const SignupStep3 = ({ onSubmit }: StepProps) => {
         <h1 className="font-helmet">Set your password</h1>
         <InputFiled
           label="Password"
-          type={passwordShown ? "text" : "password"}
+          type={passwordShown ? 'text' : 'password'}
           placeholder="Password"
-          register={register("password")}
-          errorMessage={formState?.errors?.["password"]?.message}
+          register={register('password')}
+          errorMessage={formState?.errors?.['password']?.message}
           required
           className="my-6"
           suffixContent={
@@ -57,23 +57,23 @@ const SignupStep3 = ({ onSubmit }: StepProps) => {
           label="Confirm password"
           type="password"
           placeholder="Confirm password"
-          register={register("confirmPassword")}
-          errorMessage={formState?.errors?.["confirmPassword"]?.message}
+          register={register('confirmPassword')}
+          errorMessage={formState?.errors?.['confirmPassword']?.message}
           required
         />
         <div className="grid grid-cols-2 gap-3  py-5 w-full">
           <div
             className={twMerge(
-              "flex flex-col  border-t-4 py-3 border-t-success",
-              !isValidPasswordLength && "border-opacity-40"
+              'flex flex-col  border-t-4 py-3 border-t-success',
+              !isValidPasswordLength && 'border-opacity-40',
             )}
           >
             <p className="text-sm">・7 characters </p>
           </div>
           <div
             className={twMerge(
-              "flex flex-col border-t-4 py-3 border-t-success",
-              !isValidPasswordHasNumber && "border-opacity-40"
+              'flex flex-col border-t-4 py-3 border-t-success',
+              !isValidPasswordHasNumber && 'border-opacity-40',
             )}
           >
             <p className="text-sm">・1 number </p>

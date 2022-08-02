@@ -1,10 +1,10 @@
-import { Avatar, Chip } from "@components/common";
+import {Avatar, Chip} from '@components/common';
 import {
   ChatAltIcon,
   DotsHorizontalIcon,
   HeartIcon,
   ShareIcon,
-} from "@heroicons/react/outline";
+} from '@heroicons/react/outline';
 
 export interface PostCardProps {
   content?: string;
@@ -13,7 +13,7 @@ export interface PostCardProps {
   passion?: string;
 }
 
-export function PostCard({ content, name, time, passion }: PostCardProps) {
+export function PostCard({content, name, time, passion}: PostCardProps) {
   return (
     <div className="p-4 space-y-4 rounded-2xl border border-grayLineBased">
       <div className="flex justify-between items-center">
@@ -32,7 +32,7 @@ export function PostCard({ content, name, time, passion }: PostCardProps) {
         <div className="w-full h-40 bg-offWhite rounded-lg" />
       </div>
       <div>
-        <Chip content={passion ?? ""} contentClassName="text-secondary" />
+        <Chip content={passion ?? ''} contentClassName="text-secondary" />
       </div>
       <div>
         <p className="text-small">{content}</p>

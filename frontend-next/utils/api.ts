@@ -1,9 +1,8 @@
 /* eslint-disable max-len */
 
-import AppConfig from "./constants";
+import AppConfig from './constants';
 
-
-export const DEV_MODE_API = 'https://api.socious.io';
+export const DEV_MODE_API = 'http://127.0.0.1:8370';
 export const PROD_MODE_API = 'https://api.socious.io';
 export const STAGING_MODE_API = 'https://api.socious.io';
 export const ECHO_LARAVEL = 'https://api.socious.io';
@@ -38,7 +37,7 @@ export const APP_MODE_URL = {
 export type AppModeType = keyof typeof APP_MODE_URL;
 
 export const ApiConstants = {
-  LOGIN: '/api/login',
+  LOGIN: '/auth/login',
   LOGOUT: '/api/logout',
   CHECK_EMAIL_EXIST: '/api/checkEmail',
   CHANGE_PASSWORD: '/api/change-password',

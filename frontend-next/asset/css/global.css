@@ -3,31 +3,31 @@
 @tailwind utilities;
 
 @layer base {
-    h1 {
-        @apply text-2xl;
-    }
-    h2 {
-        @apply text-lg;
-    }
-    h3 {
-        @apply text-base;
-    }
-    h4 {
-        @apply text-sm;
-    }
-    h5 {
-        @apply text-xs;
-    }
-    h6 {
-        @apply text-xs;
-    }
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-lg;
+  }
+  h3 {
+    @apply text-base;
+  }
+  h4 {
+    @apply text-sm;
+  }
+  h5 {
+    @apply text-xs;
+  }
+  h6 {
+    @apply text-xs;
+  }
 }
 
 body {
-    font-family: 'Work Sans', sans-serif;
-    /* rest css code also here */
-    background-color: #f8f8f8;
+  font-family: 'Work Sans', sans-serif;
+  /* rest css code also here */
+  background-color: #f8f8f8;
 }
-.font-helmet{
-     font-family: "Hahmlet", sans-serif !important;    
+.font-helmet {
+  font-family: 'Hahmlet', sans-serif !important;
 }

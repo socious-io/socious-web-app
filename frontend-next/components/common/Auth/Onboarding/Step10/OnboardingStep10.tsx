@@ -1,12 +1,11 @@
-import { Button } from "@components/common";
-import { BellIcon } from "@heroicons/react/outline";
-import { StepProps } from "@models/stepProps";
-const OnboardingStep10 = ({ onSubmit }: StepProps) => {
-
-    const handleOnSubmit = (e:any)=>{
-        e.preventDefault();
-        onSubmit("true")
-    }
+import {Button} from '@components/common';
+import {BellIcon} from '@heroicons/react/outline';
+import {StepProps} from '@models/stepProps';
+const OnboardingStep10 = ({onSubmit}: StepProps) => {
+  const handleOnSubmit = (e: any) => {
+    e.preventDefault();
+    onSubmit('true');
+  };
 
   return (
     <form
@@ -14,10 +13,10 @@ const OnboardingStep10 = ({ onSubmit }: StepProps) => {
       className="flex flex-col justify-between  px-10     "
     >
       <div className="flex flex-col h-[28rem]">
-        {" "}
+        {' '}
         <BellIcon className="w-16 h-16 mx-auto fill-white border-2 border-white rounded-full bg-background " />
         <div className="flex flex-col justify-between      ">
-          {" "}
+          {' '}
           <h1 className="text-white mx-auto">Allow notifications</h1>
           <p className="text-base text-grayDisableButton mx-auto py-5">
             Stay up to date with messages, recommendations and posts

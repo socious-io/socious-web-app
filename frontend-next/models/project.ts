@@ -1,6 +1,6 @@
-import { Passion } from "./passion";
-import { Questionnaire } from "./question";
-import { TopSkills } from "./topSkills";
+import {Passion} from './passion';
+import {Questionnaire} from './question';
+import {TopSkills} from './topSkills';
 
 export interface Project {
   id?: number;

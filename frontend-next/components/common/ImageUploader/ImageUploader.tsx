@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
-import { FC, useState, useEffect, useRef } from "react";
+import {FC, useState, useEffect, useRef} from 'react';
 
-import profile_img_icon from "asset/images/user.png";
+import profile_img_icon from 'asset/images/user.png';
 
 interface ImageUploaderProps {
   src: string;
@@ -33,7 +33,7 @@ const ImageUploader: FC<ImageUploaderProps> = ({
       reader.onloadend = () => {
         // onChange(file);
 
-        setImagePreviewUrl(reader?.result || "");
+        setImagePreviewUrl(reader?.result || '');
       };
       reader.readAsDataURL(file);
     }

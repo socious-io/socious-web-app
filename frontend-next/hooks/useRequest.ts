@@ -1,73 +1,101 @@
-import { useMemo } from "react";
-import axios from "axios";
+import {useMemo} from 'react';
+import axios from 'axios';
 
 const useRequest = () => {
+  const request = useMemo(() => {
+    return axios.create({
+      // baseURL: process.env.baseURL ,
+      timeout: 10000,
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+  }, []);
 
+  request?.interceptors?.response.use(
+    (response) => {
+      return response?.data ? response?.data : response;
+    },
+    (error) => {
+      throw error;
+    },
+  );
 
-    const request = useMemo(() => {
-        
-        return axios.create({
-            // baseURL: process.env.baseURL ,
-            timeout: 10000,
-            headers: {
-                "content-type": "application/json",
-            },
-        });
-    }, []);
+  const setHeaders = () => {
+    const token = localStorage.getItem('token');
+    const identity = localStorage.getItem('identity');
 
-      request?.interceptors?.response.use(
-        (response) => {
-          
-            return response?.data ? response?.data : response;
-        },
-        (error) => {},
-    );
-
- 
-
-    const get = (arg: string) => {
-        return request?.get(arg);
+    request.defaults.headers = {
+      'content-type': 'application/json',
+      Authorization: token ? `Bearer ${token}` : undefined,
+      'Current-Identity': identity || undefined,
     };
-    const deleteRequest = (arg: string) => {
-        return request?.delete(arg);
-    };
-    const post = (arg: string, body: any) => {
-        return request?.post(arg, body);
-    };
-    const patch = (arg: string, body: any) => {
-        return request?.patch(arg, body);
-    };
-    const put = (arg: string, body: any) => {
-        return request?.put(arg, body);
-    };
+  };
 
-    const all = axios.all;
-    const spread = axios.spread;
+  const get = (arg: string) => {
+    setHeaders();
+    return request?.get(arg);
+  };
 
-    const doCORSRequest = async (options: any) => {
-        return new Promise((resolve: (response: any) => void) => {
-        
-            const  requestCORS = new XMLHttpRequest();
-            requestCORS.open(options.method,  options.url);
-            requestCORS.onload =requestCORS.onerror = function () {
-                resolve(typeof requestCORS?.responseText === "string" ? requestCORS?.responseText : JSON.parse(requestCORS?.responseText));
-            };
-            requestCORS.withCredentials = false;
-            if (/^POST/i.test(options.method)) {
-                requestCORS.setRequestHeader("Content-Type", "application/json");
-                requestCORS.send(JSON.stringify(options.data));
-            }
-            if (/^GET/i.test(options.method)) {
-                // requestCORS.setRequestHeader("Content-Type", "application/json");
-                // x.setRequestHeader("Authorization", "Bearer " + options?.token);
+  const deleteRequest = (arg: string) => {
+    setHeaders();
+    return request?.delete(arg);
+  };
 
-                requestCORS.send(JSON.stringify(options.data));
-            }
-        });
-    };
+  const post = (arg: string, body: any) => {
+    setHeaders();
+    return request?.post(arg, body);
+  };
 
+  const patch = (arg: string, body: any) => {
+    setHeaders();
+    return request?.patch(arg, body);
+  };
 
-    return { request, get, post, put, deleteRequest, patch, all, spread ,doCORSRequest};
+  const put = (arg: string, body: any) => {
+    setHeaders();
+    return request?.put(arg, body);
+  };
+
+  const all = axios.all;
+  const spread = axios.spread;
+
+  const doCORSRequest = async (options: any) => {
+    return new Promise((resolve: (response: any) => void) => {
+      const requestCORS = new XMLHttpRequest();
+      requestCORS.open(options.method, options.url);
+      requestCORS.onload = requestCORS.onerror = function () {
+        resolve(
+          typeof requestCORS?.responseText === 'string'
+            ? requestCORS?.responseText
+            : JSON.parse(requestCORS?.responseText),
+        );
+      };
+      requestCORS.withCredentials = false;
+      if (/^POST/i.test(options.method)) {
+        requestCORS.setRequestHeader('Content-Type', 'application/json');
+        requestCORS.send(JSON.stringify(options.data));
+      }
+      if (/^GET/i.test(options.method)) {
+        // requestCORS.setRequestHeader("Content-Type", "application/json");
+        // x.setRequestHeader("Authorization", "Bearer " + options?.token);
+
+        requestCORS.send(JSON.stringify(options.data));
+      }
+    });
+  };
+
+  return {
+    request,
+    get,
+    post,
+    put,
+    deleteRequest,
+    patch,
+    all,
+    spread,
+    doCORSRequest,
+  };
 };
 
 export default useRequest;
