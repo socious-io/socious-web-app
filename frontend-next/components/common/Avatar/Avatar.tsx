@@ -52,7 +52,9 @@ export function Avatar({
   const {imageSize, statusSize} = SIZE_LIST[size];
   const statusColor = status && STATUS_COLOR[status];
 
-  const imgSrc = require('../../../asset/images/user.png');
+  const imgSrc = require(type === 1
+    ? '../../../asset/images/user.png'
+    : '../../../asset/images/user.png');
 
   return (
     <span

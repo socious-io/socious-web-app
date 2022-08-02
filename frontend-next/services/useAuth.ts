@@ -44,7 +44,6 @@ const useAuth = () => {
         });
     });
   };
-
   const sendOTP = (data: any) => {
     const body = data?.email
       ? {
@@ -63,7 +62,6 @@ const useAuth = () => {
         });
     });
   };
-
   const confirmOTP = (data: any) => {
     const body = data?.email
       ? {

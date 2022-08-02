@@ -44,7 +44,7 @@ const Login: NextPage = () => {
     try {
       const response = await login({email, password});
       await signin(response.access_token);
-    } catch (err) {
+    } catch (err: Error) {
       setError(err?.error);
       setShowModal(!showModal);
     }

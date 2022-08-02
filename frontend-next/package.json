@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "pretty:fix": "prettier --write ."
+    "prettier:check": "prettier --check **/*.ts **/*.tsx",
+    "prettier:fix": "prettier --write  **/*.ts **/*.tsx"
   },
   "dependencies": {
     "@headlessui/react": "^1.6.5",
@@ -56,5 +57,9 @@
     "postcss": "^8.4.14",
     "tailwindcss": "^3.1.6",
     "typescript": "4.4.4"
+  },
+  "lint-staged": {
+    "*.js": "next lint",
+    "*.{js,css,md}": "prettier --write"
   }
 }
