@@ -1,28 +1,28 @@
-import { ExclamationCircleIcon, XIcon } from "@heroicons/react/outline";
-import { CheckCircleIcon } from "@heroicons/react/solid";
+import {ExclamationCircleIcon, XIcon} from '@heroicons/react/outline';
+import {CheckCircleIcon} from '@heroicons/react/solid';
 
 interface VariantValues {
-  [key: string]: { [key: string]: string | React.ReactNode };
+  [key: string]: {[key: string]: string | React.ReactNode};
 }
 
 const VARIANT: VariantValues = {
   success: {
-    position: "bottom-10",
-    bg: "bg-success-100",
-    border: "border-success",
-    bgIcon: "",
+    position: 'bottom-10',
+    bg: 'bg-success-100',
+    border: 'border-success',
+    bgIcon: '',
     icon: <CheckCircleIcon className="w-6 h-6 text-success" />,
-    textColor: "text-black",
-    xIconColor: "text-black",
+    textColor: 'text-black',
+    xIconColor: 'text-black',
   },
   error: {
-    position: "top-10",
-    bg: "bg-error-100",
-    border: "bg-error-100",
-    bgIcon: "bg-error",
+    position: 'top-10',
+    bg: 'bg-error-100',
+    border: 'bg-error-100',
+    bgIcon: 'bg-error',
     icon: <ExclamationCircleIcon className="w-6 h-6 text-white" />,
-    textColor: "text-tart-orange-700",
-    xIconColor: "text-error",
+    textColor: 'text-tart-orange-700',
+    xIconColor: 'text-error',
   },
 };
 
@@ -30,14 +30,14 @@ export interface NotificationProps {
   text: string;
   isOpen?: boolean;
   onClose?: () => void;
-  variant?: "error" | "success";
+  variant?: 'error' | 'success';
 }
 
 export function Notification({
   text,
   onClose,
   isOpen = false,
-  variant = "error",
+  variant = 'error',
 }: NotificationProps) {
   if (!isOpen) {
     return null;

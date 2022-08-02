@@ -1,8 +1,8 @@
-import { Avatar, Chip } from "@components/common";
+import {Avatar, Chip} from '@components/common';
 
-import { Project } from "models/project";
+import {Project} from 'models/project';
 
-export function ProjectCard({ title }: Project) {
+export function ProjectCard({title}: Project) {
   return (
     <div className="p-4 space-y-4 rounded-2xl border border-grayLineBased">
       <div className="flex flex-row items-center space-x-2">

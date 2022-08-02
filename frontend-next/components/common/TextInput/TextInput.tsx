@@ -1,7 +1,7 @@
-import * as React from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
-import { twMerge } from "tailwind-merge";
-
+import * as React from 'react';
+import {UseFormRegisterReturn} from 'react-hook-form';
+import {twMerge} from 'tailwind-merge';
+import {ExclamationCircleIcon} from '@heroicons/react/solid';
 export interface TextInputProps
   extends React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -12,56 +12,73 @@ export interface TextInputProps
   labelFloat?: boolean;
   register?: UseFormRegisterReturn;
   invalid?: boolean;
-  styleClass?: string;
+  className?: string;
+  containerClassName?: string;
+  errorMessage?: any;
 }
 
 export const TextInput = ({
-  label = "",
+  label = '',
   labelFloat = false,
-  type = "text",
+  type = 'text',
   disabled = false,
   placeholder,
   id,
   name,
   register,
   invalid,
-  styleClass,
+  className,
+  containerClassName,
+  errorMessage,
+  required,
   ...props
 }: TextInputProps) => {
   return (
-    <div className={`${labelFloat ? "relative" : ""}`}>
+    <div
+      className={`${labelFloat ? 'relative' : ''} ${
+        containerClassName && containerClassName
+      }`}
+    >
       {label && (
         <label
           htmlFor={id || name}
           className={twMerge(
-            "block font-medium",
-            invalid ? "text-red-500" : "text-gray-700",
-            labelFloat ? "bg-white absolute px-1 left-3 text-sm -top-2" : "",
-            disabled ? "text-gray-400" : ""
+            'block font-base',
+            errorMessage ? 'text-error' : 'text-black',
+            labelFloat ? 'bg-white absolute px-1 left-3 text-sm -top-2' : '',
+            disabled && 'text-opacity-40 ',
           )}
         >
-          {label}
+          {label} {required && <span className="text-error">*</span>}
         </label>
       )}
-      <div>
-        <input
-          {...props}
-          disabled={disabled}
-          type={type}
-          id={id || name}
-          name={name || id}
-          placeholder={placeholder || label}
-          aria-label={label}
-          data-testid={`${label}-testid`}
-          className={twMerge(
-            "block w-full py-1.5 text-sm rounded-lg ",
-            invalid ? "border-red-500" : "border-gray-300",
-            disabled ? "text-gray-400" : "",
-            styleClass && styleClass
-          )}
-          {...register}
-        />
-      </div>
+
+      <input
+        {...props}
+        disabled={disabled}
+        type={type}
+        id={id || name}
+        name={name || id}
+        placeholder={placeholder || label}
+        aria-label={label}
+        data-testid={`${label}-testid`}
+        className={twMerge(
+          'block w-full py-1.5 px-2 text-sm  outline-none rounded-lg',
+          errorMessage
+            ? 'border-2 border-b-error'
+            : ' border-2 border-background focus:border-2 focus:border-primary',
+          disabled && 'text-opacity-40 border-opacity-40 bg-transparent',
+          className && className,
+        )}
+        {...register}
+      />
+
+      {errorMessage && (
+        <div className="text-error flex items-center">
+          {' '}
+          <ExclamationCircleIcon className="w-5 h-5 mr-1" /> {errorMessage}
+        </div>
+      )}
     </div>
   );
 };

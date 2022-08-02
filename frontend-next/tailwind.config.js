@@ -42,3 +42,21 @@ module.exports = {
   },
   plugins: [],
 };
+
+//level 1 - xs -0.75rem; /* 12px */   // 0.60rem; /* 10px */
+//level 2 - xs - 0.75rem; /* 12px */
+//level 3 - sm - 0.875rem; /* 14px */
+//level 4 - base - 1rem; /* 16px */
+//level 5 - lg - 1.125rem; /* 18px */
+//level 6 - xl - 1.25rem; /* 20px */
+//level 7 - 2xl - 1.5rem; /* 24px */
+//level 8 - 3xl - 1.875rem; /* 30px */  // 1.5rem; /* 28px */
+//level 9 - 4xl - 2.25rem; /* 36px */
+//level 10 - 5xl - 3rem; /* 48px */  // 2.75rem; /* 44px */
+
+//h1 - level 7 - 2xl - 1.5rem; /* 24px */
+//h2 - level 5 -lg - 1.125rem; /* 18px */
+//h3 - level 4 - base - 1rem; /* 16px */
+//h4 - level 3 -sm - 0.875rem; /* 14px */
+//h5 - level 2 - xs - 0.75rem; /* 12px */
+//h6 - level 1 - xs -0.75rem; /* 12px */   // 0.60rem; /* 10px */

@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from 'react';
 //import { GreeterContext } from "./../hardhat/SymfoniContext";
 
 interface Props {}
 
 export const Greeter: React.FC<Props> = () => {
   //const greeter = useContext(GreeterContext);
-  const [message, setMessage] = useState("");
-  const [inputGreeting, setInputGreeting] = useState("");
+  const [message, setMessage] = useState('');
+  const [inputGreeting, setInputGreeting] = useState('');
   // useEffect(() => {
   //   const doAsync = async () => {
   //     if (!greeter.instance) return;

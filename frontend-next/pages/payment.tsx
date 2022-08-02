@@ -1,24 +1,18 @@
-import type { NextPage } from "next";
+import type {NextPage} from 'next';
 import {
   BriefcaseIcon,
   ClockIcon,
   DotsHorizontalIcon,
-} from "@heroicons/react/outline";
-import Button from "../components/common/Button/Button";
+} from '@heroicons/react/outline';
+import Button from '../components/common/Button/Button';
 // import Image from "next/image";
-import metamask from "../asset/images/metamask@3x.png";
-import { useWeb3React } from "@web3-react/core";
-import { injected } from "../components/wallet/connector";
+import metamask from '../asset/images/metamask@3x.png';
+import {useWeb3React} from '@web3-react/core';
+import {injected} from '../components/wallet/connector';
 
 const Payment: NextPage = () => {
-  const {
-    active,
-    account,
-    library,
-    connector,
-    activate,
-    deactivate,
-  } = useWeb3React();
+  const {active, account, library, connector, activate, deactivate} =
+    useWeb3React();
 
   const disconnect = async () => {
     try {
@@ -74,7 +68,7 @@ const Payment: NextPage = () => {
             {/* <Image src={metamask} alt="Metamask" width={24} height={24} /> */}
             <p className="text-primary text-base font-semibold">
               {`${account?.substring(0, 17)}...${account?.substring(
-                account.length - 5
+                account.length - 5,
               )}`}
             </p>
             <div

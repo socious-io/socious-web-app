@@ -1,10 +1,10 @@
-import { Avatar, Chip } from "@components/common";
+import {Avatar, Chip} from '@components/common';
 import {
   ChatAltIcon,
   DotsHorizontalIcon,
   HeartIcon,
   ShareIcon,
-} from "@heroicons/react/outline";
+} from '@heroicons/react/outline';
 
 export interface CommentProps {
   content?: string;
@@ -15,7 +15,7 @@ export interface CommentProps {
 
 export function CommentItem({
   content,
-  name = "User Name",
+  name = 'User Name',
   time,
   passion,
 }: CommentProps) {

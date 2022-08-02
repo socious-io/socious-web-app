@@ -1,6 +1,6 @@
-import { Passion } from "./passion";
-import { Questionnaire } from "./question";
-import { Skill } from "./skill";
+import {Passion} from './passion';
+import {Questionnaire} from './question';
+import {TopSkills} from './topSkills';
 
 export interface Project {
   id?: number;
@@ -16,7 +16,7 @@ export interface Project {
   payment_range_higher: string;
   experience_level: number;
   passions?: Array<number> | Array<Passion>;
-  skills?: Array<number> | Array<Skill>;
+  skills?: Array<number> | Array<TopSkills>;
   payment_currency?: string;
   questionnaire?: Array<Questionnaire>;
   project_status?: number;

@@ -1,21 +1,25 @@
-import * as React from "react";
-import Head from "next/head";
-import { useMediaQuery } from "react-responsive";
+/* eslint-disable @next/next/no-page-custom-font */
+import * as React from 'react';
+import Head from 'next/head';
+import {useMediaQuery} from 'react-responsive';
 
-import Navbar from "../Navbar/Navbar";
+import Navbar from '../Navbar/Navbar';
 //import Footer from '../Footer/Footer';
 //import MobileNavbar from "../MobileNavbar/MobileNavbar";
 
-import { Container } from "../Container/Container";
+import {Container} from '../Container/Container';
+import {useRouter} from 'next/dist/client/router';
 
 export interface LayoutProps {
   children: React.ReactNode;
 }
 
-export function Wrapper({ children }: LayoutProps) {
+export function Wrapper({children}: LayoutProps) {
   // const isDesktop = useMediaQuery({
   //   minWidth: 1024,
   // });
+  const {asPath} = useRouter();
+  const isAuth = !asPath?.includes('auth');
 
   return (
     <>
@@ -37,7 +41,7 @@ export function Wrapper({ children }: LayoutProps) {
           rel="stylesheet"
         />
       </Head>
-      <Navbar />
+      {isAuth && <Navbar />}
       <Container>{children}</Container>
     </>
   );

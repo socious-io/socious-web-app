@@ -1,14 +1,14 @@
-import { createContext, ReactNode, useContext, useMemo, useState } from "react";
+import {createContext, ReactNode, useContext, useMemo, useState} from 'react';
 
-import { useWallet, UseWallet } from "./useWallet";
+import {useWallet, UseWallet} from './useWallet';
 
 const WalletContext = createContext<UseWallet>(null!);
 
 type Props = {
   children: ReactNode;
 };
-function WalletProvider({ children }: Props) {
-  const [walletAddress, setWalletAddress] = useWallet("");
+function WalletProvider({children}: Props) {
+  const [walletAddress, setWalletAddress] = useWallet('');
 
   return (
     <WalletContext.Provider value={[walletAddress, setWalletAddress]}>
@@ -20,4 +20,4 @@ function useWalletContext() {
   return useContext(WalletContext);
 }
 
-export { WalletProvider, useWalletContext };
+export {WalletProvider, useWalletContext};
