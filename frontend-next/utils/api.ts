@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 
-import AppConfig from "./constants";
-
+import AppConfig from './constants';
 
 export const DEV_MODE_API = 'https://api.socious.io';
 export const PROD_MODE_API = 'https://api.socious.io';

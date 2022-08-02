@@ -1,12 +1,12 @@
-import { CogIcon } from "@heroicons/react/outline";
-import { ReactComponent as Logo } from "../../asset/icons/logo.svg";
+import {CogIcon} from '@heroicons/react/outline';
+import {ReactComponent as Logo} from '../../asset/icons/logo.svg';
 
-import Link from "next/link";
-import { Avatar } from "../../components/common/Avatar/Avatar";
-import { TextInput } from "../../components/common/TextInput/TextInput";
+import Link from 'next/link';
+import {Avatar} from '../../components/common/Avatar/Avatar';
+import {TextInput} from '../../components/common/TextInput/TextInput';
 
 function Navbar() {
-  const imgSrc = require("../../asset/icons/logo.svg");
+  const imgSrc = require('../../asset/icons/logo.svg');
 
   return (
     <nav className="flex items-center w-full rounded-b-sm bg-primary h-16">

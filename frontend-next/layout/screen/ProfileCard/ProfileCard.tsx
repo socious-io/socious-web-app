@@ -1,4 +1,4 @@
-import { Avatar } from "@components/common";
+import {Avatar} from '@components/common';
 
 export interface ProfileCardProps {
   content?: string;
@@ -18,7 +18,7 @@ export function ProfileCard({
   return (
     <div className="p-4 space-y-4 rounded-2xl border border-grayLineBased">
       <div className="space-y-4">
-        <Avatar src={avatar ?? ""} size="xxl" type={1} />
+        <Avatar src={avatar ?? ''} size="xxl" type={1} />
         <div>
           <p className="text-2xl font-semibold">{name}</p>
           <label className="text-primary">View my profile</label>

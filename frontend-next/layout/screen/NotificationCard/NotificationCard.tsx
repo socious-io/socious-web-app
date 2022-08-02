@@ -1,5 +1,5 @@
-import { Avatar } from "@components/common";
-import { DotsHorizontalIcon } from "@heroicons/react/outline";
+import {Avatar} from '@components/common';
+import {DotsHorizontalIcon} from '@heroicons/react/outline';
 
 export interface NotificationCardProps {
   action?: string;
@@ -17,7 +17,7 @@ export function NotificationCard({
   return (
     <div className="flex flex-row items-center justify-between">
       <div>
-        <Avatar size="l" src={avatar ?? ""} />
+        <Avatar size="l" src={avatar ?? ''} />
       </div>
       <div className="flex flex-col w-4/5">
         <p className="text-sm text-start">
