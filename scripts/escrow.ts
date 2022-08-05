@@ -1,4 +1,4 @@
-import { providers, BigNumber, utils } from "ethers";
+import { providers, BigNumber } from "ethers";
 import { Escrow } from "../@types/contracts/Escrow";
 
 export function getEscrowContract() {

@@ -7,18 +7,38 @@ export function getDonateContract() {
     return { contractAddress, contractAbi };
 }
 
-export async function funcDonate(signedContract: Donate,
-    projectId: number, targetAddress: string, ammount: BigNumber) {
-    try {
-        const txResponse: providers.TransactionResponse = await signedContract.donate(projectId, targetAddress, 
-            { value: ammount, gasLimit: 10_000_000 }
-            );
-        const txReceipt: providers.TransactionReceipt = await txResponse.wait();
-        console.log(`Donation to Organization with address ${targetAddress}\
-        for the ammount of ${ammount} was successful with ${txReceipt.confirmations} confirmations.\n`)
+export async function addToken(
+    signedContract: Donate,
+    targetToken: string) 
+    {
+        try {
+            const txResponse: providers.TransactionResponse = await signedContract.addTokens(targetToken);
+            const txReceipt: providers.TransactionReceipt = await txResponse.wait();
+            console.log(`Token ${targetToken} addded with ${txReceipt.confirmations} confirmations.\n`);
         } catch (e) {
             console.error(e);
         }
+};
+
+export async function funcDonate(
+    signedContract: Donate,
+    projectId: number, 
+    targetAddress: string, 
+    ammount: BigNumber,
+    tokenIndex: number) 
+    {
+        try {
+            const txResponse: providers.TransactionResponse = await signedContract.donate(
+                    projectId, targetAddress, 
+                    ammount, tokenIndex,
+                    { gasLimit: 10_000_000 }
+                );
+            const txReceipt: providers.TransactionReceipt = await txResponse.wait();
+            console.log(`Donation to Organization with address ${targetAddress}\
+            for the ammount of ${ammount} was successful with ${txReceipt.confirmations} confirmations.\n`)
+        } catch (e) {
+                console.error(e);
+            };
 };
 
 export async function funcGetHistory(signedContract: Donate,

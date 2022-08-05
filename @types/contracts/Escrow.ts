@@ -2,499 +2,412 @@
 /* tslint:disable */
 /* eslint-disable */
 import type {
-    BaseContract,
+  BaseContract,
+  BigNumber,
+  BigNumberish,
+  BytesLike,
+  CallOverrides,
+  ContractTransaction,
+  Overrides,
+  PopulatedTransaction,
+  Signer,
+  utils,
+} from "ethers";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
+import type { Listener, Provider } from "@ethersproject/providers";
+import type {
+  TypedEventFilter,
+  TypedEvent,
+  TypedListener,
+  OnEvent,
+  PromiseOrValue,
+} from "../common";
+
+export declare namespace Escrow {
+  export type EscrowDataStruct = {
+    contributor: PromiseOrValue<string>;
+    projectId: PromiseOrValue<BigNumberish>;
+    netAmmount: PromiseOrValue<BigNumberish>;
+    organizationFee: PromiseOrValue<BigNumberish>;
+    contributorFee: PromiseOrValue<BigNumberish>;
+    isInProgress: PromiseOrValue<boolean>;
+    isFinished: PromiseOrValue<boolean>;
+    isCanceled: PromiseOrValue<boolean>;
+  };
+
+  export type EscrowDataStructOutput = [
+    string,
     BigNumber,
-    BigNumberish,
-    BytesLike,
-    CallOverrides,
-    ContractTransaction,
-    Overrides,
-    PayableOverrides,
-    PopulatedTransaction,
-    Signer,
-    utils,
-  } from "ethers";
-  import type {
-    FunctionFragment,
-    Result,
-    EventFragment,
-  } from "@ethersproject/abi";
-  import type { Listener, Provider } from "@ethersproject/providers";
-  import type {
-    TypedEventFilter,
-    TypedEvent,
-    TypedListener,
-    OnEvent,
-    PromiseOrValue,
-  } from "../common";
-  
-  export declare namespace Escrow {
-    export type EscrowDataStruct = {
-      contributor: PromiseOrValue<string>;
-      projectId: PromiseOrValue<BigNumberish>;
-      netAmmount: PromiseOrValue<BigNumberish>;
-      organizationFee: PromiseOrValue<BigNumberish>;
-      contributorFee: PromiseOrValue<BigNumberish>;
-      isInProgress: PromiseOrValue<boolean>;
-      isFinished: PromiseOrValue<boolean>;
-      isCanceled: PromiseOrValue<boolean>;
-    };
-  
-    export type EscrowDataStructOutput = [
-      string,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      boolean,
-      boolean,
-      boolean
-    ] & {
-      contributor: string;
-      projectId: BigNumber;
-      netAmmount: BigNumber;
-      organizationFee: BigNumber;
-      contributorFee: BigNumber;
-      isInProgress: boolean;
-      isFinished: boolean;
-      isCanceled: boolean;
-    };
-  }
-  
-  export interface EscrowInterface extends utils.Interface {
-    functions: {
-      "contributorsHistory(address,uint256)": FunctionFragment;
-      "escrowDecision(uint256,address,address,uint256,uint256)": FunctionFragment;
-      "getDecisionRetentionFee()": FunctionFragment;
-      "getImpactContFee()": FunctionFragment;
-      "getImpactOrgFee()": FunctionFragment;
-      "getNoImpactContFee()": FunctionFragment;
-      "getNoImpactOrgFee()": FunctionFragment;
-      "getSpecificEscrow(address,address,uint256,uint256)": FunctionFragment;
-      "getTransactionIndex(address,address,uint256,uint256)": FunctionFragment;
-      "getTransactionNumber(address,address,uint256,uint256)": FunctionFragment;
-      "newEscrow(address,uint256,uint256)": FunctionFragment;
-      "organizationsHistory(address,uint256)": FunctionFragment;
-      "owner()": FunctionFragment;
-      "renounceOwnership()": FunctionFragment;
-      "setDecisionRetentionFee(uint256)": FunctionFragment;
-      "setImpactContFee(uint256)": FunctionFragment;
-      "setImpactOrgFee(uint256)": FunctionFragment;
-      "setNoImpactContFee(uint256)": FunctionFragment;
-      "setNoImpactOrgFee(uint256)": FunctionFragment;
-      "transferFunds(address,uint256,uint256)": FunctionFragment;
-      "transferOwnership(address)": FunctionFragment;
-    };
-  
-    getFunction(
-      nameOrSignatureOrTopic:
-        | "contributorsHistory"
-        | "escrowDecision"
-        | "getDecisionRetentionFee"
-        | "getImpactContFee"
-        | "getImpactOrgFee"
-        | "getNoImpactContFee"
-        | "getNoImpactOrgFee"
-        | "getSpecificEscrow"
-        | "getTransactionIndex"
-        | "getTransactionNumber"
-        | "newEscrow"
-        | "organizationsHistory"
-        | "owner"
-        | "renounceOwnership"
-        | "setDecisionRetentionFee"
-        | "setImpactContFee"
-        | "setImpactOrgFee"
-        | "setNoImpactContFee"
-        | "setNoImpactOrgFee"
-        | "transferFunds"
-        | "transferOwnership"
-    ): FunctionFragment;
-  
-    encodeFunctionData(
-      functionFragment: "contributorsHistory",
-      values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-    ): string;
-    encodeFunctionData(
-      functionFragment: "escrowDecision",
-      values: [
-        PromiseOrValue<BigNumberish>,
-        PromiseOrValue<string>,
-        PromiseOrValue<string>,
-        PromiseOrValue<BigNumberish>,
-        PromiseOrValue<BigNumberish>
-      ]
-    ): string;
-    encodeFunctionData(
-      functionFragment: "getDecisionRetentionFee",
-      values?: undefined
-    ): string;
-    encodeFunctionData(
-      functionFragment: "getImpactContFee",
-      values?: undefined
-    ): string;
-    encodeFunctionData(
-      functionFragment: "getImpactOrgFee",
-      values?: undefined
-    ): string;
-    encodeFunctionData(
-      functionFragment: "getNoImpactContFee",
-      values?: undefined
-    ): string;
-    encodeFunctionData(
-      functionFragment: "getNoImpactOrgFee",
-      values?: undefined
-    ): string;
-    encodeFunctionData(
-      functionFragment: "getSpecificEscrow",
-      values: [
-        PromiseOrValue<string>,
-        PromiseOrValue<string>,
-        PromiseOrValue<BigNumberish>,
-        PromiseOrValue<BigNumberish>
-      ]
-    ): string;
-    encodeFunctionData(
-      functionFragment: "getTransactionIndex",
-      values: [
-        PromiseOrValue<string>,
-        PromiseOrValue<string>,
-        PromiseOrValue<BigNumberish>,
-        PromiseOrValue<BigNumberish>
-      ]
-    ): string;
-    encodeFunctionData(
-      functionFragment: "getTransactionNumber",
-      values: [
-        PromiseOrValue<string>,
-        PromiseOrValue<string>,
-        PromiseOrValue<BigNumberish>,
-        PromiseOrValue<BigNumberish>
-      ]
-    ): string;
-    encodeFunctionData(
-      functionFragment: "newEscrow",
-      values: [
-        PromiseOrValue<string>,
-        PromiseOrValue<BigNumberish>,
-        PromiseOrValue<BigNumberish>
-      ]
-    ): string;
-    encodeFunctionData(
-      functionFragment: "organizationsHistory",
-      values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-    ): string;
-    encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-    encodeFunctionData(
-      functionFragment: "renounceOwnership",
-      values?: undefined
-    ): string;
-    encodeFunctionData(
-      functionFragment: "setDecisionRetentionFee",
-      values: [PromiseOrValue<BigNumberish>]
-    ): string;
-    encodeFunctionData(
-      functionFragment: "setImpactContFee",
-      values: [PromiseOrValue<BigNumberish>]
-    ): string;
-    encodeFunctionData(
-      functionFragment: "setImpactOrgFee",
-      values: [PromiseOrValue<BigNumberish>]
-    ): string;
-    encodeFunctionData(
-      functionFragment: "setNoImpactContFee",
-      values: [PromiseOrValue<BigNumberish>]
-    ): string;
-    encodeFunctionData(
-      functionFragment: "setNoImpactOrgFee",
-      values: [PromiseOrValue<BigNumberish>]
-    ): string;
-    encodeFunctionData(
-      functionFragment: "transferFunds",
-      values: [
-        PromiseOrValue<string>,
-        PromiseOrValue<BigNumberish>,
-        PromiseOrValue<BigNumberish>
-      ]
-    ): string;
-    encodeFunctionData(
-      functionFragment: "transferOwnership",
-      values: [PromiseOrValue<string>]
-    ): string;
-  
-    decodeFunctionResult(
-      functionFragment: "contributorsHistory",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "escrowDecision",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "getDecisionRetentionFee",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "getImpactContFee",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "getImpactOrgFee",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "getNoImpactContFee",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "getNoImpactOrgFee",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "getSpecificEscrow",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "getTransactionIndex",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "getTransactionNumber",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(functionFragment: "newEscrow", data: BytesLike): Result;
-    decodeFunctionResult(
-      functionFragment: "organizationsHistory",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-    decodeFunctionResult(
-      functionFragment: "renounceOwnership",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "setDecisionRetentionFee",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "setImpactContFee",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "setImpactOrgFee",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "setNoImpactContFee",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "setNoImpactOrgFee",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "transferFunds",
-      data: BytesLike
-    ): Result;
-    decodeFunctionResult(
-      functionFragment: "transferOwnership",
-      data: BytesLike
-    ): Result;
-  
-    events: {
-      "DecisionNotification(address,address,uint256)": EventFragment;
-      "OwnershipTransferred(address,address)": EventFragment;
-    };
-  
-    getEvent(nameOrSignatureOrTopic: "DecisionNotification"): EventFragment;
-    getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  }
-  
-  export interface DecisionNotificationEventObject {
-    _organizationUser: string;
-    _contributorUser: string;
-    _escrowIndex: BigNumber;
-  }
-  export type DecisionNotificationEvent = TypedEvent<
-    [string, string, BigNumber],
-    DecisionNotificationEventObject
-  >;
-  
-  export type DecisionNotificationEventFilter =
-    TypedEventFilter<DecisionNotificationEvent>;
-  
-  export interface OwnershipTransferredEventObject {
-    previousOwner: string;
-    newOwner: string;
-  }
-  export type OwnershipTransferredEvent = TypedEvent<
-    [string, string],
-    OwnershipTransferredEventObject
-  >;
-  
-  export type OwnershipTransferredEventFilter =
-    TypedEventFilter<OwnershipTransferredEvent>;
-  
-  export interface Escrow extends BaseContract {
-    connect(signerOrProvider: Signer | Provider | string): this;
-    attach(addressOrName: string): this;
-    deployed(): Promise<this>;
-  
-    interface: EscrowInterface;
-  
-    queryFilter<TEvent extends TypedEvent>(
-      event: TypedEventFilter<TEvent>,
-      fromBlockOrBlockhash?: string | number | undefined,
-      toBlock?: string | number | undefined
-    ): Promise<Array<TEvent>>;
-  
-    listeners<TEvent extends TypedEvent>(
-      eventFilter?: TypedEventFilter<TEvent>
-    ): Array<TypedListener<TEvent>>;
-    listeners(eventName?: string): Array<Listener>;
-    removeAllListeners<TEvent extends TypedEvent>(
-      eventFilter: TypedEventFilter<TEvent>
-    ): this;
-    removeAllListeners(eventName?: string): this;
-    off: OnEvent<this>;
-    on: OnEvent<this>;
-    once: OnEvent<this>;
-    removeListener: OnEvent<this>;
-  
-    functions: {
-      contributorsHistory(
-        arg0: PromiseOrValue<string>,
-        arg1: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<
-        [string, BigNumber, BigNumber, BigNumber] & {
-          organizationUser: string;
-          projectId: BigNumber;
-          transactionAmmount: BigNumber;
-          transactionNumber: BigNumber;
-        }
-      >;
-  
-      escrowDecision(
-        decision_: PromiseOrValue<BigNumberish>,
-        contributorAddress_: PromiseOrValue<string>,
-        organizationAddress_: PromiseOrValue<string>,
-        projectId_: PromiseOrValue<BigNumberish>,
-        transactionAmmount_: PromiseOrValue<BigNumberish>,
-        overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-      ): Promise<ContractTransaction>;
-  
-      getDecisionRetentionFee(overrides?: CallOverrides): Promise<[BigNumber]>;
-  
-      getImpactContFee(overrides?: CallOverrides): Promise<[BigNumber]>;
-  
-      getImpactOrgFee(overrides?: CallOverrides): Promise<[BigNumber]>;
-  
-      getNoImpactContFee(overrides?: CallOverrides): Promise<[BigNumber]>;
-  
-      getNoImpactOrgFee(overrides?: CallOverrides): Promise<[BigNumber]>;
-  
-      getSpecificEscrow(
-        organizationAddress_: PromiseOrValue<string>,
-        contributorAddress_: PromiseOrValue<string>,
-        projectId_: PromiseOrValue<BigNumberish>,
-        transactionAmmount_: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<[Escrow.EscrowDataStructOutput]>;
-  
-      getTransactionIndex(
-        _organizationAddress: PromiseOrValue<string>,
-        _contributorAddress: PromiseOrValue<string>,
-        _projectId: PromiseOrValue<BigNumberish>,
-        _transactionAmmount: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<[BigNumber]>;
-  
-      getTransactionNumber(
-        _organizationAddress: PromiseOrValue<string>,
-        _contributorAddress: PromiseOrValue<string>,
-        _projectId: PromiseOrValue<BigNumberish>,
-        _transactionAmmount: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<[BigNumber]>;
-  
-      newEscrow(
-        _contributorAddress: PromiseOrValue<string>,
-        _projectId: PromiseOrValue<BigNumberish>,
-        _orgType: PromiseOrValue<BigNumberish>,
-        overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-      ): Promise<ContractTransaction>;
-  
-      organizationsHistory(
-        arg0: PromiseOrValue<string>,
-        arg1: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<
-        [
-          string,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          boolean,
-          boolean,
-          boolean
-        ] & {
-          contributor: string;
-          projectId: BigNumber;
-          netAmmount: BigNumber;
-          organizationFee: BigNumber;
-          contributorFee: BigNumber;
-          isInProgress: boolean;
-          isFinished: boolean;
-          isCanceled: boolean;
-        }
-      >;
-  
-      owner(overrides?: CallOverrides): Promise<[string]>;
-  
-      renounceOwnership(
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<ContractTransaction>;
-  
-      setDecisionRetentionFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<ContractTransaction>;
-  
-      setImpactContFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<ContractTransaction>;
-  
-      setImpactOrgFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<ContractTransaction>;
-  
-      setNoImpactContFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<ContractTransaction>;
-  
-      setNoImpactOrgFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<ContractTransaction>;
-  
-      transferFunds(
-        contributorAddress_: PromiseOrValue<string>,
-        projectId_: PromiseOrValue<BigNumberish>,
-        transactionAmmount_: PromiseOrValue<BigNumberish>,
-        overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-      ): Promise<ContractTransaction>;
-  
-      transferOwnership(
-        newOwner: PromiseOrValue<string>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<ContractTransaction>;
-    };
-  
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    boolean,
+    boolean,
+    boolean
+  ] & {
+    contributor: string;
+    projectId: BigNumber;
+    netAmmount: BigNumber;
+    organizationFee: BigNumber;
+    contributorFee: BigNumber;
+    isInProgress: boolean;
+    isFinished: boolean;
+    isCanceled: boolean;
+  };
+}
+
+export interface EscrowInterface extends utils.Interface {
+  functions: {
+    "addTokens(address)": FunctionFragment;
+    "contributorsHistory(address,uint256)": FunctionFragment;
+    "escrowDecision(uint256,address,address,uint256,uint256,uint256)": FunctionFragment;
+    "getDecisionRetentionFee()": FunctionFragment;
+    "getImpactContFee()": FunctionFragment;
+    "getImpactOrgFee()": FunctionFragment;
+    "getNoImpactContFee()": FunctionFragment;
+    "getNoImpactOrgFee()": FunctionFragment;
+    "getSpecificEscrow(address,address,uint256,uint256)": FunctionFragment;
+    "getToken(uint256)": FunctionFragment;
+    "getTransactionIndex(address,address,uint256,uint256)": FunctionFragment;
+    "getTransactionNumber(address,address,uint256,uint256)": FunctionFragment;
+    "newEscrow(address,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "organizationsHistory(address,uint256)": FunctionFragment;
+    "owner()": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "setDecisionRetentionFee(uint256)": FunctionFragment;
+    "setImpactContFee(uint256)": FunctionFragment;
+    "setImpactOrgFee(uint256)": FunctionFragment;
+    "setNoImpactContFee(uint256)": FunctionFragment;
+    "setNoImpactOrgFee(uint256)": FunctionFragment;
+    "tokenInts(uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+    "withdrawFunds(address,uint256,uint256,uint256)": FunctionFragment;
+  };
+
+  getFunction(
+    nameOrSignatureOrTopic:
+      | "addTokens"
+      | "contributorsHistory"
+      | "escrowDecision"
+      | "getDecisionRetentionFee"
+      | "getImpactContFee"
+      | "getImpactOrgFee"
+      | "getNoImpactContFee"
+      | "getNoImpactOrgFee"
+      | "getSpecificEscrow"
+      | "getToken"
+      | "getTransactionIndex"
+      | "getTransactionNumber"
+      | "newEscrow"
+      | "organizationsHistory"
+      | "owner"
+      | "renounceOwnership"
+      | "setDecisionRetentionFee"
+      | "setImpactContFee"
+      | "setImpactOrgFee"
+      | "setNoImpactContFee"
+      | "setNoImpactOrgFee"
+      | "tokenInts"
+      | "transferOwnership"
+      | "withdrawFunds"
+  ): FunctionFragment;
+
+  encodeFunctionData(
+    functionFragment: "addTokens",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "contributorsHistory",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "escrowDecision",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getDecisionRetentionFee",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getImpactContFee",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getImpactOrgFee",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getNoImpactContFee",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getNoImpactOrgFee",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSpecificEscrow",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getToken",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTransactionIndex",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTransactionNumber",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "newEscrow",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "organizationsHistory",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setDecisionRetentionFee",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setImpactContFee",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setImpactOrgFee",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setNoImpactContFee",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setNoImpactOrgFee",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "tokenInts",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "withdrawFunds",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+
+  decodeFunctionResult(functionFragment: "addTokens", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "contributorsHistory",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "escrowDecision",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getDecisionRetentionFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getImpactContFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getImpactOrgFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getNoImpactContFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getNoImpactOrgFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSpecificEscrow",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getToken", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getTransactionIndex",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTransactionNumber",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "newEscrow", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "organizationsHistory",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setDecisionRetentionFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setImpactContFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setImpactOrgFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setNoImpactContFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setNoImpactOrgFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "tokenInts", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawFunds",
+    data: BytesLike
+  ): Result;
+
+  events: {
+    "DecisionNotification(address,address,uint256,uint256,uint256)": EventFragment;
+    "EscrowAction(uint256,uint256,address,address)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "DecisionNotification"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "EscrowAction"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+}
+
+export interface DecisionNotificationEventObject {
+  _organizationUser: string;
+  _contributorUser: string;
+  _escrowIndex: BigNumber;
+  refundAmmount: BigNumber;
+  feeAmmount: BigNumber;
+}
+export type DecisionNotificationEvent = TypedEvent<
+  [string, string, BigNumber, BigNumber, BigNumber],
+  DecisionNotificationEventObject
+>;
+
+export type DecisionNotificationEventFilter =
+  TypedEventFilter<DecisionNotificationEvent>;
+
+export interface EscrowActionEventObject {
+  totalFee: BigNumber;
+  contAmmount: BigNumber;
+  orgAddress: string;
+  contAddress: string;
+}
+export type EscrowActionEvent = TypedEvent<
+  [BigNumber, BigNumber, string, string],
+  EscrowActionEventObject
+>;
+
+export type EscrowActionEventFilter = TypedEventFilter<EscrowActionEvent>;
+
+export interface OwnershipTransferredEventObject {
+  previousOwner: string;
+  newOwner: string;
+}
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string],
+  OwnershipTransferredEventObject
+>;
+
+export type OwnershipTransferredEventFilter =
+  TypedEventFilter<OwnershipTransferredEvent>;
+
+export interface Escrow extends BaseContract {
+  connect(signerOrProvider: Signer | Provider | string): this;
+  attach(addressOrName: string): this;
+  deployed(): Promise<this>;
+
+  interface: EscrowInterface;
+
+  queryFilter<TEvent extends TypedEvent>(
+    event: TypedEventFilter<TEvent>,
+    fromBlockOrBlockhash?: string | number | undefined,
+    toBlock?: string | number | undefined
+  ): Promise<Array<TEvent>>;
+
+  listeners<TEvent extends TypedEvent>(
+    eventFilter?: TypedEventFilter<TEvent>
+  ): Array<TypedListener<TEvent>>;
+  listeners(eventName?: string): Array<Listener>;
+  removeAllListeners<TEvent extends TypedEvent>(
+    eventFilter: TypedEventFilter<TEvent>
+  ): this;
+  removeAllListeners(eventName?: string): this;
+  off: OnEvent<this>;
+  on: OnEvent<this>;
+  once: OnEvent<this>;
+  removeListener: OnEvent<this>;
+
+  functions: {
+    addTokens(
+      newToken: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     contributorsHistory(
       arg0: PromiseOrValue<string>,
       arg1: PromiseOrValue<BigNumberish>,
@@ -507,57 +420,65 @@ import type {
         transactionNumber: BigNumber;
       }
     >;
-  
+
     escrowDecision(
       decision_: PromiseOrValue<BigNumberish>,
       contributorAddress_: PromiseOrValue<string>,
       organizationAddress_: PromiseOrValue<string>,
       projectId_: PromiseOrValue<BigNumberish>,
       transactionAmmount_: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      _token: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-  
-    getDecisionRetentionFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-    getImpactContFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-    getImpactOrgFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-    getNoImpactContFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-    getNoImpactOrgFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
+
+    getDecisionRetentionFee(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getImpactContFee(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getImpactOrgFee(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getNoImpactContFee(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getNoImpactOrgFee(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getSpecificEscrow(
       organizationAddress_: PromiseOrValue<string>,
       contributorAddress_: PromiseOrValue<string>,
       projectId_: PromiseOrValue<BigNumberish>,
       transactionAmmount_: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<Escrow.EscrowDataStructOutput>;
-  
+    ): Promise<[Escrow.EscrowDataStructOutput]>;
+
+    getToken(
+      tokenIndex: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     getTransactionIndex(
       _organizationAddress: PromiseOrValue<string>,
       _contributorAddress: PromiseOrValue<string>,
       _projectId: PromiseOrValue<BigNumberish>,
       _transactionAmmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
-  
+    ): Promise<[BigNumber]>;
+
     getTransactionNumber(
       _organizationAddress: PromiseOrValue<string>,
       _contributorAddress: PromiseOrValue<string>,
       _projectId: PromiseOrValue<BigNumberish>,
       _transactionAmmount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
-  
+    ): Promise<[BigNumber]>;
+
     newEscrow(
       _contributorAddress: PromiseOrValue<string>,
       _projectId: PromiseOrValue<BigNumberish>,
       _orgType: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      _ammount: PromiseOrValue<BigNumberish>,
+      _token: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-  
+
     organizationsHistory(
       arg0: PromiseOrValue<string>,
       arg1: PromiseOrValue<BigNumberish>,
@@ -583,420 +504,651 @@ import type {
         isCanceled: boolean;
       }
     >;
-  
-    owner(overrides?: CallOverrides): Promise<string>;
-  
+
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-  
+
     setDecisionRetentionFee(
       newFee: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-  
+
     setImpactContFee(
       newFee: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-  
+
     setImpactOrgFee(
       newFee: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-  
+
     setNoImpactContFee(
       newFee: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-  
+
     setNoImpactOrgFee(
       newFee: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-  
-    transferFunds(
-      contributorAddress_: PromiseOrValue<string>,
-      projectId_: PromiseOrValue<BigNumberish>,
-      transactionAmmount_: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-  
+
+    tokenInts(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     transferOwnership(
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-  
-    callStatic: {
-      contributorsHistory(
-        arg0: PromiseOrValue<string>,
-        arg1: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<
-        [string, BigNumber, BigNumber, BigNumber] & {
-          organizationUser: string;
-          projectId: BigNumber;
-          transactionAmmount: BigNumber;
-          transactionNumber: BigNumber;
-        }
-      >;
-  
-      escrowDecision(
-        decision_: PromiseOrValue<BigNumberish>,
-        contributorAddress_: PromiseOrValue<string>,
-        organizationAddress_: PromiseOrValue<string>,
-        projectId_: PromiseOrValue<BigNumberish>,
-        transactionAmmount_: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<boolean>;
-  
-      getDecisionRetentionFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-      getImpactContFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-      getImpactOrgFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-      getNoImpactContFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-      getNoImpactOrgFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-      getSpecificEscrow(
-        organizationAddress_: PromiseOrValue<string>,
-        contributorAddress_: PromiseOrValue<string>,
-        projectId_: PromiseOrValue<BigNumberish>,
-        transactionAmmount_: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<Escrow.EscrowDataStructOutput>;
-  
-      getTransactionIndex(
-        _organizationAddress: PromiseOrValue<string>,
-        _contributorAddress: PromiseOrValue<string>,
-        _projectId: PromiseOrValue<BigNumberish>,
-        _transactionAmmount: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<BigNumber>;
-  
-      getTransactionNumber(
-        _organizationAddress: PromiseOrValue<string>,
-        _contributorAddress: PromiseOrValue<string>,
-        _projectId: PromiseOrValue<BigNumberish>,
-        _transactionAmmount: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<BigNumber>;
-  
-      newEscrow(
-        _contributorAddress: PromiseOrValue<string>,
-        _projectId: PromiseOrValue<BigNumberish>,
-        _orgType: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<boolean>;
-  
-      organizationsHistory(
-        arg0: PromiseOrValue<string>,
-        arg1: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<
-        [
-          string,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          BigNumber,
-          boolean,
-          boolean,
-          boolean
-        ] & {
-          contributor: string;
-          projectId: BigNumber;
-          netAmmount: BigNumber;
-          organizationFee: BigNumber;
-          contributorFee: BigNumber;
-          isInProgress: boolean;
-          isFinished: boolean;
-          isCanceled: boolean;
-        }
-      >;
-  
-      owner(overrides?: CallOverrides): Promise<string>;
-  
-      renounceOwnership(overrides?: CallOverrides): Promise<void>;
-  
-      setDecisionRetentionFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<void>;
-  
-      setImpactContFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<void>;
-  
-      setImpactOrgFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<void>;
-  
-      setNoImpactContFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<void>;
-  
-      setNoImpactOrgFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<void>;
-  
-      transferFunds(
-        contributorAddress_: PromiseOrValue<string>,
-        projectId_: PromiseOrValue<BigNumberish>,
-        transactionAmmount_: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<boolean>;
-  
-      transferOwnership(
-        newOwner: PromiseOrValue<string>,
-        overrides?: CallOverrides
-      ): Promise<void>;
-    };
-  
-    filters: {
-      "DecisionNotification(address,address,uint256)"(
-        _organizationUser?: null,
-        _contributorUser?: null,
-        _escrowIndex?: null
-      ): DecisionNotificationEventFilter;
-      DecisionNotification(
-        _organizationUser?: null,
-        _contributorUser?: null,
-        _escrowIndex?: null
-      ): DecisionNotificationEventFilter;
-  
-      "OwnershipTransferred(address,address)"(
-        previousOwner?: PromiseOrValue<string> | null,
-        newOwner?: PromiseOrValue<string> | null
-      ): OwnershipTransferredEventFilter;
-      OwnershipTransferred(
-        previousOwner?: PromiseOrValue<string> | null,
-        newOwner?: PromiseOrValue<string> | null
-      ): OwnershipTransferredEventFilter;
-    };
-  
-    estimateGas: {
-      contributorsHistory(
-        arg0: PromiseOrValue<string>,
-        arg1: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<BigNumber>;
-  
-      escrowDecision(
-        decision_: PromiseOrValue<BigNumberish>,
-        contributorAddress_: PromiseOrValue<string>,
-        organizationAddress_: PromiseOrValue<string>,
-        projectId_: PromiseOrValue<BigNumberish>,
-        transactionAmmount_: PromiseOrValue<BigNumberish>,
-        overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-      ): Promise<BigNumber>;
-  
-      getDecisionRetentionFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-      getImpactContFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-      getImpactOrgFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-      getNoImpactContFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-      getNoImpactOrgFee(overrides?: CallOverrides): Promise<BigNumber>;
-  
-      getSpecificEscrow(
-        organizationAddress_: PromiseOrValue<string>,
-        contributorAddress_: PromiseOrValue<string>,
-        projectId_: PromiseOrValue<BigNumberish>,
-        transactionAmmount_: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<BigNumber>;
-  
-      getTransactionIndex(
-        _organizationAddress: PromiseOrValue<string>,
-        _contributorAddress: PromiseOrValue<string>,
-        _projectId: PromiseOrValue<BigNumberish>,
-        _transactionAmmount: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<BigNumber>;
-  
-      getTransactionNumber(
-        _organizationAddress: PromiseOrValue<string>,
-        _contributorAddress: PromiseOrValue<string>,
-        _projectId: PromiseOrValue<BigNumberish>,
-        _transactionAmmount: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<BigNumber>;
-  
-      newEscrow(
-        _contributorAddress: PromiseOrValue<string>,
-        _projectId: PromiseOrValue<BigNumberish>,
-        _orgType: PromiseOrValue<BigNumberish>,
-        overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-      ): Promise<BigNumber>;
-  
-      organizationsHistory(
-        arg0: PromiseOrValue<string>,
-        arg1: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<BigNumber>;
-  
-      owner(overrides?: CallOverrides): Promise<BigNumber>;
-  
-      renounceOwnership(
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<BigNumber>;
-  
-      setDecisionRetentionFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<BigNumber>;
-  
-      setImpactContFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<BigNumber>;
-  
-      setImpactOrgFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<BigNumber>;
-  
-      setNoImpactContFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<BigNumber>;
-  
-      setNoImpactOrgFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<BigNumber>;
-  
-      transferFunds(
-        contributorAddress_: PromiseOrValue<string>,
-        projectId_: PromiseOrValue<BigNumberish>,
-        transactionAmmount_: PromiseOrValue<BigNumberish>,
-        overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-      ): Promise<BigNumber>;
-  
-      transferOwnership(
-        newOwner: PromiseOrValue<string>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<BigNumber>;
-    };
-  
-    populateTransaction: {
-      contributorsHistory(
-        arg0: PromiseOrValue<string>,
-        arg1: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<PopulatedTransaction>;
-  
-      escrowDecision(
-        decision_: PromiseOrValue<BigNumberish>,
-        contributorAddress_: PromiseOrValue<string>,
-        organizationAddress_: PromiseOrValue<string>,
-        projectId_: PromiseOrValue<BigNumberish>,
-        transactionAmmount_: PromiseOrValue<BigNumberish>,
-        overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-      ): Promise<PopulatedTransaction>;
-  
-      getDecisionRetentionFee(
-        overrides?: CallOverrides
-      ): Promise<PopulatedTransaction>;
-  
-      getImpactContFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-  
-      getImpactOrgFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-  
-      getNoImpactContFee(
-        overrides?: CallOverrides
-      ): Promise<PopulatedTransaction>;
-  
-      getNoImpactOrgFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-  
-      getSpecificEscrow(
-        organizationAddress_: PromiseOrValue<string>,
-        contributorAddress_: PromiseOrValue<string>,
-        projectId_: PromiseOrValue<BigNumberish>,
-        transactionAmmount_: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<PopulatedTransaction>;
-  
-      getTransactionIndex(
-        _organizationAddress: PromiseOrValue<string>,
-        _contributorAddress: PromiseOrValue<string>,
-        _projectId: PromiseOrValue<BigNumberish>,
-        _transactionAmmount: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<PopulatedTransaction>;
-  
-      getTransactionNumber(
-        _organizationAddress: PromiseOrValue<string>,
-        _contributorAddress: PromiseOrValue<string>,
-        _projectId: PromiseOrValue<BigNumberish>,
-        _transactionAmmount: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<PopulatedTransaction>;
-  
-      newEscrow(
-        _contributorAddress: PromiseOrValue<string>,
-        _projectId: PromiseOrValue<BigNumberish>,
-        _orgType: PromiseOrValue<BigNumberish>,
-        overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-      ): Promise<PopulatedTransaction>;
-  
-      organizationsHistory(
-        arg0: PromiseOrValue<string>,
-        arg1: PromiseOrValue<BigNumberish>,
-        overrides?: CallOverrides
-      ): Promise<PopulatedTransaction>;
-  
-      owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-  
-      renounceOwnership(
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<PopulatedTransaction>;
-  
-      setDecisionRetentionFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<PopulatedTransaction>;
-  
-      setImpactContFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<PopulatedTransaction>;
-  
-      setImpactOrgFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<PopulatedTransaction>;
-  
-      setNoImpactContFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<PopulatedTransaction>;
-  
-      setNoImpactOrgFee(
-        newFee: PromiseOrValue<BigNumberish>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<PopulatedTransaction>;
-  
-      transferFunds(
-        contributorAddress_: PromiseOrValue<string>,
-        projectId_: PromiseOrValue<BigNumberish>,
-        transactionAmmount_: PromiseOrValue<BigNumberish>,
-        overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-      ): Promise<PopulatedTransaction>;
-  
-      transferOwnership(
-        newOwner: PromiseOrValue<string>,
-        overrides?: Overrides & { from?: PromiseOrValue<string> }
-      ): Promise<PopulatedTransaction>;
-    };
-  }
-  
+
+    withdrawFunds(
+      contributorAddress_: PromiseOrValue<string>,
+      projectId_: PromiseOrValue<BigNumberish>,
+      transactionAmmount_: PromiseOrValue<BigNumberish>,
+      _token: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+  };
+
+  addTokens(
+    newToken: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  contributorsHistory(
+    arg0: PromiseOrValue<string>,
+    arg1: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<
+    [string, BigNumber, BigNumber, BigNumber] & {
+      organizationUser: string;
+      projectId: BigNumber;
+      transactionAmmount: BigNumber;
+      transactionNumber: BigNumber;
+    }
+  >;
+
+  escrowDecision(
+    decision_: PromiseOrValue<BigNumberish>,
+    contributorAddress_: PromiseOrValue<string>,
+    organizationAddress_: PromiseOrValue<string>,
+    projectId_: PromiseOrValue<BigNumberish>,
+    transactionAmmount_: PromiseOrValue<BigNumberish>,
+    _token: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  getDecisionRetentionFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getImpactContFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getImpactOrgFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getNoImpactContFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getNoImpactOrgFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getSpecificEscrow(
+    organizationAddress_: PromiseOrValue<string>,
+    contributorAddress_: PromiseOrValue<string>,
+    projectId_: PromiseOrValue<BigNumberish>,
+    transactionAmmount_: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<Escrow.EscrowDataStructOutput>;
+
+  getToken(
+    tokenIndex: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getTransactionIndex(
+    _organizationAddress: PromiseOrValue<string>,
+    _contributorAddress: PromiseOrValue<string>,
+    _projectId: PromiseOrValue<BigNumberish>,
+    _transactionAmmount: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getTransactionNumber(
+    _organizationAddress: PromiseOrValue<string>,
+    _contributorAddress: PromiseOrValue<string>,
+    _projectId: PromiseOrValue<BigNumberish>,
+    _transactionAmmount: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  newEscrow(
+    _contributorAddress: PromiseOrValue<string>,
+    _projectId: PromiseOrValue<BigNumberish>,
+    _orgType: PromiseOrValue<BigNumberish>,
+    _ammount: PromiseOrValue<BigNumberish>,
+    _token: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  organizationsHistory(
+    arg0: PromiseOrValue<string>,
+    arg1: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<
+    [
+      string,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      boolean,
+      boolean,
+      boolean
+    ] & {
+      contributor: string;
+      projectId: BigNumber;
+      netAmmount: BigNumber;
+      organizationFee: BigNumber;
+      contributorFee: BigNumber;
+      isInProgress: boolean;
+      isFinished: boolean;
+      isCanceled: boolean;
+    }
+  >;
+
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setDecisionRetentionFee(
+    newFee: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setImpactContFee(
+    newFee: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setImpactOrgFee(
+    newFee: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setNoImpactContFee(
+    newFee: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setNoImpactOrgFee(
+    newFee: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  tokenInts(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  transferOwnership(
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  withdrawFunds(
+    contributorAddress_: PromiseOrValue<string>,
+    projectId_: PromiseOrValue<BigNumberish>,
+    transactionAmmount_: PromiseOrValue<BigNumberish>,
+    _token: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  callStatic: {
+    addTokens(
+      newToken: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    contributorsHistory(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [string, BigNumber, BigNumber, BigNumber] & {
+        organizationUser: string;
+        projectId: BigNumber;
+        transactionAmmount: BigNumber;
+        transactionNumber: BigNumber;
+      }
+    >;
+
+    escrowDecision(
+      decision_: PromiseOrValue<BigNumberish>,
+      contributorAddress_: PromiseOrValue<string>,
+      organizationAddress_: PromiseOrValue<string>,
+      projectId_: PromiseOrValue<BigNumberish>,
+      transactionAmmount_: PromiseOrValue<BigNumberish>,
+      _token: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    getDecisionRetentionFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getImpactContFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getImpactOrgFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getNoImpactContFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getNoImpactOrgFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getSpecificEscrow(
+      organizationAddress_: PromiseOrValue<string>,
+      contributorAddress_: PromiseOrValue<string>,
+      projectId_: PromiseOrValue<BigNumberish>,
+      transactionAmmount_: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<Escrow.EscrowDataStructOutput>;
+
+    getToken(
+      tokenIndex: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getTransactionIndex(
+      _organizationAddress: PromiseOrValue<string>,
+      _contributorAddress: PromiseOrValue<string>,
+      _projectId: PromiseOrValue<BigNumberish>,
+      _transactionAmmount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTransactionNumber(
+      _organizationAddress: PromiseOrValue<string>,
+      _contributorAddress: PromiseOrValue<string>,
+      _projectId: PromiseOrValue<BigNumberish>,
+      _transactionAmmount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    newEscrow(
+      _contributorAddress: PromiseOrValue<string>,
+      _projectId: PromiseOrValue<BigNumberish>,
+      _orgType: PromiseOrValue<BigNumberish>,
+      _ammount: PromiseOrValue<BigNumberish>,
+      _token: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    organizationsHistory(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        string,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        boolean,
+        boolean,
+        boolean
+      ] & {
+        contributor: string;
+        projectId: BigNumber;
+        netAmmount: BigNumber;
+        organizationFee: BigNumber;
+        contributorFee: BigNumber;
+        isInProgress: boolean;
+        isFinished: boolean;
+        isCanceled: boolean;
+      }
+    >;
+
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    setDecisionRetentionFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setImpactContFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setImpactOrgFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setNoImpactContFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setNoImpactOrgFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    tokenInts(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    withdrawFunds(
+      contributorAddress_: PromiseOrValue<string>,
+      projectId_: PromiseOrValue<BigNumberish>,
+      transactionAmmount_: PromiseOrValue<BigNumberish>,
+      _token: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+  };
+
+  filters: {
+    "DecisionNotification(address,address,uint256,uint256,uint256)"(
+      _organizationUser?: null,
+      _contributorUser?: null,
+      _escrowIndex?: null,
+      refundAmmount?: null,
+      feeAmmount?: null
+    ): DecisionNotificationEventFilter;
+    DecisionNotification(
+      _organizationUser?: null,
+      _contributorUser?: null,
+      _escrowIndex?: null,
+      refundAmmount?: null,
+      feeAmmount?: null
+    ): DecisionNotificationEventFilter;
+
+    "EscrowAction(uint256,uint256,address,address)"(
+      totalFee?: null,
+      contAmmount?: null,
+      orgAddress?: null,
+      contAddress?: null
+    ): EscrowActionEventFilter;
+    EscrowAction(
+      totalFee?: null,
+      contAmmount?: null,
+      orgAddress?: null,
+      contAddress?: null
+    ): EscrowActionEventFilter;
+
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+  };
+
+  estimateGas: {
+    addTokens(
+      newToken: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    contributorsHistory(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    escrowDecision(
+      decision_: PromiseOrValue<BigNumberish>,
+      contributorAddress_: PromiseOrValue<string>,
+      organizationAddress_: PromiseOrValue<string>,
+      projectId_: PromiseOrValue<BigNumberish>,
+      transactionAmmount_: PromiseOrValue<BigNumberish>,
+      _token: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    getDecisionRetentionFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getImpactContFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getImpactOrgFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getNoImpactContFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getNoImpactOrgFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getSpecificEscrow(
+      organizationAddress_: PromiseOrValue<string>,
+      contributorAddress_: PromiseOrValue<string>,
+      projectId_: PromiseOrValue<BigNumberish>,
+      transactionAmmount_: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getToken(
+      tokenIndex: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTransactionIndex(
+      _organizationAddress: PromiseOrValue<string>,
+      _contributorAddress: PromiseOrValue<string>,
+      _projectId: PromiseOrValue<BigNumberish>,
+      _transactionAmmount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTransactionNumber(
+      _organizationAddress: PromiseOrValue<string>,
+      _contributorAddress: PromiseOrValue<string>,
+      _projectId: PromiseOrValue<BigNumberish>,
+      _transactionAmmount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    newEscrow(
+      _contributorAddress: PromiseOrValue<string>,
+      _projectId: PromiseOrValue<BigNumberish>,
+      _orgType: PromiseOrValue<BigNumberish>,
+      _ammount: PromiseOrValue<BigNumberish>,
+      _token: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    organizationsHistory(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setDecisionRetentionFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setImpactContFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setImpactOrgFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setNoImpactContFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setNoImpactOrgFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    tokenInts(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    withdrawFunds(
+      contributorAddress_: PromiseOrValue<string>,
+      projectId_: PromiseOrValue<BigNumberish>,
+      transactionAmmount_: PromiseOrValue<BigNumberish>,
+      _token: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+  };
+
+  populateTransaction: {
+    addTokens(
+      newToken: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    contributorsHistory(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    escrowDecision(
+      decision_: PromiseOrValue<BigNumberish>,
+      contributorAddress_: PromiseOrValue<string>,
+      organizationAddress_: PromiseOrValue<string>,
+      projectId_: PromiseOrValue<BigNumberish>,
+      transactionAmmount_: PromiseOrValue<BigNumberish>,
+      _token: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getDecisionRetentionFee(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getImpactContFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getImpactOrgFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getNoImpactContFee(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getNoImpactOrgFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getSpecificEscrow(
+      organizationAddress_: PromiseOrValue<string>,
+      contributorAddress_: PromiseOrValue<string>,
+      projectId_: PromiseOrValue<BigNumberish>,
+      transactionAmmount_: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getToken(
+      tokenIndex: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTransactionIndex(
+      _organizationAddress: PromiseOrValue<string>,
+      _contributorAddress: PromiseOrValue<string>,
+      _projectId: PromiseOrValue<BigNumberish>,
+      _transactionAmmount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTransactionNumber(
+      _organizationAddress: PromiseOrValue<string>,
+      _contributorAddress: PromiseOrValue<string>,
+      _projectId: PromiseOrValue<BigNumberish>,
+      _transactionAmmount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    newEscrow(
+      _contributorAddress: PromiseOrValue<string>,
+      _projectId: PromiseOrValue<BigNumberish>,
+      _orgType: PromiseOrValue<BigNumberish>,
+      _ammount: PromiseOrValue<BigNumberish>,
+      _token: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    organizationsHistory(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setDecisionRetentionFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setImpactContFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setImpactOrgFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setNoImpactContFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setNoImpactOrgFee(
+      newFee: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    tokenInts(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    withdrawFunds(
+      contributorAddress_: PromiseOrValue<string>,
+      projectId_: PromiseOrValue<BigNumberish>,
+      transactionAmmount_: PromiseOrValue<BigNumberish>,
+      _token: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+  };
+}
