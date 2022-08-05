@@ -1,26 +1,35 @@
 import { useState } from "react";
 import type { NextPage } from "next";
-import { Contract, utils } from "ethers";
+import { Contract, utils, Signer } from "ethers";
 import { useAccount, useProvider, useSigner } from "wagmi";
 import { Button } from "@components/common";
-import { getDonateContract, funcDonate, funcGetFee, funcGetHistory } from "../scripts";
-import { Donate } from "../@types/contracts/Donate";
+import { getDonateContract, funcDonate, 
+  funcGetFee, funcGetHistory,
+  getTokenContract, funcApprove,
+  validateTokenExists } from "../scripts";
+import { Donate, IERC20 } from "../@types/contracts/";
 
 const Donation: NextPage = () => {
   const { address, isConnected } = useAccount();
   const { contractAddress, contractAbi } = getDonateContract();
-  const provider = useProvider();
   let contract: Donate;
+  let tokenContract: IERC20;
+
+  const [targetCoin, setTargetCoin] = useState("usdc_test");
+  const { tokenAddress, contractAbi: tokenAbi } = getTokenContract(targetCoin);
+
   if (isConnected) {
     const { data: signer } = useSigner({
         onSettled(data, error) {
           console.log('Settled', data, error)
         },
       });
-    contract = new Contract(contractAddress, contractAbi, signer) as Donate;
+    contract = new Contract(contractAddress, contractAbi, signer as Signer) as Donate;
+    tokenContract = new Contract(tokenAddress, tokenAbi, signer as Signer) as IERC20;
     } else {
       const provider = useProvider();
       contract = new Contract(contractAddress, contractAbi, provider) as Donate;
+      tokenContract = new Contract(tokenAddress, tokenAbi, provider) as IERC20;
     };
 
   /* We are expecting the implementation to read this data from React-Native */
@@ -30,8 +39,12 @@ const Donation: NextPage = () => {
   const [userType, setUserType] = useState("individual");
 
   const makeDonation = async () => {
-    if (isConnected) {
-      await funcDonate(contract, projectId, orgAdrs, ammount);
+    const { result: validToken, tokenIndex } = await validateTokenExists(contract, targetCoin);
+    if (isConnected && validToken) {
+      await funcApprove(tokenContract, contract.address, ammount);
+      await funcDonate(contract, projectId, 
+        orgAdrs, ammount, 
+        tokenIndex);
     } else {
       console.log('Wallet is not connected');
     }
