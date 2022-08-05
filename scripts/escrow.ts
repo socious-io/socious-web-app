@@ -2,7 +2,7 @@ import { providers, BigNumber, utils } from "ethers";
 import { Escrow } from "../@types/contracts/Escrow";
 
 export function getEscrowContract() {
-    const contractAddress = "0xDF8864AAdcf77f7706dEbAcB214634Bb816c90aE";
+    const contractAddress = "0x961F8787035c2280479589DaB31BdD7186a8B577";
     const contractAbi = require("../asset/abis/Escrow.json");
     return { contractAddress, contractAbi };
 };

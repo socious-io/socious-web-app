@@ -6,7 +6,6 @@ import { Avatar } from "../../components/common/Avatar/Avatar";
 import { TextInput } from "../../components/common/TextInput/TextInput";
 
 function Navbar() {
-  const imgSrc = require("../../asset/icons/logo.svg");
 
   return (
     <nav className="flex items-center w-full rounded-b-sm bg-primary h-16">
@@ -18,7 +17,6 @@ function Navbar() {
                 <Link href="/">
                   <a>
                     <img
-                      src={imgSrc}
                       className="fill-warning"
                       alt="socious logo"
                     />

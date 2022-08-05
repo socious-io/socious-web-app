@@ -2,7 +2,7 @@ import { providers, BigNumber } from "ethers";
 import { Donate } from "../@types/contracts/Donate";
 
 export function getDonateContract() {
-    const contractAddress = "0xeb20711725A61A75E660A046beBe5E19d45b422B";
+    const contractAddress = "0x99B0f41941C34A98482C6621DeEF2381D7fa5f4c";
     const contractAbi = require("../asset/abis/Donate.json");
     return { contractAddress, contractAbi };
 }

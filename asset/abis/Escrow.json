@@ -24,9 +24,52 @@
         "internalType": "uint256",
         "name": "_escrowIndex",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "refundAmmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "feeAmmount",
+        "type": "uint256"
       }
     ],
     "name": "DecisionNotification",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalFee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "contAmmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "orgAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "contAddress",
+        "type": "address"
+      }
+    ],
+    "name": "EscrowAction",
     "type": "event"
   },
   {
@@ -47,6 +90,19 @@
     ],
     "name": "OwnershipTransferred",
     "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newToken",
+        "type": "address"
+      }
+    ],
+    "name": "addTokens",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -95,12 +151,12 @@
         "type": "uint256"
       },
       {
-        "internalType": "address payable",
+        "internalType": "address",
         "name": "contributorAddress_",
         "type": "address"
       },
       {
-        "internalType": "address payable",
+        "internalType": "address",
         "name": "organizationAddress_",
         "type": "address"
       },
@@ -113,17 +169,16 @@
         "internalType": "uint256",
         "name": "transactionAmmount_",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_token",
+        "type": "uint256"
       }
     ],
     "name": "escrowDecision",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "payable",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -270,6 +325,25 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "tokenIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "getToken",
+    "outputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_organizationAddress",
         "type": "address"
@@ -351,17 +425,21 @@
         "internalType": "uint256",
         "name": "_orgType",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_ammount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_token",
+        "type": "uint256"
       }
     ],
     "name": "newEscrow",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "payable",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -511,7 +589,39 @@
   {
     "inputs": [
       {
-        "internalType": "address payable",
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "tokenInts",
+    "outputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "contributorAddress_",
         "type": "address"
       },
@@ -524,28 +634,14 @@
         "internalType": "uint256",
         "name": "transactionAmmount_",
         "type": "uint256"
-      }
-    ],
-    "name": "transferFunds",
-    "outputs": [
+      },
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "uint256",
+        "name": "_token",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
+    "name": "withdrawFunds",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
