@@ -1,13 +1,21 @@
 import { providers, BigNumber } from "ethers";
 import { Donate } from "../@types/contracts/Donate";
 
+interface TokenMap {
+    [tokenName: string]: number
+}
+
+export const tokenMap = <TokenMap>{
+    usdc_test: 0
+}
+
 export function getDonateContract() {
     const contractAddress = "0x99B0f41941C34A98482C6621DeEF2381D7fa5f4c";
     const contractAbi = require("../asset/abis/Donate.json");
     return { contractAddress, contractAbi };
 }
 
-export async function addToken(
+export async function funcAddToken(
     signedContract: Donate,
     targetToken: string) 
     {
