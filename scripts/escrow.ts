@@ -1,4 +1,4 @@
-import { providers, BigNumber } from "ethers";
+ import { providers, BigNumber } from "ethers";
 import { Escrow } from "../@types/contracts/Escrow";
 
 export function getEscrowContract() {
@@ -7,22 +7,54 @@ export function getEscrowContract() {
     return { contractAddress, contractAbi };
 };
 
-export async function funcNewEscrow(signedContract: Escrow,
-    contAddress: string, projectId: number, 
-    orgType: number, ammount: BigNumber) {
+export async function funcNewEscrow (
+    signedContract: Escrow,
+    contAddress: string, 
+    projectId: number, 
+    orgType: number, 
+    ammount: BigNumber,
+    tokIndex: number
+    ) {
         try {
             const txResponse: providers.TransactionResponse = await signedContract.newEscrow(
-                contAddress, projectId, orgType, {
-                    value: ammount, gasLimit: 10_000_000
-                }
+                contAddress, projectId, 
+                orgType, 
+                ammount,
+                tokIndex,
+                { gasLimit: 10_000_000 }
             );
             const txReceipt: providers.TransactionReceipt = await txResponse.wait();
             console.log(`Escrow between parties: Organization - ${await signedContract.signer.getAddress()}\
             and Contributor - ${contAddress} was successful with ${txReceipt.confirmations}\
             confirmations\n`)
-            } catch (e) {
-                console.error(e);
-            }
+        } catch (e) {
+            console.error(e);
+        };
+};
+
+export async function funcWithdrawFunds (
+    signedContract: Escrow,
+    contAddress: string,
+    projectId: number,
+    ammount: BigNumber,
+    tokIndex: number
+    ) {
+        try {
+            const txResponse: providers.TransactionResponse = await signedContract.withdrawFunds(
+                contAddress,
+                projectId,
+                ammount,
+                tokIndex,
+                { gasLimit: 10_000_000 }
+            );
+            const txReceipt: providers.TransactionReceipt = await txResponse.wait();
+            console.log(`Funds have been successfully transfer between parties. \
+                Organization ${await signedContract.signer.getAddress()} & Contributor ${contAddress}\
+                with ${txReceipt.confirmations} confirmations\n`)
+        } catch (e) {
+            console.error(e);
+        }
+
 };
 
 export async function funcGetfees(signedContract: Escrow, 
@@ -49,35 +81,33 @@ export async function funcGetfees(signedContract: Escrow,
         }
 };
 
-export async function funcTransferFunds(signedContract: Escrow, 
-    contAddress: string, projectId: number, ammount: BigNumber) {
-        try {
-            const txResponse: providers.TransactionResponse = await signedContract.transferFunds(contAddress, projectId, 
-                ammount, {
-                    gasLimit: 10_000_000
-                });
-            const txReceipt = await txResponse.wait();
-            console.log(`Escrow has been completed. Funds for ${ammount} in value has been trasfer\
-            to contributor with address ${contAddress} with ${txReceipt.confirmations} confirmations\n`);
-        } catch(e) {
-            console.error(e);
-        }
-};
-
 /* This function is not to be used by the Front-end but by Socious for 
 Escrow Resolutions */
-export async function funcEscrowDecision(signedContract: Escrow, decision: number,
-    contAddress: string, orgAddress: string, projectId: number, ammount: BigNumber) {
-    try{
-        const txResponse: providers.TransactionResponse = await signedContract.escrowDecision(
-            decision, contAddress, orgAddress, projectId, ammount
-        );
-        await txResponse.wait();
-        signedContract.on("DecisionNotification", (author, _oldValue, newValue, _event) => {
-            console.log(`Transaction signed by ${author}\n\
-            Completed with ${newValue}`);
-        })
-    } catch(e) {
-        console.error(e)
-    }
+export async function funcEscrowDecision (
+    signedContract: Escrow, 
+    decision: number,
+    contAddress: string, 
+    orgAddress: string, 
+    projectId: number, 
+    ammount: BigNumber,
+    tokIndex: number
+    ) {
+        try {
+            const txResponse: providers.TransactionResponse = await signedContract.escrowDecision(
+                decision, 
+                contAddress, 
+                orgAddress, 
+                projectId, 
+                ammount,
+                tokIndex, 
+                { gasLimit: 10_000_000 }
+            );
+            await txResponse.wait();
+            signedContract.on("DecisionNotification", (author, _oldValue, newValue, _event) => {
+                console.log(`Transaction signed by ${author}\n\
+                Completed with ${newValue}`);
+            })
+        } catch(e) {
+            console.error(e)
+        };
 }

@@ -6,7 +6,7 @@ import { Button } from "@components/common";
 import { getDonateContract, funcDonate, 
   funcGetFee, funcGetHistory,
   getTokenContract, funcApprove,
-  validateTokenExists, funcGetBalance } from "../scripts";
+  validateTokenExists } from "../scripts";
 import { Donate, ERC20 } from "../@types/contracts/";
 
 const Donation: NextPage = () => {
@@ -33,9 +33,9 @@ const Donation: NextPage = () => {
   };
 
   /* We are expecting the implementation to read this data from React-Native */
-  const [orgAdrs, setOrgAdrs] = useState("0xd29BC939ACF8269938557A27949b228EEf478479");
-  const [projectId, setProjectId] = useState(123);
-  const [ammount, setAmmount] = useState(utils.parseUnits(`${1.0}`, 6));
+  const [orgAdrs, setOrgAdrs] = useState("");
+  const [projectId, setProjectId] = useState(0);
+  const [ammount, setAmmount] = useState(utils.parseUnits(`${0}`, 6));
   const [userType, setUserType] = useState("individual");
 
   const makeDonation = async () => {
