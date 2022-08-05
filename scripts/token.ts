@@ -1,5 +1,5 @@
 import { providers, BigNumber, utils } from "ethers";
-import { IERC20 } from "../@types/contracts/IERC20";
+import { ERC20 } from "../@types/contracts/ERC20";
 
 interface TokensDict {
     [tokenName: string]: string
@@ -10,11 +10,11 @@ export function getTokenContract(tokenName: string) {
         ["usdc_test"]: "0xC12F6Ee5c853393105f29EF0310e61e6B494a70F"
     };
     const tokenAddress: string = availableTokens[tokenName];
-    const contractAbi = require("../asset/abis/IERC20.json");
+    const contractAbi = require("../asset/abis/ERC20.json");
     return { tokenAddress, contractAbi };
 };
 
-export async function funcApprove(signedContract: IERC20,
+export async function funcApprove(signedContract: ERC20,
     targetAddress: string,
     ammount: BigNumber) {
         try {
@@ -29,11 +29,21 @@ export async function funcApprove(signedContract: IERC20,
         };
     };
 
-export async function funcGetBalance(signedContract: IERC20,
+export async function funcGetDecimals(signedContract: ERC20) {
+    try {
+        return await signedContract.decimals();
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+export async function funcGetBalance(signedContract: ERC20,
     targetAddress: string) {
         try {
             const balance = utils.formatEther(await signedContract.balanceOf(targetAddress));
-            console.log(`The balance of ${targetAddress} is: ${balance}`);
+            console.log(`The balance of ${targetAddress} for the token ${signedContract.address} \
+                is: ${balance}`);
+            return balance;
         } catch (e) {
             console.error(e);
         };

@@ -1,31 +1,10 @@
 import { providers, BigNumber } from "ethers";
 import { Donate } from "../@types/contracts/Donate";
 
-interface TokenMap {
-    [tokenName: string]: number
-}
-
-export const tokenMap = <TokenMap>{
-    usdc_test: 0
-}
-
 export function getDonateContract() {
     const contractAddress = "0x99B0f41941C34A98482C6621DeEF2381D7fa5f4c";
     const contractAbi = require("../asset/abis/Donate.json");
     return { contractAddress, contractAbi };
-}
-
-export async function funcAddToken(
-    signedContract: Donate,
-    targetToken: string) 
-    {
-        try {
-            const txResponse: providers.TransactionResponse = await signedContract.addTokens(targetToken);
-            const txReceipt: providers.TransactionReceipt = await txResponse.wait();
-            console.log(`Token ${targetToken} addded with ${txReceipt.confirmations} confirmations.\n`);
-        } catch (e) {
-            console.error(e);
-        }
 };
 
 export async function funcDonate(

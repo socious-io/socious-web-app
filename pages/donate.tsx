@@ -6,14 +6,14 @@ import { Button } from "@components/common";
 import { getDonateContract, funcDonate, 
   funcGetFee, funcGetHistory,
   getTokenContract, funcApprove,
-  validateTokenExists } from "../scripts";
-import { Donate, IERC20 } from "../@types/contracts/";
+  validateTokenExists, funcGetBalance } from "../scripts";
+import { Donate, ERC20 } from "../@types/contracts/";
 
 const Donation: NextPage = () => {
   const { address, isConnected } = useAccount();
   const { contractAddress, contractAbi } = getDonateContract();
   let contract: Donate;
-  let tokenContract: IERC20;
+  let tokenContract: ERC20;
 
   const [targetCoin, setTargetCoin] = useState("usdc_test");
   const { tokenAddress, contractAbi: tokenAbi } = getTokenContract(targetCoin);
@@ -25,26 +25,28 @@ const Donation: NextPage = () => {
         },
       });
     contract = new Contract(contractAddress, contractAbi, signer as Signer) as Donate;
-    tokenContract = new Contract(tokenAddress, tokenAbi, signer as Signer) as IERC20;
+    tokenContract = new Contract(tokenAddress, tokenAbi, signer as Signer) as ERC20;
     } else {
       const provider = useProvider();
       contract = new Contract(contractAddress, contractAbi, provider) as Donate;
-      tokenContract = new Contract(tokenAddress, tokenAbi, provider) as IERC20;
-    };
+      tokenContract = new Contract(tokenAddress, tokenAbi, provider) as ERC20;
+  };
 
   /* We are expecting the implementation to read this data from React-Native */
-  const [orgAdrs, setOrgAdrs] = useState("");
-  const [projectId, setProjectId] = useState(0);
-  const [ammount, setAmmount] = useState(utils.parseUnits(`${0}`, "ether"));
+  const [orgAdrs, setOrgAdrs] = useState("0xd29BC939ACF8269938557A27949b228EEf478479");
+  const [projectId, setProjectId] = useState(123);
+  const [ammount, setAmmount] = useState(utils.parseUnits(`${1.0}`, 6));
   const [userType, setUserType] = useState("individual");
 
   const makeDonation = async () => {
     const { result: validToken, tokenIndex } = await validateTokenExists(contract, targetCoin);
     if (isConnected && validToken) {
+
       await funcApprove(tokenContract, contract.address, ammount);
       await funcDonate(contract, projectId, 
-        orgAdrs, ammount, 
+        orgAdrs, ammount,
         tokenIndex);
+      
     } else {
       console.log('Wallet is not connected');
     }
@@ -62,7 +64,7 @@ const Donation: NextPage = () => {
 
   const getFee = async () => {
     /* Feel free to modify the output units based on your UI preferences */
-    const result = utils.formatUnits(await funcGetFee(contract), "gwei");
+    const result = utils.formatUnits(await funcGetFee(contract), "ether");
     /* Here goes the publishing of data to React-Native */
     console.log(result) // Just for testing
   }
