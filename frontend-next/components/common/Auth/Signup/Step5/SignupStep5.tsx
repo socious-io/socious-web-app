@@ -1,12 +1,24 @@
-import {Button} from '@components/common';
 import Image from 'next/image';
-import logoCompony from 'asset/icons/logo-color.svg';
 import {useState} from 'react';
+
+import sociousLogo from 'asset/icons/logo-color.svg';
+import {Button} from '@components/common';
 import {StepProps} from '@models/stepProps';
-const SignupStep5 = ({onSubmit}: StepProps) => {
-  const [seePolicy, setSePolicy] = useState<boolean>(false);
+import {TERM_URL, PRIVACY_URL} from 'utils/api';
+
+const SignupStep5 = ({ onSubmit }: StepProps) => {
+  const [sawPolicy, setSawPolicy] = useState<boolean>(false);
+  const [sawTerms, setSawTerms] = useState<boolean>(false);
+
+  const handleSeeTerms = () => {
+    // TODO detect current language
+    window.open(TERM_URL('en_US'));
+    setSawTerms(true);
+  };
   const handleSeePolicy = () => {
-    setSePolicy(true);
+    // TODO detect current language
+    window.open(PRIVACY_URL('en_US'));
+    setSawPolicy(true);
   };
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
@@ -20,7 +32,7 @@ const SignupStep5 = ({onSubmit}: StepProps) => {
     >
       <div className="flex flex-col h-[28rem]">
         <Image
-          src={logoCompony}
+          src={sociousLogo}
           width="104.03"
           height="136.59"
           alt="socious logo"
@@ -29,9 +41,12 @@ const SignupStep5 = ({onSubmit}: StepProps) => {
         <h1 className="font-helmet text-center my-6">Welcome to Socious</h1>
         <p className="text-base text-center my-6">
           To continue, please agree to our
+          <Button variant="link" onClick={handleSeeTerms}>
+            terms of service
+          </Button>
+          and
           <Button variant="link" onClick={handleSeePolicy}>
-            {' '}
-            terms of service and privacy policy{' '}
+            privacy policy
           </Button>
         </p>
       </div>
@@ -42,7 +57,7 @@ const SignupStep5 = ({onSubmit}: StepProps) => {
           size="lg"
           variant="fill"
           value="Submit"
-          disabled={!seePolicy}
+          disabled={!(sawPolicy && sawTerms)}
         >
           Continue
         </Button>

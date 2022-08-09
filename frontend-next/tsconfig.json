@@ -50,7 +50,8 @@
       "@icons/*": ["asset/icons/*"],
       "@components/*": ["components/*"],
       "@hooks": ["hooks/index.ts"],
-      "@models/*": ["models/*"]
+      "@models/*": ["models/*"],
+      "@api/*": ["api/*"]
     }
   },
   "include": ["index.d.ts", "**/*.ts", "**/*.tsx"],

@@ -68,7 +68,7 @@ const SignupStep3 = ({onSubmit}: StepProps) => {
               !isValidPasswordLength && 'border-opacity-40',
             )}
           >
-            <p className="text-sm">・7 characters </p>
+            <p className="text-sm">・8 characters </p>
           </div>
           <div
             className={twMerge(

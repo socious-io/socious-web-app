@@ -17,7 +17,7 @@ import {
   schemaSignupStep1,
   schemaSignupStep2,
   schemaSignupStep3,
-} from 'utils/validate';
+} from '@api/auth/validation';
 import useAuth from 'services/useAuth';
 
 const schemaStep = {
@@ -41,10 +41,8 @@ const Signup: NextPage = () => {
     resolver: joiResolver(schemaStep[3]),
   });
 
-  const {signup, checkEmailExist} = useAuth();
-
   const handleSubmit = (data: any) => {
-    if (step === 5) {
+    if (step === 4) {
       handleSignupRequest();
     } else {
       setStep(step + 1);
@@ -57,6 +55,7 @@ const Signup: NextPage = () => {
   const handleToggleModal = () => {
     setShowModal(!showModal);
   };
+
   const handleSignupRequest = () => {
     const firstName = formMethodsStep1.getValues('firstName');
     const lastName = formMethodsStep1.getValues('lastName');
@@ -66,19 +65,17 @@ const Signup: NextPage = () => {
 
     const user = {firstName, lastName, email, password, username};
 
-    signup(user).then(() => {
-      handleToggleModal();
-    });
+    // signup(user).then(() => {
+    //   handleToggleModal();
+    // });
+    alert('Signup');
+    handleToggleModal();
   };
-  const handleCheckEmailExist = () => {
-    const email = formMethodsStep2.getValues('email');
 
-    checkEmailExist(email);
-  };
   return (
     <div className="max-w-xl h-[45rem] m-auto  bg-background rounded-3xl py-7 px-6 border border-grayLineBased ">
       <div className="flex  justify-center  h-20 relative">
-        {![1, 5].includes(step) && (
+        {![1, 4].includes(step) && (
           <span
             className="cursor-pointer absolute left-0"
             title="Back"
@@ -110,9 +107,9 @@ const Signup: NextPage = () => {
       <FormProvider {...formMethodsStep3}>
         {step === 3 && <SignupStep3 onSubmit={handleSubmit} />}
       </FormProvider>
-      {step === 4 && <SignupStep4 onSubmit={handleSubmit} />}
+      {step === 4 && <SignupStep5 onSubmit={handleSubmit} />}
 
-      {step === 5 && <SignupStep5 onSubmit={handleSubmit} />}
+      {/*step === 5 && <SignupStep5 onSubmit={handleSubmit} />*/}
 
       <Modal isOpen={showModal} onClose={handleToggleModal}>
         <Modal.Title>Title</Modal.Title>

@@ -1,5 +1,5 @@
 import Router from 'next/router';
-import {createContext, useEffect, useState} from 'react';
+import {createContext, ReactNode, useEffect, useState} from 'react';
 import useAuth from 'services/useAuth';
 import useUser from 'services/useUser';
 
@@ -10,24 +10,28 @@ const AuthContext = createContext({
   authVerified: false,
 });
 
-export const AuthContextProvider = ({children}) => {
+type Props = {
+  children: ReactNode;
+};
+
+export const AuthContextProvider = ({children}: Props) => {
   const {getProfile} = useUser();
   const {login} = useAuth();
   const [user, setUser] = useState(null);
   const [authVerified, setAuth] = useState(false);
 
-  useEffect(() => {
-    getProfile()
-      .then((response: any) => {
-        console.log(response)
-        setUser(response);
-        setAuth(true);
-      })
-      .catch((error: any) => {
-        console.log(error);
-        signout();
-      });
-  }, []);
+  // useEffect(() => {
+  //   getProfile()
+  //     .then((response: any) => {
+  //       console.log(response)
+  //       setUser(response);
+  //       setAuth(true);
+  //     })
+  //     .catch((error: any) => {
+  //       console.log(error);
+  //       signout();
+  //     });
+  // }, [getProfile]);
 
   const signin = async (email: string, password: string) => {
     await login({email, password});
