@@ -1,5 +1,5 @@
 import useRequest from 'hooks/useRequest';
-import {ApiConstants, DEV_MODE_API} from 'utils/api';
+import {ApiConstants, API_BASE_URL} from 'utils/api';
 import {stringSingleSpace} from 'utils/validate';
 
 const useAuth = () => {
@@ -16,7 +16,7 @@ const useAuth = () => {
 
     return new Promise((resolve: (response: any) => void, reject) => {
       request
-        .post(DEV_MODE_API + ApiConstants.REGISTER, body)
+        .post(API_BASE_URL + ApiConstants.REGISTER, body)
         .then((response: any) => {
           //access_token
           resolve(response);
@@ -35,7 +35,7 @@ const useAuth = () => {
 
     return new Promise((resolve: (response: any) => void, reject) => {
       request
-        .post(DEV_MODE_API + ApiConstants.LOGIN, body)
+        .post(API_BASE_URL + ApiConstants.LOGIN, body)
         .then((response: any) => {
           resolve(response);
         })
@@ -53,7 +53,7 @@ const useAuth = () => {
 
     return new Promise((resolve: (response: any) => void, reject) => {
       request
-        .post(DEV_MODE_API + ApiConstants.SEND_OTP, body)
+        .post(API_BASE_URL + ApiConstants.SEND_OTP, body)
         .then((response: any) => {
           resolve(response);
         })
@@ -72,7 +72,7 @@ const useAuth = () => {
 
     return new Promise((resolve: (response: any) => void, reject) => {
       request
-        .post(DEV_MODE_API + ApiConstants.SEND_OTP_CONFIRM, body)
+        .post(API_BASE_URL + ApiConstants.SEND_OTP_CONFIRM, body)
         .then((response: any) => {
           resolve(response);
         })
@@ -90,7 +90,7 @@ const useAuth = () => {
 
     return new Promise((resolve: (response: any) => void, reject) => {
       request
-        .post(DEV_MODE_API + ApiConstants.RESET_PASSWORD, body)
+        .post(API_BASE_URL + ApiConstants.RESET_PASSWORD, body)
         .then((response: any) => {
           resolve(response);
         })
@@ -104,7 +104,7 @@ const useAuth = () => {
 
     return new Promise((resolve: (response: any) => void, reject) => {
       request
-        .put(DEV_MODE_API + ApiConstants.CHECK_EMAIL_EXIST, body)
+        .put(API_BASE_URL + ApiConstants.CHECK_EMAIL_EXIST, body)
         .then((response: any) => {
           resolve(response);
         })

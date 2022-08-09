@@ -1,5 +1,5 @@
 import useRequest from 'hooks/useRequest';
-import {ApiConstants, DEV_MODE_API} from 'utils/api';
+import {ApiConstants, API_BASE_URL} from 'utils/api';
 import useSWR from 'swr'
 
 const useUser = () => {
@@ -9,7 +9,7 @@ const useUser = () => {
   
     return new Promise((resolve: (response: any) => void, reject) => {
       request
-        .get(DEV_MODE_API + '/user/profile')
+        .get(API_BASE_URL + '/user/profile')
         .then((response: any) => {
           resolve(response);
         })
@@ -22,7 +22,7 @@ const useUser = () => {
   const getOthersProfile = (id: string) => {
     return new Promise((resolve: (response: any) => void, reject) => {
       request
-        .get(DEV_MODE_API + `/user/${id}/profile`)
+        .get(API_BASE_URL + `/user/${id}/profile`)
         .then((response: any) => {
           resolve(response);
         })
@@ -40,7 +40,7 @@ const useUser = () => {
 
     return new Promise((resolve: (response: any) => void, reject) => {
       request
-        .put(DEV_MODE_API + ApiConstants.CHANGE_PASSWORD, body)
+        .put(API_BASE_URL + ApiConstants.CHANGE_PASSWORD, body)
         .then((response: any) => {
           resolve(response);
         })
@@ -56,7 +56,7 @@ const useUser = () => {
 
     return new Promise((resolve: (response: any) => void, reject) => {
       request
-        .put(DEV_MODE_API + ApiConstants.CHANGE_PASSWORD_DIRECT, body)
+        .put(API_BASE_URL + ApiConstants.CHANGE_PASSWORD_DIRECT, body)
         .then((response: any) => {
           resolve(response);
         })
@@ -80,7 +80,7 @@ const useUser = () => {
 
     return new Promise((resolve: (response: any) => void, reject) => {
       request
-        .put(DEV_MODE_API + ApiConstants.GET_PROFILE, body)
+        .put(API_BASE_URL + ApiConstants.GET_PROFILE, body)
         .then((response: any) => {
           resolve(response);
         })

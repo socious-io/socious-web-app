@@ -2,9 +2,6 @@
 
 import AppConfig from './constants';
 
-export const DEV_MODE_API = 'http://127.0.0.1:8370';
-export const PROD_MODE_API = 'https://api.socious.io';
-export const STAGING_MODE_API = 'https://api.socious.io';
 export const ECHO_LARAVEL = 'https://api.socious.io';
 export const GOOGLE_API = 'AIzaSyDJDyCE_C1CXFyFie7v5yGvdE5cXm9ZlOE';
 export const TERM_URL = (language: string) => {
@@ -29,12 +26,7 @@ export const PRIVACY_URL = (language: string) => {
       return 'https://socious.io/privacy-policy';
   }
 };
-export const APP_MODE_URL = {
-  dev: DEV_MODE_API,
-  prod: PROD_MODE_API,
-  staging: STAGING_MODE_API,
-};
-export type AppModeType = keyof typeof APP_MODE_URL;
+export const API_BASE_URL = process.env.API_BASE_URL || 'http://127.0.0.1:5061';
 
 export const ApiConstants = {
   LOGIN: '/auth/web/login',
@@ -116,3 +108,56 @@ export const ApiConstants = {
       language ?? AppConfig.KEY_LANGUAGE_ENGLISH
     }&key=${GOOGLE_API}`,
 };
+
+export async function fetcher<JSON = unknown>(
+  input: RequestInfo,
+  init?: RequestInit,
+): Promise<JSON> {
+  const response = await fetch(input, init);
+
+  // if the server replies, there's always some data in json
+  // if there's a network error, it will throw at the previous line
+  const data = await response.json();
+
+  // response.ok is true when res.status is 2xx
+  // https://developer.mozilla.org/en-US/docs/Web/API/Response/ok
+  if (response.ok) {
+    return data;
+  }
+
+  throw new FetchError({
+    message: response.statusText,
+    response,
+    data,
+  });
+}
+
+export class FetchError extends Error {
+  response: Response;
+  data: {
+    message: string;
+  };
+  constructor({
+    message,
+    response,
+    data,
+  }: {
+    message: string;
+    response: Response;
+    data: {
+      message: string;
+    };
+  }) {
+    // Pass remaining arguments (including vendor specific ones) to parent constructor
+    super(message);
+
+    // Maintains proper stack trace for where our error was thrown (only available on V8)
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, FetchError);
+    }
+
+    this.name = 'FetchError';
+    this.response = response;
+    this.data = data ?? {message: message};
+  }
+}
