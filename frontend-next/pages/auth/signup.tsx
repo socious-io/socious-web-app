@@ -1,5 +1,6 @@
 import type {NextPage} from 'next';
 import {useState} from 'react';
+import {useRouter} from 'next/router';
 import {FormProvider, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 
@@ -27,6 +28,8 @@ const schemaStep = {
 };
 
 const Signup: NextPage = () => {
+  const router = useRouter();
+
   const [step, setStep] = useState<number>(1);
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -53,6 +56,7 @@ const Signup: NextPage = () => {
   };
 
   const handleToggleModal = () => {
+    if (showModal) router.replace('/auth/login');
     setShowModal(!showModal);
   };
 
@@ -112,12 +116,11 @@ const Signup: NextPage = () => {
       {/*step === 5 && <SignupStep5 onSubmit={handleSubmit} />*/}
 
       <Modal isOpen={showModal} onClose={handleToggleModal}>
-        <Modal.Title>Title</Modal.Title>
+        <Modal.Title>Signup successful</Modal.Title>
         <Modal.Description>
           <div className="mt-2">
             <p className="text-sm text-gray-500">
-              Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-              amet sint. Velit de.
+              Thank you for joining Socious. You can now log in.
             </p>
           </div>
         </Modal.Description>
@@ -128,7 +131,7 @@ const Signup: NextPage = () => {
             size="lg"
             variant="fill"
             value="Submit"
-            //disabled={!!formState[step]?.errors}
+            onClick={handleToggleModal}
           >
             Ok
           </Button>
