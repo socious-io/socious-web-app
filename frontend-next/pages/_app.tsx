@@ -5,7 +5,6 @@ import {fetcher} from 'utils/api';
 
 import type {AppProps} from 'next/app';
 import Head from 'next/head';
-import {AuthContextProvider} from '../context/authContext';
 import {WalletProvider} from '../context/useWalletContext';
 import Layout from 'layout/Wrapper/Wrapper';
 
@@ -25,13 +24,11 @@ function MyApp({Component, pageProps}: AppProps) {
         console.error(err)
       },
     }}>
-      <AuthContextProvider>
-        <Layout>
-          <Web3ReactProvider getLibrary={getLibrary}>
-            <Component {...pageProps} />
-          </Web3ReactProvider>
-        </Layout>
-      </AuthContextProvider>
+      <Layout>
+        <Web3ReactProvider getLibrary={getLibrary}>
+          <Component {...pageProps} />
+        </Web3ReactProvider>
+      </Layout>
     </SWRConfig>
   );
 }

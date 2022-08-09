@@ -4,13 +4,9 @@ import {useContext} from 'react';
 import Link from 'next/link';
 import {Avatar} from '../../components/common/Avatar/Avatar';
 import {TextInput} from '../../components/common/TextInput/TextInput';
-import AuthContext from 'context/authContext';
 
 function Navbar() {
   const imgSrc = require('../../asset/icons/logo.svg');
-  const {user} = useContext(AuthContext);
-
-  console.log(user);
 
   return (
     <nav className="flex items-center w-full rounded-b-sm bg-primary h-16">
