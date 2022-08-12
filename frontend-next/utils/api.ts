@@ -2,7 +2,6 @@
 
 import AppConfig from './constants';
 
-export const ECHO_LARAVEL = 'https://api.socious.io';
 export const GOOGLE_API = 'AIzaSyDJDyCE_C1CXFyFie7v5yGvdE5cXm9ZlOE';
 export const TERM_URL = (language: string) => {
   switch (language) {
@@ -26,8 +25,8 @@ export const PRIVACY_URL = (language: string) => {
       return 'https://socious.io/privacy-policy';
   }
 };
-export const API_BASE_URL = process.env.API_BASE_URL || 'http://127.0.0.1:5061';
 
+// TODO remove
 export const ApiConstants = {
   LOGIN: '/auth/web/login',
   LOGOUT: '/auth/web/logout',
@@ -113,7 +112,13 @@ export async function fetcher<JSON = unknown>(
   input: RequestInfo,
   init?: RequestInit,
 ): Promise<JSON> {
-  const response = await fetch(input, init);
+  const response = await fetch(input, {
+    ...init,
+    headers: {
+      'content-type': 'application/json',
+      ...init?.headers,
+    },
+  });
 
   // if the server replies, there's always some data in json
   // if there's a network error, it will throw at the previous line

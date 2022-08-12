@@ -19,13 +19,7 @@ import {
   schemaSignupStep2,
   schemaSignupStep3,
 } from '@api/auth/validation';
-import useAuth from 'services/useAuth';
-
-const schemaStep = {
-  1: schemaSignupStep1,
-  2: schemaSignupStep2,
-  3: schemaSignupStep3,
-};
+import {signup} from '@api/auth/actions';
 
 const Signup: NextPage = () => {
   const router = useRouter();
@@ -35,13 +29,13 @@ const Signup: NextPage = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const formMethodsStep1 = useForm({
-    resolver: joiResolver(schemaStep[1]),
+    resolver: joiResolver(schemaSignupStep1),
   });
   const formMethodsStep2 = useForm({
-    resolver: joiResolver(schemaStep[2]),
+    resolver: joiResolver(schemaSignupStep2),
   });
   const formMethodsStep3 = useForm({
-    resolver: joiResolver(schemaStep[3]),
+    resolver: joiResolver(schemaSignupStep3),
   });
 
   const handleSubmit = (data: any) => {
@@ -60,19 +54,15 @@ const Signup: NextPage = () => {
     setShowModal(!showModal);
   };
 
-  const handleSignupRequest = () => {
+  const handleSignupRequest = async () => {
     const firstName = formMethodsStep1.getValues('firstName');
     const lastName = formMethodsStep1.getValues('lastName');
-    const email = formMethodsStep1.getValues('email');
-    const password = formMethodsStep1.getValues('password');
-    const username = 'test';
+    const email = formMethodsStep2.getValues('email');
+    const password = formMethodsStep3.getValues('password');
 
-    const user = {firstName, lastName, email, password, username};
+    // TODO handle errors
+    await signup(firstName, lastName, email, password);
 
-    // signup(user).then(() => {
-    //   handleToggleModal();
-    // });
-    alert('Signup');
     handleToggleModal();
   };
 

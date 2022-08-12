@@ -5,12 +5,6 @@ export const rxEmail =
 export const rxEmailDoubleSpec = /([_.-]){2,}|[._-]+@|@[._-]+/;
 export const rxPassword =
   /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W])(?!.*['"]).{7,128}$/;
-// a-z : chi cho phep ki tu thuong
-// A-Z : chỉ cho phép kí tự in hoa
-// ぁ-ん : chỉ cho phép kí tự hiragana
-// 一-龥 : chỉ cho phép kí tự hán
-// ^- : không cho phép chứa dấu cach
-// \s : cho phép chứa dấu cach
 export const rxName = /^[a-zA-Zぁ-ん一-龥\s]+$/;
 export const rxHasUpperLower = /(?=.*[a-z])(?=.*[A-Z])/;
 export const rxHasNumber = /(?=.*\d)/;
