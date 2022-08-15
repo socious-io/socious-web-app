@@ -1,6 +1,6 @@
-import * as React from "react";
-import { twMerge } from "tailwind-merge";
-import { UseFormRegisterReturn } from "react-hook-form";
+import * as React from 'react';
+import {twMerge} from 'tailwind-merge';
+import {UseFormRegisterReturn} from 'react-hook-form';
 
 export interface CheckboxProps
   extends React.DetailedHTMLProps<
@@ -12,25 +12,25 @@ export interface CheckboxProps
 }
 
 const defaultCheckboxClass =
-  "w-4 h-4 mr-2  focus:ring-transparent text-secondary accent-primary hover:accent-primaryLight";
-const disabledClass = "border-gray-500 bg-gray-400";
+  'w-4 h-4 mr-2   focus:ring-transparent text-secondary accent-primary hover:accent-primaryLight cursor-pointer';
+const disabledClass = 'border-gray-500 bg-gray-400';
 
 export function Checkbox({
   className,
   register,
   disabled = false,
-  label = "",
+  label = '',
   ...props
 }: CheckboxProps) {
   return (
-    <label className="flex items-center">
+    <label className="flex items-center cursor-pointer ">
       <input
         {...props}
         type="checkbox"
         className={twMerge(
           defaultCheckboxClass,
           disabled && disabledClass,
-          className
+          className,
         )}
         disabled={disabled}
         {...register}

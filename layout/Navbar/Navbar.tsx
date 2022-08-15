@@ -1,11 +1,15 @@
-import { CogIcon } from "@heroicons/react/outline";
-import { ReactComponent as Logo } from "../../asset/icons/logo.svg";
-
-import Link from "next/link";
-import { Avatar } from "../../components/common/Avatar/Avatar";
-import { TextInput } from "../../components/common/TextInput/TextInput";
+import {CogIcon} from '@heroicons/react/outline';
+import {ReactComponent as Logo} from '../../asset/icons/logo.svg';
+import {useContext} from 'react';
+import Link from 'next/link';
+import {Avatar} from '../../components/common/Avatar/Avatar';
+import {TextInput} from '../../components/common/TextInput/TextInput';
 
 function Navbar() {
+<<<<<<< HEAD:layout/Navbar/Navbar.tsx
+=======
+  const imgSrc = require('../../asset/icons/logo.svg');
+>>>>>>> feature/team/auth-page:frontend-next/layout/Navbar/Navbar.tsx
 
   return (
     <nav className="flex items-center w-full rounded-b-sm bg-primary h-16">
@@ -24,7 +28,7 @@ function Navbar() {
                 </Link>
               </div>
               <div className="flex space-between items-center">
-                <TextInput styleClass="py-1.5 w-72 rounded-full" />
+                <TextInput className="py-1.5 w-72 rounded-full" />
               </div>
             </div>
             <div className="flex items-center justify-end w-4/6 space-x-6">
