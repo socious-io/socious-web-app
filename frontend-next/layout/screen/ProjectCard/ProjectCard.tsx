@@ -1,6 +1,6 @@
 import {Avatar, Chip} from '@components/common';
 
-import {Project} from 'models/project';
+import {Project} from '@models/project';
 
 export function ProjectCard({title}: Project) {
   return (

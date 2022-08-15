@@ -6,11 +6,11 @@ import {joiResolver} from '@hookform/resolvers/joi';
 
 import {Button, Modal} from '@components/common';
 
-import SignupStep1 from '@components/common/Auth/Signup/Step1/SignupStep1';
-import SignupStep2 from '@components/common/Auth/Signup/Step2/SignupStep2';
-import SignupStep3 from '@components/common/Auth/Signup/Step3/SignupStep3';
-import SignupStep4 from '@components/common/Auth/Signup/Step4/SignupStep4';
-import SignupStep5 from '@components/common/Auth/Signup/Step5/SignupStep5';
+import SignupStep1 from 'frontend-next/components/common/Auth/Signup/Step1/SignupStep1';
+import SignupStep2 from 'frontend-next/components/common/Auth/Signup/Step2/SignupStep2';
+import SignupStep3 from 'frontend-next/components/common/Auth/Signup/Step3/SignupStep3';
+import SignupStep4 from 'frontend-next/components/common/Auth/Signup/Step4/SignupStep4';
+import SignupStep5 from 'frontend-next/components/common/Auth/Signup/Step5/SignupStep5';
 
 import {twMerge} from 'tailwind-merge';
 import {ChevronLeftIcon} from '@heroicons/react/outline';

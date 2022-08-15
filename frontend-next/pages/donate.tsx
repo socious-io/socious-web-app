@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { NextPage } from "next";
 import { Contract, utils, Signer } from "ethers";
 import { useAccount, useProvider, useSigner } from "wagmi";
-import { Button } from "@components/common";
+import { Button } from "frontend-next/components/common";
 import { getDonateContract, funcDonate, 
   funcGetFee, funcGetHistory,
   getTokenContract, funcApprove,

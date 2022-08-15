@@ -6,10 +6,7 @@ import {Avatar} from '../../components/common/Avatar/Avatar';
 import {TextInput} from '../../components/common/TextInput/TextInput';
 
 function Navbar() {
-<<<<<<< HEAD:layout/Navbar/Navbar.tsx
-=======
   const imgSrc = require('../../asset/icons/logo.svg');
->>>>>>> feature/team/auth-page:frontend-next/layout/Navbar/Navbar.tsx
 
   return (
     <nav className="flex items-center w-full rounded-b-sm bg-primary h-16">
