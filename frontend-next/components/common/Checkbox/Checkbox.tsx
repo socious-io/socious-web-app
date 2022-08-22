@@ -7,7 +7,7 @@ export interface CheckboxProps
     React.InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement
   > {
-  label?: string;
+  label?: string | React.ReactNode;
   register?: UseFormRegisterReturn;
 }
 

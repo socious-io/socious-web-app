@@ -3,6 +3,7 @@ import {useState} from 'react';
 
 import sociousLogo from 'asset/icons/logo-color.svg';
 import {Button} from '@components/common';
+import {Checkbox} from '@components/common';
 import {StepProps} from '@models/stepProps';
 import {TERM_URL, PRIVACY_URL} from 'utils/api';
 
@@ -41,14 +42,27 @@ const SignupStep5 = ({ onSubmit }: StepProps) => {
         <h1 className="font-helmet text-center my-6">Welcome to Socious</h1>
         <p className="text-base text-center my-6">
           To continue, please agree to our
-          <Button variant="link" onClick={handleSeeTerms}>
-            terms of service
-          </Button>
-          and
-          <Button variant="link" onClick={handleSeePolicy}>
-            privacy policy
-          </Button>
         </p>
+        <div className="mx-auto">
+          <Checkbox
+            checked={!!sawTerms}
+            label={
+                    <Button variant="link" onClick={handleSeeTerms}>
+                      terms of service
+                    </Button>
+                  }
+            onChange={(e) => setSawTerms(e.target.checked)}
+          />
+          <Checkbox
+            checked={!!sawPolicy}
+            label={
+                    <Button variant="link" onClick={handleSeePolicy}>
+                      privacy policy
+                    </Button>
+                  }
+            onChange={(e) => setSawPolicy(e.target.checked)}
+          />
+        </div>
       </div>
       <div className="h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
         <Button
