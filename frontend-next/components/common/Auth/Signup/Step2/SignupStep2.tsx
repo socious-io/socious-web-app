@@ -1,7 +1,12 @@
 import {InputFiled, Button} from '@components/common';
 import {StepProps} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
-const SignupStep2 = ({onSubmit}: StepProps) => {
+
+interface CustomErrorStepProps extends StepProps {
+  error: null | string,
+}
+
+const SignupStep2 = ({onSubmit, error}: CustomErrorStepProps) => {
   const formMethods = useFormContext();
   const {handleSubmit, formState, register} = formMethods;
   return (
@@ -20,6 +25,7 @@ const SignupStep2 = ({onSubmit}: StepProps) => {
           required
           className="my-6"
         />
+        {error && <span className='text-red-500 font-mono'>{error}</span>}
       </div>
       <div className="h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
         <Button

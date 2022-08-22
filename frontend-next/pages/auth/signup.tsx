@@ -28,6 +28,8 @@ const Signup: NextPage = () => {
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
+  const [error, setError] = useState<string | null>(null);
+
   const formMethodsStep1 = useForm({
     resolver: joiResolver(schemaSignupStep1),
   });
@@ -61,9 +63,14 @@ const Signup: NextPage = () => {
     const password = formMethodsStep3.getValues('password');
 
     // TODO handle errors
-    await signup(firstName, lastName, email, password);
+    try {
+      await signup(firstName, lastName, email, password);
+      handleToggleModal();
+    } catch(error: any) {
+      setError(error.data.error || error.data.message);
+      setStep(2)
+    }
 
-    handleToggleModal();
   };
 
   return (
@@ -93,10 +100,10 @@ const Signup: NextPage = () => {
         </div>
       </div>
       <FormProvider {...formMethodsStep1}>
-        {step === 1 && <SignupStep1 onSubmit={handleSubmit} />}
+        {step === 1 && <SignupStep1 onSubmit={handleSubmit}/>}
       </FormProvider>
       <FormProvider {...formMethodsStep2}>
-        {step === 2 && <SignupStep2 onSubmit={handleSubmit} />}
+        {step === 2 && <SignupStep2 onSubmit={handleSubmit} error={error} />}
       </FormProvider>
       <FormProvider {...formMethodsStep3}>
         {step === 3 && <SignupStep3 onSubmit={handleSubmit} />}
