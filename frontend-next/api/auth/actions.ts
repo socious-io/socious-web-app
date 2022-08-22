@@ -7,7 +7,7 @@ export async function signup(firstName: string, lastName: string, email: string,
       first_name: firstName,
       last_name: lastName,
       email,
-      username: username || email,
+      username,
       password,
     }),
   });
