@@ -12,3 +12,13 @@ export async function signup(firstName: string, lastName: string, email: string,
     }),
   });
 }
+
+export async function login(email: string, password: string): Promise<void> {
+  await fetcher('/api/v2/auth/web/login', {
+    method: 'POST',
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  });
+}

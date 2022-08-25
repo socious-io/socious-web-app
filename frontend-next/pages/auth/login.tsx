@@ -7,17 +7,16 @@ import {joiResolver} from '@hookform/resolvers/joi';
 import Link from 'next/link';
 import {InputFiled, Button, Modal} from '@components/common';
 
+import { login } from "../../api/auth/actions";
+import { FetchError } from 'utils/api';
+
 import {EyeIcon, EyeOffIcon} from '@heroicons/react/outline';
 
 import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
-import {schemaLogin} from 'utils/validate';
-import AuthContext from 'context/authContext';
+import {schemaLogin} from '../../api/auth/validation';
 
 const Login: NextPage = () => {
-  const {signin, authVerified} = useContext(AuthContext);
-
-  if (authVerified) Router.push('/');
 
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -38,10 +37,16 @@ const Login: NextPage = () => {
   const handleLoginRequest = async () => {
     const email = getValues('email');
     const password = getValues('password');
+
     try {
-      await signin(email, password);
-    } catch (err) {
-      setError(err?.error);
+      await login(email, password);
+      Router.push("/");
+    } catch (error: any) {
+      if (error instanceof FetchError) {
+        setError(() => (error.data.error || error.data.message));
+      } else {
+        setError("Please, try again.")
+      }
       setShowModal(!showModal);
     }
   };
