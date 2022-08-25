@@ -9,7 +9,7 @@ export type SendOTPType = {
   code: string;
 };
 export type SendOTPResponse = {
-  message: string;
+  access_token: string
 };
 export type ResetPasswordType = {
   email: string;
