@@ -44,8 +44,6 @@ const Login: NextPage = () => {
     } catch (error: any) {
       if (error instanceof FetchError) {
         setError(() => (error.data.error || error.data.message));
-      } else {
-        setError("Please, try again.")
       }
       setShowModal(!showModal);
     }
@@ -112,7 +110,7 @@ const Login: NextPage = () => {
               }
             />
 
-            <Link passHref href="/auth/signup">
+            <Link passHref href="/auth/forgotpassword">
               <Button
                 className="absolute -right-6 -bottom-5"
                 size="lg"
@@ -147,11 +145,11 @@ const Login: NextPage = () => {
 
       <Modal isOpen={showModal} onClose={handleToggleModal}>
         <Modal.Title>
-          <h2 className="text-error text-center">{errorMessage}</h2>
+          <h2 className="text-error text-center">{errorMessage || "Sorry, something went wrong"}</h2>
         </Modal.Title>
         <Modal.Description>
           <div className="mt-2">
-            <p className="text-sm text-gray-500"></p>
+            <p className="text-sm text-gray-500">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit de. </p>
           </div>
         </Modal.Description>
         <div className="mt-4">
