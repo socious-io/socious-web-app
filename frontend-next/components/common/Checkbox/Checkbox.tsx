@@ -7,8 +7,9 @@ export interface CheckboxProps
     React.InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement
   > {
-  label?: string;
+  label?: string | React.ReactNode;
   register?: UseFormRegisterReturn;
+  withAlignStart?: boolean;
 }
 
 const defaultCheckboxClass =
@@ -20,10 +21,11 @@ export function Checkbox({
   register,
   disabled = false,
   label = '',
+  withAlignStart = false,
   ...props
 }: CheckboxProps) {
   return (
-    <label className="flex items-center cursor-pointer ">
+    <label className={`cursor-pointer ${withAlignStart ? "text-center" : "flex align-center"}`}>
     {/* <label className="flex items-center cursor-pointer "> */}
       <input
         {...props}

@@ -43,18 +43,20 @@ const SignupStep5 = ({ onSubmit }: StepProps) => {
           <Checkbox
             checked={agreed}
             onChange={(e) => setAgreed(e.target.checked)}
-            className="mt-1 md:mt-3"
+            withAlignStart
+            label={
+              <>
+                By signing up, I agree to the
+                <Button variant="link" className="px-1" onClick={handleSeeTerms}>
+                  Terms of Service
+                </Button>
+                and
+                <Button variant="link" className="px-1 pt-0" onClick={handleSeePolicy}>
+                  Privacy Policy
+                </Button>
+              </>
+            }
           />
-          <div className='text-center md:-ml-7 md:mr-5'>
-              By signing up, I agree to the
-              <Button variant="link" className="px-1" onClick={handleSeeTerms}>
-                Terms of Service
-              </Button>
-              and
-              <Button variant="link" className="px-1 pt-0" onClick={handleSeePolicy}>
-                Privacy Policy
-              </Button>
-          </div>
         </div>
       </div>
       <div className="h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
