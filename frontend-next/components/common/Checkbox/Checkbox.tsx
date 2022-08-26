@@ -7,7 +7,7 @@ export interface CheckboxProps
     React.InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement
   > {
-  label?: string | React.ReactNode;
+  label?: string;
   register?: UseFormRegisterReturn;
 }
 
@@ -24,6 +24,7 @@ export function Checkbox({
 }: CheckboxProps) {
   return (
     <label className="flex items-center cursor-pointer ">
+    {/* <label className="flex items-center cursor-pointer "> */}
       <input
         {...props}
         type="checkbox"
