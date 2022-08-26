@@ -19,7 +19,8 @@ import {
   schemaSignupStep2,
   schemaSignupStep3,
 } from '@api/auth/validation';
-import {signup} from '@api/auth/actions';
+import {signup, checkEmailExist} from '@api/auth/actions';
+import { rejects } from 'assert';
 
 const Signup: NextPage = () => {
   const router = useRouter();
@@ -28,7 +29,7 @@ const Signup: NextPage = () => {
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const [error, setError] = useState<string | null>(null);
+  const [errorMessage, setError] = useState<string>("");
 
   const formMethodsStep1 = useForm({
     resolver: joiResolver(schemaSignupStep1),
@@ -43,7 +44,18 @@ const Signup: NextPage = () => {
   const handleSubmit = (data: any) => {
     if (step === 4) {
       handleSignupRequest();
-    } else {
+    } else if (step === 2) {
+      const email = formMethodsStep2.getValues('email');
+      checkEmailExist(email)
+        .then((response) => {
+          if (response.email) {
+            setError("This email is already registered.")
+          } else {
+            setStep(step + 1)
+          }
+        })
+    }
+    else  {
       setStep(step + 1);
     }
   };
@@ -103,7 +115,7 @@ const Signup: NextPage = () => {
         {step === 1 && <SignupStep1 onSubmit={handleSubmit}/>}
       </FormProvider>
       <FormProvider {...formMethodsStep2}>
-        {step === 2 && <SignupStep2 onSubmit={handleSubmit} error={error} />}
+        {step === 2 && <SignupStep2 onSubmit={handleSubmit} error={errorMessage} />}
       </FormProvider>
       <FormProvider {...formMethodsStep3}>
         {step === 3 && <SignupStep3 onSubmit={handleSubmit} />}

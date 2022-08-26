@@ -14,6 +14,15 @@ export async function signup(firstName: string, lastName: string, email: string,
   });
 }
 
+export async function checkEmailExist(email: string): Promise<any> {
+  return await fetcher('/api/v2/auth/preregister', {
+    method: 'POST',
+    body: JSON.stringify({
+      email,
+    }),
+  });
+}
+
 export async function login(email: string, password: string): Promise<void> {
   await fetcher('/api/v2/auth/web/login', {
     method: 'POST',
