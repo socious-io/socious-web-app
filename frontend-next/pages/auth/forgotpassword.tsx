@@ -15,8 +15,6 @@ import {
   schemaForgotPasswordStep1,
   schemaForgotPasswordStep3,
 } from '../../api/auth/validation';
-import useAuth from 'services/useAuth';
-import useUser from 'services/useUser';
 
 import { forgetPassword, confirmOTP, directChangePassword } from '@api/auth/actions';
 
@@ -28,6 +26,8 @@ const schemaStep = {
 const ForgotPassword: NextPage = () => {
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [errorMessage, setError] = useState<string>('');
+
 
   const formMethodsStep1 = useForm({
     resolver: joiResolver(schemaStep[1]),
@@ -56,14 +56,12 @@ const ForgotPassword: NextPage = () => {
   const handleForgotPasswordRequest = () => {
     const email = formMethodsStep1.getValues('email');
 
-    // const user = {email};
-
     try {
       forgetPassword(email).then(() => {
         setStep(step + 1);
       });
     } catch(error: any) {
-      console.error(error.data.message);
+      setError(error?.data.error || error?.data.message)
     }
   };
 
@@ -78,9 +76,10 @@ const ForgotPassword: NextPage = () => {
         handleToggleModal();
       }
     } catch (error: any) {
-      console.error(error.data.error)
+      setError(error?.data.error || error?.data.message)
     }
   };
+
   const handleDirectChangePasswordRequest = () => {
     const password = formMethodsStep3.getValues('newPassword');
 
@@ -88,9 +87,21 @@ const ForgotPassword: NextPage = () => {
       Router.push("/");
     });
     } catch (error: any) {
-      console.error(error)
+      setError(error?.data.error || error?.data.message)
     }
   };
+
+  const handleResendCode = (onClickReset: () => void) => {
+    const email = formMethodsStep1.getValues('email');
+    
+    try {
+      forgetPassword(email).then(() => {
+        onClickReset()
+      });
+    } catch(error: any) {
+      setError(error?.data.error || error?.data.message)
+    }
+  }
 
   const handleBack = () => {
     setStep(step - 1);
@@ -103,7 +114,7 @@ const ForgotPassword: NextPage = () => {
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>
             <h2 className="text-error text-center">
-              Sorry, something went wrong
+              {errorMessage || "Sorry, something went wrong"}
             </h2>
           </Modal.Title>
           <Modal.Description>
@@ -142,7 +153,7 @@ const ForgotPassword: NextPage = () => {
       </FormProvider>
 
       {(step === 2) && (
-        <ForgotPasswordStep2 onSubmit={handleSubmit} />
+        <ForgotPasswordStep2 onSubmit={handleSubmit} onResendCode={handleResendCode} />
       )}
 
       <FormProvider {...formMethodsStep3}>

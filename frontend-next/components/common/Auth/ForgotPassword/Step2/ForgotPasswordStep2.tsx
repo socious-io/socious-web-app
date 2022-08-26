@@ -2,11 +2,11 @@ import {useState, useRef, useEffect} from 'react';
 import {Button, TextInput} from '@components/common';
 
 import Timer from '@components/common/Timer/Timer';
-import {StepProps} from '@models/stepProps';
+import {StepWithResendCode} from '@models/stepProps';
 
 import {ExclamationCircleIcon} from '@heroicons/react/solid';
 
-const ForgotPasswordStep2 = ({onSubmit}: StepProps) => {
+const ForgotPasswordStep2 = ({onSubmit, onResendCode}: StepWithResendCode) => {
   const [code, setCode] = useState<any>([null, null, null, null]);
 
   const [blockVerify, setBlockVerify] = useState<boolean>(true);
@@ -19,7 +19,6 @@ const ForgotPasswordStep2 = ({onSubmit}: StepProps) => {
     e.preventDefault();
     onSubmit(code?.join(''));
   };
-  const handleSubmitSendCode = (onClickReset: any) => {};
 
   const handleCodeInputChange = (e: any, codeIndex: number) => {
     setCode(
@@ -64,15 +63,7 @@ const ForgotPasswordStep2 = ({onSubmit}: StepProps) => {
               className="text-center w-16 h-16 border-2 border-grayLineBased "
             />
           ))}
-        </div>
-
-        {/* {(errorMessage) && (
-        <div className="text-error flex items-center space">
-          {' '}
-          <ExclamationCircleIcon fontSize={"large"} className="w-5 h-5 mr-1" /> {errorMessage}
-        </div>
-      )} */}
-      
+        </div>      
       </div>
 
       <div className="h-48  border-t-2 border-b-grayLineBased  -mx-16 ">
@@ -94,7 +85,7 @@ const ForgotPasswordStep2 = ({onSubmit}: StepProps) => {
                 <Button
                   variant="link"
                   size="lg"
-                  onClick={() => handleSubmitSendCode(onClickReset)}
+                  onClick={() => onResendCode(onClickReset)}
                   disabled={disabled}
                 >
                   Resend the verification code
