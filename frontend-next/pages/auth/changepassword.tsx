@@ -1,22 +1,21 @@
 import type {NextPage} from 'next';
+import Router from "next/router";
 import {useState, useMemo, useCallback} from 'react';
 import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
-
 import {InputFiled, Button, Modal} from '@components/common';
 import {rxHasNumber} from 'utils/regex';
 import {twMerge} from 'tailwind-merge';
 
 import {EyeIcon, EyeOffIcon, ChevronLeftIcon} from '@heroicons/react/outline';
-import {schemaChangePassword} from 'utils/validate';
-import useUser from 'services/useUser';
+import {schemaChangePassword} from '../../api/auth/validation';
+import { changePassword } from '@api/auth/actions';
 
 const ChangePassword: NextPage = () => {
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [newPasswordShown, setNewPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
-
-  const {changePassword} = useUser();
+  const [errorMessage, setError] = useState<string>("");
 
   const {register, handleSubmit, formState, watch, getValues} = useForm({
     resolver: joiResolver(schemaChangePassword),
@@ -40,15 +39,20 @@ const ChangePassword: NextPage = () => {
 
   const handleBack = () => {};
 
-  const handleChangePasswordRequest = () => {
+  const handleChangePasswordRequest = async () => {
     const currentPassword = getValues('currentPassword');
     const newPassword = getValues('newPassword');
 
     const user = {currentPassword, newPassword};
 
-    changePassword(user).then(() => {
+ 
+    try {
+      await changePassword(currentPassword, newPassword);
+      Router.push("/");
+    } catch (error: any) {
+      setError(error?.data.error || error?.data.message)
       handleToggleModal();
-    });
+    }
   };
 
   const newPassword = watch('newPassword');
@@ -160,7 +164,7 @@ const ChangePassword: NextPage = () => {
             size="lg"
             variant="fill"
             value="Submit"
-            //disabled={!!formState?.errors}
+            // disabled={!!formState?.errors}
           >
             Change your password
           </Button>
@@ -170,7 +174,7 @@ const ChangePassword: NextPage = () => {
       <Modal isOpen={showModal} onClose={handleToggleModal}>
         <Modal.Title>
           <h2 className="text-error text-center">
-            Sorry, something went wrong
+            { errorMessage || <span>Sorry, something went wrong</span> }
           </h2>
         </Modal.Title>
         <Modal.Description>
