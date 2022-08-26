@@ -8,19 +8,18 @@ import {StepProps} from '@models/stepProps';
 import {TERM_URL, PRIVACY_URL} from 'utils/api';
 
 const SignupStep5 = ({ onSubmit }: StepProps) => {
-  const [sawPolicy, setSawPolicy] = useState<boolean>(false);
-  const [sawTerms, setSawTerms] = useState<boolean>(false);
+  const [agreed, setAgreed] = useState<boolean>(false);
 
   const handleSeeTerms = () => {
     // TODO detect current language
     window.open(TERM_URL('en_US'));
-    setSawTerms(true);
   };
+
   const handleSeePolicy = () => {
     // TODO detect current language
     window.open(PRIVACY_URL('en_US'));
-    setSawPolicy(true);
   };
+
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
@@ -40,27 +39,23 @@ const SignupStep5 = ({ onSubmit }: StepProps) => {
         />
 
         <h1 className="font-helmet text-center my-6">Welcome to Socious</h1>
-        <p className="text-base text-center my-6">
-          To continue, please agree to our
-        </p>
-        <div className="mx-auto">
+        <div className="text-base flex items-start justify-start my-6">
           <Checkbox
-            checked={!!sawTerms}
+            checked={agreed}
+            onChange={(e) => setAgreed(e.target.checked)}
+            withAlignStart
             label={
-                    <Button variant="link" onClick={handleSeeTerms}>
-                      terms of service
-                    </Button>
-                  }
-            onChange={(e) => setSawTerms(e.target.checked)}
-          />
-          <Checkbox
-            checked={!!sawPolicy}
-            label={
-                    <Button variant="link" onClick={handleSeePolicy}>
-                      privacy policy
-                    </Button>
-                  }
-            onChange={(e) => setSawPolicy(e.target.checked)}
+              <>
+                By signing up, I agree to the
+                <Button variant="link" className="px-1" onClick={handleSeeTerms}>
+                  Terms of Service
+                </Button>
+                and
+                <Button variant="link" className="px-1 pt-0" onClick={handleSeePolicy}>
+                  Privacy Policy
+                </Button>
+              </>
+            }
           />
         </div>
       </div>
@@ -71,7 +66,7 @@ const SignupStep5 = ({ onSubmit }: StepProps) => {
           size="lg"
           variant="fill"
           value="Submit"
-          disabled={!(sawPolicy && sawTerms)}
+          disabled={!agreed}
         >
           Continue
         </Button>
