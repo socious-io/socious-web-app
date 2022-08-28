@@ -33,7 +33,8 @@ export const ApiConstants = {
   CHECK_EMAIL_EXIST: '/api/checkEmail',
   CHANGE_PASSWORD: '/api/change-password',
   CHANGE_PASSWORD_DIRECT: '/api/change-password-direct',
-  REGISTER: '/api/register',
+  REGISTER: '/api/v2/auth/register',
+  PREREGISTER: '/api/v2/auth/preregister',
   REFRESH_TOKEN: '',
   GET_NEWS_FEED: '/api/list-new-feed',
   SEND_OTP: '/api/otp',
@@ -120,7 +121,7 @@ export async function fetcher<JSON = unknown>(
     },
   });
 
-  console.log("response", response);
+  console.log("response In APIs", response);
   // if the server replies, there's always some data in json
   // if there's a network error, it will throw at the previous line
   const data = await response.json();

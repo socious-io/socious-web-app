@@ -16,6 +16,7 @@ import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
 import {schemaLogin} from '../../api/auth/validation';
 
+
 const Login: NextPage = () => {
 
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
@@ -26,6 +27,7 @@ const Login: NextPage = () => {
   const {register, handleSubmit, formState, getValues} = useForm({
     resolver: joiResolver(schemaLogin),
   });
+
 
   const onSubmit = (data: any) => {
     handleLoginRequest();

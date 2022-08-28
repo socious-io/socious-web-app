@@ -1,9 +1,10 @@
-import useRequest from 'hooks/useRequest';
-import {ApiConstants, API_BASE_URL} from 'utils/api';
+import useRequest from 'hooks/request';
+import {ApiConstants} from 'utils/api';
 import {stringSingleSpace} from 'utils/validate';
 
 const useAuth = () => {
   const request = useRequest();
+  const API_BASE_URL = process.env.API_BASE_URL
 
   const signup = (data: any) => {
     const body = {
