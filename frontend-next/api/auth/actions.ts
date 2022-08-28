@@ -1,6 +1,5 @@
 import { get, post, put } from "utils/request"
 import { fetcher } from "utils/api";
-import { getData, setData, deleteData } from 'utils/storage';
 
 export async function signup(firstName: string, lastName: string, email: string, password: string, username?: string): Promise<void> {
   const data = {
@@ -32,4 +31,14 @@ export async function confirmOTP(email: string, code: string): Promise<void> {
 
 export async function directChangePassword(password: string): Promise<void> {
   await put('/api/v2/user/change-password-direct', { password });
+}
+
+export async function changePassword(currentPassword: string, newPassword: string): Promise<void> {
+  await fetcher("/api/v2/user/change-password", {
+    method: 'PUT',
+    body: JSON.stringify({
+      current_password: currentPassword,
+      password: newPassword,
+    })
+  })
 }
