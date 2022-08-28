@@ -39,6 +39,7 @@ export async function confirmOTP(email: string, code: string): Promise<void> {
 }
 
 export async function directChangePassword(password: string): Promise<void> {
+  // Request after password-expired might need a conditional.
   const token = localStorage.getItem("access-token");
   await fetcher("/api/v2/user/change-password-direct", {
     method: 'PUT',
@@ -50,4 +51,14 @@ export async function directChangePassword(password: string): Promise<void> {
     }),
   });
   localStorage.removeItem("access-token");
+}
+
+export async function changePassword(currentPassword: string, newPassword: string): Promise<void> {
+  await fetcher("/api/v2/user/change-password", {
+    method: 'PUT',
+    body: JSON.stringify({
+      current_password: currentPassword,
+      password: newPassword,
+    })
+  })
 }
