@@ -17,6 +17,7 @@ import {
 } from '../../api/auth/validation';
 
 import { forgetPassword, confirmOTP, directChangePassword } from '@api/auth/actions';
+import { FetchError } from 'utils/request';
 
 const schemaStep = {
   1: schemaForgotPasswordStep1,
@@ -53,15 +54,17 @@ const ForgotPassword: NextPage = () => {
     setShowModal(!showModal);
   };
 
-  const handleForgotPasswordRequest = () => {
+  const handleForgotPasswordRequest = async () => {
     const email = formMethodsStep1.getValues('email');
 
     try {
-      forgetPassword(email).then(() => {
-        setStep(step + 1);
-      });
+      await forgetPassword(email);
+      console.log("I am in forgotPassword");
+      setStep(step + 1);
     } catch(error: any) {
-      setError(error?.data.error || error?.data.message)
+      if (error instanceof FetchError) {
+        setError(() => (error.data.error || error.data.message));
+      }
     }
   };
 
@@ -76,18 +79,23 @@ const ForgotPassword: NextPage = () => {
         handleToggleModal();
       }
     } catch (error: any) {
-      setError(error?.data.error || error?.data.message)
+      if (error instanceof FetchError) {
+        setError(() => (error.data.error || error.data.message));
+      }
     }
   };
 
-  const handleDirectChangePasswordRequest = () => {
+  const handleDirectChangePasswordRequest = async () => {
     const password = formMethodsStep3.getValues('newPassword');
 
-    try {directChangePassword(password).then(() => {
+    try {
+      console.log("I am taking password", password);
+      await directChangePassword(password)
       Router.push("/");
-    });
     } catch (error: any) {
-      setError(error?.data.error || error?.data.message)
+      if (error instanceof FetchError) {
+        setError(error?.data.message)
+      }
     }
   };
 
@@ -99,7 +107,9 @@ const ForgotPassword: NextPage = () => {
         onClickReset()
       });
     } catch(error: any) {
-      setError(error?.data.error || error?.data.message)
+      if (error instanceof FetchError) {
+        setError(() => (error.data.error || error.data.message));
+      }
     }
   }
 

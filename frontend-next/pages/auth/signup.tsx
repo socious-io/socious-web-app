@@ -5,6 +5,7 @@ import {FormProvider, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 
 import {Button, Modal} from '@components/common';
+import { FetchError } from 'utils/request';
 
 import SignupStep1 from '@components/common/Auth/Signup/Step1/SignupStep1';
 import SignupStep2 from '@components/common/Auth/Signup/Step2/SignupStep2';
@@ -48,11 +49,14 @@ const Signup: NextPage = () => {
       const email = formMethodsStep2.getValues('email');
       checkEmailExist(email)
         .then((response) => {
+          console.log("RESPONSE", response);
           if (response.email) {
             setError("This email is already registered.")
           } else {
             setStep(step + 1)
           }
+        }).catch((error) => {
+          console.error(error.message);
         })
     }
     else  {
@@ -79,7 +83,9 @@ const Signup: NextPage = () => {
       await signup(firstName, lastName, email, password);
       handleToggleModal();
     } catch(error: any) {
-      setError(error.data.error || error.data.message);
+      if (error instanceof FetchError) {
+        setError(() => (error.data.error || error.data.message));
+      }
       setStep(2)
     }
 
