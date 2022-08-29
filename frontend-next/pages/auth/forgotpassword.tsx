@@ -1,6 +1,6 @@
 import type {NextPage} from 'next';
 import Router from "next/router";
-import {useState} from 'react';
+import {useCallback, useMemo, useReducer, useState} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 
@@ -14,21 +14,34 @@ import ForgotPasswordStep3 from '@components/common/Auth/ForgotPassword/Step3/Fo
 import {
   schemaForgotPasswordStep1,
   schemaForgotPasswordStep3,
-} from '../../api/auth/validation';
+} from '@api/auth/validation';
 
 import { forgetPassword, confirmOTP, directChangePassword } from '@api/auth/actions';
 import { FetchError } from 'utils/request';
+import { ForgotError } from '@models/forgotPassword'
 
 const schemaStep = {
   1: schemaForgotPasswordStep1,
   3: schemaForgotPasswordStep3,
 };
 
+const reducer = (state: ForgotError, action: { type: string, error: string}) => {
+  if (action.error == undefined) return state
+
+  switch (action.type) {
+    case "EMAIL":
+      return { ...state, emailCheckError: action.error}
+    case "OTP":
+      return { ...state, otpError: action.error}
+    default:
+      return { ...state, defaultMessage: action.error}
+  }
+}
+
 const ForgotPassword: NextPage = () => {
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [errorMessage, setError] = useState<string>('');
-
+  const [errorMessages, dispatch] = useReducer(reducer, {emailCheckError: "", otpError: "", defaultMessage: ""});
 
   const formMethodsStep1 = useForm({
     resolver: joiResolver(schemaStep[1]),
@@ -41,12 +54,10 @@ const ForgotPassword: NextPage = () => {
   const handleSubmit = (data: any) => {
     if (step === 1) {
       handleForgotPasswordRequest();
-    } else if (step === 2 || step === 4) {
+    } else if (step === 2) {
       handleConfirmOTPRequest(data);
     } else if (step === 3) {
       handleDirectChangePasswordRequest();
-    } else {
-      setStep(step + 1);
     }
   };
 
@@ -56,14 +67,19 @@ const ForgotPassword: NextPage = () => {
 
   const handleForgotPasswordRequest = async () => {
     const email = formMethodsStep1.getValues('email');
-
+    
+    // Keeping errors clean for next check
+    dispatch({ type: "EMAIL", error: ""})
     try {
       await forgetPassword(email);
-      console.log("I am in forgotPassword");
       setStep(step + 1);
     } catch(error: any) {
       if (error instanceof FetchError) {
-        setError(() => (error.data.error || error.data.message));
+        if (error.data.error === "not matched") {
+          dispatch({ type: "EMAIL", error: "Email does not exist!"});
+        } else {
+          dispatch({ type: "DEFAULT", error: (error.data.error || error.data.message)});
+        }
       }
     }
   };
@@ -80,7 +96,7 @@ const ForgotPassword: NextPage = () => {
       }
     } catch (error: any) {
       if (error instanceof FetchError) {
-        setError(() => (error.data.error || error.data.message));
+        dispatch({ type: "OTP", error: (error.data.error || error.data.message)});
       }
     }
   };
@@ -89,26 +105,26 @@ const ForgotPassword: NextPage = () => {
     const password = formMethodsStep3.getValues('newPassword');
 
     try {
-      console.log("I am taking password", password);
-      await directChangePassword(password)
-      Router.push("/");
+      await directChangePassword(password);
+      Router.push("/auth/login");
     } catch (error: any) {
       if (error instanceof FetchError) {
-        setError(error?.data.message)
+        dispatch({ type: "DEFAULT", error: (error.data.error || error.data.message)});
+        handleToggleModal();
       }
     }
   };
 
-  const handleResendCode = (onClickReset: () => void) => {
+  const handleResendCode = async (onClickReset: () => void) => {
     const email = formMethodsStep1.getValues('email');
     
     try {
-      forgetPassword(email).then(() => {
-        onClickReset()
-      });
+      await forgetPassword(email)
+      onClickReset()
     } catch(error: any) {
       if (error instanceof FetchError) {
-        setError(() => (error.data.error || error.data.message));
+        dispatch({ type: "DEFAULT", error: (error.data.error || error.data.message)});
+        handleToggleModal();
       }
     }
   }
@@ -118,13 +134,12 @@ const ForgotPassword: NextPage = () => {
   };
 
   return (
-    // We might not need this modal
     <div className="max-w-xl h-[45rem] m-auto  bg-background rounded-3xl py-7 px-6 border border-grayLineBased ">
       <div className="flex  justify-center  h-20 relative">
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>
             <h2 className="text-error text-center">
-              {errorMessage || "Sorry, something went wrong"}
+              {errorMessages.defaultMessage || "Sorry, something went wrong"}
             </h2>
           </Modal.Title>
           <Modal.Description>
@@ -150,20 +165,22 @@ const ForgotPassword: NextPage = () => {
           </div>
         </Modal>
 
-        <span
-          className="cursor-pointer absolute left-0"
-          title="Back"
-          onClick={handleBack}
-        >
-          <ChevronLeftIcon className="w-5 h-5 cursor-pointer" />
-        </span>
+        {(step != 1) && (
+          <span
+            className="cursor-pointer absolute left-0"
+            title="Back"
+            onClick={handleBack}
+          >
+            <ChevronLeftIcon className="w-5 h-5 cursor-pointer" />
+          </span>
+        )}
       </div>
       <FormProvider {...formMethodsStep1}>
-        {step === 1 && <ForgotPasswordStep1 onSubmit={handleSubmit} />}
+        {step === 1 && <ForgotPasswordStep1 onSubmit={handleSubmit} error={errorMessages.emailCheckError} />}
       </FormProvider>
 
       {(step === 2) && (
-        <ForgotPasswordStep2 onSubmit={handleSubmit} onResendCode={handleResendCode} />
+        <ForgotPasswordStep2 onSubmit={handleSubmit} onResendCode={handleResendCode} error={errorMessages.otpError} />
       )}
 
       <FormProvider {...formMethodsStep3}>

@@ -5,6 +5,7 @@ import {EyeIcon, EyeOffIcon} from '@heroicons/react/outline';
 import {twMerge} from 'tailwind-merge';
 import {StepProps} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
+
 const SignupStep3 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
   const {handleSubmit, formState, register, watch} = formMethods;

@@ -8,13 +8,13 @@ import Link from 'next/link';
 import {InputFiled, Button, Modal} from '@components/common';
 
 import { login } from "../../api/auth/actions";
-import { FetchError } from 'utils/api';
+import { FetchError } from 'utils/request';
 
 import {EyeIcon, EyeOffIcon} from '@heroicons/react/outline';
 
 import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
-import {schemaLogin} from '../../api/auth/validation';
+import {schemaLogin} from '@api/auth/validation';
 
 
 const Login: NextPage = () => {

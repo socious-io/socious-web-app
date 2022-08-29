@@ -2,11 +2,10 @@ import {useState, useRef, useEffect} from 'react';
 import {Button, TextInput} from '@components/common';
 
 import Timer from '@components/common/Timer/Timer';
-import {StepWithResendCode} from '@models/stepProps';
+import {StepWithResendAndError} from '@models/stepProps';
+import { ExclamationCircleIcon } from '@heroicons/react/solid';
 
-import {ExclamationCircleIcon} from '@heroicons/react/solid';
-
-const ForgotPasswordStep2 = ({onSubmit, onResendCode}: StepWithResendCode) => {
+const ForgotPasswordStep2 = ({onSubmit, onResendCode, error}: StepWithResendAndError) => {
   const [code, setCode] = useState<any>([null, null, null, null]);
 
   const [blockVerify, setBlockVerify] = useState<boolean>(true);
@@ -50,7 +49,7 @@ const ForgotPasswordStep2 = ({onSubmit, onResendCode}: StepWithResendCode) => {
           the code to continue.
         </p>
         <div
-          className="codes flex flex-row  justify-center space-x-3 py-10"
+          className="codes flex flex-row  justify-center space-x-3 pt-10 pb-5"
           ref={codeInputRef}
         >
           {[0, 1, 2, 3].map((codeIndex) => (
@@ -63,7 +62,12 @@ const ForgotPasswordStep2 = ({onSubmit, onResendCode}: StepWithResendCode) => {
               className="text-center w-16 h-16 border-2 border-grayLineBased "
             />
           ))}
-        </div>      
+        </div>
+        {error && 
+          <p className='text-error'>
+            <ExclamationCircleIcon className='w-5 h-5 inline'/> {error}
+          </p>
+        }
       </div>
 
       <div className="h-48  border-t-2 border-b-grayLineBased  -mx-16 ">

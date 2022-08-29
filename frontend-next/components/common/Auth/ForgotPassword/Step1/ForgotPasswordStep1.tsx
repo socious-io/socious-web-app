@@ -1,9 +1,17 @@
 import {Button, InputFiled} from '@components/common';
-import {StepProps} from '@models/stepProps';
+import {StepWithError} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
-const ForgotPasswordStep1 = ({onSubmit}: StepProps) => {
+import { useEffect, memo, useState } from 'react';
+
+const ForgotPasswordStep1 = ({onSubmit, error}: StepWithError) => {
   const formMethods = useFormContext();
-  const {handleSubmit, formState, register} = formMethods;
+  const {handleSubmit,setError, formState, register} = formMethods;
+  // const [errorMessage, setError] = useState<string>("");
+
+  useEffect(() => {
+    setError("email", { type: "userExists", message: error})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   return (
     <form
@@ -17,6 +25,7 @@ const ForgotPasswordStep1 = ({onSubmit}: StepProps) => {
           type="email"
           placeholder="Email"
           register={register('email')}
+          // errorMessage={errorMessage}
           errorMessage={formState?.errors?.['email']?.message}
           required
           className="my-6"
@@ -39,4 +48,4 @@ const ForgotPasswordStep1 = ({onSubmit}: StepProps) => {
   );
 };
 
-export default ForgotPasswordStep1;
+export default memo(ForgotPasswordStep1);

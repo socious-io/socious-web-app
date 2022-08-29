@@ -22,3 +22,9 @@ export type FormResetPasswordType = {
 export type ResetPasswordResponse = {
   message: string;
 };
+
+export interface ForgotError {
+  emailCheckError: string,
+  otpError: string,
+  defaultMessage: string,
+}

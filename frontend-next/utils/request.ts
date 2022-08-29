@@ -1,4 +1,3 @@
-// import {useMemo} from 'react';
 import axios from 'axios';
 
 type AxiosRequestHeaders = {
@@ -21,21 +20,17 @@ request?.interceptors.response.use(
   },
   (error) => {
     if (error.response) {
-      console.log("I am IN RESPONSE", error.response)
+      console.log(error.response);
       throw new FetchError({
         message: error.response.statusText,
         response: error.response,
         data: error.response.data,
       })
     } else if (error.request) {
-      console.log("I am IN Request", error.request);
-      console.log(error.request);
       throw error;
     } else {
-      console.log("I am In");
-      console.log("ERROR", error.message);
     }
-    console.log("CONFIG", error.config);
+    console.error(error.config);
   },
 );
 
@@ -47,17 +42,15 @@ const deleteRequest = (arg: string) => {
   return request?.delete(arg);
 };
 
-const post = (arg: string, data: any, headers?: any) => {
-  console.log("POST")
+const post = (arg: string, data: any, headers?: AxiosRequestHeaders) => {
   return request?.post(arg, data, headers);
 };
 
-const patch = (arg: string,  data: any, headers?: any) => {
+const patch = (arg: string,  data: any, headers?: AxiosRequestHeaders) => {
   return request?.patch(arg, data, headers);
 };
 
-const put = (arg: string,  data: any, headers?: any) => {
-  console.log("HEADER", headers);
+const put = (arg: string,  data: any, headers?: AxiosRequestHeaders) => {
   return request?.put(arg, data, headers);
 };
 
@@ -68,6 +61,7 @@ class FetchError extends Error {
   response: Response;
   data: {
     message: string;
+    error?: string;
   };
   constructor({
     message,
@@ -78,6 +72,7 @@ class FetchError extends Error {
     response: Response;
     data: {
       message: string;
+      error?: string;
     };
   }) {
     // Pass remaining arguments (including vendor specific ones) to parent constructor

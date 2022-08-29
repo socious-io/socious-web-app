@@ -1,15 +1,13 @@
-import useRequest from 'hooks/useRequest';
+import {get} from 'utils/request';
 import {GOOGLE_API} from 'utils/api';
 
 const useLocation = () => {
-  const request = useRequest();
 
   const getCountryByKeyword = (searchKeyword: string | undefined) => {
     const language = 'en_US';
     return new Promise((resolve: (response: any) => void, reject) => {
       searchKeyword &&
-        request
-          .get(
+        get(
             `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
               searchKeyword,
             )}&types=%28countries%29&language=${
@@ -45,8 +43,7 @@ const useLocation = () => {
     return new Promise((resolve: (response: any) => void, reject) => {
       searchKeyword &&
         selectedCountry &&
-        request
-          .get(
+        get(
             `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
               searchKeyword,
             )}&types=%28cities%29&components=country:${

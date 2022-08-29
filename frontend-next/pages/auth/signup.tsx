@@ -11,7 +11,6 @@ import SignupStep1 from '@components/common/Auth/Signup/Step1/SignupStep1';
 import SignupStep2 from '@components/common/Auth/Signup/Step2/SignupStep2';
 import SignupStep3 from '@components/common/Auth/Signup/Step3/SignupStep3';
 import SignupStep4 from '@components/common/Auth/Signup/Step4/SignupStep4';
-import SignupStep5 from '@components/common/Auth/Signup/Step5/SignupStep5';
 
 import {twMerge} from 'tailwind-merge';
 import {ChevronLeftIcon} from '@heroicons/react/outline';
@@ -21,7 +20,6 @@ import {
   schemaSignupStep3,
 } from '@api/auth/validation';
 import {signup, checkEmailExist} from '@api/auth/actions';
-import { rejects } from 'assert';
 
 const Signup: NextPage = () => {
   const router = useRouter();
@@ -47,9 +45,9 @@ const Signup: NextPage = () => {
       handleSignupRequest();
     } else if (step === 2) {
       const email = formMethodsStep2.getValues('email');
+      setError("");
       checkEmailExist(email)
         .then((response) => {
-          console.log("RESPONSE", response);
           if (response.email) {
             setError("This email is already registered.")
           } else {
@@ -78,7 +76,6 @@ const Signup: NextPage = () => {
     const email = formMethodsStep2.getValues('email');
     const password = formMethodsStep3.getValues('password');
 
-    // TODO handle errors
     try {
       await signup(firstName, lastName, email, password);
       handleToggleModal();
@@ -126,9 +123,7 @@ const Signup: NextPage = () => {
       <FormProvider {...formMethodsStep3}>
         {step === 3 && <SignupStep3 onSubmit={handleSubmit} />}
       </FormProvider>
-      {step === 4 && <SignupStep5 onSubmit={handleSubmit} />}
-
-      {/*step === 5 && <SignupStep5 onSubmit={handleSubmit} />*/}
+      {step === 4 && <SignupStep4 onSubmit={handleSubmit} />}
 
       <Modal isOpen={showModal} onClose={handleToggleModal}>
         <Modal.Title>Signup successful</Modal.Title>
