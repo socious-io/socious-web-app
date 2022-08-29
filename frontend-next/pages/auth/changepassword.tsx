@@ -45,7 +45,6 @@ const ChangePassword: NextPage = () => {
 
     const user = {currentPassword, newPassword};
 
- 
     try {
       await changePassword(currentPassword, newPassword);
       Router.push("/");

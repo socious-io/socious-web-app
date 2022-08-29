@@ -11,17 +11,12 @@ interface CustomErrorStepProps extends StepProps {
 const SignupStep2 = ({onSubmit, error}: CustomErrorStepProps) => {
   const formMethods = useFormContext();
 
-  const {handleSubmit,setError, formState, register, clearErrors} = formMethods;
+  const {handleSubmit,setError, formState, register} = formMethods;
   
   useEffect(() => {
     setError("email", { type: "userExists", message: error})
-  }, [setError, error]);
-
-  useEffect(() => {
-    if (formState.errors.email) {
-      clearErrors("email.userExists");
-    }
-  }, [formState, clearErrors]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   return (
     <form

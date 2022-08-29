@@ -1,30 +1,20 @@
-import useRequest from 'hooks/useRequest';
-import {ApiConstants, API_BASE_URL} from 'utils/api';
+/* eslint-disable react-hooks/rules-of-hooks */
+import {get, put} from 'utils/request';
+import {ApiConstants } from 'utils/api';
 import useSWR from 'swr'
 
 const useUser = () => {
-  const request = useRequest();
 
   const getProfile = () => {
-  
-    return new Promise((resolve: (response: any) => void, reject) => {
-      request
-        .get(API_BASE_URL + '/user/profile')
-        .then((response: any) => {
-          resolve(response);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
+    const { data: user, mutate: mutateUser } = useSWR<JSON>("/api/v2/user/profile");
+    
   };
 
   const getOthersProfile = (id: string) => {
     return new Promise((resolve: (response: any) => void, reject) => {
-      request
-        .get(API_BASE_URL + `/user/${id}/profile`)
+      get(`/user/${id}/profile`)
         .then((response: any) => {
-          resolve(response);
+          resolve(response);  
         })
         .catch((error: any) => {
           reject(error);
@@ -39,8 +29,7 @@ const useUser = () => {
     };
 
     return new Promise((resolve: (response: any) => void, reject) => {
-      request
-        .put(API_BASE_URL + ApiConstants.CHANGE_PASSWORD, body)
+      put(ApiConstants.CHANGE_PASSWORD, body)
         .then((response: any) => {
           resolve(response);
         })
@@ -55,8 +44,7 @@ const useUser = () => {
     };
 
     return new Promise((resolve: (response: any) => void, reject) => {
-      request
-        .put(API_BASE_URL + ApiConstants.CHANGE_PASSWORD_DIRECT, body)
+      put(ApiConstants.CHANGE_PASSWORD_DIRECT, body)
         .then((response: any) => {
           resolve(response);
         })
@@ -80,7 +68,7 @@ const useUser = () => {
 
     return new Promise((resolve: (response: any) => void, reject) => {
       request
-        .put(API_BASE_URL + ApiConstants.GET_PROFILE, body)
+        .put(ApiConstants.GET_PROFILE, body)
         .then((response: any) => {
           resolve(response);
         })

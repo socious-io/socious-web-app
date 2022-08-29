@@ -6,7 +6,10 @@ export interface StepFormProps {
   formMethods: UseFormReturn;
   onSubmit: (value: any) => void;
 }
-
-export interface StepWithResendCode extends StepProps {
+export interface StepWithError{
+  onSubmit: (value: any) => any;
+  error: string;
+}
+export interface StepWithResendAndError extends StepWithError {
   onResendCode: (onClickReset: any) => void;
 }
