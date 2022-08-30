@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { NextPage } from "next";
 import { Contract, utils, Signer } from "ethers";
 import { useAccount, useProvider, useSigner } from "wagmi";
-import { Button } from "frontend-next/components/common";
+import { Button } from "../components/common";
 import { getDonateContract, funcDonate, 
   funcGetFee, funcGetHistory,
   getTokenContract, funcApprove,
@@ -18,18 +18,19 @@ const Donation: NextPage = () => {
   const [targetCoin, setTargetCoin] = useState("usdc_test");
   const { tokenAddress, contractAbi: tokenAbi } = getTokenContract(targetCoin);
 
+  const provider = useProvider();
+  const { data: signer } = useSigner({
+    onSettled(data, error) {
+      console.log('Settled', data, error)
+    },
+  });
+
+  contract = new Contract(contractAddress, contractAbi, provider) as Donate;
+  tokenContract = new Contract(tokenAddress, tokenAbi, provider) as ERC20;
+
   if (isConnected) {
-    const { data: signer } = useSigner({
-        onSettled(data, error) {
-          console.log('Settled', data, error)
-        },
-      });
-    contract = new Contract(contractAddress, contractAbi, signer as Signer) as Donate;
-    tokenContract = new Contract(tokenAddress, tokenAbi, signer as Signer) as ERC20;
-    } else {
-      const provider = useProvider();
-      contract = new Contract(contractAddress, contractAbi, provider) as Donate;
-      tokenContract = new Contract(tokenAddress, tokenAbi, provider) as ERC20;
+    contract.connect(signer as Signer);
+    tokenContract.connect(signer as Signer);
   };
 
   /* We are expecting the implementation to read this data from React-Native */
