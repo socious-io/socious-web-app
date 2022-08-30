@@ -40,7 +40,7 @@ const Payment: NextPage = () => {
   const [orgType, setOrgType] = useState(1); // 1 Is for Non-impact and 2 is for Impact
 
   const getFess = async () => {
-    let result: string[] = new Array<string>;
+    let result: string[] = new Array<string>();
     result.push(utils.formatEther(await funcGetfees(contract, 'individual', 'impact') as BigNumber));
     result.push(utils.formatEther(await funcGetfees(contract, 'individual', 'noImpact') as BigNumber));
     result.push(utils.formatEther(await funcGetfees(contract, 'organization', 'impact') as BigNumber));
