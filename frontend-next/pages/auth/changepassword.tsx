@@ -4,12 +4,12 @@ import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 
 import {InputFiled, Button, Modal} from '@components/common';
-import {rxHasNumber} from 'frontend-next/utils/regex';
+import {rxHasNumber} from '../../utils/regex';
 import {twMerge} from 'tailwind-merge';
 
 import {EyeIcon, EyeOffIcon, ChevronLeftIcon} from '@heroicons/react/outline';
-import {schemaChangePassword} from 'frontend-next/utils/validate';
-import useUser from 'frontend-next/services/useUser';
+import {schemaChangePassword} from '../../api/auth/validation';
+import useUser from '../../services/useUser';
 
 const ChangePassword: NextPage = () => {
   const [passwordShown, setPasswordShown] = useState<boolean>(false);

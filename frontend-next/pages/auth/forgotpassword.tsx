@@ -13,7 +13,7 @@ import ForgotPasswordStep3 from '@components/common/Auth/ForgotPassword/Step3/Fo
 import {
   schemaForgotPasswordStep1,
   schemaForgotPasswordStep3,
-} from 'utils/validate';
+} from '../../api/auth/validation';
 import useAuth from 'services/useAuth';
 import useUser from 'services/useUser';
 

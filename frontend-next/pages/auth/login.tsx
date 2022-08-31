@@ -11,7 +11,7 @@ import {EyeIcon, EyeOffIcon} from '@heroicons/react/outline';
 
 import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
-import {schemaLogin} from 'utils/validate';
+import {schemaLogin} from '../../api/auth/validation';
 import AuthContext from 'context/authContext';
 
 const Login: NextPage = () => {
