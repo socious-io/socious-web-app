@@ -8,7 +8,7 @@ export interface ChipProps {
   selected?: boolean;
   containerClassName?: string;
   contentClassName?: string;
-  onSelected?: (value: string | number) => void;
+  onSelected?: (value: string) => void;
 }
 
 const PADDING_LIST = {

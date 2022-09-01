@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import {UseFormRegisterReturn} from 'react-hook-form';
 import {twMerge} from 'tailwind-merge';
 import {SearchIcon} from '@heroicons/react/outline';
@@ -10,18 +10,29 @@ export interface SearchBarProps
   > {
   disabled?: boolean;
   register?: UseFormRegisterReturn;
+  onChangeText: (text: string) => void;
+  defaultValue?: string, 
 }
 
 export const SearchBar = ({
   type = 'search',
   disabled = false,
+  defaultValue = "",
   placeholder,
   id,
   name,
   register,
   className,
+  onChangeText,
   ...props
 }: SearchBarProps) => {
+
+  const onInputChange = useCallback((e) => {
+    if (e?.currentTarget?.value !== undefined) {
+      onChangeText(e?.currentTarget?.value || "");
+    }
+  }, [onChangeText])
+  
   return (
     <div className={twMerge('relative', className && className)}>
       <span className="absolute left-2 top-2">
@@ -41,6 +52,7 @@ export const SearchBar = ({
           'block w-full py-1.5 text-sm rounded-full   pl-8 bg-background outline-none border-2 border-grayLineBased  focus:border-2 focus:border-primary',
           disabled && 'text-opacity-40 border-opacity-40 bg-transparent',
         )}
+        onChange={onInputChange}
         {...register}
       />
     </div>

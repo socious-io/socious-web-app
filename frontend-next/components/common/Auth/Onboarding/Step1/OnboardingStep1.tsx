@@ -1,19 +1,27 @@
 import {Button} from '@components/common';
 import Image from 'next/image';
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import logoCompony from 'asset/icons/logo-color.svg';
 import {StepProps} from '@models/stepProps';
+import {TERM_URL, PRIVACY_URL} from 'utils/api';
+
 const OnboardingStep1 = ({onSubmit}: StepProps) => {
-  const [seePolicy, setSePolicy] = useState<boolean>(false);
 
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
   };
 
-  const handleSeePolicy = () => {
-    setSePolicy(true);
-  };
+  const handleSeeTerms = useCallback(() => {
+    // TODO detect current language
+    window.open(TERM_URL('en_US'));
+  }, [])
+
+  const handleSeePolicy = useCallback(() => {
+    // TODO detect current language
+    window.open(PRIVACY_URL('en_US'));
+  }, [])
+
   return (
     <form
       onSubmit={handleOnSubmit}
@@ -30,9 +38,14 @@ const OnboardingStep1 = ({onSubmit}: StepProps) => {
         <h1 className="font-helmet text-center my-6 ">Welcome to Socious</h1>
         <p className="text-base text-center my-6 text-graySubtitle">
           To continue, please agree to our terms of service and privacy policy
-          <Button variant="link" onClick={handleSeePolicy}>
+          <Button variant="link" onClick={handleSeeTerms} className="px-1">
             {' '}
-            terms of service and privacy policy{' '}
+            terms of service{' '}
+          </Button>
+          and
+          <Button variant="link" onClick={handleSeePolicy} className="px-1">
+            {' '}
+            privacy policy{' '}
           </Button>
         </p>
       </div>
@@ -44,7 +57,6 @@ const OnboardingStep1 = ({onSubmit}: StepProps) => {
           size="lg"
           variant="fill"
           value="Submit"
-          disabled={!seePolicy}
         >
           I agree
         </Button>

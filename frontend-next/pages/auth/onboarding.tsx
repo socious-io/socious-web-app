@@ -21,14 +21,16 @@ import {useForm, FormProvider} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 
 import {
+  schemaOnboardingStep3,
   schemaOnboardingStep5,
   schemaOnboardingStep6,
   schemaOnboardingStep7,
   schemaOnboardingStep8,
-} from 'utils/validate';
+} from '@api/auth/validation';
 import useUser from 'services/useUser';
 
 const schemaStep = {
+  3: schemaOnboardingStep3,
   5: schemaOnboardingStep5,
   6: schemaOnboardingStep6,
   7: schemaOnboardingStep7,
@@ -51,6 +53,14 @@ const Onboarding: NextPage = () => {
   const handleToggleModal = () => {
     setShowModal(!showModal);
   };
+
+  const formMethodsStep3 = useForm({
+    mode: 'all',
+    resolver: joiResolver(schemaStep[3]),
+    defaultValues: {
+      passions: [],
+    }
+  });
 
   const formMethodsStep5 = useForm({resolver: joiResolver(schemaStep[5])});
   const formMethodsStep6 = useForm({
@@ -90,6 +100,10 @@ const Onboarding: NextPage = () => {
     });
   };
 
+  const getData = () => {
+    const passions = formMethodsStep3.getValues('passions');
+    console.log(passions);
+  }
   return (
     <div
       className={twMerge(
@@ -97,6 +111,7 @@ const Onboarding: NextPage = () => {
         step === 10 ? ' bg-primary' : 'bg-background',
       )}
     >
+      <button onClick={getData}>Cause Check</button>
       <div className="flex  justify-center  h-20 relative">
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>Title</Modal.Title>
@@ -157,8 +172,13 @@ const Onboarding: NextPage = () => {
 
       {step === 1 && <OnboardingStep1 onSubmit={handleSubmit} />}
       {step === 2 && <OnboardingStep2 onSubmit={handleSubmit} />}
-      {step === 3 && <OnboardingStep3 onSubmit={handleSubmit} />}
+      {/* {step === 3 && <OnboardingStep3 onSubmit={handleSubmit} />} */}
+      <FormProvider {...formMethodsStep3}>
+        {step === 3 && <OnboardingStep3 onSubmit={handleSubmit} />}
+      </FormProvider>
+
       {step === 4 && <OnboardingStep4 onSubmit={handleSubmit} />}
+
       <FormProvider {...formMethodsStep5}>
         {step === 5 && <OnboardingStep5 onSubmit={handleSubmit} />}
       </FormProvider>
