@@ -22,15 +22,18 @@ import {joiResolver} from '@hookform/resolvers/joi';
 
 import {
   schemaOnboardingStep3,
+  schemaOnboardingStep4,
   schemaOnboardingStep5,
   schemaOnboardingStep6,
   schemaOnboardingStep7,
   schemaOnboardingStep8,
 } from '@api/auth/validation';
 import useUser from 'services/useUser';
+import { put } from 'utils/request';
 
 const schemaStep = {
   3: schemaOnboardingStep3,
+  4: schemaOnboardingStep4,
   5: schemaOnboardingStep5,
   6: schemaOnboardingStep6,
   7: schemaOnboardingStep7,
@@ -38,7 +41,7 @@ const schemaStep = {
 };
 
 const Onboarding: NextPage = () => {
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(9);
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const {updateProfile} = useUser();
@@ -61,6 +64,13 @@ const Onboarding: NextPage = () => {
       passions: [],
     }
   });
+  const formMethodsStep4 = useForm({
+    mode: 'all',
+    resolver: joiResolver(schemaStep[4]),
+    defaultValues: {
+      skills: [],
+    }
+  });
 
   const formMethodsStep5 = useForm({resolver: joiResolver(schemaStep[5])});
   const formMethodsStep6 = useForm({
@@ -78,9 +88,12 @@ const Onboarding: NextPage = () => {
   const formMethodsStep8 = useForm({
     resolver: joiResolver(schemaStep[8]),
   });
+  const formMethodsStep9 = useForm({
+    // resolver: joiResolver(schemaStep[8]),
+  });
 
   const handleSubmit = (data: any) => {
-    if (step === 8) {
+    if (step === 9) {
       handleUpdateProfileRequest();
     }
     if (step === 10) {
@@ -92,18 +105,49 @@ const Onboarding: NextPage = () => {
   const handleUpdateProfileRequest = () => {
     const biography = formMethodsStep8.getValues('bio');
     const city = formMethodsStep5.getValues('city');
+    // const passions = formMethodsStep3.getValues('passions')
+    const passions = ["SOCIAL", "POVERTY", "HOMELESSNESS", "HUNGER", "HEALTH",];
+    const skills = formMethodsStep4.getValues('skills');
+    const photo = formMethodsStep9.getValues('file');
+
 
     const user = {bio: biography, city: city?.name};
+    const formData = new FormData();
 
-    updateProfile(user).then(() => {
-      setStep(step + 1);
-    });
+    formData.append("avatar", photo);
+    formData.append("skills", JSON.stringify(skills));
+    formData.append("social_causes", JSON.stringify(passions));
+    formData.append("city", city);
+    formData.append("bio", biography);
+    formData.append("first_name", "Babin");
+    formData.append("last_name", "Haha");
+
+    console.log("I am here!");
+    console.log(...formData)
+    put("/api/v2/user/profile", 
+      {
+        "first_name": "Babin",
+        "last_name": "Bohora",
+        "username": "klzzorfp2632",
+        "social_causes": passions,
+        "skills": skills,
+        "bio": biography,
+        "avatar": photo
+
+      },
+      {
+        "Content-Type": "multipart/formdata",
+      }
+    ).then(data => console.log(data))
+    .catch(err => console.error(err));
+    // updateProfile(user).then(() => {
+    //   setStep(step + 1);
+    // });
   };
-
   const getData = () => {
-    const passions = formMethodsStep3.getValues('passions');
-    console.log(passions);
+    console.log("data", formMethodsStep9.getValues('file'));
   }
+
   return (
     <div
       className={twMerge(
@@ -111,7 +155,7 @@ const Onboarding: NextPage = () => {
         step === 10 ? ' bg-primary' : 'bg-background',
       )}
     >
-      <button onClick={getData}>Cause Check</button>
+      <button onClick={getData}>Get Image</button>
       <div className="flex  justify-center  h-20 relative">
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>Title</Modal.Title>
@@ -176,8 +220,10 @@ const Onboarding: NextPage = () => {
       <FormProvider {...formMethodsStep3}>
         {step === 3 && <OnboardingStep3 onSubmit={handleSubmit} />}
       </FormProvider>
+      <FormProvider {...formMethodsStep4}>
+        {step === 4 && <OnboardingStep4 onSubmit={handleSubmit} />}
+      </FormProvider>
 
-      {step === 4 && <OnboardingStep4 onSubmit={handleSubmit} />}
 
       <FormProvider {...formMethodsStep5}>
         {step === 5 && <OnboardingStep5 onSubmit={handleSubmit} />}
@@ -191,7 +237,9 @@ const Onboarding: NextPage = () => {
       <FormProvider {...formMethodsStep8}>
         {step === 8 && <OnboardingStep8 onSubmit={handleSubmit} />}
       </FormProvider>
-      {step === 9 && <OnboardingStep9 onSubmit={handleSubmit} />}
+      <FormProvider {...formMethodsStep9}>
+        {step === 9 && <OnboardingStep9 onSubmit={handleSubmit} />}
+      </FormProvider>
       {step === 10 && <OnboardingStep10 onSubmit={handleSubmit} />}
     </div>
   );
