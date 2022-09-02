@@ -1,8 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
 import {FC, useState, useEffect, useRef} from 'react';
+import {useFormContext, UseFormRegisterReturn, useFormState} from 'react-hook-form';
 
 import profile_img_icon from 'asset/images/user.png';
+import { post } from 'utils/request';
 
 interface ImageUploaderProps {
   src: string;
@@ -24,14 +26,19 @@ const ImageUploader: FC<ImageUploaderProps> = ({
   useEffect(() => {
     setImagePreviewUrl(src);
   }, [src]);
+  const {setValue} = useFormContext();
 
   const OnChange = (e: any) => {
     e.preventDefault();
     const reader = new FileReader();
     const file = e.target?.files[0];
+    if (!file) return
+    setValue("file", file, {
+      shouldDirty: true,
+      shouldTouch: true
+    })
     if (file) {
       reader.onloadend = () => {
-        // onChange(file);
 
         setImagePreviewUrl(reader?.result || '');
       };
@@ -49,6 +56,7 @@ const ImageUploader: FC<ImageUploaderProps> = ({
             onChange={OnChange}
             type="file"
             id="imageUpload"
+            // accept="image/*"
             accept=".png, .jpg, .jpeg"
             ref={inputRef}
           />

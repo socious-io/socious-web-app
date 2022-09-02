@@ -2,6 +2,7 @@ import {Button} from '@components/common';
 import ImageUploader from '@components/common/ImageUploader/ImageUploader';
 import profile_img_icon from 'asset/images/user.png';
 import {StepProps} from '@models/stepProps';
+
 const OnboardingStep9 = ({onSubmit}: StepProps) => {
   const handleOnSubmit = (e: any) => {
     e.preventDefault();

@@ -2,49 +2,25 @@ import {SearchBar, Button, Chip} from '@components/common';
 import {useState, useMemo, useCallback} from 'react';
 import {StepProps} from '@models/stepProps';
 import { useFormContext } from 'react-hook-form';
+import useFilter from 'hooks/auth/useFilter';
+import useHandleSelected from 'hooks/auth/useHandleSelected';
 
 const OnboardingStep4 = ({onSubmit}: StepProps) => {
-  const [selecteds, setSelecteds] = useState<string[]>([]);
-
+  const maxSkills = 10;
+  const [selecteds, onSelect] = useHandleSelected("skills", maxSkills);
+  
   const formMethods = useFormContext();
-  const { setValue, watch, handleSubmit } = formMethods;
+  const { watch, handleSubmit } = formMethods;
 
-  const skills = useMemo(() => ["Sustainable Finance", "Bloomberg Terminal", "Impact Investing", "Financial Analysis", "Sustainability", "Sustainable Finance", "Bloomberg Terminal", "Impact Investing", "Financial Analysis", "Sustainability"], [])
-  const [filteredSkills, setFilteredSkills] = useState<string[]>(skills);
+  const skills = useMemo(() => ["Sustainable Financse", "Bloomberg Taerminal", "Impact aInvesting", "Financaiald Analysis", "Sustainadbaility", "Sustainadble Finance","Sustainadbility", "Sustainablde Finance", "Bsloomberg Terminal", "Impact Investing", "Financial Analysis", "Sustainability"], [])
+  const [filteredItems, filterWith] = useFilter(skills);
 
   const skill = watch('skills');
-  const maxSkills = 10;
-
-  const onSetValueForm = useCallback((value) => {
-    setValue("skills", value, {
-      shouldDirty: true,
-      shouldValidate: true,
-    })
-  }, [setValue])
-
-  const handleSelecteds = useCallback((itemSelected: string) => {
-    if (selecteds?.includes(itemSelected)) {
-      setSelecteds(selecteds?.filter((i) => i !== itemSelected))
-      onSetValueForm(selecteds?.filter((i) => i !== itemSelected));
-    } else {
-      if (selecteds?.length  < maxSkills)  {
-        setSelecteds([...selecteds, itemSelected]);
-        onSetValueForm([...selecteds, itemSelected]);
-      }
-    }
-  }, [selecteds, onSetValueForm]);
-
-  const onSearchSkills = useCallback(
-    (text: string) => {
-      const reg = new RegExp( `${text}`, 'gi');
-      setFilteredSkills(skills.filter(x => reg.test(x)))
-    },
-    [skills]
-  );
+  
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col justify-between  px-10    "
+      className="flex flex-col justify-between  px-10"
     >
       <div className="flex flex-col h-[28rem]">
         {' '}
@@ -57,15 +33,15 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
           <SearchBar
             type="text"
             placeholder="Search"
-            onChangeText={onSearchSkills}
+            onChangeText={filterWith}
             className="my-6"
           />
           <div className="flex flex-col  border-t-2 border-b-grayLineBased -mx-5 px-5  ">
             <h3 className="py-3">Accounting & Consultancy</h3>
             <div className="flex flex-wrap space-x-2  h-32 overflow-y-auto ">
-              {filteredSkills.map((skill, index) => (
+              {filteredItems.map((skill: any, index: number) => (
                 <Chip
-                  onSelected={handleSelecteds}
+                  onSelected={onSelect}
                   selected={selecteds?.includes(skill+index)}
                   value={skill+index}
                   key={`skill-${skill+index}`}

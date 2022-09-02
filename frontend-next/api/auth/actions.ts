@@ -37,6 +37,10 @@ export async function changePassword(currentPassword: string, newPassword: strin
   });
 }
 
+export async function updateProfile(user: any) {
+  await put("/api/v2/user/profile", user);
+}
+
 // Asking for JWT token(refresh token)
 export async function logout() {
   await deleteRequest("/api/v2/auth/logout");

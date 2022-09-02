@@ -1,11 +1,12 @@
 import axios from 'axios';
+import { any, boolean } from 'joi';
 
 type AxiosRequestHeaders = {
   [x: string]: string | number | boolean;
 }
 
 const request = axios.create({
-  // baseURL: process.env.baseURL ,
+  // baseURL: process.env.baseURL,
   withCredentials: true,
   timeout: 40000,
   headers: {
@@ -14,11 +15,11 @@ const request = axios.create({
 });
 
 request?.interceptors.response.use(
-  (response) => {
-    console.log("response", response);
+  (response: any) => {
     return response?.data ? response?.data : response;
   },
-  (error) => {
+  (error: any) => {
+    console.log("ERROR", error);
     if (error.response) {
       console.log(error.response);
       throw new FetchError({
@@ -29,13 +30,16 @@ request?.interceptors.response.use(
     } else if (error.request) {
       throw error;
     } else {
+      throw error
     }
     console.error(error.config);
   },
 );
 
-const get = (arg: string)=> {
-  return request?.get(arg);
+const get = (arg: string, headers?: AxiosRequestHeaders)=> {
+  console.log("GET", headers);
+
+  return request?.get(arg, headers);
 };
 
 const deleteRequest = (arg: string) => {
@@ -43,6 +47,7 @@ const deleteRequest = (arg: string) => {
 };
 
 const post = (arg: string, data: any, headers?: AxiosRequestHeaders) => {
+  console.log("HEADERS", headers);
   return request?.post(arg, data, headers);
 };
 
@@ -56,6 +61,31 @@ const put = (arg: string,  data: any, headers?: AxiosRequestHeaders) => {
 
 const all = axios.all;
 const spread = axios.spread;
+
+export const doCORSRequest = async (options: any) => {
+  return new Promise((resolve: (response: any) => void) => {
+    const requestCORS = new XMLHttpRequest();
+    requestCORS.open(options.method, options.url);
+    requestCORS.onload = requestCORS.onerror = function () {
+      resolve(
+        typeof requestCORS?.responseText === 'string'
+          ? requestCORS?.responseText
+          : JSON.parse(requestCORS?.responseText),
+      );
+    };
+    requestCORS.withCredentials = false;
+    if (/^POST/i.test(options.method)) {
+      requestCORS.setRequestHeader('Content-Type', 'application/json');
+      requestCORS.send(JSON.stringify(options.data));
+    }
+    if (/^GET/i.test(options.method)) {
+      // requestCORS.setRequestHeader("Content-Type", "application/json");
+      // x.setRequestHeader("Authorization", "Bearer " + options?.token);
+
+      requestCORS.send(JSON.stringify(options.data));
+    }
+  });
+};
 
 class FetchError extends Error {
   response: Response;

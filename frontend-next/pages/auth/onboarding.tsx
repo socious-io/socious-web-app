@@ -1,8 +1,9 @@
 import type {NextPage} from 'next';
-import {useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {Button, Modal} from '@components/common';
 import {twMerge} from 'tailwind-merge';
-
+import axios from 'axios';
+import FormData from 'form-data';
 import OnboardingStep1 from '@components/common/Auth/Onboarding/Step1/OnboardingStep1';
 import OnboardingStep2 from '@components/common/Auth/Onboarding/Step2/OnboardingStep2';
 import OnboardingStep3 from '@components/common/Auth/Onboarding/Step3/OnboardingStep3';
@@ -28,8 +29,9 @@ import {
   schemaOnboardingStep7,
   schemaOnboardingStep8,
 } from '@api/auth/validation';
-import useUser from 'services/useUser';
-import { put } from 'utils/request';
+import { get, put, post } from 'utils/request';
+import { updateProfile } from '@api/auth/actions';
+import useSWR from 'swr';
 
 const schemaStep = {
   3: schemaOnboardingStep3,
@@ -40,22 +42,27 @@ const schemaStep = {
   8: schemaOnboardingStep8,
 };
 
+type User = {
+  first_name: string;
+  last_name: string;
+  username: string;
+}
 const Onboarding: NextPage = () => {
-  const [step, setStep] = useState<number>(9);
+  const {data}= useSWR<any>("/api/v2/user/profile", get);
+
+  console.log("data", data);
+  
+  const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const {updateProfile} = useUser();
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     setStep(step - 1);
-  };
-  const handleNext = () => {
-    setStep(step + 1);
-  };
+  }, [step]);
 
-  const handleToggleModal = () => {
+  const handleToggleModal = useCallback(() => {
     setShowModal(!showModal);
-  };
+  }, [showModal]);
 
   const formMethodsStep3 = useForm({
     mode: 'all',
@@ -88,65 +95,73 @@ const Onboarding: NextPage = () => {
   const formMethodsStep8 = useForm({
     resolver: joiResolver(schemaStep[8]),
   });
-  const formMethodsStep9 = useForm({
-    // resolver: joiResolver(schemaStep[8]),
-  });
+  const formMethodsStep9 = useForm();
 
   const handleSubmit = (data: any) => {
-    if (step === 9) {
+    if (step === 8) {
       handleUpdateProfileRequest();
-    }
-    if (step === 10) {
+    } else if (step === 9) {
+      handleImageUpload();
+    } else if (step === 10) {
       handleToggleModal();
-    } else {
+    }
+    else {
       setStep(step + 1);
     }
   };
-  const handleUpdateProfileRequest = () => {
-    const biography = formMethodsStep8.getValues('bio');
+
+  const handleImageUpload = useCallback(async () => {
+    const avatar = formMethodsStep9.getValues('file');
+    const formData = new FormData();
+    formData.append("file", avatar, avatar.name);
+    post("/api/v2/media/upload", formData, {
+      "Content-Type": "multipart/form-data",
+      "Current-Identity": "b5dbfb0a-cbe7-49f2-8154-bfcdcca2754c",
+      // "onUploadProgress" : ProgressEvent => { console.log("Upload Progress", Math.round(ProgressEvent.loaded / ProgressEvent.total * 100) + "%")} 
+    }).then(response => {
+      console.log("RESPONSE", response)
+      // make another update with reponse id.
+    })
+    .catch((error) => console.log("ERROR", error.response));
+
+  }, [formMethodsStep9]);
+
+  const handleUpdateProfileRequest = useCallback(() => {
+    const bio = formMethodsStep8.getValues('bio');
     const city = formMethodsStep5.getValues('city');
     // const passions = formMethodsStep3.getValues('passions')
+    // Waiting for new githubpackage with enum and types
     const passions = ["SOCIAL", "POVERTY", "HOMELESSNESS", "HUNGER", "HEALTH",];
     const skills = formMethodsStep4.getValues('skills');
-    const photo = formMethodsStep9.getValues('file');
 
+    if (data === undefined) return
 
-    const user = {bio: biography, city: city?.name};
-    const formData = new FormData();
+    const user:any = {
+      "first_name": "boblin" || data?.first_name,
+      "last_name": data?.last_name,
+      "username": data?.username,
+      "social_causes": passions,
+      "skills": skills,
+    }
+    if (bio) user["bio"] = bio;
+    put("/api/v2/user/profile", user)
+      .then(data => {
+        setStep(step + 1);
+        console.log(data)
+      })
+      .catch(err => console.error(err));
+    updateProfile(user).then(() => {
+      setStep(step + 1);
+    }).catch(error => console.error(error))
+  }, [data, formMethodsStep4, formMethodsStep5, formMethodsStep8, step]);
 
-    formData.append("avatar", photo);
-    formData.append("skills", JSON.stringify(skills));
-    formData.append("social_causes", JSON.stringify(passions));
-    formData.append("city", city);
-    formData.append("bio", biography);
-    formData.append("first_name", "Babin");
-    formData.append("last_name", "Haha");
-
-    console.log("I am here!");
-    console.log(...formData)
-    put("/api/v2/user/profile", 
-      {
-        "first_name": "Babin",
-        "last_name": "Bohora",
-        "username": "klzzorfp2632",
-        "social_causes": passions,
-        "skills": skills,
-        "bio": biography,
-        "avatar": photo
-
-      },
-      {
-        "Content-Type": "multipart/formdata",
-      }
-    ).then(data => console.log(data))
-    .catch(err => console.error(err));
-    // updateProfile(user).then(() => {
-    //   setStep(step + 1);
-    // });
-  };
-  const getData = () => {
-    console.log("data", formMethodsStep9.getValues('file'));
-  }
+  const handleNext = useCallback(() => {
+    if (step === 8) {
+      handleUpdateProfileRequest();
+    } else {
+      setStep(step + 1);
+    }
+  }, [handleUpdateProfileRequest, step]);
 
   return (
     <div
@@ -155,7 +170,6 @@ const Onboarding: NextPage = () => {
         step === 10 ? ' bg-primary' : 'bg-background',
       )}
     >
-      <button onClick={getData}>Get Image</button>
       <div className="flex  justify-center  h-20 relative">
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>Title</Modal.Title>
