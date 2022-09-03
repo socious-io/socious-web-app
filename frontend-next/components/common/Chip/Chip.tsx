@@ -12,7 +12,7 @@ export interface ChipProps {
 }
 
 const PADDING_LIST = {
-  s: 'py-py px-3',
+  s: 'py-px px-3',
   m: 'py-1 px-3',
   l: 'py-2.5 px-3',
 };
