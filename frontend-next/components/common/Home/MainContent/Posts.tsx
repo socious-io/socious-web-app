@@ -1,13 +1,14 @@
-import PostCard from "layout/screen/PostCard/PostCard";
+// import HomePostCard from "layout/screen/PostCard/HomePostCard";
 import Button from "@components/common/Button/Button";
+import {CommentedCard, LikedCard, SharedCard, HomeCard} from "layout/screen/PostCard";
 
 const Posts = () => {
   return (
     <div className="space-y-2">
-      { [...Array(5)].map((item) => {
-        return <PostCard key={item} />
-      })
-      }
+      <HomeCard />
+      <CommentedCard />
+      <LikedCard />
+      <SharedCard />
       <div className="flex justify-center">
         <Button variant="link" className="text-primary font-semibold">
           See more
