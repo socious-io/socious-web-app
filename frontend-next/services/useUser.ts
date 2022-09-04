@@ -1,90 +1,66 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import {get, put} from 'utils/request';
+import {get} from 'utils/request';
 import {ApiConstants } from 'utils/api';
 import useSWR from 'swr'
+import { useEffect } from 'react';
+import Router, { useRouter } from 'next/router';
+import path from 'path';
 
-const useUser = () => {
+interface UseUserProps {
+  redirectIfFound?: boolean;
+  redirect?: boolean;
+  redirectTo?: string;
+  shouldRetry?: boolean;
+  onAuthError?: boolean;
+  forceStop?: boolean
+}
 
-  const getProfile = () => {
-    const { data: user, mutate: mutateUser } = useSWR<JSON>("/api/v2/user/profile");
+const useUser = ({
+    redirectIfFound = false,
+    redirectTo = "",
+    // Force Stop redirect logic.
+    // Implemented to try Password expired
+    forceStop = false,
+
+    shouldRetry = true,
+    onAuthError = true
+  }: UseUserProps
+) => {
+  const { data: user, error: userError, mutate: mutateUser } = useSWR<any>("/api/v2/user/profile", get, {
+    shouldRetryOnError: shouldRetry,
+    onErrorRetry: (error) => {
+      if (!onAuthError && error.response.status === 401) return
+    }
+  });
+  const { pathname } = useRouter();
+
+  useEffect(() => {
+    // if user && error both are undefined
+    if (!user && !userError) return
     
-  };
+    if (forceStop) return
 
-  const getOthersProfile = (id: string) => {
-    return new Promise((resolve: (response: any) => void, reject) => {
-      get(`/user/${id}/profile`)
-        .then((response: any) => {
-          resolve(response);  
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-  };
+    // if user unauthorized || or any error
+    if (userError && userError.response.status === 401) {
+      // if page !== home
+      if (pathname !== "/") {
+        // => redirect to /auth/login 
+        Router.push("/auth/login");
+        // => add ?redirect_to=/profile
+      }
+    }
 
-  const changePassword = (data: any) => {
-    const body = {
-      current_password: data?.currentPassword,
-      password: data?.newPassword,
-    };
+    
+    // if user authorized
+      // if page === home [doesn't need to be home]
+      // if user === new_user
+    if (user && !user.skills && !user.passions) {
+      //=> redirect to /auth/onboarding
+      Router.push("/auth/onboarding");
+    }    
 
-    return new Promise((resolve: (response: any) => void, reject) => {
-      put(ApiConstants.CHANGE_PASSWORD, body)
-        .then((response: any) => {
-          resolve(response);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-  };
-  const directChangePassword = (data: any) => {
-    const body = {
-      password: data?.password,
-    };
-
-    return new Promise((resolve: (response: any) => void, reject) => {
-      put(ApiConstants.CHANGE_PASSWORD_DIRECT, body)
-        .then((response: any) => {
-          resolve(response);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-  };
-  const updateProfile = (data: any) => {
-    const body = data;
-
-    // {
-    //     first_name: data?.firstName,
-    //     last_name : data?.lastName,
-    //     bio: data?.biography,
-    //     city: data?.city,
-    //     address: data?.address,
-    //     wallet_address: data?.walletAddress,
-    //     social_causes: data?.socialCauses,
-    // };
-
-    return new Promise((resolve: (response: any) => void, reject) => {
-      request
-        .put(ApiConstants.GET_PROFILE, body)
-        .then((response: any) => {
-          resolve(response);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-  };
-
-  return {
-    changePassword,
-    directChangePassword,
-    updateProfile,
-    getProfile,
-    getOthersProfile,
-  };
+  }, [user, pathname, userError, forceStop])
+  return {user, userError, mutateUser};
 };
 
 export default useUser;
