@@ -1,90 +1,76 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import {get, put} from 'utils/request';
+import {get} from 'utils/request';
 import {ApiConstants } from 'utils/api';
 import useSWR from 'swr'
+import { useEffect } from 'react';
+import Router, { useRouter } from 'next/router';
 
-const useUser = () => {
+interface UseUserProps {
+  shouldRetry?: boolean;
+  onAuthError?: boolean;
+  forceStop?: boolean
+};
 
-  const getProfile = () => {
-    const { data: user, mutate: mutateUser } = useSWR<JSON>("/api/v2/user/profile");
+const defaultValues = {
+  // Force Stop redirect logic.
+  // Implemented to try Password expired
+  forceStop: false,
+  shouldRetry: true,
+  onAuthError: true
+};
+
+const allowedRoutes = [
+  "/", "/auth/forgotpassword", "/auth/login", "/auth/signup"
+];
+
+const useUser = (props: UseUserProps = 
+  defaultValues
+) => {
+  const { forceStop, shouldRetry, onAuthError } = {...defaultValues, ...props};
+  const { pathname } = useRouter();
+
+  const { data: user, error: userError, mutate: mutateUser } = useSWR<any>("/api/v2/user/profile", get, {
+    shouldRetryOnError: shouldRetry,
+    onErrorRetry: (error) => {
+      if (!onAuthError && error.response.status === 401) return
+    }
+  });
+
+
+  useEffect(() => {
+    // if user && error both are undefined
+    if (!user && !userError) return
+    if (forceStop) return
+
+    // if user unauthorized
+    if (userError && userError.response.status === 401) {
+      // if page !== allowed_routes
+      if (!(allowedRoutes.includes (pathname))) {
+        // => add ?redirect_to=/profile
+        Router.push("/auth/login");
+      }
+    }
+
     
-  };
+    // if user authorized
+    if (user) {
+      // if user has requested forgot password.
+      if (user.password_expired) {
+        Router.push("/auth/forgotpassword");
+        return
+      } else if (pathname.startsWith("/auth/forgotpassword")) {
+        // if user trying to access /auth/forgotpassword when password not expired
+        Router.push("/");
+      }
 
-  const getOthersProfile = (id: string) => {
-    return new Promise((resolve: (response: any) => void, reject) => {
-      get(`/user/${id}/profile`)
-        .then((response: any) => {
-          resolve(response);  
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-  };
+      // if user === new_user
+      if (!user.skills && !user.passions) {
+        Router.push("/auth/onboarding");
+      }    
+    }
 
-  const changePassword = (data: any) => {
-    const body = {
-      current_password: data?.currentPassword,
-      password: data?.newPassword,
-    };
-
-    return new Promise((resolve: (response: any) => void, reject) => {
-      put(ApiConstants.CHANGE_PASSWORD, body)
-        .then((response: any) => {
-          resolve(response);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-  };
-  const directChangePassword = (data: any) => {
-    const body = {
-      password: data?.password,
-    };
-
-    return new Promise((resolve: (response: any) => void, reject) => {
-      put(ApiConstants.CHANGE_PASSWORD_DIRECT, body)
-        .then((response: any) => {
-          resolve(response);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-  };
-  const updateProfile = (data: any) => {
-    const body = data;
-
-    // {
-    //     first_name: data?.firstName,
-    //     last_name : data?.lastName,
-    //     bio: data?.biography,
-    //     city: data?.city,
-    //     address: data?.address,
-    //     wallet_address: data?.walletAddress,
-    //     social_causes: data?.socialCauses,
-    // };
-
-    return new Promise((resolve: (response: any) => void, reject) => {
-      request
-        .put(ApiConstants.GET_PROFILE, body)
-        .then((response: any) => {
-          resolve(response);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-  };
-
-  return {
-    changePassword,
-    directChangePassword,
-    updateProfile,
-    getProfile,
-    getOthersProfile,
-  };
+  }, [user, pathname, userError, forceStop])
+  return {user, userError, mutateUser};
 };
 
 export default useUser;
