@@ -2,7 +2,11 @@ import ImgUrl from "../../../../asset/images/socious_feed.png";
 import Avatar from "@components/common/Avatar/Avatar";
 import Button from "@components/common/Button/Button";
 
-const AddPost = () => { 
+interface AddPostProps {
+  onClickAdd: () => void
+}
+
+const AddPost = ({ onClickAdd }: AddPostProps) => {
   return (
     <>
       <div className="bg-clearWhite bg-cover pt-11 pb-7 px-4 space-y-2 rounded-2xl bg-blend-overlay"
@@ -18,7 +22,7 @@ const AddPost = () => {
 
       <div className='flex p-6 space-x-4 rounded-2xl border border-grayLineBased bg-white'>
         <Avatar size="xl" />
-        <Button variant='outline' className='grow px-6 py-3 rounded-2xl border border-grayLineBased text-primary'>
+        <Button variant='outline' className='grow px-6 py-3 rounded-2xl border border-grayLineBased text-primary' onClick={onClickAdd}>
           Create a post
         </Button>
       </div>

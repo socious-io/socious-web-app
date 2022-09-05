@@ -20,11 +20,11 @@ const PostAction = ({
       </div>
       <div className="flex flex-row justify-center items-center space-x-1 grow">
         <ChatAltIcon className="w-5" />
-        <p className="text-graySubtitle text-xs">Like</p>
+        <p className="text-graySubtitle text-xs">Comment</p>
       </div>
       <div className="flex flex-row justify-center items-center space-x-1 grow">
         <ShareIcon className="w-5" />
-        <p className="text-graySubtitle text-xs">Like</p>
+        <p className="text-graySubtitle text-xs">Share</p>
       </div>
     </div>
   );
