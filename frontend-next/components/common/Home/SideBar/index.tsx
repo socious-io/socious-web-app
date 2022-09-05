@@ -10,7 +10,7 @@ const SideBar = () => {
       <div className="space-y-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
         <ProfileCard />
         <StatusCard status="None"/>
-        { "org" === "user" ? 
+        { false ? // something.identity_type === "user" ? 
           <NetworkCard />
           :
           <OrganizationCard />
