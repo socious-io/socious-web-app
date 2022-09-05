@@ -36,6 +36,7 @@ export default function Combobox({
   onChangeInputSearch,
 }: ComboboxProps) {
   const [query, setQuery] = useState('');
+  const [filteredItems, setFilteredItems] = useState<any[]>([]);
 
   const debouncedAmount = useDebounce(query, 500);
 
@@ -43,14 +44,14 @@ export default function Combobox({
     onChangeInputSearch && onChangeInputSearch(debouncedAmount);
   }, [debouncedAmount]);
 
-  // const filteredItems =
-  //     query === ''
-  //         ? items
-  //         : items.filter((person) =>
-  //               person.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, '')),
-  //           );
-
-  const filteredItems = items;
+  
+  useEffect(() => {
+    query === ''
+        ? setFilteredItems(items)
+        : setFilteredItems(() => items.filter((person) =>
+              person.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, '')),
+          ))
+  }, [filteredItems, query])
 
   return (
     <UiCombobox
