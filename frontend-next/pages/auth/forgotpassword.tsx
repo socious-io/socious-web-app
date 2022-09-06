@@ -1,6 +1,6 @@
 import type {NextPage} from 'next';
 import Router from "next/router";
-import {useCallback, useMemo, useReducer, useState} from 'react';
+import {useCallback, useEffect, useMemo, useReducer, useState} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 
@@ -19,6 +19,7 @@ import {
 import { forgetPassword, confirmOTP, directChangePassword } from '@api/auth/actions';
 import { FetchError } from 'utils/request';
 import { ForgotError } from '@models/forgotPassword'
+import useUser from 'services/useUser';
 
 const schemaStep = {
   1: schemaForgotPasswordStep1,
@@ -42,6 +43,13 @@ const ForgotPassword: NextPage = () => {
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessages, dispatch] = useReducer(reducer, {emailCheckError: "", otpError: "", defaultMessage: ""});
+  const {user} = useUser({onAuthError: false});
+  
+  useEffect(() => {
+    if (user && user.password_expired) {
+      setStep(3);
+    }
+  }, [user])
 
   const formMethodsStep1 = useForm({
     resolver: joiResolver(schemaStep[1]),

@@ -5,14 +5,17 @@ import {CheckIcon, ChevronDownIcon} from '@heroicons/react/solid';
 import {twMerge} from 'tailwind-merge';
 import {ExclamationCircleIcon} from '@heroicons/react/solid';
 import useDebounce from 'hooks/useDebounce';
+import { ReactElement } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 export interface ComboboxProps
   extends React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement
   > {
-  label?: string;
+  label?: string | ReactElement;
   disabled?: boolean;
+  register?: UseFormRegisterReturn;
   errorMessage?: any;
   suffixContent?: any;
   prefixContent?: any;
@@ -32,10 +35,13 @@ export default function Combobox({
   errorMessage,
   required,
   selected,
+  register,
   onSelected,
   onChangeInputSearch,
+  ...props
 }: ComboboxProps) {
   const [query, setQuery] = useState('');
+  const [filteredItems, setFilteredItems] = useState<any[]>([]);
 
   const debouncedAmount = useDebounce(query, 500);
 
@@ -43,14 +49,14 @@ export default function Combobox({
     onChangeInputSearch && onChangeInputSearch(debouncedAmount);
   }, [debouncedAmount]);
 
-  // const filteredItems =
-  //     query === ''
-  //         ? items
-  //         : items.filter((person) =>
-  //               person.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, '')),
-  //           );
-
-  const filteredItems = items;
+  
+  useEffect(() => {
+    query === ''
+        ? setFilteredItems(items)
+        : setFilteredItems(() => items.filter((person) =>
+              person.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, '')),
+          ))
+  }, [filteredItems, query])
 
   return (
     <UiCombobox
@@ -72,14 +78,18 @@ export default function Combobox({
                 disabled && 'text-opacity-40 ',
               )}
             >
-              {label} {required && <span className="text-error">*</span>}
+              <div className='flex items-baseline'>
+                {label} {required && <span className="text-error">*</span>}
+              </div>
             </UiCombobox.Label>
           )}
           <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <UiCombobox.Input
               className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 outline-none"
-              displayValue={(person: any) => person?.name}
+              displayValue={(item: any) => item?.name}
               onChange={(event) => setQuery(event.target.value)}
+              {...props}
+              {...register}
             />
 
             <UiCombobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -100,7 +110,7 @@ export default function Combobox({
             leaveTo="transform scale-95 opacity-0"
             afterLeave={() => setQuery('')}
           >
-            <UiCombobox.Options className="z-10 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <UiCombobox.Options className="z-10 absolute top-full mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {filteredItems.length === 0 && query !== '' ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                   Nothing found.

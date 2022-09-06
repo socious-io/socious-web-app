@@ -7,9 +7,10 @@ import profile_img_icon from 'asset/images/user.png';
 import { post } from 'utils/request';
 
 interface ImageUploaderProps {
-  src: string;
+  src?: string;
   onChange: (file: any) => void;
   children?: any;
+  withPreview?: boolean;
 }
 
 const onImageError = (ev: any) => {
@@ -19,6 +20,7 @@ const ImageUploader: FC<ImageUploaderProps> = ({
   src,
   onChange,
   children,
+  withPreview = true,
 }: ImageUploaderProps) => {
   const inputRef: any = useRef(null);
 
@@ -38,6 +40,7 @@ const ImageUploader: FC<ImageUploaderProps> = ({
       shouldTouch: true
     })
     if (file) {
+      onChange(file);
       reader.onloadend = () => {
 
         setImagePreviewUrl(reader?.result || '');
@@ -50,7 +53,7 @@ const ImageUploader: FC<ImageUploaderProps> = ({
   };
   return (
     <>
-      <div className="relative max-w-[15rem]">
+      <div className={`relative ${withPreview && "max-w-[15rem]"}`}>
         <div className="ui-component-img-uploader-edit">
           <input
             onChange={OnChange}
@@ -61,9 +64,12 @@ const ImageUploader: FC<ImageUploaderProps> = ({
             ref={inputRef}
           />
         </div>
-        <div className="ui-component-img-uploader-preview">
-          <img src={imagePreviewUrl} onError={onImageError} />
-        </div>
+        {
+          withPreview && 
+            <div className="ui-component-img-uploader-preview">
+              <img src={imagePreviewUrl} onError={onImageError} />
+            </div>
+        }
       </div>
       {children(handleChooseMedia)}
     </>

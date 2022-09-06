@@ -59,7 +59,7 @@ export function Avatar({
   return (
     <span
       className={twMerge(
-        'relative inline-block border border-grayLineBased',
+        'relative inline-block border bg-white border-grayLineBased',
         rounded && 'rounded-full',
         imageSize,
       )}
