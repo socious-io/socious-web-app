@@ -27,7 +27,6 @@ const SideBar = () => {
   });
   const { user } = useUser();
 
-  console.log("Identity", data);
   const users = data?.map((item: any) => {
     if (item.current) return item.type === "users"
   })
