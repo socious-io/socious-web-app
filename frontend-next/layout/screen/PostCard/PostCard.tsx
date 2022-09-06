@@ -1,56 +1,30 @@
-import { Avatar, Chip } from "@components/common";
-import {
-  ChatAltIcon,
-  DotsHorizontalIcon,
-  HeartIcon,
-  ShareIcon,
-} from "@heroicons/react/outline";
+import PostHead from './components/PostHead';
+import PostContent from './components/PostContent';
+import PostAction from './components/PostAction';
+
 
 export interface PostCardProps {
   content?: string;
   name?: string;
   time?: string;
   passion?: string;
+  showAction?: boolean;
+  liked?: boolean;
+  media?: string[] | null;
+  likes?: number,
+  shared?: number,
+  src?: string,
 }
 
-export function PostCard({ content, name, time, passion }: PostCardProps) {
+
+export function PostCard({content, name, time, passion, liked, showAction = true, src, likes,shared}: PostCardProps) {
   return (
-    <div className="p-4 space-y-4 rounded-2xl border border-grayLineBased">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-2 p-b">
-          <Avatar size="s" />
-          <p className="text-sm">{name}</p>
-          <div className="w-1.5 h-1.5 bg-grayInputField rounded-full" />
-          <p className="text-sm text-grayInputField">{time}</p>
-        </div>
-        <div className="flex">
-          <DotsHorizontalIcon className="w-5 h-5" />
-        </div>
-      </div>
-      {/* Image container */}
-      <div>
-        <div className="w-full h-40 bg-offWhite rounded-lg" />
-      </div>
-      <div>
-        <Chip content={passion ?? ""} contentClassName="text-secondary" />
-      </div>
-      <div>
-        <p className="text-small">{content}</p>
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="flex flex-row justify-start items-center space-x-1">
-          <HeartIcon className="w-5" />
-          <p className="text-graySubtitle text-xs">Like</p>
-        </div>
-        <div className="flex flex-row justify-start items-center space-x-1">
-          <ChatAltIcon className="w-5" />
-          <p className="text-graySubtitle text-xs">Like</p>
-        </div>
-        <div className="flex flex-row justify-start items-center space-x-1">
-          <ShareIcon className="w-5" />
-          <p className="text-graySubtitle text-xs">Like</p>
-        </div>
-      </div>
+    <div className='space-y-5 p-4 rounded-2xl border border-grayLineBased bg-white'>
+      <PostHead name={name} time={time} src={src} hideOption />
+      <PostContent content={content} passion={passion} noBorder />
+      { showAction &&
+          <PostAction liked={liked} likes={likes} shared={shared} />
+      }
     </div>
   );
 }

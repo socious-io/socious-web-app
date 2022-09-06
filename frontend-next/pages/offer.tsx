@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from 'react';
 //import type { NextPage } from "next";
-import { useState } from "react";
+import {useState} from 'react';
 // import { ethers } from "ethers";
 // import abi from "../abis/Escrow.json";
 // import { getData } from "../utils/storage";
@@ -13,25 +13,25 @@ import { useState } from "react";
 //   Switch,
 //   TextInput,
 // } from "@components/common";
-import { useToggle } from "hooks";
+import {useToggle} from 'hooks';
 
 // import { ReactComponent as WalletIcon } from "../asset/icons/wallet.svg";
 // import { PaperAirplaneIcon } from "@heroicons/react/outline";
-import PostCard from "layout/screen/PostCard/PostCard";
-import ProfileCard from "layout/screen/ProfileCard/ProfileCard";
-import NotificationCard from "layout/screen/NotificationCard/NotificationCard";
-import ProjectCard from "layout/screen/ProjectCard/ProjectCard";
-import CommentItem from "layout/screen/CommentItem/CommentItem";
+import PostCard from 'layout/screen/PostCard/PostCard';
+import ProfileCard from 'layout/screen/ProfileCard/ProfileCard';
+import NotificationCard from 'layout/screen/NotificationCard/NotificationCard';
+import ProjectCard from 'layout/screen/ProjectCard/ProjectCard';
+import CommentItem from 'layout/screen/CommentItem/CommentItem';
 
 const override = {
-  display: "block",
-  margin: "0 auto",
-  borderColor: "#FCFCFC",
+  display: 'block',
+  margin: '0 auto',
+  borderColor: '#FCFCFC',
 };
 
 const Offer = () => {
   const [loading, setLoading] = useState<boolean | undefined>(false);
-  const [toggleState] = useToggle();
+  const {state} = useToggle();
 
   // const sendSuccessOffer = async (data: string) => {
   //   //window?.ReactNativeWebView?.postMessage(data);
@@ -128,15 +128,15 @@ const Offer = () => {
           />
         </div>
         <ProjectCard
-          title={""}
-          description={""}
+          title={''}
+          description={''}
           country_id={0}
           project_type={0}
           project_length={0}
           payment_type={0}
           payment_scheme={0}
-          payment_range_lower={""}
-          payment_range_higher={""}
+          payment_range_lower={''}
+          payment_range_higher={''}
           experience_level={0}
         />
       </div>

@@ -1,5 +1,5 @@
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/outline";
-import { XIcon } from "@heroicons/react/solid";
+import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/outline';
+import {XIcon} from '@heroicons/react/solid';
 
 export interface ToastProps {
   success: boolean;
@@ -12,11 +12,11 @@ export interface ToastProps {
 export function Toast({
   success,
   shopName,
-  message = "",
+  message = '',
   isVisible = true,
   onClose = () => null,
 }: ToastProps) {
-  const backgroundColor = success ? "bg-success-100" : "bg-error-100";
+  const backgroundColor = success ? 'bg-success-100' : 'bg-error-100';
   const renderIcon = () =>
     success ? (
       <CheckCircleIcon className="w-6 h-6 text-success" />
@@ -27,15 +27,15 @@ export function Toast({
   return (
     <div
       className={`${
-        isVisible ? "absolute" : "hidden"
+        isVisible ? 'absolute' : 'hidden'
       } top-10 right-10 w-96 p-4 flex space-x-4 rounded-lg shadow ${backgroundColor}`}
     >
       {renderIcon()}
       <div className="flex justify-between flex-grow space-x-4">
         <div>
           <p>
-            <strong>{shopName}</strong>{" "}
-            {message.length ? message : "has been added."}
+            <strong>{shopName}</strong>{' '}
+            {message.length ? message : 'has been added.'}
           </p>
         </div>
         <XIcon

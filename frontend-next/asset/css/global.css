@@ -2,8 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-lg;
+  }
+  h3 {
+    @apply text-base;
+  }
+  h4 {
+    @apply text-sm;
+  }
+  h5 {
+    @apply text-xs;
+  }
+  h6 {
+    @apply text-xs;
+  }
+}
+
 body {
-  font-family: "Work Sans", sans-serif !important;
-  /* font-family: "Hahmlet", sans-serif !important; */
+  font-family: 'Work Sans', sans-serif;
   /* rest css code also here */
+  background-color: #f8f8f8;
+}
+.font-helmet {
+  font-family: 'Hahmlet', sans-serif !important;
+}
+h1, h2, h3, h4, h5 {
+  font-family: 'Hahmlet', sans-serif;
 }

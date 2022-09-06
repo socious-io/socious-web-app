@@ -1,12 +1,13 @@
-import { CogIcon } from "@heroicons/react/outline";
-import { ReactComponent as Logo } from "../../asset/icons/logo.svg";
-
-import Link from "next/link";
-import { Avatar } from "../../components/common/Avatar/Avatar";
-import { TextInput } from "../../components/common/TextInput/TextInput";
+import {CogIcon} from '@heroicons/react/outline';
+import {ReactComponent as Logo} from '../../asset/icons/logo.svg';
+import {useContext} from 'react';
+import Link from 'next/link';
+import {Avatar} from '../../components/common/Avatar/Avatar';
+import {TextInput} from '../../components/common/TextInput/TextInput';
+import Image from "next/image";
 
 function Navbar() {
-  const imgSrc = require("../../asset/icons/logo.svg");
+  const imgSrc = require('../../asset/icons/logo.svg');
 
   return (
     <nav className="flex items-center w-full rounded-b-sm bg-primary h-16">
@@ -17,35 +18,47 @@ function Navbar() {
               <div>
                 <Link href="/">
                   <a>
-                    <img
+                    <Image
                       src={imgSrc}
                       className="fill-warning"
                       alt="socious logo"
+                      width={"100%"}
+                      height={"100%"}
                     />
                   </a>
                 </Link>
               </div>
               <div className="flex space-between items-center">
-                <TextInput styleClass="py-1.5 w-72 rounded-full" />
+                <TextInput className="py-1.5 w-72 rounded-full" />
               </div>
             </div>
             <div className="flex items-center justify-end w-4/6 space-x-6">
               <div className="space-x-4">
-                <a className="text-sm text-white" href="/">
-                  Home
-                </a>
-                <a className="text-sm text-white" href="/">
-                  Network
-                </a>
-                <a className="text-sm text-white" href="/">
-                  Chats
-                </a>
-                <a className="text-sm text-white" href="/">
-                  Notifications
-                </a>
-                <a className="text-sm text-white" href="/">
-                  Projects
-                </a>
+                <Link href="/" passHref>
+                  <span  className="text-sm text-white" >
+                    Home
+                  </span>
+                </Link>
+                <Link href="/" passHref>
+                  <span  className="text-sm text-white" >
+                    Network
+                  </span>
+                </Link>
+                <Link href="/" passHref>
+                  <span  className="text-sm text-white" >
+                    Chats
+                  </span>
+                </Link>
+                <Link href="/" passHref>
+                  <span  className="text-sm text-white" >
+                    Notifications
+                  </span>
+                </Link>
+                <Link href="/" passHref>
+                  <span  className="text-sm text-white" >
+                    Projects
+                  </span>
+                </Link>
               </div>
               <div className="flex space-between items-center space-x-3">
                 <Avatar size="m" />
