@@ -25,8 +25,8 @@ import {
   schemaOnboardingStep6,
   schemaOnboardingStep7,
   schemaOnboardingStep8,
-} from 'utils/validate';
-import useUser from 'services/useUser';
+} from 'api/auth/validation';
+import useUser from 'hooks/useUser/useUser';
 
 const schemaStep = {
   5: schemaOnboardingStep5,
@@ -39,7 +39,7 @@ const Onboarding: NextPage = () => {
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const {updateProfile} = useUser();
+  // const {updateProfile} = useUser();
 
   const handleBack = () => {
     setStep(step - 1);
@@ -85,9 +85,10 @@ const Onboarding: NextPage = () => {
 
     const user = {bio: biography, city: city?.name};
 
-    updateProfile(user).then(() => {
+    // updateProfile(user).then(() => {
       setStep(step + 1);
-    });
+    // });
+    
   };
 
   return (
