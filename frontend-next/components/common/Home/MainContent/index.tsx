@@ -37,22 +37,32 @@ const MainContent = () => {
   
   const onCreatePost = useCallback(async (e?: any) => {
     // e?.preventDefault();
-    const causes_tags = getValues('social_causes');
     let media = null
     if (file) {
       const formData = new FormData;
       formData.append("file", file);
-      const res = await uploadMedia(formData)
-      media = [res.id]
+      try {
+        const res = await uploadMedia(formData)
+        media = [res.id]
+      } catch (error) {
+        console.error(error);
+        return;
+      }
     }
-
+    
     const content = getValues('content');
+    const causes_tags = getValues('causes_tags');
+    console.log("Causes", causes_tags);
     let postBody: CreatePostType = { content, causes_tags}
     if (media) postBody.media = media
-
-    const post = await createPost(postBody, user.id)
+    console.log("Post Body", postBody);
+    try {
+      await createPost(postBody, user.id)
+    } catch(error) {
+      console.log(error);
+    }
     resetCreatePostForm();
-  }, [file, getValues, resetCreatePostForm, user.id])
+  }, [file, getValues, resetCreatePostForm, user?.id])
 
   const onSelected = useCallback((selectedItem) => {
     setSelected(selectedItem);
