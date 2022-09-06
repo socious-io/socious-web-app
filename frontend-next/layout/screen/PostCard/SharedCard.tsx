@@ -9,7 +9,7 @@ interface SharedCardProps extends PostCardProps {
   sharedPost: any
 }
 
-export function SharedCard({name, content, passion, time, media, sharedPost, liked, likes, shared}: SharedCardProps) {
+export function SharedCard({id, name, content, passion, time, media, sharedPost, liked, likes, shared}: SharedCardProps) {
 
   console.log("sharedPost", sharedPost);
 
@@ -18,6 +18,7 @@ export function SharedCard({name, content, passion, time, media, sharedPost, lik
       <PostHead name={(name || "name") + " Shared"} time={time} src={""} />
       <PostContent content={content} passion={passion} media={media} noBorder/>
       <PostCard 
+        id={sharedPost?.id}
         content={sharedPost?.content}
         time={sharedPost?.created_at}
         passion={sharedPost?.causes_tags}
@@ -28,7 +29,7 @@ export function SharedCard({name, content, passion, time, media, sharedPost, lik
         shared={sharedPost?.shared}
         showAction={false}
       />
-      <PostAction liked={liked} likes={likes} shared={shared} />
+      <PostAction liked={liked} likes={likes} shared={shared} id={id}/>
     </div>
   );
 }

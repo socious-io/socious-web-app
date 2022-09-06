@@ -38,8 +38,8 @@ const get = (arg: string)=> {
   return request?.get(arg);
 };
 
-const deleteRequest = (arg: string) => {
-  return request?.delete(arg);
+const deleteRequest = (arg: string, headers?: AxiosRequestHeaders) => {
+  return request?.delete(arg, headers);
 };
 
 const post = (arg: string, data: any, headers?: AxiosRequestHeaders) => {

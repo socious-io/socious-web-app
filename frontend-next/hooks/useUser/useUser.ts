@@ -31,6 +31,7 @@ const useUser = (props: UseUserProps =
 
   const { data: user, error: userError, mutate: mutateUser } = useSWR<any>("/api/v2/user/profile", get, {
     shouldRetryOnError: shouldRetry,
+    revalidateOnFocus: false,
     onErrorRetry: (error) => {
       if (!onAuthError && error.response.status === 401) return
     }

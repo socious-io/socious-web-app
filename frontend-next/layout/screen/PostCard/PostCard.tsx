@@ -4,6 +4,7 @@ import PostAction from './components/PostAction';
 
 
 export interface PostCardProps {
+  id?: string;
   content?: string;
   name?: string;
   time?: string;

@@ -6,12 +6,15 @@ import { get } from "utils/request";
 
 const Posts = () => {
 
-  const {data: posts, error: postsErrors, mutate: mutatePosts} = useSWR<any>("/api/v2/posts", get, {
+  const {data: posts, error: postsErrors, mutate: mutatePosts} = useSWR<any>("/api/v2/posts?limit=5", get, {
     shouldRetryOnError: false,
+    revalidateOnFocus: false,
     onErrorRetry: (error) => {
       if (error.response.status === 401) return
     }
   });
+
+  console.log("POSTS", posts);
 
   return (
     <div className="space-y-2">
@@ -20,6 +23,7 @@ const Posts = () => {
           posts?.items?.map((post: any) => {
             return !!(post.shared_id) ?
             <SharedCard
+              id={post.id}
               content={post.content}
               time={post.created_at}
               passion={post.causes_tags}
@@ -31,7 +35,8 @@ const Posts = () => {
               sharedPost={{...post.shared_post, identity_meta: post.shared_from_identity.meta}}
               />
               :
-              <HomeCard 
+            <HomeCard
+              id={post?.id}
               name={post.identity_meta.name}
               content={post.content}
               time={post.created_at}
