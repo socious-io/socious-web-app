@@ -4,7 +4,7 @@ import PostAction from './components/PostAction';
 
 
 export interface PostCardProps {
-  id?: string;
+  id: string;
   content?: string;
   name?: string;
   time?: string;
@@ -18,13 +18,13 @@ export interface PostCardProps {
 }
 
 
-export function PostCard({content, name, time, passion, liked, showAction = true, src, likes,shared}: PostCardProps) {
+export function PostCard({ id, content, name, time, passion, liked, showAction = true, src, likes,shared}: PostCardProps) {
   return (
     <div className='space-y-5 p-4 rounded-2xl border border-grayLineBased bg-white'>
       <PostHead name={name} time={time} src={src} hideOption />
       <PostContent content={content} passion={passion} noBorder />
       { showAction &&
-          <PostAction liked={liked} likes={likes} shared={shared} />
+          <PostAction liked={liked} likes={likes} shared={shared} id={id} />
       }
     </div>
   );

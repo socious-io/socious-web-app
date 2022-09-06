@@ -36,7 +36,7 @@ const Posts = () => {
               />
               :
             <HomeCard
-              id={post?.id}
+              id={post.id}
               name={post.identity_meta.name}
               content={post.content}
               time={post.created_at}

@@ -8,7 +8,7 @@ export interface PostActionProps {
   liked?: boolean;
   likes?: number;
   shared?: number;
-  id?: string;
+  id: string;
 }
 
 const PostAction = ({
@@ -21,24 +21,20 @@ const PostAction = ({
   const [likesCount, setlikesCount] = useState<number>(likes || 0);
   const { user } = useUser();
   
-  const toggleLike = useCallback((id) => {
+  const toggleLike = async (id: string) => {
+    if (!id) return
     setlikesCount(() => isLiked ? (likesCount - 1) : (likesCount + 1))
     setIsLiked(() => !isLiked);
     try {
-      if (isLiked) {
-        unlikePost(id, user.id).then((response) => {
-          setIsLiked(() => false);
-        });
-      } else {
-        likePost(id, user.id).then((reponse) => {
-          setIsLiked(() => true)
-        }) 
-      }
+      isLiked ? (
+        await unlikePost(id, user.id)
+      ) : (
+        await likePost(id, user.id)
+      )
     } catch(error) {
       console.error(error);
-      setlikesCount(() => isLiked ? (likesCount - 1) : (likesCount + 1));
     }
-  }, [isLiked, user?.id, likesCount])
+  };
 
   return (
     <div className="flex justify-between items-center divide-x divide-grayLineBased divide-x-[1px]">
