@@ -7,7 +7,7 @@ import { PostCardProps } from './PostCard';
 const CommentedCard = ({content, name, time, passion}: PostCardProps) => {
   return (
     <div className="border-neutralGray border-b">
-      <div className="space-y-4 py-4">
+      <div className="space-y-5 py-4">
         <PostHead name={(name || "name") + " commented" }/>
         {/* Image container */}
         <PostContent /> 

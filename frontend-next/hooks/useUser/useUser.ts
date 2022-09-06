@@ -16,7 +16,7 @@ const defaultValues = {
   // Implemented to try Password expired
   forceStop: false,
   shouldRetry: true,
-  onAuthError: true
+  onAuthError: false
 };
 
 const allowedRoutes = [

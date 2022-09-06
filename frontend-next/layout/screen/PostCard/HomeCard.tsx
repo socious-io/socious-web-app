@@ -3,13 +3,13 @@ import PostContent from './components/PostContent';
 import PostAction from './components/PostAction';
 import { PostCardProps } from './PostCard';
 
-export function HomeCard({content, name, time, passion}: PostCardProps) {
+export function HomeCard({content, name, time, passion, liked, likes, shared, src}: PostCardProps) {
   return (
-    <div className="space-y-4 py-4 border-neutralGray border-b">
-      <PostHead />
+    <div className="space-y-5 py-4 border-neutralGray border-b">
+      <PostHead name={name} time={time} src={src}/>
       {/* Image container */}
-      <PostContent />
-      <PostAction />
+      <PostContent content={content} passion={passion} />
+      <PostAction liked={liked} likes={likes} shared={shared} />
     </div>
   );
 }
