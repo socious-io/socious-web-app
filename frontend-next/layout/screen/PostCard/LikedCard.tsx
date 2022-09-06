@@ -6,7 +6,7 @@ import { PostCardProps } from './PostCard';
 
 export function LikedCard({content, name, time, passion}: PostCardProps) {
   return (
-    <div className="space-y-4 py-4 border-neutralGray border-b">
+    <div className="space-y-5 py-4 border-neutralGray border-b">
       <PostHead name={(name || "name") + " liked"}/>
       <PostCard />
     </div>

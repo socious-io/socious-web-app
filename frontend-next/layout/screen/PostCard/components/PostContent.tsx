@@ -4,19 +4,23 @@ export interface PostContentProps {
   passion?: string;
   content?: string;
   noBorder?: boolean;
+  media?: string[] | null;
 }
 
 const PostContent = ({
   passion,
   content,
   noBorder = false,
+  media = [],
 }: PostContentProps
 ) => {
   return (
-    <div className={noBorder ? "" : `p-4 rounded-2xl border border-grayLineBased`}>
-      <div>
-        <div className="w-full h-40 bg-offWhite rounded-lg" />
-      </div>
+    <div className={noBorder ? "" : `p-4 rounded-2xl border border-grayLineBased bg-white`}>
+      {media && media.length > 0 &&
+        <div>
+          <div className="w-full h-40 bg-offWhite rounded-lg" />
+        </div>
+      }
       <div>
         <Chip content={passion ?? 'Environment'} containerClassName="bg-secondarySLight inline" contentClassName="text-secondary" />
       </div>
