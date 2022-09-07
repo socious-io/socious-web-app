@@ -100,7 +100,8 @@ const PostCreateStep1 = ({onSubmit, setFile}: PostCreateStepProps) => {
         </Modal.Description>
         <div className='flex justify-between items-center bg-offWhite py-2 border-grayLineBased border-y-2 -mr-6 -ml-6 mt-3'>
           <div className='p-2'>
-            <LinkIcon className='w-5' />
+            {/* <LinkIcon className='w-5' /> */}
+            <span></span>
           </div>
           <div className='flex items-center'>
             <Button

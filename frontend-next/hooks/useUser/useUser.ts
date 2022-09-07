@@ -20,7 +20,8 @@ const defaultValues = {
 };
 
 const allowedRoutes = [
-  "/", "/auth/forgotpassword", "/auth/login", "/auth/signup"
+  // "/", Uncomment after finishing starter page.
+  "/auth/forgotpassword", "/auth/login", "/auth/signup"
 ];
 
 const useUser = (props: UseUserProps = 
