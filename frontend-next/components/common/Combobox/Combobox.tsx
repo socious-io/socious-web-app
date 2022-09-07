@@ -88,6 +88,7 @@ export default function Combobox({
               className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 outline-none"
               displayValue={(item: any) => item?.name}
               onChange={(event) => setQuery(event.target.value)}
+              // required={required}
               {...props}
               {...register}
             />
@@ -110,7 +111,7 @@ export default function Combobox({
             leaveTo="transform scale-95 opacity-0"
             afterLeave={() => setQuery('')}
           >
-            <UiCombobox.Options className="z-10 absolute top-full mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <UiCombobox.Options className="z-10 absolute top-full right-0 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {filteredItems.length === 0 && query !== '' ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                   Nothing found.

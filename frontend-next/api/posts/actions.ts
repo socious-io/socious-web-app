@@ -1,15 +1,12 @@
 import { rejects } from 'assert';
 import { resolve } from 'path';
 import { deleteRequest, post, put } from 'utils/request';
-import { CreatePostType } from '@models/post';
+import { CreatePostType, SharePostBodyType } from '@models/post';
  
-export function createPost(postBody: CreatePostType, currentIdentity: string) {
+export function createPost(postBody: CreatePostType) {
   return new Promise((resolve: (response: any) => void, reject) =>
     post("/api/v2/posts",
           postBody,
-          {
-            "Current-Identity": currentIdentity,
-          }
     ).then((response) => {
       resolve(response);
     }).catch(error => {
@@ -47,5 +44,5 @@ export function unlikePost(id: string, currentIdentity: string) {
     }).catch(error => {
       reject(error);
     })
-  )
+    )
 }
