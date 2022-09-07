@@ -1,5 +1,4 @@
 import {Avatar, Chip} from '@components/common';
-import PostContent from '@components/common/PostCard/PostContent';
 import {
   ChatAltIcon,
   DotsHorizontalIcon,

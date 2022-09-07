@@ -31,7 +31,7 @@ const override = {
 
 const Offer = () => {
   const [loading, setLoading] = useState<boolean | undefined>(false);
-  const [toggleState] = useToggle();
+  const {state} = useToggle();
 
   // const sendSuccessOffer = async (data: string) => {
   //   //window?.ReactNativeWebView?.postMessage(data);

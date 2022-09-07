@@ -19,7 +19,7 @@ import {
 import { forgetPassword, confirmOTP, directChangePassword } from '@api/auth/actions';
 import { FetchError } from 'utils/request';
 import { ForgotError } from '@models/forgotPassword'
-import useUser from 'services/useUser';
+import useUser from 'hooks/useUser/useUser';
 
 const schemaStep = {
   1: schemaForgotPasswordStep1,
