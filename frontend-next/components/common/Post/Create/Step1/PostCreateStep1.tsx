@@ -108,7 +108,7 @@ const PostCreateStep1 = ({onSubmit, setFile}: PostCreateStepProps) => {
               className="max-w-xs mr-auto flex items-center justify-center align-middle bg-transparent p-2"
               size="lg"
               variant="ghost"
-              onClick={(e) => showCamera(e)}
+              onClick={() => showCamera()}
               >
                 <CameraIcon className="w-5"/>
             </Button>

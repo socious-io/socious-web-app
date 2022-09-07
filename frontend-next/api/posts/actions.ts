@@ -1,7 +1,7 @@
 import { rejects } from 'assert';
 import { resolve } from 'path';
 import { deleteRequest, post, put } from 'utils/request';
-import { CreatePostType, SharePostBodyType } from '@models/post';
+import { CreatePostType } from '@models/post';
  
 export function createPost(postBody: CreatePostType) {
   return new Promise((resolve: (response: any) => void, reject) =>
