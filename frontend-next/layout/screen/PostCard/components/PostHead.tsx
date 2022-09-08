@@ -1,24 +1,29 @@
 import { DotsHorizontalIcon } from "@heroicons/react/outline";
 import { Avatar } from "@components/common";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import useSWR from "swr";
-
+import {Button} from 'components/common'
 export interface PostHeadProps {
   name?: string;
   time?: string;
   hideOption?: boolean;
   src?: string;
+  toggleOptions?: () => void
 }
 
 const PostHead = ({
   name,
   time,
   hideOption = false,
-  src
+  src,
+  toggleOptions
 }: PostHeadProps) => {
 
-  useEffect(() => {
-  }, [name])
+  // useEffect(() => {
+  // }, [name])
+  const handleOptions = useCallback(() => {
+    if (toggleOptions) toggleOptions();
+  }, [toggleOptions])
 
   return (
     <div className="flex justify-between items-center">
@@ -29,9 +34,13 @@ const PostHead = ({
         <p className="text-sm text-grayInputField">{time || "00 min ago"}</p>
       </div>
       { !hideOption && 
-        <div className="flex">
+        <Button
+          variant='ghost'
+          className='border-0 p-2 flex'
+          onClick={handleOptions}
+        >
           <DotsHorizontalIcon className="w-5 h-5" />
-        </div>
+        </Button>
       }
     </div>
   );

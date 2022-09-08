@@ -1,8 +1,9 @@
-import { rejects } from 'assert';
-import { resolve } from 'path';
 import { post } from 'utils/request';
- 
-export function createPost(postBody: {}, currentIdentity: string) {
+import { CreatePostBodyType } from '@models/post';
+
+type CreatePostType = (postBody: CreatePostBodyType, currentIdentity: string)  => Promise<any>
+
+export const createPost: CreatePostType = (postBody: CreatePostBodyType, currentIdentity: string) => {
   return new Promise((resolve: (response: any) => void, reject) =>
     post("/api/v2/posts",
           postBody,
@@ -12,7 +13,7 @@ export function createPost(postBody: {}, currentIdentity: string) {
     ).then((response) => {
       resolve(response);
     }).catch(error => {
-      rejects(error);
+      reject(error);
     }) 
   )
 }
