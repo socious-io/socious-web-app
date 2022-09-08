@@ -26,7 +26,6 @@ export function Wrapper({children}: LayoutProps) {
   if (asPath === "/" && (user || userError?.response?.status != 401)) {
     isStarter = false;
   }
-  console.log("I am here", isStarter);
   
   return (
     <>
