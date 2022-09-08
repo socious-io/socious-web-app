@@ -32,7 +32,7 @@ const useUser = (props: UseUserProps =
   const { data: user, error: userError, mutate: mutateUser } = useSWR<any>("/api/v2/user/profile", get, {
     shouldRetryOnError: shouldRetry,
     onErrorRetry: (error) => {
-      if (!onAuthError && error.response.status === 401) return
+      if (!onAuthError && error?.response?.status === 401) return
     }
   });
 
@@ -43,7 +43,7 @@ const useUser = (props: UseUserProps =
     if (forceStop) return
 
     // if user unauthorized
-    if (userError && userError.response.status === 401) {
+    if (userError && userError?.response?.status === 401) {
       // if page !== allowed_routes
       if (!(allowedRoutes.includes (pathname))) {
         // => add ?redirect_to=/profile
