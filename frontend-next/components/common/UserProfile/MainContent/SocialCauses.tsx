@@ -17,7 +17,6 @@ const SocialCauses = () => {
         <Chip name="Anti-Semitism" />
         <Chip name="Armed Conflict" />
         <Chip name="Biodiversity" />
-        <Chip name="Biodiversity" />
       </div>
     </div>
   );
