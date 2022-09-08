@@ -14,8 +14,8 @@ const Contact = () => {
     <div className="px-4  border-t border-grayLineBased">
       <Title>Contact</Title>
       <div className="flex mb-4">
-        <LocationMarkerIcon className="h-6 text-secondary" />
-        <p className="w-3/6 text-black pl-4">
+        <LocationMarkerIcon className="h-5 w-5 text-secondary" />
+        <p className="w-3/6 text-black pl-4 text-sm">
           1-1 Chiyoda, Chiyoda City, Tokyo, Tokyo, Japan
         </p>
       </div>

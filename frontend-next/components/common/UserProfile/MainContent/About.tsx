@@ -10,7 +10,7 @@ const About = () => {
   return (
     <div className="px-4 border-t border-grayLineBased ">
       <Title>About</Title>
-      <p className="text-graySubtitle w-4/6 mb-4">
+      <p className="text-graySubtitle w-4/6 mb-4 text-base">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla incidunt
         nobis ex corrupti vitae expedita ratione in quidem autem. Iusto, saepe.
         Magni est quo inventore neque voluptate ab eos ex?

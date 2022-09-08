@@ -15,7 +15,7 @@ const Recommendations = () => {
       <RecommendationCard />
       <RecommendationCard />
       <RecommendationCard />
-      <p className="text-primary py-4">See all recommendations</p>
+      <p className="text-primary py-4 text-base">See all recommendations</p>
     </div>
   );
 };

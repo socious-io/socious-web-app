@@ -15,7 +15,7 @@ const MutaulConnections = () => {
         <Avatar size="m" className=" absolute left-8 top-0 " />
         <Avatar size="m" />
       </div>
-      <p className="text-secondary ml-5">You have +3 connections</p>
+      <p className="text-secondary text-sm ml-5">You have +3 connections</p>
     </div>
   );
 };

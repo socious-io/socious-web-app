@@ -11,10 +11,10 @@ const RecommendationCard = () => {
     <>
       <div className="flex items-center gap-x-4 mt-4">
         <Avatar size="m" />
-        <h3 className="text-black">Name</h3>
-        <p className="text-graySubtitle">. Time</p>
+        <p className="text-black text-sm">Name</p>
+        <p className="text-graySubtitle text-sm">. Time</p>
       </div>
-      <p className="text-black  bg-secondaryLight rounded-lg  p-4 mt-4 text-left">
+      <p className="text-black  bg-secondaryLight rounded-lg  p-4 mt-4 text-left text-base">
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores
         tenetur accusantium doloribus dolorum sunt consequuntur rerum voluptas,
         vero aut, itaque corrupti, tempore perspiciatis maiores. Ipsam laborum

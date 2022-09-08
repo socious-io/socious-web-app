@@ -12,12 +12,12 @@ const OrganizationsCard = () => {
   const company_avatar = require('../../../../asset/images/company-avatar-filled.png');
 
   return (
-    <div className="flex items-center my-4">
+    <div className="flex items-center my-4 text-base">
       <div className=" border border-grayLineBased w-12 h-12 rounded-full flex items-center justify-center">
         <Image src={company_avatar} alt="socious logo" width={26} height={26} />
       </div>
       <div className="w-1/2 pl-4">
-        <p className="text-black">Organization</p>
+        <p className="text-black ">Organization</p>
         <p className="text-graySubtitle">Location</p>
       </div>
       <p className="text-graySubtitle w-1/2 pl-4">Role</p>
