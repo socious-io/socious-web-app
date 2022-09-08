@@ -42,7 +42,7 @@ const MainContent = () => {
       const formData = new FormData;
       formData.append("file", file);
       try {
-        const res = await uploadMedia(formData)
+        const res: any = await uploadMedia(formData)
         media = [res.id]
       } catch (error) {
         console.error(error);
