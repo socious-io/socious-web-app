@@ -8,7 +8,10 @@ import React from 'react';
 import Header from './Header';
 import MutaulConnections from './MutaulConnections';
 import ProfileInfo from './ProfileInfo';
+import Skills from './Skills';
 import SocialCauses from './SocialCauses';
+import About from './About';
+import Contact from './Contact';
 
 const MainContent = () => {
   return (
@@ -17,6 +20,9 @@ const MainContent = () => {
       <ProfileInfo />
       <MutaulConnections />
       <SocialCauses />
+      <Contact />
+      <About />
+      <Skills />
     </div>
   );
 };

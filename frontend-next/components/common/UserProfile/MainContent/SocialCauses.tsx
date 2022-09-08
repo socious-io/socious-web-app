@@ -6,11 +6,12 @@ import React from 'react';
 
 // components
 import Chip from './Chip';
+import Title from './Title';
 
 const SocialCauses = () => {
   return (
     <div className="p-4">
-      <h2 className="py-4 text-black">Social causes</h2>
+      <Title>Social causes</Title>
       <div className="flex w-4/6 flex-wrap gap-2 ">
         <Chip name="Abortion" />
         <Chip name="Animal Rights" />
