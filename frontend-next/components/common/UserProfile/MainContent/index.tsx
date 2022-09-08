@@ -1,12 +1,22 @@
-import React from 'react'
-import Header from './Header'
+/*
+ * mainContent (left contetnt) of user profile page
+ */
+
+import React from 'react';
+
+// components
+import Header from './Header';
+import MutaulConnections from './MutaulConnections';
+import ProfileInfo from './ProfileInfo';
 
 const MainContent = () => {
   return (
-    <div>
-        <Header/>
+    <div className="w-4/6 border-grayLineBased  border border-1 rounded-xl ">
+      <Header />
+      <ProfileInfo />
+      <MutaulConnections />
     </div>
-  )
-}
+  );
+};
 
-export default MainContent
+export default MainContent;

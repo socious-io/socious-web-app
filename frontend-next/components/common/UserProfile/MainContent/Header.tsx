@@ -15,7 +15,7 @@ const Header = () => {
   const bg_icon = require('../../../../asset/icons/bg-image.svg');
 
   return (
-    <div className="w-4/6 text-right ">
+    <div className="mb-4 text-right ">
       <div className="flex item-center justify-center relative bg-primaryDark h-32 rounded-t-xl">
         <Image src={bg_icon} alt="socious logo" width={24} height={24} />
         <Avatar size="xxl" className="absolute top-24 left-4" />

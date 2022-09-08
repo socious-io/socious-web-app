@@ -10,7 +10,7 @@ const MoreButton = () => {
   const more = require('../../../../asset/icons/more.svg');
 
   return (
-    <div className="flex border-2 border-grayLineBased border-red w-12 h-12  rounded-full items-center justify-center ">
+    <div className="flex border border-1 border-grayLineBased  w-12 h-12  rounded-full items-center justify-center ">
       <Image src={more} alt="socious logo" width={24} height={24} />
     </div>
   );
