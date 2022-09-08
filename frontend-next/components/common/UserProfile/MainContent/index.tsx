@@ -8,6 +8,7 @@ import React from 'react';
 import Header from './Header';
 import MutaulConnections from './MutaulConnections';
 import ProfileInfo from './ProfileInfo';
+import SocialCauses from './SocialCauses';
 
 const MainContent = () => {
   return (
@@ -15,6 +16,7 @@ const MainContent = () => {
       <Header />
       <ProfileInfo />
       <MutaulConnections />
+      <SocialCauses />
     </div>
   );
 };
