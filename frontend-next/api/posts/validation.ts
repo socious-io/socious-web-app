@@ -7,9 +7,10 @@ export const schemaCreatePost = Joi.object({
   }),
   media: Joi.array().items(Joi.string()),
   hashtags: Joi.array().items(Joi.string()),
-  causes_tags: Joi.array().label("Causes tag").items(Joi.string().required()).messages({
-    'array.min': `Needed atleast 1 social cause.`,
-    'array.base': `Needed a social cause.`
+  causes_tags: Joi.string().required().messages({
+    'string.empty': "Select relevant social cause",
+    'string.base': "Select relevant social cause"
   }),
+  link: Joi.string().allow('', null),
   identity_tags: Joi.array().items(Joi.string()),
 })

@@ -37,8 +37,7 @@ const MainContent = () => {
     setFile(null);
   }, [addPostHandlers, setValue])
   
-  const onCreatePost = useCallback(async (e?: any) => {
-    // e?.preventDefault();
+  const onCreatePost = useCallback(async () => {
     let media = null
     if (file) {
       const formData = new FormData;
@@ -52,19 +51,18 @@ const MainContent = () => {
         return;
       }
     }
-    
     const content = getValues('content');
     const causes_tags = getValues('causes_tags');
-    console.table({causes_tags, content});
-    let postBody: CreatePostType = { content, causes_tags}
-    if (media) postBody.media = media
-    console.log("Post Body", postBody);
+    const link = getValues('link');
+    const postBody: CreatePostType = { content, causes_tags: [causes_tags]}
+    if (link) postBody.link = link;
+    if (media) postBody.media = media;
+
     try {
-      const response = await createPost(postBody);
-      console.log("response ---> ", response);
-      resetCreatePostForm();
+      const res = await createPost(postBody);
+      console.log("response: ", res);
     } catch(error) {
-      console.log(error);
+      console.error(error);
     }
     resetCreatePostForm();
   }, [file, getValues, resetCreatePostForm])
@@ -73,7 +71,6 @@ const MainContent = () => {
     if (step === 1) {
       setStep(step + 1);
     } else {
-      console.log("Here I am");
       onCreatePost();
     }
   }, [step, onCreatePost])

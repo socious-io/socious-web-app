@@ -14,8 +14,6 @@ const Posts = () => {
     }
   });
 
-  console.log("POSTS", posts);
-
   return (
     <div className="space-y-2">
       <div className="space-y-10">

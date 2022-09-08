@@ -17,7 +17,7 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
   const social_causes = getValues("causes_tags");
   const content = getValues("content");
   const [url, setUrl] = React.useState<any>("");
-
+  // const link = getValues("link");
   const { user } = useUser();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
       <Modal.Description>
         <div className='-mr-6 -ml-6 p-4 border-y-[.5px]'>
           <div className='space-x-3 flex items-center'>
-            <Avatar src={user?.avatar}/>
+            <Avatar src={user?.avatar?.url} size='m' />
             <span>
               {user?.username ?? "User Name"}
             </span>
@@ -52,9 +52,12 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
             containerClassName='bg-secondarySLight inline-block mt-4 mb-6'
             contentClassName='text-secondary font-normal text-sm'
             // content={"apple"}
-            content={social_causes ?? "ENVIRONMENT"}
+            content={social_causes}
           />
           <p className='min-h-[8rem]'>{content || " ipsum dolor sit amet, consectetur adipiscing elit. Nibh aliquet nullam odio maecenas semper. Dui felis suspendisse nunc, in vel enim nunc adipiscing donec. Pellentesque a magna venenatis ut ut semper dictum sit sem. Suspendisse lacus, pulvinar elit ipsum fermentum. Ipsum, orci, faucibus nibh et commodo et, dignissim erat. Adipiscing fusce et fames aliquam condimentum. "}</p>
+          {/* {link && 
+            <p className="my-4">{link}</p>
+          } */}
           {url &&
             <div className="mx-auto rounded-xl h-48 w-80">
               <Image

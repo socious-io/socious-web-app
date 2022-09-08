@@ -10,6 +10,9 @@ import ImageUploader from '@components/common/ImageUploader/ImageUploader';
 import Button from '@components/common/Button/Button';
 import { CameraIcon, LinkIcon, PhotographIcon } from '@heroicons/react/outline';
 import useUser from 'hooks/useUser/useUser';
+import InputFiled from '@components/common/InputFiled/InputFiled';
+import TextInput from '@components/common/TextInput/TextInput';
+import { useToggle } from '@hooks';
 
 interface PostCreateStepProps extends StepProps {
   setFile: React.Dispatch<React.SetStateAction<any>>,
@@ -17,28 +20,26 @@ interface PostCreateStepProps extends StepProps {
 
 const PostCreateStep1 = ({onSubmit, setFile}: PostCreateStepProps) => {
   const [selected, setSelected] = useState<string>("");
-  // const [file, setFile] = useState<any>(null);
   const { user} = useUser();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvaRef = useRef<HTMLCanvasElement>(null);
+
+  const {state: showLinkBox, handlers: linkHandler} = useToggle();
 
   const formMethods = useFormContext();
   const {handleSubmit, setValue, formState, register} = formMethods;
   
   const onSelected = useCallback((selectedItem) => {
     setSelected(selectedItem);
-    setValue('causes_tags', [selectedItem.name], {
+    setValue('causes_tags', selectedItem.name, {
       shouldValidate: true,
       shouldDirty: true,
     })
   }, [setValue])
 
-  const beforeSubmit = useCallback(() => {
-  }, [])
 
   const showCamera = useCallback(async () => {
     let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-    console.log("Stream", stream);
     if (videoRef?.current) videoRef.current.srcObject = stream; 
   }, [])
 
@@ -49,7 +50,6 @@ const PostCreateStep1 = ({onSubmit, setFile}: PostCreateStepProps) => {
       let file: any = null;
       canvaRef.current.toBlob(function(blob) {
         if (blob) file = new File([blob], 'test.png', { type: 'image/png' }, );
-        console.log("file", file)
         setFile(() => file);
       }, 'image/png');
     }
@@ -62,21 +62,23 @@ const PostCreateStep1 = ({onSubmit, setFile}: PostCreateStepProps) => {
         </Modal.Title>
         <Modal.Description>
           <div className="mt-2 space-y-8">
-            <Combobox 
-              selected={selected}
-              onSelected={onSelected}
-              items={[
-                {id: 1, name: "MINORITY"},
-                {id: 2, name: "DIVERSITY_INCLUSION"},
-                {id: 3, name: "INDIGENOUS_PEOPLES"},
-                {id: 4, name: "DISABILITY"},
-              ]}
-              errorMessage={formState?.errors?.['causes_tags']?.message}
-              required
-              className="flex items-center space-x-3 -ml-6 -mr-6 border-[#C3C8D9] border-y-[0.5px] p-4"
-              placeholder="social causes"
-              label={<Avatar src={user?.avatar}/>}
+            <div className='flex items-center space-x-3 -ml-6 -mr-6 border-[#C3C8D9] border-y-[0.5px] p-4'>
+              <Avatar src={user?.avatar?.url} size="m" />
+              <Combobox 
+                selected={selected}
+                onSelected={onSelected}
+                items={[
+                  {id: 1, name: "MINORITY"},
+                  {id: 2, name: "DIVERSITY_INCLUSION"},
+                  {id: 3, name: "INDIGENOUS_PEOPLES"},
+                  {id: 4, name: "DISABILITY"},
+                ]}
+                errorMessage={formState?.errors?.['causes_tags']?.message}
+                required
+                className="w-full"
+                placeholder="social causes"
               />
+              </div>
             <TextArea
               placeholder='I feel like......'
               rows={12}
@@ -99,19 +101,38 @@ const PostCreateStep1 = ({onSubmit, setFile}: PostCreateStepProps) => {
           }
         </Modal.Description>
         <div className='flex justify-between items-center bg-offWhite py-2 border-grayLineBased border-y-2 -mr-6 -ml-6 mt-3'>
-          <div className='p-2'>
-            {/* <LinkIcon className='w-5' /> */}
-            <span></span>
-          </div>
-          <div className='flex items-center'>
+          {/* Link Button */}
+          {/* <div className='p-2 relative'>
             <Button
+              className='bg-transparent p-2'
+              variant="ghost"
+              onClick={linkHandler.toggle}
+            >
+              <LinkIcon className='w-5' />
+            </Button>
+            { showLinkBox &&
+              <TextInput
+                containerClassName='absolute bottom-full '
+                className='w-30 min-w-20 rounded-none px-1 py-0 border-grayLinedBased focus:border-grayLinedBased'
+                register={register("link")}
+                errorMessage={formState?.errors?.['link']?.message}
+              />
+
+            }
+
+          </div> */}
+          <span></span>
+          <div className='flex items-center'>
+            {/* Camera Button */}
+            {/* <Button
               className="max-w-xs mr-auto flex items-center justify-center align-middle bg-transparent p-2"
               size="lg"
               variant="ghost"
               onClick={() => showCamera()}
               >
                 <CameraIcon className="w-5"/>
-            </Button>
+            </Button> */}
+            <span></span>
             <ImageUploader onChange={setFile} withPreview={false}>
               {(setOpen: any) => (
                 <Button

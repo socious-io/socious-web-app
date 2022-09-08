@@ -37,7 +37,7 @@ const SideBar = () => {
         <ProfileCard
             content={user?.mission}
             name={user?.username}
-            avatar={user?.avatar}
+            avatar={user?.avatar?.url}
             following={user?.following}
             followers={user?.followers}
         />

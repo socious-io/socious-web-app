@@ -4,4 +4,5 @@ export type CreatePostType = {
   hashtags?: string[];
   causes_tags?: string[];
   identity_tags?: string[];
+  link?: string;
 }
