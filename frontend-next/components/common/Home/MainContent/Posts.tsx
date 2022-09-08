@@ -20,6 +20,7 @@ const Posts = () => {
           posts?.items?.map((post: any) => {
             return !!(post.shared_id) ?
             <SharedCard
+              id={post.id}
               content={post.content}
               time={post.created_at}
               passion={post.causes_tags}
@@ -29,9 +30,10 @@ const Posts = () => {
               liked={post.liked}
               likes={post.likes}
               sharedPost={{...post.shared_post, identity_meta: post.shared_from_identity.meta}}
-              />
+            />
               :
-              <HomeCard 
+            <HomeCard
+              id={post.id}
               name={post.identity_meta.name}
               content={post.content}
               time={post.created_at}
