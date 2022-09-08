@@ -13,10 +13,11 @@ import SocialCauses from './SocialCauses';
 import About from './About';
 import Contact from './Contact';
 import Recommendations from './Recommendations';
+import Organizations from './Organizations';
 
 const MainContent = () => {
   return (
-    <div className="w-4/6 border-grayLineBased  border border-1 rounded-xl ">
+    <div className="w-4/6 border-grayLineBased  border border-1 rounded-xl mb-8 ">
       <Header />
       <ProfileInfo />
       <MutaulConnections />
@@ -24,7 +25,8 @@ const MainContent = () => {
       <Contact />
       <About />
       <Skills />
-      <Recommendations/>
+      <Recommendations />
+      <Organizations />
     </div>
   );
 };
