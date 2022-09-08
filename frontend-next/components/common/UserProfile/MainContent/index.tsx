@@ -12,6 +12,7 @@ import Skills from './Skills';
 import SocialCauses from './SocialCauses';
 import About from './About';
 import Contact from './Contact';
+import Recommendations from './Recommendations';
 
 const MainContent = () => {
   return (
@@ -23,6 +24,7 @@ const MainContent = () => {
       <Contact />
       <About />
       <Skills />
+      <Recommendations/>
     </div>
   );
 };
