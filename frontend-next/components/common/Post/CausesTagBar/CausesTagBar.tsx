@@ -1,7 +1,6 @@
 import { UseFormRegisterReturn } from "react-hook-form";
-import Avatar from "../Avatar/Avatar";
-import Combobox from "../Combobox/Combobox";
 import { useEffect, useState } from "react";
+import { Avatar, Combobox } from "@components/common";
 
 const items = [
   {id: 1, name: "MINORITY"},
@@ -10,16 +9,16 @@ const items = [
   {id: 4, name: "DISABILITY"},
 ]
 
+type selectionType = {
+  id: number,
+  name: string,
+}
+
 interface CausesTagBarProps {
   url: string,
   register: UseFormRegisterReturn
   errorMessage?: any,
   preSelected?: string,
-}
-
-type selectionType = {
-  id: number,
-  name: string,
 }
 
 export const CausesTagBar = ({
