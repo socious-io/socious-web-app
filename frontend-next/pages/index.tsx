@@ -11,9 +11,9 @@ const Index: NextPage = () => {
   
   return (
     <div className='flex mt-10 space-x-6'>
-      <SideBar />
-      <MainContent />
-      {/* <UserProfile/> */}
+      {/* <SideBar />
+      <MainContent /> */}
+      <UserProfile/>
     </div>
   );
 };
