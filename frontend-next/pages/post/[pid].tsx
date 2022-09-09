@@ -1,32 +1,40 @@
 import { useRouter } from "next/router";
-import useUser from "hooks/useUser/useUser";
-import SideBar from "@components/common/Home/SideBar";
-import { PostCard, SharedCard } from "layout/screen/PostCard";
 import CommentField from "@components/common/Post/CommentField/CommentField";
 import CommentsBox from "@components/common/Post/CommentsBox/CommentsBox";
-import { Button, Modal } from "@components/common";
-import { useCallback, useEffect, useState } from "react";
+import { Button, Modal, Notification} from "@components/common";
+import { useCallback, useState } from "react";
 import useSWR from "swr";
 import { get } from "utils/request";
 import { createComment } from "@api/posts/comments/actions";
 import { useSWRConfig } from "swr";
+import ShareModalStep1 from "@components/common/Post/ShareModal/ShareModalStep1/ShareModalStep1";
+import ShareModalStep2 from "@components/common/Post/ShareModal/ShareModalStep2/ShareModalStep2";
+import { SharedCard, PostCard } from "layout/screen/PostCard";
+import SideBar from "@components/common/Home/SideBar";
+import { useToggle } from "@hooks";
+import { XIcon } from "@heroicons/react/outline";
 
+// invalid input syntax for type uuid
 const Post = () => {
-  const [page, setPage] = useState<number>(1);
-  const { mutate } = useSWRConfig();
   const router = useRouter();
   const { pid } = router.query;
-  const comments = [];
-  const { user } = useUser();
+  const { data: post, error } = useSWR<any>(`/api/v2/posts/${pid}`, get, {
+    onErrorRetry: (error) => {
+      if (error?.response?.status === 500 && error?.response?.data?.error.startsWith("invalid input syntax for type uuid")) return
+    }
+  });
   
-  const { data: post, error } = useSWR<any>(`/api/v2/posts/${pid}`, get);
-
+  const [page, setPage] = useState<number>(1);
+  const { mutate } = useSWRConfig();
+  const {state: notify, handlers: notifyHandler} = useToggle();
+  const { state: showShare, handlers: shareHandler } = useToggle();
+  
+  const [shareStep, setShareStep] = useState<number>(1);
+  
   const onCommentSend = useCallback((content: string) => {
     if (!post?.id || !content) return
-
     createComment({ content }, post.id)
       .then(response => {
-        console.log("response :------: |", response);
         for (let i = 1; i <= page; i++) {
           mutate(`/api/v2/posts/${post.id}/comments?page=${i}`)
         }
@@ -34,7 +42,36 @@ const Post = () => {
         console.error(error);
       })
   }, [post, mutate, page]);
-  
+
+  const onCopied = useCallback(() => {
+    shareHandler.off();
+    notifyHandler.on();
+  }, [shareHandler, notifyHandler])
+
+  const onShare = useCallback(() => {
+    if (shareStep === 1) {
+      setShareStep(2)
+    } else {
+
+    }
+  }, [shareStep])
+
+  const onOptionClicked = useCallback((type: string) => {
+    switch (type) {
+      case 'EDIT':
+        console.log("IT IS EDIT");
+        break;
+      case 'SHARE':
+        shareHandler.on();
+        break;
+      case 'DELETE':
+        console.log("BE CAREFUL THERE");
+        break;
+    
+      default:
+        break;
+    }
+  }, [shareHandler])
 
   if (!post) {
     return <div>
@@ -44,15 +81,20 @@ const Post = () => {
 
   if (error?.response?.status === 404) return <h1>404</h1> ;
 
+  const comments = [];
   for (let i = 1; i <= page; i++ ) {
     comments.push(<CommentsBox pid={post.id} page={i} key={i}/>);
   };
 
-  console.log("post :----: ", post);
-  
-
+  console.log("posts :----:", post?.likes);
   return (
     <div className='flex mt-10 space-x-6'>
+      <Notification 
+        onClose={notifyHandler.off}
+        variant="copySuccess"
+        isOpen={notify}
+        text="Post link copied"
+      />
       <SideBar />
       <div className="w-full mb-10 space-y-6">
         {
@@ -68,6 +110,7 @@ const Post = () => {
             liked={post.liked}
             likes={post.likes}
             sharedPost={{...post.shared_post, identity_meta: post.shared_from_identity.meta}}
+            optionClicked={onOptionClicked}
           />
           :
           <PostCard
@@ -80,13 +123,13 @@ const Post = () => {
             liked={post.liked}
             likes={post.likes}
             shared={post.shared}
+            optionClicked={onOptionClicked}
           />
         }
         <CommentField
           onSend={onCommentSend}
         />
         
-        {/* <CommentsBox pid={pid as string} page={1} /> */}
         <div>
           {comments}
         </div>
@@ -97,6 +140,21 @@ const Post = () => {
           </Button>
         </div>
 
+
+        <Modal isOpen={showShare} onClose={shareHandler.off} className={`${shareStep === 1 ? "bg-offWhite" : ""}`}>
+          <span className='absolute right-3 cursor-pointer ' onClick={shareHandler.off}>
+            <XIcon className='w-6' />
+          </span>
+          <Modal.Title>
+            <h2 className="text-center min-h-[30px]">{shareStep === 1 ? "" : "Share Post"}</h2>
+          </Modal.Title>
+          {
+            shareStep === 1 && <ShareModalStep1 onCopied={onCopied} onShare={onShare}/>
+          }
+          {
+            shareStep === 2 && <ShareModalStep2 onShare={onShare} />
+          }
+        </Modal>
       </div>
     </div>
   );
