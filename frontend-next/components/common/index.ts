@@ -13,3 +13,4 @@ export * from './SearchBar/SearchBar';
 export * from './TextArea/TextArea';
 export * from './ImageUploader/ImageUploader';
 export * from './Timer/Timer';
+export * from './SocialShareBar/SocialShareBar';
