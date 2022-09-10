@@ -15,14 +15,14 @@ type selectionType = {
 }
 
 interface CausesTagBarProps {
-  url: string,
+  src: string,
   register: UseFormRegisterReturn
   errorMessage?: any,
   preSelected?: string,
 }
 
 export const CausesTagBar = ({
-  url,
+  src,
   register,
   errorMessage,
   preSelected,
@@ -35,7 +35,7 @@ export const CausesTagBar = ({
 
   return (
     <div className='flex items-center space-x-3 -ml-6 -mr-6 border-[#C3C8D9] border-y-[0.5px] p-4'>
-      <Avatar src={url} size="m" />
+      <Avatar src={src} size="m" />
       <Combobox 
         register={register}
         selected={selected}

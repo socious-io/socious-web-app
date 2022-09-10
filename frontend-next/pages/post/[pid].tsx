@@ -13,6 +13,8 @@ import { SharedCard, PostCard } from "layout/screen/PostCard";
 import SideBar from "@components/common/Home/SideBar";
 import { useToggle } from "@hooks";
 import { XIcon } from "@heroicons/react/outline";
+import { SharePostBodyType } from "@models/post";
+import { sharePost } from "@api/posts/actions";
 
 // invalid input syntax for type uuid
 const Post = () => {
@@ -29,7 +31,7 @@ const Post = () => {
   const {state: notify, handlers: notifyHandler} = useToggle();
   const { state: showShare, handlers: shareHandler } = useToggle();
   
-  const [shareStep, setShareStep] = useState<number>(1);
+  const [shareStep, setShareStep] = useState<number>(2);
   
   const onCommentSend = useCallback((content: string) => {
     if (!post?.id || !content) return
@@ -48,29 +50,41 @@ const Post = () => {
     notifyHandler.on();
   }, [shareHandler, notifyHandler])
 
-  const onShare = useCallback(() => {
+  const onShare = useCallback(async (data?: SharePostBodyType) => {
     if (shareStep === 1) {
-      setShareStep(2)
-    } else {
-
+      setShareStep(2);
+    } else if(data) {
+      try {
+        const response: any = await sharePost(data, post.id);
+        // setShareStep(1);
+        shareHandler.off();
+        router.push(`/post/${response.id}`)
+      } catch (error) {
+        console.error(error);
+      }
     }
-  }, [shareStep])
+  }, [post, router, shareStep, shareHandler])
 
   const onOptionClicked = useCallback((type: string) => {
     switch (type) {
       case 'EDIT':
-        console.log("IT IS EDIT");
+        console.log("[pid].tsx:- IT IS EDIT");
         break;
       case 'SHARE':
         shareHandler.on();
         break;
       case 'DELETE':
-        console.log("BE CAREFUL THERE");
+        console.log("[pid].tsx:- BE CAREFUL THERE");
         break;
-    
       default:
+        console.log("[pid].tsx:- Ohh la. I am lost here.")
         break;
     }
+  }, [shareHandler])
+
+  const resetShareModal = useCallback(() => {
+    shareHandler.off();
+    setShareStep(1);
   }, [shareHandler])
 
   if (!post) {
@@ -86,7 +100,6 @@ const Post = () => {
     comments.push(<CommentsBox pid={post.id} page={i} key={i}/>);
   };
 
-  console.log("posts :----:", post?.likes);
   return (
     <div className='flex mt-10 space-x-6'>
       <Notification 
@@ -141,16 +154,16 @@ const Post = () => {
         </div>
 
 
-        <Modal isOpen={showShare} onClose={shareHandler.off} className={`${shareStep === 1 ? "bg-offWhite" : ""}`}>
-          <span className='absolute right-3 cursor-pointer ' onClick={shareHandler.off}>
+        <Modal isOpen={showShare} onClose={resetShareModal} className={`${shareStep === 1 ? "bg-offWhite" : ""}`}>
+          <span className='absolute right-3 cursor-pointer ' onClick={resetShareModal}>
             <XIcon className='w-6' />
           </span>
           <Modal.Title>
             <h2 className="text-center min-h-[30px]">{shareStep === 1 ? "" : "Share Post"}</h2>
           </Modal.Title>
-          {
+          {/* {
             shareStep === 1 && <ShareModalStep1 onCopied={onCopied} onShare={onShare}/>
-          }
+          } */}
           {
             shareStep === 2 && <ShareModalStep2 onShare={onShare} />
           }

@@ -14,7 +14,7 @@ interface ImageUploaderProps {
 const onImageError = (ev: any) => {
   ev.target.src = profile_img_icon;
 };
-const ImageUploader: FC<ImageUploaderProps> = ({
+export const ImageUploader: FC<ImageUploaderProps> = ({
   src,
   onChange,
   children,

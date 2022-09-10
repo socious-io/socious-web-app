@@ -1,41 +1,142 @@
-import { Modal, SearchBar, Button, Avatar, SocialShareBar } from 'components/common';
-import { ShareIcon } from '@heroicons/react/outline';
+import { useRouter } from "next/router";
+import { useCallback, useState } from 'react';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { useForm } from 'react-hook-form';
+import useSWR from "swr";
 
+import { 
+  Modal,
+  TextArea,
+  Button,
+  Avatar,
+} from 'components/common';
+import PostActionBar from 'components/common/Post/PostActionBar/PostActionBar';
+import CausesTagBar from 'components/common/Post/CausesTagBar/CausesTagBar';
+
+import { useUser } from 'hooks';
+import { schemaSharePost } from '@api/posts/validation';
+import { PostCard, SharedCard } from "layout/screen/PostCard";
+import { get } from "utils/request";
+import { uploadMedia } from "@api/media/actions";
+import { SharePostBodyType } from "@models/post";
 
 interface shareModalStep2Props {
-  onShare: () => void;
+  onShare: (data: SharePostBodyType) => void;
 }
 
 export const ShareModalStep2 = ({
-
   onShare
 }: shareModalStep2Props) => {
-  const connections: any[] = [];
-  const onCopied = () => {}
+
+  const router = useRouter();
+  const { pid } = router.query;
+  const { data: post, error } = useSWR<any>(`/api/v2/posts/${pid}`, get, {
+    onErrorRetry: (error) => {
+      if (error?.response?.status === 500 && error?.response?.data?.error?.startsWith("invalid input syntax for type uuid")) return
+    }
+  });
+
+  const { user } = useUser();
+  const [file, setFile] = useState<string>("");
+
+  const { register, handleSubmit, formState, getValues } = useForm({
+    resolver: joiResolver(schemaSharePost),
+  });
+
+  const onSubmit = useCallback(async () => {
+    let file = "";
+    if (file) {
+      try {
+        const formData = new FormData;
+        formData.append("file", file);
+        const response: any = await uploadMedia(formData);
+        file = response?.id;
+      } catch(error) {
+        console.error(error);
+        return;
+      }
+    }
+    let  postData: SharePostBodyType = {};
+    const socialCauses = getValues("causes_tags");
+    const content = getValues("content");
+    // const link = getValues("link");
+    if (socialCauses) postData.causes_tags = [socialCauses];
+    if (content) postData.content = content;
+    // if (link) postData.link = link;
+    console.table(postData);
+    onShare(postData);
+  }, [getValues, onShare])
+
 
   return (
-    <div className='-ml-6 -mr-6'>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Modal.Description>
-        <SearchBar
-          className='m-4'
-          // onChange={(e) => onChange(e.currentTarget.value)}
-        />
-        <h3 className="text-xl text-grayDisableButton font-semibold p-4">Share</h3>
-        <Button
-          variant='link'
-          className="p-4 bg-background rounded-none border-y-[0.5px] border-offsetColor w-full text-black text-base space-x-4 flex align-center hover:text-secondaryDark"
+        <div className="mt-2">
+          <CausesTagBar
+            src={user?.avatar?.url}
+            register={register('causes_tags')}
+            errorMessage={formState?.errors?.['causes_tags']?.message}
+          />
+          <div className="flex items-center -mr-6 -ml-6 p-4 space-x-4" >
+            <Avatar src={user?.avatar?.url} size="m" />
+            <span>{user?.first_name + " " + user?.last_name}</span>
+          </div>
+          <TextArea
+            placeholder='I feel like......'
+            rows={4}
+            containerClassName=" -mr-5 -ml-5"
+            className='focus:border-none'
+            errorMessage={formState?.errors?.['content']?.message}
+            register={register("content")}
+            />
+          {
+          !!(post.shared_id) ?
+            <div className='relative space-y-5 p-4 rounded-2xl border border-grayLineBased bg-white'>
+              <SharedCard
+                id={post.id}
+                content={post.content}
+                time={post.created_at}
+                passion={post.causes_tags}
+                name={post.identity_meta.name}
+                src={post.identity_meta.image}
+                shared={post.shared}
+                liked={post.liked}
+                likes={post.likes}
+                showAction={false}
+                sharedPost={{...post.shared_post, identity_meta: post.shared_from_identity.meta}}
+              />
+            </div>  
+          :
+          <PostCard
+            id={post.id}
+            name={post.identity_meta.name}
+            content={post.content}
+            time={post.created_at}
+            passion={post.causes_tags}
+            src={post.identity_meta.image}
+            liked={post.liked}
+            likes={post.likes}
+            showAction={false}
+            shared={post.shared}
+          />
+        }
+        </div>
+      </Modal.Description>
+      <PostActionBar
+        register={register('link')}
+        errorMessage={formState?.errors?.['link']?.message}
+        setFile={setFile}
+      />      
+      <Button
+        className="max-w-xs ml-auto flex items-center justify-center align-middle mt-4 "
+        type="submit"
+        // size="lg"
+        variant="fill"
+        value="Submit"
         >
-          <ShareIcon className='w-5'/>
-          <span>
-            Share posts
-          </span>
-        </Button>
-        <h3 className="text-xl text-grayDisableButton font-semibold p-4">Share elsewhere</h3>
-        <SocialShareBar onCopied={onCopied} />
-        <h3 className="text-xl text-grayDisableButton font-semibold p-4">Connections</h3>
-        
-      </Modal.Description>  
-    </div>
+        Share Post
+      </Button>
+    </form>
   );
 };
 

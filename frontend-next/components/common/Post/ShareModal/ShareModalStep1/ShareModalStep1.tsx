@@ -14,6 +14,7 @@ export const ShareModalStep1 = ({
   onCopied,
   onShare
 }: ShareModalStep1Props) => {
+
   const [connections, setConnections] = useState<any[]>([]);
   const { data: response } = useSWR<any>("/api/v2/follows/followings", get);
 
