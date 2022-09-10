@@ -3,21 +3,35 @@ import PostContent from './components/PostContent';
 import PostHead from './components/PostHead';
 import PostCard, { PostCardProps } from './PostCard';
 import PostAction from './components/PostAction';
-import useSWR from 'swr';
-import { get } from 'utils/request';
+import {useToggle} from '@hooks';
+import PostOption from './components/PostOption';
+
 interface SharedCardProps extends PostCardProps {
   sharedPost: any
 }
 
-export function SharedCard({id, name, content, passion, time, media, sharedPost, liked, likes, shared}: SharedCardProps) {
+export function SharedCard({
+  id,
+  name, 
+  content,
+  src, 
+  passion, 
+  time, 
+  media, 
+  sharedPost, 
+  liked, 
+  likes, 
+  shared,
+  hideOption = false,
+}: SharedCardProps) {
 
-  console.log("sharedPost", sharedPost);
-
+  const {state, handlers} = useToggle();
+  console.log("Shared Id :------: ", id);
   return (
-    <div className="space-y-5 py-4 border-neutralGray border-b">
-      <PostHead name={(name || "name") + " Shared"} time={time} src={""} />
+    <div className="relative space-y-5 py-4 border-neutralGray border-b">
+      <PostHead name={(name || "name") + " Shared"} time={time} src={src} toggleOptions={handlers.toggle} />
       <PostContent content={content} passion={passion} media={media} noBorder/>
-      <PostCard 
+      <PostCard
         id={sharedPost?.id}
         content={sharedPost?.content}
         time={sharedPost?.created_at}
@@ -27,9 +41,14 @@ export function SharedCard({id, name, content, passion, time, media, sharedPost,
         likes={sharedPost?.likes}
         liked={sharedPost?.liked}
         shared={sharedPost?.shared}
+        hideOption={true}
         showAction={false}
       />
       <PostAction liked={liked} likes={likes} shared={shared} id={id}/>
+      {
+        !hideOption && state && 
+        <PostOption />
+      }
     </div>
   );
 }

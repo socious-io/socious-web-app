@@ -119,7 +119,7 @@ const Offer = () => {
           content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh aliquet nullam odio maecenas semper. Dui felis suspendisse nunc, in vel enim nunc adipiscing donec. Pellentesque a magna venenatis ut ut semper dictum sit sem. Suspendisse lacus, pulvinar elit ipsum fermentum. Ipsum, orci, faucibus nibh et commodo et, dignissim erat. Adipiscing fusce et fames aliquam condimentum. "
         />
 
-        <CommentItem name="User" time="1 min ago" />
+        {/* <CommentItem name="User" time="1 min ago" /> */}
 
         <div className="py-2 px-4 rounded-2xl border border-grayLineBased">
           <NotificationCard

@@ -1,7 +1,7 @@
 import PostContent from './components/PostContent';
 import PostHead from './components/PostHead';
 import React from 'react';
-import CommentItem from '../CommentItem/CommentItem';
+// import CommentItem from '../CommentItem/CommentItem';
 import { PostCardProps } from './PostCard';
 
 const CommentedCard = ({id, content, name, time, passion}: PostCardProps) => {
@@ -12,7 +12,7 @@ const CommentedCard = ({id, content, name, time, passion}: PostCardProps) => {
         {/* Image container */}
         <PostContent /> 
       </div>
-      <CommentItem name={(name || "name")}/>
+      {/* <CommentItem name={(name || "name")}/> */}
     </div>
   );
 };

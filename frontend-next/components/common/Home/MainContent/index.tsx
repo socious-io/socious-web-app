@@ -10,13 +10,12 @@ import { CameraIcon, ChevronLeftIcon, ChevronRightIcon, XIcon } from '@heroicons
 import ImageUploader from '@components/common/ImageUploader/ImageUploader';
 import { uploadMedia } from '@api/media/actions';
 import {createPost} from "@api/posts/actions"
-import { CreatePostType } from '@models/post';
 // validations
 
 import { useForm, FormProvider } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { schemaCreatePost } from '@api/posts/validation';
-import PostCreateStep1 from '@components/common/Post/Create/Step1/PostCreateStep1';
+import PostCreateStep1 from '@components/common/Post/Create/Step1/PostBodyCreateStep1';
 import PostCreateStep2 from '@components/common/Post/Create/Step2/PostCreateStep2';
 
 
@@ -43,7 +42,7 @@ const MainContent = () => {
       const formData = new FormData;
       formData.append("file", file);
       try {
-        const res = await uploadMedia(formData)
+        const res: any = await uploadMedia(formData)
         media = [res.id]
       } catch (error) {
         console.error(error);

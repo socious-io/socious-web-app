@@ -34,7 +34,7 @@ const useUser = (props: UseUserProps =
     shouldRetryOnError: shouldRetry,
     revalidateOnFocus: false,
     onErrorRetry: (error) => {
-      if (!onAuthError && error.response.status === 401) return
+      if (!onAuthError && error?.response?.status === 401) return
     }
   });
 
@@ -47,6 +47,7 @@ const useUser = (props: UseUserProps =
     // if user unauthorized
     if (userError && userError.response.status === 401) {
       // if page !== allowed_routes
+      console.log("pathname", pathname);
       if (!(allowedRoutes.includes (pathname))) {
         // => add ?redirect_to=/profile
         Router.push("/auth/login");

@@ -47,7 +47,7 @@ const Signup: NextPage = () => {
       const email = formMethodsStep2.getValues('email');
       setError("");
       checkEmailExist(email)
-        .then((response) => {
+        .then((response: any) => {
           if (response.email) {
             setError("This email is already registered.")
           } else {

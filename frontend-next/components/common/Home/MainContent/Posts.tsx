@@ -31,7 +31,7 @@ const Posts = () => {
               liked={post.liked}
               likes={post.likes}
               sharedPost={{...post.shared_post, identity_meta: post.shared_from_identity.meta}}
-              />
+            />
               :
             <HomeCard
               id={post.id}
