@@ -5,24 +5,8 @@ import { get } from 'utils/request';
 import { useSWRConfig } from 'swr';
 
 const CommentsBox = ({pid, page}: {pid: string, page: number}) => {
-  // const comments =[
-  //     {
-  //       content: "Hello How are youes",
-  //       name: "My Name"
-  //     },
-  //     {
-  //       content: "Good Work.",
-  //       name: "Another Name"
-  //     },
-  //     {
-  //       content: "Amazing. I believe it.",
-  //       name: "Name Name"
-  //     }
-  //   ]
-
 
   const { mutate } = useSWRConfig();
-  // Uncomment When Create Comment done.
   const { data: comments, error } = useSWR<any>((pid && page) ? `/api/v2/posts/${pid}/comments?page=${page}` : null, get)
 
   if (!comments?.items) {

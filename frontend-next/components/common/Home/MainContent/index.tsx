@@ -15,6 +15,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import { schemaCreatePost } from '@api/posts/validation';
 import PostCreateStep1 from '@components/common/Post/Create/Step1/PostCreateStep1';
 import PostCreateStep2 from '@components/common/Post/Create/Step2/PostCreateStep2';
+import PostContainer from './PostContainer';
 
 
 const MainContent = () => {
@@ -77,7 +78,7 @@ const MainContent = () => {
   return (
     <div className="w-full mb-10 space-y-6">
       <AddPost onClickAdd={addPostHandlers.on}/>
-      <Posts />
+      <PostContainer />
       {/* Like Modal */}
       <Modal isOpen={likeState} onClose={likeHandlers.off}>
         <Modal.Title>
