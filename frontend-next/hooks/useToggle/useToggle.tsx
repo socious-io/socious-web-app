@@ -1,6 +1,14 @@
+import { boolean } from 'joi';
 import React from 'react';
 
-export const useToggle = (): {state: boolean, handlers: {on: ()=>void, off: ()=>void, toggle: ()=>void}} => {
+export type HandlersType = {on: ()=>void, off: ()=>void, toggle: ()=>void}
+
+interface UseToggleReturn {
+  state: boolean;
+  handlers: HandlersType;
+}
+
+export const useToggle = (): UseToggleReturn => {
   const [state, setState] = React.useState<boolean>(false);
 
   const handlers = React.useMemo(

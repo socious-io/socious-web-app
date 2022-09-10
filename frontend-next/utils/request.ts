@@ -15,8 +15,7 @@ const request = axios.create({
 
 request?.interceptors.response.use(
   (response) => {
-    console.log("response", response);
-    return response?.data ? response?.data : response;
+    return response?.data ? response?.data as any : response as any;
   },
   (error) => {
     if (error.response) {
@@ -38,8 +37,8 @@ const get = (arg: string)=> {
   return request?.get(arg);
 };
 
-const deleteRequest = (arg: string) => {
-  return request?.delete(arg);
+const deleteRequest = (arg: string, headers?: AxiosRequestHeaders) => {
+  return request?.delete(arg, headers);
 };
 
 const post = (arg: string, data: any, headers?: AxiosRequestHeaders) => {

@@ -45,6 +45,7 @@ const useUser = (props: UseUserProps =
     // if user unauthorized
     if (userError && userError?.response?.status === 401) {
       // if page !== allowed_routes
+      console.log("pathname", pathname);
       if (!(allowedRoutes.includes (pathname))) {
         // => add ?redirect_to=/profile
         Router.push("/auth/login");

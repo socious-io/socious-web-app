@@ -15,7 +15,7 @@ import {createPost} from "@api/posts/actions"
 import { useForm, FormProvider } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { schemaCreatePost } from '@api/posts/validation';
-import { CreatePostType } from '@models/post';
+import { CreatePostBodyType } from '@models/post';
 
 
 const MainContent = () => {
@@ -42,7 +42,7 @@ const MainContent = () => {
       const formData = new FormData;
       formData.append("file", file);
       try {
-        const res = await uploadMedia(formData)
+        const res: any = await uploadMedia(formData)
         media = [res.id]
       } catch (error) {
         console.error(error);
@@ -53,7 +53,7 @@ const MainContent = () => {
     const content = getValues('content');
     const causes_tags = getValues('causes_tags');
     console.log("Causes", causes_tags);
-    let postBody: CreatePostType = { content, causes_tags}
+    let postBody: CreatePostBodyType = { content, causes_tags}
     if (media) postBody.media = media
     console.log("Post Body", postBody);
     try {
