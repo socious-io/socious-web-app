@@ -23,32 +23,32 @@ export const PostActionBar = ({
   setFile,
 }: PostActionBarProps) => {
   const { state: showLinkBox, handlers: linkHandler } = useToggle();
-  const { state: cameraState, handlers: cameraHandler } = useToggle();
+  // const { state: cameraState, handlers: cameraHandler } = useToggle();
 
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvaRef = useRef<HTMLCanvasElement>(null);
+  // const videoRef = useRef<HTMLVideoElement>(null);
+  // const canvaRef = useRef<HTMLCanvasElement>(null);
 
-  const showCamera = useCallback(async () => {
-    cameraHandler.on();
-    let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-    if (videoRef?.current) videoRef.current.srcObject = stream;
-  }, [cameraHandler]);
+  // const showCamera = useCallback(async () => {
+  //   cameraHandler.on();
+  //   let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+  //   if (videoRef?.current) videoRef.current.srcObject = stream;
+  // }, [cameraHandler]);
 
-  const clickPhoto = useCallback(async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    if ((videoRef?.current) && (canvaRef?.current !== null)) {
-      (canvaRef.current.getContext('2d')?.drawImage(videoRef.current, 0, 0, canvaRef.current.width, canvaRef.current.height));
-      let file: any = null;
-      canvaRef.current.toBlob(function(blob) {
-        if (blob) file = new File([blob], 'test.png', { type: 'image/png' }, );
-        setFile(() => file);
-      }, 'image/png');
-    };
-  }, [setFile]);
+  // const clickPhoto = useCallback(async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  //   e.preventDefault();
+  //   if ((videoRef?.current) && (canvaRef?.current !== null)) {
+  //     (canvaRef.current.getContext('2d')?.drawImage(videoRef.current, 0, 0, canvaRef.current.width, canvaRef.current.height));
+  //     let file: any = null;
+  //     canvaRef.current.toBlob(function(blob) {
+  //       if (blob) file = new File([blob], 'test.png', { type: 'image/png' }, );
+  //       setFile(() => file);
+  //     }, 'image/png');
+  //   };
+  // }, [setFile]);
 
   return (
     <>
-      {cameraState &&
+      {/* {cameraState &&
             <div>
               <div className='flex '>
                 <video className="basis-1" id="video" ref={videoRef} autoPlay></video>
@@ -56,10 +56,10 @@ export const PostActionBar = ({
               </div>
               <button id="click-photo" onClick={clickPhoto}>Click Photo</button>
             </div>
-          }
+          } */}
       <div className='flex justify-between items-center bg-offWhite py-2 border-grayLineBased border-y-2 -mr-6 -ml-6 mt-3'>
         {/* Link Button */}
-        <div className='p-2 relative'>
+        {/* <div className='p-2 relative'>
           <Button
             className='bg-transparent p-2'
             variant="ghost"
@@ -75,18 +75,18 @@ export const PostActionBar = ({
             errorMessage={errorMessage}
             />
           }
-        </div>
-        {/* <span></span> */}
+        </div> */}
+        <span></span>
         <div className='flex items-center'>
           {/* Camera Button */}
-          <Button
+          {/* <Button
             className="max-w-xs mr-auto flex items-center justify-center align-middle bg-transparent p-2"
             size="lg"
             variant="ghost"
             onClick={() => showCamera()}
             >
               <CameraIcon className="w-5"/>
-          </Button>
+          </Button> */}
           <span></span>
           <ImageUploader onChange={setFile} withPreview={false}>
             {(setOpen: any) => (

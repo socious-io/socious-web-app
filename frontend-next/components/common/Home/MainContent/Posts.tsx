@@ -12,7 +12,7 @@ const Posts = () => {
       if (error.response.status === 401) return
     }
   });
-
+console.log("POST: ____", posts);
   return (
     <div className="space-y-2">
       <div className="space-y-10">

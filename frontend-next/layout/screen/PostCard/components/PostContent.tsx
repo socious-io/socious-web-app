@@ -14,7 +14,6 @@ const PostContent = ({
   media = [],
 }: PostContentProps
 ) => {
-  console.log("passion", passion);
   return (
     <div className={noBorder ? "" : `p-4 rounded-2xl border border-grayLineBased bg-white`}>
       {media && media.length > 0 &&

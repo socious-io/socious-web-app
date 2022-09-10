@@ -95,6 +95,8 @@ const Post = () => {
 
   if (error?.response?.status === 404) return <h1>404</h1> ;
 
+  console.log("POST:---", post);
+
   const comments = [];
   for (let i = 1; i <= page; i++ ) {
     comments.push(<CommentsBox pid={post.id} page={i} key={i}/>);

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useForm } from 'react-hook-form';
 import useSWR from "swr";
@@ -44,13 +44,14 @@ export const ShareModalStep2 = ({
   });
 
   const onSubmit = useCallback(async () => {
-    let file = "";
+    let fileId = "";
     if (file) {
       try {
         const formData = new FormData;
         formData.append("file", file);
+        console.log("FORMDATA", formData);
         const response: any = await uploadMedia(formData);
-        file = response?.id;
+        fileId = response?.id;
       } catch(error) {
         console.error(error);
         return;
@@ -62,10 +63,11 @@ export const ShareModalStep2 = ({
     // const link = getValues("link");
     if (socialCauses) postData.causes_tags = [socialCauses];
     if (content) postData.content = content;
+    if (fileId) postData.media = [fileId];
     // if (link) postData.link = link;
-    console.table(postData);
+    
     onShare(postData);
-  }, [getValues, onShare])
+  }, [getValues, onShare, file])
 
 
   return (

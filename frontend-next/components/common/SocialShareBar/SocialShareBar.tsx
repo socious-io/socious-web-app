@@ -1,15 +1,15 @@
-import {
-  FacebookShareButton,
-  FacebookIcon,
-  LinkedinShareButton,
-  LinkedinIcon,
-  WhatsappShareButton,
-  WhatsappIcon,
-  TelegramShareButton,
-  TelegramIcon,
-  TwitterShareButton,
-  TwitterIcon,
-} from 'next-share';
+// import {
+//   FacebookShareButton,
+//   FacebookIcon,
+//   LinkedinShareButton,
+//   LinkedinIcon,
+//   WhatsappShareButton,
+//   WhatsappIcon,
+//   TelegramShareButton,
+//   TelegramIcon,
+//   TwitterShareButton,
+//   TwitterIcon,
+// } from 'next-share';
 import { Button } from 'components/common';
 import { LinkIcon } from '@heroicons/react/outline';
 import { useCallback } from 'react';
@@ -30,7 +30,7 @@ export const SocialShareBar = ({
 
   return (
     <div className='p-4 space-x-6 flex no-wrap overflow-auto hide-scrollbar border-y-[0.5px] border-offsetColor'>
-      <Button
+      {/* <Button
         variant='ghost'
         className='bg-transparent inline-block hover:text-primary focus:text-primary p-0'
         onClick={copyToClipBoard}
@@ -84,7 +84,7 @@ export const SocialShareBar = ({
         <span className=' text-sm font-normal'>
           Twitter
         </span>
-      </TwitterShareButton>
+      </TwitterShareButton> */}
     </div>
   );
 };
