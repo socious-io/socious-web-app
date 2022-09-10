@@ -26,7 +26,7 @@ export function SharedCard({
 }: SharedCardProps) {
 
   const {state, handlers} = useToggle();
-  console.log("Shared Id :------: ", id);
+  
   return (
     <div className="relative space-y-5 py-4 border-neutralGray border-b">
       <PostHead name={(name || "name") + " Shared"} time={time} src={src} toggleOptions={handlers.toggle} />

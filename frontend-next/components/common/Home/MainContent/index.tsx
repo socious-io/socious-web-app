@@ -3,19 +3,17 @@ import AddPost from './AddPost';
 import Posts from './Posts';
 import { Modal, Button } from "@components/common"
 import { useToggle } from '@hooks';
-import {TextArea, Avatar} from '@components/common';
-import Combobox from '@components/common/Combobox/Combobox';
-import useUser from 'hooks/useUser/useUser';
-import { CameraIcon, ChevronLeftIcon, ChevronRightIcon, XIcon } from '@heroicons/react/outline';
-import ImageUploader from '@components/common/ImageUploader/ImageUploader';
+import { Avatar} from '@components/common';
+import { ChevronLeftIcon, XIcon } from '@heroicons/react/outline';
 import { uploadMedia } from '@api/media/actions';
-import {createPost} from "@api/posts/actions"
-// validations
+import {createPost} from "@api/posts/actions";
+import { CreatePostBodyType } from '@models/post';
 
+// validations
 import { useForm, FormProvider } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { schemaCreatePost } from '@api/posts/validation';
-import PostCreateStep1 from '@components/common/Post/Create/Step1/PostBodyCreateStep1';
+import PostCreateStep1 from '@components/common/Post/Create/Step1/PostCreateStep1';
 import PostCreateStep2 from '@components/common/Post/Create/Step2/PostCreateStep2';
 
 
@@ -53,7 +51,7 @@ const MainContent = () => {
     const content = getValues('content');
     const causes_tags = getValues('causes_tags');
     const link = getValues('link');
-    const postBody: CreatePostType = { content, causes_tags: [causes_tags]}
+    const postBody: CreatePostBodyType = { content, causes_tags: [causes_tags]}
     if (link) postBody.link = link;
     if (media) postBody.media = media;
 
