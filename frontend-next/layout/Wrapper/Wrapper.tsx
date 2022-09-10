@@ -22,9 +22,9 @@ export function Wrapper({children}: LayoutProps) {
   const {asPath} = useRouter();
   const isNotAuth = !asPath?.includes('auth');
   const { user, userError } = useUser();
-  let isStarter = true;
-  if (asPath === "/" && (user || userError?.response?.status != 401)) {
-    isStarter = false;
+  let isStarter = false;
+  if (asPath === "/" && ((!user && !userError) || userError?.response?.status === 401)) {
+    isStarter = true;
   }
   
   return (

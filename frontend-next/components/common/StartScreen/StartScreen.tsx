@@ -27,7 +27,7 @@ const StartScreen = () => {
   }, [step])
 
   return (
-    <div className="max-w-xl min-h-[40rem] mx-auto bg-background rounded-3xl pb-7 px-6 border border-grayLineBased -my-10 md:my-0">
+    <div className="max-w-xl min-h-[40rem] mx-auto bg-background  rounded-none md:rounded-3xl pb-7 px-6 border border-grayLineBased -my-10 md:my-0">
       {
         step === 1 && 
         <div className="h-[28rem] px-4 flex flex-col mb-9">
