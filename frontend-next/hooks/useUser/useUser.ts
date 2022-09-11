@@ -23,7 +23,7 @@ const allowedRoutes = [
   "/", "/auth/forgotpassword", "/auth/login", "/auth/signup"
 ];
 
-const useUser = (props: UseUserProps = 
+export const useUser = (props: UseUserProps = 
   defaultValues
 ) => {
   const { forceStop, shouldRetry, onAuthError } = {...defaultValues, ...props};
@@ -43,7 +43,7 @@ const useUser = (props: UseUserProps =
     if (forceStop) return
 
     // if user unauthorized
-    if (userError && userError.response.status === 401) {
+    if (userError && userError?.response?.status === 401) {
       // if page !== allowed_routes
       console.log("pathname", pathname);
       if (!(allowedRoutes.includes (pathname))) {

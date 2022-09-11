@@ -20,7 +20,7 @@ const PostAction = ({
           :
           <HeartIcon className="w-5" />
         }
-        <p className="text-graySubtitle text-xs">{shared} Like</p>
+        <p className="text-graySubtitle text-xs">{likes} Like</p>
       </div>
       <div className="flex flex-row justify-center items-center space-x-1 grow">
         <ChatAltIcon className="w-5" />

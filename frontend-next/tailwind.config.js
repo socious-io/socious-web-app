@@ -38,6 +38,7 @@ module.exports = {
         info: '#ffd700',
         errorSub: '#F5BABA',
         neutralGray: '#D4D2D0',
+        offsetColor: "#C3C8D9",
       },
     },
   },

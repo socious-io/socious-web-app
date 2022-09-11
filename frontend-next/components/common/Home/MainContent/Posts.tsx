@@ -1,6 +1,6 @@
 // import HomePostCard from "layout/screen/PostCard/HomePostCard";
 import Button from "@components/common/Button/Button";
-import {CommentedCard, LikedCard, SharedCard, HomeCard} from "layout/screen/PostCard";
+import { SharedCard, HomeCard} from "layout/screen/PostCard";
 import useSWR from "swr";
 import { get } from "utils/request";
 
@@ -12,7 +12,7 @@ const Posts = () => {
       if (error.response.status === 401) return
     }
   });
-
+console.log("POST: ____", posts);
   return (
     <div className="space-y-2">
       <div className="space-y-10">

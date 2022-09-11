@@ -13,3 +13,9 @@ export const schemaCreatePost = Joi.object({
   }),
   identity_tags: Joi.array().items(Joi.string()),
 })
+
+export const schemaSharePost = Joi.object({
+  content: Joi.string().allow("", null),
+  causes_tags: Joi.string().allow("", null),
+  link: Joi.string().allow("", null),
+})

@@ -49,9 +49,10 @@ export function CommentItem({
     try {
       console.log("Like Status", isLiked);
       isLiked ?
-        await onUnlikedComment(post_id, id)
+        console.log("Unliking", await onUnlikedComment(post_id, id))
+
       :
-        await onLikedComment(post_id, id);
+        console.log("Liking", await onLikedComment(post_id, id));
       } catch(error) {
         console.log(error);
       }

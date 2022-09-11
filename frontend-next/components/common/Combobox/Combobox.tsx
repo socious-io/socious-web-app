@@ -25,7 +25,7 @@ export interface ComboboxProps
   items: Array<any>;
 }
 
-export default function Combobox({
+export function Combobox({
   label = '',
   disabled = false,
   items,
@@ -163,3 +163,5 @@ export default function Combobox({
     </UiCombobox>
   );
 }
+
+export default Combobox;
