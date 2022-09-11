@@ -31,12 +31,8 @@ body {
 .font-helmet {
   font-family: 'Hahmlet', sans-serif !important;
 }
-.font-work_sans{
-  font-family: 'Work Sans', sans-serif !important;
-}
 h1, h2, h3, h4, h5 {
   font-family: 'Hahmlet', sans-serif;
-
 }
 
 .hide-scrollbar::-webkit-scrollbar {
@@ -48,5 +44,3 @@ h1, h2, h3, h4, h5 {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
-
-
