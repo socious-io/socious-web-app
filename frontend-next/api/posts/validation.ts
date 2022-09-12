@@ -20,3 +20,9 @@ export const schemaSharePost = Joi.object({
   causes_tags: Joi.string().allow("", null),
   link: Joi.string().allow("", null),
 })
+
+export const schemaEditPost = Joi.object({
+  content: Joi.string().allow("", null),
+  causes_tags: Joi.string().allow("", null),
+  link: Joi.string().allow("", null),
+})
