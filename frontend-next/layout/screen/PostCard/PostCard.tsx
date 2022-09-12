@@ -13,10 +13,10 @@ export interface PostCardProps {
   showAction?: boolean;
   liked?: boolean;
   media?: string[] | null;
-  likes?: number,
-  shared?: number,
-  src?: string,
-  hideOption?: boolean
+  likes?: number;
+  shared?: number;
+  src?: string;
+  optionClicked?: (data: string) => void;
 }
 
 
@@ -31,22 +31,21 @@ export function PostCard({
   likes,
   shared,
   showAction = true,
-  hideOption = false
+  optionClicked
 }: PostCardProps) {
   
   const {state, handlers} = useToggle();
-  console.log("POST Id :------: ", id);
 
   return (
     <div className='relative space-y-5 p-4 rounded-2xl border border-grayLineBased bg-white'>
-      <PostHead name={name} time={time} src={src} hideOption={hideOption} toggleOptions={handlers.toggle}/>
+      <PostHead name={name} time={time} src={src} hideOption={!optionClicked} toggleOptions={handlers.toggle}/>
       <PostContent content={content} passion={passion} noBorder />
       { showAction &&
           <PostAction liked={liked} likes={likes} shared={shared} id={id} />
       }
       {
-        !hideOption && state && 
-        <PostOption />
+        optionClicked && state && 
+        <PostOption optionClicked={optionClicked} />
       }
     </div>
   );

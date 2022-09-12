@@ -21,9 +21,12 @@ const PostContent = ({
           <div className="w-full h-40 bg-offWhite rounded-lg" />
         </div>
       }
-      <div>
-        <Chip content={passion ?? 'Environment'} containerClassName="bg-secondarySLight inline" contentClassName="text-secondary" />
-      </div>
+      {
+        passion &&
+        <div>
+          <Chip content={passion} containerClassName="bg-secondarySLight inline" contentClassName="text-secondary" />
+        </div>
+      }
       <div>
         <p className="text-small">{content ?? 
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime cupiditate amet perspiciatis blanditiis tempore tempora obcaecati? Eum id excepturi, corrupti vel vitae, quidem perferendis atque, illum odio aperiam eveniet pariatur."

@@ -1,5 +1,5 @@
 import Button from "@components/common/Button/Button";
-import {SharedCard, HomeCard} from "layout/screen/PostCard";
+import { SharedCard, HomeCard } from "layout/screen/PostCard";
 import useSWR from "swr";
 import { get, post } from "utils/request";
 

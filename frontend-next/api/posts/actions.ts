@@ -1,5 +1,5 @@
 import { deleteRequest, post, put } from 'utils/request';
-import { CreatePostBodyType } from '@models/post';
+import { CreatePostBodyType, SharePostBodyType } from '@models/post';
  
 export function createPost(postBody: CreatePostBodyType) {
   return post("/api/v2/posts",
@@ -15,4 +15,8 @@ export function likePost(id: string, currentIdentity: string) {
 
 export function unlikePost(id: string, currentIdentity: string) {
   return deleteRequest(`/api/v2/posts/${id}/like`);
+};
+
+export function sharePost(postBody: SharePostBodyType, postId: string) {
+  return post(`/api/v2/posts/${postId}/share`, postBody);
 };
