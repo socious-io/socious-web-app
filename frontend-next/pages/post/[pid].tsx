@@ -15,6 +15,7 @@ import { useToggle } from "@hooks";
 import { XIcon } from "@heroicons/react/outline";
 import { SharePostBodyType } from "@models/post";
 import { sharePost } from "@api/posts/actions";
+import DeleteModal from "@components/common/Post/DeleteModal/DeleteModal";
 
 // invalid input syntax for type uuid
 const Post = () => {
@@ -30,7 +31,8 @@ const Post = () => {
   const { mutate } = useSWRConfig();
   const {state: notify, handlers: notifyHandler} = useToggle();
   const { state: showShare, handlers: shareHandler } = useToggle();
-  
+  const {state: showDelete, handlers: deleteHandler } = useToggle();
+
   const [shareStep, setShareStep] = useState<number>(2);
   
   const onCommentSend = useCallback((content: string) => {
@@ -66,6 +68,8 @@ const Post = () => {
   }, [post, router, shareStep, shareHandler])
 
   const onOptionClicked = useCallback((type: string) => {
+    shareHandler.off();
+    deleteHandler.off();
     switch (type) {
       case 'EDIT':
         console.log("[pid].tsx:- IT IS EDIT");
@@ -74,13 +78,13 @@ const Post = () => {
         shareHandler.on();
         break;
       case 'DELETE':
-        console.log("[pid].tsx:- BE CAREFUL THERE");
+        deleteHandler.on();
         break;
       default:
         console.log("[pid].tsx:- Ohh la. I am lost here.")
         break;
     }
-  }, [shareHandler])
+  }, [deleteHandler, shareHandler])
 
   const resetShareModal = useCallback(() => {
     shareHandler.off();
@@ -170,6 +174,9 @@ const Post = () => {
             shareStep === 2 && <ShareModalStep2 onShare={onShare} />
           }
         </Modal>
+
+        {/* DELETE MODAL */}
+        <DeleteModal pid={post?.id} isOpen={showDelete} onClose={deleteHandler.off}/>
       </div>
     </div>
   );

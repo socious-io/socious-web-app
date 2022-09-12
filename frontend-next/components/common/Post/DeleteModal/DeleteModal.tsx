@@ -1,10 +1,27 @@
 
+import { deletePost } from "@api/posts/actions";
 import { ModalProps, Modal, Button } from "@components/common";
+import { useCallback } from "react";
+import Router from 'next/router'
+interface DeleteModalProps extends ModalProps {
+  pid: string;
+}
 
 const DeleteModal = ({
   isOpen = true,
   onClose = () => null,
-}: ModalProps) => {
+  pid,
+}: DeleteModalProps) => {
+
+  const onDelete = useCallback(async () => {
+    try {
+      await deletePost(pid);
+      console.log("Deleted");
+      Router.push("/");
+    } catch(error) {
+      console.error(error);
+    }
+  }, [pid]);
 
   return (
     <Modal isOpen={isOpen} className="max-w-xs" onClose={onClose}>
@@ -17,7 +34,8 @@ const DeleteModal = ({
         <Button
           className="max-w-full block mx-auto w-full align-middle font-semibold"
           variant="fill"
-          >
+          onClick={onDelete}
+        >
           Delete
         </Button>
         <Button
