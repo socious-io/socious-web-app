@@ -18,9 +18,10 @@ const SocialCauses: React.FC<Props> = ({social_causes}) => {
     <div className="p-4">
       <Title>Social causes</Title>
       <div className="flex w-4/6 flex-wrap gap-2 ">
-        {social_causes?.map((item: string) => {
-          return <Chip name={item} />;
-        })}
+        {social_causes &&
+          social_causes?.map((item: string) => {
+            return <Chip name={item} />;
+          })}
       </div>
     </div>
   );

@@ -20,24 +20,16 @@ const UserProfile: NextPage = () => {
   const {id} = router.query;
 
   //get user profile data by user id
-  const {data, error} = useSWR<any>(`/api/v2/user/${id}/profile`, get, {
-    onErrorRetry: (error) => {
-      if (
-        error?.response?.status === 500 &&
-        error?.response?.data?.error.startsWith(
-          'invalid input syntax for type uuid',
-        )
-      )
-        return;
-    },
-  });
+  const {data, error} = useSWR<any>(`/api/v2/user/${id}/profile`, get);
 
   // Show this until the data is fetched
   if (!data && !error) return <p>loading</p>;
   if (
-    error?.response?.data?.error.startsWith(
-      'invalid input syntax for type uuid',
-    )
+    error?.response?.status === 400 ||
+    (500 &&
+      error?.response?.data?.error.startsWith(
+        'invalid input syntax for type uuid',
+      ))
   )
     return <p>invalid user</p>;
 

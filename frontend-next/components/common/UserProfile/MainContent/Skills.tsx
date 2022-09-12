@@ -17,9 +17,10 @@ const Skills: React.FC<Props> = ({skills}) => {
     <div className="p-4 border-t border-grayLineBased">
       <Title>Skills</Title>
       <div className="flex w-4/6 flex-wrap gap-2 ">
-        {skills.map((item: string) => {
-          return <Chip name={item} />;
-        })}
+        {skills &&
+          skills.map((item: string) => {
+            return <Chip name={item} />;
+          })}
       </div>
     </div>
   );
