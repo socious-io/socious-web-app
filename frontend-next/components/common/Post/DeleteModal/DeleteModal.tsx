@@ -39,9 +39,9 @@ const DeleteModal = ({
           Delete
         </Button>
         <Button
-          className="max-w-full block mx-auto align-middle font-semibold"
+          className="max-w-full block mx-auto w-full align-middle font-semibold"
           type="submit"
-          variant="ghost"
+          variant="outline"
           onClick={onClose}
           >
           Cancel
