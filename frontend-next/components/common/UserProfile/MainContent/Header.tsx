@@ -10,8 +10,24 @@ import Button from '@components/common/Button/Button';
 import MoreButton from './MoreButton';
 import Avatar from '@components/common/Avatar/Avatar';
 
-const Header: React.FC<any> = ({data}) => {
-  const {avatar, cover_image} = data;
+interface Props {
+  cover_image: null | {
+    created_at: string;
+    filename: string;
+    id: string;
+    identity_id: string;
+    url: string;
+  };
+  avatar: null | {
+    created_at: string;
+    filename: string;
+    id: string;
+    identity_id: string;
+    url: string;
+  };
+}
+
+const Header: React.FC<Props> = ({cover_image, avatar}) => {
   // backgground image not exist svg
   const bg_icon = require('../../../../asset/icons/bg-image.svg');
 

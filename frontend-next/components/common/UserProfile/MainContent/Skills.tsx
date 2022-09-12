@@ -8,8 +8,11 @@ import React from 'react';
 import Chip from './Chip';
 import Title from './Title';
 
-const Skills: React.FC<any> = ({data}) => {
-  const {skills} = data;
+//interfaces
+interface Props {
+  skills: string[];
+}
+const Skills: React.FC<Props> = ({skills}) => {
   return (
     <div className="p-4 border-t border-grayLineBased">
       <Title>Skills</Title>

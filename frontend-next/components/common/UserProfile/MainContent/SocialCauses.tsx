@@ -8,10 +8,12 @@ import React from 'react';
 import Chip from './Chip';
 import Title from './Title';
 
-const SocialCauses: React.FC<any> = ({data}) => {
- 
-  const {social_causes} = data;
+//interfaces
+interface Props {
+  social_causes: string[];
+}
 
+const SocialCauses: React.FC<Props> = ({social_causes}) => {
   return (
     <div className="p-4">
       <Title>Social causes</Title>

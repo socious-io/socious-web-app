@@ -6,9 +6,11 @@ import React from 'react';
 // components
 import Title from './Title';
 
-const About: React.FC<any> = ({data}) => {
-  const {mission} = data;
-
+//interfaces
+interface Props {
+  mission?: string;
+}
+const About: React.FC<Props> = ({mission}) => {
   return (
     <div className="px-4 border-t border-grayLineBased ">
       <Title>About</Title>

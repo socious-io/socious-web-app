@@ -19,13 +19,23 @@ const MainContent: React.FC<any> = ({data}) => {
   console.log(data);
   return (
     <div className="md:w-4/6 border-grayLineBased  border border-1 rounded-xl mb-8  ">
-      <Header data={data} />
-      <ProfileInfo data={data} />
+      <Header avatar={data?.avatar} cover_image={data?.cover_image} />
+      <ProfileInfo
+        first_name={data?.first_name}
+        last_name={data?.last_name}
+        bio={data?.bio}
+        followings={data?.followings}
+        followers={data?.followers}
+      />
       <MutaulConnections />
-      <SocialCauses data={data} />
-      <Contact data={data} />
-      <About data={data} />
-      <Skills data={data} />
+      <SocialCauses social_causes={data?.social_causes} />
+      <Contact
+        address={data?.address}
+        country={data?.country}
+        city={data?.city}
+      />
+      <About mission={data?.mission} />
+      <Skills skills={data?.skills} />
       <Recommendations />
       <Organizations />
     </div>

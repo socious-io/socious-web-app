@@ -9,9 +9,14 @@ import Title from './Title';
 //icons
 import {LocationMarkerIcon} from '@heroicons/react/outline';
 
-const Contact: React.FC<any> = ({data}) => {
-  const {address, country, city} = data;
+//interfaces
+interface Props {
+  address?: string;
+  country?: string;
+  city?: string;
+}
 
+const Contact: React.FC<Props> = ({address, country, city}) => {
   return (
     <div className="px-4  border-t border-grayLineBased">
       <Title>Contact</Title>

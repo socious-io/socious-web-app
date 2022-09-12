@@ -5,9 +5,20 @@
 
 import React from 'react';
 
-const ProfileInfo: React.FC<any> = ({data}) => {
-  const {first_name, last_name, bio, followings, followers} = data;
-
+interface Props {
+  first_name: string;
+  last_name: string;
+  bio: string;
+  followings: number;
+  followers: number;
+}
+const ProfileInfo: React.FC<Props> = ({
+  first_name,
+  last_name,
+  bio,
+  followings,
+  followers,
+}) => {
   return (
     <div className="px-4">
       <h1 className=" text-2xl text-text font-worksans font-semibold ">
