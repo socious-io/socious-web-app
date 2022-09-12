@@ -20,7 +20,7 @@ const UserProfile: NextPage = () => {
   const {id} = router.query;
 
   //get user profile data by user id
-  const {data, error} = useSWR<any>(`/api/v2/user/${id}/profile`, get);
+  const {data, error} = useSWR<any>(`/api/v2/user/by-username/${id}/profile`, get);
 
   // Show this until the data is fetched
   if (!data && !error) return <p>loading</p>;
