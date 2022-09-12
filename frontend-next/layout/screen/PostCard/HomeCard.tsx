@@ -9,7 +9,7 @@ export function HomeCard({id, content, name, time, passion, liked, likes, shared
       <PostHead name={name} time={time} src={src}/>
       {/* Image container */}
       <PostContent content={content} passion={passion} />
-      <PostAction liked={liked} likes={likes} shared={shared} />
+      <PostAction liked={liked} likes={likes} shared={shared} id={id} />
     </div>
   );
 }

@@ -20,10 +20,11 @@ const defaultValues = {
 };
 
 const allowedRoutes = [
-  "/", "/auth/forgotpassword", "/auth/login", "/auth/signup"
+  // "/", Uncomment after finishing starter page.
+  "/auth/forgotpassword", "/auth/login", "/auth/signup"
 ];
 
-const useUser = (props: UseUserProps = 
+export const useUser = (props: UseUserProps = 
   defaultValues
 ) => {
   const { forceStop, shouldRetry, onAuthError } = {...defaultValues, ...props};
@@ -31,6 +32,7 @@ const useUser = (props: UseUserProps =
 
   const { data: user, error: userError, mutate: mutateUser } = useSWR<any>("/api/v2/user/profile", get, {
     shouldRetryOnError: shouldRetry,
+    revalidateOnFocus: false,
     onErrorRetry: (error) => {
       if (!onAuthError && error?.response?.status === 401) return
     }

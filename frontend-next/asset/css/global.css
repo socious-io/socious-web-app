@@ -28,9 +28,23 @@ body {
   /* rest css code also here */
   background-color: #f8f8f8;
 }
-.font-helmet {
-  font-family: 'Hahmlet', sans-serif !important;
-}
 h1, h2, h3, h4, h5 {
   font-family: 'Hahmlet', sans-serif;
+}
+
+.font-helmet {
+  font-family: 'Hahmlet', sans-serif !important;  
+}
+.font-worksans {
+  font-family: 'Work Sans', sans-serif;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

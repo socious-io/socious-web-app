@@ -6,8 +6,13 @@ import PostAction from './components/PostAction';
 import {useToggle} from '@hooks';
 import PostOption from './components/PostOption';
 
+interface SharedPostType extends PostCardProps {
+  identity_meta: any;
+  created_at: string;
+  causes_tags: string;
+}
 interface SharedCardProps extends PostCardProps {
-  sharedPost: any
+  sharedPost: SharedPostType;
 }
 
 export function SharedCard({
@@ -22,14 +27,15 @@ export function SharedCard({
   liked, 
   likes, 
   shared,
-  hideOption = false,
+  showAction = true,
+  optionClicked,
 }: SharedCardProps) {
 
   const {state, handlers} = useToggle();
-  console.log("Shared Id :------: ", id);
+  
   return (
     <div className="relative space-y-5 py-4 border-neutralGray border-b">
-      <PostHead name={(name || "name") + " Shared"} time={time} src={src} toggleOptions={handlers.toggle} />
+      <PostHead name={(name || "name") + " Shared"} time={time} src={src} hideOption={!optionClicked} toggleOptions={handlers.toggle} />
       <PostContent content={content} passion={passion} media={media} noBorder/>
       <PostCard
         id={sharedPost?.id}
@@ -41,13 +47,14 @@ export function SharedCard({
         likes={sharedPost?.likes}
         liked={sharedPost?.liked}
         shared={sharedPost?.shared}
-        hideOption={true}
         showAction={false}
       />
-      <PostAction liked={liked} likes={likes} shared={shared} />
       {
-        !hideOption && state && 
-        <PostOption />
+        showAction && <PostAction id={id} liked={liked} likes={likes} shared={shared} />
+      }
+      {
+        optionClicked && state && 
+        <PostOption optionClicked={optionClicked} />
       }
     </div>
   );

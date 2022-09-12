@@ -2,11 +2,13 @@ import * as React from 'react';
 import {Dialog, Transition} from '@headlessui/react';
 import {XIcon} from '@heroicons/react/solid';
 import {Fragment} from 'react';
+import { twMerge } from 'tailwind-merge';
 
 export interface ModalProps {
   isOpen?: boolean;
   onClose?: () => void;
   children?: React.ReactNode;
+  className?: string
 }
 
 export interface IModalCloseButton {
@@ -17,6 +19,7 @@ export function Modal({
   isOpen = false,
   onClose = () => null,
   children,
+  className,
 }: ModalProps) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -44,7 +47,11 @@ export function Modal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel
+                className={twMerge(
+                  "w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all",
+                  className && className
+                  )}>
                 {children}
               </Dialog.Panel>
             </Transition.Child>

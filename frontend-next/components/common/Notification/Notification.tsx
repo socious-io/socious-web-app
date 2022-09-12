@@ -1,8 +1,18 @@
-import {ExclamationCircleIcon, XIcon} from '@heroicons/react/outline';
+import {ExclamationCircleIcon, XIcon, LinkIcon} from '@heroicons/react/outline';
 import {CheckCircleIcon} from '@heroicons/react/solid';
+import { twMerge } from 'tailwind-merge';
 
+interface VariantSubValues {
+    position: string,
+    bg: string,
+    border: string,
+    bgIcon: string,
+    icon: React.ReactNode,
+    textColor: string,
+    xIconColor: string,
+}
 interface VariantValues {
-  [key: string]: {[key: string]: string | React.ReactNode};
+  [key: string]: VariantSubValues;
 }
 
 const VARIANT: VariantValues = {
@@ -24,13 +34,22 @@ const VARIANT: VariantValues = {
     textColor: 'text-tart-orange-700',
     xIconColor: 'text-error',
   },
+  copySuccess: {
+    position: 'z-20 top-16 px-4 w-auto left-auto right-1/2 translate-x-2/4',
+    bg: ' bg-success py-0 w-80 rounded-2xl',
+    border: 'border-none drop-shadow-md',
+    bgIcon: '',
+    icon: <LinkIcon className="w-6 h-6 text-background" />,
+    textColor: 'text-background',
+    xIconColor: 'text-background',
+  },
 };
 
 export interface NotificationProps {
   text: string;
   isOpen?: boolean;
   onClose?: () => void;
-  variant?: 'error' | 'success';
+  variant?: 'error' | 'success' | 'copySuccess';
 }
 
 export function Notification({
@@ -44,7 +63,10 @@ export function Notification({
   }
 
   return (
-    <div className={`fixed left-0 right-0 z-10 ${VARIANT[variant].position}`}>
+    <div className={twMerge(`fixed left-0 right-0 z-10`,
+        VARIANT[variant].position
+        )
+       }>
       <div className="container px-3 mx-auto">
         <div
           className={`flex items-center justify-between p-3 rounded-lg border ${VARIANT[variant].border} ${VARIANT[variant].bg}`}

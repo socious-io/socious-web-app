@@ -1,13 +1,5 @@
-import HomeCard from "./HomeCard";
-import LikedCard from "./LikedCard";
-import CommentedCard from "./CommentedCard";
-import SharedCard from "./SharedCard";
-import PostCard from "./PostCard";
-
-export {
-  HomeCard,
-  LikedCard,
-  CommentedCard,
-  SharedCard,
-  PostCard,
-};
+export * from "./HomeCard";
+export * from "./LikedCard";
+export * from "./CommentedCard";
+export * from "./SharedCard";
+export * from "./PostCard";
