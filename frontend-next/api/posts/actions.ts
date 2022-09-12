@@ -24,3 +24,7 @@ export function sharePost(postBody: SharePostBodyType, postId: string) {
 export function editPost(postBody: EditPostBodyType, postId: string) {
   return put(`/api/v2/posts/${postId}`, postBody);
 }
+
+export function deletePost(postId: string) {
+  return deleteRequest(`/api/v2/posts/${postId}`);
+}
