@@ -7,6 +7,7 @@ const items = [
   {id: 2, name: "DIVERSITY_INCLUSION"},
   {id: 3, name: "INDIGENOUS_PEOPLES"},
   {id: 4, name: "DISABILITY"},
+  {id: 5, name: "POVERTY"},
 ]
 
 type selectionType = {
@@ -30,7 +31,7 @@ export const CausesTagBar = ({
 
   const [selected, setSelected] = useState<selectionType>();
   useEffect(() => {
-    if (preSelected) setSelected(items.find(item => item.name === preSelected))
+    if (preSelected) setSelected(items.find(item => item.name === preSelected));
   }, [preSelected])
 
   return (
