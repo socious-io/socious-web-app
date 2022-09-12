@@ -33,7 +33,13 @@ const UserProfile: NextPage = () => {
   });
 
   // Show this until the data is fetched
-  if (!data) return <p>loading</p>;
+  if (!data && !error) return <p>loading</p>;
+  if (
+    error?.response?.data?.error.startsWith(
+      'invalid input syntax for type uuid',
+    )
+  )
+    return <p>invalid user</p>;
 
   return (
     <div className="w-full flex-col lg:px-0 flex gap-x-6 md:flex-row  md:px-8  ">
