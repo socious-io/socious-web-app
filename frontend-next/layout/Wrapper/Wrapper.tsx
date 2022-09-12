@@ -9,6 +9,7 @@ import Navbar from '../Navbar/Navbar';
 
 import {Container} from '../Container/Container';
 import {useRouter} from 'next/dist/client/router';
+import useUser from 'hooks/useUser/useUser';
 
 export interface LayoutProps {
   children: React.ReactNode;
@@ -19,8 +20,13 @@ export function Wrapper({children}: LayoutProps) {
   //   minWidth: 1024,
   // });
   const {asPath} = useRouter();
-  const isAuth = !asPath?.includes('auth');
-
+  const isNotAuth = !asPath?.includes('auth');
+  const { user, userError } = useUser();
+  let isStarter = false;
+  if (asPath === "/" && ((!user && !userError) || userError?.response?.status === 401)) {
+    isStarter = true;
+  }
+  
   return (
     <>
       <Head>
@@ -40,8 +46,10 @@ export function Wrapper({children}: LayoutProps) {
           href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@600&display=swap"
           rel="stylesheet"
         />
+        <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
+        <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js" async></script>
       </Head>
-      {isAuth && <Navbar />}
+      {(isNotAuth && !isStarter) && <Navbar />}
       <Container>{children}</Container>
     </>
   );
