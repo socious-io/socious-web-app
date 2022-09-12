@@ -12,8 +12,6 @@ import Skills from './Skills';
 import SocialCauses from './SocialCauses';
 import About from './About';
 import Contact from './Contact';
-import Recommendations from './Recommendations';
-import Organizations from './Organizations';
 
 const MainContent: React.FC<any> = ({data}) => {
   console.log(data);
@@ -36,8 +34,6 @@ const MainContent: React.FC<any> = ({data}) => {
       />
       <About mission={data?.mission} />
       <Skills skills={data?.skills} />
-      <Recommendations />
-      <Organizations />
     </div>
   );
 };
