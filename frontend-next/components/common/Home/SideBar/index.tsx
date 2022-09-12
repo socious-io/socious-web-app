@@ -21,7 +21,7 @@ interface identity {
 const SideBar = () => {
   const { data } = useSWR<any, any, any>("/api/v2/identities", get, {
     onErrorRetry: (error) => {
-      if (error.response.status === 401) return
+      if (error?.response?.status === 401) return
     },
     // revalidateOnFocus: false,
   });
@@ -37,7 +37,7 @@ const SideBar = () => {
         <ProfileCard
             content={user?.mission}
             name={user?.username}
-            avatar={user?.avatar}
+            avatar={user?.avatar?.url}
             following={user?.following}
             followers={user?.followers}
         />

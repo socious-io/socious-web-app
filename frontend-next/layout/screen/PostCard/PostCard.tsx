@@ -5,7 +5,7 @@ import { useToggle } from '@hooks';
 import PostOption from './components/PostOption';
 
 export interface PostCardProps {
-  id: string,
+  id: string;
   content?: string;
   name?: string;
   time?: string;
@@ -41,7 +41,7 @@ export function PostCard({
       <PostHead name={name} time={time} src={src} hideOption={!optionClicked} toggleOptions={handlers.toggle}/>
       <PostContent content={content} passion={passion} noBorder />
       { showAction &&
-          <PostAction liked={liked} likes={likes} shared={shared} />
+          <PostAction liked={liked} likes={likes} shared={shared} id={id} />
       }
       {
         optionClicked && state && 
