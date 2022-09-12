@@ -15,6 +15,7 @@ import { useToggle } from "@hooks";
 import { XIcon } from "@heroicons/react/outline";
 import { SharePostBodyType } from "@models/post";
 import { sharePost } from "@api/posts/actions";
+import EditModal from "@components/common/Post/EditModal/EditModal";
 
 // invalid input syntax for type uuid
 const Post = () => {
@@ -30,6 +31,7 @@ const Post = () => {
   const { mutate } = useSWRConfig();
   const {state: notify, handlers: notifyHandler} = useToggle();
   const { state: showShare, handlers: shareHandler } = useToggle();
+  const { state: showEdit, handlers: editHandler } = useToggle();
   
   const [shareStep, setShareStep] = useState<number>(2);
   
@@ -69,6 +71,7 @@ const Post = () => {
     switch (type) {
       case 'EDIT':
         console.log("[pid].tsx:- IT IS EDIT");
+        editHandler.on();
         break;
       case 'SHARE':
         shareHandler.on();
@@ -80,7 +83,7 @@ const Post = () => {
         console.log("[pid].tsx:- Ohh la. I am lost here.")
         break;
     }
-  }, [shareHandler])
+  }, [shareHandler, editHandler])
 
   const resetShareModal = useCallback(() => {
     shareHandler.off();
@@ -155,7 +158,7 @@ const Post = () => {
           </Button>
         </div>
 
-
+        {/* SHARE MODAL */}
         <Modal isOpen={showShare} onClose={resetShareModal} className={`${shareStep === 1 ? "bg-offWhite" : ""}`}>
           <span className='absolute right-3 cursor-pointer ' onClick={resetShareModal}>
             <XIcon className='w-6' />
@@ -170,6 +173,9 @@ const Post = () => {
             shareStep === 2 && <ShareModalStep2 onShare={onShare} />
           }
         </Modal>
+
+        {/* EDIT MODAL */}
+        <EditModal isOpen={showEdit} onClose={editHandler.off}/>
       </div>
     </div>
   );
