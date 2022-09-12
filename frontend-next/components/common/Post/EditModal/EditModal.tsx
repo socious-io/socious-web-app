@@ -87,12 +87,13 @@ const EditModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}
       // className={`${shareStep === 1 ? "bg-offWhite" : ""}`}
+      className=""
     >
       <span className='absolute right-3 cursor-pointer ' onClick={onClose}>
         <XIcon className='w-6' />
       </span>
       <Modal.Title>
-        <h2 className="text-center min-h-[30px]">Edit Post</h2>
+        <h2 className="text-center font-worksans">Edit Post</h2>
       </Modal.Title>
       <form onSubmit={handleSubmit(onSubmit)}>
       <Modal.Description>
@@ -138,7 +139,7 @@ const EditModal = ({
         variant="fill"
         value="Submit"
         >
-        Edit Post
+        Save post
       </Button>
     </form>
     </Modal>
