@@ -11,10 +11,11 @@ import ShareModalStep1 from "@components/common/Post/ShareModal/ShareModalStep1/
 import ShareModalStep2 from "@components/common/Post/ShareModal/ShareModalStep2/ShareModalStep2";
 import { SharedCard, PostCard } from "layout/screen/PostCard";
 import SideBar from "@components/common/Home/SideBar";
-import { useToggle } from "@hooks";
+import { useToggle, useUser } from "@hooks";
 import { XIcon } from "@heroicons/react/outline";
 import { SharePostBodyType } from "@models/post";
 import { sharePost } from "@api/posts/actions";
+import EditModal from "@components/common/Post/EditModal/EditModal";
 
 // invalid input syntax for type uuid
 const Post = () => {
@@ -25,11 +26,14 @@ const Post = () => {
       if (error?.response?.status === 500 && error?.response?.data?.error.startsWith("invalid input syntax for type uuid")) return
     }
   });
+
+  const { user } = useUser();
   
   const [page, setPage] = useState<number>(1);
   const { mutate } = useSWRConfig();
   const {state: notify, handlers: notifyHandler} = useToggle();
   const { state: showShare, handlers: shareHandler } = useToggle();
+  const { state: showEdit, handlers: editHandler } = useToggle();
   
   const [shareStep, setShareStep] = useState<number>(2);
   
@@ -69,6 +73,7 @@ const Post = () => {
     switch (type) {
       case 'EDIT':
         console.log("[pid].tsx:- IT IS EDIT");
+        editHandler.on();
         break;
       case 'SHARE':
         shareHandler.on();
@@ -80,7 +85,7 @@ const Post = () => {
         console.log("[pid].tsx:- Ohh la. I am lost here.")
         break;
     }
-  }, [shareHandler])
+  }, [shareHandler, editHandler])
 
   const resetShareModal = useCallback(() => {
     shareHandler.off();
@@ -125,10 +130,10 @@ const Post = () => {
             liked={post.liked}
             likes={post.likes}
             sharedPost={{...post.shared_post, identity_meta: post.shared_from_identity.meta}}
-            optionClicked={onOptionClicked}
-          />
-          :
-          <PostCard
+            optionClicked={(user?.id === post.identity_id) ? onOptionClicked : undefined}
+            />
+            :
+            <PostCard
             id={post.id}
             name={post.identity_meta.name}
             content={post.content}
@@ -138,38 +143,46 @@ const Post = () => {
             liked={post.liked}
             likes={post.likes}
             shared={post.shared}
-            optionClicked={onOptionClicked}
+            optionClicked={(user.id === post.identity_id) ? onOptionClicked : undefined}
           />
         }
         <CommentField
           onSend={onCommentSend}
         />
-        
         <div>
           {comments}
         </div>
-
         <div className="flex justify-center">
-          <Button variant="link" className="text-primary font-semibold" onClick={() => setPage(page + 1)}>
+          <Button 
+            variant="link"
+            className="text-primary font-semibold"
+            onClick={() => setPage(page + 1)}
+          >
             See more
           </Button>
         </div>
 
+        {(user.id === post.identity_id) &&
+        <>
+          {/* SHARE MODAL */}
+          <Modal isOpen={showShare} onClose={resetShareModal} className={`${shareStep === 1 ? "bg-offWhite" : ""}`}>
+            <span className='absolute right-3 cursor-pointer ' onClick={resetShareModal}>
+              <XIcon className='w-6' />
+            </span>
+            <Modal.Title>
+              <h2 className="text-center min-h-[30px]">{shareStep === 1 ? "" : "Share Post"}</h2>
+            </Modal.Title>
+            {/* {
+              shareStep === 1 && <ShareModalStep1 onCopied={onCopied} onShare={onShare}/>
+            } */}
+            {
+              shareStep === 2 && <ShareModalStep2 onShare={onShare} />
+            }
+          </Modal>
 
-        <Modal isOpen={showShare} onClose={resetShareModal} className={`${shareStep === 1 ? "bg-offWhite" : ""}`}>
-          <span className='absolute right-3 cursor-pointer ' onClick={resetShareModal}>
-            <XIcon className='w-6' />
-          </span>
-          <Modal.Title>
-            <h2 className="text-center min-h-[30px]">{shareStep === 1 ? "" : "Share Post"}</h2>
-          </Modal.Title>
-          {/* {
-            shareStep === 1 && <ShareModalStep1 onCopied={onCopied} onShare={onShare}/>
-          } */}
-          {
-            shareStep === 2 && <ShareModalStep2 onShare={onShare} />
-          }
-        </Modal>
+          {/* EDIT MODAL */}
+          <EditModal isOpen={showEdit} onClose={editHandler.off} pid={post?.id}/>
+        </>}
       </div>
     </div>
   );
