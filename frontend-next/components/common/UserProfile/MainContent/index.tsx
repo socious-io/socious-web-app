@@ -12,9 +12,11 @@ import Skills from './Skills';
 import SocialCauses from './SocialCauses';
 import About from './About';
 import Contact from './Contact';
+import { useUser } from '@hooks';
 
 const MainContent: React.FC<any> = ({data}) => {
-  console.log(data);
+  const {user}=useUser()
+ 
   return (
     <div className="md:w-4/6 border-grayLineBased  border border-1 rounded-xl mb-8  ">
       <Header avatar={data?.avatar} cover_image={data?.cover_image} />
@@ -25,7 +27,8 @@ const MainContent: React.FC<any> = ({data}) => {
         followings={data?.followings}
         followers={data?.followers}
       />
-      <MutaulConnections />
+      {/* if user is current user show 'You' */}
+      {user.username===data.username && <MutaulConnections />} 
       <SocialCauses social_causes={data?.social_causes} />
       <Contact
         address={data?.address}
