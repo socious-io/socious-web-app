@@ -12,6 +12,7 @@ import useSWR from 'swr';
 //components
 import MainContent from '@components/common/UserProfile/MainContent';
 import {get} from 'utils/request';
+import Activities from '@components/common/UserProfile/Activities';
 
 const UserProfile: NextPage = () => {
   // get id from route
@@ -35,8 +36,9 @@ const UserProfile: NextPage = () => {
   if (!data) return <p>loading</p>;
 
   return (
-    <div className="w-full">
+    <div className="w-full flex-col lg:px-0 flex gap-x-6 md:flex-row  md:px-8  ">
       <MainContent data={data} />
+      <Activities />
     </div>
   );
 };

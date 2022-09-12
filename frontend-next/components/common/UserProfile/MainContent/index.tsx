@@ -16,16 +16,16 @@ import Recommendations from './Recommendations';
 import Organizations from './Organizations';
 
 const MainContent: React.FC<any> = ({data}) => {
-  console.log(data)
+  console.log(data);
   return (
-    <div className="w-4/6 border-grayLineBased  border border-1 rounded-xl mb-8 ">
+    <div className="md:w-4/6 border-grayLineBased  border border-1 rounded-xl mb-8  ">
       <Header data={data} />
       <ProfileInfo data={data} />
       <MutaulConnections />
       <SocialCauses data={data} />
       <Contact data={data} />
       <About data={data} />
-      <Skills data={data}/>
+      <Skills data={data} />
       <Recommendations />
       <Organizations />
     </div>
