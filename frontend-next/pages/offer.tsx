@@ -112,7 +112,7 @@ const Offer = () => {
       </div>
       <div className="w-2/3 space-y-4">
         <PostCard
-          id='qwertyui1234'
+          id="id"
           name="Jayson Ilagan"
           time="1 hour ago"
           passion="Child Health"
