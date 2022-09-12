@@ -11,6 +11,7 @@ export interface AvatarProps {
   status?: 'offline' | 'online' | 'busy';
   type?: 0 | 1;
   rounded?: boolean;
+  className?:any;
 }
 
 const SIZE_LIST = {
@@ -48,6 +49,7 @@ export function Avatar({
   src,
   type = 0,
   rounded = true,
+  className
 }: AvatarProps) {
   const {imageSize, statusSize} = SIZE_LIST[size];
   const statusColor = status && STATUS_COLOR[status];
@@ -61,7 +63,7 @@ export function Avatar({
       className={twMerge(
         'relative inline-block border bg-white border-grayLineBased',
         rounded && 'rounded-full',
-        imageSize,
+        imageSize,className,
       )}
     >
       <img
