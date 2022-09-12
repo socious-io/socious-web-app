@@ -34,7 +34,7 @@ const UserProfile: NextPage = () => {
     return <p>invalid user</p>;
 
   return (
-    <div className="w-full flex-col lg:px-0 flex gap-x-6 md:flex-row  md:px-8  ">
+    <div className="w-full flex-col lg:px-0 flex gap-x-6 md:flex-row  md:px-8 ">
       <MainContent data={data} />
       <Activities />
     </div>

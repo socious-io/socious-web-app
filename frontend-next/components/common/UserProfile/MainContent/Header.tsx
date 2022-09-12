@@ -33,13 +33,13 @@ const Header: React.FC<Props> = ({cover_image, avatar}) => {
 
   return (
     <div className="mb-4 text-right ">
-      <div className="flex item-center justify-center relative bg-primaryDark h-32 rounded-t-xl">
+      <div className="flex item-center justify-center relative bg-primaryDark h-32 md:rounded-t-xl">
         {cover_image ? (
           <Image
             src={cover_image?.url}
             alt="socious logo"
             layout="fill"
-            className="rounded-t-xl"
+            className="md:rounded-t-xl"
           />
         ) : (
           <Image src={bg_icon} alt="socious logo" width={24} height={24} />
