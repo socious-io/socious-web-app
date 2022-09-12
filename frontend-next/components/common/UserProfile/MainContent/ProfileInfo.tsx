@@ -10,7 +10,7 @@ const ProfileInfo: React.FC<any> = ({data}) => {
 
   return (
     <div className="px-4">
-      <h1 className=" text-2xl text-text font-work_sans font-semibold ">
+      <h1 className=" text-2xl text-text font-worksans font-semibold ">
         {first_name} {last_name}
       </h1>
       <div className="flex gap-x-4 mt-1 mb-4 font-base">
