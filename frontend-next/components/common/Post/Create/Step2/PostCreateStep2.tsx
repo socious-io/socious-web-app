@@ -38,7 +38,7 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
   return (
     <div>
       <Modal.Title>
-        <h2 className="text-center mb-4">Review post</h2>
+        <h2 className="text-center font-worksans mb-4">Review post</h2>
       </Modal.Title>
       <Modal.Description>
         <div className='-mr-6 -ml-6 p-4 border-y-[.5px]'>
@@ -54,7 +54,7 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
             // content={"apple"}
             content={social_causes}
           />
-          <p className='min-h-[8rem]'>{content || " ipsum dolor sit amet, consectetur adipiscing elit. Nibh aliquet nullam odio maecenas semper. Dui felis suspendisse nunc, in vel enim nunc adipiscing donec. Pellentesque a magna venenatis ut ut semper dictum sit sem. Suspendisse lacus, pulvinar elit ipsum fermentum. Ipsum, orci, faucibus nibh et commodo et, dignissim erat. Adipiscing fusce et fames aliquam condimentum. "}</p>
+          <p className={file ? "min-h-[4rem]" : "min-h-[8rem]"}>{content || " ipsum dolor sit amet, consectetur adipiscing elit. Nibh aliquet nullam odio maecenas semper. Dui felis suspendisse nunc, in vel enim nunc adipiscing donec. Pellentesque a magna venenatis ut ut semper dictum sit sem. Suspendisse lacus, pulvinar elit ipsum fermentum. Ipsum, orci, faucibus nibh et commodo et, dignissim erat. Adipiscing fusce et fames aliquam condimentum. "}</p>
           {/* {link && 
             <p className="my-4">{link}</p>
           } */}
@@ -62,8 +62,8 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
             <div className="mx-auto rounded-xl h-48 w-80">
               <Image
                 src={url}
-                width="100%"
-                height="100%"
+                width="320px"
+                height="192px"
                 className='object-cover'
                 alt="Image"
               />

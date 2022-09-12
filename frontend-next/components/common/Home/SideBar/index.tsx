@@ -21,7 +21,7 @@ interface identity {
 const SideBar = () => {
   const { data } = useSWR<any, any, any>("/api/v2/identities", get, {
     onErrorRetry: (error) => {
-      if (error.response.status === 401) return
+      if (error?.response?.status === 401) return
     },
     // revalidateOnFocus: false,
   });

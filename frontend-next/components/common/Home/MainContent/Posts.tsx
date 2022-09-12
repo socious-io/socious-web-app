@@ -17,7 +17,7 @@ const Posts = ({
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     onErrorRetry: (error) => {
-      if (error.response.status === 401) return
+      if (error?.response?.status === 401) return
     }
   });
 
