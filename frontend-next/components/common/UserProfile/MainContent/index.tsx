@@ -11,6 +11,8 @@ import Skills from './Skills';
 import SocialCauses from './SocialCauses';
 import About from './About';
 import Contact from './Contact';
+
+//hooks
 import {useUser} from '@hooks';
 
 const MainContent: React.FC<any> = ({data}) => {
