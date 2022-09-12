@@ -23,7 +23,7 @@ const PostHead = ({
   // }, [name])
   const handleOptions = useCallback(() => {
     if (toggleOptions) toggleOptions();
-  }, [toggleOptions])
+  }, [toggleOptions]);
 
   return (
     <div className="flex justify-between items-center">
