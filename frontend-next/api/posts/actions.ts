@@ -9,11 +9,11 @@ export function createPost(postBody: CreatePostBodyType) {
 
 
 // LIKE UNLIKE
-export function likePost(id: string, currentIdentity: string) {
+export function likePost(id: string) {
   return put(`/api/v2/posts/${id}/like`, {});
 }
 
-export function unlikePost(id: string, currentIdentity: string) {
+export function unlikePost(id: string) {
   return deleteRequest(`/api/v2/posts/${id}/like`);
 };
 

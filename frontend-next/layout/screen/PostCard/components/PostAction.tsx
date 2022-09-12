@@ -27,13 +27,13 @@ const PostAction = ({
     setIsLiked(() => !isLiked);
     try {
       isLiked ?
-        await unlikePost(id, user.id)
+        await unlikePost(id)
       :
-        await likePost(id, user.id);
+        await likePost(id);
     } catch(error) {
       console.error(error);
     }
-  }, [id, isLiked, likesCount, user])
+  }, [id, isLiked, likesCount])
 
   return (
     <div className="flex justify-between items-center divide-x divide-grayLineBased divide-x-[1px]">

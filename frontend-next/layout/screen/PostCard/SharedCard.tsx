@@ -50,7 +50,7 @@ export function SharedCard({
         showAction={false}
       />
       {
-        showAction && <PostAction liked={liked} likes={likes} shared={shared} />
+        showAction && <PostAction id={id} liked={liked} likes={likes} shared={shared} />
       }
       {
         optionClicked && state && 
