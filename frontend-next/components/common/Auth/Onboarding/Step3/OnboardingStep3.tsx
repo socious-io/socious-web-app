@@ -12,7 +12,7 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
   const {handleSubmit, watch} = formMethods;
 
-  const passions = useMemo(() => ["inequilty", "Mental Health", "Neurodiversity", "inequilty","inequilty", "Mental Health", "Neurodiversity", "inequilty","inequilty", "Mental Health", "Neurodiversity", "inequilty", "Mental Health", "Neurodiversity","inequilty", "Mental Health", "Neurodiversity", "Civic Engagement", "Climate Change", "Substance Abuse", "Veganism"], []);
+  const passions = useMemo(() => ["inequilty", "Mental Health", "Neurodiversity", "Civic Engagement", "Climate Change", "Substance Abuse", "Veganism"], []);
   const [filteredItems, filterWith] = useFilter(passions);
 
   const passion = watch('passions');

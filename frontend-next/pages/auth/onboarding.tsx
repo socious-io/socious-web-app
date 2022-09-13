@@ -2,8 +2,6 @@ import type {NextPage} from 'next';
 import {useCallback, useMemo, useState} from 'react';
 import {Button, Modal} from '@components/common';
 import {twMerge} from 'tailwind-merge';
-import axios from 'axios';
-import FormData from 'form-data';
 import OnboardingStep1 from '@components/common/Auth/Onboarding/Step1/OnboardingStep1';
 import OnboardingStep2 from '@components/common/Auth/Onboarding/Step2/OnboardingStep2';
 import OnboardingStep3 from '@components/common/Auth/Onboarding/Step3/OnboardingStep3';
@@ -29,9 +27,10 @@ import {
   schemaOnboardingStep7,
   schemaOnboardingStep8,
 } from '@api/auth/validation';
-import { get, put, post } from 'utils/request';
-import { updateProfile } from '@api/auth/actions';
-import useSWR from 'swr';
+import { get, post } from 'utils/request';
+import { updateProfile } from '@api/user/actions';
+import { UpdateProfileBodyType } from '@models/user';
+import useUser from 'hooks/useUser/useUser';
 
 const schemaStep = {
   3: schemaOnboardingStep3,
@@ -48,11 +47,11 @@ type User = {
   username: string;
 }
 const Onboarding: NextPage = () => {
-  const {data}= useSWR<any>("/api/v2/user/profile", get);
+  const {user}= useUser();
 
-  console.log("data", data);
-  
-  const [step, setStep] = useState<number>(6);
+  console.log("USER", user);
+
+  const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
 
 
@@ -120,6 +119,7 @@ const Onboarding: NextPage = () => {
     }).then(response => {
       console.log("RESPONSE", response)
       // make another update with reponse id.
+
     })
     .catch((error) => console.log("ERROR", error.response));
 
@@ -133,26 +133,21 @@ const Onboarding: NextPage = () => {
     const passions = ["SOCIAL", "POVERTY", "HOMELESSNESS", "HUNGER", "HEALTH",];
     const skills = formMethodsStep4.getValues('skills');
 
-    if (data === undefined) return
+    if (user === undefined) return
 
-    const user:any = {
-      "first_name": "boblin" || data?.first_name,
-      "last_name": data?.last_name,
-      "username": data?.username,
+    const profileBody: UpdateProfileBodyType = {
+      "first_name": user?.first_name,
+      "last_name": user?.last_name,
+      "username": user?.username,
       "social_causes": passions,
       "skills": skills,
     }
-    if (bio) user["bio"] = bio;
-    put("/api/v2/user/profile", user)
-      .then(data => {
-        setStep(step + 1);
-        console.log(data)
-      })
-      .catch(err => console.error(err));
-    updateProfile(user).then(() => {
+    if (bio) profileBody.bio = bio;
+
+    updateProfile(profileBody).then(() => {
       setStep(step + 1);
     }).catch((error: any) => console.error(error))
-  }, [data, formMethodsStep4, formMethodsStep5, formMethodsStep8, step]);
+  }, [user, formMethodsStep4, formMethodsStep5, formMethodsStep8, step]);
 
   const handleNext = useCallback(() => {
     if (step === 8) {
