@@ -10,7 +10,7 @@ const OnboardingStep10 = ({onSubmit}: StepProps) => {
   return (
     <form
       onSubmit={handleOnSubmit}
-      className="flex flex-col justify-between  px-10     "
+      className="flex flex-col justify-between px-10 grow sm:grow-0"
     >
       <div className="flex flex-col h-[28rem]">
         {' '}
@@ -24,7 +24,7 @@ const OnboardingStep10 = ({onSubmit}: StepProps) => {
         </div>
       </div>
 
-      <div className="h-48 flex flex-col  border-t-2 border-b-grayLineBased divide-x  items-center ">
+      <div className="sm:h-48 flex flex-col border-b-grayLineBased divide-x  items-center ">
         <Button
           className="max-w-xs w-full   flex items-center justify-center align-middle mt-4 "
           type="submit"

@@ -52,7 +52,7 @@ const Onboarding: NextPage = () => {
 
   console.log("data", data);
   
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(6);
   const [showModal, setShowModal] = useState<boolean>(false);
 
 
@@ -117,7 +117,6 @@ const Onboarding: NextPage = () => {
     post("/api/v2/media/upload", formData, {
       "Content-Type": "multipart/form-data",
       "Current-Identity": "b5dbfb0a-cbe7-49f2-8154-bfcdcca2754c",
-      // "onUploadProgress" : ProgressEvent => { console.log("Upload Progress", Math.round(ProgressEvent.loaded / ProgressEvent.total * 100) + "%")} 
     }).then(response => {
       console.log("RESPONSE", response)
       // make another update with reponse id.
@@ -152,7 +151,7 @@ const Onboarding: NextPage = () => {
       .catch(err => console.error(err));
     updateProfile(user).then(() => {
       setStep(step + 1);
-    }).catch(error => console.error(error))
+    }).catch((error: any) => console.error(error))
   }, [data, formMethodsStep4, formMethodsStep5, formMethodsStep8, step]);
 
   const handleNext = useCallback(() => {
@@ -166,7 +165,7 @@ const Onboarding: NextPage = () => {
   return (
     <div
       className={twMerge(
-        'max-w-xl h-[45rem]  m-auto bg-background rounded-3xl py-7 px-6 border border-grayLineBased',
+        'w-screen sm:max-w-xl h-screen sm:h-[45rem] flex flex-col items-stretch sm:block mx-auto -my-10 sm:my-auto sm:rounded-3xl py-7 px-6 border border-grayLineBased',
         step === 10 ? ' bg-primary' : 'bg-background',
       )}
     >
@@ -183,7 +182,7 @@ const Onboarding: NextPage = () => {
           </Modal.Description>
           <div className="mt-4">
             <Button
-              className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+              className="max-w-xs w-full m-auto flex items-center justify-center align-middle mt-4 "
               type="submit"
               size="lg"
               variant="fill"
@@ -230,7 +229,6 @@ const Onboarding: NextPage = () => {
 
       {step === 1 && <OnboardingStep1 onSubmit={handleSubmit} />}
       {step === 2 && <OnboardingStep2 onSubmit={handleSubmit} />}
-      {/* {step === 3 && <OnboardingStep3 onSubmit={handleSubmit} />} */}
       <FormProvider {...formMethodsStep3}>
         {step === 3 && <OnboardingStep3 onSubmit={handleSubmit} />}
       </FormProvider>

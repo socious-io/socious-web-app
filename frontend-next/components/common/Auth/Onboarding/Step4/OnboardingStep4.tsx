@@ -20,9 +20,9 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col justify-between  px-10"
+      className="flex flex-col justify-between px-10 grow sm:grow-1"
     >
-      <div className="flex flex-col h-[28rem]">
+      <div className="flex flex-col h-[28rem] ">
         {' '}
         <h1 className="font-helmet ">What skills do you have?</h1>
         <p className="text-base text-graySubtitle">
@@ -38,7 +38,7 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
           />
           <div className="flex flex-col  border-t-2 border-b-grayLineBased -mx-5 px-5  ">
             <h3 className="py-3">Accounting & Consultancy</h3>
-            <div className="flex flex-wrap space-x-2  h-32 overflow-y-auto ">
+            <div className="flex flex-wrap space-x-2 h-32 overflow-y-auto ">
               {filteredItems.map((skill: any, index: number) => (
                 <Chip
                   onSelected={onSelect}
@@ -54,7 +54,7 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
           </div>
         </div>
       </div>
-      <div className="h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
+      <div className="sm:h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
         <Button
           className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
           type="submit"
