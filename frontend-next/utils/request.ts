@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ErrorParamType, handleErrorAxios } from './helpers';
 
 type AxiosRequestHeaders = {
   [x: string]: string | number | boolean;
@@ -15,21 +16,12 @@ const request = axios.create({
 
 request?.interceptors.response.use(
   (response) => {
+    console.log("RESPONSE", response);
     return response?.data ? response?.data as any : response as any;
   },
   (error) => {
-    if (error.response) {
-      console.log(error.response);
-      throw new FetchError({
-        message: error.response.statusText,
-        response: error.response,
-        data: error.response.data,
-      })
-    } else if (error.request) {
-      throw error;
-    } else {
-    }
-    console.error(error.config);
+    console.log("error", error);
+    throw new FetchError(handleErrorAxios(error));
   },
 );
 
@@ -59,23 +51,17 @@ const spread = axios.spread;
 class FetchError extends Error {
   response: Response;
   data: {
-    message: string;
-    error?: string;
+    error: string;
   };
+  code: string;
   constructor({
-    message,
+    code,
+    msg,
     response,
     data,
-  }: {
-    message: string;
-    response: Response;
-    data: {
-      message: string;
-      error?: string;
-    };
-  }) {
+  }: ErrorParamType<any>) {
     // Pass remaining arguments (including vendor specific ones) to parent constructor
-    super(message);
+    super(msg);
 
     // Maintains proper stack trace for where our error was thrown (only available on V8)
     if (Error.captureStackTrace) {
@@ -83,8 +69,9 @@ class FetchError extends Error {
     }
 
     this.name = 'FetchError';
-    this.response = response;
-    this.data = data ?? {message: message};
+    this.response = response ?? null;
+    this.data = data || { error: msg };
+    this.code = code.toString();
   }
 }
 
