@@ -83,7 +83,7 @@ const ForgotPassword: NextPage = () => {
       setStep(step + 1);
     } catch(error: any) {
       if (error instanceof FetchError) {
-        if (error.data.error === "not matched") {
+        if (error.data.error === "Not matched") {
           dispatch({ type: "EMAIL", error: "Email does not exist!"});
         } else {
           dispatch({ type: "DEFAULT", error: (error.data.error || error.data.message)});
@@ -95,6 +95,7 @@ const ForgotPassword: NextPage = () => {
   const handleConfirmOTPRequest = async (code: string) => {
     const email = formMethodsStep1.getValues('email');
 
+    dispatch({ type: "OTP", error: ""})
     try {
       await confirmOTP(email, code)
       if (step === 2) {
@@ -104,7 +105,11 @@ const ForgotPassword: NextPage = () => {
       }
     } catch (error: any) {
       if (error instanceof FetchError) {
-        dispatch({ type: "OTP", error: (error.data.error || error.data.message)});
+        if (error.data.error === "Not matched") {
+          dispatch({ type: "OTP", error: "Incorrect verification code."});
+        } else {
+          dispatch({ type: "DEFAULT", error: (error.data.error || error.data.message)});
+        }
       }
     }
   };
@@ -142,8 +147,8 @@ const ForgotPassword: NextPage = () => {
   };
 
   return (
-    <div className="max-w-xl h-[45rem] m-auto  bg-background rounded-3xl py-7 px-6 border border-grayLineBased ">
-      <div className="flex  justify-center  h-20 relative">
+    <div className="w-screen sm:max-w-xl h-screen sm:h-[45rem] flex flex-col items-stretch sm:block mx-auto -my-10 sm:my-auto bg-background sm:rounded-3xl py-7 px-6 border border-grayLineBased">
+      <div className="flex justify-center h-20 relative">
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>
             <h2 className="text-error text-center">
