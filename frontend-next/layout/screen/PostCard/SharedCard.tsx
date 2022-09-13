@@ -27,6 +27,7 @@ export function SharedCard({
   liked, 
   likes, 
   shared,
+  hideOption,
   showAction = true,
   optionClicked,
 }: SharedCardProps) {
@@ -35,7 +36,7 @@ export function SharedCard({
   
   return (
     <div className="relative space-y-5 py-4 border-neutralGray border-b">
-      <PostHead name={(name || "name") + " Shared"} time={time} src={src} hideOption={!optionClicked} toggleOptions={handlers.toggle} />
+      <PostHead name={(name || "name") + " Shared"} time={time} src={src} hideOption={hideOption} toggleOptions={handlers.toggle} />
       <PostContent content={content} passion={passion} media={media} noBorder/>
       <PostCard
         id={sharedPost?.id}
@@ -48,9 +49,10 @@ export function SharedCard({
         liked={sharedPost?.liked}
         shared={sharedPost?.shared}
         showAction={false}
+        hideOption={true}
       />
       {
-        showAction && <PostAction id={id} liked={liked} likes={likes} shared={shared} />
+        showAction && <PostAction id={id} liked={liked} likes={likes} shared={shared} onShare={optionClicked ? () => optionClicked("SHARE") : undefined} />
       }
       {
         optionClicked && state && 
