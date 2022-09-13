@@ -8,4 +8,8 @@ module.exports = withImages({
     unoptimized: true,
     domains: ['soscious.s3-ap-northeast-1.amazonaws.com'],
   },
+  eslint: {
+    // TODO: remove this when it's all been formatted
+    ignoreDuringBuilds: true,
+  },
 });
