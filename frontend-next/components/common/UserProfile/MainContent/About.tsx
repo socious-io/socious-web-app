@@ -14,7 +14,7 @@ const About: React.FC<Props> = ({mission}) => {
   return (
     <div className="px-4 border-t border-grayLineBased ">
       <Title>About</Title>
-      <p className="text-graySubtitle w-4/6 mb-4 text-base">{mission}</p>
+    <p className="text-graySubtitle w-4/6 mb-4 text-base">{mission?mission:'No information'}</p>
     </div>
   );
 };
