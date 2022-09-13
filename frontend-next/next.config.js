@@ -8,5 +8,6 @@ module.exports = withOptimizedImages({
   },
   images: {
     disableStaticImages: true,
+    domains: ['soscious.s3-ap-northeast-1.amazonaws.com'],
   },
 });

@@ -10,7 +10,7 @@ function Navbar() {
   const imgSrc = require('../../asset/icons/logo.svg');
 
   return (
-    <nav className="flex items-center w-full rounded-b-sm bg-primary h-16">
+    <nav className="md:flex items-center w-full rounded-b-sm bg-primary h-16 hidden ">
       <div className="w-full">
         <div className="container mx-auto max-w-5xl">
           <div className="flex items-center space-x-4">
