@@ -2427,13 +2427,6 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/http-proxy@1.17.3":
-  version "1.17.3"
-  resolved "https://registry.yarnpkg.com/@types/http-proxy/-/http-proxy-1.17.3.tgz#348e1b808ff9585423cb909e9992d89ccdbf4c14"
-  integrity sha512-wIPqXANye5BbORbuh74exbwNzj+UWCwWyeEFJzUQ7Fq3W2NSAy+7x7nX1fgbEypr2/TdKqpeuxLnXWgzN533/Q==
-  dependencies:
-    "@types/node" "*"
-
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0":
   version "2.0.3"
   resolved "https://registry.npmjs.org/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.3.tgz"
@@ -7932,7 +7925,7 @@ http-proxy-middleware@0.19.1:
     lodash "^4.17.11"
     micromatch "^3.1.10"
 
-http-proxy@^1.17.0, http-proxy@^1.18.1:
+http-proxy@^1.17.0:
   version "1.18.1"
   resolved "https://registry.npmjs.org/http-proxy/-/http-proxy-1.18.1.tgz"
   integrity sha512-7mz/721AbnJwIVbnaSv1Cz3Am0ZLT/UBwkC92VlxhXv/k/BBQfM2fXElQNC27BVGr0uwUpplYPQM9LnaBMR5NQ==
@@ -10223,14 +10216,6 @@ next-auth@^4.10.3:
     preact "^10.6.3"
     preact-render-to-string "^5.1.19"
     uuid "^8.3.2"
-
-next-http-proxy-middleware@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/next-http-proxy-middleware/-/next-http-proxy-middleware-1.2.4.tgz#4b6fb209f776434d517826a05376b6ce810ad3fa"
-  integrity sha512-4ScStkj08nFL2IX0doJq8Hwrk1zOdKaOkxFGxRmV+lN4Oh/d6qDSqUKxfSew676qA07bhncj6vbKBVVpLKfZBA==
-  dependencies:
-    "@types/http-proxy" "1.17.3"
-    http-proxy "^1.18.1"
 
 next-optimized-images@^2.6.2:
   version "2.6.2"

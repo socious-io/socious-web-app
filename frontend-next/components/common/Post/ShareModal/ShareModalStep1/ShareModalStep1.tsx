@@ -16,7 +16,7 @@ export const ShareModalStep1 = ({
 }: ShareModalStep1Props) => {
 
   const [connections, setConnections] = useState<any[]>([]);
-  const { data: response } = useSWR<any>("/api/v2/follows/followings", get);
+  const { data: response } = useSWR<any>("/follows/followings", get);
 
   useEffect(() => {
     if (response && response.items) {
@@ -26,7 +26,7 @@ export const ShareModalStep1 = ({
   
   const onChange = useCallback((name: string) => {
     if (name) {
-      get(`/api/v2/follows/followings?name=${name}`)
+      get(`/follows/followings?name=${name}`)
         .then((res: any) => {
           setConnections(() => res.items.filter((item: any) => item?.mutual))
         });
