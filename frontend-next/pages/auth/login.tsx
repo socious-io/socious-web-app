@@ -45,7 +45,7 @@ const Login: NextPage = () => {
       Router.push("/");
     } catch (error: any) {
       if (error instanceof FetchError) {
-        setError(() => (error.data.error || error.data.message));
+        setError(() => (error.message + " " + error.data.error));
       }
       setShowModal(!showModal);
     }
