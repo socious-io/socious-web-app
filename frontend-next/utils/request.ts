@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import {ErrorParamType, handleErrorAxios} from './helpers';
 
 type AxiosRequestHeaders = {
@@ -51,7 +51,7 @@ const all = axios.all;
 const spread = axios.spread;
 
 class FetchError extends Error {
-  response: Response;
+  response?: AxiosResponse<unknown>;
   data: {
     error: string;
   };
@@ -66,7 +66,7 @@ class FetchError extends Error {
     }
 
     this.name = 'FetchError';
-    this.response = response ?? null;
+    this.response = response;
     this.data = data || {error: msg};
     this.code = code.toString();
   }

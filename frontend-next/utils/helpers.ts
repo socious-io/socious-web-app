@@ -3,47 +3,49 @@ export const STATUS_TIME_OUT = 'ECONNABORTED';
 export const CODE_TIME_OUT = 408;
 export const SERVER_ERROR = 500;
 export const UNAUTHORIZED = 401;
-import { AxiosError } from 'axios';
+import {AxiosError, AxiosResponse} from 'axios';
 
 interface ResponseBase {
   code: number;
   msg: string;
 }
 
-export interface ErrorParamType<T=any> extends ResponseBase {
-  response?: T;
-  data: {error: string} 
+export interface ErrorParamType<T = any> extends ResponseBase {
+  response?: AxiosResponse<T>;
+  data: {error: string};
 }
-
 
 const handleData = (responseError: ResponseBase) => {
   return responseError;
 };
 
-
-export const handleErrorAxios = (error: AxiosError): ErrorParamType<any> => {
+export function handleErrorAxios(error: AxiosError): ErrorParamType<unknown> {
   if (error.code === STATUS_TIME_OUT) {
     // timeout
-    return {...HandleErrorApi(SERVER_ERROR),
-              data: {error: "REQUEST TIMED OUT"}    
-            };
+    return {
+      ...HandleErrorApi(SERVER_ERROR),
+      data: { error: 'REQUEST TIMED OUT' },
+    };
   }
   if (error.response) {
-      return {...HandleErrorApi(error.response.status),
-                response: error.response,
-                data: { error: error.response.data.error ? error.response.data.error : error.response.statusText},
-              };
-  
-  }else if(error.request) {
-    console.log("REQUEST", error.request);
-    return {...HandleErrorApi(error.request.status),
-              data: {error: error.request.statusText ?? "SERVER ERROR"}
-            };
+    return {
+      ...HandleErrorApi(error.response.status),
+      response: error.response,
+      data: {
+        error: error.response.data.error
+          ? error.response.data.error
+          : error.response.statusText,
+      },
+    };
+  } else if (error.request) {
+    console.log('REQUEST', error.request);
+    return {
+      ...HandleErrorApi(error.request.status),
+      data: { error: error.request.statusText ?? 'SERVER ERROR' },
+    };
   }
-  return {...HandleErrorApi(SERVER_ERROR),
-          data: { error: "SERVER ERROR"}
-          };
-};
+  return { ...HandleErrorApi(SERVER_ERROR), data: { error: 'SERVER ERROR' } };
+}
 
 export const HandleErrorApi = (status: number) => {
   switch (status) {
@@ -185,17 +187,17 @@ export const HandleErrorApi = (status: number) => {
       if (status > 503) {
         return handleData({
           code: status,
-          msg: 'error:serverError'
+          msg: 'error:serverError',
         });
       } else if (status < 500 && status >= 400) {
         return handleData({
           code: status,
-          msg: 'error:errorOnRequest'
+          msg: 'error:errorOnRequest',
         });
       } else {
         return handleData({
           code: status,
-          msg: 'error:errorOnHandle'
+          msg: 'error:errorOnHandle',
         });
       }
   }
