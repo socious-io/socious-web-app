@@ -93,7 +93,7 @@ export const ShareModalStep2 = ({
             />
           {
           !!(post.shared_id) ?
-            <div className='relative space-y-5 p-4 rounded-2xl border border-grayLineBased bg-white'>
+            <div className='relative space-y-5 p-4 rounded-2xl border border-grayLineBased bg-white mt-4'>
               <SharedCard
                 id={post.id}
                 content={post.content}
@@ -109,6 +109,7 @@ export const ShareModalStep2 = ({
               />
             </div>  
           :
+          <div className="mt-4">
           <PostCard
             id={post.id}
             name={post.identity_meta.name}
@@ -120,7 +121,8 @@ export const ShareModalStep2 = ({
             likes={post.likes}
             showAction={false}
             shared={post.shared}
-          />
+            />
+          </div>
         }
         </div>
       </Modal.Description>
