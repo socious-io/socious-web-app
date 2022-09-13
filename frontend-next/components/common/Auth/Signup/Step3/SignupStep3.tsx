@@ -30,7 +30,7 @@ const SignupStep3 = ({onSubmit}: StepProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col justify-between px-10   "
+      className="flex flex-col justify-between px-10 grow sm:grow-0  "
     >
       <div className="flex flex-col h-[28rem]">
         <h1 className="font-helmet">Set your password</h1>
@@ -58,6 +58,7 @@ const SignupStep3 = ({onSubmit}: StepProps) => {
           label="Confirm password"
           type="password"
           placeholder="Confirm password"
+          className="my-6"
           register={register('confirmPassword')}
           errorMessage={formState?.errors?.['confirmPassword']?.message}
           required
@@ -81,9 +82,9 @@ const SignupStep3 = ({onSubmit}: StepProps) => {
           </div>
         </div>
       </div>
-      <div className="h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
+      <div className="sm:h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
         <Button
-          className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+          className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4  mb-12 sm:mb-auto"
           type="submit"
           size="lg"
           variant="fill"
