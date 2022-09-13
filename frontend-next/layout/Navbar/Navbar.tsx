@@ -16,18 +16,8 @@ import {getOrganization} from '@api/organizations/actions';
 
 const Navbar = () => {
   const {mutate} = useSWRConfig();
-  const {data: identities} = useSWR<any, any, any>('/api/v2/identities', get, {
-    onErrorRetry: (error) => {
-      if (error?.response?.status === 401) return;
-    },
-    // revalidateOnFocus: false,
-  });
 
-  const {user} = useUser();
-
-  const currentIdentity = identities?.find(
-    (ident: LoginIdentity) => ident.current,
-  );
+  const {currentIdentity, identities} = useUser();
 
   const onSwitchIdentity = async (identity: LoginIdentity) => {
     try {
@@ -35,7 +25,7 @@ const Navbar = () => {
       if (res?.message === 'success') {
         mutate('/api/v2/identities');
         if (identity.type === 'organizations') {
-          const res = await getOrganization(identity.id);
+          await getOrganization(identity.id);
         }
       }
     } catch (error) {
