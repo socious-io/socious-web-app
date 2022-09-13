@@ -95,7 +95,7 @@ const Post = () => {
 
   const resetShareModal = useCallback(() => {
     shareHandler.off();
-    setShareStep(1);
+    setShareStep(2);
   }, [shareHandler])
 
   if (!post) {
