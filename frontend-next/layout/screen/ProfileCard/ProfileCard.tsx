@@ -4,6 +4,7 @@ import Link from 'next/link';
 export interface ProfileCardProps {
   content?: string;
   name?: string;
+  username?: string;
   avatar?: string;
   following?: number;
   followers?: number;
@@ -12,6 +13,7 @@ export interface ProfileCardProps {
 export function ProfileCard({
   content,
   name,
+  username,
   avatar,
   following,
   followers,
@@ -22,8 +24,8 @@ export function ProfileCard({
         <Avatar src={avatar ?? ''} size="xxl" type={1} />
         <div>
           <p className="text-2xl font-semibold">{name || "FirstName LastName"}</p>
-          <Link href={'/profile'} passHref>
-            <label className="text-primary">View my profile</label>
+          <Link href={`/user/${username}`} passHref>
+            <label className="text-primary cursor-pointer">View my profile</label>
           </Link>
         </div>
         <div>

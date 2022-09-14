@@ -24,7 +24,7 @@ const SideBar = () => {
       if (error?.response?.status === 401) return
     },
     revalidateOnFocus: false,
-  });
+  }); 
   const { user } = useUser();
 
   const identity = data?.find((item: any) => item.current);
@@ -35,6 +35,7 @@ const SideBar = () => {
         <ProfileCard
             content={user?.mission}
             name={identity?.meta?.name}
+            username={user?.username}
             avatar={user?.avatar?.url}
             following={user?.following}
             followers={user?.followers}
@@ -42,11 +43,11 @@ const SideBar = () => {
         {/* TODO: Uncomment after status is fixed */}
         {/* <StatusCard status={user?.status} /> */}
         { identity?.type === "users" ? 
-          <NetworkCard />
+          <NetworkCard username={user?.username}/>
           :
           <OrganizationCard />
         }
-        <ProjectsCard isOrganization={identity?.type !== "users"} />
+        <ProjectsCard isOrganization={identity?.type !== "users"} username={user?.username}/>
       </div>
     </div>
   );
