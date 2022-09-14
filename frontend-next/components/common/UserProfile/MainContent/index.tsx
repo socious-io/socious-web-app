@@ -24,11 +24,11 @@ interface Props {
 
 const MainContent: React.FC<Props> = ({data, status}) => {
   const {user} = useUser();
-console.log(data)
+  console.log(data);
   return (
     <div className="md:w-4/6 border-grayLineBased  border border-1 rounded-xl mb-8  ">
       <Header
-        avatar={status==='user'?data?.avatar: data?.image}
+        avatar={status === 'user' ? data?.avatar : data?.image}
         cover_image={data?.cover_image}
         status={status}
       />
@@ -70,6 +70,7 @@ console.log(data)
         title={status === 'user' ? 'About' : 'Mission'}
       />
       {status === 'user' && <Skills skills={data?.skills} />}
+      <hr className="border-grayLineBased mb-20" />
     </div>
   );
 };
