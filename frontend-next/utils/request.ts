@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { responseSymbol } from 'next/dist/server/web/spec-compliant/fetch-event';
 import { ErrorParamType, handleErrorAxios } from './helpers';
 
 type AxiosRequestHeaders = {
@@ -14,35 +15,29 @@ const request = axios.create({
   },
 });
 
-request?.interceptors.response.use(
-  (response) => {
-    console.log("RESPONSE", response);
-    return response?.data ? response?.data as any : response as any;
-  },
-  (error) => {
-    console.log("error", error);
-    throw new FetchError(handleErrorAxios(error));
-  },
-);
-
-const get = (arg: string)=> {
-  return request?.get(arg);
+const get = async(arg: string)=> {
+  const response = await request?.get(arg);
+  return response.data;
 };
 
-const deleteRequest = (arg: string, headers?: AxiosRequestHeaders) => {
-  return request?.delete(arg, headers);
+const deleteRequest = async (arg: string, headers?: AxiosRequestHeaders) => {
+  const response = await request?.delete(arg, headers);
+  return response.data;
 };
 
-const post = (arg: string, data: any, headers?: AxiosRequestHeaders) => {
-  return request?.post(arg, data, headers);
+const post = async (arg: string, data: any, headers?: AxiosRequestHeaders) => {
+  const response = await request?.post(arg, data, headers);
+  return response.data;
 };
 
-const patch = (arg: string,  data: any, headers?: AxiosRequestHeaders) => {
-  return request?.patch(arg, data, headers);
+const patch = async(arg: string,  data: any, headers?: AxiosRequestHeaders) => {
+  const response = await request?.patch(arg, data, headers);
+  return response.data;
 };
 
-const put = (arg: string,  data: any, headers?: AxiosRequestHeaders) => {
-  return request?.put(arg, data, headers);
+const put = async(arg: string,  data: any, headers?: AxiosRequestHeaders) => {
+  const response = await request?.put(arg, data, headers);
+  return response.data;
 };
 
 const all = axios.all;
@@ -84,4 +79,16 @@ export {
   all,
   spread,
   FetchError
+};
+
+export type ErrorMessage = {
+  title: string;
+  message: string;
+};
+
+export const DefaultErrorMessage: ErrorMessage = {
+  title: 'Sorry, something went wrong',
+  message:
+    'An unexpected error occurred. It has been reported to our team, ' +
+    "and we'll fix it as soon as we can. Please try again in a few minutes.",
 };
