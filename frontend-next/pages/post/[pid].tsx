@@ -22,7 +22,7 @@ import EditModal from "@components/common/Post/EditModal/EditModal";
 const Post = () => {
   const router = useRouter();
   const { pid } = router.query;
-  const { data: post, error } = useSWR<any>(`/api/v2/posts/${pid}`, get, {
+  const { data: post, error } = useSWR<any>(`/posts/${pid}`, get, {
     onErrorRetry: (error) => {
       if (error?.response?.status === 500 && error?.response?.data?.error.startsWith("invalid input syntax for type uuid")) return
     }
@@ -44,7 +44,7 @@ const Post = () => {
     createComment({ content }, post.id)
       .then(response => {
         for (let i = 1; i <= page; i++) {
-          mutate(`/api/v2/posts/${post.id}/comments?page=${i}`)
+          mutate(`/posts/${post.id}/comments?page=${i}`)
         }
       }).catch(error => {
         console.error(error);

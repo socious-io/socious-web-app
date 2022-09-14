@@ -13,7 +13,7 @@ const Posts = ({
   onFull,
 }: PostsProps) => {
 
-  const {data: posts, error: postsErrors} = useSWR<any>(page ? `/api/v2/posts?page=${page}` : null, get, {
+  const {data: posts, error: postsErrors} = useSWR<any>(page ? `/posts?page=${page}` : null, get, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     onErrorRetry: (error) => {

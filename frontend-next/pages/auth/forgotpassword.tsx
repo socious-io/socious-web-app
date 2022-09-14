@@ -17,7 +17,6 @@ import {
 } from '@api/auth/validation';
 
 import { forgetPassword, confirmOTP, directChangePassword } from '@api/auth/actions';
-import { FetchError } from 'utils/request';
 import { ForgotError } from '@models/forgotPassword'
 import useUser from 'hooks/useUser/useUser';
 
@@ -82,11 +81,11 @@ const ForgotPassword: NextPage = () => {
       await forgetPassword(email);
       setStep(step + 1);
     } catch(error: any) {
-      if (error instanceof FetchError) {
+      if (error.isAxiosError) {
         if (error.data.error === "not matched") {
           dispatch({ type: "EMAIL", error: "Email does not exist!"});
         } else {
-          dispatch({ type: "DEFAULT", error: (error.data.error || error.data.message)});
+          dispatch({ type: "DEFAULT", error: (error.data.error || error.message)});
         }
       }
     }
@@ -103,8 +102,8 @@ const ForgotPassword: NextPage = () => {
         handleToggleModal();
       }
     } catch (error: any) {
-      if (error instanceof FetchError) {
-        dispatch({ type: "OTP", error: (error.data.error || error.data.message)});
+      if (error.isAxiosError) {
+        dispatch({ type: "OTP", error: (error.data.error || error.message)});
       }
     }
   };
@@ -116,8 +115,8 @@ const ForgotPassword: NextPage = () => {
       await directChangePassword(password);
       Router.push("/auth/login");
     } catch (error: any) {
-      if (error instanceof FetchError) {
-        dispatch({ type: "DEFAULT", error: (error.data.error || error.data.message)});
+      if (error.isAxiosError) {
+        dispatch({ type: "DEFAULT", error: (error.data.error || error.message)});
         handleToggleModal();
       }
     }
@@ -130,8 +129,8 @@ const ForgotPassword: NextPage = () => {
       await forgetPassword(email)
       onClickReset()
     } catch(error: any) {
-      if (error instanceof FetchError) {
-        dispatch({ type: "DEFAULT", error: (error.data.error || error.data.message)});
+      if (error.isAxiosError) {
+        dispatch({ type: "DEFAULT", error: (error.data.error || error.message)});
         handleToggleModal();
       }
     }
