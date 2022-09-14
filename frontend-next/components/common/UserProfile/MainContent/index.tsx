@@ -24,11 +24,11 @@ interface Props {
 
 const MainContent: React.FC<Props> = ({data, status}) => {
   const {user} = useUser();
-
+console.log(data)
   return (
     <div className="md:w-4/6 border-grayLineBased  border border-1 rounded-xl mb-8  ">
       <Header
-        avatar={data?.avatar}
+        avatar={status==='user'?data?.avatar: data?.image}
         cover_image={data?.cover_image}
         status={status}
       />
