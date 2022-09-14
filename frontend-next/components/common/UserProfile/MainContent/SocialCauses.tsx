@@ -20,7 +20,7 @@ const SocialCauses: React.FC<Props> = ({social_causes}) => {
       <div className="flex w-4/6 flex-wrap gap-2 ">
         {social_causes &&
           social_causes?.map((item: string) => {
-            return <Chip name={item} />;
+            return <Chip key={item} name={item} />;
           })}
       </div>
     </div>

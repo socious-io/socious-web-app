@@ -17,7 +17,6 @@ import {
 } from '@api/auth/validation';
 
 import { forgetPassword, confirmOTP, directChangePassword } from '@api/auth/actions';
-import { FetchError } from 'utils/request';
 import { ForgotError } from '@models/forgotPassword'
 import useUser from 'hooks/useUser/useUser';
 import router from 'next/router';
@@ -40,7 +39,7 @@ const reducer = (state: ForgotError, action: { type: string, error: string}) => 
   }
 }
 
-const ForgotPassword: NextPage = () => {
+const ForgotPassword = () => {
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessages, dispatch] = useReducer(reducer, {emailCheckError: "", otpError: "", defaultMessage: ""});
@@ -83,7 +82,7 @@ const ForgotPassword: NextPage = () => {
       await forgetPassword(email);
       setStep(step + 1);
     } catch(error: any) {
-      if (error instanceof FetchError) {
+      if (error.isAxiosError) {
         if (error.data.error === "Not matched") {
           dispatch({ type: "EMAIL", error: "Email does not exist!"});
         } else {
@@ -105,7 +104,7 @@ const ForgotPassword: NextPage = () => {
         handleToggleModal();
       }
     } catch (error: any) {
-      if (error instanceof FetchError) {
+      if (error.isAxiosError) {
         if (error.data.error === "Not matched") {
           dispatch({ type: "OTP", error: "Incorrect verification code."});
         } else {
@@ -122,8 +121,6 @@ const ForgotPassword: NextPage = () => {
       await directChangePassword(password);
       Router.push("/auth/login");
     } catch (error: any) {
-      if (error instanceof FetchError) {
-        dispatch({ type: "DEFAULT", error: error.data.error });
         handleToggleModal();
       }
     }
@@ -136,10 +133,7 @@ const ForgotPassword: NextPage = () => {
       await forgetPassword(email)
       onClickReset()
     } catch(error: any) {
-      if (error instanceof FetchError) {
-        dispatch({ type: "DEFAULT", error: (error.data.error)});
         handleToggleModal();
-      }
     }
   }
 

@@ -7,14 +7,14 @@ import { useSWRConfig } from 'swr';
 const CommentsBox = ({pid, page}: {pid: string, page: number}) => {
 
   const { mutate } = useSWRConfig();
-  const { data: comments, error } = useSWR<any>((pid && page) ? `/api/v2/posts/${pid}/comments?page=${page}` : null, get)
+  const { data: comments, error } = useSWR<any>((pid && page) ? `/posts/${pid}/comments?page=${page}` : null, get)
 
   if (!comments?.items) {
     <> ERROR </>
   }
   const mutateComments = useCallback(() => {
     console.log("I should be mutating those comments");
-    mutate(`/api/v2/posts/${pid}/comments?page=${page}`);
+    mutate(`/posts/${pid}/comments?page=${page}`);
   }, [mutate, page, pid])
 
 

@@ -5,7 +5,6 @@ import {FormProvider, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 
 import {Button, Modal} from '@components/common';
-import { FetchError } from 'utils/request';
 
 import SignupStep1 from '@components/common/Auth/Signup/Step1/SignupStep1';
 import SignupStep2 from '@components/common/Auth/Signup/Step2/SignupStep2';
@@ -85,7 +84,7 @@ const Signup: NextPage = () => {
       await signup(firstName, lastName, email, password);
       handleToggleModal();
     } catch(error: any) {
-      if (error instanceof FetchError) {
+      if (error.isAxiosError) {
         setError(() => (error.data.error || error.data.message));
       }
       setStep(2)

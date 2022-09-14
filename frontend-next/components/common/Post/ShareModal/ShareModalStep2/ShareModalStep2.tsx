@@ -30,7 +30,7 @@ export const ShareModalStep2 = ({
 
   const router = useRouter();
   const { pid } = router.query;
-  const { data: post, error } = useSWR<any>(`/api/v2/posts/${pid}`, get, {
+  const { data: post, error } = useSWR<any>(`/posts/${pid}`, get, {
     onErrorRetry: (error) => {
       if (error?.response?.status === 500 && error?.response?.data?.error?.startsWith("invalid input syntax for type uuid")) return
     }

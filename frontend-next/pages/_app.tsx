@@ -6,6 +6,7 @@ import type {AppProps} from 'next/app';
 import Head from 'next/head';
 import {WalletProvider} from '../context/useWalletContext';
 import Layout from 'layout/Wrapper/Wrapper';
+import {get} from 'utils/request';
 
 import '../asset/css/global.css';
 import '../styles/index.css';
@@ -23,11 +24,11 @@ function MyApp({Component, pageProps}: AppProps) {
     //     console.error(err)
     //   },
     // }}>
-      <Layout>
-        <Web3ReactProvider getLibrary={getLibrary}>
-          <Component {...pageProps} />
-        </Web3ReactProvider>
-      </Layout>
+    <Layout>
+      <Web3ReactProvider getLibrary={getLibrary}>
+        <Component {...pageProps} />
+      </Web3ReactProvider>
+    </Layout>
     // </SWRConfig>
   );
 }
