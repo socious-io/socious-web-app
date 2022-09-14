@@ -1,14 +1,13 @@
 import { DotsHorizontalIcon } from "@heroicons/react/outline";
 import { Avatar } from "@components/common";
 import { useCallback, useEffect } from "react";
-import useSWR from "swr";
 import {Button} from 'components/common'
 export interface PostHeadProps {
   name?: string;
   time?: string;
   hideOption?: boolean;
   src?: string;
-  toggleOptions?: () => void
+  toggleOptions?: () => void;
 }
 
 const PostHead = ({
@@ -19,8 +18,6 @@ const PostHead = ({
   toggleOptions
 }: PostHeadProps) => {
 
-  // useEffect(() => {
-  // }, [name])
   const handleOptions = useCallback(() => {
     if (toggleOptions) toggleOptions();
   }, [toggleOptions]);
