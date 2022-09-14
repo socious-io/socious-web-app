@@ -8,6 +8,6 @@ module.exports = withOptimizedImages({
   },
   images: {
     disableStaticImages: true,
-    domains: ['soscious.s3-ap-northeast-1.amazonaws.com'],
+    domains: ['soscious.s3-ap-northeast-1.amazonaws.com','process.filestackapi.com'],
   },
 });
