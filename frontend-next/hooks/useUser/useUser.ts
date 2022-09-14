@@ -2,14 +2,13 @@ import {LoginIdentity} from './../../models/identity';
 /* eslint-disable react-hooks/rules-of-hooks */
 import {get} from 'utils/request';
 import {ApiConstants} from 'utils/api';
-import useSWR from 'swr';
+import useSWR, {useSWRConfig} from 'swr';
 import {useEffect} from 'react';
 import Router, {useRouter} from 'next/router';
 import {logout} from '@api/auth/actions';
 
 interface UseUserProps {
   shouldRetry?: boolean;
-  onAuthError?: boolean;
   forceStop?: boolean;
 }
 
@@ -18,7 +17,6 @@ const defaultValues = {
   // Implemented to try Password expired
   forceStop: false,
   shouldRetry: true,
-  onAuthError: false,
 };
 
 const allowedRoutes = [
@@ -28,16 +26,29 @@ const allowedRoutes = [
   '/auth/signup',
 ];
 
-export const useUser = (props: UseUserProps = defaultValues) => {
-  const {forceStop, shouldRetry, onAuthError} = {...defaultValues, ...props};
-  const {pathname} = useRouter();
+function authFetcher<T>(url: string) {
+  return get<T>(url).catch((error) => {
+    if (error?.response?.status === 401) return null;
+    throw error;
+  });
+}
 
-  const {data: identities, mutate: mutateIdentities} = useSWR<any, any, any>(
+export const useUser = (props: UseUserProps = defaultValues) => {
+  const {forceStop, shouldRetry} = {...defaultValues, ...props};
+  const {pathname} = useRouter();
+  // const {mutate} = useSWRConfig();
+
+  const {
+    data: identities,
+    error: identitiesError,
+    mutate: mutateIdentities,
+  } = useSWR<Array<LoginIdentity> | null, any, string | null>(
     !forceStop ? '/identities' : null,
-    get,
+    authFetcher,
     {
       onErrorRetry: (error) => {
-        if (error?.response?.status === 401) return;
+        const status = error?.response?.status;
+        if (status && status < 500) return null;
       },
       // revalidateOnFocus: false,
     },
@@ -52,15 +63,18 @@ export const useUser = (props: UseUserProps = defaultValues) => {
     error: userError,
     mutate: mutateUser,
   } = useSWR<any>(
-    currentIdentity?.type === 'users'
-      ? '/user/profile'
-      : `/orgs/${currentIdentity?.id}`,
-    get,
+    identities
+      ? currentIdentity?.type === 'users'
+        ? '/user/profile'
+        : `/orgs/${currentIdentity?.id}`
+      : null,
+    authFetcher,
     {
       shouldRetryOnError: shouldRetry,
       revalidateOnFocus: false,
       onErrorRetry: (error) => {
-        if (!onAuthError && error?.response?.status === 401) return;
+        const status = error?.response?.status;
+        if (status && status < 500) return;
       },
     },
   );
@@ -104,13 +118,22 @@ export const useUser = (props: UseUserProps = defaultValues) => {
         Router.push('/auth/onboarding');
       }
     }
-  }, [user, pathname, userError, forceStop]);
+  }, [
+    user,
+    pathname,
+    userError,
+    forceStop,
+    mutateIdentities,
+    mutateUser,
+    currentIdentity?.type,
+  ]);
   return {
     user,
     userError,
     mutateUser,
     currentIdentity,
     identities,
+    identitiesError,
     mutateIdentities,
   };
 };
