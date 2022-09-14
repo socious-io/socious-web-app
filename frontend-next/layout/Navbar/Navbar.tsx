@@ -23,7 +23,7 @@ const Navbar = () => {
     try {
       const res = await changeIdentity(identity.id);
       if (res?.message === 'success') {
-        mutate('/api/v2/identities');
+        mutate('/identities');
         if (identity.type === 'organizations') {
           await getOrganization(identity.id);
         }
