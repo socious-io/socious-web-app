@@ -35,7 +35,7 @@ const OrganizationProfile: NextPage = () => {
 
 
   return (
-    <div className="w-full flex-col lg:px-0 flex gap-x-6 md:flex-row  md:px-8 ">
+    <div className="w-full  justify-center flex-col lg:px-0 flex  md:flex-row  md:px-8 ">
       <MainContent data={data} status='organization'/>
     </div>
   );
