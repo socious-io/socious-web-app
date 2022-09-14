@@ -5,6 +5,7 @@ import {ApiConstants} from 'utils/api';
 import useSWR from 'swr';
 import {useEffect} from 'react';
 import Router, {useRouter} from 'next/router';
+import {logout} from '@api/auth/actions';
 
 interface UseUserProps {
   shouldRetry?: boolean;
@@ -31,12 +32,16 @@ export const useUser = (props: UseUserProps = defaultValues) => {
   const {forceStop, shouldRetry, onAuthError} = {...defaultValues, ...props};
   const {pathname} = useRouter();
 
-  const {data: identities} = useSWR<any, any, any>('/identities', get, {
-    onErrorRetry: (error) => {
-      if (error?.response?.status === 401) return;
+  const {data: identities, mutate: mutateIdentities} = useSWR<any, any, any>(
+    !forceStop ? '/identities' : null,
+    get,
+    {
+      onErrorRetry: (error) => {
+        if (error?.response?.status === 401) return;
+      },
+      // revalidateOnFocus: false,
     },
-    // revalidateOnFocus: false,
-  });
+  );
 
   const currentIdentity = identities?.find(
     (identity: LoginIdentity) => identity.current,
@@ -61,6 +66,14 @@ export const useUser = (props: UseUserProps = defaultValues) => {
   );
 
   useEffect(() => {
+    // for emergencies
+    console.log('Storing window.logout for emergencies');
+    window.logout = async () => {
+      await logout();
+      mutateIdentities();
+      mutateUser();
+    };
+
     // if user && error both are undefined
     if (!user && !userError) return;
     if (forceStop) return;
@@ -92,7 +105,20 @@ export const useUser = (props: UseUserProps = defaultValues) => {
       }
     }
   }, [user, pathname, userError, forceStop]);
-  return {user, userError, mutateUser, currentIdentity, identities};
+  return {
+    user,
+    userError,
+    mutateUser,
+    currentIdentity,
+    identities,
+    mutateIdentities,
+  };
 };
 
 export default useUser;
+
+declare global {
+  interface Window {
+    logout: () => any;
+  }
+}

@@ -1,6 +1,3 @@
-import useSWR from 'swr';
-import {useEffect, useReducer} from 'react';
-
 import StatusCard from './StatusCard';
 import NetworkCard from './NetworkCard';
 import ProjectsCard from './ProjectsCard';
