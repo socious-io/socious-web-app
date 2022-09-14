@@ -1,10 +1,10 @@
-import {LoginIdentity} from './../../models/identity';
-/* eslint-disable react-hooks/rules-of-hooks */
-import {get} from 'utils/request';
-import {ApiConstants} from 'utils/api';
+import {AxiosError} from 'axios';
 import useSWR, {useSWRConfig} from 'swr';
 import {useEffect} from 'react';
 import Router, {useRouter} from 'next/router';
+
+import {LoginIdentity} from './../../models/identity';
+import {get} from 'utils/request';
 import {logout} from '@api/auth/actions';
 
 interface UseUserOptions {
@@ -25,13 +25,12 @@ function authFetcher<T>(url: string) {
 export const useUser = (options?: UseUserOptions) => {
   const {redirect} = {...defaultValues, ...options};
   const {pathname} = useRouter();
-  // const {mutate} = useSWRConfig();
 
   const {
     data: identities,
     error: identitiesError,
     mutate: mutateIdentities,
-  } = useSWR<Array<LoginIdentity> | null, any, string>(
+  } = useSWR<Array<LoginIdentity> | null, AxiosError, string>(
     '/identities',
     authFetcher,
     {
@@ -47,11 +46,12 @@ export const useUser = (options?: UseUserOptions) => {
     (identity: LoginIdentity) => identity.current,
   );
 
+  // TODO type defs for user/org
   const {
     data: user,
     error: userError,
     mutate: mutateUser,
-  } = useSWR<any>(
+  } = useSWR<any, AxiosError, string | null>(
     identities
       ? currentIdentity?.type === 'users'
         ? '/user/profile'
