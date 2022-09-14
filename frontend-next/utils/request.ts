@@ -54,9 +54,6 @@ export async function put<T>(
   return response.data;
 }
 
-export const all = axios.all;
-export const spread = axios.spread;
-
 export type ErrorMessage = {
   title: string;
   message: string;

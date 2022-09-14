@@ -15,40 +15,48 @@ import {
   schemaForgotPasswordStep1,
   schemaForgotPasswordStep3,
 } from '@api/auth/validation';
+import {AxiosError} from 'axios';
 
 import {
   forgetPassword,
   confirmOTP,
   directChangePassword,
 } from '@api/auth/actions';
+import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 import {ForgotError} from '@models/forgotPassword';
-import useUser from 'hooks/useUser/useUser';
+import {useUser} from 'hooks';
 
 const schemaStep = {
   1: schemaForgotPasswordStep1,
   3: schemaForgotPasswordStep3,
 };
 
-const reducer = (state: ForgotError, action: {type: string; error: string}) => {
+const reducer = (
+  state: ForgotError,
+  action: {type: string; error: string | ErrorMessage},
+) => {
   if (action.error == undefined) return state;
 
-  switch (action.type) {
-    case 'EMAIL':
+  if (typeof action.error == 'string') {
+    if (action.type === 'EMAIL') {
       return {...state, emailCheckError: action.error};
-    case 'OTP':
+    } else if (action.type === 'OTP') {
       return {...state, otpError: action.error};
-    default:
-      return {...state, defaultMessage: action.error};
+    }
+  } else if (action.type === 'DEFAULT') {
+    return {...state, defaultMessage: action.error};
   }
+
+  return state;
 };
 
-const ForgotPassword: NextPage = () => {
+const ForgotPassword = () => {
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessages, dispatch] = useReducer(reducer, {
     emailCheckError: '',
     otpError: '',
-    defaultMessage: '',
+    defaultMessage: DefaultErrorMessage,
   });
   const {user} = useUser({redirect: false});
 
@@ -66,16 +74,6 @@ const ForgotPassword: NextPage = () => {
     resolver: joiResolver(schemaStep[3]),
   });
 
-  const handleSubmit = (data: any) => {
-    if (step === 1) {
-      handleForgotPasswordRequest();
-    } else if (step === 2) {
-      handleConfirmOTPRequest(data);
-    } else if (step === 3) {
-      handleDirectChangePasswordRequest();
-    }
-  };
-
   const handleToggleModal = () => {
     setShowModal(!showModal);
   };
@@ -88,20 +86,22 @@ const ForgotPassword: NextPage = () => {
     try {
       await forgetPassword(email);
       setStep(step + 1);
-    } catch (error: any) {
+    } catch (e) {
+      const error = e as AxiosError;
       if (error.isAxiosError) {
-        if (error.data.error === 'not matched') {
+        if (error.response?.data?.error === 'Not matched') {
           dispatch({type: 'EMAIL', error: 'Email does not exist!'});
-        } else {
-          dispatch({type: 'DEFAULT', error: error.data.error || error.message});
+          return;
         }
       }
+      handleToggleModal();
     }
   };
 
   const handleConfirmOTPRequest = async (code: string) => {
     const email = formMethodsStep1.getValues('email');
 
+    dispatch({type: 'OTP', error: ''});
     try {
       await confirmOTP(email, code);
       if (step === 2) {
@@ -109,10 +109,15 @@ const ForgotPassword: NextPage = () => {
       } else {
         handleToggleModal();
       }
-    } catch (error: any) {
+    } catch (e) {
+      const error = e as AxiosError;
       if (error.isAxiosError) {
-        dispatch({type: 'OTP', error: error.data.error || error.message});
+        if (error.response?.data?.error === 'Not matched') {
+          dispatch({type: 'OTP', error: 'Incorrect verification code.'});
+          return;
+        }
       }
+      handleToggleModal();
     }
   };
 
@@ -123,10 +128,7 @@ const ForgotPassword: NextPage = () => {
       await directChangePassword(password);
       Router.push('/auth/login');
     } catch (error: any) {
-      if (error.isAxiosError) {
-        dispatch({type: 'DEFAULT', error: error.data.error || error.message});
-        handleToggleModal();
-      }
+      handleToggleModal();
     }
   };
 
@@ -137,10 +139,17 @@ const ForgotPassword: NextPage = () => {
       await forgetPassword(email);
       onClickReset();
     } catch (error: any) {
-      if (error.isAxiosError) {
-        dispatch({type: 'DEFAULT', error: error.data.error || error.message});
-        handleToggleModal();
-      }
+      handleToggleModal();
+    }
+  };
+
+  const handleSubmit = (data: any) => {
+    if (step === 1) {
+      handleForgotPasswordRequest();
+    } else if (step === 2) {
+      handleConfirmOTPRequest(data);
+    } else if (step === 3) {
+      handleDirectChangePasswordRequest();
     }
   };
 
@@ -154,14 +163,13 @@ const ForgotPassword: NextPage = () => {
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>
             <h2 className="text-error text-center">
-              {errorMessages.defaultMessage || 'Sorry, something went wrong'}
+              {errorMessages.defaultMessage.title}
             </h2>
           </Modal.Title>
           <Modal.Description>
             <div className="mt-2">
               <p className="text-sm text-gray-500">
-                Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-                amet sint. Velit de.
+                {errorMessages.defaultMessage.message}
               </p>
             </div>
           </Modal.Description>
