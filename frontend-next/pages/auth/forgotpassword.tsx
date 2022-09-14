@@ -20,6 +20,7 @@ import { forgetPassword, confirmOTP, directChangePassword } from '@api/auth/acti
 import { FetchError } from 'utils/request';
 import { ForgotError } from '@models/forgotPassword'
 import useUser from 'hooks/useUser/useUser';
+import router from 'next/router';
 
 const schemaStep = {
   1: schemaForgotPasswordStep1,
@@ -143,11 +144,15 @@ const ForgotPassword: NextPage = () => {
   }
 
   const handleBack = () => {
-    setStep(step - 1);
+    if (step === 1) {
+      router.back();
+    } else {
+      setStep(step - 1);
+    }
   };
 
   return (
-    <div className="w-screen sm:max-w-xl h-screen sm:h-[45rem] flex flex-col items-stretch sm:block mx-auto -my-10 sm:my-auto bg-background sm:rounded-3xl py-7 px-6 border border-grayLineBased">
+    <div className="w-screen sm:max-w-xl min-h-screen sm:min-h-0 sm:h-[45rem] flex flex-col items-stretch sm:block mx-auto sm:my-auto bg-background sm:rounded-3xl pt-12 sm:pt-7 px-6 border border-grayLineBased">
       <div className="flex justify-center h-20 relative">
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>
@@ -178,15 +183,13 @@ const ForgotPassword: NextPage = () => {
           </div>
         </Modal>
 
-        {(step != 1) && (
-          <span
-            className="cursor-pointer absolute left-0"
-            title="Back"
-            onClick={handleBack}
-          >
-            <ChevronLeftIcon className="w-5 h-5 cursor-pointer" />
-          </span>
-        )}
+      <span
+        className="cursor-pointer absolute left-0"
+        title="Back"
+        onClick={handleBack}
+      >
+        <ChevronLeftIcon className="w-5 h-5 cursor-pointer" />
+      </span>
       </div>
       <FormProvider {...formMethodsStep1}>
         {step === 1 && <ForgotPasswordStep1 onSubmit={handleSubmit} error={errorMessages.emailCheckError} />}

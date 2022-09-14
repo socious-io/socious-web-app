@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {get} from 'utils/request';
-import {ApiConstants } from 'utils/api';
 import useSWR from 'swr'
 import { useEffect } from 'react';
 import Router, { useRouter } from 'next/router';
@@ -20,8 +19,10 @@ const defaultValues = {
 };
 
 const allowedRoutes = [
-  // "/", Uncomment after finishing starter page.
-  "/auth/forgotpassword", "/auth/login", "/auth/signup"
+  "/",
+  "/auth/forgotpassword",
+  "/auth/login",
+  "/auth/signup"
 ];
 
 export const useUser = (props: UseUserProps = 
@@ -47,7 +48,6 @@ export const useUser = (props: UseUserProps =
     // if user unauthorized
     if (userError && userError?.response?.status === 401) {
       // if page !== allowed_routes
-      console.log("pathname", pathname);
       if (!(allowedRoutes.includes (pathname))) {
         // => add ?redirect_to=/profile
         Router.push("/auth/login");

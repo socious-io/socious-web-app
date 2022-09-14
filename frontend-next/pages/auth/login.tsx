@@ -56,7 +56,7 @@ const Login: NextPage = () => {
   }, []);
 
   return (
-    <div className="w-screen sm:max-w-xl h-screen sm:h-[45rem] flex flex-col items-stretch mx-auto -my-10 sm:my-auto bg-background sm:rounded-3xl pb-7 px-6 border border-grayLineBased">
+    <div className="w-screen sm:max-w-xl min-h-screen sm:min-h-0 sm:h-[45rem] flex flex-col items-stretch mx-auto sm:my-auto bg-background sm:rounded-3xl px-6 border border-grayLineBased">
       <div className="flex justify-center h-36 relative">
         <span className="mx-auto py-16">
           <Image
@@ -76,7 +76,7 @@ const Login: NextPage = () => {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col justify-between px-10 grow sm:grow-0"
+        className="flex flex-col justify-between pl-0 sm:pl-10 pr-10 grow sm:grow-0"
       >
         <div className="flex flex-col h-[28rem]">
           {' '}
@@ -124,7 +124,7 @@ const Login: NextPage = () => {
           </div>
         </div>
 
-        <div className="sm:h-48 border-t-2 border-b-grayLineBased -mx-16">
+        <div className="sm:h-48 pb-12 pl-10 sm:pl-0 border-t-2 border-b-grayLineBased divide-x -mx-16">
           <Button
             className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4"
             type="submit"

@@ -61,8 +61,13 @@ const Signup: NextPage = () => {
       setStep(step + 1);
     }
   };
+
   const handleBack = () => {
-    setStep(step - 1);
+    if (step === 1) {
+      router.back();
+    } else {
+      setStep(step - 1);
+    }
   };
 
   const handleToggleModal = () => {
@@ -89,7 +94,7 @@ const Signup: NextPage = () => {
   };
 
   return (
-    <div className="w-screen sm:max-w-xl h-screen sm:h-[45rem] flex flex-col items-stretch mx-auto -my-10 sm:my-auto bg-background sm:rounded-3xl py-7 px-6 border border-grayLineBased ">
+    <div className="w-screen sm:max-w-xl min-h-screen sm:min-h-0 sm:h-[45rem] flex flex-col items-stretch mx-auto sm:my-auto bg-background sm:rounded-3xl pt-12 sm:py-7 px-6 border border-grayLineBased">
       <div className="flex  justify-center  h-20 relative">
         {![1, 4].includes(step) && (
           <span
