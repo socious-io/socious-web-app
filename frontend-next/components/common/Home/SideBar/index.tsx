@@ -19,35 +19,34 @@ interface identity {
 }
 
 const SideBar = () => {
-  const { data } = useSWR<any, any, any>("/api/v2/identities", get, {
+  const { data } = useSWR<any>("/api/v2/identities", get, {
     onErrorRetry: (error) => {
       if (error?.response?.status === 401) return
     },
-    // revalidateOnFocus: false,
+    revalidateOnFocus: false,
   });
   const { user } = useUser();
 
-  const users = data?.map((item: any) => {
-    if (item.current) return item.type === "users"
-  })
+  const identity = data?.find((item: any) => item.current);
 
   return (
     <div className="w-80" aria-label="Sidebar">
       <div className="space-y-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
         <ProfileCard
             content={user?.mission}
-            name={user?.username}
+            name={identity?.meta?.name}
             avatar={user?.avatar?.url}
             following={user?.following}
             followers={user?.followers}
         />
-        <StatusCard status={user?.status} />
-        { users ? 
+        {/* TODO: Uncomment after status is fixed */}
+        {/* <StatusCard status={user?.status} /> */}
+        { identity?.type === "users" ? 
           <NetworkCard />
           :
           <OrganizationCard />
         }
-        <ProjectsCard isOrganization={!users} />
+        <ProjectsCard isOrganization={identity?.type !== "users"} />
       </div>
     </div>
   );
