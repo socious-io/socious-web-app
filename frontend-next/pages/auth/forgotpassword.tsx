@@ -87,7 +87,7 @@ const ForgotPassword: NextPage = () => {
         if (error.data.error === "Not matched") {
           dispatch({ type: "EMAIL", error: "Email does not exist!"});
         } else {
-          dispatch({ type: "DEFAULT", error: (error.data.error || error.data.message)});
+          dispatch({ type: "DEFAULT", error: error.data.error });
         }
       }
     }
@@ -109,7 +109,7 @@ const ForgotPassword: NextPage = () => {
         if (error.data.error === "Not matched") {
           dispatch({ type: "OTP", error: "Incorrect verification code."});
         } else {
-          dispatch({ type: "DEFAULT", error: (error.data.error || error.data.message)});
+          dispatch({ type: "DEFAULT", error: error.data.error });
         }
       }
     }
@@ -123,7 +123,7 @@ const ForgotPassword: NextPage = () => {
       Router.push("/auth/login");
     } catch (error: any) {
       if (error instanceof FetchError) {
-        dispatch({ type: "DEFAULT", error: (error.data.error || error.data.message)});
+        dispatch({ type: "DEFAULT", error: error.data.error });
         handleToggleModal();
       }
     }
@@ -137,7 +137,7 @@ const ForgotPassword: NextPage = () => {
       onClickReset()
     } catch(error: any) {
       if (error instanceof FetchError) {
-        dispatch({ type: "DEFAULT", error: (error.data.error || error.data.message)});
+        dispatch({ type: "DEFAULT", error: (error.data.error)});
         handleToggleModal();
       }
     }
