@@ -21,7 +21,7 @@ export function Wrapper({children}: LayoutProps) {
   // });
   const {asPath} = useRouter();
   const isNotAuth = !asPath?.includes('auth');
-  const {user, userError} = useUser();
+  const {user, userError} = useUser({redirect: false});
   let isStarter = false;
   if (
     asPath === '/' &&

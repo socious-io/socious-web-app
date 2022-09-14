@@ -9,7 +9,7 @@ import useUser from 'hooks/useUser/useUser';
 import IdealScreen from 'layout/IdealScreen/IdealScreen';
 
 const Index: NextPage = () => {
-  const {identities, identitiesError} = useUser();
+  const {identities, identitiesError} = useUser({redirect: false});
 
   if (identities === null) {
     return <StartScreen />;

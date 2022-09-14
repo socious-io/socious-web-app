@@ -7,24 +7,13 @@ import {useEffect} from 'react';
 import Router, {useRouter} from 'next/router';
 import {logout} from '@api/auth/actions';
 
-interface UseUserProps {
-  shouldRetry?: boolean;
-  forceStop?: boolean;
+interface UseUserOptions {
+  redirect: boolean;
 }
 
 const defaultValues = {
-  // Force Stop redirect logic.
-  // Implemented to try Password expired
-  forceStop: false,
-  shouldRetry: true,
+  redirect: true,
 };
-
-const allowedRoutes = [
-  '/',
-  '/auth/forgotpassword',
-  '/auth/login',
-  '/auth/signup',
-];
 
 function authFetcher<T>(url: string) {
   return get<T>(url).catch((error) => {
@@ -33,8 +22,8 @@ function authFetcher<T>(url: string) {
   });
 }
 
-export const useUser = (props: UseUserProps = defaultValues) => {
-  const {forceStop, shouldRetry} = {...defaultValues, ...props};
+export const useUser = (options?: UseUserOptions) => {
+  const {redirect} = {...defaultValues, ...options};
   const {pathname} = useRouter();
   // const {mutate} = useSWRConfig();
 
@@ -42,8 +31,8 @@ export const useUser = (props: UseUserProps = defaultValues) => {
     data: identities,
     error: identitiesError,
     mutate: mutateIdentities,
-  } = useSWR<Array<LoginIdentity> | null, any, string | null>(
-    !forceStop ? '/identities' : null,
+  } = useSWR<Array<LoginIdentity> | null, any, string>(
+    '/identities',
     authFetcher,
     {
       onErrorRetry: (error) => {
@@ -70,7 +59,6 @@ export const useUser = (props: UseUserProps = defaultValues) => {
       : null,
     authFetcher,
     {
-      shouldRetryOnError: shouldRetry,
       revalidateOnFocus: false,
       onErrorRetry: (error) => {
         const status = error?.response?.status;
@@ -88,19 +76,13 @@ export const useUser = (props: UseUserProps = defaultValues) => {
       mutateUser();
     };
 
+    // if user unauthorized
+    if (identities === null && redirect) {
+      Router.push(`/auth/login?redirect_to=${pathname}`);
+    }
+
     // if user && error both are undefined
     if (!user && !userError) return;
-    if (forceStop) return;
-
-    // if user unauthorized
-    if (userError && userError?.response?.status === 401) {
-      // if page !== allowed_routes
-      console.log('pathname', pathname);
-      if (!allowedRoutes.includes(pathname)) {
-        // => add ?redirect_to=/profile
-        Router.push('/auth/login');
-      }
-    }
 
     // if user authorized
     if (user) {
@@ -122,10 +104,11 @@ export const useUser = (props: UseUserProps = defaultValues) => {
     user,
     pathname,
     userError,
-    forceStop,
     mutateIdentities,
     mutateUser,
     currentIdentity?.type,
+    identities,
+    redirect,
   ]);
   return {
     user,
