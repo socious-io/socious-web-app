@@ -13,7 +13,6 @@ import useSWR from 'swr';
 import MainContent from '@components/common/UserProfile/MainContent';
 import {get} from 'utils/request';
 
-
 const OrganizationProfile: NextPage = () => {
   // get id from route
   const router = useRouter();
@@ -21,7 +20,7 @@ const OrganizationProfile: NextPage = () => {
 
   //get user profile data by user id
   const {data, error} = useSWR<any>(`/orgs/by-shortname/${id}`, get);
- 
+
   // Show this until the data is fetched
   if (!data && !error) return <p>loading</p>;
   if (
@@ -33,10 +32,9 @@ const OrganizationProfile: NextPage = () => {
   )
     return <p>invalid user</p>;
 
-
   return (
-    <div className="w-full  justify-center flex-col lg:px-0 flex  md:flex-row  md:px-8 ">
-      <MainContent data={data} status='organization'/>
+    <div className="w-full justify-center flex-col lg:px-0 flex  md:flex-row  md:px-8 ">
+      <MainContent data={data} status="organization" />
     </div>
   );
 };

@@ -13,7 +13,6 @@ import useSWR from 'swr';
 import MainContent from '@components/common/UserProfile/MainContent';
 import {get} from 'utils/request';
 
-
 const UserProfile: NextPage = () => {
   // get id from route
   const router = useRouter();
@@ -34,8 +33,8 @@ const UserProfile: NextPage = () => {
     return <p>invalid user</p>;
 
   return (
-    <div className="w-full flex-col lg:px-0 flex gap-x-6 md:flex-row  md:px-8 ">
-      <MainContent data={data} status='user' />
+    <div className="w-full flex-col justify-center lg:px-0 flex  md:flex-row  md:px-8 ">
+      <MainContent data={data} status="user" />
     </div>
   );
 };
