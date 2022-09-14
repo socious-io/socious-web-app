@@ -20,8 +20,8 @@ const OrganizationProfile: NextPage = () => {
   const {id} = router.query;
 
   //get user profile data by user id
-  const {data, error} = useSWR<any>(`/api/v2/orgs/by-shortname/${id}`, get);
-
+  const {data, error} = useSWR<any>(`/orgs/by-shortname/${id}`, get);
+ 
   // Show this until the data is fetched
   if (!data && !error) return <p>loading</p>;
   if (
@@ -32,6 +32,7 @@ const OrganizationProfile: NextPage = () => {
       ))
   )
     return <p>invalid user</p>;
+
 
   return (
     <div className="w-full flex-col lg:px-0 flex gap-x-6 md:flex-row  md:px-8 ">
