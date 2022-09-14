@@ -32,12 +32,16 @@ export const useUser = (props: UseUserProps = defaultValues) => {
   const {forceStop, shouldRetry, onAuthError} = {...defaultValues, ...props};
   const {pathname} = useRouter();
 
-  const {data: identities, mutate} = useSWR<any, any, any>('/identities', get, {
-    onErrorRetry: (error) => {
-      if (error?.response?.status === 401) return;
+  const {data: identities, mutate: mutateIdentities} = useSWR<any, any, any>(
+    !forceStop ? '/identities' : null,
+    get,
+    {
+      onErrorRetry: (error) => {
+        if (error?.response?.status === 401) return;
+      },
+      // revalidateOnFocus: false,
     },
-    // revalidateOnFocus: false,
-  });
+  );
 
   const currentIdentity = identities?.find(
     (identity: LoginIdentity) => identity.current,
@@ -66,7 +70,7 @@ export const useUser = (props: UseUserProps = defaultValues) => {
     console.log('Storing window.logout for emergencies');
     window.logout = async () => {
       await logout();
-      mutate();
+      mutateIdentities();
       mutateUser();
     };
 
@@ -101,7 +105,14 @@ export const useUser = (props: UseUserProps = defaultValues) => {
       }
     }
   }, [user, pathname, userError, forceStop]);
-  return {user, userError, mutateUser, currentIdentity, identities};
+  return {
+    user,
+    userError,
+    mutateUser,
+    currentIdentity,
+    identities,
+    mutateIdentities,
+  };
 };
 
 export default useUser;
