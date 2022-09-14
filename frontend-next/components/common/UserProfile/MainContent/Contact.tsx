@@ -65,7 +65,13 @@ const Contact: React.FC<Props> = ({
           <div className="flex mb-4">
             <GlobeAltIcon className="h-6 w-6 text-secondary stroke-1.5 " />
             <p className="w-3/6 text-black pl-4 text-sm break-all">
-              {website ? website : 'No website'}
+              {website ? (
+                <a href={website} target="_blank" rel="noreferrer">
+                  {website}
+                </a>
+              ) : (
+                'No website'
+              )}
             </p>
           </div>
         </>
