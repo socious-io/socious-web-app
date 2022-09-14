@@ -2,7 +2,7 @@ import {UsersIcon, UserGroupIcon} from '@heroicons/react/outline';
 
 const NetworkCard = () => {
   return (
-    <div className="p-4 space-y-4 rounded-2xl border border-grayLineBased">
+    <div className="p-4 space-y-4 rounded-2xl border border-grayLineBased bg-background">
       <label className='text-primary'>Networking</label>
       <ul className="list-none space-y-4">
         <li className='flex space-x-4 items-center'>

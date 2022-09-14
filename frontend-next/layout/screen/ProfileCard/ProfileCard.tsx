@@ -17,7 +17,7 @@ export function ProfileCard({
   followers,
 }: ProfileCardProps) {
   return (
-    <div className="p-4 space-y-4 rounded-2xl border border-grayLineBased">
+    <div className="p-4 space-y-4 rounded-2xl border border-grayLineBased bg-background">
       <div className="space-y-4">
         <Avatar src={avatar ?? ''} size="xxl" type={1} />
         <div>
@@ -31,7 +31,7 @@ export function ProfileCard({
         </div>
         <div className="flex flex-row space-x-2">
           <div>
-            <p className="text-grayInputField">{followers ?? 0} Following</p>
+            <p className="text-grayInputField">{following ?? 0} Following</p>
           </div>
           <div>
             <p className="text-grayInputField">{followers ?? 0} Followers</p>
