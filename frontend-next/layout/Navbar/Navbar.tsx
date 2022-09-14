@@ -4,9 +4,32 @@ import {useContext} from 'react';
 import Link from 'next/link';
 import {Avatar} from '../../components/common/Avatar/Avatar';
 import {TextInput} from '../../components/common/TextInput/TextInput';
-import Image from "next/image";
 
-function Navbar() {
+import Image from 'next/image';
+import {Dropdown} from '@components/common';
+import useSWR, {useSWRConfig} from 'swr';
+import {useUser} from '@hooks';
+import {changeIdentity} from '@api/identity/actions';
+import {get} from 'utils/request';
+import {IdentityMeta, LoginIdentity} from '@models/identity';
+import {getOrganization} from '@api/organizations/actions';
+
+const Navbar = () => {
+  const {mutate} = useSWRConfig();
+
+  const {currentIdentity, identities} = useUser();
+
+  const onSwitchIdentity = async (identity: LoginIdentity) => {
+    try {
+      await changeIdentity(identity.id);
+      mutate('/identities');
+      if (identity.type === 'organizations') {
+        await getOrganization(identity.id);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const imgSrc = require('../../asset/icons/logo.svg');
 
   return (
@@ -22,8 +45,8 @@ function Navbar() {
                       src={imgSrc}
                       className="fill-warning"
                       alt="socious logo"
-                      width={"100%"}
-                      height={"100%"}
+                      width={'100%'}
+                      height={'100%'}
                     />
                   </a>
                 </Link>
@@ -35,33 +58,51 @@ function Navbar() {
             <div className="flex items-center justify-end w-4/6 space-x-6">
               <div className="space-x-4">
                 <Link href="/" passHref>
-                  <span  className="text-sm text-white" >
-                    Home
-                  </span>
+                  <span className="text-sm text-white">Home</span>
                 </Link>
                 <Link href="/" passHref>
-                  <span  className="text-sm text-white" >
-                    Network
-                  </span>
+                  <span className="text-sm text-white">Network</span>
                 </Link>
                 <Link href="/" passHref>
-                  <span  className="text-sm text-white" >
-                    Chats
-                  </span>
+                  <span className="text-sm text-white">Chats</span>
                 </Link>
                 <Link href="/" passHref>
-                  <span  className="text-sm text-white" >
-                    Notifications
-                  </span>
+                  <span className="text-sm text-white">Notifications</span>
                 </Link>
                 <Link href="/" passHref>
-                  <span  className="text-sm text-white" >
-                    Projects
-                  </span>
+                  <span className="text-sm text-white">Projects</span>
                 </Link>
               </div>
               <div className="flex space-between items-center space-x-3">
-                <Avatar size="m" />
+                <Dropdown
+                  display={
+                    <Avatar size="m" src={currentIdentity?.meta?.avatar} />
+                  }
+                >
+                  {identities?.length > 0 &&
+                    identities.map(
+                      (identity: LoginIdentity) =>
+                        !identity.current && (
+                          <div
+                            key={identity?.meta?.id}
+                            className="flex flex-row items-center w-52 p-4 cursor-pointer hover:bg-primary my-4 hover:text-offWhite"
+                            onClick={() => onSwitchIdentity(identity)}
+                          >
+                            <div className="w-1/4">
+                              <Avatar
+                                size="m"
+                                src={
+                                  identity.type === 'users'
+                                    ? identity?.meta?.avatar
+                                    : identity?.meta?.image
+                                }
+                              />
+                            </div>
+                            <div className="w-3/4">{identity?.meta?.name}</div>
+                          </div>
+                        ),
+                    )}
+                </Dropdown>
                 <CogIcon className="text-white  h-6" />
               </div>
             </div>
@@ -70,5 +111,5 @@ function Navbar() {
       </div>
     </nav>
   );
-}
+};
 export default Navbar;
