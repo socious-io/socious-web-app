@@ -85,7 +85,8 @@ const Navbar = () => {
                     <Avatar size="m" src={currentIdentity?.meta?.avatar} />
                   }
                 >
-                  {identities?.length > 0 &&
+                  {identities &&
+                    identities.length > 0 &&
                     identities.map(
                       (identity: LoginIdentity) =>
                         !identity.current && (
