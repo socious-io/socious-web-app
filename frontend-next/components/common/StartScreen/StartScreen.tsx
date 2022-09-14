@@ -27,10 +27,10 @@ const StartScreen = () => {
   }, [step])
 
   return (
-    <div className="max-w-xl min-h-[40rem] mx-auto bg-background  rounded-none md:rounded-3xl pb-7 px-6 border border-grayLineBased -my-10 md:my-0">
+    <div className="w-screen sm:max-w-xl min-h-screen sm:min-h-0 sm:h-[45rem] flex flex-col items-stretch mx-auto sm:my-auto bg-background sm:rounded-3xl px-6 sm:px-12 border border-grayLineBased">
       {
         step === 1 && 
-        <div className="h-[28rem] px-4 flex flex-col mb-9">
+        <div className="h-[28rem] px-4 flex flex-col mb-9 grow">
           <div className="pt-12 pb-4">
             <h1 className="font-semibold">Make a social impact</h1>
             <p className="text-base py-2 text-graySubtitle ">Find projects that align with your passion to solve social issues</p>
@@ -47,7 +47,7 @@ const StartScreen = () => {
       }
       {
         step === 2 && 
-        <div className="h-[28rem] px-4 flex flex-col mb-9">
+        <div className="h-[28rem] px-4 flex flex-col mb-9 grow">
           <div className="pt-12 pb-4">
             <h1 className="font-semibold">Connect with contributors</h1>
             <p className="text-base py-2 text-graySubtitle ">Hire professionals that add values and contribute to the culture</p>
@@ -64,7 +64,7 @@ const StartScreen = () => {
       }
       {
         step === 3 && 
-        <div className="h-[28rem] px-4 flex flex-col mb-9">
+        <div className="h-[28rem] px-4 flex flex-col mb-9 grow">
           <div className="pt-12 pb-4">
             <h1 className="font-semibold">Social Impact Focus</h1>
             <p className="text-base py-2 text-graySubtitle ">A marketplace specifies to realizing positive global change</p>
@@ -92,7 +92,7 @@ const StartScreen = () => {
           />
         ))}
       </div>
-      <div className='space-y-4 px-4 mx-10 mt-16'>
+      <div className='space-y-4 px-4 mt-16 mb-12 sm:mx-6'>
         <Button
           className='block w-10/12 mx-auto'
           onClick={toSignUp}
