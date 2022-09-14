@@ -39,14 +39,15 @@ const Contact: React.FC<Props> = ({
   return (
     <div className="px-4  border-t border-grayLineBased">
       <Title>Contact</Title>
-      <div className="flex mb-4">
-        <LocationMarkerIcon className="h-6 w-6 text-secondary stroke-1.5" />
-        <p className="w-3/6 text-black pl-4 text-sm">
-          {address && address + ' ,'} {city && city + ' ,'} {country}
-        </p>
-      </div>
-      {status === 'organization' && (
+
+      {status === 'organization' ? (
         <>
+          <div className="flex mb-4">
+            <LocationMarkerIcon className="h-6 w-6 text-secondary stroke-1.5" />
+            <p className="w-3/6 text-black pl-4 text-sm">
+              {address && address + ' ,'}
+            </p>
+          </div>
           <div className="flex mb-4">
             <AtSymbolIcon className="h-6 w-6 text-secondary stroke-1.5 " />
             <p className="w-3/6 text-black pl-4 text-sm">
@@ -68,6 +69,13 @@ const Contact: React.FC<Props> = ({
             </p>
           </div>
         </>
+      ) : (
+        <div className="flex mb-4">
+          <LocationMarkerIcon className="h-6 w-6 text-secondary stroke-1.5" />
+          <p className="w-3/6 text-black pl-4 text-sm">
+            {city && city + ' ,'} {country}
+          </p>
+        </div>
       )}
     </div>
   );
