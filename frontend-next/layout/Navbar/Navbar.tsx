@@ -21,12 +21,10 @@ const Navbar = () => {
 
   const onSwitchIdentity = async (identity: LoginIdentity) => {
     try {
-      const res = await changeIdentity(identity.id);
-      if (res?.message === 'success') {
-        mutate('/identities');
-        if (identity.type === 'organizations') {
-          await getOrganization(identity.id);
-        }
+      await changeIdentity(identity.id);
+      mutate('/identities');
+      if (identity.type === 'organizations') {
+        await getOrganization(identity.id);
       }
     } catch (error) {
       console.error(error);
