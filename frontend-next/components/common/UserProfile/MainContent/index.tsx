@@ -1,5 +1,6 @@
 /*
- * mainContent (left contetnt) of user profile page
+ * mainContent (left contetnt) of user/organization profile page
+ * The type of profile is determined by status
  */
 
 import React from 'react';
@@ -12,19 +13,25 @@ import SocialCauses from './SocialCauses';
 import Description from './Description';
 import Contact from './Contact';
 
-//hooks
+// hooks
 import {useUser} from '@hooks';
+
+// interfaces
 interface Props {
   data: any;
   status: 'user' | 'organization';
 }
+
 const MainContent: React.FC<Props> = ({data, status}) => {
   const {user} = useUser();
-  console.log(data);
-  console.log(user);
+
   return (
     <div className="md:w-4/6 border-grayLineBased  border border-1 rounded-xl mb-8  ">
-      <Header avatar={data?.avatar} cover_image={data?.cover_image} />
+      <Header
+        avatar={data?.avatar}
+        cover_image={data?.cover_image}
+        status={status}
+      />
       <ProfileInfo
         first_name={data?.first_name}
         last_name={data?.last_name}
@@ -37,7 +44,7 @@ const MainContent: React.FC<Props> = ({data, status}) => {
       {user?.username === data?.username && (
         <p className="text-secondary text-sm mt-3 px-4">You </p>
       )}
-      
+
       <SocialCauses social_causes={data?.social_causes} />
       {status === 'user' ? (
         <Contact

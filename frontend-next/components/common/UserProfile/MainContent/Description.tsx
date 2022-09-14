@@ -1,5 +1,6 @@
 /*
- * The text written by the user about herself is placed in this file
+ * The text written by the user/organization about missions or other paragraphs
+ * is placed in this file
  */
 
 import React from 'react';
