@@ -28,7 +28,7 @@ const ProfileInfo: React.FC<Props> = ({
         <p className="text-grayInputField">{followings} Conections</p>
         <p className="text-grayInputField">{followers} Followers</p>
       </div>
-      <p className="text-left text-black text-sm">{bio}</p>
+      <p className="text-left text-black text-sm break-all ">{bio}</p>
     </div>
   );
 };
