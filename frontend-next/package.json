@@ -27,6 +27,7 @@
     "imagemin-optipng": "^8.0.0",
     "imagemin-svgo": "9.0.0",
     "joi": "^17.6.0",
+    "luxon": "^3.0.3",
     "next": "12.0.1",
     "next-auth": "^4.10.3",
     "next-http-proxy-middleware": "^1.2.4",
@@ -49,6 +50,7 @@
   "devDependencies": {
     "@ethersproject/contracts": "^5.5.0",
     "@ethersproject/providers": "^5.5.0",
+    "@types/luxon": "^3.0.1",
     "@types/node": "16.11.6",
     "@types/react": "17.0.33",
     "autoprefixer": "^10.4.7",
