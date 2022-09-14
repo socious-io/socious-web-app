@@ -30,7 +30,7 @@ export const ShareModalStep2 = ({
 
   const router = useRouter();
   const { pid } = router.query;
-  const { data: post, error } = useSWR<any>(`/api/v2/posts/${pid}`, get, {
+  const { data: post, error } = useSWR<any>(`/posts/${pid}`, get, {
     onErrorRetry: (error) => {
       if (error?.response?.status === 500 && error?.response?.data?.error?.startsWith("invalid input syntax for type uuid")) return
     }
@@ -93,7 +93,7 @@ export const ShareModalStep2 = ({
             />
           {
           !!(post.shared_id) ?
-            <div className='relative space-y-5 p-4 rounded-2xl border border-grayLineBased bg-white'>
+            <div className='relative space-y-5 p-4 rounded-2xl border border-grayLineBased bg-white mt-4'>
               <SharedCard
                 id={post.id}
                 content={post.content}
@@ -109,6 +109,7 @@ export const ShareModalStep2 = ({
               />
             </div>  
           :
+          <div className="mt-4">
           <PostCard
             id={post.id}
             name={post.identity_meta.name}
@@ -120,7 +121,8 @@ export const ShareModalStep2 = ({
             likes={post.likes}
             showAction={false}
             shared={post.shared}
-          />
+            />
+          </div>
         }
         </div>
       </Modal.Description>

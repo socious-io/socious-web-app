@@ -5,29 +5,26 @@ import {useState, useCallback, useContext} from 'react';
 import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 import Link from 'next/link';
-import {InputFiled, Button, Modal} from '@components/common';
-
-import { login } from "../../api/auth/actions";
-import { FetchError } from 'utils/request';
-
 import {EyeIcon, EyeOffIcon} from '@heroicons/react/outline';
+import {AxiosError} from 'axios';
+
+import {login} from '@api/auth/actions';
+import {InputFiled, Button, Modal} from '@components/common';
+import {schemaLogin} from '@api/auth/validation';
 
 import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
-import {schemaLogin} from '@api/auth/validation';
-
+import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
 const Login: NextPage = () => {
-
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const [errorMessage, setError] = useState<string>('');
+  const [errorMessage, setError] = useState<ErrorMessage>();
 
   const {register, handleSubmit, formState, getValues} = useForm({
     resolver: joiResolver(schemaLogin),
   });
-
 
   const onSubmit = (data: any) => {
     handleLoginRequest();
@@ -42,11 +39,18 @@ const Login: NextPage = () => {
 
     try {
       await login(email, password);
-      Router.push("/");
-    } catch (error: any) {
-      if (error instanceof FetchError) {
-        setError(() => (error.message + " " + error.data.error));
+      Router.push('/');
+    } catch (e) {
+      const error = e as AxiosError;
+      let msg = DefaultErrorMessage;
+      if (error.isAxiosError) {
+        if (error.response?.data?.error === 'Not matched')
+          msg = {
+            title: 'Invalid login',
+            message: 'Email or password is incorrect',
+          };
       }
+      setError(msg);
       setShowModal(!showModal);
     }
   };
@@ -147,11 +151,11 @@ const Login: NextPage = () => {
 
       <Modal isOpen={showModal} onClose={handleToggleModal}>
         <Modal.Title>
-          <h2 className="text-error text-center">{errorMessage || "Sorry, something went wrong"}</h2>
+          <h2 className="text-error text-center">{errorMessage?.title}</h2>
         </Modal.Title>
         <Modal.Description>
           <div className="mt-2">
-            <p className="text-sm text-gray-500">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit de. </p>
+            <p className="text-sm text-gray-500">{errorMessage?.message}</p>
           </div>
         </Modal.Description>
         <div className="mt-4">

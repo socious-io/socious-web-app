@@ -10,6 +10,7 @@ export interface PostActionProps {
   likes?: number;
   shared?: number;
   id: string;
+  onShare?: () => void;
 }
 
 const PostAction = ({
@@ -17,6 +18,7 @@ const PostAction = ({
   likes,
   shared,
   id,
+  onShare,
 }: PostActionProps) => {
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const [likesCount, setlikesCount] = useState<number>(likes || 0);
@@ -56,12 +58,24 @@ const PostAction = ({
           <p className="text-xs">Comment</p>
         </Button>
       </Link>
-      <Link href={`/post/${id}`} passHref>
-        <Button variant="ghost" className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none">
+      {
+        onShare ?
+        <Button
+          variant="ghost"
+          className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
+          onClick={onShare}
+        >
           <ShareIcon className="w-5" />
           <p className="text-xs">{shared} Share</p>
         </Button>
-      </Link>
+        :
+        <Link href={`/post/${id}`} passHref>
+          <Button variant="ghost" className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none">
+            <ShareIcon className="w-5" />
+            <p className="text-xs">{shared} Share</p>
+          </Button>
+        </Link>
+      }
     </div>
   );
 };

@@ -22,7 +22,7 @@ import EditModal from "@components/common/Post/EditModal/EditModal";
 const Post = () => {
   const router = useRouter();
   const { pid } = router.query;
-  const { data: post, error } = useSWR<any>(`/api/v2/posts/${pid}`, get, {
+  const { data: post, error } = useSWR<any>(`/posts/${pid}`, get, {
     onErrorRetry: (error) => {
       if (error?.response?.status === 500 && error?.response?.data?.error.startsWith("invalid input syntax for type uuid")) return
     }
@@ -44,7 +44,7 @@ const Post = () => {
     createComment({ content }, post.id)
       .then(response => {
         for (let i = 1; i <= page; i++) {
-          mutate(`/api/v2/posts/${post.id}/comments?page=${i}`)
+          mutate(`/posts/${post.id}/comments?page=${i}`)
         }
       }).catch(error => {
         console.error(error);
@@ -75,6 +75,7 @@ const Post = () => {
     shareHandler.off();
     deleteHandler.off();
     editHandler.off();
+    console.log("TYPE: ", type);
     switch (type) {
       case 'EDIT':
         console.log("[pid].tsx:- IT IS EDIT");
@@ -94,7 +95,7 @@ const Post = () => {
 
   const resetShareModal = useCallback(() => {
     shareHandler.off();
-    setShareStep(1);
+    setShareStep(2);
   }, [shareHandler])
 
   if (!post) {
@@ -135,10 +136,11 @@ const Post = () => {
             liked={post.liked}
             likes={post.likes}
             sharedPost={{...post.shared_post, identity_meta: post.shared_from_identity.meta}}
-            optionClicked={(user?.id === post.identity_id) ? onOptionClicked : undefined}
+            hideOption={(user.id !== post.identity_id)}
+            optionClicked={onOptionClicked}
             />
             :
-            <PostCard
+          <PostCard
             id={post.id}
             name={post.identity_meta.name}
             content={post.content}
@@ -148,7 +150,8 @@ const Post = () => {
             liked={post.liked}
             likes={post.likes}
             shared={post.shared}
-            optionClicked={(user.id === post.identity_id) ? onOptionClicked : undefined}
+            hideOption={(user?.id !== post.identity_id)}
+            optionClicked={onOptionClicked}
           />
         }
         <CommentField
@@ -167,24 +170,24 @@ const Post = () => {
           </Button>
         </div>
 
+        {/* SHARE MODAL */}
+        <Modal isOpen={showShare} onClose={resetShareModal} className={`${shareStep === 1 ? "bg-offWhite" : ""}`}>
+          <span className='absolute right-3 cursor-pointer ' onClick={resetShareModal}>
+            <XIcon className='w-6' />
+          </span>
+          <Modal.Title>
+            <h2 className="text-center min-h-[30px]">{shareStep === 1 ? "" : "Share Post"}</h2>
+          </Modal.Title>
+          {/* {
+            shareStep === 1 && <ShareModalStep1 onCopied={onCopied} onShare={onShare}/>
+          } */}
+          {
+            shareStep === 2 && <ShareModalStep2 onShare={onShare} />
+          }
+        </Modal>
+
         {(user.id === post.identity_id) &&
         <>
-          {/* SHARE MODAL */}
-          <Modal isOpen={showShare} onClose={resetShareModal} className={`${shareStep === 1 ? "bg-offWhite" : ""}`}>
-            <span className='absolute right-3 cursor-pointer ' onClick={resetShareModal}>
-              <XIcon className='w-6' />
-            </span>
-            <Modal.Title>
-              <h2 className="text-center min-h-[30px]">{shareStep === 1 ? "" : "Share Post"}</h2>
-            </Modal.Title>
-            {/* {
-              shareStep === 1 && <ShareModalStep1 onCopied={onCopied} onShare={onShare}/>
-            } */}
-            {
-              shareStep === 2 && <ShareModalStep2 onShare={onShare} />
-            }
-          </Modal>
-
           {/* EDIT MODAL */}
           <EditModal isOpen={showEdit} onClose={editHandler.off} pid={post?.id}/>
 

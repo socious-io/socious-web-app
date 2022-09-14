@@ -1,0 +1,34 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "scss.lint.unknownAtRules": "ignore",
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "[html,svg]": {
+    "editor.formatOnSaveMode": "file",
+    "editor.defaultFormatter": "HookyQR.beautify"
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": true,
+    "**/dist": true
+  },
+  "cSpell.words": ["datasource", "datetime", "Laravel", "mediumtext", "nestjs", "socious", "typeorm", "Selecteds", "Signup", "Socious", "testid"],
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true
+}

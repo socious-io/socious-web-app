@@ -16,6 +16,7 @@ export interface PostCardProps {
   likes?: number;
   shared?: number;
   src?: string;
+  hideOption?: boolean
   optionClicked?: (data: string) => void;
 }
 
@@ -30,6 +31,7 @@ export function PostCard({
   src,
   likes,
   shared,
+  hideOption,
   showAction = true,
   optionClicked
 }: PostCardProps) {
@@ -38,10 +40,10 @@ export function PostCard({
 
   return (
     <div className='relative space-y-5 p-4 rounded-2xl border border-grayLineBased bg-white'>
-      <PostHead name={name} time={time} src={src} hideOption={!optionClicked} toggleOptions={handlers.toggle}/>
+      <PostHead name={name} time={time} src={src} hideOption={hideOption} toggleOptions={handlers.toggle}/>
       <PostContent content={content} passion={passion} noBorder />
       { showAction &&
-          <PostAction liked={liked} likes={likes} shared={shared} id={id} />
+          <PostAction liked={liked} likes={likes} shared={shared} id={id} onShare={ optionClicked ? () => optionClicked('SHARE') : undefined }/>
       }
       {
         optionClicked && state && 

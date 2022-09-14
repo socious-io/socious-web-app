@@ -30,7 +30,7 @@ const EditModal = ({
   pid,
 }: EditModalProps) => {
   const { user } = useUser();
-  const { data: post, error: postError, mutate } = useSWR<any>(pid ? `/api/v2/posts/${pid}` : null, get, {
+  const { data: post, error: postError, mutate } = useSWR<any>(pid ? `/posts/${pid}` : null, get, {
     onErrorRetry: (error) => {
       if (error?.response?.status === 500 && error?.response?.data?.error.startsWith("invalid input syntax for type uuid")) return
     }
