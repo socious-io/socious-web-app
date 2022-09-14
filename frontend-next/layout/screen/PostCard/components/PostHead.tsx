@@ -2,6 +2,7 @@ import { DotsHorizontalIcon } from "@heroicons/react/outline";
 import { Avatar } from "@components/common";
 import { useCallback, useEffect } from "react";
 import {Button} from 'components/common'
+import { isoToHumanTime } from "services/toHumanTime";
 export interface PostHeadProps {
   name?: string;
   time?: string;
@@ -28,8 +29,9 @@ const PostHead = ({
         <Avatar size="s" src={src} />
         <p className="text-sm">{name || "Clear Me"}</p>
         <div className="w-1.5 h-1.5 bg-grayInputField rounded-full" />
-        <p className="text-sm text-grayInputField">{time || "00 min ago"}</p>
+        <p className="text-sm text-grayInputField">{time ? isoToHumanTime(time) : "00 minutes ago"}</p>
       </div>
+      {/* HideOption from unauthorized User */}
       { !hideOption && 
         <Button
           variant='ghost'
