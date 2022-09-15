@@ -1,5 +1,3 @@
-import {ExclamationCircleIcon, XIcon, LinkIcon} from '@heroicons/react/outline';
-import {CheckCircleIcon} from '@heroicons/react/solid';
 import {NotificationItem} from '@models/notification';
 import useSWR from 'swr';
 import {twMerge} from 'tailwind-merge';
@@ -39,7 +37,7 @@ export function Notification({page, onFull}: NotificationProps) {
           const borderClass =
             index === 0
               ? 'border rounded-t-xl'
-              : index === notifications.items.length - 1
+              : index === notifications?.items?.length - 1
               ? 'border-r border-l border-b rounded-b-xl'
               : 'border-r border-l border-b';
 
@@ -61,7 +59,7 @@ export function Notification({page, onFull}: NotificationProps) {
                   <div className="space-y-1">
                     <p className="font-sm">{notification?.data.body.body}</p>
                     <p className="font-sm text-graySubtitle">
-                      {notification.created_at}
+                      {notification?.created_at}
                     </p>
                   </div>
                 </div>
