@@ -25,9 +25,10 @@ interface Props {
     identity_id: string;
     url: string;
   };
+  status: 'user' | 'organization';
 }
 
-const Header: React.FC<Props> = ({cover_image, avatar}) => {
+const Header: React.FC<Props> = ({cover_image, avatar, status}) => {
   // backgground image not exist svg
   const bg_icon = require('../../../../asset/icons/bg-image.svg');
 
@@ -48,6 +49,7 @@ const Header: React.FC<Props> = ({cover_image, avatar}) => {
           src={avatar?.url}
           size="xxl"
           className="absolute top-24 left-4"
+          type={status === 'organization' ? 1 : 0}
         />
       </div>
       <div className="flex h-12 flex-row justify-end pr-4 gap-4 mt-6">

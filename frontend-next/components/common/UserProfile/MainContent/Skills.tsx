@@ -14,12 +14,12 @@ interface Props {
 }
 const Skills: React.FC<Props> = ({skills}) => {
   return (
-    <div className="p-4 border-y border-grayLineBased mb-20 ">
+    <div className="p-4 border-t border-grayLineBased  ">
       <Title>Skills</Title>
       <div className="flex w-4/6 flex-wrap gap-2 ">
         {skills &&
           skills.map((item: string) => {
-            return <Chip name={item} />;
+            return <Chip key={item} name={item} />;
           })}
       </div>
     </div>

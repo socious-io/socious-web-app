@@ -13,7 +13,7 @@ export function Dropdown({
   display,
   children,
   displayClass = '',
-  dropdownClass = 'absolute mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10',
+  dropdownClass = 'absolute mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10 transform -translate-x-full',
 }: DropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">

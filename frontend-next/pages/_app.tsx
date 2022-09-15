@@ -6,6 +6,7 @@ import type {AppProps} from 'next/app';
 import Head from 'next/head';
 import {WalletProvider} from '../context/useWalletContext';
 import Layout from 'layout/Wrapper/Wrapper';
+import {get} from 'utils/request';
 
 import '../asset/css/global.css';
 import '../styles/index.css';
@@ -17,18 +18,20 @@ function getLibrary(provider: any) {
 
 function MyApp({Component, pageProps}: AppProps) {
   return (
-    // <SWRConfig value={{
-    //   fetcher,
-    //   onError: (err) => {
-    //     console.error(err)
-    //   },
-    // }}>
+    <SWRConfig
+      value={{
+        fetcher: get,
+        onError: (err) => {
+          console.error(err);
+        },
+      }}
+    >
       <Layout>
         <Web3ReactProvider getLibrary={getLibrary}>
           <Component {...pageProps} />
         </Web3ReactProvider>
       </Layout>
-    // </SWRConfig>
+    </SWRConfig>
   );
 }
 

@@ -1,79 +1,124 @@
+import {LoginIdentity} from './../../models/identity';
 /* eslint-disable react-hooks/rules-of-hooks */
 import {get} from 'utils/request';
-import {ApiConstants } from 'utils/api';
-import useSWR from 'swr'
-import { useEffect } from 'react';
-import Router, { useRouter } from 'next/router';
+import {ApiConstants} from 'utils/api';
+import useSWR from 'swr';
+import {useEffect} from 'react';
+import Router, {useRouter} from 'next/router';
+import {logout} from '@api/auth/actions';
 
 interface UseUserProps {
   shouldRetry?: boolean;
   onAuthError?: boolean;
-  forceStop?: boolean
-};
+  forceStop?: boolean;
+}
 
 const defaultValues = {
   // Force Stop redirect logic.
   // Implemented to try Password expired
   forceStop: false,
   shouldRetry: true,
-  onAuthError: false
+  onAuthError: false,
 };
 
 const allowedRoutes = [
-  // "/", Uncomment after finishing starter page.
-  "/auth/forgotpassword", "/auth/login", "/auth/signup"
+  '/',
+  '/auth/forgotpassword',
+  '/auth/login',
+  '/auth/signup',
 ];
 
-export const useUser = (props: UseUserProps = 
-  defaultValues
-) => {
-  const { forceStop, shouldRetry, onAuthError } = {...defaultValues, ...props};
-  const { pathname } = useRouter();
+export const useUser = (props: UseUserProps = defaultValues) => {
+  const {forceStop, shouldRetry, onAuthError} = {...defaultValues, ...props};
+  const {pathname} = useRouter();
 
-  const { data: user, error: userError, mutate: mutateUser } = useSWR<any>("/api/v2/user/profile", get, {
-    shouldRetryOnError: shouldRetry,
-    revalidateOnFocus: false,
-    onErrorRetry: (error) => {
-      if (!onAuthError && error?.response?.status === 401) return
-    }
-  });
+  const {data: identities, mutate: mutateIdentities} = useSWR<any, any, any>(
+    !forceStop ? '/identities' : null,
+    get,
+    {
+      onErrorRetry: (error) => {
+        if (error?.response?.status === 401) return;
+      },
+      // revalidateOnFocus: false,
+    },
+  );
 
+  const currentIdentity = identities?.find(
+    (identity: LoginIdentity) => identity.current,
+  );
+
+  const {
+    data: user,
+    error: userError,
+    mutate: mutateUser,
+  } = useSWR<any>(
+    currentIdentity?.type === 'users'
+      ? '/user/profile'
+      : `/orgs/${currentIdentity?.id}`,
+    get,
+    {
+      shouldRetryOnError: shouldRetry,
+      revalidateOnFocus: false,
+      onErrorRetry: (error) => {
+        if (!onAuthError && error?.response?.status === 401) return;
+      },
+    },
+  );
 
   useEffect(() => {
+    // for emergencies
+    console.log('Storing window.logout for emergencies');
+    window.logout = async () => {
+      await logout();
+      mutateIdentities();
+      mutateUser();
+    };
+
     // if user && error both are undefined
-    if (!user && !userError) return
-    if (forceStop) return
+    if (!user && !userError) return;
+    if (forceStop) return;
 
     // if user unauthorized
     if (userError && userError?.response?.status === 401) {
       // if page !== allowed_routes
-      console.log("pathname", pathname);
-      if (!(allowedRoutes.includes (pathname))) {
+      console.log('pathname', pathname);
+      if (!allowedRoutes.includes(pathname)) {
         // => add ?redirect_to=/profile
-        Router.push("/auth/login");
+        Router.push('/auth/login');
       }
     }
 
-    
     // if user authorized
     if (user) {
       // if user has requested forgot password.
       if (user.password_expired) {
-        Router.push("/auth/forgotpassword");
-        return
-      } else if (pathname.startsWith("/auth/forgotpassword")) {
+        Router.push('/auth/forgotpassword');
+        return;
+      } else if (pathname.startsWith('/auth/forgotpassword')) {
         // if user trying to access /auth/forgotpassword when password not expired
-        Router.push("/");
+        Router.push('/');
       }
 
       // if user === new_user
-      if (!user.skills && !user.passions) {
-        Router.push("/auth/onboarding");
-      }    
+      if (!user.skills && !user.passions && currentIdentity?.type === 'users') {
+        Router.push('/auth/onboarding');
+      }
     }
-
-  }, [user, pathname, userError, forceStop])
-  return {user, userError, mutateUser};
+  }, [user, pathname, userError, forceStop]);
+  return {
+    user,
+    userError,
+    mutateUser,
+    currentIdentity,
+    identities,
+    mutateIdentities,
+  };
 };
 
 export default useUser;
+
+declare global {
+  interface Window {
+    logout: () => any;
+  }
+}

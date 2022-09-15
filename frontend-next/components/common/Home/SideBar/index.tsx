@@ -1,53 +1,39 @@
-import useSWR from 'swr';
-import { useEffect, useReducer } from 'react';
-
 import StatusCard from './StatusCard';
 import NetworkCard from './NetworkCard';
 import ProjectsCard from './ProjectsCard';
 import ProfileCard from 'layout/screen/ProfileCard/ProfileCard';
 import OrganizationCard from './OrganizationCard';
-import { get } from 'utils/request';
-import useUser from "hooks/useUser/useUser";
 
-interface identity {
-  created_at: string;
-  current: boolean;
-  id: string
-  meta: {[index: string]: string};
-  primary: boolean;
-  type: string;
-}
+import useUser from 'hooks/useUser/useUser';
 
 const SideBar = () => {
-  const { data } = useSWR<any>("/api/v2/identities", get, {
-    onErrorRetry: (error) => {
-      if (error?.response?.status === 401) return
-    },
-    revalidateOnFocus: false,
-  }); 
-  const { user } = useUser();
-
-  const identity = data?.find((item: any) => item.current);
+  const {user, currentIdentity} = useUser();
 
   return (
     <div className="w-80" aria-label="Sidebar">
-      <div className="space-y-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+      <div className="space-y-4 overflow-y-auto bg-gray-50">
         <ProfileCard
-            content={user?.mission}
-            name={identity?.meta?.name}
-            username={user?.username}
-            avatar={user?.avatar?.url}
-            following={user?.following}
-            followers={user?.followers}
+          content={user?.mission}
+          name={currentIdentity?.type === 'users' ? currentIdentity?.meta?.name : user?.name}
+          avatar={
+            currentIdentity?.type === 'users'
+              ? user?.avatar?.url
+              : user?.image?.url
+          }
+          following={user?.following}
+          followers={user?.followers}
         />
         {/* TODO: Uncomment after status is fixed */}
         {/* <StatusCard status={user?.status} /> */}
-        { identity?.type === "users" ? 
+        {currentIdentity?.type === 'users' ? (
           <NetworkCard username={user?.username}/>
-          :
+        ) : (
           <OrganizationCard />
+        )
         }
-        <ProjectsCard isOrganization={identity?.type !== "users"} username={user?.username}/>
+        <ProjectsCard
+          isOrganization={currentIdentity?.type === 'organizations'}
+          username={user?.username}/>
       </div>
     </div>
   );

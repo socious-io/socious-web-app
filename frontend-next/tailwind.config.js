@@ -40,6 +40,9 @@ module.exports = {
         neutralGray: '#D4D2D0',
         offsetColor: "#C3C8D9",
       },
+      strokeWidth: {
+        '1.5': '1.5px',
+      }
     },
   },
   plugins: [],

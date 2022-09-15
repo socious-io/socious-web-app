@@ -2,7 +2,7 @@ import { CreatePostBodyType, EditPostBodyType, SharePostBodyType } from '@models
 import { deleteRequest, post, put } from 'utils/request';
  
 export function createPost(postBody: CreatePostBodyType) {
-  return post("/api/v2/posts",
+  return post("/posts",
         postBody,
   );
 }
@@ -10,21 +10,21 @@ export function createPost(postBody: CreatePostBodyType) {
 
 // LIKE UNLIKE
 export function likePost(id: string) {
-  return put(`/api/v2/posts/${id}/like`, {});
+  return put(`/posts/${id}/like`, {});
 }
 
 export function unlikePost(id: string) {
-  return deleteRequest(`/api/v2/posts/${id}/like`);
+  return deleteRequest(`/posts/${id}/like`);
 };
 
 export function sharePost(postBody: SharePostBodyType, postId: string) {
-  return post(`/api/v2/posts/${postId}/share`, postBody);
+  return post(`/posts/${postId}/share`, postBody);
 }
 
 export function editPost(postBody: EditPostBodyType, postId: string) {
-  return put(`/api/v2/posts/${postId}`, postBody);
+  return put(`/posts/${postId}`, postBody);
 }
 
 export function deletePost(postId: string) {
-  return deleteRequest(`/api/v2/posts/${postId}`);
+  return deleteRequest(`/posts/${postId}`);
 }
