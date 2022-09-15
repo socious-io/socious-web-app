@@ -1,21 +1,23 @@
 import type {NextPage} from 'next';
-import Router from "next/router";
+import Router from 'next/router';
 import {useState, useMemo, useCallback} from 'react';
 import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {InputFiled, Button, Modal} from '@components/common';
 import {rxHasNumber} from 'utils/regex';
 import {twMerge} from 'tailwind-merge';
+import {AxiosError} from 'axios';
 
 import {EyeIcon, EyeOffIcon, ChevronLeftIcon} from '@heroicons/react/outline';
 import {schemaChangePassword} from '../../api/auth/validation';
-import { changePassword } from '@api/auth/actions';
+import {changePassword} from '@api/auth/actions';
+import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
 const ChangePassword: NextPage = () => {
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [newPasswordShown, setNewPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [errorMessage, setError] = useState<string>("");
+  const [errorMessage, setError] = useState<ErrorMessage>();
 
   const {register, handleSubmit, formState, watch, getValues} = useForm({
     resolver: joiResolver(schemaChangePassword),
@@ -43,13 +45,20 @@ const ChangePassword: NextPage = () => {
     const currentPassword = getValues('currentPassword');
     const newPassword = getValues('newPassword');
 
-    const user = {currentPassword, newPassword};
-
     try {
       await changePassword(currentPassword, newPassword);
-      Router.push("/");
-    } catch (error: any) {
-      setError(error?.data.error || error?.data.message)
+      Router.push('/');
+    } catch (e) {
+      const error = e as AxiosError;
+      let msg = DefaultErrorMessage;
+      if (error.isAxiosError) {
+        if (error.response?.data?.error === 'Not matched')
+          msg = {
+            title: 'Invalid Password',
+            message: 'Password is incorrect.',
+          };
+      }
+      setError(msg);
       handleToggleModal();
     }
   };
@@ -172,16 +181,11 @@ const ChangePassword: NextPage = () => {
 
       <Modal isOpen={showModal} onClose={handleToggleModal}>
         <Modal.Title>
-          <h2 className="text-error text-center">
-            { errorMessage || <span>Sorry, something went wrong</span> }
-          </h2>
+          <h2 className="text-error text-center">{errorMessage?.title}</h2>
         </Modal.Title>
         <Modal.Description>
           <div className="mt-2">
-            <p className="text-sm text-gray-500">
-              Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-              amet sint. Velit de.
-            </p>
+            <p className="text-sm text-gray-500">{errorMessage?.message}</p>
           </div>
         </Modal.Description>
         <div className="mt-4">
