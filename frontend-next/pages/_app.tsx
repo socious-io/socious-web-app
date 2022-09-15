@@ -18,12 +18,14 @@ function getLibrary(provider: any) {
 
 function MyApp({Component, pageProps}: AppProps) {
   return (
-    <SWRConfig value={{
-      fetcher: get,
-      onError: (err) => {
-        console.error(err)
-      },
-    }}>
+    <SWRConfig
+      value={{
+        fetcher: get,
+        onError: (err) => {
+          console.error(err);
+        },
+      }}
+    >
       <Layout>
         <Web3ReactProvider getLibrary={getLibrary}>
           <Component {...pageProps} />
