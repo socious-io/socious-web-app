@@ -1,17 +1,17 @@
-import ImgUrl from "../../../../asset/images/socious_feed.png";
-import Avatar from "@components/common/Avatar/Avatar";
-import Button from "@components/common/Button/Button";
+import ImgUrl from '../../../../asset/images/socious_feed.png';
+import Avatar from '@components/common/Avatar/Avatar';
+import Button from '@components/common/Button/Button';
 
 interface AddPostProps {
   onClickAdd: () => void;
 }
 
-const AddPost = ({ onClickAdd }: AddPostProps) => {
+const AddPost = ({onClickAdd}: AddPostProps) => {
   return (
     <>
       <div
-        className="hidden space-y-2 rounded-2xl bg-clearWhite bg-cover px-4 pt-11 pb-7 bg-blend-overlay md:flex"
-        style={{ backgroundImage: `url(${ImgUrl})` }}
+        className="hidden space-y-2 rounded-2xl bg-clearWhite bg-cover px-4 pt-11 pb-7 bg-center bg-blend-overlay md:flex"
+        style={{backgroundImage: `url(${ImgUrl})`}}
       >
         <h1 className="text-4xl text-white">Your Feed</h1>
         <p className="text-base font-normal text-neutralGray">
