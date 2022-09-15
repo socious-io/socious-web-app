@@ -1,18 +1,20 @@
 import type {NextPage} from 'next';
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import {useRouter} from 'next/router';
 import {FormProvider, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
+import {twMerge} from 'tailwind-merge';
+import {ChevronLeftIcon} from '@heroicons/react/outline';
+import {AxiosError} from 'axios';
 
 import {Button, Modal} from '@components/common';
+import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
 import SignupStep1 from '@components/common/Auth/Signup/Step1/SignupStep1';
 import SignupStep2 from '@components/common/Auth/Signup/Step2/SignupStep2';
 import SignupStep3 from '@components/common/Auth/Signup/Step3/SignupStep3';
 import SignupStep4 from '@components/common/Auth/Signup/Step4/SignupStep4';
 
-import {twMerge} from 'tailwind-merge';
-import {ChevronLeftIcon} from '@heroicons/react/outline';
 import {
   schemaSignupStep1,
   schemaSignupStep2,
@@ -25,9 +27,10 @@ const Signup: NextPage = () => {
 
   const [step, setStep] = useState<number>(1);
 
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showSuccess, setShowSuccess] = useState<boolean>(false);
+  const [showError, setShowError] = useState<boolean>(false);
 
-  const [errorMessage, setError] = useState<string>('');
+  const [errorMessage, setError] = useState<ErrorMessage>();
 
   const formMethodsStep1 = useForm({
     resolver: joiResolver(schemaSignupStep1),
@@ -47,11 +50,9 @@ const Signup: NextPage = () => {
       handleSignupRequest();
     } else if (step === 2) {
       const email = formMethodsStep2.getValues('email');
-      setError('');
       checkEmailExist(email)
         .then((response: any) => {
           if (response.email) {
-            // setError('This email is already registered.');
             setEmailError('email', {
               type: 'userExists',
               message: 'This email is already registered',
@@ -60,21 +61,27 @@ const Signup: NextPage = () => {
             setStep(step + 1);
           }
         })
-        .catch((error) => {
-          console.error(error.message);
+        .catch((e) => {
+          setError(DefaultErrorMessage);
+          handleErrorToggle();
         });
     } else {
       setStep(step + 1);
     }
   };
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     setStep(step - 1);
-  };
+  }, []);
 
-  const handleToggleModal = () => {
-    if (showModal) router.replace('/auth/login');
-    setShowModal(!showModal);
-  };
+  const handleSuccessToggle = useCallback(() => {
+    if (showSuccess) router.replace('/auth/login');
+    setShowSuccess(!showSuccess);
+  }, [showSuccess]);
+
+  const handleErrorToggle = useCallback(
+    () => setShowError(!showError),
+    [showError],
+  );
 
   const handleSignupRequest = async () => {
     const firstName = formMethodsStep1.getValues('firstName');
@@ -84,12 +91,10 @@ const Signup: NextPage = () => {
 
     try {
       await signup(firstName, lastName, email, password);
-      handleToggleModal();
-    } catch (error: any) {
-      if (error.isAxiosError) {
-        setError(() => error.data.error || error.data.message);
-      }
-      setStep(2);
+      handleSuccessToggle();
+    } catch (e) {
+      setError(DefaultErrorMessage);
+      handleErrorToggle();
     }
   };
 
@@ -130,7 +135,7 @@ const Signup: NextPage = () => {
       </FormProvider>
       {step === 4 && <SignupStep4 onSubmit={handleSubmit} />}
 
-      <Modal isOpen={showModal} onClose={handleToggleModal}>
+      <Modal isOpen={showSuccess} onClose={handleSuccessToggle}>
         <Modal.Title>Signup successful</Modal.Title>
         <Modal.Description>
           <div className="mt-2">
@@ -146,9 +151,33 @@ const Signup: NextPage = () => {
             size="lg"
             variant="fill"
             value="Submit"
-            onClick={handleToggleModal}
+            onClick={handleSuccessToggle}
           >
             Ok
+          </Button>
+        </div>
+      </Modal>
+
+      {/* Error Modal */}
+      <Modal isOpen={showError} onClose={handleErrorToggle}>
+        <Modal.Title>
+          <h2 className="text-error text-center">{errorMessage?.title}</h2>
+        </Modal.Title>
+        <Modal.Description>
+          <div className="mt-2">
+            <p className="text-sm text-gray-500">{errorMessage?.message}</p>
+          </div>
+        </Modal.Description>
+        <div className="mt-4">
+          <Button
+            className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+            type="submit"
+            size="lg"
+            variant="fill"
+            value="Submit"
+            onClick={handleErrorToggle}
+          >
+            Close
           </Button>
         </div>
       </Modal>
