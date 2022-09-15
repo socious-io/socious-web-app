@@ -1,5 +1,5 @@
 import type {NextPage} from 'next';
-import Router from 'next/router';
+import { useRouter } from "next/router";
 import {useCallback, useEffect, useMemo, useReducer, useState} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
@@ -51,6 +51,7 @@ const reducer = (
 };
 
 const ForgotPassword = () => {
+  const router = useRouter();
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessages, dispatch] = useReducer(reducer, {
@@ -126,7 +127,7 @@ const ForgotPassword = () => {
 
     try {
       await directChangePassword(password);
-      Router.push('/auth/login');
+      router.push("/auth/login");
     } catch (error: any) {
       handleToggleModal();
     }
@@ -158,8 +159,8 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="max-w-xl h-[45rem] m-auto  bg-background rounded-3xl py-7 px-6 border border-grayLineBased ">
-      <div className="flex  justify-center  h-20 relative">
+    <div className="w-screen sm:max-w-xl min-h-screen sm:min-h-0 sm:h-[45rem] flex flex-col items-stretch sm:block mx-auto sm:my-auto bg-background sm:rounded-3xl pt-12 sm:pt-7 px-6 border border-grayLineBased">
+      <div className="flex justify-center h-20 relative">
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>
             <h2 className="text-error text-center">
