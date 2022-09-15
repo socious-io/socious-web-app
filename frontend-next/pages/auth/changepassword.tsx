@@ -18,7 +18,7 @@ const ChangePassword: NextPage = () => {
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [newPasswordShown, setNewPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [errorMessage, setError] = useState<ErrorMessage>();
+  const [errorMessage, setError] = useState<ErrorMessage | null>();
 
   const {register, handleSubmit, formState, watch, getValues} = useForm({
     resolver: joiResolver(schemaChangePassword),
@@ -28,14 +28,14 @@ const ChangePassword: NextPage = () => {
     handleChangePasswordRequest();
   };
 
-  const handleToggleModal = useCallback(() => {
+  const onModalClose = useCallback(() => {
     if (errorMessage) {
-      setError();
+      setError(null);
     } else {
       router.push('/');
     }
-    setShowModal(!showModal);
-  }, [errorMessage, router, showModal]);
+    setShowModal(false);
+  }, [errorMessage, router]);
 
   const onTogglePassword = useCallback(() => {
     setPasswordShown((v) => !v);
@@ -51,7 +51,6 @@ const ChangePassword: NextPage = () => {
 
     try {
       await changePassword(currentPassword, newPassword);
-      Router.push('/');
     } catch (e) {
       const error = e as AxiosError;
       let msg = DefaultErrorMessage;
@@ -63,10 +62,9 @@ const ChangePassword: NextPage = () => {
           };
       }
       setError(msg);
-      handleToggleModal();
     }
     setShowModal(true);
-  }, [getValues, handleToggleModal]);
+  }, [getValues]);
 
   const newPassword = watch('newPassword');
 
@@ -184,7 +182,7 @@ const ChangePassword: NextPage = () => {
         </div>
       </form>
 
-      <Modal isOpen={showModal} onClose={handleToggleModal}>
+      <Modal isOpen={showModal} onClose={onModalClose}>
         {errorMessage && (
           <Modal.Title>
             <h2 className="text-error text-center">{errorMessage.title}</h2>
@@ -206,7 +204,7 @@ const ChangePassword: NextPage = () => {
             size="lg"
             variant="fill"
             value="Submit"
-            onClick={handleToggleModal}
+            onClick={onModalClose}
             //disabled={!!formState?.errors}
           >
             {errorMessage ? 'Close' : 'Ok'}
