@@ -1,24 +1,25 @@
 import React, {useState} from 'react';
 
 // components
-import Button from '../Button/Button';
-import Carousel from './components/Carousel';
+import Button from '../components/common/Button/Button';
+import Carousel from '../components/common/CreateOrganization/components/Carousel';
 
 // steps of create organization
-import AddSocialCauses from './steps/SocialCauses';
-import OrganizationType from './steps/OrganizationType';
-import BasicInfo from './steps/BasicInfo';
-import Culture from './steps/Culture';
-import Impact from './steps/Impact';
-import CreateSuccessfully from './steps/CreateSuccessfully';
-import VerifyOrganization from './steps/VerifyOrganization';
+import SocialCauses from '../components/common/CreateOrganization/steps/SocialCauses';
+import OrganizationType from '../components/common/CreateOrganization/steps/OrganizationType';
+import BasicInfo from '../components/common/CreateOrganization/steps/BasicInfo';
+import Culture from '../components/common/CreateOrganization/steps/Culture';
+import Impact from '../components/common/CreateOrganization/steps/Impact';
+import CreateSuccessfully from '../components/common/CreateOrganization/steps/CreateSuccessfully';
+import VerifyOrganization from '../components/common/CreateOrganization/steps/VerifyOrganization';
+import Starter from '../components/common/CreateOrganization/steps/Starter';
 
 const CreateOrganization = () => {
   const [step, setStep] = useState<number>(8);
 
   // back function of carousel
   const backHandler = () => {
-    if (step > 1) {
+    if (step > 0) {
       setStep((step) => step - 1);
     }
   };
@@ -28,10 +29,12 @@ const CreateOrganization = () => {
       <div className="bg-white w-full h-full min-w-360 md:w-4/12 md:h-4/5 md:rounded-3xl flex flex-col ">
         <Carousel onPress={backHandler} step={step} />
 
-        {step === 1 ? (
+        {step === 0 ? (
+          <Starter />
+        ) : step === 1 ? (
           <OrganizationType />
         ) : step === 2 ? (
-          <AddSocialCauses />
+          <SocialCauses />
         ) : step === 3 ? (
           <BasicInfo />
         ) : step === 4 ? (

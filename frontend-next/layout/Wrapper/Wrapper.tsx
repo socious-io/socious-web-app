@@ -23,7 +23,7 @@ export function Wrapper({children}: LayoutProps) {
   const isNotAuth = !asPath?.includes('auth');
 
   /////////////////////////////////////
-const createOrg=!asPath?.includes('createOrg');
+const createOrg=!asPath?.includes('createorganization');
 
   ///////////////////////////////////
   const {user, userError} = useUser({redirect: false});

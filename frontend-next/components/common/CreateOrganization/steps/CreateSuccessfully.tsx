@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const CreateSuccessfully = () => {
-  return (
-    <div>CreateSuccessfully</div>
-  )
-}
+  return <div>CreateSuccessfully</div>;
+};
 
-export default CreateSuccessfully
+export default CreateSuccessfully;
