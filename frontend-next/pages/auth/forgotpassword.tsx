@@ -44,7 +44,7 @@ const reducer = (state: ForgotError, action: { type: string, error: string | Err
 }
 
 const ForgotPassword = () => {
-  const route = useRouter();
+  const router = useRouter();
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessages, dispatch] = useReducer(reducer, {emailCheckError: "", otpError: "", defaultMessage: DefaultErrorMessage});
