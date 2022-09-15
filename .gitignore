@@ -86,3 +86,4 @@ typechain/
 
 # If someone uses npm, make sure we don't commit the lock file, as it causes bugs
 frontend-next/package.json
+package-lock.json

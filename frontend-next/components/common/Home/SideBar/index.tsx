@@ -10,7 +10,7 @@ const SideBar = () => {
   const {user, currentIdentity} = useUser();
 
   return (
-    <div className="w-80" aria-label="Sidebar">
+    <div className="hidden w-80 md:flex" aria-label="Sidebar">
       <div className="space-y-4 overflow-y-auto bg-gray-50">
         <ProfileCard
           content={user?.mission}

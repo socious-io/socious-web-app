@@ -48,3 +48,6 @@ h1, h2, h3, h4, h5 {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+.overlay__about {
+  background-image:url('../../asset/images/socious_feed.png') bg-slate-900 bg-no-repeat bg-cover ;
+}
