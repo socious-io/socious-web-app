@@ -7,7 +7,7 @@ type StatusProp = {
 
 const StatusCard: React.ElementType = ({ status = "None"}: StatusProp) => {
   return (
-    <div className='p-4 rounded-2xl border border-grayLineBased flex items-center justify-between'>
+    <div className='p-4 rounded-2xl border border-grayLineBased flex items-center justify-between bg-background'>
       <div className='flex flex-row space-x-3'>
         <span className='text-graySubtitle'>
           Status

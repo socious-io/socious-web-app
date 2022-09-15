@@ -6,7 +6,10 @@ module.exports = withImages({
   images: {
     disableStaticImages: true,
     unoptimized: true,
-    domains: ['soscious.s3-ap-northeast-1.amazonaws.com','process.filestackapi.com'],
+    domains: [
+      'soscious.s3-ap-northeast-1.amazonaws.com',
+      'process.filestackapi.com',
+    ],
   },
   eslint: {
     // TODO: remove this when it's all been formatted
