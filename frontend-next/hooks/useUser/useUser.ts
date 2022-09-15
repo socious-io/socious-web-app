@@ -96,9 +96,9 @@ export const useUser = (options?: UseUserOptions) => {
       }
 
       // if user === new_user
-      if (!user.skills && !user.passions && currentIdentity?.type === 'users') {
-        Router.push('/auth/onboarding');
-      }
+      // if (!user.skills && !user.passions && currentIdentity?.type === 'users') {
+      //   Router.push('/auth/onboarding');
+      // }
     }
   }, [
     user,
