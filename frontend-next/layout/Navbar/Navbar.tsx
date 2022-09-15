@@ -15,7 +15,7 @@ import {logout} from '@api/auth/actions';
 import Router from 'next/router';
 
 const Navbar = () => {
-  const {currentIdentity, identities, mutateIdentities} = useUser();
+  const {currentIdentity, identities, mutateIdentities, mutateUser} = useUser();
 
   const onSwitchIdentity = async (identity: LoginIdentity) => {
     try {
@@ -31,7 +31,9 @@ const Navbar = () => {
 
   const onLogout = async () => {
     const res = await logout();
-    if (res) Router.push('/auth/login');
+    mutateIdentities();
+    mutateUser();
+    if (res) Router.push('/');
   };
 
   const imgSrc = require('../../asset/icons/logo.svg');
@@ -83,7 +85,8 @@ const Navbar = () => {
                     <Avatar size="m" src={currentIdentity?.meta?.avatar} />
                   }
                 >
-                  {identities?.length > 0 &&
+                  {identities &&
+                    identities.length > 0 &&
                     identities.map(
                       (identity: LoginIdentity) =>
                         !identity.current && (
