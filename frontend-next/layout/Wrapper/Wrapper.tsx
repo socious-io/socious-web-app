@@ -21,6 +21,11 @@ export function Wrapper({children}: LayoutProps) {
   // });
   const {asPath} = useRouter();
   const isNotAuth = !asPath?.includes('auth');
+
+  /////////////////////////////////////
+const createOrg=!asPath?.includes('createOrg');
+
+  ///////////////////////////////////
   const {user, userError} = useUser({redirect: false});
   let isStarter = false;
   if (
@@ -58,7 +63,7 @@ export function Wrapper({children}: LayoutProps) {
           async
         ></script>
       </Head>
-      {isNotAuth && !isStarter && <Navbar />}
+      {isNotAuth && !isStarter && createOrg && <Navbar />}
       <Container>{children}</Container>
     </>
   );
