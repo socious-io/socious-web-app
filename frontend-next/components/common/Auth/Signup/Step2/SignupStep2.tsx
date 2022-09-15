@@ -1,22 +1,11 @@
 import {InputFiled, Button} from '@components/common';
 import {StepProps} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
-import {useEffect, useState} from "react";
-import { errors } from 'ethers';
 
-interface CustomErrorStepProps extends StepProps {
-  error: string,
-}
-
-const SignupStep2 = ({onSubmit, error}: CustomErrorStepProps) => {
+const SignupStep2 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
 
-  const {handleSubmit,setError, formState, register} = formMethods;
-  
-  useEffect(() => {
-    setError("email", { type: "userExists", message: error})
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
+  const {handleSubmit, setError, formState, register} = formMethods;
 
   return (
     <form

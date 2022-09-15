@@ -27,7 +27,7 @@ const Signup: NextPage = () => {
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const [errorMessage, setError] = useState<string>("");
+  const [errorMessage, setError] = useState<string>('');
 
   const formMethodsStep1 = useForm({
     resolver: joiResolver(schemaSignupStep1),
@@ -35,6 +35,9 @@ const Signup: NextPage = () => {
   const formMethodsStep2 = useForm({
     resolver: joiResolver(schemaSignupStep2),
   });
+
+  const {setError: setEmailError} = formMethodsStep2;
+
   const formMethodsStep3 = useForm({
     resolver: joiResolver(schemaSignupStep3),
   });
@@ -44,19 +47,23 @@ const Signup: NextPage = () => {
       handleSignupRequest();
     } else if (step === 2) {
       const email = formMethodsStep2.getValues('email');
-      setError("");
+      setError('');
       checkEmailExist(email)
         .then((response: any) => {
           if (response.email) {
-            setError("This email is already registered.")
+            // setError('This email is already registered.');
+            setEmailError('email', {
+              type: 'userExists',
+              message: 'This email is already registered',
+            });
           } else {
-            setStep(step + 1)
+            setStep(step + 1);
           }
-        }).catch((error) => {
-          console.error(error.message);
         })
-    }
-    else  {
+        .catch((error) => {
+          console.error(error.message);
+        });
+    } else {
       setStep(step + 1);
     }
   };
@@ -78,13 +85,12 @@ const Signup: NextPage = () => {
     try {
       await signup(firstName, lastName, email, password);
       handleToggleModal();
-    } catch(error: any) {
+    } catch (error: any) {
       if (error.isAxiosError) {
-        setError(() => (error.data.error || error.data.message));
+        setError(() => error.data.error || error.data.message);
       }
-      setStep(2)
+      setStep(2);
     }
-
   };
 
   return (
@@ -114,10 +120,10 @@ const Signup: NextPage = () => {
         </div>
       </div>
       <FormProvider {...formMethodsStep1}>
-        {step === 1 && <SignupStep1 onSubmit={handleSubmit}/>}
+        {step === 1 && <SignupStep1 onSubmit={handleSubmit} />}
       </FormProvider>
       <FormProvider {...formMethodsStep2}>
-        {step === 2 && <SignupStep2 onSubmit={handleSubmit} error={errorMessage} />}
+        {step === 2 && <SignupStep2 onSubmit={handleSubmit} />}
       </FormProvider>
       <FormProvider {...formMethodsStep3}>
         {step === 3 && <SignupStep3 onSubmit={handleSubmit} />}
