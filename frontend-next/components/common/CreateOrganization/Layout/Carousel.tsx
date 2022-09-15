@@ -9,10 +9,10 @@ const Carousel = () => {
     }
   };
   return (
-    <div className=" flex h-12 justify-center items-center border-b relative border-grayLineBased mt-2">
+    <div className=" flex h-16 justify-center items-center border-b relative border-grayLineBased py-4">
       <ChevronLeftIcon
         onClick={back}
-        className="h-6 w-6 text-black stroke-1.5 absolute left-6 hover:text-primary"
+        className="h-6 w-6 text-black stroke-1.5 absolute left-3 hover:text-primary"
       />
 
       {[1, 2, 3, 4, 5, 6, 7].map((stepNumber) => (
