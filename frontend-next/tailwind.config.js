@@ -42,6 +42,9 @@ module.exports = {
       },
       strokeWidth: {
         '1.5': '1.5px',
+      },
+      minWidth: {
+        '360': '360px',
       }
     },
   },
