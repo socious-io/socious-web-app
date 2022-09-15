@@ -1,5 +1,5 @@
 import type {NextPage} from 'next';
-import Router from 'next/router';
+import {useRouter} from 'next/router';
 import {useState, useMemo, useCallback} from 'react';
 import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
@@ -14,6 +14,7 @@ import {changePassword} from '@api/auth/actions';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
 const ChangePassword: NextPage = () => {
+  const router = useRouter();
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [newPasswordShown, setNewPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -27,9 +28,14 @@ const ChangePassword: NextPage = () => {
     handleChangePasswordRequest();
   };
 
-  const handleToggleModal = () => {
+  const handleToggleModal = useCallback(() => {
+    if (errorMessage) {
+      setError();
+    } else {
+      router.push('/');
+    }
     setShowModal(!showModal);
-  };
+  }, [errorMessage, router, showModal]);
 
   const onTogglePassword = useCallback(() => {
     setPasswordShown((v) => !v);
@@ -39,9 +45,7 @@ const ChangePassword: NextPage = () => {
     setNewPasswordShown((v) => !v);
   }, []);
 
-  const handleBack = () => {};
-
-  const handleChangePasswordRequest = async () => {
+  const handleChangePasswordRequest = useCallback(async () => {
     const currentPassword = getValues('currentPassword');
     const newPassword = getValues('newPassword');
 
@@ -61,7 +65,8 @@ const ChangePassword: NextPage = () => {
       setError(msg);
       handleToggleModal();
     }
-  };
+    setShowModal(true);
+  }, [getValues, handleToggleModal]);
 
   const newPassword = watch('newPassword');
 
@@ -76,12 +81,12 @@ const ChangePassword: NextPage = () => {
   );
 
   return (
-    <div className="max-w-xl h-[45rem] m-auto bg-background rounded-3xl py-7 px-6 border border-grayLineBased ">
+    <div className="w-screen sm:max-w-xl min-h-screen sm:min-h-0 sm:h-[45rem] flex flex-col items-stretch mx-auto sm:my-auto bg-background sm:rounded-3xl pt-12 sm:pt-7 px-6 border border-grayLineBased">
       <div className="flex  justify-center  h-20 relative">
         <span
-          className="cursor-pointer absolute left-0"
+          className="cursor-pointer absolute left-0 top-3"
           title="Back"
-          onClick={handleBack}
+          onClick={() => router.back()}
         >
           <ChevronLeftIcon className="w-5 h-5 cursor-pointer" />
         </span>
@@ -93,7 +98,7 @@ const ChangePassword: NextPage = () => {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col justify-between  px-10   "
+        className="flex flex-col justify-between pl-0 sm:pl-10 pr-10 grow sm:grow-0"
       >
         <div className="flex flex-col h-[28rem]">
           <InputFiled
@@ -165,7 +170,7 @@ const ChangePassword: NextPage = () => {
           </div>
         </div>
 
-        <div className="h-48  border-t-2 border-b-grayLineBased  -mx-16 ">
+        <div className="sm:h-48 pb-12 pl-10 sm:pl-0 border-t-2 border-b-grayLineBased  -mx-16 ">
           <Button
             className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
             type="submit"
@@ -180,12 +185,18 @@ const ChangePassword: NextPage = () => {
       </form>
 
       <Modal isOpen={showModal} onClose={handleToggleModal}>
-        <Modal.Title>
-          <h2 className="text-error text-center">{errorMessage?.title}</h2>
-        </Modal.Title>
+        {errorMessage && (
+          <Modal.Title>
+            <h2 className="text-error text-center">{errorMessage.title}</h2>
+          </Modal.Title>
+        )}
         <Modal.Description>
           <div className="mt-2">
-            <p className="text-sm text-gray-500">{errorMessage?.message}</p>
+            <p className="text-sm text-gray-500">
+              {errorMessage
+                ? errorMessage.message
+                : 'You have successfully changed your password.'}
+            </p>
           </div>
         </Modal.Description>
         <div className="mt-4">
@@ -198,7 +209,7 @@ const ChangePassword: NextPage = () => {
             onClick={handleToggleModal}
             //disabled={!!formState?.errors}
           >
-            Close
+            {errorMessage ? 'Close' : 'Ok'}
           </Button>
         </div>
       </Modal>

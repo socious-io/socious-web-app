@@ -53,27 +53,37 @@ const PostAction = ({
         <p className="text-xs">{likesCount} Like</p>
       </Button>
       <Link href={`/post/${id}`} passHref>
-        <Button variant="ghost" className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none">
-          <ChatAltIcon className="w-5" />
-          <p className="text-xs">Comment</p>
-        </Button>
+        <a>
+          <Button
+            variant="ghost"
+            className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
+            >
+            <ChatAltIcon className="w-5" />
+            <p className="text-xs">Comment</p>
+          </Button>
+        </a>
       </Link>
       {
         onShare ?
         <Button
-          variant="ghost"
-          className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
-          onClick={onShare}
+        variant="ghost"
+        className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
+        onClick={onShare}
         >
           <ShareIcon className="w-5" />
           <p className="text-xs">{shared} Share</p>
         </Button>
         :
         <Link href={`/post/${id}`} passHref>
-          <Button variant="ghost" className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none">
-            <ShareIcon className="w-5" />
-            <p className="text-xs">{shared} Share</p>
-          </Button>
+          <a>
+            <Button 
+              variant="ghost"
+              className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
+              >
+              <ShareIcon className="w-5" />
+              <p className="text-xs">{shared} Share</p>
+            </Button>
+            </a>
         </Link>
       }
     </div>

@@ -60,8 +60,13 @@ const Signup: NextPage = () => {
       setStep(step + 1);
     }
   };
+
   const handleBack = () => {
-    setStep(step - 1);
+    if (step === 1) {
+      router.back();
+    } else {
+      setStep(step - 1);
+    }
   };
 
   const handleToggleModal = () => {
@@ -88,7 +93,7 @@ const Signup: NextPage = () => {
   };
 
   return (
-    <div className="max-w-xl h-[45rem] m-auto  bg-background rounded-3xl py-7 px-6 border border-grayLineBased ">
+    <div className="w-screen sm:max-w-xl min-h-screen sm:min-h-0 sm:h-[45rem] flex flex-col items-stretch mx-auto sm:my-auto bg-background sm:rounded-3xl pt-12 sm:py-7 px-6 border border-grayLineBased">
       <div className="flex  justify-center  h-20 relative">
         {![1, 4].includes(step) && (
           <span
@@ -99,7 +104,7 @@ const Signup: NextPage = () => {
             <ChevronLeftIcon className="w-5 h-5 cursor-pointer" />
           </span>
         )}
-        <div className="flex h-20 pt-1">
+        <div className="flex h-20 pt-1 ">
           {[1, 2, 3].includes(step) &&
             [1, 2, 3].map((stepNumber) => (
               <div key={`stepper-${stepNumber}`} className="flex">
@@ -135,7 +140,7 @@ const Signup: NextPage = () => {
         </Modal.Description>
         <div className="mt-4">
           <Button
-            className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+            className="max-w-xs w-full m-auto flex items-center justify-center align-middle mt-4 "
             type="submit"
             size="lg"
             variant="fill"
