@@ -1,3 +1,5 @@
+import { ErrorMessage } from "utils/request";
+
 export type SendEmailType = {
   email: string;
 };
@@ -26,5 +28,5 @@ export type ResetPasswordResponse = {
 export interface ForgotError {
   emailCheckError: string,
   otpError: string,
-  defaultMessage: string,
+  defaultMessage: ErrorMessage,
 }

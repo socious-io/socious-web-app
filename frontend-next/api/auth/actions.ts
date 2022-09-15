@@ -1,43 +1,48 @@
-import { deleteRequest, get, post, put } from "utils/request"
+import {get, post, put} from 'utils/request';
 
-export function signup(firstName: string, lastName: string, email: string, password: string, username?: string) {
+export function signup(
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+  username?: string,
+) {
   return post('/auth/register', {
-      first_name: firstName,
-      last_name: lastName,
-      email,
-      username,
-      password,
-    });
-};
-  
+    first_name: firstName,
+    last_name: lastName,
+    email,
+    username,
+    password,
+  });
+}
+
 export function checkEmailExist(email: string) {
-  return post('/auth/preregister', { email });
-};
-  
+  return post('/auth/preregister', {email});
+}
+
 export function login(email: string, password: string) {
-  return post('/auth/web/login', { email, password });
-};
-  
+  return post('/auth/web/login', {email, password});
+}
+
 export function forgetPassword(email: string) {
-  return post('/auth/forget-password', { email });
-};
-  
+  return post('/auth/forget-password', {email});
+}
+
 export function confirmOTP(email: string, code: string) {
   return get(`/auth/otp/confirm/web?email=${email}&code=${code}`);
-};
+}
 
 export function directChangePassword(password: string) {
-  return put('/user/change-password-direct', { password });
-};
+  return put('/user/change-password-direct', {password});
+}
 
 export function changePassword(currentPassword: string, newPassword: string) {
-  return put("/user/change-password", {
-      current_password: currentPassword,
-      password: newPassword,
-    });
-};
+  return put('/user/change-password', {
+    current_password: currentPassword,
+    password: newPassword,
+  });
+}
 
-// Asking for JWT token(refresh token)
 export function logout() {
-  return deleteRequest("/auth/logout");
-};
+  return post('/auth/logout', {});
+}

@@ -1,5 +1,5 @@
 import type {NextPage} from 'next';
-import Router from "next/router";
+import { useRouter } from "next/router";
 import {useCallback, useEffect, useMemo, useReducer, useState} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
@@ -15,34 +15,39 @@ import {
   schemaForgotPasswordStep1,
   schemaForgotPasswordStep3,
 } from '@api/auth/validation';
+import {AxiosError} from 'axios';
 
 import { forgetPassword, confirmOTP, directChangePassword } from '@api/auth/actions';
+import { DefaultErrorMessage, ErrorMessage } from 'utils/request';
 import { ForgotError } from '@models/forgotPassword'
-import useUser from 'hooks/useUser/useUser';
-import router from 'next/router';
+import { useUser } from 'hooks';
 
 const schemaStep = {
   1: schemaForgotPasswordStep1,
   3: schemaForgotPasswordStep3,
 };
 
-const reducer = (state: ForgotError, action: { type: string, error: string}) => {
-  if (action.error == undefined) return state
+const reducer = (state: ForgotError, action: { type: string, error: string | ErrorMessage}) => {
+  if (action.error == undefined) return state;
 
-  switch (action.type) {
-    case "EMAIL":
-      return { ...state, emailCheckError: action.error}
-    case "OTP":
-      return { ...state, otpError: action.error}
-    default:
-      return { ...state, defaultMessage: action.error}
+  if (typeof(action.error) == 'string') {
+    if (action.type === "EMAIL") {
+      return { ...state, emailCheckError: action.error};
+    } else if (action.type === "OTP") {
+      return { ...state, otpError: action.error};
+    }
+  } else if(action.type === "DEFAULT") {
+    return { ...state, defaultMessage: action.error};
   }
+
+  return state;
 }
 
 const ForgotPassword = () => {
+  const route = useRouter();
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [errorMessages, dispatch] = useReducer(reducer, {emailCheckError: "", otpError: "", defaultMessage: ""});
+  const [errorMessages, dispatch] = useReducer(reducer, {emailCheckError: "", otpError: "", defaultMessage: DefaultErrorMessage});
   const {user} = useUser({onAuthError: false});
   
   useEffect(() => {
@@ -59,16 +64,6 @@ const ForgotPassword = () => {
     resolver: joiResolver(schemaStep[3]),
   });
 
-  const handleSubmit = (data: any) => {
-    if (step === 1) {
-      handleForgotPasswordRequest();
-    } else if (step === 2) {
-      handleConfirmOTPRequest(data);
-    } else if (step === 3) {
-      handleDirectChangePasswordRequest();
-    }
-  };
-
   const handleToggleModal = () => {
     setShowModal(!showModal);
   };
@@ -81,21 +76,22 @@ const ForgotPassword = () => {
     try {
       await forgetPassword(email);
       setStep(step + 1);
-    } catch(error: any) {
+    } catch(e) {
+      const error = e as AxiosError;
       if (error.isAxiosError) {
-        if (error.data.error === "Not matched") {
-          dispatch({ type: "EMAIL", error: "Email does not exist!"});
-        } else {
-          dispatch({ type: "DEFAULT", error: error.data.error });
-        }
+        if (error.response?.data?.error === 'Not matched') {
+            dispatch({ type: "EMAIL", error: "Email does not exist!"});
+            return;
+        }        
       }
+      handleToggleModal();
     }
   };
 
-  const handleConfirmOTPRequest = async (code: string) => {
+  const handleConfirmOTPRequest = async(code: string) => {
     const email = formMethodsStep1.getValues('email');
 
-    dispatch({ type: "OTP", error: ""})
+    dispatch({ type: "OTP", error: "" })
     try {
       await confirmOTP(email, code)
       if (step === 2) {
@@ -103,14 +99,15 @@ const ForgotPassword = () => {
       } else {
         handleToggleModal();
       }
-    } catch (error: any) {
+    } catch (e) {
+      const error = e as AxiosError;
       if (error.isAxiosError) {
-        if (error.data.error === "Not matched") {
-          dispatch({ type: "OTP", error: "Incorrect verification code."});
-        } else {
-          dispatch({ type: "DEFAULT", error: error.data.error });
+        if (error.response?.data?.error === 'Not matched') {
+            dispatch({ type: "OTP", error: "Incorrect verification code."});
+            return;
         }
       }
+      handleToggleModal();
     }
   };
 
@@ -119,23 +116,33 @@ const ForgotPassword = () => {
 
     try {
       await directChangePassword(password);
-      Router.push("/auth/login");
+      router.push("/auth/login");
     } catch (error: any) {
-        handleToggleModal();
-      }
+      handleToggleModal();
     }
   };
 
-  const handleResendCode = async (onClickReset: () => void) => {
+  const handleResendCode = async(onClickReset: () => void) => {
     const email = formMethodsStep1.getValues('email');
     
     try {
       await forgetPassword(email)
       onClickReset()
     } catch(error: any) {
-        handleToggleModal();
+      handleToggleModal();
     }
   }
+
+  const handleSubmit = (data: any) => {
+    if (step === 1) {
+      handleForgotPasswordRequest();
+    } else if (step === 2) {
+      handleConfirmOTPRequest(data);
+    } else if (step === 3) {
+      handleDirectChangePasswordRequest();
+    }
+  };
+
 
   const handleBack = () => {
     if (step === 1) {
@@ -151,14 +158,13 @@ const ForgotPassword = () => {
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>
             <h2 className="text-error text-center">
-              {errorMessages.defaultMessage || "Sorry, something went wrong"}
+              {errorMessages.defaultMessage.title}
             </h2>
           </Modal.Title>
           <Modal.Description>
             <div className="mt-2">
               <p className="text-sm text-gray-500">
-                Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-                amet sint. Velit de.
+                {errorMessages.defaultMessage.message}
               </p>
             </div>
           </Modal.Description>

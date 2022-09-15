@@ -55,7 +55,7 @@ export function Avatar({
   const statusColor = status && STATUS_COLOR[status];
 
   const imgSrc = require(type === 1
-    ? '../../../asset/images/user.png'
+    ? '../../../asset/images/company-avatar-filled.png'
     : '../../../asset/images/user.png');
 
   return (

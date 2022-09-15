@@ -7,22 +7,20 @@ import {TextInput} from '../../components/common/TextInput/TextInput';
 
 import Image from 'next/image';
 import {Dropdown} from '@components/common';
-import useSWR, {useSWRConfig} from 'swr';
 import {useUser} from '@hooks';
 import {changeIdentity} from '@api/identity/actions';
-import {get} from 'utils/request';
-import {IdentityMeta, LoginIdentity} from '@models/identity';
+import {LoginIdentity} from '@models/identity';
 import {getOrganization} from '@api/organizations/actions';
+import {logout} from '@api/auth/actions';
+import Router from 'next/router';
 
 const Navbar = () => {
-  const {mutate} = useSWRConfig();
-
-  const {currentIdentity, identities} = useUser();
+  const {currentIdentity, identities, mutateIdentities} = useUser();
 
   const onSwitchIdentity = async (identity: LoginIdentity) => {
     try {
       await changeIdentity(identity.id);
-      mutate('/identities');
+      mutateIdentities();
       if (identity.type === 'organizations') {
         await getOrganization(identity.id);
       }
@@ -30,6 +28,12 @@ const Navbar = () => {
       console.error(error);
     }
   };
+
+  const onLogout = async () => {
+    const res = await logout();
+    if (res) Router.push('/auth/login');
+  };
+
   const imgSrc = require('../../asset/icons/logo.svg');
 
   return (
@@ -102,6 +106,9 @@ const Navbar = () => {
                           </div>
                         ),
                     )}
+                  <div className="p-4 cursor-pointer" onClick={onLogout}>
+                    <b>LOGOUT</b>
+                  </div>
                 </Dropdown>
                 <CogIcon className="text-white  h-6" />
               </div>
