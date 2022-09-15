@@ -2,12 +2,12 @@ import {Avatar} from '@components/common';
 import Link from 'next/link';
 
 export interface ProfileCardProps {
-  content?: string;
-  name?: string;
-  username?: string;
-  avatar?: string;
-  following?: number;
-  followers?: number;
+  content: string;
+  name: string;
+  username: string;
+  avatar: string;
+  following: number;
+  followers: number;
 }
 
 export function ProfileCard({

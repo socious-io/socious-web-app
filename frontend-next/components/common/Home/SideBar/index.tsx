@@ -14,7 +14,11 @@ const SideBar = () => {
       <div className="space-y-4 overflow-y-auto bg-gray-50">
         <ProfileCard
           content={user?.mission}
-          name={currentIdentity?.type === 'users' ? currentIdentity?.meta?.name : user?.name}
+          name={
+            currentIdentity?.type === 'users'
+              ? currentIdentity?.meta?.name
+              : user?.name
+          }
           avatar={
             currentIdentity?.type === 'users'
               ? user?.avatar?.url
@@ -22,18 +26,19 @@ const SideBar = () => {
           }
           following={user?.following}
           followers={user?.followers}
+          username={user?.username}
         />
         {/* TODO: Uncomment after status is fixed */}
         {/* <StatusCard status={user?.status} /> */}
         {currentIdentity?.type === 'users' ? (
-          <NetworkCard username={user?.username}/>
+          <NetworkCard username={user?.username} />
         ) : (
           <OrganizationCard />
-        )
-        }
+        )}
         <ProjectsCard
           isOrganization={currentIdentity?.type === 'organizations'}
-          username={user?.username}/>
+          username={user?.username}
+        />
       </div>
     </div>
   );
