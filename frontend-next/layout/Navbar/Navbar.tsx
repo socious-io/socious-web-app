@@ -92,7 +92,7 @@ const Navbar = () => {
                 <Link href="/" passHref>
                   <span className="text-sm text-white">Chats</span>
                 </Link>
-                <Link href="/" passHref>
+                <Link href="/notifications" passHref>
                   <span className="text-sm text-white">Notifications</span>
                 </Link>
                 <Link href="/" passHref>

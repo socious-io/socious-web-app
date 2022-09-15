@@ -1,7 +1,5 @@
 import {NextPage} from 'next';
-import React, {useEffect} from 'react';
-import useSWR from 'swr';
-import {get} from 'utils/request';
+import React from 'react';
 import SideBar from '@components/common/Home/SideBar';
 import MainContent from '@components/common/Home/MainContent';
 import StartScreen from '@components/common/StartScreen/StartScreen';

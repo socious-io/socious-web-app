@@ -1,96 +1,76 @@
 import {ExclamationCircleIcon, XIcon, LinkIcon} from '@heroicons/react/outline';
 import {CheckCircleIcon} from '@heroicons/react/solid';
-import { twMerge } from 'tailwind-merge';
-
-interface VariantSubValues {
-    position: string,
-    bg: string,
-    border: string,
-    bgIcon: string,
-    icon: React.ReactNode,
-    textColor: string,
-    xIconColor: string,
-}
-interface VariantValues {
-  [key: string]: VariantSubValues;
-}
-
-const VARIANT: VariantValues = {
-  success: {
-    position: 'bottom-10',
-    bg: 'bg-success-100',
-    border: 'border-success',
-    bgIcon: '',
-    icon: <CheckCircleIcon className="w-6 h-6 text-success" />,
-    textColor: 'text-black',
-    xIconColor: 'text-black',
-  },
-  error: {
-    position: 'top-10',
-    bg: 'bg-error-100',
-    border: 'bg-error-100',
-    bgIcon: 'bg-error',
-    icon: <ExclamationCircleIcon className="w-6 h-6 text-white" />,
-    textColor: 'text-tart-orange-700',
-    xIconColor: 'text-error',
-  },
-  copySuccess: {
-    position: 'z-20 top-16 px-4 w-auto left-auto right-1/2 translate-x-2/4',
-    bg: ' bg-success py-0 w-80 rounded-2xl',
-    border: 'border-none drop-shadow-md',
-    bgIcon: '',
-    icon: <LinkIcon className="w-6 h-6 text-background" />,
-    textColor: 'text-background',
-    xIconColor: 'text-background',
-  },
-};
+import {NotificationItem} from '@models/notification';
+import useSWR from 'swr';
+import {twMerge} from 'tailwind-merge';
+import {get} from 'utils/request';
+import Avatar from '../Avatar/Avatar';
 
 export interface NotificationProps {
-  text: string;
-  isOpen?: boolean;
-  onClose?: () => void;
-  variant?: 'error' | 'success' | 'copySuccess';
+  page: number;
+  onFull: () => void;
 }
 
-export function Notification({
-  text,
-  onClose,
-  isOpen = false,
-  variant = 'error',
-}: NotificationProps) {
-  if (!isOpen) {
-    return null;
+export function Notification({page, onFull}: NotificationProps) {
+  const {data: notifications, error: postsErrors} = useSWR<any>(
+    page ? `/notifications?page=${page}` : null,
+    get,
+    {
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+      onErrorRetry: (error) => {
+        if (error?.response?.status === 401) return;
+      },
+    },
+  );
+
+  if (
+    notifications &&
+    notifications.total_count &&
+    page * 10 >= notifications.total_count
+  ) {
+    onFull();
   }
 
   return (
-    <div className={twMerge(`fixed left-0 right-0 z-10`,
-        VARIANT[variant].position
-        )
-       }>
-      <div className="container px-3 mx-auto">
-        <div
-          className={`flex items-center justify-between p-3 rounded-lg border ${VARIANT[variant].border} ${VARIANT[variant].bg}`}
-        >
-          <div className="flex items-center">
-            <div
-              className={`flex items-center justify-center flex-none w-10 h-10 rounded-lg ${VARIANT[variant].bgIcon}`}
-            >
-              <i>{VARIANT[variant].icon}</i>
+    <>
+      {notifications?.items?.map(
+        (notification: NotificationItem, index: number) => {
+          const borderClass =
+            index === 0
+              ? 'border rounded-t-xl'
+              : index === notifications.items.length - 1
+              ? 'border-r border-l border-b rounded-b-xl'
+              : 'border-r border-l border-b';
+
+          return (
+            <div key={notification?.id}>
+              <div
+                className={twMerge(
+                  'flex items-center px-4 py-2 bg-white',
+                  borderClass && borderClass,
+                )}
+              >
+                <div className="flex flex-row items-center justify-center space-x-2">
+                  <div className="flex items-center justify-center">
+                    <Avatar
+                      size="l"
+                      src={notification?.data?.identity?.meta?.avatar || ''}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="font-sm">{notification?.data.body.body}</p>
+                    <p className="font-sm text-graySubtitle">
+                      {notification.created_at}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="px-3 py-2">
-              <p className={`font-medium ${VARIANT[variant].textColor}`}>
-                {text}
-              </p>
-            </div>
-          </div>
-          {onClose && (
-            <button className="px-2" onClick={onClose}>
-              <XIcon className={`w-7 h-7 ${VARIANT[variant].xIconColor}`} />
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
+          );
+        },
+      )}
+    </>
   );
 }
 
