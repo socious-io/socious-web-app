@@ -14,13 +14,13 @@ const NotificationContainer = () => {
   }
 
   return (
-    <div className="px-4 w-full lg:w-4/6 lg:space-y-2 lg:px-0">
+    <div className="w-full px-4 lg:w-4/6 lg:space-y-2 lg:px-0">
       <div>{notifications}</div>
       {!fullList && (
         <div className="flex justify-center">
           <Button
             variant="link"
-            className="text-primary font-semibold"
+            className="font-semibold text-primary"
             onClick={() => setPage(page + 1)}
             disabled={fullList}
           >
