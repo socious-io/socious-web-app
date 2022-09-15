@@ -1,9 +1,9 @@
-import Layout from '@components/common/CreateOrganization/Layout'
+import CreateOrganization from '@components/common/CreateOrganization/CreateOrganization'
 import React from 'react'
 
 const CreateOrg = () => {
   return (
-    <Layout/>
+    <CreateOrganization/>
   )
 }
 
