@@ -29,6 +29,7 @@ const Posts = ({
     posts?.items?.map((post: any) => {
       return !!(post.shared_id) ?
       <SharedCard
+        key={post.id}
         id={post.id}
         content={post.content}
         time={post.created_at}
@@ -42,6 +43,7 @@ const Posts = ({
       />
         :
       <HomeCard
+        key={post.id}
         id={post.id}
         name={post.identity_meta.name}
         content={post.content}
