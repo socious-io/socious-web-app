@@ -9,8 +9,9 @@ interface AddPostProps {
 const AddPost = ({ onClickAdd }: AddPostProps) => {
   return (
     <>
-      <div className="bg-clearWhite bg-cover pt-11 pb-7 px-4 space-y-2 rounded-2xl bg-blend-overlay"
-        style={{backgroundImage: `url(${ImgUrl})`}}
+      <div
+        className="bg-clearWhite bg-cover pt-11 pb-7 h-[7.5rem] sm:h-[8.5rem] px-4 space-y-2 rounded-2xl bg-center bg-blend-overlay"
+        style={{ backgroundImage: `url(${ImgUrl})`}}
         >
         <h1 className='text-4xl text-white'>
           Your Feed
