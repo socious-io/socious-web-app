@@ -12,9 +12,9 @@ export interface ChipProps {
 }
 
 const PADDING_LIST = {
-  s: 'py-px px-3',
+  s: 'py-1 px-3',
   m: 'py-1 px-3',
-  l: 'py-2.5 px-3',
+  l: 'py-1 px-3',
 };
 
 export function Chip({
@@ -32,7 +32,7 @@ export function Chip({
         onSelected && value && onSelected(value);
       }}
       className={twMerge(
-        'flex flex-wrap  rounded-full',
+        'flex items-center space-x-2 flex-nowrap bg-secondarySLight rounded-full text-secondary',
         `${PADDING_LIST[size]}`,
         containerClassName && containerClassName,
       )}

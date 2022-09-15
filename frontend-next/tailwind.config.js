@@ -38,11 +38,11 @@ module.exports = {
         info: '#ffd700',
         errorSub: '#F5BABA',
         neutralGray: '#D4D2D0',
-        offsetColor: "#C3C8D9",
+        offsetColor: '#C3C8D9',
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar-hide')],
 };
 
 //level 1 - xs -0.75rem; /* 12px */   // 0.60rem; /* 10px */
