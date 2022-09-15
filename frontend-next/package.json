@@ -15,7 +15,6 @@
     "@headlessui/react": "^1.6.5",
     "@heroicons/react": "^1.0.6",
     "@hookform/resolvers": "^2.9.6",
-    "@socious/data": "github:socious-io/socious-data",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
