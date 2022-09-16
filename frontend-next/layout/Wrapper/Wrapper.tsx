@@ -21,12 +21,15 @@ export function Wrapper({children}: LayoutProps) {
   // });
   const {asPath} = useRouter();
   const isNotAuth = !asPath?.includes('auth');
-  const { user, userError } = useUser();
+  const {user, userError} = useUser({redirect: false});
   let isStarter = false;
-  if (asPath === "/" && ((!user && !userError) || userError?.response?.status === 401)) {
+  if (
+    asPath === '/' &&
+    ((!user && !userError) || userError?.response?.status === 401)
+  ) {
     isStarter = true;
   }
-  
+
   return (
     <>
       <Head>
@@ -46,10 +49,16 @@ export function Wrapper({children}: LayoutProps) {
           href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@600&display=swap"
           rel="stylesheet"
         />
-        <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
-        <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js" async></script>
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css"
+        />
+        <script
+          src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"
+          async
+        ></script>
       </Head>
-      {(isNotAuth && !isStarter) && <Navbar />}
+      {isNotAuth && !isStarter && <Navbar />}
       <Container>{children}</Container>
     </>
   );

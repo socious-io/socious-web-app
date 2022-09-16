@@ -1,79 +1,130 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import {get} from 'utils/request';
-import {ApiConstants } from 'utils/api';
-import useSWR from 'swr'
-import { useEffect } from 'react';
-import Router, { useRouter } from 'next/router';
+import {AxiosError} from 'axios';
+import useSWR, {useSWRConfig} from 'swr';
+import {useEffect} from 'react';
+import Router, {useRouter} from 'next/router';
 
-interface UseUserProps {
-  shouldRetry?: boolean;
-  onAuthError?: boolean;
-  forceStop?: boolean
-};
+import {LoginIdentity} from './../../models/identity';
+import {get} from 'utils/request';
+import {logout} from '@api/auth/actions';
+
+interface UseUserOptions {
+  redirect: boolean;
+}
 
 const defaultValues = {
-  // Force Stop redirect logic.
-  // Implemented to try Password expired
-  forceStop: false,
-  shouldRetry: true,
-  onAuthError: false
+  redirect: true,
 };
 
-const allowedRoutes = [
-  "/",
-  "/auth/forgotpassword", "/auth/login", "/auth/signup"
-];
-
-export const useUser = (props: UseUserProps = 
-  defaultValues
-) => {
-  const { forceStop, shouldRetry, onAuthError } = {...defaultValues, ...props};
-  const { pathname } = useRouter();
-
-  const { data: user, error: userError, mutate: mutateUser } = useSWR<any>("/user/profile", get, {
-    shouldRetryOnError: shouldRetry,
-    revalidateOnFocus: false,
-    onErrorRetry: (error) => {
-      if (!onAuthError && error?.response?.status === 401) return
-    }
+function authFetcher<T>(url: string) {
+  return get<T>(url).catch((error) => {
+    if (error?.response?.status === 401) return null;
+    throw error;
   });
+}
 
+export const useUser = (options?: UseUserOptions) => {
+  const {redirect} = {...defaultValues, ...options};
+  const {pathname} = useRouter();
+
+  const {
+    data: identities,
+    error: identitiesError,
+    mutate: mutateIdentities,
+  } = useSWR<Array<LoginIdentity> | null, AxiosError, string>(
+    '/identities',
+    authFetcher,
+    {
+      onErrorRetry: (error) => {
+        const status = error?.response?.status;
+        if (status && status < 500) return null;
+      },
+      // revalidateOnFocus: false,
+    },
+  );
+
+  const currentIdentity = identities?.find(
+    (identity: LoginIdentity) => identity.current,
+  );
+
+  // TODO type defs for user/org
+  const {
+    data: user,
+    error: userError,
+    mutate: mutateUser,
+  } = useSWR<any, AxiosError, string | null>(
+    identities
+      ? currentIdentity?.type === 'users'
+        ? '/user/profile'
+        : `/orgs/${currentIdentity?.id}`
+      : null,
+    authFetcher,
+    {
+      revalidateOnFocus: false,
+      onErrorRetry: (error) => {
+        const status = error?.response?.status;
+        if (status && status < 500) return;
+      },
+    },
+  );
 
   useEffect(() => {
-    // if user && error both are undefined
-    if (!user && !userError) return
-    if (forceStop) return
+    // for emergencies
+    console.log('Storing window.logout for emergencies');
+    window.logout = async () => {
+      await logout();
+      mutateIdentities();
+      mutateUser();
+    };
 
     // if user unauthorized
-    if (userError && userError?.response?.status === 401) {
-      // if page !== allowed_routes
-      console.log("pathname", pathname);
-      if (!(allowedRoutes.includes (pathname))) {
-        // => add ?redirect_to=/profile
-        Router.push("/auth/login");
-      }
+    if (identities === null && redirect) {
+      Router.push(`/auth/login?redirect_to=${pathname}`);
     }
 
-    
+    // if user && error both are undefined
+    if (!user && !userError) return;
+
     // if user authorized
-    if (user) {
+    if (user && userError?.response?.status !== 401) {
       // if user has requested forgot password.
       if (user.password_expired) {
-        Router.push("/auth/forgotpassword");
-        return
-      } else if (pathname.startsWith("/auth/forgotpassword")) {
+        Router.push('/auth/forgotpassword');
+        return;
+      } else if (pathname.startsWith('/auth/forgotpassword')) {
         // if user trying to access /auth/forgotpassword when password not expired
-        Router.push("/");
+        Router.push('/');
       }
 
       // if user === new_user
-      if (!user.skills && !user.passions) {
-        Router.push("/auth/onboarding");
-      }    
+      // if (!user.skills && !user.passions && currentIdentity?.type === 'users') {
+      //   Router.push('/auth/onboarding');
+      // }
     }
-
-  }, [user, pathname, userError, forceStop])
-  return {user, userError, mutateUser};
+  }, [
+    user,
+    pathname,
+    userError,
+    mutateIdentities,
+    mutateUser,
+    currentIdentity?.type,
+    identities,
+    redirect,
+  ]);
+  return {
+    user,
+    userError,
+    mutateUser,
+    currentIdentity,
+    identities,
+    identitiesError,
+    mutateIdentities,
+  };
 };
 
 export default useUser;
+
+declare global {
+  interface Window {
+    logout: () => any;
+  }
+}
