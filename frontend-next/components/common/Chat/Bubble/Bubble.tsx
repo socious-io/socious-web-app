@@ -1,33 +1,38 @@
 import Avatar from '@components/common/Avatar/Avatar';
 import React from 'react';
+import useSWR from 'swr';
 import {twMerge} from 'tailwind-merge';
+import {get} from 'utils/request';
 
 interface BubbleProps {
   self?: boolean;
   content?: string;
-  src?: string;
   link?: string;
+  identity_id?: string;
 }
 
-const Bubble = ({self = true, content, src, link}: BubbleProps) => {
+const Bubble = ({self = true, content, link, identity_id}: BubbleProps) => {
+  const {data: participant} = useSWR<any>(
+    self ? `user/profile` : identity_id ? `/user/${identity_id}/profile` : null,
+    get,
+  );
+
   return (
     <div
       className={twMerge(
         'flex w-full gap-x-4',
-        self
-          ? 'flex-row-reverse ml-auto items-end focus:border-secondaryDark'
-          : 'focus:border-primary',
+        self && 'flex-row-reverse ml-auto items-end',
       )}
     >
       <div>
-        <Avatar size="l" src={src ?? ''} />
+        <Avatar size="l" src={participant?.avatar?.url ?? ''} />
       </div>
       <div
         className={twMerge(
           'p-4 border border-grayLineBased  max-w-xs',
           self
-            ? 'rounded-l-2xl rounded-tr-2xl bg-secondaryLight'
-            : 'rounded-r-2xl rounded-bl-2xl bg-offWhite',
+            ? 'rounded-l-2xl rounded-tr-2xl bg-secondaryLight  active:border-secondaryDark'
+            : 'rounded-r-2xl rounded-bl-2xl bg-offWhite active:border-primary',
         )}
       >
         {content ??

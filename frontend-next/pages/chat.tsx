@@ -9,29 +9,56 @@ import {
   DotsHorizontalIcon,
   PlusIcon,
 } from '@heroicons/react/outline';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 
 const Chat = () => {
-  const {data, error} = useSWR<any>('/chats', get);
-  console.log('Chats --- ', data);
+  const {data, error} = useSWR<any>('/chats/summary', get);
 
-  if (!data.items) <p>Loading....</p>;
+  if (!data?.items) <p>Loading....</p>;
 
   if (!error) <p>Error in fetch</p>;
+
   const [chats, setChats] = useState<any[]>([]);
   const [selectedChat, setSelectedChat] = useState<string>();
+  const [width, setWidth] = useState<number>();
+
+  useEffect(() => {
+    setWidth(window.innerWidth);
+    const handleResize = () => setWidth(window.innerWidth);
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => setChats(data?.items), [data]);
 
+  const backToChatList = useCallback(() => setSelectedChat(''), []);
+
   return (
-    <div className="flex sm:mt-10 sm:space-x-4 h-full">
-      {/* SIDEBAR */}
-      <SideBar chats={chats} />
-      {/* CHAT BOX */}
-      <MainChat selectedChat={selectedChat ?? ''} />
-    </div>
+    <>
+      {width && width >= 640 ? (
+        <div className="hidden sm:flex sm:mt-10 sm:space-x-4 h-full">
+          <SideBar chats={chats} onChatOpen={setSelectedChat} />
+          <MainChat selectedChat={selectedChat ?? ''} goBack={backToChatList} />
+        </div>
+      ) : (
+        <div className="flex sm:hidden sm:mt-10 sm:space-x-4 h-full">
+          {!selectedChat ? (
+            <SideBar chats={chats} onChatOpen={setSelectedChat} />
+          ) : (
+            <MainChat
+              selectedChat={selectedChat ?? ''}
+              goBack={backToChatList}
+            />
+          )}
+        </div>
+      )}
+    </>
   );
 };
 
