@@ -34,7 +34,7 @@ const Starter = () => {
       </div>
 
       <div className="h-full overflow-y-scroll">
-        <p className="text-base font-medium text-left pl-10 pb-4 pt-5 text-black">
+        <p className="sm:text-base text-lg font-medium text-left px-10 pb-4 pt-5 text-black">
           Find talented professionals to help your social cause:
         </p>
         <div className="bg-offWhite flex flex-col divide-y divide-grayLineBased  items-center justify-center mx-6 rounded-3xl">
@@ -44,7 +44,7 @@ const Starter = () => {
             );
           })}
         </div>
-        <p className="px-10 text-xs text-graySubtitle leading-6 py-3">
+        <p className="px-10 sm:text-xs text-sm text-graySubtitle leading-6 py-3">
           * You can post projects when your company has been successfully
           verified by our team.
         </p>
