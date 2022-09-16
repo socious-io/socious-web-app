@@ -59,7 +59,7 @@ export const ORGANIZATION_TYPE = [
   'COOP',
   'IIF',
   'PUBLIC',
-  'INTERGOV',
+  'Impact Investing Funds/Foundations',
   'DEPARTMENT',
   'OTHER',
 ];

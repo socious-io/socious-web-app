@@ -15,7 +15,7 @@ import VerifyOrganization from '../components/common/CreateOrganization/steps/Ve
 import Starter from '../components/common/CreateOrganization/steps/Starter';
 
 const CreateOrganization = () => {
-  const [step, setStep] = useState<number>(8);
+  const [step, setStep] = useState<number>(0);
 
   // back function of carousel
   const backHandler = () => {
@@ -24,10 +24,17 @@ const CreateOrganization = () => {
     }
   };
 
+  // next function
+  const nextHandler = () => {
+    if (step < 8) {
+      setStep((step) => step + 1);
+    }
+  };
+
   return (
     <div className="bg-clearWhite w-screen h-screen absolute top-0 left-0 flex items-center justify-center">
       <div className="bg-white w-screen h-full sm:max-w-lg sm:h-5/6 sm:rounded-3xl flex flex-col ">
-       {step===0?null: <Carousel onPress={backHandler} step={step} />}
+        {step === 0 ? null : <Carousel onPress={backHandler} step={step} />}
 
         {step === 0 ? (
           <Starter />
@@ -49,8 +56,11 @@ const CreateOrganization = () => {
           <VerifyOrganization />
         ) : null}
 
-        <footer className="flex pt-4 pb-10 justify-center border-grayLineBased border-t">
-          <Button className="w-8/12 flex justify-center py-1.5 font-medium">
+        <footer className="flex pt-6 pb-28 sm:pb-10 sm:pt-4 justify-center border-grayLineBased border-t">
+          <Button
+            onClick={nextHandler}
+            className="w-8/12 flex justify-center py-1.5 font-medium"
+          >
             continue
           </Button>
         </footer>
