@@ -39,6 +39,7 @@ module.exports = {
         errorSub: '#F5BABA',
         neutralGray: '#D4D2D0',
         offsetColor: "#C3C8D9",
+        GrayBlack01: '#1F2128',
       },
       strokeWidth: {
         '1.5': '1.5px',
