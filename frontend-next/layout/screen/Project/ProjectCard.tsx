@@ -3,6 +3,7 @@ import {Avatar, Chip} from '@components/common';
 import {Project} from 'models/project';
 import Link from 'next/link';
 import Image from 'next/image';
+import { ChevronRightIcon } from '@heroicons/react/outline';
 
 const imgSrc = require('../../../asset/icons/IconRight.svg');
 const imgUserSrc = require('../../../asset/icons/userWithBorder.svg');
@@ -82,7 +83,7 @@ function ProjectCard({title}: Project) {
           />
         </div>
         <span className="flex flex-row ml-2 items-center ">
-          <Image src={imgSrc} alt="arrow" width={24} height={24} />
+        <ChevronRightIcon className='w-6' />
         </span>
       </div>
       <div className="flex mt-4 justify-between">
