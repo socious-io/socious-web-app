@@ -1,6 +1,6 @@
 import {CogIcon} from '@heroicons/react/outline';
 import {ReactComponent as Logo} from '../../asset/icons/logo.svg';
-import {useContext} from "react";
+import {useContext} from 'react';
 import Link from 'next/link';
 import {Avatar} from '../../components/common/Avatar/Avatar';
 import {TextInput} from '../../components/common/TextInput/TextInput';
@@ -41,7 +41,7 @@ const Navbar = () => {
 
   return (
     <div className="flex h-60 w-full items-center rounded-b-sm bg-primary bg-[url('/images/socious_feed.png')] bg-cover  md:flex md:h-16  md:bg-none lg:h-16  ">
-    <nav className="h-60 w-full items-center md:flex md:h-16  md:bg-none lg:h-16 ">  
+      <nav className="h-60 w-full items-center md:flex md:h-16  md:bg-none lg:h-16 ">
         <div className="container mx-auto max-w-5xl ">
           <div className="flex flex items-center justify-center space-x-4">
             <div className="flex-row-2 ml-4 mr-4 mt-8 flex items-center justify-items-center md:ml-0 md:mt-0">
@@ -92,14 +92,14 @@ const Navbar = () => {
                 <Link href="/" passHref>
                   <span className="text-sm text-white">Chats</span>
                 </Link>
-                <Link href="/" passHref>
+                <Link href="/notifications" passHref>
                   <span className="text-sm text-white">Notifications</span>
                 </Link>
                 <Link href="/" passHref>
                   <span className="text-sm text-white">Projects</span>
                 </Link>
               </div>
-              <div className="flex space-between items-center space-x-3">
+              <div className="space-between flex items-center space-x-3">
                 <Dropdown
                   display={
                     <Avatar size="m" src={currentIdentity?.meta?.avatar} />
@@ -112,7 +112,7 @@ const Navbar = () => {
                         !identity.current && (
                           <div
                             key={identity?.meta?.id}
-                            className="flex flex-row items-center w-52 p-4 cursor-pointer hover:bg-primary my-4 hover:text-offWhite"
+                            className="my-4 flex w-52 cursor-pointer flex-row items-center p-4 hover:bg-primary hover:text-offWhite"
                             onClick={() => onSwitchIdentity(identity)}
                           >
                             <div className="w-1/4">
@@ -129,17 +129,16 @@ const Navbar = () => {
                           </div>
                         ),
                     )}
-                  <div className="p-4 cursor-pointer" onClick={onLogout}>
+                  <div className="cursor-pointer p-4" onClick={onLogout}>
                     <b>LOGOUT</b>
                   </div>
                 </Dropdown>
-                <CogIcon className="text-white  h-6" />
+                <CogIcon className="h-6  text-white" />
               </div>
             </div>
           </div>
         </div>
-     
-    </nav>
+      </nav>
     </div>
   );
 };
