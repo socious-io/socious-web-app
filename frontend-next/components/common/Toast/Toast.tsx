@@ -1,47 +1,96 @@
-import {CheckCircleIcon, XCircleIcon} from '@heroicons/react/outline';
-import {XIcon} from '@heroicons/react/solid';
+import {ExclamationCircleIcon, XIcon, LinkIcon} from '@heroicons/react/outline';
+import {CheckCircleIcon} from '@heroicons/react/solid';
+import {twMerge} from 'tailwind-merge';
+
+interface VariantSubValues {
+  position: string;
+  bg: string;
+  border: string;
+  bgIcon: string;
+  icon: React.ReactNode;
+  textColor: string;
+  xIconColor: string;
+}
+interface VariantValues {
+  [key: string]: VariantSubValues;
+}
+
+const VARIANT: VariantValues = {
+  success: {
+    position: 'bottom-10',
+    bg: 'bg-success-100',
+    border: 'border-success',
+    bgIcon: '',
+    icon: <CheckCircleIcon className="h-6 w-6 text-success" />,
+    textColor: 'text-black',
+    xIconColor: 'text-black',
+  },
+  error: {
+    position: 'top-10',
+    bg: 'bg-error-100',
+    border: 'bg-error-100',
+    bgIcon: 'bg-error',
+    icon: <ExclamationCircleIcon className="h-6 w-6 text-white" />,
+    textColor: 'text-tart-orange-700',
+    xIconColor: 'text-error',
+  },
+  copySuccess: {
+    position: 'z-20 top-16 px-4 w-auto left-auto right-1/2 translate-x-2/4',
+    bg: ' bg-success py-0 w-80 rounded-2xl',
+    border: 'border-none drop-shadow-md',
+    bgIcon: '',
+    icon: <LinkIcon className="h-6 w-6 text-background" />,
+    textColor: 'text-background',
+    xIconColor: 'text-background',
+  },
+};
 
 export interface ToastProps {
-  success: boolean;
-  shopName: string;
-  message?: string;
-  isVisible?: boolean;
+  text: string;
+  isOpen?: boolean;
   onClose?: () => void;
+  variant?: 'error' | 'success' | 'copySuccess';
 }
 
 export function Toast({
-  success,
-  shopName,
-  message = '',
-  isVisible = true,
-  onClose = () => null,
+  text,
+  onClose,
+  isOpen = false,
+  variant = 'error',
 }: ToastProps) {
-  const backgroundColor = success ? 'bg-success-100' : 'bg-error-100';
-  const renderIcon = () =>
-    success ? (
-      <CheckCircleIcon className="w-6 h-6 text-success" />
-    ) : (
-      <XCircleIcon className="w-6 h-6 text-error" />
-    );
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div
-      className={`${
-        isVisible ? 'absolute' : 'hidden'
-      } top-10 right-10 w-96 p-4 flex space-x-4 rounded-lg shadow ${backgroundColor}`}
+      className={twMerge(
+        `fixed left-0 right-0 z-10`,
+        VARIANT[variant].position,
+      )}
     >
-      {renderIcon()}
-      <div className="flex justify-between flex-grow space-x-4">
-        <div>
-          <p>
-            <strong>{shopName}</strong>{' '}
-            {message.length ? message : 'has been added.'}
-          </p>
+      <div className="container mx-auto px-3">
+        <div
+          className={`flex items-center justify-between rounded-lg border p-3 ${VARIANT[variant].border} ${VARIANT[variant].bg}`}
+        >
+          <div className="flex items-center">
+            <div
+              className={`flex h-10 w-10 flex-none items-center justify-center rounded-lg ${VARIANT[variant].bgIcon}`}
+            >
+              <i>{VARIANT[variant].icon}</i>
+            </div>
+            <div className="px-3 py-2">
+              <p className={`font-medium ${VARIANT[variant].textColor}`}>
+                {text}
+              </p>
+            </div>
+          </div>
+          {onClose && (
+            <button className="px-2" onClick={onClose}>
+              <XIcon className={`h-7 w-7 ${VARIANT[variant].xIconColor}`} />
+            </button>
+          )}
         </div>
-        <XIcon
-          className="w-6 h-6 text-gray-500 cursor-pointer"
-          onClick={onClose}
-        />
       </div>
     </div>
   );
