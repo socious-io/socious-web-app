@@ -46,26 +46,24 @@ function SliderCard() {
   return (
     <div
       id="slider"
-      className="w-full   flex-row -ml-2 overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide"
+      className="w-full flex-row -ml-2 overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide"
     >
-      <div className="flex  lg:mr-40 md:mr-20 mr-10 ">
-        {data.map((item) => (
-          <div className="w-full  inline-block  p-2 cursor-pointer  ease-in-out duration-300">
-            <RecommendCard
-              title={''}
-              description={''}
-              country_id={0}
-              project_type={0}
-              project_length={0}
-              payment_type={0}
-              payment_scheme={0}
-              payment_range_lower={''}
-              payment_range_higher={''}
-              experience_level={0}
-            />
-          </div>
-        ))}
-      </div>
+      {data.map((item) => (
+        <div className="w-5/6 md:w-1/2 inline-block  p-2 cursor-pointer  ease-in-out duration-300">
+          <RecommendCard
+            title={''}
+            description={''}
+            country_id={0}
+            project_type={0}
+            project_length={0}
+            payment_type={0}
+            payment_scheme={0}
+            payment_range_lower={''}
+            payment_range_higher={''}
+            experience_level={0}
+          />
+        </div>
+      ))}
     </div>
   );
 }

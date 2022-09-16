@@ -4,7 +4,7 @@ const ImageBanner = () => {
   return (
     <>
       <div
-        className="bg-clearWhite bg-cover pt-11 pb-7 px-4 space-y-2 rounded-2xl bg-blend-overlay"
+        className="hidden md:flex bg-clearWhite bg-cover pt-11 pb-7 px-4 space-y-2 rounded-2xl bg-blend-overlay"
         style={{backgroundImage: `url(${ImgUrl})`}}
       >
         <h1 className="text-4xl text-white">Projects</h1>

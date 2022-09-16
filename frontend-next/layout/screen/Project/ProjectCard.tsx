@@ -11,7 +11,7 @@ const bookmarkSrc = require('../../../asset/icons/bookmark.svg');
 
 function ProjectCard({title}: Project) {
   return (
-    <div className="p-4 bg-white rounded-2xl border border-grayLineBased">
+    <div className="p-4  bg-white rounded-2xl border border-grayLineBased">
       <div className="flex flex-row items-center justify-between ">
         <div className="flex flex-row space-x-2">
           <Avatar size="l" />
