@@ -1,4 +1,5 @@
 import Avatar from '@components/common/Avatar/Avatar';
+import {isoToHumanTime} from 'services/toHumanTime';
 import useSWRImmutable from 'swr/immutable';
 import {get} from 'utils/request';
 
@@ -35,7 +36,9 @@ const ChatCard = ({chat, onChatOpen}: ChatCardProps) => {
       </div>
       <div className="cursor-default">
         {/* TODO:: After merging with main, time to human time. ( chat?.updated_at ) */}
-        <p className="text-grayInputField text-sm mx-auto">Time</p>
+        <p className="text-grayInputField text-sm mx-auto">
+          {chat.updated_at ? isoToHumanTime(chat.updated_at) : '0 min ago'}
+        </p>
         <div className="mx-auto mt-2 rounded-full bg-primary text-white font-semibold w-[1.25rem] h-[1.25rem] flex justify-center items-center">
           <span className="text-xs">{chat?.unread_count}</span>
         </div>
