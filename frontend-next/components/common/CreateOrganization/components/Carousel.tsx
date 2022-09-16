@@ -12,7 +12,7 @@ const Carousel:React.FC<Props> = ({step, onPress}) => {
     <div className=" flex h-16 justify-center items-center border-b relative border-grayLineBased py-4">
       <ChevronLeftIcon
         onClick={onPress}
-        className="h-6 w-6 text-black stroke-1.5 absolute left-3 hover:text-primary"
+        className="h-6 w-6 text-black stroke-1.5 absolute left-4 hover:text-primary"
       />
 
       {[1, 2, 3, 4, 5, 6].map((stepNumber) => (

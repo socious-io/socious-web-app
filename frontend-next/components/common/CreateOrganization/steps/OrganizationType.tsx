@@ -8,7 +8,7 @@ const OrganizationType = () => {
     <>
       <Title>What type of organization?</Title>
       <div className="h-full overflow-y-scroll">
-        <div className="pl-4 py-2">
+        <div className="pl-6 py-2">
           {ORGANIZATION_TYPE.map((item) => {
             return <p className="lowercase py-1.5">{item}</p>;
           })}

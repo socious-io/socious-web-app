@@ -26,7 +26,7 @@ const CreateOrganization = () => {
 
   return (
     <div className="bg-clearWhite w-screen h-screen absolute top-0 left-0 flex items-center justify-center">
-      <div className="bg-white w-full h-full min-w-360 md:w-4/12 md:h-4/5 md:rounded-3xl flex flex-col ">
+      <div className="bg-white w-screen h-full sm:max-w-md sm:h-4/5 md:rounded-3xl flex flex-col ">
         <Carousel onPress={backHandler} step={step} />
 
         {step === 0 ? (
