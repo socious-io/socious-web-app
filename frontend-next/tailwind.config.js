@@ -38,11 +38,11 @@ module.exports = {
         info: '#ffd700',
         errorSub: '#F5BABA',
         neutralGray: '#D4D2D0',
-        offsetColor: "#C3C8D9",
+        offsetColor: '#C3C8D9',
       },
       strokeWidth: {
-        '1.5': '1.5px',
-      }
+        1.5: '1.5px',
+      },
     },
   },
   plugins: [],
