@@ -1,13 +1,19 @@
 import type {NextPage} from 'next';
-import Link from 'next/link';
-import Image from 'next/image';
-import ProjectCard from 'layout/screen/ProjectCard/ProjectCard';
-import SliderCard from 'layout/screen/ProjectCard/SliderCard';
+import ProjectCard from 'layout/screen/Project/ProjectCard';
+import SliderCard from 'layout/screen/Project/SliderCard';
+import ImageBanner from 'layout/screen/Project/ImageBanner';
+import SideBar from '@components/common/Home/SideBar';
+const ImgUrl = require('../../asset/images/project.png');
 
 const Project: NextPage = () => {
   return (
-    <main className="bg-white shadow rounded-lg px-4 pt-16 pb-24 sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
+    <div className="flex mt-10 space-x-6">
+      <SideBar />
       <div className="max-w-3xl mx-auto">
+        <ImageBanner />
+        <p className="text-base mt-6 mb-4 text-neutralGray font-semibold">
+          Recommended you
+        </p>
         <SliderCard />
         <ProjectCard
           title={''}
@@ -22,7 +28,7 @@ const Project: NextPage = () => {
           experience_level={0}
         />
       </div>
-    </main>
+    </div>
   );
 };
 

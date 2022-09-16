@@ -8,9 +8,10 @@ const imgSrc = require('../../../asset/icons/IconRight.svg');
 const imgUserSrc = require('../../../asset/icons/userWithBorder.svg');
 const dislikeSrc = require('../../../asset/icons/thumbs-dislike.svg');
 const bookmarkSrc = require('../../../asset/icons/bookmark.svg');
-export function ProjectCard({title}: Project) {
+
+function ProjectCard({title}: Project) {
   return (
-    <div className="p-4 space-y-4 rounded-2xl border border-grayLineBased">
+    <div className="p-4 bg-white rounded-2xl border border-grayLineBased">
       <div className="flex flex-row items-center justify-between ">
         <div className="flex flex-row space-x-2">
           <Avatar size="l" />
@@ -53,20 +54,20 @@ export function ProjectCard({title}: Project) {
       <div className="">
         <p className="font-semibold">{title}</p>
       </div>
-      <div className="flex flex-row space-x-2 divide-x divide-solid divide-graySubtitle">
+      <div className="flex flex-row mt-4 space-x-2 divide-x divide-solid divide-graySubtitle">
         <p className="text-graySubtitle text-sm ">Part time</p>
         <p className="text-graySubtitle text-sm pl-2 ">Volunteer</p>
         <p className="text-graySubtitle text-sm pl-2 ">Expert</p>
       </div>
       <div>
-        <p className="text-sm">
+        <p className="text-sm my-4">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Equat
           faucibus sed facilisi sit id blandiacilisi sit id blandit
         </p>
       </div>
 
-      <div className="flex flex-row">
-        <div className="flex flex-row space-x-2 hide-scroll-bar  overflow-auto whitespace-no-wrap   w-7/10">
+      <div className="flex flex-row ">
+        <div className="flex flex-row space-x-2 hide-scroll-bar  overflow-auto whitespace-no-wrap  w-7/10">
           <Chip
             content="Environment"
             contentClassName="text-secondary text-sm"
