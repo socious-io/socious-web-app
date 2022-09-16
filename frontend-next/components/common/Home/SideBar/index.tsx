@@ -10,11 +10,15 @@ const SideBar = () => {
   const {user, currentIdentity} = useUser();
 
   return (
-    <div className="w-80" aria-label="Sidebar">
+    <div className="hidden w-80 md:flex" aria-label="Sidebar">
       <div className="space-y-4 overflow-y-auto bg-gray-50">
         <ProfileCard
           content={user?.mission}
-          name={currentIdentity?.type === 'users' ? user?.username : user?.name}
+          name={
+            currentIdentity?.type === 'users'
+              ? currentIdentity?.meta?.name
+              : user?.name
+          }
           avatar={
             currentIdentity?.type === 'users'
               ? user?.avatar?.url
@@ -22,15 +26,18 @@ const SideBar = () => {
           }
           following={user?.following}
           followers={user?.followers}
+          username={user?.username}
         />
-        <StatusCard status={user?.status} />
+        {/* TODO: Uncomment after status is fixed */}
+        {/* <StatusCard status={user?.status} /> */}
         {currentIdentity?.type === 'users' ? (
-          <NetworkCard />
+          <NetworkCard username={user?.username} />
         ) : (
           <OrganizationCard />
         )}
         <ProjectsCard
           isOrganization={currentIdentity?.type === 'organizations'}
+          username={user?.username}
         />
       </div>
     </div>

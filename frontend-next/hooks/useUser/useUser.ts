@@ -85,7 +85,7 @@ export const useUser = (options?: UseUserOptions) => {
     if (!user && !userError) return;
 
     // if user authorized
-    if (user) {
+    if (user && userError?.response?.status !== 401) {
       // if user has requested forgot password.
       if (user.password_expired) {
         Router.push('/auth/forgotpassword');
@@ -96,9 +96,9 @@ export const useUser = (options?: UseUserOptions) => {
       }
 
       // if user === new_user
-      if (!user.skills && !user.passions && currentIdentity?.type === 'users') {
-        Router.push('/auth/onboarding');
-      }
+      // if (!user.skills && !user.passions && currentIdentity?.type === 'users') {
+      //   Router.push('/auth/onboarding');
+      // }
     }
   }, [
     user,

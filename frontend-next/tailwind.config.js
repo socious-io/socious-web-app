@@ -5,7 +5,13 @@ module.exports = {
     './layout/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    Container: {
+      center: true,
+    },
     extend: {
+      backgroundImage: {
+        'hero-pattern': "url('../../asset/images/socious_feed.png')",
+      },
       colors: {
         primary: '#2F4786',
         primaryDark: '#1F2F59',

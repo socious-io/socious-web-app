@@ -1,27 +1,16 @@
 import {InputFiled, Button} from '@components/common';
 import {StepProps} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
-import {useEffect, useState} from "react";
-import { errors } from 'ethers';
 
-interface CustomErrorStepProps extends StepProps {
-  error: string,
-}
-
-const SignupStep2 = ({onSubmit, error}: CustomErrorStepProps) => {
+const SignupStep2 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
 
-  const {handleSubmit,setError, formState, register} = formMethods;
-  
-  useEffect(() => {
-    setError("email", { type: "userExists", message: error})
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
+  const {handleSubmit, setError, formState, register} = formMethods;
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col justify-between px-10   "
+      className="flex flex-col justify-between pl-0 sm:pl-10 pr-10 grow sm:grow-0 "
     >
       <div className="flex flex-col h-[28rem]">
         <h1 className="font-helmet">How do we contact you?</h1>
@@ -35,9 +24,9 @@ const SignupStep2 = ({onSubmit, error}: CustomErrorStepProps) => {
           className="my-6"
         />
       </div>
-      <div className="h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
+      <div className="sm:h-48 pl-10 sm:pl-0 border-t-2 border-b-grayLineBased divide-x -mx-16 ">
         <Button
-          className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+          className="max-w-xs w-full m-auto flex items-center justify-center align-middle mt-4  mb-12 sm:mb-auto"
           type="submit"
           size="lg"
           variant="fill"
