@@ -21,7 +21,7 @@ const Chat = () => {
   if (!error) <p>Error in fetch</p>;
 
   const [chats, setChats] = useState<any[]>([]);
-  const [selectedChat, setSelectedChat] = useState<string>();
+  const [selectedChat, setSelectedChat] = useState<any>();
   const [width, setWidth] = useState<number>();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const Chat = () => {
 
   useEffect(() => setChats(data?.items), [data]);
 
-  const backToChatList = useCallback(() => setSelectedChat(''), []);
+  const backToChatList = useCallback(() => setSelectedChat(undefined), []);
 
   return (
     <>
