@@ -1,5 +1,5 @@
-import {Web3ReactProvider} from '@web3-react/core';
-import Web3 from 'web3';
+// import {Web3ReactProvider} from '@web3-react/core';
+// import Web3 from 'web3';
 import {SWRConfig} from 'swr';
 
 import type {AppProps} from 'next/app';
@@ -12,9 +12,9 @@ import '../asset/css/global.css';
 import '../styles/index.css';
 import '../styles/App.css';
 
-function getLibrary(provider: any) {
-  return new Web3(provider);
-}
+// function getLibrary(provider: any) {
+//   return new Web3(provider);
+// }
 
 function MyApp({Component, pageProps}: AppProps) {
   return (
@@ -27,9 +27,10 @@ function MyApp({Component, pageProps}: AppProps) {
       }}
     >
       <Layout>
-        <Web3ReactProvider getLibrary={getLibrary}>
+        {/* <Web3ReactProvider getLibrary={getLibrary}>
           <Component {...pageProps} />
-        </Web3ReactProvider>
+        </Web3ReactProvider> */}
+        <Component {...pageProps} />
       </Layout>
     </SWRConfig>
   );

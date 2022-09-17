@@ -88,7 +88,7 @@ const ForgotPassword = () => {
       await forgetPassword(email);
       setStep(step + 1);
     } catch (e) {
-      const error = e as AxiosError;
+      const error = e as AxiosError<any>;
       if (error.isAxiosError) {
         if (error.response?.data?.error === 'Not matched') {
           dispatch({type: 'EMAIL', error: 'Email does not exist!'});
@@ -111,7 +111,7 @@ const ForgotPassword = () => {
         handleToggleModal();
       }
     } catch (e) {
-      const error = e as AxiosError;
+      const error = e as AxiosError<any>;
       if (error.isAxiosError) {
         if (error.response?.data?.error === 'Not matched') {
           dispatch({type: 'OTP', error: 'Incorrect verification code.'});

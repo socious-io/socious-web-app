@@ -1,37 +1,38 @@
-import type { Wallet, ContractFactory, Contract } from "ethers";
+// import type { Wallet, ContractFactory, Contract } from "ethers";
 
-import { task } from "hardhat/config";
-import { getAccount, getEnvVariable, writeJsonFile } from "../scripts/utils";
+// import { task } from "hardhat/config";
+// import { getAccount, getEnvVariable, writeJsonFile } from "../scripts/utils";
 
-task("deploy", "Deploys the indicated contract name")
-  .addParam("name", "Name of the contract to be deployed")
-  .addParam("params", "In case additional parameters for constructor are needed")
-  .setAction(async (taskArgs, hre) => {
-    const contractName: string = taskArgs.name
-    const fileName = `addresses/${contractName}-${getEnvVariable('NETWORK').toLowerCase()}.json`;
+// task("deploy", "Deploys the indicated contract name")
+//   .addParam("name", "Name of the contract to be deployed")
+//   .addParam("params", "In case additional parameters for constructor are needed")
+//   .setAction(async (taskArgs, hre) => {
+//     const contractName: string = taskArgs.name
+//     const fileName = `addresses/${contractName}-${getEnvVariable('NETWORK').toLowerCase()}.json`;
 
-    let contract: Contract;
-    let signer: Wallet = getAccount();
+//     let contract: Contract;
+//     let signer: Wallet = getAccount();
 
-    const contractFactory: ContractFactory = await hre.ethers.getContractFactory(contractName, signer);
+//     const contractFactory: ContractFactory = await hre.ethers.getContractFactory(contractName, signer);
 
-    try {
-      if (taskArgs.params) {
-        contract = await contractFactory.deploy(...taskArgs.params);
-      }
-      else {
-        contract = await contractFactory.deploy();
-      }
+//     try {
+//       if (taskArgs.params) {
+//         contract = await contractFactory.deploy(...taskArgs.params);
+//       }
+//       else {
+//         contract = await contractFactory.deploy();
+//       }
 
-      console.log(`Contract deployed to address: ${contract.address}`)
+//       console.log(`Contract deployed to address: ${contract.address}`)
 
-      writeJsonFile({
-        path: `/${fileName}`,
-        data: { contractName: contract.address }
-      })
+//       writeJsonFile({
+//         path: `/${fileName}`,
+//         data: { contractName: contract.address }
+//       })
 
-    } catch (e) {
-      alert(e)
-    }
+//     } catch (e) {
+//       alert(e)
+//     }
 
-});
+// });
+export {};

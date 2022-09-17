@@ -52,7 +52,7 @@ const ChangePassword: NextPage = () => {
     try {
       await changePassword(currentPassword, newPassword);
     } catch (e) {
-      const error = e as AxiosError;
+      const error = e as AxiosError<any>;
       let msg = DefaultErrorMessage;
       if (error.isAxiosError) {
         if (error.response?.data?.error === 'Not matched')

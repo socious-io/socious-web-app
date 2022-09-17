@@ -41,7 +41,7 @@ const Login: NextPage = () => {
       await login(email, password);
       Router.push('/');
     } catch (e) {
-      const error = e as AxiosError;
+      const error = e as AxiosError<any>;
       let msg = DefaultErrorMessage;
       if (error.isAxiosError) {
         if (error.response?.data?.error === 'Not matched')
