@@ -75,3 +75,10 @@
   -moz-appearance: textfield;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 }
+.hide-scroll-bar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scroll-bar::-webkit-scrollbar {
+  display: none;
+}

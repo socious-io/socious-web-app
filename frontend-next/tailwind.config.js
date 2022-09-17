@@ -51,7 +51,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar-hide')],
 };
 
 //level 1 - xs -0.75rem; /* 12px */   // 0.60rem; /* 10px */

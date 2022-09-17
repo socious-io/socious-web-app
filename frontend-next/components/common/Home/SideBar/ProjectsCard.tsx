@@ -13,21 +13,22 @@ const ProjectsCard: FC<ProjectsCardProps> = ({
 }) => {
   return (
     <div className="p-4 space-y-4 rounded-2xl border border-grayLineBased bg-background">
+      <Link href={`/project`}> 
       <label className='text-primary'>Projects</label>
+      </Link>
       <ul className="list-none space-y-4">
-        {
-          isOrganization ? 
+        {isOrganization ? (
           <>
             <li className='flex space-x-4 items-center'>
               <UserCircleIcon className='h-4' />
               <p>Created</p>
             </li>
-            <li className='flex space-x-4 items-center'>
+            <li className="flex space-x-4 items-center">
               <FolderIcon className="h-4" />
               <p>Archived</p>
             </li>
           </>
-          :
+        ) : (
           <>
             <Link href={`/user/${username}/applied`} passHref>
               <li className='flex space-x-4 items-center cursor-pointer'>
@@ -42,7 +43,7 @@ const ProjectsCard: FC<ProjectsCardProps> = ({
               </li>
             </Link>
           </>
-        }
+        )}
       </ul>
     </div>
   );
