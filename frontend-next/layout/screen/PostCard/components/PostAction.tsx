@@ -4,7 +4,6 @@ import { HeartIcon, ChatAltIcon, ShareIcon } from "@heroicons/react/outline";
 import { HeartIcon as LikedIcon } from "@heroicons/react/solid";
 import { useCallback, useState } from "react";
 import { likePost, unlikePost } from "@api/posts/actions";
-import useUser from "hooks/useUser/useUser";
 export interface PostActionProps {
   liked?: boolean;
   likes?: number;
@@ -22,7 +21,6 @@ const PostAction = ({
 }: PostActionProps) => {
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const [likesCount, setlikesCount] = useState<number>(likes || 0);
-  const { user } = useUser();
 
   const toggleLike = useCallback(async() => {
     if (!id) return
@@ -42,7 +40,7 @@ const PostAction = ({
     <div className="flex justify-between items-center divide-x divide-grayLineBased divide-x-[1px]">
       <Button
         variant="ghost"
-        className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
+        className="flex justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
         onClick={toggleLike}
         >
         { isLiked ?
@@ -53,10 +51,10 @@ const PostAction = ({
         <p className="text-xs">{likesCount} Like</p>
       </Button>
       <Link href={`/post/${id}`} passHref>
-        <a>
+        <a className="grow flex justify-center items-center">
           <Button
             variant="ghost"
-            className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
+            className="text-graySubtitle space-x-1 border-0 rounded-none"
             >
             <ChatAltIcon className="w-5" />
             <p className="text-xs">Comment</p>
@@ -67,7 +65,7 @@ const PostAction = ({
         onShare ?
         <Button
         variant="ghost"
-        className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
+        className="flex justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
         onClick={onShare}
         >
           <ShareIcon className="w-5" />
@@ -75,10 +73,10 @@ const PostAction = ({
         </Button>
         :
         <Link href={`/post/${id}`} passHref>
-          <a>
+          <a className="grow flex justify-center items-center ">
             <Button 
               variant="ghost"
-              className="flex flex-row justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
+              className="space-x-1  text-graySubtitle border-0 rounded-none"
               >
               <ShareIcon className="w-5" />
               <p className="text-xs">{shared} Share</p>
