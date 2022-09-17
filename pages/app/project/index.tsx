@@ -3,7 +3,6 @@ import ProjectCard from 'layout/screen/Project/ProjectCard';
 import SliderCard from 'layout/screen/Project/SliderCard';
 import ImageBanner from 'layout/screen/Project/ImageBanner';
 import SideBar from '@components/common/Home/SideBar';
-const ImgUrl = require('../../asset/images/project.png');
 
 const Project: NextPage = () => {
   return (
