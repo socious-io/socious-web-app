@@ -29,7 +29,13 @@ const ChatCard = ({chat, onChatOpen}: ChatCardProps) => {
         />
       </div>
       <div className="grow w-2/5 cursor-pointer">
-        <p className="text-base">{chat?.name}</p>
+        <p className="text-base">
+          {
+            chat?.type === "CHAT"
+              ? chat?.participants?.[0]?.identity_meta?.name 
+              : chat?.name
+          }
+        </p>
         <p className="text-graySubtitle text-sm truncate">
           {chat?.last_message?.text}
         </p>
