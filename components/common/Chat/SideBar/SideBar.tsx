@@ -1,6 +1,6 @@
 import Avatar from '@components/common/Avatar/Avatar';
 import SearchBar from '@components/common/SearchBar/SearchBar';
-import {ChevronLeftIcon, PlusIcon} from '@heroicons/react/outline';
+import {ChevronLeftIcon, PlusIcon} from '@heroicons/react/24/outline';
 import React, {useCallback, useEffect, useState} from 'react';
 import ChatCard from '../ChatCard/ChatCard';
 import {useRouter} from 'next/router';

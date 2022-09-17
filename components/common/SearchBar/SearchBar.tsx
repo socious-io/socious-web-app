@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {UseFormRegisterReturn} from 'react-hook-form';
 import {twMerge} from 'tailwind-merge';
-import {SearchIcon} from '@heroicons/react/outline';
+import {MagnifyingGlassIcon} from '@heroicons/react/24/outline';
 
 export interface SearchBarProps
   extends React.DetailedHTMLProps<
@@ -25,7 +25,7 @@ export const SearchBar = ({
   return (
     <div className={twMerge('relative', className && className)}>
       <span className="absolute left-2 top-2">
-        <SearchIcon className="w-5 h-5 mr-1 text-grayDisableButton focus:text-black " />
+        <MagnifyingGlassIcon className="w-5 h-5 mr-1 text-grayDisableButton focus:text-black " />
       </span>
 
       <input

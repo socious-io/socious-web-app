@@ -1,7 +1,7 @@
 import {InputFiled, Button} from '@components/common';
 import {useState, useMemo, useCallback} from 'react';
 import {rxHasNumber} from 'utils/regex';
-import {EyeIcon, EyeOffIcon} from '@heroicons/react/outline';
+import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
 import {twMerge} from 'tailwind-merge';
 import {StepProps} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
@@ -49,7 +49,7 @@ const SignupStep3 = ({onSubmit}: StepProps) => {
               </span>
             ) : (
               <span onClick={onTogglePassword}>
-                <EyeOffIcon className="w-5 h-5 cursor-pointer" />
+                <EyeSlashIcon className="w-5 h-5 cursor-pointer" />
               </span>
             )
           }

@@ -1,5 +1,5 @@
 import {Avatar} from '@components/common';
-import {DotsHorizontalIcon} from '@heroicons/react/outline';
+import {EllipsisHorizontalIcon} from '@heroicons/react/24/outline';
 
 export interface NotificationCardProps {
   action?: string;
@@ -28,7 +28,7 @@ export function NotificationCard({
         <p className="text-sm text-graySubtitle">{time}</p>
       </div>
       <div>
-        <DotsHorizontalIcon className="w-5" />
+        <EllipsisHorizontalIcon className="w-5" />
       </div>
     </div>
   );

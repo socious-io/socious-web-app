@@ -4,7 +4,7 @@ import {useRouter} from 'next/router';
 import {FormProvider, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {twMerge} from 'tailwind-merge';
-import {ChevronLeftIcon} from '@heroicons/react/outline';
+import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import {AxiosError} from 'axios';
 
 import {Button, Modal} from '@components/common';

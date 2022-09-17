@@ -2,8 +2,8 @@ import type {NextPage} from 'next';
 import {
   BriefcaseIcon,
   ClockIcon,
-  DotsHorizontalIcon,
-} from '@heroicons/react/outline';
+  EllipsisHorizontalIcon,
+} from '@heroicons/react/24/outline';
 import Button from '../components/common/Button/Button';
 // import Image from "next/image";
 import metamask from '../asset/images/metamask@3x.png';
@@ -75,7 +75,7 @@ const Payment: NextPage = () => {
               className="p-2 rounded-full bg-borderGray"
               onClick={disconnect}
             >
-              <DotsHorizontalIcon className="text-primary w-5 h-5 " />
+              <EllipsisHorizontalIcon className="text-primary w-5 h-5 " />
             </div>
           </div>
         </div>

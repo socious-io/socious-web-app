@@ -1,4 +1,4 @@
-import {CogIcon} from '@heroicons/react/outline';
+import {CogIcon} from '@heroicons/react/24/outline';
 import {ReactComponent as Logo} from '../../asset/icons/logo.svg';
 import {useContext} from 'react';
 import Link from 'next/link';

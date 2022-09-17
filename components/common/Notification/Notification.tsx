@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import {twMerge} from 'tailwind-merge';
 import {get} from 'utils/request';
 import Avatar from '../Avatar/Avatar';
-import {DotsVerticalIcon} from '@heroicons/react/solid';
+import {EllipsisVerticalIcon} from '@heroicons/react/24/solid';
 
 export interface NotificationProps {
   page: number;
@@ -65,7 +65,7 @@ export function Notification({page, onFull}: NotificationProps) {
                     </p>
                   </div>
                   <div className="flex w-1/12 justify-end">
-                    <DotsVerticalIcon className="w-5" />
+                    <EllipsisVerticalIcon className="w-5" />
                   </div>
                 </div>
               </div>

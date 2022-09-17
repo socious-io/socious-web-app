@@ -5,7 +5,7 @@ import {useState, useCallback, useContext} from 'react';
 import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 import Link from 'next/link';
-import {EyeIcon, EyeOffIcon} from '@heroicons/react/outline';
+import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
 import {AxiosError} from 'axios';
 
 import {login} from '@api/auth/actions';
@@ -110,7 +110,7 @@ const Login: NextPage = () => {
                   </span>
                 ) : (
                   <span onClick={onTogglePassword}>
-                    <EyeOffIcon className="w-5 h-5 cursor-pointer" />
+                    <EyeSlashIcon className="w-5 h-5 cursor-pointer" />
                   </span>
                 )
               }

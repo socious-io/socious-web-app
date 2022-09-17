@@ -1,5 +1,5 @@
-import {ExclamationCircleIcon, XIcon, LinkIcon} from '@heroicons/react/outline';
-import {CheckCircleIcon} from '@heroicons/react/solid';
+import {ExclamationCircleIcon, XMarkIcon, LinkIcon} from '@heroicons/react/24/outline';
+import {CheckCircleIcon} from '@heroicons/react/24/solid';
 import {twMerge} from 'tailwind-merge';
 
 interface VariantSubValues {
@@ -9,7 +9,7 @@ interface VariantSubValues {
   bgIcon: string;
   icon: React.ReactNode;
   textColor: string;
-  xIconColor: string;
+  XMarkIconColor: string;
 }
 interface VariantValues {
   [key: string]: VariantSubValues;
@@ -23,7 +23,7 @@ const VARIANT: VariantValues = {
     bgIcon: '',
     icon: <CheckCircleIcon className="h-6 w-6 text-success" />,
     textColor: 'text-black',
-    xIconColor: 'text-black',
+    XMarkIconColor: 'text-black',
   },
   error: {
     position: 'top-10',
@@ -32,7 +32,7 @@ const VARIANT: VariantValues = {
     bgIcon: 'bg-error',
     icon: <ExclamationCircleIcon className="h-6 w-6 text-white" />,
     textColor: 'text-tart-orange-700',
-    xIconColor: 'text-error',
+    XMarkIconColor: 'text-error',
   },
   copySuccess: {
     position: 'z-20 top-16 px-4 w-auto left-auto right-1/2 translate-x-2/4',
@@ -41,7 +41,7 @@ const VARIANT: VariantValues = {
     bgIcon: '',
     icon: <LinkIcon className="h-6 w-6 text-background" />,
     textColor: 'text-background',
-    xIconColor: 'text-background',
+    XMarkIconColor: 'text-background',
   },
 };
 
@@ -87,7 +87,7 @@ export function Toast({
           </div>
           {onClose && (
             <button className="px-2" onClick={onClose}>
-              <XIcon className={`h-7 w-7 ${VARIANT[variant].xIconColor}`} />
+              <XMarkIcon className={`h-7 w-7 ${VARIANT[variant].XMarkIconColor}`} />
             </button>
           )}
         </div>

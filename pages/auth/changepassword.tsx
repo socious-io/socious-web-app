@@ -8,7 +8,7 @@ import {rxHasNumber} from 'utils/regex';
 import {twMerge} from 'tailwind-merge';
 import {AxiosError} from 'axios';
 
-import {EyeIcon, EyeOffIcon, ChevronLeftIcon} from '@heroicons/react/outline';
+import {EyeIcon, EyeSlashIcon, ChevronLeftIcon} from '@heroicons/react/24/outline';
 import {schemaChangePassword} from '../../api/auth/validation';
 import {changePassword} from '@api/auth/actions';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
@@ -114,7 +114,7 @@ const ChangePassword: NextPage = () => {
                 </span>
               ) : (
                 <span onClick={onTogglePassword}>
-                  <EyeOffIcon className="w-5 h-5 cursor-pointer" />
+                  <EyeSlashIcon className="w-5 h-5 cursor-pointer" />
                 </span>
               )
             }
@@ -134,7 +134,7 @@ const ChangePassword: NextPage = () => {
                 </span>
               ) : (
                 <span onClick={onToggleNewPassword}>
-                  <EyeOffIcon className="w-5 h-5 cursor-pointer" />
+                  <EyeSlashIcon className="w-5 h-5 cursor-pointer" />
                 </span>
               )
             }

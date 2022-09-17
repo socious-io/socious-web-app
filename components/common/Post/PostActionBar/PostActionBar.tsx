@@ -5,8 +5,8 @@ import {
 } from "@components/common";
 import { CameraIcon,
   LinkIcon,
-  PhotographIcon
-} from "@heroicons/react/outline";
+  PhotoIcon
+} from "@heroicons/react/24/outline";
 import { useToggle } from "@hooks";
 import { useCallback, useRef } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
@@ -96,7 +96,7 @@ export const PostActionBar = ({
               variant="ghost"
               onClick={setOpen}
               >
-                <PhotographIcon className="w-5"/>
+                <PhotoIcon className="w-5"/>
               </Button>
             )}
           </ImageUploader>

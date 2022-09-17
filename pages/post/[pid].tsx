@@ -12,7 +12,7 @@ import ShareModalStep2 from '@components/common/Post/ShareModal/ShareModalStep2/
 import {SharedCard, PostCard} from 'layout/screen/PostCard';
 import SideBar from '@components/common/Home/SideBar';
 import {useToggle, useUser} from '@hooks';
-import {XIcon} from '@heroicons/react/outline';
+import {XMarkIcon} from '@heroicons/react/24/outline';
 import {SharePostBodyType} from '@models/post';
 import {sharePost} from '@api/posts/actions';
 import DeleteModal from '@components/common/Post/DeleteModal/DeleteModal';
@@ -193,7 +193,7 @@ const Post = () => {
             className="absolute right-3 cursor-pointer "
             onClick={resetShareModal}
           >
-            <XIcon className="w-6" />
+            <XMarkIcon className="w-6" />
           </span>
           <Modal.Title>
             <h2 className="min-h-[30px] text-center">

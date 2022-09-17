@@ -4,7 +4,7 @@ import Posts from './Posts';
 import { Modal, Button } from "@components/common"
 import { useToggle } from '@hooks';
 import { Avatar} from '@components/common';
-import { ChevronLeftIcon, XIcon } from '@heroicons/react/outline';
+import { ChevronLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { uploadMedia } from '@api/media/actions';
 import {createPost} from "@api/posts/actions";
 import { CreatePostBodyType } from '@models/post';
@@ -111,7 +111,7 @@ const MainContent = () => {
       {/* Add Post Modal */}
       <Modal isOpen={addPostState} onClose={addPostHandlers.off}>
         <span className='absolute right-3 cursor-pointer ' onClick={resetCreatePostForm}>
-          <XIcon className='w-6' />
+          <XMarkIcon className='w-6' />
         </span>
         {step === 2 && 
           <span

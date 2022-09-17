@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {UseFormRegisterReturn} from 'react-hook-form';
 import {twMerge} from 'tailwind-merge';
-import {ExclamationCircleIcon} from '@heroicons/react/solid';
+import {ExclamationCircleIcon} from '@heroicons/react/24/solid';
 export interface TextInputProps
   extends React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,

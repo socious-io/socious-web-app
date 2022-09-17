@@ -3,7 +3,7 @@ import {Avatar, Chip} from '@components/common';
 import {Project} from 'models/project';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRightIcon } from '@heroicons/react/outline';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
 
 const imgSrc = require('../../../asset/icons/IconRight.svg');
 const imgUserSrc = require('../../../asset/icons/userWithBorder.svg');

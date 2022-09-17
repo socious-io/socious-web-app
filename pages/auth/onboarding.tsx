@@ -14,7 +14,7 @@ import OnboardingStep8 from '@components/common/Auth/Onboarding/Step8/Onboarding
 import OnboardingStep9 from '@components/common/Auth/Onboarding/Step9/OnboardingStep9';
 import OnboardingStep10 from '@components/common/Auth/Onboarding/Step10/OnboardingStep10';
 
-import {ChevronLeftIcon} from '@heroicons/react/outline';
+import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 
 import {useForm, FormProvider} from 'react-hook-form';
 

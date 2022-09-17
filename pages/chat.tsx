@@ -6,9 +6,9 @@ import CommentField from '@components/common/Post/CommentField/CommentField';
 import {
   ArrowLeftIcon,
   ChevronLeftIcon,
-  DotsHorizontalIcon,
+  EllipsisHorizontalIcon,
   PlusIcon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 import {useCallback, useEffect, useState} from 'react';
 import useSWR from 'swr';
 import {get} from 'utils/request';

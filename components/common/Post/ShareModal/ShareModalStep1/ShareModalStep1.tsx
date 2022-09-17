@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Modal, SearchBar, Button, Avatar, SocialShareBar } from 'components/common';
-import { ShareIcon } from '@heroicons/react/outline';
+import { ShareIcon } from '@heroicons/react/24/outline';
 
 import useSWR from 'swr';
 import { get } from 'utils/request';

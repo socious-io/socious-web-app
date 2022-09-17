@@ -11,7 +11,7 @@
 //   TwitterIcon,
 // } from 'next-share';
 import { Button } from 'components/common';
-import { LinkIcon } from '@heroicons/react/outline';
+import { LinkIcon } from '@heroicons/react/24/outline';
 import { useCallback } from 'react';
 
 interface SocialShareBarProps {

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button, Modal } from "@components/common";
-import { HeartIcon, ChatAltIcon, ShareIcon } from "@heroicons/react/outline";
-import { HeartIcon as LikedIcon } from "@heroicons/react/solid";
+import { HeartIcon, ChatBubbleLeftEllipsisIcon, ShareIcon } from "@heroicons/react/24/outline";
+import { HeartIcon as LikedIcon } from "@heroicons/react/24/solid";
 import { useCallback, useState } from "react";
 import { likePost, unlikePost } from "@api/posts/actions";
 export interface PostActionProps {
@@ -56,7 +56,7 @@ const PostAction = ({
             variant="ghost"
             className="text-graySubtitle space-x-1 border-0 rounded-none"
             >
-            <ChatAltIcon className="w-5" />
+            <ChatBubbleLeftEllipsisIcon className="w-5" />
             <p className="text-xs">Comment</p>
           </Button>
         </a>

@@ -1,4 +1,4 @@
-import { DotsHorizontalIcon } from "@heroicons/react/outline";
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { Avatar } from "@components/common";
 import { useCallback, useEffect } from "react";
 import {Button} from 'components/common'
@@ -38,7 +38,7 @@ const PostHead = ({
           className='border-0 p-2 flex'
           onClick={handleOptions}
         >
-          <DotsHorizontalIcon className="w-5 h-5" />
+          <EllipsisHorizontalIcon className="w-5 h-5" />
         </Button>
       }
     </div>

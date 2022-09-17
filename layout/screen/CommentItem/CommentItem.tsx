@@ -1,11 +1,11 @@
 import {Avatar, Button} from '@components/common';
 import {
-  ChatAltIcon,
-  DotsHorizontalIcon,
+  ChatBubbleLeftEllipsisIcon,
+  EllipsisHorizontalIcon,
   HeartIcon,
   ShareIcon,
-} from '@heroicons/react/outline';
-import { HeartIcon as LikedIcon } from "@heroicons/react/solid";
+} from '@heroicons/react/24/outline';
+import { HeartIcon as LikedIcon } from "@heroicons/react/24/solid";
 import { useCallback, useEffect, useState } from 'react';
 import {twMerge} from 'tailwind-merge';
 import { onLikedComment, onUnlikedComment } from '@api/posts/comments/actions';
@@ -72,7 +72,7 @@ export function CommentItem({
           <p className="text-sm text-grayInputField">{time ?? "0 min ago"}</p>
         </div>
         <div className="flex">
-          <DotsHorizontalIcon className="w-5 h-5" />
+          <EllipsisHorizontalIcon className="w-5 h-5" />
         </div>
       </div>
 

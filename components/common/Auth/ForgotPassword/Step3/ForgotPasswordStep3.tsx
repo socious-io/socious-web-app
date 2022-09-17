@@ -1,6 +1,6 @@
 import {InputFiled, Button} from '@components/common';
 import {useState, useMemo, useCallback} from 'react';
-import {EyeIcon, EyeOffIcon} from '@heroicons/react/outline';
+import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
 import {twMerge} from 'tailwind-merge';
 import {rxHasNumber} from 'utils/regex';
 import {StepProps} from '@models/stepProps';
@@ -50,7 +50,7 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
               </span>
             ) : (
               <span onClick={onToggleNewPassword}>
-                <EyeOffIcon className="w-5 h-5 cursor-pointer" />
+                <EyeSlashIcon className="w-5 h-5 cursor-pointer" />
               </span>
             )
           }

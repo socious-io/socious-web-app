@@ -1,4 +1,4 @@
-import {FolderIcon, ClipboardListIcon, UserCircleIcon} from '@heroicons/react/outline';
+import {FolderIcon, ClipboardDocumentListIcon, UserCircleIcon} from '@heroicons/react/24/outline';
 import { FC } from 'react';
 import Link from 'next/link';
 
@@ -32,7 +32,7 @@ const ProjectsCard: FC<ProjectsCardProps> = ({
           <>
             <Link href={`/user/${username}/applied`} passHref>
               <li className='flex space-x-4 items-center cursor-pointer'>
-                <ClipboardListIcon className='h-4' />
+                <ClipboardDocumentListIcon className='h-4' />
                 <p>My applications</p>
               </li>
             </Link>

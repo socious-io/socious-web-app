@@ -1,5 +1,5 @@
 import {twMerge} from 'tailwind-merge';
-import {CheckIcon} from '@heroicons/react/outline';
+import {CheckIcon} from '@heroicons/react/24/outline';
 
 export interface ChipProps {
   size?: 's' | 'm' | 'l';

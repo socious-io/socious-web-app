@@ -6,7 +6,7 @@ import {joiResolver} from '@hookform/resolvers/joi';
 
 import {Button, Modal} from '@components/common';
 
-import {ChevronLeftIcon} from '@heroicons/react/outline';
+import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 
 import ForgotPasswordStep1 from '@components/common/Auth/ForgotPassword/Step1/ForgotPasswordStep1';
 import ForgotPasswordStep2 from '@components/common/Auth/ForgotPassword/Step2/ForgotPasswordStep2';

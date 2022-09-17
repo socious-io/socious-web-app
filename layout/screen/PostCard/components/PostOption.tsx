@@ -1,5 +1,5 @@
 import React from 'react';
-import { PencilIcon, ShareIcon, TrashIcon } from '@heroicons/react/outline';
+import { PencilIcon, ShareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { Button } from '@components/common';
 
 interface PostOptionProps {

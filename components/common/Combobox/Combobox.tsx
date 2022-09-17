@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {Fragment, useEffect, useState} from 'react';
 import {Combobox as UiCombobox, Transition} from '@headlessui/react';
-import {CheckIcon, ChevronDownIcon} from '@heroicons/react/solid';
+import {CheckIcon, ChevronDownIcon} from '@heroicons/react/24/solid';
 import {twMerge} from 'tailwind-merge';
-import {ExclamationCircleIcon} from '@heroicons/react/solid';
+import {ExclamationCircleIcon} from '@heroicons/react/24/solid';
 import useDebounce from 'hooks/useDebounce';
 import { ReactElement } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';

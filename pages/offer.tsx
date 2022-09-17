@@ -16,7 +16,7 @@ import {useState} from 'react';
 import {useToggle} from 'hooks';
 
 // import { ReactComponent as WalletIcon } from "../asset/icons/wallet.svg";
-// import { PaperAirplaneIcon } from "@heroicons/react/outline";
+// import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import PostCard from 'layout/screen/PostCard/PostCard';
 import ProfileCard from 'layout/screen/ProfileCard/ProfileCard';
 import NotificationCard from 'layout/screen/NotificationCard/NotificationCard';

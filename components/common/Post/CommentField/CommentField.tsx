@@ -1,4 +1,4 @@
-import {PaperAirplaneIcon} from '@heroicons/react/outline';
+import {PaperAirplaneIcon} from '@heroicons/react/24/outline';
 import React, {useCallback, useState} from 'react';
 import Avatar from '../../Avatar/Avatar';
 import TextInput from '../../TextInput/TextInput';

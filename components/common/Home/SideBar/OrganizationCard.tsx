@@ -1,4 +1,4 @@
-import {UserCircleIcon, UserGroupIcon} from '@heroicons/react/outline';
+import {UserCircleIcon, UserGroupIcon} from '@heroicons/react/24/outline';
 import Team from "../../../../asset/icons/team.svg";
 import Followers from "../../../../asset/icons/followers.svg";
 import Image from 'next/dist/client/image';

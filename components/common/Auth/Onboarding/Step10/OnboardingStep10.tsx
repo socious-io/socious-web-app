@@ -1,5 +1,5 @@
 import {Button} from '@components/common';
-import {BellIcon} from '@heroicons/react/outline';
+import {BellIcon} from '@heroicons/react/24/outline';
 import {StepProps} from '@models/stepProps';
 const OnboardingStep10 = ({onSubmit}: StepProps) => {
   const handleOnSubmit = (e: any) => {

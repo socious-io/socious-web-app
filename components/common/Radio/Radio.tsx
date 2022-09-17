@@ -1,5 +1,5 @@
 import {UseFormRegisterReturn} from 'react-hook-form';
-import {ExclamationCircleIcon} from '@heroicons/react/solid';
+import {ExclamationCircleIcon} from '@heroicons/react/24/solid';
 /* eslint-disable-next-line */
 export interface RadioInputProps
   extends React.DetailedHTMLProps<

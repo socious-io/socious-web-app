@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Dialog, Transition} from '@headlessui/react';
-import {XIcon} from '@heroicons/react/solid';
+import {XMarkIcon} from '@heroicons/react/24/solid';
 import {Fragment} from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -78,7 +78,7 @@ const Description = ({children}: ModalProps) => {
 
 const CloseButton = ({onClose}: IModalCloseButton) => {
   return (
-    <XIcon
+    <XMarkIcon
       className="absolute w-6 h-6 text-black cursor-pointer top-8 right-4 lg:right-8"
       onClick={onClose}
     />

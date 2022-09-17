@@ -1,6 +1,6 @@
 import Avatar from '@components/common/Avatar/Avatar';
 import CommentField from '@components/common/Post/CommentField/CommentField';
-import {ChevronLeftIcon, DotsHorizontalIcon} from '@heroicons/react/outline';
+import {ChevronLeftIcon, EllipsisHorizontalIcon} from '@heroicons/react/24/outline';
 import {useUser} from '@hooks';
 import React from 'react';
 import useSWR from 'swr';
@@ -63,7 +63,7 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
               </p>
               <p className="text-graySubtitle text-sm">Last Online</p>
             </div>
-            <DotsHorizontalIcon className="w-7 p-1 rounded-full" />
+            <EllipsisHorizontalIcon className="w-7 p-1 rounded-full" />
           </div>
           {data?.items.length > 0 ? (
             <div className="grow flex flex-col justify-end overflow-y-auto w-full p-4 space-y-2">

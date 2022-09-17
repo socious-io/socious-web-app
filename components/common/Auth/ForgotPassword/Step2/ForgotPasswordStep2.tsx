@@ -3,7 +3,7 @@ import {Button, TextInput} from '@components/common';
 
 import Timer from '@components/common/Timer/Timer';
 import {StepWithResendAndError} from '@models/stepProps';
-import { ExclamationCircleIcon } from '@heroicons/react/solid';
+import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 
 const ForgotPasswordStep2 = ({onSubmit, onResendCode, error}: StepWithResendAndError) => {
   const [code, setCode] = useState<any>([null, null, null, null]);

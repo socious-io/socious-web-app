@@ -8,11 +8,11 @@ import Title from './Title';
 
 //icons
 import {
-  LocationMarkerIcon,
+  MapPinIcon,
   PhoneIcon,
   AtSymbolIcon,
   GlobeAltIcon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 
 //interfaces
 interface Props {
@@ -43,7 +43,7 @@ const Contact: React.FC<Props> = ({
       {status === 'organization' ? (
         <>
           <div className="flex mb-4">
-            <LocationMarkerIcon className="h-6 w-6 text-secondary stroke-1.5" />
+            <MapPinIcon className="h-6 w-6 text-secondary stroke-1.5" />
             <p className="w-3/6 text-black pl-4 text-sm">
               {address && address + ' ,'}
             </p>
@@ -77,7 +77,7 @@ const Contact: React.FC<Props> = ({
         </>
       ) : (
         <div className="flex mb-4">
-          <LocationMarkerIcon className="h-6 w-6 text-secondary stroke-1.5" />
+          <MapPinIcon className="h-6 w-6 text-secondary stroke-1.5" />
           <p className="w-3/6 text-black pl-4 text-sm">
             {city && city + ' ,'} {country}
           </p>

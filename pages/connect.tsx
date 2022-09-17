@@ -1,5 +1,5 @@
 import type {NextPage} from 'next';
-import {DotsHorizontalIcon} from '@heroicons/react/solid';
+import {EllipsisHorizontalIcon} from '@heroicons/react/24/solid';
 import Button from '../components/common/Button/Button';
 // import metamask from "../asset/images/metamask@3x.png";
 import {useWeb3React} from '@web3-react/core';
@@ -90,7 +90,7 @@ const Connect: NextPage = () => {
             )}`}
           </p>
           <div className="p-2 rounded-full bg-borderGray" onClick={disconnect}>
-            <DotsHorizontalIcon className="text-primary w-5 h-5 " />
+            <EllipsisHorizontalIcon className="text-primary w-5 h-5 " />
           </div>
         </div>
         <p className="text-primary text-xl text-center font-semibold">
