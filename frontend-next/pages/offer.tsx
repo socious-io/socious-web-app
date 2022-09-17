@@ -20,7 +20,7 @@ import {useToggle} from 'hooks';
 import PostCard from 'layout/screen/PostCard/PostCard';
 import ProfileCard from 'layout/screen/ProfileCard/ProfileCard';
 import NotificationCard from 'layout/screen/NotificationCard/NotificationCard';
-import ProjectCard from 'layout/screen/ProjectCard/ProjectCard';
+import ProjectCard from 'layout/screen/Project/ProjectCard';
 import CommentItem from 'layout/screen/CommentItem/CommentItem';
 
 const override = {
