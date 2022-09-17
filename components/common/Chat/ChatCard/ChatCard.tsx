@@ -18,7 +18,7 @@ const ChatCard = ({chat, onChatOpen}: ChatCardProps) => {
 
   return (
     <div
-      className="font-normal flex max-w-full items-center space-x-2 py-2.5 px-3 border-offsetColor border-b-[1px]"
+      className="flex max-w-full items-center space-x-2 border-b-[1px] border-offsetColor py-2.5 px-3 font-normal"
       onClick={() => onChatOpen(chat)}
     >
       <div className="cursor-pointer">
@@ -28,23 +28,21 @@ const ChatCard = ({chat, onChatOpen}: ChatCardProps) => {
           type={chat?.participants?.[0]?.identity_type === 'users' ? 0 : 1}
         />
       </div>
-      <div className="grow w-2/5 cursor-pointer">
+      <div className="w-2/5 grow cursor-pointer">
         <p className="text-base">
-          {
-            chat?.type === "CHAT"
-              ? chat?.participants?.[0]?.identity_meta?.name 
-              : chat?.name
-          }
+          {chat?.type === 'CHAT'
+            ? chat?.participants?.[0]?.identity_meta?.name
+            : chat?.name}
         </p>
-        <p className="text-graySubtitle text-sm truncate">
+        <p className="truncate text-sm text-graySubtitle">
           {chat?.last_message?.text}
         </p>
       </div>
       <div className="cursor-default">
-        <p className="text-grayInputField text-sm mx-auto">
+        <p className="mx-auto text-sm text-grayInputField">
           {chat.updated_at ? isoToHumanTime(chat.updated_at) : '0 min ago'}
         </p>
-        <div className="mx-auto mt-2 rounded-full bg-primary text-white font-semibold w-[1.25rem] h-[1.25rem] flex justify-center items-center">
+        <div className="mx-auto mt-2 flex h-[1.25rem] w-[1.25rem] items-center justify-center rounded-full bg-primary font-semibold text-white">
           <span className="text-xs">{chat?.unread_count}</span>
         </div>
       </div>

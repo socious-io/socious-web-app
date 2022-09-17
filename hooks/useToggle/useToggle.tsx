@@ -1,7 +1,11 @@
-import { boolean } from 'joi';
+import {boolean} from 'joi';
 import React from 'react';
 
-export type HandlersType = {on: ()=>void, off: ()=>void, toggle: ()=>void}
+export type HandlersType = {
+  on: () => void;
+  off: () => void;
+  toggle: () => void;
+};
 
 interface UseToggleReturn {
   state: boolean;

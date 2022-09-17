@@ -37,34 +37,34 @@ const Contact: React.FC<Props> = ({
   status,
 }) => {
   return (
-    <div className="px-4  border-t border-grayLineBased">
+    <div className="border-t  border-grayLineBased px-4">
       <Title>Contact</Title>
 
       {status === 'organization' ? (
         <>
-          <div className="flex mb-4">
-            <MapPinIcon className="h-6 w-6 text-secondary stroke-1.5" />
-            <p className="w-3/6 text-black pl-4 text-sm">
+          <div className="mb-4 flex">
+            <MapPinIcon className="h-6 w-6 stroke-1.5 text-secondary" />
+            <p className="w-3/6 pl-4 text-sm text-black">
               {address && address + ' ,'}
             </p>
           </div>
-          <div className="flex mb-4">
-            <AtSymbolIcon className="h-6 w-6 text-secondary stroke-1.5 " />
-            <p className="w-3/6 text-black pl-4 text-sm">
+          <div className="mb-4 flex">
+            <AtSymbolIcon className="h-6 w-6 stroke-1.5 text-secondary " />
+            <p className="w-3/6 pl-4 text-sm text-black">
               {mobile_country_code && phone
                 ? mobile_country_code + phone
                 : 'No phone Number'}
             </p>
           </div>
-          <div className="flex mb-4">
-            <PhoneIcon className="h-6 w-6 text-secondary stroke-1.5" />
-            <p className="w-3/6 text-black pl-4 text-sm">
+          <div className="mb-4 flex">
+            <PhoneIcon className="h-6 w-6 stroke-1.5 text-secondary" />
+            <p className="w-3/6 pl-4 text-sm text-black">
               {email ? email : 'No Email'}
             </p>
           </div>
-          <div className="flex mb-4">
-            <GlobeAltIcon className="h-6 w-6 text-secondary stroke-1.5 " />
-            <p className="w-3/6 text-black pl-4 text-sm break-all">
+          <div className="mb-4 flex">
+            <GlobeAltIcon className="h-6 w-6 stroke-1.5 text-secondary " />
+            <p className="w-3/6 break-all pl-4 text-sm text-black">
               {website ? (
                 <a href={website} target="_blank" rel="noreferrer">
                   {website}
@@ -76,9 +76,9 @@ const Contact: React.FC<Props> = ({
           </div>
         </>
       ) : (
-        <div className="flex mb-4">
-          <MapPinIcon className="h-6 w-6 text-secondary stroke-1.5" />
-          <p className="w-3/6 text-black pl-4 text-sm">
+        <div className="mb-4 flex">
+          <MapPinIcon className="h-6 w-6 stroke-1.5 text-secondary" />
+          <p className="w-3/6 pl-4 text-sm text-black">
             {city && city + ' ,'} {country}
           </p>
         </div>

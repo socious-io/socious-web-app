@@ -16,13 +16,13 @@ export function Switch({onChange, value = false, label}: InputToggleProps) {
       onChange={onChange}
       className={`${
         value ? 'bg-gray-500' : 'bg-gray-200'
-      } relative inline-flex items-center h-6 rounded-full w-11`}
+      } relative inline-flex h-6 w-11 items-center rounded-full`}
     >
       <span className="sr-only">{label}</span>
       <span
         className={`${
           value ? 'translate-x-6' : 'translate-x-1'
-        } inline-block w-4 h-4 transform bg-white rounded-full`}
+        } inline-block h-4 w-4 transform rounded-full bg-white`}
       />
     </SwitchRoot>
   );

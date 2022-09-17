@@ -26,7 +26,7 @@ const MainContent: React.FC<Props> = ({data, status}) => {
   const {user} = useUser();
   console.log(data);
   return (
-    <div className="md:w-4/6 border-grayLineBased  border border-1 rounded-xl mb-8  ">
+    <div className="border-1 mb-8  rounded-xl border border-grayLineBased md:w-4/6  ">
       <Header
         avatar={status === 'user' ? data?.avatar : data?.image}
         cover_image={data?.cover_image}
@@ -42,7 +42,7 @@ const MainContent: React.FC<Props> = ({data, status}) => {
 
       {/* if user is current user show 'You' */}
       {user?.username === data?.username && (
-        <p className="text-secondary text-sm mt-3 px-4">You </p>
+        <p className="mt-3 px-4 text-sm text-secondary">You </p>
       )}
 
       <SocialCauses social_causes={data?.social_causes} />
@@ -70,7 +70,7 @@ const MainContent: React.FC<Props> = ({data, status}) => {
         title={status === 'user' ? 'About' : 'Mission'}
       />
       {status === 'user' && <Skills skills={data?.skills} />}
-      <hr className="border-grayLineBased mb-20" />
+      <hr className="mb-20 border-grayLineBased" />
     </div>
   );
 };

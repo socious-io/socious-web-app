@@ -46,10 +46,10 @@ function SliderCard() {
   return (
     <div
       id="slider"
-      className="w-full flex-row -ml-2 overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide"
+      className="scroll -ml-2 w-full flex-row overflow-x-scroll scroll-smooth whitespace-nowrap scrollbar-hide"
     >
       {data.map((item) => (
-        <div className="w-5/6 md:w-1/2 inline-block  p-2 cursor-pointer  ease-in-out duration-300">
+        <div className="inline-block w-5/6 cursor-pointer  p-2 duration-300  ease-in-out md:w-1/2">
           <RecommendCard
             title={''}
             description={''}

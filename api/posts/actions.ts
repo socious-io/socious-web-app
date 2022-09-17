@@ -1,12 +1,13 @@
-import { CreatePostBodyType, EditPostBodyType, SharePostBodyType } from '@models/post';
-import { deleteRequest, post, put } from 'utils/request';
- 
-export function createPost(postBody: CreatePostBodyType) {
-  return post("/posts",
-        postBody,
-  );
-}
+import {
+  CreatePostBodyType,
+  EditPostBodyType,
+  SharePostBodyType,
+} from '@models/post';
+import {deleteRequest, post, put} from 'utils/request';
 
+export function createPost(postBody: CreatePostBodyType) {
+  return post('/posts', postBody);
+}
 
 // LIKE UNLIKE
 export function likePost(id: string) {
@@ -15,7 +16,7 @@ export function likePost(id: string) {
 
 export function unlikePost(id: string) {
   return deleteRequest(`/posts/${id}/like`);
-};
+}
 
 export function sharePost(postBody: SharePostBodyType, postId: string) {
   return post(`/posts/${postId}/share`, postBody);

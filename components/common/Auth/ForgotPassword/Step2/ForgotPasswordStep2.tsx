@@ -3,16 +3,21 @@ import {Button, TextInput} from '@components/common';
 
 import Timer from '@components/common/Timer/Timer';
 import {StepWithResendAndError} from '@models/stepProps';
-import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
+import {ExclamationCircleIcon} from '@heroicons/react/24/solid';
 
-const ForgotPasswordStep2 = ({onSubmit, onResendCode, error}: StepWithResendAndError) => {
+const ForgotPasswordStep2 = ({
+  onSubmit,
+  onResendCode,
+  error,
+}: StepWithResendAndError) => {
   const [code, setCode] = useState<any>([null, null, null, null]);
 
   const [blockVerify, setBlockVerify] = useState<boolean>(true);
 
-  useEffect(() => (
-    setBlockVerify(() => (code.includes(null) || code.includes("")))
-  ), [code]);
+  useEffect(
+    () => setBlockVerify(() => code.includes(null) || code.includes('')),
+    [code],
+  );
 
   const handleSubmitCheckCode = (e: any) => {
     e.preventDefault();
@@ -39,9 +44,9 @@ const ForgotPasswordStep2 = ({onSubmit, onResendCode, error}: StepWithResendAndE
   return (
     <form
       onSubmit={handleSubmitCheckCode}
-      className="flex flex-col justify-between pl-0 sm:pl-10 pr-10 grow sm:grow-0"
+      className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
     >
-      <div className="flex flex-col h-[28rem]">
+      <div className="flex h-[28rem] flex-col">
         {' '}
         <h1 className="font-helmet">Making sure it’s you</h1>
         <p className="text-base">
@@ -49,7 +54,7 @@ const ForgotPasswordStep2 = ({onSubmit, onResendCode, error}: StepWithResendAndE
           the code to continue.
         </p>
         <div
-          className="codes flex flex-row  justify-center space-x-3 pt-10 pb-5 mx-auto"
+          className="codes mx-auto flex  flex-row justify-center space-x-3 pt-10 pb-5"
           ref={codeInputRef}
         >
           {[0, 1, 2, 3].map((codeIndex) => (
@@ -59,20 +64,20 @@ const ForgotPasswordStep2 = ({onSubmit, onResendCode, error}: StepWithResendAndE
               onChange={(e) => handleCodeInputChange(e, codeIndex)}
               type="number"
               maxLength={1}
-              className="text-center w-16 h-16 border-2 border-grayLineBased "
+              className="h-16 w-16 border-2 border-grayLineBased text-center "
             />
           ))}
         </div>
-        {error && 
-          <p className='text-error'>
-            <ExclamationCircleIcon className='w-5 h-5 inline'/> {error}
+        {error && (
+          <p className="text-error">
+            <ExclamationCircleIcon className="inline h-5 w-5" /> {error}
           </p>
-        }
+        )}
       </div>
 
-      <div className="sm:h-48 pl-10 sm:pl-0 border-t-2 border-b-grayLineBased divide-x -mx-16 pb-12">
+      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 pb-12 sm:h-48 sm:pl-0">
         <Button
-          className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+          className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"
@@ -82,7 +87,7 @@ const ForgotPasswordStep2 = ({onSubmit, onResendCode, error}: StepWithResendAndE
         >
           Verify
         </Button>
-        <div className="flex justify-center align-middle items-center">
+        <div className="flex items-center justify-center align-middle">
           <Timer>
             {(onClickReset: any, disabled: any) => (
               <div className="info flex">

@@ -7,7 +7,7 @@ import {Checkbox} from '@components/common';
 import {StepProps} from '@models/stepProps';
 import {TERM_URL, PRIVACY_URL} from 'utils/api';
 
-const SignupStep4 = ({ onSubmit }: StepProps) => {
+const SignupStep4 = ({onSubmit}: StepProps) => {
   const [agreed, setAgreed] = useState<boolean>(false);
 
   const handleSeeTerms = () => {
@@ -28,9 +28,9 @@ const SignupStep4 = ({ onSubmit }: StepProps) => {
   return (
     <form
       onSubmit={handleOnSubmit}
-      className="flex flex-col justify-between pl-0 sm:pl-10 pr-10 grow sm:grow-0  "
+      className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10  "
     >
-      <div className="flex flex-col h-[28rem]">
+      <div className="flex h-[28rem] flex-col">
         <Image
           src={sociousLogo}
           width="104.03"
@@ -38,8 +38,8 @@ const SignupStep4 = ({ onSubmit }: StepProps) => {
           alt="socious logo"
         />
 
-        <h1 className="font-helmet text-center my-6">Welcome to Socious</h1>
-        <div className="text-base flex items-start justify-start my-6">
+        <h1 className="font-helmet my-6 text-center">Welcome to Socious</h1>
+        <div className="my-6 flex items-start justify-start text-base">
           <Checkbox
             checked={agreed}
             onChange={(e) => setAgreed(e.target.checked)}
@@ -47,11 +47,19 @@ const SignupStep4 = ({ onSubmit }: StepProps) => {
             label={
               <>
                 By signing up, I agree to the
-                <Button variant="link" className="px-1" onClick={handleSeeTerms}>
+                <Button
+                  variant="link"
+                  className="px-1"
+                  onClick={handleSeeTerms}
+                >
                   Terms of Service
                 </Button>
                 and
-                <Button variant="link" className="px-1 pt-0" onClick={handleSeePolicy}>
+                <Button
+                  variant="link"
+                  className="px-1 pt-0"
+                  onClick={handleSeePolicy}
+                >
                   Privacy Policy
                 </Button>
               </>
@@ -59,9 +67,9 @@ const SignupStep4 = ({ onSubmit }: StepProps) => {
           />
         </div>
       </div>
-      <div className="sm:h-48 pl-10 sm:pl-0 border-t-2 border-b-grayLineBased divide-x -mx-16 ">
+      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 sm:h-48 sm:pl-0 ">
         <Button
-          className="max-w-xs w-full m-auto flex items-center justify-center align-middle mt-4 mb-12 sm:mb-auto"
+          className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center align-middle sm:mb-auto"
           type="submit"
           size="lg"
           variant="fill"

@@ -1,8 +1,8 @@
-import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import { Avatar } from "@components/common";
-import { useCallback, useEffect } from "react";
-import {Button} from 'components/common'
-import { isoToHumanTime } from "services/toHumanTime";
+import {EllipsisHorizontalIcon} from '@heroicons/react/24/outline';
+import {Avatar} from '@components/common';
+import {useCallback, useEffect} from 'react';
+import {Button} from 'components/common';
+import {isoToHumanTime} from 'services/toHumanTime';
 export interface PostHeadProps {
   name?: string;
   time?: string;
@@ -16,31 +16,32 @@ const PostHead = ({
   time,
   hideOption = false,
   src,
-  toggleOptions
+  toggleOptions,
 }: PostHeadProps) => {
-
   const handleOptions = useCallback(() => {
     if (toggleOptions) toggleOptions();
   }, [toggleOptions]);
 
   return (
-    <div className="flex justify-between items-center">
-      <div className="flex items-center space-x-2 p-b">
+    <div className="flex items-center justify-between">
+      <div className="p-b flex items-center space-x-2">
         <Avatar size="s" src={src} />
-        <p className="text-sm">{name || "Clear Me"}</p>
-        <div className="w-1.5 h-1.5 bg-grayInputField rounded-full" />
-        <p className="text-sm text-grayInputField">{time ? isoToHumanTime(time) : "00 minutes ago"}</p>
+        <p className="text-sm">{name || 'Clear Me'}</p>
+        <div className="h-1.5 w-1.5 rounded-full bg-grayInputField" />
+        <p className="text-sm text-grayInputField">
+          {time ? isoToHumanTime(time) : '00 minutes ago'}
+        </p>
       </div>
       {/* HideOption from unauthorized User */}
-      { !hideOption && 
+      {!hideOption && (
         <Button
-          variant='ghost'
-          className='border-0 p-2 flex'
+          variant="ghost"
+          className="flex border-0 p-2"
           onClick={handleOptions}
         >
-          <EllipsisHorizontalIcon className="w-5 h-5" />
+          <EllipsisHorizontalIcon className="h-5 w-5" />
         </Button>
-      }
+      )}
     </div>
   );
 };

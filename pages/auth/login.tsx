@@ -60,8 +60,8 @@ const Login: NextPage = () => {
   }, []);
 
   return (
-    <div className="w-screen sm:max-w-xl min-h-screen sm:min-h-0 sm:h-[45rem] flex flex-col items-stretch mx-auto sm:my-auto bg-background sm:rounded-3xl px-6 border border-grayLineBased">
-      <div className="flex justify-center h-36 relative">
+    <div className="mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased bg-background px-6 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl">
+      <div className="relative flex h-36 justify-center">
         <span className="mx-auto py-16">
           <Image
             src={logoCompony}
@@ -80,9 +80,9 @@ const Login: NextPage = () => {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col justify-between pl-0 sm:pl-10 pr-10 grow sm:grow-0"
+        className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
       >
-        <div className="flex flex-col h-[28rem]">
+        <div className="flex h-[28rem] flex-col">
           {' '}
           <h1 className="font-helmet">Sign in</h1>
           <InputFiled
@@ -106,11 +106,11 @@ const Login: NextPage = () => {
               suffixContent={
                 passwordShown ? (
                   <span onClick={onTogglePassword}>
-                    <EyeIcon className="w-5 h-5 cursor-pointer" />
+                    <EyeIcon className="h-5 w-5 cursor-pointer" />
                   </span>
                 ) : (
                   <span onClick={onTogglePassword}>
-                    <EyeSlashIcon className="w-5 h-5 cursor-pointer" />
+                    <EyeSlashIcon className="h-5 w-5 cursor-pointer" />
                   </span>
                 )
               }
@@ -128,9 +128,9 @@ const Login: NextPage = () => {
           </div>
         </div>
 
-        <div className="sm:h-48 pb-12 pl-10 sm:pl-0 border-t-2 border-b-grayLineBased divide-x -mx-16">
+        <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pb-12 pl-10 sm:h-48 sm:pl-0">
           <Button
-            className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4"
+            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle"
             type="submit"
             size="lg"
             variant="fill"
@@ -138,7 +138,7 @@ const Login: NextPage = () => {
           >
             Continue
           </Button>
-          <div className="flex justify-center align-middle items-center">
+          <div className="flex items-center justify-center align-middle">
             Not a member?
             <Link passHref href="/auth/signup">
               <Button size="lg" variant="link">
@@ -151,7 +151,7 @@ const Login: NextPage = () => {
 
       <Modal isOpen={showModal} onClose={handleToggleModal}>
         <Modal.Title>
-          <h2 className="text-error text-center">{errorMessage?.title}</h2>
+          <h2 className="text-center text-error">{errorMessage?.title}</h2>
         </Modal.Title>
         <Modal.Description>
           <div className="mt-2">
@@ -160,7 +160,7 @@ const Login: NextPage = () => {
         </Modal.Description>
         <div className="mt-4">
           <Button
-            className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
             type="submit"
             size="lg"
             variant="fill"

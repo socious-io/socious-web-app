@@ -7,11 +7,11 @@ const ImgUrl = require('../../asset/images/project.png');
 
 const Project: NextPage = () => {
   return (
-    <div className="flex mt-10 space-x-6">
+    <div className="mt-10 flex space-x-6">
       <SideBar />
-      <div className="max-w-3xl mx-auto pr-6">
+      <div className="mx-auto max-w-3xl pr-6">
         <ImageBanner />
-        <p className="text-base mt-6 mb-4 text-secondary font-semibold">
+        <p className="mt-6 mb-4 text-base font-semibold text-secondary">
           Recommended you
         </p>
         <SliderCard />

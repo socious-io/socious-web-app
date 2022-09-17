@@ -46,7 +46,7 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
   };
   return (
     <>
-      <div className={`relative ${withPreview && "max-w-[15rem]"}`}>
+      <div className={`relative ${withPreview && 'max-w-[15rem]'}`}>
         <div className="ui-component-img-uploader-edit">
           <input
             onChange={OnChange}
@@ -56,12 +56,11 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
             ref={inputRef}
           />
         </div>
-        {
-          withPreview && 
-            <div className="ui-component-img-uploader-preview">
-              <img src={imagePreviewUrl} onError={onImageError} />
-            </div>
-        }
+        {withPreview && (
+          <div className="ui-component-img-uploader-preview">
+            <img src={imagePreviewUrl} onError={onImageError} />
+          </div>
+        )}
       </div>
       {children(handleChooseMedia)}
     </>

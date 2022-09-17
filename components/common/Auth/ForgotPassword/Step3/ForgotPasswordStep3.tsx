@@ -30,9 +30,9 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col justify-between pl-0 sm:pl-10 pr-10 grow sm:grow-0"
+      className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
     >
-      <div className="flex flex-col h-[28rem]">
+      <div className="flex h-[28rem] flex-col">
         {' '}
         <h1 className="font-helmet">Reset your password </h1>
         <InputFiled
@@ -46,11 +46,11 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
           suffixContent={
             newPasswordShown ? (
               <span onClick={onToggleNewPassword}>
-                <EyeIcon className="w-5 h-5 cursor-pointer" />
+                <EyeIcon className="h-5 w-5 cursor-pointer" />
               </span>
             ) : (
               <span onClick={onToggleNewPassword}>
-                <EyeSlashIcon className="w-5 h-5 cursor-pointer" />
+                <EyeSlashIcon className="h-5 w-5 cursor-pointer" />
               </span>
             )
           }
@@ -66,10 +66,10 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
           className="my-6"
           autoComplete="on"
         />
-        <div className="grid grid-cols-2 gap-3  py-5 w-full">
+        <div className="grid w-full grid-cols-2  gap-3 py-5">
           <div
             className={twMerge(
-              'flex flex-col  border-t-4 py-3 border-t-success',
+              'flex flex-col  border-t-4 border-t-success py-3',
               !isValidPasswordLength && 'border-opacity-40',
             )}
           >
@@ -77,7 +77,7 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
           </div>
           <div
             className={twMerge(
-              'flex flex-col border-t-4 py-3 border-t-success',
+              'flex flex-col border-t-4 border-t-success py-3',
               !isValidPasswordHasNumber && 'border-opacity-40',
             )}
           >
@@ -85,9 +85,9 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
           </div>
         </div>
       </div>
-      <div className="sm:h-48 pl-10 sm:pl-0 border-t-2 border-b-grayLineBased divide-x -mx-16 pb-12">
+      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 pb-12 sm:h-48 sm:pl-0">
         <Button
-          className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+          className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"

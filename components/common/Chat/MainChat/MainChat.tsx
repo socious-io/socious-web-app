@@ -1,6 +1,9 @@
 import Avatar from '@components/common/Avatar/Avatar';
 import CommentField from '@components/common/Post/CommentField/CommentField';
-import {ChevronLeftIcon, EllipsisHorizontalIcon} from '@heroicons/react/24/outline';
+import {
+  ChevronLeftIcon,
+  EllipsisHorizontalIcon,
+} from '@heroicons/react/24/outline';
 import {useUser} from '@hooks';
 import React from 'react';
 import useSWR from 'swr';
@@ -38,9 +41,9 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
     <>
       {/* ON CHAT SELECTED */}
       {data?.items && currentIdentity ? (
-        <div className="h-screen flex flex-col w-full mb-10 sm:h-[48rem] sm:border border-grayLineBased bg-background sm:min-h-full sm:rounded-2xl">
+        <div className="mb-10 flex h-screen w-full flex-col border-grayLineBased bg-background sm:h-[48rem] sm:min-h-full sm:rounded-2xl sm:border">
           {/* ON CONVERSATION ALREADY STARTED */}
-          <div className="flex items-center space-x-2 pt-12 px-4 sm:pt-6 pb-2.5 border-offsetcolor border-b-[1px]">
+          <div className="border-offsetcolor flex items-center space-x-2 border-b-[1px] px-4 pt-12 pb-2.5 sm:pt-6">
             <span className="block sm:hidden" onClick={goBack}>
               <ChevronLeftIcon className="w-5" />
             </span>
@@ -54,19 +57,17 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
               }
             />
             <div className="grow">
-              <p className="text-base cursor-pointer">
-              {
-                selectedChat?.type === "CHAT"
-                  ? selectedChat?.participants?.[0]?.identity_meta?.name 
-                  : selectedChat?.name
-              }
+              <p className="cursor-pointer text-base">
+                {selectedChat?.type === 'CHAT'
+                  ? selectedChat?.participants?.[0]?.identity_meta?.name
+                  : selectedChat?.name}
               </p>
-              <p className="text-graySubtitle text-sm">Last Online</p>
+              <p className="text-sm text-graySubtitle">Last Online</p>
             </div>
-            <EllipsisHorizontalIcon className="w-7 p-1 rounded-full" />
+            <EllipsisHorizontalIcon className="w-7 rounded-full p-1" />
           </div>
           {data?.items.length > 0 ? (
-            <div className="grow flex flex-col justify-end overflow-y-auto w-full p-4 space-y-2">
+            <div className="flex w-full grow flex-col justify-end space-y-2 overflow-y-auto p-4">
               {reversedMessages.map((message: any) => (
                 <Bubble
                   key={message.id}
@@ -78,7 +79,7 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
               ))}
             </div>
           ) : (
-            <div className="grow flex items-center justify-center w-full">
+            <div className="flex w-full grow items-center justify-center">
               <div>
                 <Avatar />
               </div>
@@ -87,13 +88,13 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
           <CommentField
             onSend={(comment) => console.log(comment)}
             placeholder="Write a message"
-            className="border-0 border-t-[1px] rounded-none rounded-b-2xl border-offsetcolor"
+            className="border-offsetcolor rounded-none rounded-b-2xl border-0 border-t-[1px]"
           />
         </div>
       ) : (
-        <div className="w-full sm:flex hidden items-center justify-center mb-10 h-[48rem] border border-grayLineBased bg-background sm:min-h-full rounded-2xl">
+        <div className="mb-10 hidden h-[48rem] w-full items-center justify-center rounded-2xl border border-grayLineBased bg-background sm:flex sm:min-h-full">
           {/* NO PARTICIPANT BOX */}
-          <div className="text-center font-worksans text-grayInputField max-w-[32rem]">
+          <div className="font-worksans max-w-[32rem] text-center text-grayInputField">
             <h2>Message your friends</h2>{' '}
             <p>
               Let’s make a great conversation with your trustworthy friends,

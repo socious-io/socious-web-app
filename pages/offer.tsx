@@ -103,7 +103,7 @@ const Offer = () => {
   // };
 
   return (
-    <div className="mt-10 h-auto flex flex-row space-x-4">
+    <div className="mt-10 flex h-auto flex-row space-x-4">
       <div className="w-1/3">
         <ProfileCard
           name="Childhood Cancer"
@@ -121,7 +121,7 @@ const Offer = () => {
 
         {/* <CommentItem name="User" time="1 min ago" /> */}
 
-        <div className="py-2 px-4 rounded-2xl border border-grayLineBased">
+        <div className="rounded-2xl border border-grayLineBased py-2 px-4">
           <NotificationCard
             name="User One"
             time="1 min ago"

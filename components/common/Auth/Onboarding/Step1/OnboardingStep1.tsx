@@ -19,7 +19,7 @@ const OnboardingStep1 = ({onSubmit}: StepProps) => {
       onSubmit={handleOnSubmit}
       className="flex flex-col justify-between  px-10    "
     >
-      <div className="flex flex-col h-[28rem]">
+      <div className="flex h-[28rem] flex-col">
         {' '}
         <Image
           src={logoCompony}
@@ -27,8 +27,8 @@ const OnboardingStep1 = ({onSubmit}: StepProps) => {
           height="136.59"
           alt="socious logo"
         />
-        <h1 className="font-helmet text-center my-6 ">Welcome to Socious</h1>
-        <p className="text-base text-center my-6 text-graySubtitle">
+        <h1 className="font-helmet my-6 text-center ">Welcome to Socious</h1>
+        <p className="my-6 text-center text-base text-graySubtitle">
           To continue, please agree to our terms of service and privacy policy
           <Button variant="link" onClick={handleSeePolicy}>
             {' '}
@@ -37,9 +37,9 @@ const OnboardingStep1 = ({onSubmit}: StepProps) => {
         </p>
       </div>
 
-      <div className="h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
+      <div className="-mx-16  h-48 divide-x border-t-2 border-b-grayLineBased ">
         <Button
-          className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+          className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"

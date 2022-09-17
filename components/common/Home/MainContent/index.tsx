@@ -1,48 +1,46 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import AddPost from './AddPost';
 import Posts from './Posts';
-import { Modal, Button } from "@components/common"
-import { useToggle } from '@hooks';
-import { Avatar} from '@components/common';
-import { ChevronLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { uploadMedia } from '@api/media/actions';
-import {createPost} from "@api/posts/actions";
-import { CreatePostBodyType } from '@models/post';
+import {Modal, Button} from '@components/common';
+import {useToggle} from '@hooks';
+import {Avatar} from '@components/common';
+import {ChevronLeftIcon, XMarkIcon} from '@heroicons/react/24/outline';
+import {uploadMedia} from '@api/media/actions';
+import {createPost} from '@api/posts/actions';
+import {CreatePostBodyType} from '@models/post';
 
 // validations
-import { useForm, FormProvider } from 'react-hook-form';
-import { joiResolver } from '@hookform/resolvers/joi';
-import { schemaCreatePost } from '@api/posts/validation';
+import {useForm, FormProvider} from 'react-hook-form';
+import {joiResolver} from '@hookform/resolvers/joi';
+import {schemaCreatePost} from '@api/posts/validation';
 import PostCreateStep1 from '@components/common/Post/Create/Step1/PostCreateStep1';
 import PostCreateStep2 from '@components/common/Post/Create/Step2/PostCreateStep2';
 import PostContainer from './PostContainer';
-
 
 const MainContent = () => {
   const {state: addPostState, handlers: addPostHandlers} = useToggle();
   const {state: likeState, handlers: likeHandlers} = useToggle();
   const [file, setFile] = useState<any>(null);
   const formMethodsStep1 = useForm({resolver: joiResolver(schemaCreatePost)});
-  const { getValues, setValue } = formMethodsStep1;
+  const {getValues, setValue} = formMethodsStep1;
   const [step, setStep] = useState<number>(1);
-
 
   const resetCreatePostForm = useCallback(() => {
     addPostHandlers.off();
     setStep(1);
-    setValue("causes_tags", null);
-    setValue("content", null);
+    setValue('causes_tags', null);
+    setValue('content', null);
     setFile(null);
-  }, [addPostHandlers, setValue])
-  
+  }, [addPostHandlers, setValue]);
+
   const onCreatePost = useCallback(async () => {
-    let media = null
+    let media = null;
     if (file) {
-      const formData = new FormData;
-      formData.append("file", file);
+      const formData = new FormData();
+      formData.append('file', file);
       try {
-        const res: any = await uploadMedia(formData)
-        media = [res.id]
+        const res: any = await uploadMedia(formData);
+        media = [res.id];
       } catch (error) {
         console.error(error);
         resetCreatePostForm();
@@ -52,32 +50,33 @@ const MainContent = () => {
     const content = getValues('content');
     const causes_tags = getValues('causes_tags');
     const link = getValues('link');
-    const postBody: CreatePostBodyType = { content, causes_tags: [causes_tags]}
+    const postBody: CreatePostBodyType = {content, causes_tags: [causes_tags]};
     if (link) postBody.link = link;
     if (media) postBody.media = media;
 
     try {
       const res = await createPost(postBody);
-      console.log("response: ", res);
-    } catch(error) {
+      console.log('response: ', res);
+    } catch (error) {
       console.error(error);
     }
     resetCreatePostForm();
-  }, [file, getValues, resetCreatePostForm])
-  
-  const handleSubmit = useCallback((data?: any) => {
-    if (step === 1) {
-      setStep(step + 1);
-    } else {
-      onCreatePost();
-    }
-  }, [step, onCreatePost])
+  }, [file, getValues, resetCreatePostForm]);
 
-  
+  const handleSubmit = useCallback(
+    (data?: any) => {
+      if (step === 1) {
+        setStep(step + 1);
+      } else {
+        onCreatePost();
+      }
+    },
+    [step, onCreatePost],
+  );
 
   return (
-    <div className="w-full mb-10 space-y-6">
-      <AddPost onClickAdd={addPostHandlers.on}/>
+    <div className="mb-10 w-full space-y-6">
+      <AddPost onClickAdd={addPostHandlers.on} />
       <PostContainer />
       {/* Like Modal */}
       <Modal isOpen={likeState} onClose={likeHandlers.off}>
@@ -85,24 +84,20 @@ const MainContent = () => {
           <h2 className="text-center">Likes</h2>
         </Modal.Title>
         <Modal.Description>
-          <div className="mt-2 h-80 overflow-y-auto mt-8">
-            <div className='flex justify-between border-t-2 py-3'>
-              <div className='flex items-center'>
+          <div className="mt-2 mt-8 h-80 overflow-y-auto">
+            <div className="flex justify-between border-t-2 py-3">
+              <div className="flex items-center">
                 <Avatar />
                 Clear Me
               </div>
-              <Button size='sm'>
-                Connect
-              </Button>
+              <Button size="sm">Connect</Button>
             </div>
-            <div className='flex justify-between border-t-2 py-3'>
-              <div className='flex items-center'>
+            <div className="flex justify-between border-t-2 py-3">
+              <div className="flex items-center">
                 <Avatar />
                 Clear Me
               </div>
-              <Button size='sm'>
-                Connect
-              </Button>
+              <Button size="sm">Connect</Button>
             </div>
           </div>
         </Modal.Description>
@@ -110,20 +105,27 @@ const MainContent = () => {
 
       {/* Add Post Modal */}
       <Modal isOpen={addPostState} onClose={addPostHandlers.off}>
-        <span className='absolute right-3 cursor-pointer ' onClick={resetCreatePostForm}>
-          <XMarkIcon className='w-6' />
+        <span
+          className="absolute right-3 cursor-pointer "
+          onClick={resetCreatePostForm}
+        >
+          <XMarkIcon className="w-6" />
         </span>
-        {step === 2 && 
+        {step === 2 && (
           <span
-           className='absolute left-3 cursor-pointer'
-           onClick={() => setStep(step - 1)}
+            className="absolute left-3 cursor-pointer"
+            onClick={() => setStep(step - 1)}
           >
-            <ChevronLeftIcon className='w-6' />
+            <ChevronLeftIcon className="w-6" />
           </span>
-        }
+        )}
         <FormProvider {...formMethodsStep1}>
-          {step === 1 && <PostCreateStep1 onSubmit={handleSubmit} setFile={setFile}/>}
-          {step ===2 && <PostCreateStep2 onSubmit={handleSubmit} file={file}/>}
+          {step === 1 && (
+            <PostCreateStep1 onSubmit={handleSubmit} setFile={setFile} />
+          )}
+          {step === 2 && (
+            <PostCreateStep2 onSubmit={handleSubmit} file={file} />
+          )}
         </FormProvider>
       </Modal>
     </div>

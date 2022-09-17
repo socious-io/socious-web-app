@@ -10,9 +10,9 @@ const SignupStep2 = ({onSubmit}: StepProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col justify-between pl-0 sm:pl-10 pr-10 grow sm:grow-0 "
+      className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10 "
     >
-      <div className="flex flex-col h-[28rem]">
+      <div className="flex h-[28rem] flex-col">
         <h1 className="font-helmet">How do we contact you?</h1>
         <InputFiled
           label="Email"
@@ -24,9 +24,9 @@ const SignupStep2 = ({onSubmit}: StepProps) => {
           className="my-6"
         />
       </div>
-      <div className="sm:h-48 pl-10 sm:pl-0 border-t-2 border-b-grayLineBased divide-x -mx-16 ">
+      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 sm:h-48 sm:pl-0 ">
         <Button
-          className="max-w-xs w-full m-auto flex items-center justify-center align-middle mt-4  mb-12 sm:mb-auto"
+          className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center  align-middle sm:mb-auto"
           type="submit"
           size="lg"
           variant="fill"

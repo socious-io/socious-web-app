@@ -6,7 +6,7 @@ export interface StepFormProps {
   formMethods: UseFormReturn;
   onSubmit: (value: any) => void;
 }
-export interface StepWithError{
+export interface StepWithError {
   onSubmit: (value: any) => any;
   error: string;
 }

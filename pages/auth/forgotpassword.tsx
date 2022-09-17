@@ -1,5 +1,5 @@
 import type {NextPage} from 'next';
-import { useRouter } from "next/router";
+import {useRouter} from 'next/router';
 import {useCallback, useEffect, useMemo, useReducer, useState} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
@@ -127,7 +127,7 @@ const ForgotPassword = () => {
 
     try {
       await directChangePassword(password);
-      router.push("/auth/login");
+      router.push('/auth/login');
     } catch (error: any) {
       handleToggleModal();
     }
@@ -159,11 +159,11 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="w-screen sm:max-w-xl min-h-screen sm:min-h-0 sm:h-[45rem] flex flex-col items-stretch sm:block mx-auto sm:my-auto bg-background sm:rounded-3xl pt-12 sm:pt-7 px-6 border border-grayLineBased">
-      <div className="flex justify-center h-20 relative">
+    <div className="mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased bg-background px-6 pt-12 sm:my-auto sm:block sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:pt-7">
+      <div className="relative flex h-20 justify-center">
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>
-            <h2 className="text-error text-center">
+            <h2 className="text-center text-error">
               {errorMessages.defaultMessage.title}
             </h2>
           </Modal.Title>
@@ -176,7 +176,7 @@ const ForgotPassword = () => {
           </Modal.Description>
           <div className="mt-4">
             <Button
-              className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+              className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
               type="submit"
               size="lg"
               variant="fill"
@@ -191,11 +191,11 @@ const ForgotPassword = () => {
 
         {step != 1 && (
           <span
-            className="cursor-pointer absolute left-0"
+            className="absolute left-0 cursor-pointer"
             title="Back"
             onClick={handleBack}
           >
-            <ChevronLeftIcon className="w-5 h-5 cursor-pointer" />
+            <ChevronLeftIcon className="h-5 w-5 cursor-pointer" />
           </span>
         )}
       </div>

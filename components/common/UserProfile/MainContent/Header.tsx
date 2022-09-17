@@ -34,7 +34,7 @@ const Header: React.FC<Props> = ({cover_image, avatar, status}) => {
 
   return (
     <div className="mb-4 text-right ">
-      <div className="flex item-center justify-center relative bg-primaryDark h-32 md:rounded-t-xl">
+      <div className="item-center relative flex h-32 justify-center bg-primaryDark md:rounded-t-xl">
         {cover_image ? (
           <Image
             src={cover_image?.url}
@@ -52,7 +52,7 @@ const Header: React.FC<Props> = ({cover_image, avatar, status}) => {
           type={status === 'organization' ? 1 : 0}
         />
       </div>
-      <div className="flex h-12 flex-row justify-end pr-4 gap-4 mt-6">
+      <div className="mt-6 flex h-12 flex-row justify-end gap-4 pr-4">
         <Button>connect</Button>
         <MoreButton />
       </div>

@@ -17,7 +17,7 @@ const OnboardingStep7 = ({onSubmit}: StepProps) => {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col justify-between  px-10    "
     >
-      <div className="flex flex-col h-[28rem]">
+      <div className="flex h-[28rem] flex-col">
         {' '}
         <h1 className="font-helmet my-6 ">What’s your phone number?</h1>
         <p className="text-base text-graySubtitle">
@@ -32,7 +32,7 @@ const OnboardingStep7 = ({onSubmit}: StepProps) => {
             name="countryNumber"
             placeholder="countryNumber"
             // errorMessage={formState?.errors?.['countryNumber']?.message}
-            className="basis-3/12  my-6"
+            className="my-6  basis-3/12"
           />
           <TextInput
             placeholder="Phone number"
@@ -44,9 +44,9 @@ const OnboardingStep7 = ({onSubmit}: StepProps) => {
         </div>
       </div>
 
-      <div className="h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
+      <div className="-mx-16  h-48 divide-x border-t-2 border-b-grayLineBased ">
         <Button
-          className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+          className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"

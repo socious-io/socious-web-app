@@ -1,4 +1,4 @@
-import { Chip } from "@components/common";
+import {Chip} from '@components/common';
 
 export interface PostContentProps {
   passion?: string;
@@ -12,25 +12,32 @@ const PostContent = ({
   content,
   noBorder = false,
   media = [],
-}: PostContentProps
-) => {
+}: PostContentProps) => {
   return (
-    <div className={noBorder ? "" : `p-4 rounded-2xl border border-grayLineBased bg-white`}>
-      {media && media.length > 0 &&
-        <div>
-          <div className="w-full h-40 bg-offWhite rounded-lg" />
-        </div>
+    <div
+      className={
+        noBorder ? '' : `rounded-2xl border border-grayLineBased bg-white p-4`
       }
-      {
-        passion &&
+    >
+      {media && media.length > 0 && (
         <div>
-          <Chip content={passion} containerClassName="bg-secondarySLight inline" contentClassName="text-secondary" />
+          <div className="h-40 w-full rounded-lg bg-offWhite" />
         </div>
-      }
+      )}
+      {passion && (
+        <div>
+          <Chip
+            content={passion}
+            containerClassName="bg-secondarySLight inline"
+            contentClassName="text-secondary"
+          />
+        </div>
+      )}
       <div>
-        <p className="text-small">{content ?? 
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime cupiditate amet perspiciatis blanditiis tempore tempora obcaecati? Eum id excepturi, corrupti vel vitae, quidem perferendis atque, illum odio aperiam eveniet pariatur."
-        }</p>
+        <p className="text-small">
+          {content ??
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime cupiditate amet perspiciatis blanditiis tempore tempora obcaecati? Eum id excepturi, corrupti vel vitae, quidem perferendis atque, illum odio aperiam eveniet pariatur.'}
+        </p>
       </div>
     </div>
   );

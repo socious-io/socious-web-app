@@ -1,4 +1,8 @@
-import {ExclamationCircleIcon, XMarkIcon, LinkIcon} from '@heroicons/react/24/outline';
+import {
+  ExclamationCircleIcon,
+  XMarkIcon,
+  LinkIcon,
+} from '@heroicons/react/24/outline';
 import {CheckCircleIcon} from '@heroicons/react/24/solid';
 import {twMerge} from 'tailwind-merge';
 
@@ -87,7 +91,9 @@ export function Toast({
           </div>
           {onClose && (
             <button className="px-2" onClick={onClose}>
-              <XMarkIcon className={`h-7 w-7 ${VARIANT[variant].XMarkIconColor}`} />
+              <XMarkIcon
+                className={`h-7 w-7 ${VARIANT[variant].XMarkIconColor}`}
+              />
             </button>
           )}
         </div>

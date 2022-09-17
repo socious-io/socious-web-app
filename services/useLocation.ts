@@ -2,18 +2,17 @@ import {get} from 'utils/request';
 import {GOOGLE_API} from 'utils/api';
 
 const useLocation = () => {
-
   const getCountryByKeyword = (searchKeyword: string | undefined) => {
     const language = 'en_US';
     return new Promise((resolve: (response: any) => void, reject) => {
       searchKeyword &&
         get(
-            `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
-              searchKeyword,
-            )}&types=%28countries%29&language=${
-              language ?? 'en_US'
-            }&key=${GOOGLE_API}`,
-          )
+          `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
+            searchKeyword,
+          )}&types=%28countries%29&language=${
+            language ?? 'en_US'
+          }&key=${GOOGLE_API}`,
+        )
           .then((response: any) => {
             const listCountries = response.predictions.filter((city: any) =>
               city.types?.includes('locality'),
@@ -44,12 +43,12 @@ const useLocation = () => {
       searchKeyword &&
         selectedCountry &&
         get(
-            `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
-              searchKeyword,
-            )}&types=%28cities%29&components=country:${
-              selectedCountry?.country_code
-            }&language=${language ?? 'en_US'}&key=${GOOGLE_API}`,
-          )
+          `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
+            searchKeyword,
+          )}&types=%28cities%29&components=country:${
+            selectedCountry?.country_code
+          }&language=${language ?? 'en_US'}&key=${GOOGLE_API}`,
+        )
           .then((response: any) => {
             const listCities = response.predictions.filter((city: any) =>
               city.types?.includes('locality'),

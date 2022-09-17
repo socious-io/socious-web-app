@@ -11,7 +11,7 @@ const bookmarkSrc = require('../../../asset/icons/bookmark.svg');
 
 function RecommendCard({title}: Project) {
   return (
-    <div className="bg-white w-full p-4  rounded-2xl border border-grayLineBased">
+    <div className="w-full rounded-2xl border  border-grayLineBased bg-white p-4">
       <div className="flex flex-row items-center justify-between ">
         <div className="flex flex-row space-x-2">
           <Avatar size="l" />
@@ -55,7 +55,7 @@ function RecommendCard({title}: Project) {
         <p className="font-semibold">{title}</p>
       </div>
 
-      <div className="flex mt-4 justify-between">
+      <div className="mt-4 flex justify-between">
         <dt className="flex font-medium text-gray-900">Post date</dt>
         <div className="flex flex-row items-center ">
           <div className="relative  h-6 w-6 ">
@@ -98,7 +98,7 @@ function RecommendCard({title}: Project) {
               </a>
             </Link>
           </div>
-          <dd className="ml-2 text-secondary text-sm">connections</dd>
+          <dd className="ml-2 text-sm text-secondary">connections</dd>
         </div>
       </div>
     </div>

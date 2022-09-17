@@ -1,8 +1,7 @@
-
-import { deletePost } from "@api/posts/actions";
-import { ModalProps, Modal, Button } from "@components/common";
-import { useCallback } from "react";
-import Router from 'next/router'
+import {deletePost} from '@api/posts/actions';
+import {ModalProps, Modal, Button} from '@components/common';
+import {useCallback} from 'react';
+import Router from 'next/router';
 interface DeleteModalProps extends ModalProps {
   pid: string;
 }
@@ -12,13 +11,12 @@ const DeleteModal = ({
   onClose = () => null,
   pid,
 }: DeleteModalProps) => {
-
   const onDelete = useCallback(async () => {
     try {
       await deletePost(pid);
-      console.log("Deleted");
-      Router.push("/");
-    } catch(error) {
+      console.log('Deleted');
+      Router.push('/');
+    } catch (error) {
       console.error(error);
     }
   }, [pid]);
@@ -27,23 +25,26 @@ const DeleteModal = ({
     <Modal isOpen={isOpen} className="max-w-xs" onClose={onClose}>
       <Modal.Description>
         <div className="mt-2">
-          <p className="text-sm font-normal text-center text-base">Are you sure you want to delete this post? This action is irreversible.</p>
+          <p className="text-center text-sm text-base font-normal">
+            Are you sure you want to delete this post? This action is
+            irreversible.
+          </p>
         </div>
       </Modal.Description>
-      <div className="space-y-2 mt-7">
+      <div className="mt-7 space-y-2">
         <Button
-          className="max-w-full block mx-auto w-full align-middle font-semibold"
+          className="mx-auto block w-full max-w-full align-middle font-semibold"
           variant="fill"
           onClick={onDelete}
         >
           Delete
         </Button>
         <Button
-          className="max-w-full block mx-auto w-full align-middle font-semibold"
+          className="mx-auto block w-full max-w-full align-middle font-semibold"
           type="submit"
           variant="outline"
           onClick={onClose}
-          >
+        >
           Cancel
         </Button>
       </div>

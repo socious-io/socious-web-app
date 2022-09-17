@@ -1,9 +1,13 @@
-import Link from "next/link";
-import { Button, Modal } from "@components/common";
-import { HeartIcon, ChatBubbleLeftEllipsisIcon, ShareIcon } from "@heroicons/react/24/outline";
-import { HeartIcon as LikedIcon } from "@heroicons/react/24/solid";
-import { useCallback, useState } from "react";
-import { likePost, unlikePost } from "@api/posts/actions";
+import Link from 'next/link';
+import {Button, Modal} from '@components/common';
+import {
+  HeartIcon,
+  ChatBubbleLeftEllipsisIcon,
+  ShareIcon,
+} from '@heroicons/react/24/outline';
+import {HeartIcon as LikedIcon} from '@heroicons/react/24/solid';
+import {useCallback, useState} from 'react';
+import {likePost, unlikePost} from '@api/posts/actions';
 export interface PostActionProps {
   liked?: boolean;
   likes?: number;
@@ -13,7 +17,7 @@ export interface PostActionProps {
 }
 
 const PostAction = ({
-  liked= false,
+  liked = false,
   likes,
   shared,
   id,
@@ -22,68 +26,64 @@ const PostAction = ({
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const [likesCount, setlikesCount] = useState<number>(likes || 0);
 
-  const toggleLike = useCallback(async() => {
-    if (!id) return
-    setlikesCount(() => isLiked ? (likesCount - 1) : (likesCount + 1))
+  const toggleLike = useCallback(async () => {
+    if (!id) return;
+    setlikesCount(() => (isLiked ? likesCount - 1 : likesCount + 1));
     setIsLiked(() => !isLiked);
     try {
-      isLiked ?
-        await unlikePost(id)
-      :
-        await likePost(id);
-    } catch(error) {
+      isLiked ? await unlikePost(id) : await likePost(id);
+    } catch (error) {
       console.error(error);
     }
-  }, [id, isLiked, likesCount])
+  }, [id, isLiked, likesCount]);
 
   return (
-    <div className="flex justify-between items-center divide-x divide-grayLineBased divide-x-[1px]">
+    <div className="flex items-center justify-between divide-x divide-x-[1px] divide-grayLineBased">
       <Button
         variant="ghost"
-        className="flex justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
+        className="flex grow items-center justify-center space-x-1 rounded-none border-0 text-graySubtitle"
         onClick={toggleLike}
-        >
-        { isLiked ?
-          <LikedIcon className="w-5 text-red-500"/>
-          :
+      >
+        {isLiked ? (
+          <LikedIcon className="w-5 text-red-500" />
+        ) : (
           <HeartIcon className="w-5" />
-        }
+        )}
         <p className="text-xs">{likesCount} Like</p>
       </Button>
       <Link href={`/post/${id}`} passHref>
-        <a className="grow flex justify-center items-center">
+        <a className="flex grow items-center justify-center">
           <Button
             variant="ghost"
-            className="text-graySubtitle space-x-1 border-0 rounded-none"
-            >
+            className="space-x-1 rounded-none border-0 text-graySubtitle"
+          >
             <ChatBubbleLeftEllipsisIcon className="w-5" />
             <p className="text-xs">Comment</p>
           </Button>
         </a>
       </Link>
-      {
-        onShare ?
+      {onShare ? (
         <Button
-        variant="ghost"
-        className="flex justify-center text-graySubtitle items-center space-x-1 grow border-0 rounded-none"
-        onClick={onShare}
+          variant="ghost"
+          className="flex grow items-center justify-center space-x-1 rounded-none border-0 text-graySubtitle"
+          onClick={onShare}
         >
           <ShareIcon className="w-5" />
           <p className="text-xs">{shared} Share</p>
         </Button>
-        :
+      ) : (
         <Link href={`/post/${id}`} passHref>
-          <a className="grow flex justify-center items-center ">
-            <Button 
+          <a className="flex grow items-center justify-center ">
+            <Button
               variant="ghost"
-              className="space-x-1  text-graySubtitle border-0 rounded-none"
-              >
+              className="space-x-1  rounded-none border-0 text-graySubtitle"
+            >
               <ShareIcon className="w-5" />
               <p className="text-xs">{shared} Share</p>
             </Button>
-            </a>
+          </a>
         </Link>
-      }
+      )}
     </div>
   );
 };

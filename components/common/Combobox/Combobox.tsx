@@ -5,8 +5,8 @@ import {CheckIcon, ChevronDownIcon} from '@heroicons/react/24/solid';
 import {twMerge} from 'tailwind-merge';
 import {ExclamationCircleIcon} from '@heroicons/react/24/solid';
 import useDebounce from 'hooks/useDebounce';
-import { ReactElement } from 'react';
-import { UseFormRegisterReturn } from 'react-hook-form';
+import {ReactElement} from 'react';
+import {UseFormRegisterReturn} from 'react-hook-form';
 
 export interface ComboboxProps
   extends React.DetailedHTMLProps<
@@ -49,14 +49,18 @@ export function Combobox({
     onChangeInputSearch && onChangeInputSearch(debouncedAmount);
   }, [debouncedAmount]);
 
-  
   useEffect(() => {
     query === ''
-        ? setFilteredItems(items)
-        : setFilteredItems(() => items.filter((person) =>
-              person.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, '')),
-          ))
-  }, [filteredItems, query])
+      ? setFilteredItems(items)
+      : setFilteredItems(() =>
+          items.filter((person) =>
+            person.name
+              .toLowerCase()
+              .replace(/\s+/g, '')
+              .includes(query.toLowerCase().replace(/\s+/g, '')),
+          ),
+        );
+  }, [filteredItems, query]);
 
   return (
     <UiCombobox
@@ -73,19 +77,19 @@ export function Combobox({
             <UiCombobox.Label
               htmlFor={id || name}
               className={twMerge(
-                'block font-base',
+                'font-base block',
                 errorMessage ? 'text-error' : 'text-black',
                 disabled && 'text-opacity-40 ',
               )}
             >
-              <div className='flex items-baseline'>
+              <div className="flex items-baseline">
                 {label} {required && <span className="text-error">*</span>}
               </div>
             </UiCombobox.Label>
           )}
           <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <UiCombobox.Input
-              className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 outline-none"
+              className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 outline-none focus:ring-0"
               displayValue={(item: any) => item?.name}
               onChange={(event) => setQuery(event.target.value)}
               // required={required}
@@ -111,7 +115,7 @@ export function Combobox({
             leaveTo="transform scale-95 opacity-0"
             afterLeave={() => setQuery('')}
           >
-            <UiCombobox.Options className="z-10 absolute top-full right-0 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <UiCombobox.Options className="absolute top-full right-0 z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {filteredItems.length === 0 && query !== '' ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                   Nothing found.
@@ -155,8 +159,8 @@ export function Combobox({
             </UiCombobox.Options>
           </Transition>
           {errorMessage && (
-            <div className="text-error flex items-center">
-              <ExclamationCircleIcon className="w-5 h-5 mr-1" /> {errorMessage}
+            <div className="flex items-center text-error">
+              <ExclamationCircleIcon className="mr-1 h-5 w-5" /> {errorMessage}
             </div>
           )}
         </div>

@@ -25,7 +25,7 @@ export const SearchBar = ({
   return (
     <div className={twMerge('relative', className && className)}>
       <span className="absolute left-2 top-2">
-        <MagnifyingGlassIcon className="w-5 h-5 mr-1 text-grayDisableButton focus:text-black " />
+        <MagnifyingGlassIcon className="mr-1 h-5 w-5 text-grayDisableButton focus:text-black " />
       </span>
 
       <input
@@ -38,8 +38,8 @@ export const SearchBar = ({
         aria-label={placeholder}
         data-testid={`${id || name}-testid`}
         className={twMerge(
-          'block w-full py-1.5 text-sm rounded-full   pl-8 bg-background outline-none border-2 border-grayLineBased  focus:border-2 focus:border-primary',
-          disabled && 'text-opacity-40 border-opacity-40 bg-transparent',
+          'block w-full rounded-full border-2 border-grayLineBased   bg-background py-1.5 pl-8 text-sm outline-none  focus:border-2 focus:border-primary',
+          disabled && 'border-opacity-40 bg-transparent text-opacity-40',
         )}
         {...register}
       />

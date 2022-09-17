@@ -18,7 +18,7 @@ const Index: NextPage = () => {
   }
 
   return (
-    <div className="flex mt-10 space-x-6">
+    <div className="mt-10 flex space-x-6">
       <SideBar />
       <MainContent />
     </div>

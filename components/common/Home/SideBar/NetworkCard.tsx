@@ -3,29 +3,26 @@ import Link from 'next/link';
 
 type NetworkCardProps = {
   username: string;
-}
+};
 
-const NetworkCard = ({
-  username
-}: NetworkCardProps) => {
+const NetworkCard = ({username}: NetworkCardProps) => {
   return (
-    <div className="p-4 space-y-4 rounded-2xl border border-grayLineBased bg-background">
-      <label className='text-primary'>Networking</label>
+    <div className="space-y-4 rounded-2xl border border-grayLineBased bg-background p-4">
+      <label className="text-primary">Networking</label>
       <ul className="list-none space-y-4">
         <Link href={`/user/${username}/following`} passHref>
-          <li className='flex space-x-4 items-center cursor-pointer'>
-            <UsersIcon className='h-4' />
+          <li className="flex cursor-pointer items-center space-x-4">
+            <UsersIcon className="h-4" />
             <p>Connections</p>
           </li>
         </Link>
         <Link href={`/user/${username}/followers`} passHref>
-          <li className='flex space-x-4 items-center cursor-pointer'>
+          <li className="flex cursor-pointer items-center space-x-4">
             <UserGroupIcon className="h-4" />
             <p>Followers</p>
           </li>
         </Link>
       </ul>
-            
     </div>
   );
 };

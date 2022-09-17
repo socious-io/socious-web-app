@@ -6,7 +6,7 @@ export interface ContainerProps {
 
 export function Container(props: ContainerProps) {
   return (
-    <main className="container mx-auto max-w-5xl mb-10 md:my-10 h-96">
+    <main className="container mx-auto mb-10 h-96 max-w-5xl md:my-10">
       {props.children}
     </main>
   );

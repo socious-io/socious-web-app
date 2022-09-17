@@ -86,19 +86,18 @@ const Onboarding: NextPage = () => {
     const user = {bio: biography, city: city?.name};
 
     // updateProfile(user).then(() => {
-      setStep(step + 1);
+    setStep(step + 1);
     // });
-    
   };
 
   return (
     <div
       className={twMerge(
-        'max-w-xl h-[45rem]  m-auto bg-background rounded-3xl py-7 px-6 border border-grayLineBased',
+        'm-auto h-[45rem]  max-w-xl rounded-3xl border border-grayLineBased bg-background py-7 px-6',
         step === 10 ? ' bg-primary' : 'bg-background',
       )}
     >
-      <div className="flex  justify-center  h-20 relative">
+      <div className="relative  flex  h-20 justify-center">
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>Title</Modal.Title>
           <Modal.Description>
@@ -111,7 +110,7 @@ const Onboarding: NextPage = () => {
           </Modal.Description>
           <div className="mt-4">
             <Button
-              className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+              className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
               type="submit"
               size="lg"
               variant="fill"
@@ -125,11 +124,11 @@ const Onboarding: NextPage = () => {
 
         {![1, 10].includes(step) && (
           <span
-            className="cursor-pointer absolute left-0"
+            className="absolute left-0 cursor-pointer"
             title="Back"
             onClick={handleBack}
           >
-            <ChevronLeftIcon className="w-5 h-5 cursor-pointer" />
+            <ChevronLeftIcon className="h-5 w-5 cursor-pointer" />
           </span>
         )}
         <div className="flex h-20 pt-1">
@@ -138,7 +137,7 @@ const Onboarding: NextPage = () => {
               <div key={`stepper-${stepNumber}`} className="flex">
                 <span
                   className={twMerge(
-                    'w-3 h-3 mx-1 cursor-pointer rounded-3xl  border border-grayLineBased ',
+                    'mx-1 h-3 w-3 cursor-pointer rounded-3xl  border border-grayLineBased ',
                     stepNumber === step && 'bg-primary',
                   )}
                 />
@@ -147,7 +146,7 @@ const Onboarding: NextPage = () => {
         </div>
         {[6, 7, 8].includes(step) && (
           <span
-            className="cursor-pointer absolute right-0 text-primary text-base"
+            className="absolute right-0 cursor-pointer text-base text-primary"
             title="Next"
             onClick={handleNext}
           >

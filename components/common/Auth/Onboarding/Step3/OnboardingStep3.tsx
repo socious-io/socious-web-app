@@ -19,22 +19,22 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
       onSubmit={handleOnSubmit}
       className="flex flex-col justify-between  px-10    "
     >
-      <div className="flex flex-col h-[28rem]">
+      <div className="flex h-[28rem] flex-col">
         {' '}
         <h1 className="font-helmet ">What are your social causes?</h1>
         <p className="text-base text-graySubtitle ">
           Select up to 5 social causes that you are passionate about
         </p>
-        <div className="flex flex-col bg-offWhite h-72  px-5 my-5 -mx-16">
+        <div className="my-5 -mx-16 flex h-72  flex-col bg-offWhite px-5">
           <SearchBar
             type="text"
             placeholder="Search"
             // register={register[step]("search")}
             className="my-6"
           />
-          <div className="flex flex-col  border-t-2 border-b-grayLineBased -mx-5 px-5  ">
+          <div className="-mx-5 flex  flex-col border-t-2 border-b-grayLineBased px-5  ">
             <h3 className="py-3">Popular</h3>
-            <div className="flex flex-wrap space-x-2 h-32 overflow-y-auto   ">
+            <div className="flex h-32 flex-wrap space-x-2 overflow-y-auto   ">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((skill) => (
                 <Chip
                   onSelected={handleSelecteds}
@@ -51,9 +51,9 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
         </div>
       </div>
 
-      <div className="h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
+      <div className="-mx-16  h-48 divide-x border-t-2 border-b-grayLineBased ">
         <Button
-          className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+          className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"

@@ -32,12 +32,12 @@ export function Chip({
         onSelected && value && onSelected(value);
       }}
       className={twMerge(
-        'flex items-center space-x-2 flex-nowrap bg-secondarySLight rounded-full text-secondary',
+        'flex flex-nowrap items-center space-x-2 rounded-full bg-secondarySLight text-secondary',
         `${PADDING_LIST[size]}`,
         containerClassName && containerClassName,
       )}
     >
-      {selected && <CheckIcon className="w-5 h-5" />}
+      {selected && <CheckIcon className="h-5 w-5" />}
       <label className={contentClassName && contentClassName}>{content}</label>
     </span>
   );

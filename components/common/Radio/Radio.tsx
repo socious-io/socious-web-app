@@ -23,12 +23,12 @@ export function Radio({
 }: RadioInputProps) {
   return (
     <>
-      <label className="flex items-center cursor-pointer align-middle">
+      <label className="flex cursor-pointer items-center align-middle">
         <div className="mr-2 ">
           <input
             {...props}
             type="radio"
-            className="w-4 h-4  text-orange-500 rounded-full focus:ring-transparent accent-primary"
+            className="h-4 w-4  rounded-full text-orange-500 accent-primary focus:ring-transparent"
             id={id}
             {...register}
           />
@@ -36,8 +36,8 @@ export function Radio({
         <div>{label}</div>
       </label>
       {errorMessage && (
-        <div className="text-error flex items-center">
-          <ExclamationCircleIcon className="w-5 h-5 mr-1" /> {errorMessage}
+        <div className="flex items-center text-error">
+          <ExclamationCircleIcon className="mr-1 h-5 w-5" /> {errorMessage}
         </div>
       )}
     </>

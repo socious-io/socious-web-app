@@ -99,15 +99,15 @@ const Signup: NextPage = () => {
   };
 
   return (
-    <div className="w-screen sm:max-w-xl min-h-screen sm:min-h-0 sm:h-[45rem] flex flex-col items-stretch mx-auto sm:my-auto bg-background sm:rounded-3xl pt-12 sm:py-7 px-6 border border-grayLineBased">
-      <div className="flex  justify-center  h-20 relative">
+    <div className="mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased bg-background px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7">
+      <div className="relative  flex  h-20 justify-center">
         {![1, 4].includes(step) && (
           <span
-            className="cursor-pointer absolute left-0"
+            className="absolute left-0 cursor-pointer"
             title="Back"
             onClick={handleBack}
           >
-            <ChevronLeftIcon className="w-5 h-5 cursor-pointer" />
+            <ChevronLeftIcon className="h-5 w-5 cursor-pointer" />
           </span>
         )}
         <div className="flex h-20 pt-1 ">
@@ -116,7 +116,7 @@ const Signup: NextPage = () => {
               <div key={`stepper-${stepNumber}`} className="flex">
                 <span
                   className={twMerge(
-                    'w-3 h-3 mx-1 cursor-pointer rounded-3xl  border border-grayLineBased ',
+                    'mx-1 h-3 w-3 cursor-pointer rounded-3xl  border border-grayLineBased ',
                     stepNumber === step && 'bg-primary',
                   )}
                 />
@@ -146,7 +146,7 @@ const Signup: NextPage = () => {
         </Modal.Description>
         <div className="mt-4">
           <Button
-            className="max-w-xs w-full m-auto flex items-center justify-center align-middle mt-4 "
+            className="m-auto mt-4 flex w-full max-w-xs items-center justify-center align-middle "
             type="submit"
             size="lg"
             variant="fill"
@@ -161,7 +161,7 @@ const Signup: NextPage = () => {
       {/* Error Modal */}
       <Modal isOpen={showError} onClose={handleErrorToggle}>
         <Modal.Title>
-          <h2 className="text-error text-center">{errorMessage?.title}</h2>
+          <h2 className="text-center text-error">{errorMessage?.title}</h2>
         </Modal.Title>
         <Modal.Description>
           <div className="mt-2">
@@ -170,7 +170,7 @@ const Signup: NextPage = () => {
         </Modal.Description>
         <div className="mt-4">
           <Button
-            className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
             type="submit"
             size="lg"
             variant="fill"

@@ -19,7 +19,7 @@ export function ProfileCard({
   followers,
 }: ProfileCardProps) {
   return (
-    <div className="p-4 space-y-4 rounded-2xl border border-grayLineBased bg-background">
+    <div className="space-y-4 rounded-2xl border border-grayLineBased bg-background p-4">
       <div className="space-y-4">
         <Avatar src={avatar ?? ''} size="xxl" type={1} />
         <div>
@@ -27,7 +27,7 @@ export function ProfileCard({
             {name || 'FirstName LastName'}
           </p>
           <Link href={`/user/${username}`} passHref>
-            <label className="text-primary cursor-pointer">
+            <label className="cursor-pointer text-primary">
               View my profile
             </label>
           </Link>

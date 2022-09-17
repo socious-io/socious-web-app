@@ -12,21 +12,21 @@ const OnboardingStep10 = ({onSubmit}: StepProps) => {
       onSubmit={handleOnSubmit}
       className="flex flex-col justify-between  px-10     "
     >
-      <div className="flex flex-col h-[28rem]">
+      <div className="flex h-[28rem] flex-col">
         {' '}
-        <BellIcon className="w-16 h-16 mx-auto fill-white border-2 border-white rounded-full bg-background " />
+        <BellIcon className="mx-auto h-16 w-16 rounded-full border-2 border-white bg-background fill-white " />
         <div className="flex flex-col justify-between      ">
           {' '}
-          <h1 className="text-white mx-auto">Allow notifications</h1>
-          <p className="text-base text-grayDisableButton mx-auto py-5">
+          <h1 className="mx-auto text-white">Allow notifications</h1>
+          <p className="mx-auto py-5 text-base text-grayDisableButton">
             Stay up to date with messages, recommendations and posts
           </p>
         </div>
       </div>
 
-      <div className="h-48 flex flex-col  border-t-2 border-b-grayLineBased divide-x  items-center ">
+      <div className="flex h-48 flex-col  items-center divide-x border-t-2  border-b-grayLineBased ">
         <Button
-          className="max-w-xs w-full   flex items-center justify-center align-middle mt-4 "
+          className="mt-4 flex   w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="outline"
@@ -35,7 +35,7 @@ const OnboardingStep10 = ({onSubmit}: StepProps) => {
           Allow notifications
         </Button>
         <Button
-          className="max-w-xs w-full   flex items-center justify-center align-middle text-white  "
+          className="flex w-full   max-w-xs items-center justify-center align-middle text-white  "
           size="lg"
           variant="link"
         >

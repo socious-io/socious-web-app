@@ -1,4 +1,4 @@
-import { ErrorMessage } from "utils/request";
+import {ErrorMessage} from 'utils/request';
 
 export type SendEmailType = {
   email: string;
@@ -11,7 +11,7 @@ export type SendOTPType = {
   code: string;
 };
 export type SendOTPResponse = {
-  access_token: string
+  access_token: string;
 };
 export type ResetPasswordType = {
   email: string;
@@ -26,7 +26,7 @@ export type ResetPasswordResponse = {
 };
 
 export interface ForgotError {
-  emailCheckError: string,
-  otpError: string,
-  defaultMessage: ErrorMessage,
+  emailCheckError: string;
+  otpError: string;
+  defaultMessage: ErrorMessage;
 }

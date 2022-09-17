@@ -21,14 +21,16 @@ const ProfileInfo: React.FC<Props> = ({
 }) => {
   return (
     <div className="px-4">
-      <h1 className=" text-2xl text-text font-worksans font-semibold ">
+      <h1 className=" font-worksans text-2xl font-semibold text-text ">
         {first_name} {last_name}
       </h1>
-      <div className="flex gap-x-4 mt-1 mb-4 font-base">
+      <div className="font-base mt-1 mb-4 flex gap-x-4">
         <p className="text-grayInputField">{followings} Conections</p>
         <p className="text-grayInputField">{followers} Followers</p>
       </div>
-      <p className="text-left text-black text-sm whitespace-pre-line break-all">{bio}</p>
+      <p className="whitespace-pre-line break-all text-left text-sm text-black">
+        {bio}
+      </p>
     </div>
   );
 };

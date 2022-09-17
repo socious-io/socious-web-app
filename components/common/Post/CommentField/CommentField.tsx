@@ -30,7 +30,7 @@ const CommentField = ({
   return (
     <div
       className={twMerge(
-        'p-4 pr-2 flex w-full items-center justify-between border border-grayLineBased bg-white rounded-2xl',
+        'flex w-full items-center justify-between rounded-2xl border border-grayLineBased bg-white p-4 pr-2',
         className && className,
       )}
     >
@@ -48,7 +48,7 @@ const CommentField = ({
         onClick={onClickSend}
         disabled={comment.length === 0}
       >
-        <PaperAirplaneIcon className="w-5 rotate-45 text-grayDisableButton cursor-pointer hover:text-grayInputField" />
+        <PaperAirplaneIcon className="w-5 rotate-45 cursor-pointer text-grayDisableButton hover:text-grayInputField" />
       </Button>
     </div>
   );

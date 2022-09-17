@@ -8,7 +8,11 @@ import {rxHasNumber} from 'utils/regex';
 import {twMerge} from 'tailwind-merge';
 import {AxiosError} from 'axios';
 
-import {EyeIcon, EyeSlashIcon, ChevronLeftIcon} from '@heroicons/react/24/outline';
+import {
+  EyeIcon,
+  EyeSlashIcon,
+  ChevronLeftIcon,
+} from '@heroicons/react/24/outline';
 import {schemaChangePassword} from '../../api/auth/validation';
 import {changePassword} from '@api/auth/actions';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
@@ -79,14 +83,14 @@ const ChangePassword: NextPage = () => {
   );
 
   return (
-    <div className="w-screen sm:max-w-xl min-h-screen sm:min-h-0 sm:h-[45rem] flex flex-col items-stretch mx-auto sm:my-auto bg-background sm:rounded-3xl pt-12 sm:pt-7 px-6 border border-grayLineBased">
-      <div className="flex  justify-center  h-20 relative">
+    <div className="mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased bg-background px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:pt-7">
+      <div className="relative  flex  h-20 justify-center">
         <span
-          className="cursor-pointer absolute left-0 top-3"
+          className="absolute left-0 top-3 cursor-pointer"
           title="Back"
           onClick={() => router.back()}
         >
-          <ChevronLeftIcon className="w-5 h-5 cursor-pointer" />
+          <ChevronLeftIcon className="h-5 w-5 cursor-pointer" />
         </span>
 
         <div className="flex h-20 pt-1">
@@ -96,9 +100,9 @@ const ChangePassword: NextPage = () => {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col justify-between pl-0 sm:pl-10 pr-10 grow sm:grow-0"
+        className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
       >
-        <div className="flex flex-col h-[28rem]">
+        <div className="flex h-[28rem] flex-col">
           <InputFiled
             label="Current password"
             type={passwordShown ? 'text' : 'password'}
@@ -110,11 +114,11 @@ const ChangePassword: NextPage = () => {
             suffixContent={
               passwordShown ? (
                 <span onClick={onTogglePassword}>
-                  <EyeIcon className="w-5 h-5 cursor-pointer" />
+                  <EyeIcon className="h-5 w-5 cursor-pointer" />
                 </span>
               ) : (
                 <span onClick={onTogglePassword}>
-                  <EyeSlashIcon className="w-5 h-5 cursor-pointer" />
+                  <EyeSlashIcon className="h-5 w-5 cursor-pointer" />
                 </span>
               )
             }
@@ -130,11 +134,11 @@ const ChangePassword: NextPage = () => {
             suffixContent={
               newPasswordShown ? (
                 <span onClick={onToggleNewPassword}>
-                  <EyeIcon className="w-5 h-5 cursor-pointer" />
+                  <EyeIcon className="h-5 w-5 cursor-pointer" />
                 </span>
               ) : (
                 <span onClick={onToggleNewPassword}>
-                  <EyeSlashIcon className="w-5 h-5 cursor-pointer" />
+                  <EyeSlashIcon className="h-5 w-5 cursor-pointer" />
                 </span>
               )
             }
@@ -148,10 +152,10 @@ const ChangePassword: NextPage = () => {
             required
             className="pb-6"
           />
-          <div className="grid grid-cols-2 gap-3  py-5 w-full">
+          <div className="grid w-full grid-cols-2  gap-3 py-5">
             <div
               className={twMerge(
-                'flex flex-col  border-t-4 py-3 border-t-success',
+                'flex flex-col  border-t-4 border-t-success py-3',
                 !isValidPasswordLength && 'border-opacity-40',
               )}
             >
@@ -159,7 +163,7 @@ const ChangePassword: NextPage = () => {
             </div>
             <div
               className={twMerge(
-                'flex flex-col border-t-4 py-3 border-t-success',
+                'flex flex-col border-t-4 border-t-success py-3',
                 !isValidPasswordHasNumber && 'border-opacity-40',
               )}
             >
@@ -168,9 +172,9 @@ const ChangePassword: NextPage = () => {
           </div>
         </div>
 
-        <div className="sm:h-48 pb-12 pl-10 sm:pl-0 border-t-2 border-b-grayLineBased  -mx-16 ">
+        <div className="-mx-16 border-t-2 border-b-grayLineBased pb-12 pl-10 sm:h-48  sm:pl-0 ">
           <Button
-            className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
             type="submit"
             size="lg"
             variant="fill"
@@ -185,7 +189,7 @@ const ChangePassword: NextPage = () => {
       <Modal isOpen={showModal} onClose={onModalClose}>
         {errorMessage && (
           <Modal.Title>
-            <h2 className="text-error text-center">{errorMessage.title}</h2>
+            <h2 className="text-center text-error">{errorMessage.title}</h2>
           </Modal.Title>
         )}
         <Modal.Description>
@@ -199,7 +203,7 @@ const ChangePassword: NextPage = () => {
         </Modal.Description>
         <div className="mt-4">
           <Button
-            className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
             type="submit"
             size="lg"
             variant="fill"

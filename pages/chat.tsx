@@ -42,12 +42,12 @@ const Chat = () => {
   return (
     <>
       {width && width >= 640 ? (
-        <div className="hidden sm:flex sm:mt-10 sm:space-x-4 h-full">
+        <div className="hidden h-full sm:mt-10 sm:flex sm:space-x-4">
           <SideBar chats={chats} onChatOpen={setSelectedChat} />
           <MainChat selectedChat={selectedChat ?? ''} goBack={backToChatList} />
         </div>
       ) : (
-        <div className="flex sm:hidden sm:mt-10 sm:space-x-4 h-full">
+        <div className="flex h-full sm:mt-10 sm:hidden sm:space-x-4">
           {!selectedChat ? (
             <SideBar chats={chats} onChatOpen={setSelectedChat} />
           ) : (

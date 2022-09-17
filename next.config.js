@@ -11,8 +11,4 @@ module.exports = withImages({
       'process.filestackapi.com',
     ],
   },
-  eslint: {
-    // TODO: remove this when it's all been formatted
-    ignoreDuringBuilds: true,
-  },
 });

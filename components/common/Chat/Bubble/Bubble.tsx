@@ -21,7 +21,7 @@ const Bubble = ({self = true, content, link, identity_id}: BubbleProps) => {
     <div
       className={twMerge(
         'flex w-full gap-x-4',
-        self && 'flex-row-reverse ml-auto items-end',
+        self && 'ml-auto flex-row-reverse items-end',
       )}
     >
       <div>
@@ -29,7 +29,7 @@ const Bubble = ({self = true, content, link, identity_id}: BubbleProps) => {
       </div>
       <div
         className={twMerge(
-          'p-4 border border-grayLineBased  max-w-xs',
+          'max-w-xs border border-grayLineBased  p-4',
           self
             ? 'rounded-l-2xl rounded-tr-2xl bg-secondaryLight  active:border-secondaryDark'
             : 'rounded-r-2xl rounded-bl-2xl bg-offWhite active:border-primary',

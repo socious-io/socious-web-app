@@ -10,26 +10,23 @@
 //   TwitterShareButton,
 //   TwitterIcon,
 // } from 'next-share';
-import { Button } from 'components/common';
-import { LinkIcon } from '@heroicons/react/24/outline';
-import { useCallback } from 'react';
+import {Button} from 'components/common';
+import {LinkIcon} from '@heroicons/react/24/outline';
+import {useCallback} from 'react';
 
 interface SocialShareBarProps {
   onCopied: () => void;
 }
 
-export const SocialShareBar = ({
-  onCopied,
-}: SocialShareBarProps) => {
+export const SocialShareBar = ({onCopied}: SocialShareBarProps) => {
   const link = window.location.href;
   const copyToClipBoard = useCallback(() => {
-    console.log("I am here");
-    navigator.clipboard.writeText(link)
-      .then(() => onCopied())
-  }, [link, onCopied])
+    console.log('I am here');
+    navigator.clipboard.writeText(link).then(() => onCopied());
+  }, [link, onCopied]);
 
   return (
-    <div className='p-4 space-x-6 flex no-wrap overflow-auto hide-scrollbar border-y-[0.5px] border-offsetColor'>
+    <div className="no-wrap hide-scrollbar flex space-x-6 overflow-auto border-y-[0.5px] border-offsetColor p-4">
       {/* <Button
         variant='ghost'
         className='bg-transparent inline-block hover:text-primary focus:text-primary p-0'

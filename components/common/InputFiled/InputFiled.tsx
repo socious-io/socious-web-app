@@ -39,9 +39,9 @@ export const InputFiled = ({
         <label
           htmlFor={id || name}
           className={twMerge(
-            'block font-base',
+            'font-base block',
             errorMessage ? 'text-error' : 'text-black',
-            labelFloat && 'bg-white absolute px-1 left-3 text-sm -top-2',
+            labelFloat && 'absolute left-3 -top-2 bg-white px-1 text-sm',
             disabled && 'text-opacity-40 ',
           )}
         >
@@ -62,11 +62,11 @@ export const InputFiled = ({
         aria-label={label}
         data-testid={`${label}-testid`}
         className={twMerge(
-          'block w-full py-1.5 text-sm outline-none border-t-0 border-x-0',
+          'block w-full border-x-0 border-t-0 py-1.5 text-sm outline-none',
           errorMessage
             ? 'border-b-2 border-b-error focus:border-b-error'
             : 'border-b-2 border-b-grayInputField focus:border-b-2 focus:border-b-primary',
-          disabled && 'text-opacity-40 border-opacity-40 bg-transparent',
+          disabled && 'border-opacity-40 bg-transparent text-opacity-40',
           className && className,
         )}
         {...register}
@@ -76,9 +76,9 @@ export const InputFiled = ({
       )}
 
       {errorMessage && (
-        <div className="text-error flex items-center">
+        <div className="flex items-center text-error">
           {' '}
-          <ExclamationCircleIcon className="w-5 h-5 mr-1" /> {errorMessage}
+          <ExclamationCircleIcon className="mr-1 h-5 w-5" /> {errorMessage}
         </div>
       )}
     </div>

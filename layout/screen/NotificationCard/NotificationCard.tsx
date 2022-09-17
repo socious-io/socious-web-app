@@ -19,8 +19,8 @@ export function NotificationCard({
       <div>
         <Avatar size="l" src={avatar ?? ''} />
       </div>
-      <div className="flex flex-col w-4/5">
-        <p className="text-sm text-start">
+      <div className="flex w-4/5 flex-col">
+        <p className="text-start text-sm">
           <label className="pr-2 font-semibold">{name}</label>
           <label>{action}</label>
         </p>

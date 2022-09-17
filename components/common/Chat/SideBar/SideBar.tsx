@@ -32,26 +32,26 @@ const SideBar = ({chats, onChatOpen}: ChatSideBarProps) => {
 
   return (
     <div
-      className="flex flex-col w-full h-screen min-w-80 sm:w-80 sm:border border-grayLineBased bg-background sm:h-[48rem] rounded-2xl relative"
+      className="min-w-80 relative flex h-screen w-full flex-col rounded-2xl border-grayLineBased bg-background sm:h-[48rem] sm:w-80 sm:border"
       aria-label="Sidebar"
     >
       {/* ADD PARTICIPANT BUTTON */}
-      <div className="absolute bottom-10 right-4 p-3 bg-primary inline-block rounded-full">
+      <div className="absolute bottom-10 right-4 inline-block rounded-full bg-primary p-3">
         <PlusIcon className="w-6 text-white" />
       </div>
 
       {/* HEADER */}
-      <div className="flex justify-between sm:justify-center items-center mt-14 sm:mt-7 pb-3.5 pr-3 pl-6">
+      <div className="mt-14 flex items-center justify-between pb-3.5 pr-3 pl-6 sm:mt-7 sm:justify-center">
         <span className="block sm:hidden" onClick={goBack}>
           <ChevronLeftIcon className="w-5" />
         </span>
-        <h3 className="font-semibold text-xl text-center font-worksans">
+        <h3 className="font-worksans text-center text-xl font-semibold">
           Chats
         </h3>
         <Avatar size="m" src="" className="block sm:hidden" />
       </div>
       {/* SEARCHBAR */}
-      <div className="px-4 py-2.5 bg-offWhite border-offsetColor border-y-[0.5px] ">
+      <div className="border-y-[0.5px] border-offsetColor bg-offWhite px-4 py-2.5 ">
         <SearchBar
           placeholder="Search name"
           onChange={(e) => setQuery(e.currentTarget.value)}
@@ -60,14 +60,14 @@ const SideBar = ({chats, onChatOpen}: ChatSideBarProps) => {
       {/* USER-CARD BOX */}
       {chats?.length !== 0 ? (
         filteredChats?.length > 0 ? (
-          <div className="overflow-y-auto grow sm:w-80 hide-scrollbar">
+          <div className="hide-scrollbar grow overflow-y-auto sm:w-80">
             {/* USER-CARD */}
             {filteredChats?.map((chat: any) => (
               <ChatCard key={chat.id} chat={chat} onChatOpen={onChatOpen} />
             ))}
           </div>
         ) : (
-          <div className="w-full  sm:w-80 flex items-center justify-center grow mb-10 h-auto bg-background sm:min-h-full">
+          <div className="mb-10  flex h-auto w-full grow items-center justify-center bg-background sm:min-h-full sm:w-80">
             {/* SEARCH NOT FOUND */}
             <div className="font-worksans max-w-[32rem] text-center">
               <h2>Sorry, no chat found.</h2>{' '}
@@ -78,9 +78,9 @@ const SideBar = ({chats, onChatOpen}: ChatSideBarProps) => {
           </div>
         )
       ) : (
-        <div className="w-full sm:hidden grow flex items-center justify-center mb-10 grow bg-background">
+        <div className="mb-10 flex w-full grow grow items-center justify-center bg-background sm:hidden">
           {/* NO PARTICIPANT BOX */}
-          <div className="text-center font-worksans text-grayInputField max-w-[32rem]">
+          <div className="font-worksans max-w-[32rem] text-center text-grayInputField">
             <h2>Message your friends</h2>{' '}
             <p>
               Let’s make a great conversation with your trustworthy friends,

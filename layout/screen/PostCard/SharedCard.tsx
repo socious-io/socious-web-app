@@ -1,7 +1,7 @@
-import { post } from 'utils/request';
+import {post} from 'utils/request';
 import PostContent from './components/PostContent';
 import PostHead from './components/PostHead';
-import PostCard, { PostCardProps } from './PostCard';
+import PostCard, {PostCardProps} from './PostCard';
 import PostAction from './components/PostAction';
 import {useToggle} from '@hooks';
 import PostOption from './components/PostOption';
@@ -17,27 +17,32 @@ interface SharedCardProps extends PostCardProps {
 
 export function SharedCard({
   id,
-  name, 
+  name,
   content,
-  src, 
-  passion, 
-  time, 
-  media, 
-  sharedPost, 
-  liked, 
-  likes, 
+  src,
+  passion,
+  time,
+  media,
+  sharedPost,
+  liked,
+  likes,
   shared,
   hideOption,
   showAction = true,
   optionClicked,
 }: SharedCardProps) {
-
   const {state, handlers} = useToggle();
-  
+
   return (
-    <div className="relative space-y-5 py-4 border-neutralGray border-b">
-      <PostHead name={(name || "name") + " Shared"} time={time} src={src} hideOption={hideOption} toggleOptions={handlers.toggle} />
-      <PostContent content={content} passion={passion} media={media} noBorder/>
+    <div className="relative space-y-5 border-b border-neutralGray py-4">
+      <PostHead
+        name={(name || 'name') + ' Shared'}
+        time={time}
+        src={src}
+        hideOption={hideOption}
+        toggleOptions={handlers.toggle}
+      />
+      <PostContent content={content} passion={passion} media={media} noBorder />
       <PostCard
         id={sharedPost?.id}
         content={sharedPost?.content}
@@ -51,13 +56,16 @@ export function SharedCard({
         showAction={false}
         hideOption={true}
       />
-      {
-        showAction && <PostAction id={id} liked={liked} likes={likes} shared={shared} onShare={optionClicked ? () => optionClicked("SHARE") : undefined} />
-      }
-      {
-        optionClicked && state && 
-        <PostOption optionClicked={optionClicked} />
-      }
+      {showAction && (
+        <PostAction
+          id={id}
+          liked={liked}
+          likes={likes}
+          shared={shared}
+          onShare={optionClicked ? () => optionClicked('SHARE') : undefined}
+        />
+      )}
+      {optionClicked && state && <PostOption optionClicked={optionClicked} />}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import React, {PropsWithChildren} from 'react';
 
 const Title: React.FC<PropsWithChildren> = ({children}) => {
   return (
-    <h2 className="py-4 font-worksans text-base font-semibold text-black">
+    <h2 className="font-worksans py-4 text-base font-semibold text-black">
       {children}
     </h2>
   );

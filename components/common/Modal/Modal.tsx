@@ -2,13 +2,13 @@ import * as React from 'react';
 import {Dialog, Transition} from '@headlessui/react';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import {Fragment} from 'react';
-import { twMerge } from 'tailwind-merge';
+import {twMerge} from 'tailwind-merge';
 
 export interface ModalProps {
   isOpen?: boolean;
   onClose?: () => void;
   children?: React.ReactNode;
-  className?: string
+  className?: string;
 }
 
 export interface IModalCloseButton {
@@ -49,9 +49,10 @@ export function Modal({
             >
               <Dialog.Panel
                 className={twMerge(
-                  "w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all",
-                  className && className
-                  )}>
+                  'w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all',
+                  className && className,
+                )}
+              >
                 {children}
               </Dialog.Panel>
             </Transition.Child>
@@ -79,7 +80,7 @@ const Description = ({children}: ModalProps) => {
 const CloseButton = ({onClose}: IModalCloseButton) => {
   return (
     <XMarkIcon
-      className="absolute w-6 h-6 text-black cursor-pointer top-8 right-4 lg:right-8"
+      className="absolute top-8 right-4 h-6 w-6 cursor-pointer text-black lg:right-8"
       onClick={onClose}
     />
   );
