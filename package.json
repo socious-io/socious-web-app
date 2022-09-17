@@ -4,6 +4,11 @@
   "private": true,
   "author": "Socious",
   "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=8.0.0",
+    "yarn": "please-use-npm"
+  },
   "dependencies": {
     "@hookform/resolvers": "^2.9.6",
     "@openzeppelin/contracts": "^4.6.0",
