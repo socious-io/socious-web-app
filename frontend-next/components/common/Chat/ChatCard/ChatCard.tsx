@@ -35,7 +35,6 @@ const ChatCard = ({chat, onChatOpen}: ChatCardProps) => {
         </p>
       </div>
       <div className="cursor-default">
-        {/* TODO:: After merging with main, time to human time. ( chat?.updated_at ) */}
         <p className="text-grayInputField text-sm mx-auto">
           {chat.updated_at ? isoToHumanTime(chat.updated_at) : '0 min ago'}
         </p>
