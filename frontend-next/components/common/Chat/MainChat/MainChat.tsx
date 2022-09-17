@@ -55,7 +55,11 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
             />
             <div className="grow">
               <p className="text-base cursor-pointer">
-                {participant.first_name + ' ' + participant.last_name}
+              {
+                selectedChat?.type === "CHAT"
+                  ? selectedChat?.participants?.[0]?.identity_meta?.name 
+                  : selectedChat?.name
+              }
               </p>
               <p className="text-graySubtitle text-sm">Last Online</p>
             </div>

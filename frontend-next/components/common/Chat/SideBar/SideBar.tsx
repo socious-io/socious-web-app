@@ -67,7 +67,7 @@ const SideBar = ({chats, onChatOpen}: ChatSideBarProps) => {
             ))}
           </div>
         ) : (
-          <div className="w-full flex items-center justify-center grow mb-10 h-auto bg-background sm:min-h-full">
+          <div className="w-full  sm:w-80 flex items-center justify-center grow mb-10 h-auto bg-background sm:min-h-full">
             {/* SEARCH NOT FOUND */}
             <div className="font-worksans max-w-[32rem] text-center">
               <h2>Sorry, no chat found.</h2>{' '}
