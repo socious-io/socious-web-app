@@ -51,7 +51,7 @@ const PostAction = ({
         )}
         <p className="text-xs">{likesCount} Like</p>
       </Button>
-      <Link href={`/post/${id}`} passHref>
+      <Link href={`/app/post/${id}`} passHref>
         <a className="flex grow items-center justify-center">
           <Button
             variant="ghost"
@@ -72,7 +72,7 @@ const PostAction = ({
           <p className="text-xs">{shared} Share</p>
         </Button>
       ) : (
-        <Link href={`/post/${id}`} passHref>
+        <Link href={`/app/post/${id}`} passHref>
           <a className="flex grow items-center justify-center ">
             <Button
               variant="ghost"

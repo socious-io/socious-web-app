@@ -15,7 +15,7 @@
       "name": "Next.js: debug server-side",
       "type": "node-terminal",
       "request": "launch",
-      "command": "cd frontend-next; yarn dev"
+      "command": "npm run dev"
     },
     {
       "name": "Next.js: debug client-side",
@@ -27,7 +27,7 @@
       "name": "Next.js: debug full stack",
       "type": "node-terminal",
       "request": "launch",
-      "command": "cd frontend-next; yarn dev"
+      "command": "npm run dev",
       "console": "integratedTerminal",
       "serverReadyAction": {
         "pattern": "started server on .+, url: (https?://.+)",

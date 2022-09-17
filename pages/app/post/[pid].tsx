@@ -76,7 +76,7 @@ const Post = () => {
           const response: any = await sharePost(data, post.id);
           // setShareStep(1);
           shareHandler.off();
-          router.push(`/post/${response.id}`);
+          router.push(`/app/post/${response.id}`);
         } catch (error) {
           console.error(error);
         }
