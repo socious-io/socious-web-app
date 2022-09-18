@@ -26,7 +26,7 @@ export function ProfileCard({
           <p className="text-2xl font-semibold">
             {name || 'FirstName LastName'}
           </p>
-          <Link href={`/user/${username}`} passHref>
+          <Link href={`/app/user/${username}`} passHref>
             <label className="cursor-pointer text-primary">
               View my profile
             </label>

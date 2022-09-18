@@ -43,7 +43,7 @@ const Navbar = () => {
     <div className="flex h-60 w-full items-center rounded-b-sm bg-primary bg-[url('/images/socious_feed.png')] bg-cover  md:flex md:h-16  md:bg-none lg:h-16  ">
       <nav className="h-60 w-full items-center md:flex md:h-16  md:bg-none lg:h-16 ">
         <div className="container mx-auto max-w-5xl ">
-          <div className="flex flex items-center justify-center space-x-4">
+          <div className="flex items-center justify-center space-x-4">
             <div className="flex-row-2 ml-4 mr-4 mt-8 flex items-center justify-items-center md:ml-0 md:mt-0">
               <div className="flex flex-wrap content-around">
                 <div className="items-center rounded-full ">
@@ -83,19 +83,19 @@ const Navbar = () => {
             </div>
             <div className="hidden w-4/6 items-center justify-end space-x-6 md:flex">
               <div className="space-x-4">
-                <Link href="/" passHref>
+                <Link href="/app" passHref>
                   <span className="text-sm text-white">Home</span>
                 </Link>
-                <Link href="/" passHref>
+                <Link href="/app/network" passHref>
                   <span className="text-sm text-white">Network</span>
                 </Link>
-                <Link href="/" passHref>
+                <Link href="/app/chat" passHref>
                   <span className="text-sm text-white">Chats</span>
                 </Link>
-                <Link href="/notifications" passHref>
+                <Link href="/app/notifications" passHref>
                   <span className="text-sm text-white">Notifications</span>
                 </Link>
-                <Link href="/" passHref>
+                <Link href="/app/projects" passHref>
                   <span className="text-sm text-white">Projects</span>
                 </Link>
               </div>

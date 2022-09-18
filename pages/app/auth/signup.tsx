@@ -71,12 +71,12 @@ const Signup: NextPage = () => {
   };
   const handleBack = useCallback(() => {
     setStep(step - 1);
-  }, []);
+  }, [step]);
 
   const handleSuccessToggle = useCallback(() => {
     if (showSuccess) router.replace('/auth/login');
     setShowSuccess(!showSuccess);
-  }, [showSuccess]);
+  }, [router, showSuccess]);
 
   const handleErrorToggle = useCallback(
     () => setShowError(!showError),

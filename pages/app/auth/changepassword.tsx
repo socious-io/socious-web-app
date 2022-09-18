@@ -13,7 +13,7 @@ import {
   EyeSlashIcon,
   ChevronLeftIcon,
 } from '@heroicons/react/24/outline';
-import {schemaChangePassword} from '../../api/auth/validation';
+import {schemaChangePassword} from '@api/auth/validation';
 import {changePassword} from '@api/auth/actions';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
