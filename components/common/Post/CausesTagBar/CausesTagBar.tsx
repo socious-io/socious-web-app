@@ -1,17 +1,67 @@
 import {UseFormRegisterReturn} from 'react-hook-form';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {Avatar, Combobox} from '@components/common';
 
-const items = [
-  {id: 1, name: 'MINORITY'},
-  {id: 2, name: 'DIVERSITY_INCLUSION'},
-  {id: 3, name: 'INDIGENOUS_PEOPLES'},
-  {id: 4, name: 'DISABILITY'},
-  {id: 5, name: 'POVERTY'},
-];
+// TODO this will actually come from socious-data
+const SocialCauses = {
+  SOCIAL: 'SOCIAL',
+  POVERTY: 'POVERTY',
+  HOMELESSNESS: 'HOMELESSNESS',
+  HUNGER: 'HUNGER',
+  HEALTH: 'HEALTH',
+  SUBSTANCE_ABUSE: 'SUBSTANCE_ABUSE',
+  MENTAL: 'MENTAL',
+  BULLYING: 'BULLYING',
+  SECURITY: 'SECURITY',
+  EDUCATION: 'EDUCATION',
+  GENDER_EQUALITY: 'GENDER_EQUALITY',
+  GENDER_BASED_VIOLENCE: 'GENDER_BASED_VIOLENCE',
+  SEXUAL_VIOLENCE: 'SEXUAL_VIOLENCE',
+  DOMESTIC_VIOLENCE: 'DOMESTIC_VIOLENCE',
+  WATER_SANITATION: 'WATER_SANITATION',
+  SUSTAINABLE_ENERGY: 'SUSTAINABLE_ENERGY',
+  DECENT_WORK: 'DECENT_WORK',
+  INEQUALITY: 'INEQUALITY',
+  MINORITY: 'MINORITY',
+  MULTICULTURALISM: 'MULTICULTURALISM',
+  DIVERSITY_INCLUSION: 'DIVERSITY_INCLUSION',
+  INDIGENOUS_PEOPLES: 'INDIGENOUS_PEOPLES',
+  DISABILITY: 'DISABILITY',
+  LGBTQI: 'LGBTQI+',
+  REFUGEE: 'REFUGEE',
+  MIGRANTS: 'MIGRANTS',
+  ORPHANS: 'ORPHANS',
+  CHILD_PROTECTION: 'CHILD_PROTECTION',
+  COMMUNITY_DEVELOPMENT: 'COMMUNITY_DEVELOPMENT',
+  DEPOPULATION: 'DEPOPULATION',
+  OVERPOPULATION: 'OVERPOPULATION',
+  HUMAN_RIGHTS: 'HUMAN_RIGHTS',
+  SUSTAINABILITY: 'SUSTAINABILITY',
+  RESPONSIBLE_CONSUMPTION: 'RESPONSIBLE_CONSUMPTION',
+  CLIMATE_CHANGE: 'CLIMATE_CHANGE',
+  NATURAL_DISASTERS: 'NATURAL_DISASTERS',
+  BIODIVERSITY: 'BIODIVERSITY',
+  ANIMAL_RIGHTS: 'ANIMAL_RIGHTS',
+  ARMED_CONFLICT: 'ARMED_CONFLICT',
+  PEACEBUILDING: 'PEACEBUILDING',
+  DEMOCRACY: 'DEMOCRACY',
+  CIVIC_ENGAGEMENT: 'CIVIC_ENGAGEMENT',
+  JUSTICE: 'JUSTICE',
+  GOVERNANCE: 'GOVERNANCE',
+  CRIME_PREVENTION: 'CRIME_PREVENTION',
+  CORRUPTION: 'CORRUPTION',
+  OTHER: 'OTHER',
+  RURAL_DEVELOPMENT: 'RURAL_DEVELOPMENT',
+  VEGANISM: 'VEGANISM',
+  BLACK_LIVES_MATTER: 'BLACK_LIVES_MATTER',
+  ISLAMOPHOBIA: 'ISLAMOPHOBIA',
+  ANTI_SEMITISM: 'ANTI-SEMITISM',
+};
+
+const items = Object.entries(SocialCauses).map(([id, name]) => ({id, name}));
 
 type selectionType = {
-  id: number;
+  id: string;
   name: string;
 };
 
@@ -29,6 +79,16 @@ export const CausesTagBar = ({
   preSelected,
 }: CausesTagBarProps) => {
   const [selected, setSelected] = useState<selectionType>();
+  const sortedItems = useMemo(
+    () => {
+      const sorted = items.slice();
+      sorted.sort((a, b) => (a.name > b.name ? 1 : -1));
+      return sorted;
+    },
+    [
+      // todo: language
+    ],
+  );
   useEffect(() => {
     if (preSelected)
       setSelected(items.find((item) => item.name === preSelected));
@@ -41,7 +101,7 @@ export const CausesTagBar = ({
         register={register}
         selected={selected}
         onSelected={setSelected}
-        items={items}
+        items={sortedItems}
         errorMessage={errorMessage}
         required
         className="w-full"
