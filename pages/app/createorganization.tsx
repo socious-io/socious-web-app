@@ -37,11 +37,11 @@ const CreateOrganization = () => {
         {step === 0 ? null : <Carousel onPress={backHandler} step={step} />}
 
         {step === 0 ? (
-          <Starter />
+          <Starter onSubmit={nextHandler} />
         ) : step === 1 ? (
-          <OrganizationType />
+          <OrganizationType onSubmit={nextHandler} />
         ) : step === 2 ? (
-          <SocialCauses />
+          <SocialCauses onSubmit={nextHandler} />
         ) : step === 3 ? (
           <BasicInfo />
         ) : step === 4 ? (
@@ -56,14 +56,7 @@ const CreateOrganization = () => {
           <VerifyOrganization />
         ) : null}
 
-        <footer className="flex pt-6 pb-28 sm:pb-10 sm:pt-4 justify-center border-grayLineBased border-t">
-          <Button
-            onClick={nextHandler}
-            className="w-8/12 flex justify-center py-1.5 font-medium"
-          >
-            continue
-          </Button>
-        </footer>
+       
       </div>
     </div>
   );

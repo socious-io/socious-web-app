@@ -2,7 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import StarterCard from '../components/StarterCard';
-
+import { Button } from '@components/common/Button/Button';
+import {StepProps} from '@models/stepProps';
 const data = [
   {
     id: 1,
@@ -21,7 +22,7 @@ const data = [
   },
 ];
 
-const Starter = () => {
+const Starter = ({onSubmit}: StepProps) => {
   return (
     <>
       <div className="w-full h-56 relative ">
@@ -49,6 +50,14 @@ const Starter = () => {
           verified by our team.
         </p>
       </div>
+      <footer className="flex pt-6 pb-28 sm:pb-10 sm:pt-4 justify-center border-grayLineBased border-t">
+          <Button
+            onClick={onSubmit}
+            className="w-8/12 flex justify-center py-1.5 font-medium"
+          >
+            continue
+          </Button>
+        </footer>
     </>
   );
 };
