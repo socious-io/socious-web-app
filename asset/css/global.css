@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-lg;
+  }
+  h3 {
+    @apply text-base;
+  }
+  h4 {
+    @apply text-sm;
+  }
+  h5 {
+    @apply text-xs;
+  }
+  h6 {
+    @apply text-xs;
+  }
+}
+
+body {
+  font-family: 'Work Sans', sans-serif;
+  /* rest css code also here */
+  background-color: #f8f8f8;
+}
+h1, h2, h3, h4, h5 {
+  font-family: 'Hahmlet', sans-serif;
+}
+
+.font-helmet {
+  font-family: 'Hahmlet', sans-serif !important;  
+}
+.font-worksans {
+  font-family: 'Work Sans', sans-serif;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.overlay__about {
+  background-image:url('../../asset/images/socious_feed.png') bg-slate-900 bg-no-repeat bg-cover ;
+}
