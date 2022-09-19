@@ -74,7 +74,7 @@ const Signup: NextPage = () => {
   }, [step]);
 
   const handleSuccessToggle = useCallback(() => {
-    if (showSuccess) router.replace('/auth/login');
+    if (showSuccess) router.replace('/app/auth/login');
     setShowSuccess(!showSuccess);
   }, [router, showSuccess]);
 

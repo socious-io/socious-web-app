@@ -12,11 +12,11 @@ const StartScreen = () => {
   const [step, setStep] = useState<number>(1);
 
   const toSignUp = useCallback(() => {
-    Router.push('/auth/signup');
+    Router.push('/app/auth/signup');
   }, []);
 
   const toLogin = useCallback(() => {
-    Router.push('/auth/login');
+    Router.push('/app/auth/login');
   }, []);
 
   useEffect(() => {
