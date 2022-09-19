@@ -17,7 +17,7 @@ const ProjectsCard: FC<ProjectsCardProps> = ({
 }) => {
   return (
     <div className="space-y-4 rounded-2xl border border-grayLineBased bg-background p-4">
-      <Link href="/app/project">
+      <Link href="/app/projects">
         <label className="text-primary">Projects</label>
       </Link>
       <ul className="list-none space-y-4">

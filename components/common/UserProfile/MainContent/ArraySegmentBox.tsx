@@ -11,13 +11,14 @@ import Title from './Title';
 
 //interfaces
 interface Props {
-  social_causes: string[];
+    social_causes: string[];
+    title: string;
 }
 
-const SocialCauses: React.FC<Props> = ({social_causes}) => {
+const ArraySegmentBox: React.FC<Props> = ({title,social_causes}) => {
   return (
     <div className="p-4">
-      <Title>Social causes</Title>
+      <Title>{title}</Title>
       <div className="flex w-4/6 flex-wrap gap-2 ">
         {social_causes &&
           social_causes?.map((item: string) => {
@@ -33,4 +34,4 @@ const SocialCauses: React.FC<Props> = ({social_causes}) => {
   );
 };
 
-export default SocialCauses;
+export default ArraySegmentBox;

@@ -71,3 +71,4 @@ artifacts/
 
 # If someone uses yarn, make sure we don't commit the lock file, as it causes bugs
 yarn.lock
+.idea
