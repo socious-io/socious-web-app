@@ -1,17 +1,12 @@
 import {UseFormRegisterReturn} from 'react-hook-form';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {Avatar, Combobox} from '@components/common';
+import Data, {getText} from '@socious/data';
 
-const items = [
-  {id: 1, name: 'MINORITY'},
-  {id: 2, name: 'DIVERSITY_INCLUSION'},
-  {id: 3, name: 'INDIGENOUS_PEOPLES'},
-  {id: 4, name: 'DISABILITY'},
-  {id: 5, name: 'POVERTY'},
-];
+const items = Object.keys(Data.SocialCauses);
 
 type selectionType = {
-  id: number;
+  id: string;
   name: string;
 };
 
@@ -29,10 +24,23 @@ export const CausesTagBar = ({
   preSelected,
 }: CausesTagBarProps) => {
   const [selected, setSelected] = useState<selectionType>();
+  const localItems = useMemo(
+    () => {
+      const sorted = items.map((id) => ({
+        id,
+        name: getText('en', `PASSION.${id}`),
+      }));
+      sorted.sort((a, b) => (a.name > b.name ? 1 : -1));
+      return sorted;
+    },
+    [
+      // todo: language
+    ],
+  );
   useEffect(() => {
     if (preSelected)
-      setSelected(items.find((item) => item.name === preSelected));
-  }, [preSelected]);
+      setSelected(localItems.find((item) => item.id === preSelected));
+  }, [localItems, preSelected]);
 
   return (
     <div className="-ml-6 -mr-6 flex items-center space-x-3 border-y-[0.5px] border-[#C3C8D9] p-4">
@@ -41,7 +49,7 @@ export const CausesTagBar = ({
         register={register}
         selected={selected}
         onSelected={setSelected}
-        items={items}
+        items={localItems}
         errorMessage={errorMessage}
         required
         className="w-full"

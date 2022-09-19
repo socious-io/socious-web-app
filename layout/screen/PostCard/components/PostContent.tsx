@@ -1,3 +1,5 @@
+import {getText} from '@socious/data';
+
 import {Chip} from '@components/common';
 
 export interface PostContentProps {
@@ -27,7 +29,7 @@ const PostContent = ({
       {passion && (
         <div>
           <Chip
-            content={passion}
+            content={getText('en', `PASSION.${passion}`) || passion}
             containerClassName="bg-secondarySLight inline"
             contentClassName="text-secondary"
           />
