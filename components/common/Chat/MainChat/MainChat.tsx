@@ -1,3 +1,4 @@
+import {sendMessage} from '@api/chat/actions';
 import Avatar from '@components/common/Avatar/Avatar';
 import CommentField from '@components/common/Post/CommentField/CommentField';
 import {
@@ -5,11 +6,35 @@ import {
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/outline';
 import {useUser} from '@hooks';
-import React from 'react';
+import {createMessageResponseType, MessageType} from '@models/message';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import useSWR from 'swr';
 import useSWRImmutable from 'swr/immutable';
 import {get} from 'utils/request';
 import Bubble from '../Bubble/Bubble';
+
+// chat_id: '3ee86b36-503b-484c-af79-11e79e7a1bd2';
+// created_at: '2022-09-19T03:14:24.441Z';
+// deleted_at: null;
+// id: '00a81471-2dde-4409-98cb-2715fc19ed67';
+// identity_id: 'a505d9b6-97cb-4784-a586-3067d73dbdcc';
+// media: null;
+// replied: false;
+// reply_id: null;
+// text: 'hello';
+// updated_at: '2022-09-19T03:14:24.441Z';
+
+// chat_id: '3ee86b36-503b-484c-af79-11e79e7a1bd2';
+// created_at: '2022-09-19T03:14:24.441Z';
+// deleted_at: null;
+// id: '00a81471-2dde-4409-98cb-2715fc19ed67';
+// identity_id: 'a505d9b6-97cb-4784-a586-3067d73dbdcc';
+// media: null;
+// media_url: null;
+// replied: false;
+// reply_id: null;
+// text: 'hello';
+// updated_at: '2022-09-19T03:14:24.441Z';
 
 const INVALID_UUID = 'invalid input syntax for type uuid:';
 
@@ -19,7 +44,11 @@ type MainChatProps = {
 };
 
 const MainChat = ({selectedChat, goBack}: MainChatProps) => {
-  const {data, error: messageError} = useSWR<any>(
+  const {
+    data,
+    error: messageError,
+    mutate,
+  } = useSWR<any>(
     selectedChat.id ? `/chats/${selectedChat.id}/messages` : null,
     get,
   );
@@ -31,12 +60,32 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
     get,
   );
 
+  const [reversedMessages, setReversedMessages] = useState<MessageType[]>([]);
   const {currentIdentity} = useUser();
 
   if (messageError?.response?.data?.error?.startsWith(INVALID_UUID)) goBack();
 
-  const reversedMessages = data?.items?.reverse() ?? [];
+  useEffect(() => {
+    if (data?.items) setReversedMessages(data.items.reverse());
+  }, [data?.items]);
 
+  const onSendMessage = useCallback(
+    async (message: string) => {
+      try {
+        const response: createMessageResponseType = await sendMessage(
+          selectedChat.id,
+          {
+            text: message,
+          },
+        );
+        const newMessage = {...response, media_url: null};
+        setReversedMessages((old) => [...old, newMessage]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [selectedChat],
+  );
   return (
     <>
       {/* ON CHAT SELECTED */}
@@ -67,16 +116,18 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
             <EllipsisHorizontalIcon className="w-7 rounded-full p-1" />
           </div>
           {data?.items.length > 0 ? (
-            <div className="flex w-full grow flex-col justify-end space-y-2 overflow-y-auto p-4">
-              {reversedMessages.map((message: any) => (
-                <Bubble
-                  key={message.id}
-                  self={message.identity_id === currentIdentity?.id}
-                  content={message.text}
-                  identity_id={message.identity_id}
-                  link={message.link ?? ''}
-                />
-              ))}
+            <div className="flex w-full grow flex-col space-y-2 overflow-y-auto p-4">
+              <div className="hide-scrollbar mt-auto space-y-2 overflow-y-auto">
+                {reversedMessages?.map((message: any) => (
+                  <Bubble
+                    key={message.id}
+                    self={message.identity_id === currentIdentity?.id}
+                    content={message.text}
+                    identity_id={message.identity_id}
+                    link={message.link ?? ''}
+                  />
+                ))}
+              </div>
             </div>
           ) : (
             <div className="flex w-full grow items-center justify-center">
@@ -86,7 +137,7 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
             </div>
           )}
           <CommentField
-            onSend={(comment) => console.log(comment)}
+            onSend={onSendMessage}
             placeholder="Write a message"
             className="border-offsetcolor rounded-none rounded-b-2xl border-0 border-t-[1px]"
           />
