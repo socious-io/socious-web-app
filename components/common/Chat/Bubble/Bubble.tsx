@@ -20,7 +20,7 @@ const Bubble = ({self = true, content, link, identity_id}: BubbleProps) => {
   return (
     <div
       className={twMerge(
-        'flex w-full gap-x-4',
+        'mt-2 flex w-full gap-x-4',
         self && 'ml-auto flex-row-reverse items-end',
       )}
     >
