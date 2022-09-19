@@ -31,7 +31,9 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
     get,
   );
 
-  const {currentIdentity} = useUser();
+  const {user, currentIdentity} = useUser();
+
+  console.log('USER :---: ', user);
 
   if (messageError?.response?.data?.error?.startsWith(INVALID_UUID)) goBack();
 
@@ -86,6 +88,8 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
             </div>
           )}
           <CommentField
+            src={user?.avatar?.url}
+            avatarSize="m"
             onSend={(comment) => console.log(comment)}
             placeholder="Write a message"
             className="border-offsetcolor rounded-none rounded-b-2xl border-0 border-t-[1px]"

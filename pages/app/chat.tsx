@@ -1,14 +1,5 @@
-import {Avatar, SearchBar} from '@components/common';
-import Bubble from '@components/common/Chat/Bubble/Bubble';
 import MainChat from '@components/common/Chat/MainChat/MainChat';
 import SideBar from '@components/common/Chat/SideBar/SideBar';
-import CommentField from '@components/common/Post/CommentField/CommentField';
-import {
-  ArrowLeftIcon,
-  ChevronLeftIcon,
-  EllipsisHorizontalIcon,
-  PlusIcon,
-} from '@heroicons/react/24/outline';
 import {useCallback, useEffect, useState} from 'react';
 import useSWR from 'swr';
 import {get} from 'utils/request';
