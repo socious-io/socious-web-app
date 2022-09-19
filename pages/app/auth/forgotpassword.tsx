@@ -127,7 +127,7 @@ const ForgotPassword = () => {
 
     try {
       await directChangePassword(password);
-      router.push('/auth/login');
+      router.push('/app/auth/login');
     } catch (error: any) {
       handleToggleModal();
     }

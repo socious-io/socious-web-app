@@ -78,7 +78,7 @@ export const useUser = (options?: UseUserOptions) => {
 
     // if user unauthorized
     if (identities === null && redirect) {
-      Router.push(`/auth/login?redirect_to=${pathname}`);
+      Router.push(`/app/auth/login?redirect_to=${pathname}`);
     }
 
     // if user && error both are undefined
@@ -88,11 +88,11 @@ export const useUser = (options?: UseUserOptions) => {
     if (user && userError?.response?.status !== 401) {
       // if user has requested forgot password.
       if (user.password_expired) {
-        Router.push('/auth/forgotpassword');
+        Router.push('/app/auth/forgotpassword');
         return;
       } else if (pathname.startsWith('/auth/forgotpassword')) {
         // if user trying to access /auth/forgotpassword when password not expired
-        Router.push('/');
+        Router.push('/app');
       }
 
       // if user === new_user
