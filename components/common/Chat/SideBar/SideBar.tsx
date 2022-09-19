@@ -24,7 +24,9 @@ const SideBar = ({haveChats, onChatOpen}: ChatSideBarProps) => {
     get,
   );
 
-  useEffect(() => setFilteredChats(chatResponse?.items), [chatResponse]);
+  useEffect(() => {
+    if (chatResponse?.items) setFilteredChats(chatResponse.items);
+  }, [chatResponse]);
 
   return (
     <div
