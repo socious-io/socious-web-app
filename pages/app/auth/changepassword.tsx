@@ -36,7 +36,7 @@ const ChangePassword: NextPage = () => {
     if (errorMessage) {
       setError(null);
     } else {
-      router.push('/');
+      router.push('/app');
     }
     setShowModal(false);
   }, [errorMessage, router]);

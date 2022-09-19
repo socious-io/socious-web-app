@@ -1,5 +1,5 @@
 import type {NextPage} from 'next';
-import Router from 'next/router';
+import {useRouter} from 'next/router';
 import Image from 'next/image';
 import {useState, useCallback, useContext} from 'react';
 import {useForm} from 'react-hook-form';
@@ -17,6 +17,8 @@ import typoCompony from 'asset/icons/typo-company.svg';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
 const Login: NextPage = () => {
+  const router = useRouter();
+  const {redirect_to} = router.query;
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -36,10 +38,9 @@ const Login: NextPage = () => {
   const handleLoginRequest = async () => {
     const email = getValues('email');
     const password = getValues('password');
-
     try {
       await login(email, password);
-      Router.push('/');
+      redirect_to ? router.push(redirect_to as string) : router.push('/app');
     } catch (e) {
       const error = e as AxiosError<any>;
       let msg = DefaultErrorMessage;
@@ -116,7 +117,7 @@ const Login: NextPage = () => {
               }
             />
 
-            <Link passHref href="/auth/forgotpassword">
+            <Link passHref href="/app/auth/forgotpassword">
               <Button
                 className="absolute -right-6 -bottom-5"
                 size="lg"
@@ -140,7 +141,7 @@ const Login: NextPage = () => {
           </Button>
           <div className="flex items-center justify-center align-middle">
             Not a member?
-            <Link passHref href="/auth/signup">
+            <Link passHref href="/app/auth/signup">
               <Button size="lg" variant="link">
                 Sign up
               </Button>
