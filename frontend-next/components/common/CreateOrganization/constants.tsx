@@ -1,4 +1,4 @@
-export const PASSIONS = [
+export const SOCIAL_CAUSES = [
   'SOCIAL',
   'POVERTY',
   'HOMELESSNESS',
