@@ -8,6 +8,7 @@ import {WalletProvider} from '../context/useWalletContext';
 import Layout from 'layout/Wrapper/Wrapper';
 import {get} from 'utils/request';
 
+import 'react-toastify/dist/ReactToastify.css';
 import '../asset/css/global.css';
 import '../styles/index.css';
 import '../styles/App.css';
