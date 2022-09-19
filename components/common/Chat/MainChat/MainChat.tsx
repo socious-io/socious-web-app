@@ -81,9 +81,24 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
               ))}
             </div>
           ) : (
-            <div className="flex w-full grow items-center justify-center">
+            <div className="flex w-full grow items-center justify-center text-center">
               <div>
-                <Avatar />
+                <Avatar
+                  size="xxl"
+                  type={
+                    selectedChat?.participants?.[0]?.identity_type === 'users'
+                      ? 0
+                      : 1
+                  }
+                />
+                <div className="mt-2 space-y-2">
+                  <h2 className="text-2xl text-primary">Start charting with</h2>
+                  <h2 className="text-2xl">
+                    {selectedChat?.type === 'CHAT'
+                      ? selectedChat?.participants?.[0]?.identity_meta?.name
+                      : selectedChat?.name}
+                  </h2>
+                </div>
               </div>
             </div>
           )}
