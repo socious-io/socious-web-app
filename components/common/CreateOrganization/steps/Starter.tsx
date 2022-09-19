@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import {ChevronLeftIcon} from '@heroicons/react/outline';
+import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import StarterCard from '../components/StarterCard';
 
 const data = [

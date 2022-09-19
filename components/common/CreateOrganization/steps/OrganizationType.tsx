@@ -2,7 +2,7 @@ import React from 'react';
 import {ORGANIZATION_TYPE} from '../constants';
 
 import Title from '../components/Title';
-import {CheckCircleIcon} from '@heroicons/react/outline';
+import {CheckCircleIcon} from '@heroicons/react/24/outline';
 const OrganizationType = () => {
   return (
     <>

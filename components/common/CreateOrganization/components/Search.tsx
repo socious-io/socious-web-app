@@ -1,5 +1,5 @@
 import React from 'react';
-import {SearchIcon} from '@heroicons/react/outline';
+import {StopIcon} from '@heroicons/react/24/outline'
 
 const Search = () => {
   return (
@@ -8,7 +8,7 @@ const Search = () => {
         placeholder="search"
         className="mx-4 flex-1 border border-grayLineBased bg-offWhite w-max py-2 pl-9 pr-6 rounded-full"
       />
-      <SearchIcon className=" h-5 w-5 text-graySubtitle stroke-1.5 absolute left-6 top-3" />
+      <StopIcon className=" h-5 w-5 text-graySubtitle stroke-1.5 absolute left-6 top-3" />
     </div>
   );
 };

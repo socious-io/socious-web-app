@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 //icons
-import {ChevronLeftIcon} from '@heroicons/react/outline';
+import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 interface Props {
   step: number;
   onPress: () => void;
