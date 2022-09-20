@@ -1,4 +1,3 @@
-import {post} from 'utils/request';
 import PostContent from './components/PostContent';
 import PostHead from './components/PostHead';
 import PostCard, {PostCardProps} from './PostCard';
