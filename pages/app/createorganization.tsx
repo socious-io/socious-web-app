@@ -13,6 +13,7 @@ import Impact from '../../components/common/CreateOrganization/steps/Impact';
 import CreateSuccessfully from '../../components/common/CreateOrganization/steps/CreateSuccessfully';
 import VerifyOrganization from '../../components/common/CreateOrganization/steps/VerifyOrganization';
 import Starter from '../../components/common/CreateOrganization/steps/Starter';
+import Mission from '@components/common/CreateOrganization/steps/Mission';
 
 const CreateOrganization = () => {
   const [step, setStep] = useState<number>(0);
@@ -43,9 +44,9 @@ const CreateOrganization = () => {
         ) : step === 2 ? (
           <SocialCauses onSubmit={nextHandler} />
         ) : step === 3 ? (
-          <BasicInfo />
+          <BasicInfo onSubmit={nextHandler}/>
         ) : step === 4 ? (
-          <BasicInfo />
+          <Mission />
         ) : step === 5 ? (
           <Culture />
         ) : step === 6 ? (

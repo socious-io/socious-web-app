@@ -17,7 +17,12 @@ const OrganizationType = ({onSubmit}: StepProps) => {
         <div className="h-14 w-full grow overflow-y-scroll px-4  py-2">
           {items.map((item) => {
             return (
-              <button className="flex w-full items-center justify-between px-4 transition-all duration-300 focus:rounded-2xl focus:bg-secondary focus:pl-5 focus:text-white">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+                className="flex w-full items-center justify-between px-4 transition-all duration-300 focus:rounded-2xl focus:bg-secondary focus:pl-5 focus:text-white"
+              >
                 <p className="w-fit py-2 text-left text-lg lowercase sm:text-base">
                   {item}
                 </p>
