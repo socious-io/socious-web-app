@@ -1,7 +1,7 @@
 import SideBar from '@components/common/Home/SideBar';
-import DetailContent from 'layout/screen/Project/DetailContent';
+import DetailContent from '@components/common/Project/HiredProjects/DetailContent';
 
-const Detail = () => {
+const HiredProject = () => {
   return (
     <div className=" mx-6 mt-10 flex md:space-x-6">
       <SideBar selectBar={'PROJECT_DETAIL'} />
@@ -10,4 +10,4 @@ const Detail = () => {
   );
 };
 
-export default Detail;
+export default HiredProject;

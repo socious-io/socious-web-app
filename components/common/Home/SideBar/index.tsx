@@ -5,7 +5,6 @@ import ProfileCard from 'layout/screen/ProfileCard/ProfileCard';
 import OrganizationCard from './OrganizationCard';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import useUser from 'hooks/useUser/useUser';
-import {useToggle} from '@hooks';
 import router from 'next/router';
 
 interface Props {

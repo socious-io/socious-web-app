@@ -34,13 +34,13 @@ const ProjectsCard: FC<ProjectsCardProps> = ({
           </>
         ) : (
           <>
-            <Link href={`/app/user/${username}/applied`} passHref>
+            <Link href={`/app/projects/applications/${username}`} passHref>
               <li className="flex cursor-pointer items-center space-x-4">
                 <ClipboardDocumentListIcon className="h-4" />
                 <p>My applications</p>
               </li>
             </Link>
-            <Link href={`/app/user/${username}/hired`} passHref>
+            <Link href={`/app/projects/hired/${username}`} passHref>
               <li className="flex cursor-pointer items-center space-x-4">
                 <FolderIcon className="h-4" />
                 <p>Hired projects</p>

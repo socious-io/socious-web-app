@@ -1,7 +1,7 @@
 import type {NextPage} from 'next';
 
 import SideBar from '@components/common/Home/SideBar';
-import MainContent from 'layout/screen/Project/MainContent';
+import MainContent from '@components/common/Project/MainContent';
 import {useToggle} from '@hooks';
 
 const Project: NextPage = () => {

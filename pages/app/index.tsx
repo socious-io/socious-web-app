@@ -19,7 +19,7 @@ const Index: NextPage = () => {
 
   return (
     <div className="mt-10 flex space-x-6">
-      <SideBar selectBar={''}  />
+      <SideBar selectBar={''} />
       <MainContent />
     </div>
   );

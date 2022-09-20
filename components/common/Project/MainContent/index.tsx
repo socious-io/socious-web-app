@@ -1,8 +1,9 @@
-import ImageBanner from './ImageBanner';
-import RecommendCheck from './RecommendCheck';
-import SliderCard from './SliderCard';
-import ProjectCard from './ProjectCard';
+import ImageBanner from '../component/ImageBanner';
+import RecommendCheck from '../component/RecommendCheck';
+import SliderCard from '../component/SliderCard';
+import ProjectCard from '../component/ProjectCard';
 import {useToggle} from '@hooks';
+
 var data = [
   {
     id: 1,

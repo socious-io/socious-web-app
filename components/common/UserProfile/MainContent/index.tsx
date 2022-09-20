@@ -9,7 +9,7 @@ import React from 'react';
 import Header from './Header';
 import ProfileInfo from './ProfileInfo';
 import Skills from './Skills';
-import ArraySegmentBox from './ArraySegmentBox';
+import SocialCauses from './SocialCauses';
 import Description from './Description';
 import Contact from './Contact';
 
@@ -44,8 +44,7 @@ const MainContent: React.FC<Props> = ({data, status}) => {
       {user?.username === data?.username && (
         <p className="mt-3 px-4 text-sm text-secondary">You </p>
       )}
-
-      <ArraySegmentBox social_causes={data?.social_causes} />
+      <SocialCauses social_causes={data?.social_causes} />
       {status === 'user' ? (
         <Contact
           address={data?.address}

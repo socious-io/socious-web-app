@@ -1,6 +1,7 @@
 import BodyBox from '@components/common/Project/BodyBox/BodyBox';
-import ArraySegmentBox from '@components/common/UserProfile/MainContent/ArraySegmentBox';
-import OrganizationTopCard from './OrganizationTopCard';
+import SocialCauses from '@components/common/UserProfile/MainContent/SocialCauses';
+
+import OrganizationTopCard from '../../component/OrganizationTopCard';
 
 var social_causes = [
   'Armed Conflict',
@@ -39,12 +40,9 @@ const Detail = () => {
           payment_range_higher={''}
           experience_level={0}
         />
-        <ArraySegmentBox
-          social_causes={social_causes}
-          title={'Social causes'}
-        />
+        <SocialCauses social_causes={social_causes} />
         <BodyBox title={'Project description'} description={disp} />
-        <ArraySegmentBox social_causes={skills} title={'Skills'} />
+        <SocialCauses social_causes={skills} />
         <BodyBox title={'About the organization'} description={disp} />
       </div>
     </div>
