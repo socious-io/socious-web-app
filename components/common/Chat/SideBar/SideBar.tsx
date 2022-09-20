@@ -6,6 +6,7 @@ import ChatCard from '../ChatCard/ChatCard';
 import {useRouter} from 'next/router';
 import useSWR from 'swr';
 import {get} from 'utils/request';
+import {useUser} from '@hooks';
 
 type ChatSideBarProps = {
   onChatOpen: (data: any) => void;
@@ -18,6 +19,7 @@ const SideBar = ({haveChats, onChatOpen}: ChatSideBarProps) => {
   const [filteredChats, setFilteredChats] = useState<any[]>([]);
 
   const goBack = useCallback(() => router.back(), [router]);
+  const {user, currentIdentity} = useUser();
 
   const {data: chatResponse, error: chatError} = useSWR<any>(
     `/chats/summary?page=1&filter=${query}`,
@@ -46,7 +48,15 @@ const SideBar = ({haveChats, onChatOpen}: ChatSideBarProps) => {
         <h3 className="font-worksans text-center text-xl font-semibold">
           Chats
         </h3>
-        <Avatar size="m" src="" className="block sm:hidden" />
+        <Avatar
+          size="m"
+          src={
+            currentIdentity?.type === 'users'
+              ? user?.avatar?.url
+              : user?.image?.url
+          }
+          className="block sm:hidden"
+        />
       </div>
       {/* SEARCHBAR */}
       <div className="border-y-[0.5px] border-offsetColor bg-offWhite px-4 py-2.5 ">

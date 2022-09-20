@@ -103,7 +103,11 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
             </div>
           )}
           <CommentField
-            src={user?.avatar?.url}
+            src={
+              currentIdentity?.type === 'users'
+                ? user?.avatar?.url
+                : user?.image?.url
+            }
             avatarSize="m"
             onSend={(comment) => console.log(comment)}
             placeholder="Write a message"
