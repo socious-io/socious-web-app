@@ -39,7 +39,7 @@ export const InputFiled = ({
         <label
           htmlFor={id || name}
           className={twMerge(
-            'font-base block',
+            'sm:text-sm text-base font-semibold block',
             errorMessage ? 'text-error' : 'text-black',
             labelFloat && 'absolute left-3 -top-2 bg-white px-1 text-sm',
             disabled && 'text-opacity-40 ',
