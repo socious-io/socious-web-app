@@ -17,7 +17,7 @@ interface Props extends StepProps {
 
 const menuExtraSrc = require('../../../../../asset/icons/logo.svg');
 
-const ApplyStep1 = ({onSubmit, onAttach}: Props) => {
+const ApplyStep2 = ({onSubmit, onAttach}: Props) => {
   const {user} = useUser();
   const formMethods = useFormContext();
   const {handleSubmit, formState, register, getValues} = formMethods;
@@ -34,28 +34,8 @@ const ApplyStep1 = ({onSubmit, onAttach}: Props) => {
       </div>
       <Modal.Description>
         <div className="mt-2 space-y-4 pl-0 ">
-          <p className="font-bold text-black">project title</p>
-          <div className="flex flex-row space-x-2">
-            <Avatar size="s" type={1} />
-
-            <p className="text-black">Organization</p>
-          </div>
           <p className="text-black">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Equat
-            faucibus sed facilisi sit id blandiacilisi sit id blandit... See
-            more
-          </p>
-          <div className="divid-y">
-            <div>
-              <hr />
-            </div>
-            <BodyBox title={'Cover Letter'} description={''} />
-            <div>
-              <hr />
-            </div>
-          </div>
-          <p className="text-black">
-            Message<span className="ml-1 font-bold text-red-500 ">*</span>
+            Link name <span className="ml-1 font-bold text-red-500 ">*</span>
           </p>
           <TextArea
             placeholder="Write a message..."
@@ -65,31 +45,32 @@ const ApplyStep1 = ({onSubmit, onAttach}: Props) => {
             errorMessage={formState?.errors?.['content']?.message}
             register={register('content')}
           />
-
-          <Button
-            className=" mt-4 flex  max-w-xs  align-middle "
-            type="button"
-            size="lg"
-            variant="outline"
-            value="Submit"
-            onClick={onAttach}
-          >
-            <LinkIcon className="h-5 w-5 cursor-pointer" />
-            Attach link
-          </Button>
-          <BodyBox title={'Screening Questions'} description={''} />
+        </div>
+        <div className="mt-2 space-y-4 pl-0 ">
+          <p className="text-black">
+            Link URL<span className="ml-1 font-bold text-red-500 ">*</span>
+          </p>
+          <TextArea
+            placeholder="Write a message..."
+            rows={2}
+            containerClassName=""
+            className="border-gray border-1  overflow-y-scroll focus:border-none"
+            errorMessage={formState?.errors?.['content']?.message}
+            register={register('content')}
+          />
         </div>
       </Modal.Description>
       <Button
         className="ml-auto mt-4 flex max-w-xs items-center justify-center align-middle "
-        type="submit"
+        type="button"
         variant="fill"
         value="Submit"
+        onClick={onAttach}
       >
-        Review Application
+        Add Link
       </Button>
     </form>
   );
 };
 
-export default ApplyStep1;
+export default ApplyStep2;

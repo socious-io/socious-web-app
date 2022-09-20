@@ -6,16 +6,19 @@ import Image from 'next/image';
 import PostData from '@components/common/Project/PostData/PostData';
 import {Modal, Button} from '@components/common';
 import {useToggle} from '@hooks';
-import {XIcon} from '@heroicons/react/24/outline';
 import {FormProvider, useForm} from 'react-hook-form';
-import {joiResolver} from '@hookform/resolvers/joi';
 import ApplyStep1 from '@components/common/Project/Apply/Step1/ApplyStep1';
+import {useState} from 'react';
+import ApplyStep2 from '@components/common/Project/Apply/Step2/ApplyStep2';
+import ApplyStep4 from '@components/common/Project/Apply/step4/ApplyStep4';
 
 const dislikeSrc = require('../../../../asset/icons/thumbs-dislike.svg');
 const bookmarkSrc = require('../../../../asset/icons/bookmark.svg');
 
 function OrganizationTopCard({title}: Project) {
   const {state: showApply, handlers: setShowApply} = useToggle();
+
+  const [step, setStep] = useState<number>(1);
   const formMethodsStep1 = useForm({});
   const {getValues, setValue} = formMethodsStep1;
 
@@ -102,9 +105,34 @@ function OrganizationTopCard({title}: Project) {
         </Button>
       </div>
       {/* Add Post Modal */}
-      <Modal isOpen={showApply} onClose={() => setShowApply.off}>
+      <Modal isOpen={showApply} onClose={() => setShowApply.off()}>
         <FormProvider {...formMethodsStep1}>
-          <ApplyStep1 onSubmit={() => {}} />
+          {step == 1 ? (
+            <ApplyStep1
+              onSubmit={() => {
+                setStep(4);
+              }}
+              onAttach={() => {
+                setStep(2);
+              }}
+            />
+          ) : step == 2 ? (
+            <ApplyStep2
+              onSubmit={() => {}}
+              onAttach={() => {
+                setShowApply.off();
+                setStep(1);
+              }}
+            />
+          ) : (
+            <ApplyStep4
+              onSubmit={() => {}}
+              onAttach={() => {
+                setShowApply.off();
+                setStep(1);
+              }}
+            />
+          )}
         </FormProvider>
       </Modal>
     </div>

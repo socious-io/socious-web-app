@@ -9,8 +9,8 @@ const Project: NextPage = () => {
 
   return (
     <div className=" mx-6 mt-10 flex md:space-x-6">
-      <SideBar selectBar={showSide ? 'BACKBAR' : ''} />
-      <MainContent onClickShow={SeeSide.toggle} />
+      <SideBar selectBar={showSide ? 'PROJECT_BACKBAR' : ''} />
+      <MainContent onClickShow={SeeSide.on} />
     </div>
   );
 };

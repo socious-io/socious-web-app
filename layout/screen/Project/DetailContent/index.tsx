@@ -39,7 +39,10 @@ const Detail = () => {
           payment_range_higher={''}
           experience_level={0}
         />
-        <ArraySegmentBox social_causes={social_causes} title={'Social causes'} />
+        <ArraySegmentBox
+          social_causes={social_causes}
+          title={'Social causes'}
+        />
         <BodyBox title={'Project description'} description={disp} />
         <ArraySegmentBox social_causes={skills} title={'Skills'} />
         <BodyBox title={'About the organization'} description={disp} />
