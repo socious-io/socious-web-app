@@ -64,7 +64,7 @@ const createOrg=!asPath?.includes('createorganization');
         ></script>
       </Head>
       {isNotAuth && !isStarter && createOrg && <Navbar />}
-      <Container>{children}</Container>
+      {!createOrg?<>{children}</>:<Container>{children}</Container>}
     </>
   );
 }
