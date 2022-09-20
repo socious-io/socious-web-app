@@ -42,7 +42,7 @@ export const TextArea = ({
         <label
           htmlFor={id || name}
           className={twMerge(
-            'font-base block',
+            'sm:text-sm text-base font-semibold block',
             errorMessage ? 'text-error' : 'text-black',
             labelFloat ? 'absolute left-3 -top-2 bg-white px-1 text-sm' : '',
             disabled && 'text-opacity-40 ',
@@ -61,10 +61,10 @@ export const TextArea = ({
         aria-label={label}
         data-testid={`${label}-testid`}
         className={twMerge(
-          'block w-full rounded-lg py-1.5 px-2  text-sm outline-none',
+          'block w-full rounded-lg py-1.5 px-2 border border-grayLineBased text-sm outline-none',
           errorMessage
-            ? 'border-2 border-b-error'
-            : ' border-2 border-background focus:border-2 focus:border-primary',
+            ? 'border-1 border-b-error'
+            : ' border-1  focus:border-1 focus:border-primary',
           disabled && 'border-opacity-40 bg-transparent text-opacity-40',
           className && className,
         )}
