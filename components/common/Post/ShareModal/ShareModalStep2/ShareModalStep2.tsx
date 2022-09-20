@@ -1,7 +1,7 @@
 import {useRouter} from 'next/router';
 import {useCallback, useEffect, useState} from 'react';
 import {joiResolver} from '@hookform/resolvers/joi';
-import {useForm} from 'react-hook-form';
+import {FieldValues, useController, useForm} from 'react-hook-form';
 import useSWR from 'swr';
 
 import {Modal, TextArea, Button, Avatar} from 'components/common';
@@ -37,8 +37,15 @@ export const ShareModalStep2 = ({onShare}: shareModalStep2Props) => {
   const {user} = useUser();
   const [file, setFile] = useState<string>('');
 
-  const {register, handleSubmit, formState, getValues} = useForm({
+  const {register, handleSubmit, formState, control, getValues} = useForm({
     resolver: joiResolver(schemaSharePost),
+    defaultValues: {
+      causes_tags: post ? post.causes_tags[0] : '',
+    } as FieldValues,
+  });
+  const causesTagsController = useController<FieldValues, string>({
+    name: 'causes_tags',
+    control,
   });
 
   const onSubmit = useCallback(async () => {
@@ -73,8 +80,7 @@ export const ShareModalStep2 = ({onShare}: shareModalStep2Props) => {
         <div className="mt-2">
           <CausesTagBar
             src={user?.avatar?.url}
-            register={register('causes_tags')}
-            errorMessage={formState?.errors?.['causes_tags']?.message}
+            controller={causesTagsController}
           />
           <div className="-mr-6 -ml-6 flex items-center space-x-4 p-4">
             <Avatar src={user?.avatar?.url} size="m" />
