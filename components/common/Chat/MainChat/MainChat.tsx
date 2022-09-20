@@ -8,9 +8,9 @@ import {
 import {createMessageResponseType} from '@models/message';
 import {useCallback, useMemo} from 'react';
 import useSWRInfinite from 'swr/infinite';
-import useSWRImmutable from 'swr/immutable';
-import {get} from 'utils/request';
 import Messages from '../Messages/Messages';
+import {useUser} from '@hooks';
+import {get} from 'utils/request';
 
 const INVALID_UUID = 'invalid input syntax for type uuid:';
 
@@ -27,11 +27,12 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
         (previousData && previousData?.items?.length < 10)
       )
         return null;
-      console.log('I am making request with ', initialSize);
       return `/chats/${selectedChat.id}/messages?page=${initialSize + 1}`;
     },
     [selectedChat],
   );
+
+  const {user, currentIdentity} = useUser();
 
   const {
     data: infiniteMessage,
@@ -44,13 +45,6 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
   });
 
   if (infiniteError?.response?.data?.error?.startsWith(INVALID_UUID)) goBack();
-
-  const {data: participant} = useSWRImmutable<any>(
-    selectedChat?.participants?.[0]?.identity_meta?.id
-      ? `/user/${selectedChat?.participants?.[0]?.identity_meta?.id}/profile`
-      : null,
-    get,
-  );
 
   const noMoreMessage = useMemo(
     () => size * 10 >= infiniteMessage?.[0]?.['total_count'],
@@ -95,7 +89,11 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
             </span>
             <Avatar
               size="l"
-              src={participant?.avatar?.url ?? ''}
+              src={
+                selectedChat?.participants?.[0]?.identity_type === 'users'
+                  ? selectedChat?.participants?.[0]?.identity_meta?.avatar
+                  : selectedChat?.participants?.[0]?.identity_meta?.image
+              }
               type={
                 selectedChat?.participants?.[0]?.identity_type === 'users'
                   ? 0
@@ -116,8 +114,16 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
             infiniteMessage={infiniteMessage ?? []}
             noMoreMessage={noMoreMessage}
             loadMore={loadMore}
+            activeChat={selectedChat}
           />
           <CommentField
+            src={
+              currentIdentity?.type === 'users'
+                ? user?.avatar?.url
+                : user?.image?.url
+            }
+            type={currentIdentity?.type === 'users' ? 0 : 1}
+            avatarSize="m"
             onSend={onSendMessage}
             placeholder="Write a message"
             className="border-offsetcolor rounded-none rounded-b-2xl border-0 border-t-[1px]"

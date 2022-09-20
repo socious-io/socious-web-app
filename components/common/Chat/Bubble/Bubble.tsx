@@ -1,22 +1,15 @@
 import Avatar from '@components/common/Avatar/Avatar';
 import React from 'react';
-import useSWR from 'swr';
 import {twMerge} from 'tailwind-merge';
-import {get} from 'utils/request';
 
 interface BubbleProps {
   self?: boolean;
   content?: string;
   link?: string;
-  identity_id?: string;
+  userInfo?: any;
 }
 
-const Bubble = ({self = true, content, link, identity_id}: BubbleProps) => {
-  const {data: participant} = useSWR<any>(
-    self ? `user/profile` : identity_id ? `/user/${identity_id}/profile` : null,
-    get,
-  );
-
+const Bubble = ({self = true, content, link, userInfo}: BubbleProps) => {
   return (
     <div
       className={twMerge(
@@ -25,7 +18,13 @@ const Bubble = ({self = true, content, link, identity_id}: BubbleProps) => {
       )}
     >
       <div>
-        <Avatar size="l" src={participant?.avatar?.url ?? ''} />
+        <Avatar
+          size="l"
+          src={
+            userInfo?.identity_meta?.avatar || userInfo?.identity_meta?.image
+          }
+          type={userInfo?.identity_type === 'users' ? 0 : 1}
+        />
       </div>
       <div
         className={twMerge(
