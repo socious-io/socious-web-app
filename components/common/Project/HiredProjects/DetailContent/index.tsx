@@ -1,5 +1,3 @@
-import HeaderBoxContainer from 'layout/HeaderBoxContainer/HeaderBoxContainer';
-import BodyCard from '../../component/BodyCard';
 import FeedbackCard from '../../component/FeedbackCard';
 import MyApplicationsCard from '../../component/MyApplicationsCard';
 
