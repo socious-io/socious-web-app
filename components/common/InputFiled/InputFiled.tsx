@@ -62,10 +62,10 @@ export const InputFiled = ({
         aria-label={label}
         data-testid={`${label}-testid`}
         className={twMerge(
-          'block w-full border-x-0 border-t-0 py-1.5 text-sm outline-none',
+          'block w-full rounded-lg border border-grayLineBased py-3 text-sm outline-none',
           errorMessage
-            ? 'border-b-2 border-b-error focus:border-b-error'
-            : 'border-b-2 border-b-grayInputField focus:border-b-2 focus:border-b-primary',
+            ? ' border-b-error focus:border-b-error'
+            : '  focus:border-b-1 focus:border-b-primary',
           disabled && 'border-opacity-40 bg-transparent text-opacity-40',
           className && className,
         )}
