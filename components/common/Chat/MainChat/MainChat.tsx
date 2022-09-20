@@ -5,7 +5,7 @@ import {
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/outline';
 import {useUser} from '@hooks';
-import React from 'react';
+import React, {useMemo} from 'react';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import Bubble from '../Bubble/Bubble';
@@ -22,8 +22,6 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
     selectedChat.id ? `/chats/${selectedChat.id}/messages` : null,
     get,
   );
-
-  console.log('MESSAGES :---: ', data);
 
   const {user, currentIdentity} = useUser();
 
@@ -70,8 +68,18 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
                 <Bubble
                   key={message.id}
                   self={message.identity_id === currentIdentity?.id}
+                  userInfo={
+                    message.identity_id === currentIdentity?.id
+                      ? {
+                          identity_meta: currentIdentity.meta,
+                          identity_type: currentIdentity.type,
+                        }
+                      : selectedChat.participants.find(
+                          (x: any) =>
+                            x.identity_meta.id === message.identity_id,
+                        )
+                  }
                   content={message.text}
-                  identity_id={message.identity_id}
                   link={message.link ?? ''}
                 />
               ))}
