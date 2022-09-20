@@ -1,7 +1,5 @@
 import Avatar from '@components/common/Avatar/Avatar';
 import {isoToHumanTime} from 'services/toHumanTime';
-import useSWRImmutable from 'swr/immutable';
-import {get} from 'utils/request';
 
 type ChatCardProps = {
   chat: any;
@@ -9,13 +7,6 @@ type ChatCardProps = {
 };
 
 const ChatCard = ({chat, onChatOpen}: ChatCardProps) => {
-  const {data: participant} = useSWRImmutable<any>(
-    chat?.participants?.[0]?.identity_meta?.id
-      ? `/user/${chat?.participants?.[0]?.identity_meta?.id}/profile`
-      : null,
-    get,
-  );
-
   return (
     <div
       className="flex max-w-full items-center space-x-2 border-b-[1px] border-offsetColor py-2.5 px-3 font-normal"
@@ -24,7 +15,11 @@ const ChatCard = ({chat, onChatOpen}: ChatCardProps) => {
       <div className="cursor-pointer">
         <Avatar
           size="l"
-          src={participant?.avatar?.url ?? ''}
+          src={
+            chat?.participants?.[0]?.identity_type === 'users'
+              ? chat?.participants?.[0]?.identity_meta?.avatar
+              : chat?.participants?.[0]?.identity_meta?.image
+          }
           type={chat?.participants?.[0]?.identity_type === 'users' ? 0 : 1}
         />
       </div>

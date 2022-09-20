@@ -7,6 +7,7 @@ import {twMerge} from 'tailwind-merge';
 
 interface CommentFieldProps {
   src?: string;
+  avatarSize?: 's' | 'm' | 'l' | 'xl' | 'xxl';
   onSend: (data?: any) => void;
   placeholder?: string;
   className?: string;
@@ -14,6 +15,7 @@ interface CommentFieldProps {
 
 const CommentField = ({
   src,
+  avatarSize,
   onSend,
   placeholder = 'Write a comment.......',
   className,
@@ -34,7 +36,7 @@ const CommentField = ({
         className && className,
       )}
     >
-      <Avatar src={src ?? ''} />
+      <Avatar src={src ?? ''} size={avatarSize} />
       <TextInput
         className="border-grayLineBased focus:border-grayLineBased"
         containerClassName="w-9/12 md:w-11/12 md:mx-2"

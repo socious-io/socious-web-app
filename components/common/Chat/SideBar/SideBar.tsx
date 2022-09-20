@@ -4,31 +4,31 @@ import {ChevronLeftIcon, PlusIcon} from '@heroicons/react/24/outline';
 import React, {useCallback, useEffect, useState} from 'react';
 import ChatCard from '../ChatCard/ChatCard';
 import {useRouter} from 'next/router';
+import useSWR from 'swr';
+import {get} from 'utils/request';
+import {useUser} from '@hooks';
 
 type ChatSideBarProps = {
-  chats: any[];
   onChatOpen: (data: any) => void;
+  haveChats: boolean;
 };
 
-const SideBar = ({chats, onChatOpen}: ChatSideBarProps) => {
+const SideBar = ({haveChats, onChatOpen}: ChatSideBarProps) => {
   const router = useRouter();
   const [query, setQuery] = useState<string>('');
   const [filteredChats, setFilteredChats] = useState<any[]>([]);
 
   const goBack = useCallback(() => router.back(), [router]);
+  const {user, currentIdentity} = useUser();
+
+  const {data: chatResponse, error: chatError} = useSWR<any>(
+    `/chats/summary?page=1&filter=${query}`,
+    get,
+  );
 
   useEffect(() => {
-    query === ''
-      ? setFilteredChats(chats)
-      : setFilteredChats(() =>
-          chats.filter((person) =>
-            person.name
-              .toLowerCase()
-              .replace(/\s+/g, '')
-              .includes(query.toLowerCase().replace(/\s+/g, '')),
-          ),
-        );
-  }, [query, chats]);
+    if (chatResponse?.items) setFilteredChats(chatResponse.items);
+  }, [chatResponse]);
 
   return (
     <div
@@ -48,7 +48,15 @@ const SideBar = ({chats, onChatOpen}: ChatSideBarProps) => {
         <h3 className="font-worksans text-center text-xl font-semibold">
           Chats
         </h3>
-        <Avatar size="m" src="" className="block sm:hidden" />
+        <Avatar
+          size="m"
+          src={
+            currentIdentity?.type === 'users'
+              ? user?.avatar?.url
+              : user?.image?.url
+          }
+          className="block sm:hidden"
+        />
       </div>
       {/* SEARCHBAR */}
       <div className="border-y-[0.5px] border-offsetColor bg-offWhite px-4 py-2.5 ">
@@ -58,7 +66,7 @@ const SideBar = ({chats, onChatOpen}: ChatSideBarProps) => {
         />
       </div>
       {/* USER-CARD BOX */}
-      {chats?.length !== 0 ? (
+      {haveChats ? (
         filteredChats?.length > 0 ? (
           <div className="hide-scrollbar grow overflow-y-auto sm:w-80">
             {/* USER-CARD */}
