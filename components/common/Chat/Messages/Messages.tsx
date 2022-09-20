@@ -9,12 +9,14 @@ interface MessagesProps {
   infiniteMessage: any[];
   noMoreMessage: boolean;
   loadMore: () => void;
+  activeChat: any;
 }
 
 const Messages = ({
   infiniteMessage,
   loadMore,
   noMoreMessage,
+  activeChat,
 }: MessagesProps) => {
   const {currentIdentity} = useUser();
   const chatBoxRef = useRef<HTMLDivElement>(null);
@@ -75,7 +77,17 @@ const Messages = ({
                     key={message.id}
                     self={message.identity_id === currentIdentity?.id}
                     content={message.text}
-                    identity_id={message.identity_id}
+                    userInfo={
+                      message.identity_id === currentIdentity?.id
+                        ? {
+                            identity_meta: currentIdentity.meta,
+                            identity_type: currentIdentity.type,
+                          }
+                        : activeChat.participants.find(
+                            (x: any) =>
+                              x.identity_meta.id === message.identity_id,
+                          )
+                    }
                   />
                   {/* OLDEST MESSAGE */}
                   {oldestMessage === message && (
@@ -93,9 +105,27 @@ const Messages = ({
           </div>
         </div>
       ) : (
-        <div className="flex w-full grow items-center justify-center">
+        <div className="flex w-full grow items-center justify-center text-center">
           <div>
-            <Avatar />
+            <Avatar
+              size="xxl"
+              type={
+                activeChat?.participants?.[0]?.identity_type === 'users' ? 0 : 1
+              }
+              src={
+                activeChat?.participants?.[0]?.identity_type === 'users'
+                  ? activeChat?.participants?.[0]?.identity_meta?.avatar
+                  : activeChat?.participants?.[0]?.identity_meta?.image
+              }
+            />
+            <div className="mt-2 space-y-2">
+              <h2 className="text-2xl text-primary">Start charting with</h2>
+              <h2 className="text-2xl">
+                {activeChat?.type === 'CHAT'
+                  ? activeChat?.participants?.[0]?.identity_meta?.name
+                  : activeChat?.name}
+              </h2>
+            </div>
           </div>
         </div>
       )}
