@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Title from '../components/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
 import Button from '@components/common/Button/Button';
@@ -6,8 +6,12 @@ import {StepProps} from '@models/stepProps';
 import FormTitle from '../components/FormTitle';
 import TextArea from '@components/common/TextArea/TextArea';
 
+import Combobox from '@components/common/Combobox/Combobox';
 const BasicInfo = ({onSubmit}: StepProps) => {
-  
+  // const {data: filterCities} = useSWR(
+  //   [`getCityByKeyword`, selectedCountry],
+  //   () => getCityByKeyword(selectedCountry, cityKey),
+  // );
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
@@ -22,51 +26,70 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="Organization name"
             type="text"
             placeholder="Organization name"
-            className="mt-3 mb-8"
+            className="my-3"
             required
           />
           <TextArea
             label="Bio"
             placeholder="Your organization’s bio"
-            className="mt-3 mb-8"
+            className="my-3"
             required
             rows={3}
-          /> 
+          />
           <FormTitle>Contact</FormTitle>
           <InputFiled
             label="Organization email"
             type="text"
             placeholder="Organization email"
-            className="mt-3 mb-8"
+            className="my-3"
             required
           />
-          <InputFiled
+          <Combobox
             label="Country"
-            type="text"
+            items={[{id: 1, name: 'Istanbul'}]}
+            required
+            name="Country"
             placeholder="Country"
-            className="mt-3 mb-8"
-            required
+            className="mt-3"
           />
-          <InputFiled
+          <Combobox
             label="City"
-            type="text"
-            placeholder="City"
-            className="mt-3 mb-8"
+            items={[{id: 1, name: 'Istanbul'}]}
             required
+            name="City"
+            placeholder="City"
+            className="mt-3"
           />
           <InputFiled
             label="Address"
             type="text"
             placeholder="Address"
-            className="mt-3 mb-8"
-            required
+            className="my-3"
+            
           />
+          <div className="flex items-end gap-x-4">
+            <Combobox
+              label="Phone number"
+              items={[{id: 1, name: 'Istanbul'}]}
+             
+              name="country code"
+              placeholder="+000"
+              className="mt-3 "
+            />
+           <InputFiled
+            
+            type="text"
+            placeholder="Phone number"
+            className="mt-3 w-full"
+            
+          />
+          </div>
           <InputFiled
             label="Website"
             type="text"
             placeholder="Website"
-            className="mt-3 mb-8"
-            required
+            className="my-3"
+            
           />
         </div>
         <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28  sm:pb-10 sm:pt-4">
