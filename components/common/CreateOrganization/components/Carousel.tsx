@@ -4,22 +4,24 @@ import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 interface Props {
   step: number;
   onPress: () => void;
+  skip:boolean;
 }
-const Carousel: React.FC<Props> = ({step, onPress}) => {
+const Carousel: React.FC<Props> = ({step,skip=false, onPress}) => {
   return (
-    <div className=" flex sm:h-16 h-20 justify-center items-center border-b relative border-grayLineBased py-4">
+    <div className=" relative flex h-20 items-center justify-center border-b border-grayLineBased py-4 sm:h-16">
       <ChevronLeftIcon
         onClick={onPress}
-        className="sm:h-6 sm:w-6 h-8 w-8 text-black stroke-1.5 absolute left-4 hover:text-primary"
+        className="absolute left-4 h-8 w-8 stroke-1.5 text-black hover:text-primary sm:h-6 sm:w-6"
       />
 
       {[1, 2, 3, 4, 5, 6].map((stepNumber) => (
         <span
-          className={`sm:h-3 sm:w-3 h-4 w-4 mx-1 cursor-pointer rounded-3xl transition-all duration-300 border border-grayLineBased ${
+          className={`mx-1 h-4 w-4 cursor-pointer rounded-3xl border border-grayLineBased transition-all duration-300 sm:h-3 sm:w-3 ${
             step === stepNumber && 'bg-primary'
           }`}
         />
       ))}
+      {skip && <p className="absolute right-8 font-medium text-primary">Skip</p>}
     </div>
   );
 };
