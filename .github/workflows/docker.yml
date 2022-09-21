@@ -2,7 +2,7 @@ name: Docker
 
 on:
   push:
-    branches: ['main', 'production']
+    branches: ['lalo/production-ci', 'production']
     # branches: ['main', 'production']
   # pull_request:
   #   branches: ["main"]
@@ -84,7 +84,8 @@ jobs:
   deploy-dev:
     needs: build
     name: Deploy to Dev
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/lalo/production-ci'
+    # if: github.ref == 'refs/heads/main'
     runs-on: ['backend-dev']
     steps:
       - name: Log into registry ${{ env.REGISTRY }}
