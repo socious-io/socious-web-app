@@ -44,7 +44,6 @@ const MainContent: React.FC<Props> = ({data, status}) => {
       {user?.username === data?.username && (
         <p className="mt-3 px-4 text-sm text-secondary">You </p>
       )}
-
       <SocialCauses social_causes={data?.social_causes} />
       {status === 'user' ? (
         <Contact
