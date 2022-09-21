@@ -1,26 +1,29 @@
-importScripts("https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/7.9.1/firebase-messaging.js");
+import {initializeApp} from "firebase/app";
+import {getMessaging, onBackgroundMessage} from "firebase/messaging/sw";
 
-firebase.initializeApp({
+const firebaseApp = initializeApp({
   apiKey: 'AIzaSyA11IaAlKkmRuV4FSe3mVgaIlGNSyUrkP8',
   authDomain: 'social-network-dbc4f.firebaseapp.com',
   projectId: 'social-network-dbc4f',
   storageBucket: 'social-network-dbc4f.appspot.com',
   messagingSenderId: '876088547885',
   appId: '1:876088547885:web:a129d2199a77258bb236a4',
+  measurementId: 'G-PGTGQXSNST',
 });
 
-const messaging = firebase.messaging();
+const messaging = getMessaging(firebaseApp);
 
 //background notifications will be received here
-messaging.setBackgroundMessageHandler(function (payload) {
-  console.log('[firebase-messaging-sw.js] Received background message ', payload)
+
+onBackgroundMessage(messaging, (payload) => {
+  console.log('[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here
-  const notificationTitle = 'Background Message Title'
+  const notificationTitle = 'Background Message Title';
   const notificationOptions = {
     body: 'Background Message body.',
     icon: '/firebase-logo.png'
-  }
+  };
 
-  return self.registration.showNotification(notificationTitle, notificationOptions)
-})
+  self.registration.showNotification(notificationTitle,
+    notificationOptions);
+});

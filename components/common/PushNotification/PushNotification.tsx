@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
-import * as firebase from 'firebase/app';
-import 'firebase/messaging';
+import {getMessaging, MessagePayload, onMessage} from 'firebase/messaging';
 import {firebaseCloudMessaging} from '../../../utils/firebase';
 import {ToastContainer, toast} from 'react-toastify';
 
@@ -31,12 +30,12 @@ function PushNotificationLayout({children}: any) {
   });
 
   function getMessage() {
-    const messaging = firebase.messaging();
-    messaging.onMessage((message) => {
+    const messaging = getMessaging();
+    onMessage(messaging, (payload: MessagePayload) => {
       toast(
         <div>
-          <h5>{message?.notification?.title}</h5>
-          <h6>{message?.notification?.body}</h6>
+          <h5>{payload.notification?.title}</h5>
+          <h6>{payload.notification?.body}</h6>
         </div>,
         {
           closeOnClick: false,
