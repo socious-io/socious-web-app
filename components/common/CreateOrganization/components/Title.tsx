@@ -16,10 +16,10 @@ const Title: React.FC<Props> = ({
   return (
     <>
       <h1
-        className={`py-6 text-lg sm:text-base ${textAlign}  px-6 ${border ? 'border-b' : null} border-grayLineBased `}
+        className={`py-6 text-xl sm:text-lg  ${textAlign}  px-6 ${border ? 'border-b' : null} border-grayLineBased `}
       >
         {children}
-        <span className="font-worksans mt-2 block text-base text-graySubtitle sm:text-sm">
+        <span className="font-worksans mt-2 block  text-base text-graySubtitle sm:text-sm">
           {description}
         </span>
       </h1>

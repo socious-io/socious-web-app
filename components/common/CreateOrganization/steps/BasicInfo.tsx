@@ -30,7 +30,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             placeholder="Your organization’s bio"
             className="my-3"
             required
-            rows={3}
+            rows={4}
           />
           <FormTitle>Contact</FormTitle>
           <InputFiled

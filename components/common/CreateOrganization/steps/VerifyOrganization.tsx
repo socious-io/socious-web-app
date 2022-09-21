@@ -36,15 +36,15 @@ const VerifyOrganization = ({onSubmit}: StepProps) => {
         <Image
           src={require('../../../../asset/icons/Verified.svg')}
           alt="socious logo"
-          width={30}
-          height={30}
+          width={40}
+          height={40}
         />
         <Title
           description="Get your organization page verified to create projects and hire users on Socious"
           border={false}
           textAlign="text-center"
         >
-          Get verified
+          Get Verified
         </Title>
       </div>
 

@@ -20,7 +20,7 @@ const Culture = ({onSubmit}: StepProps) => {
             placeholder="Your organization’s culture"
             className="my-3"
            
-            rows={3}
+            rows={4}
           />
         
         </div>

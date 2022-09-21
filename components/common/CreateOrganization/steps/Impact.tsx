@@ -20,7 +20,7 @@ const Impact = ({onSubmit}: StepProps) => {
           <TextArea
             placeholder="Your organization’s achievements"
             className="my-3"
-            rows={3}
+            rows={4}
           />
         </div>
         <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28  sm:pb-10 sm:pt-4">

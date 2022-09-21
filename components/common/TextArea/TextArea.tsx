@@ -61,7 +61,7 @@ export const TextArea = ({
         aria-label={label}
         data-testid={`${label}-testid`}
         className={twMerge(
-          'block w-full rounded-lg py-1.5 px-2 border border-grayLineBased text-sm outline-none',
+          'block w-full rounded-lg py-1.5 px-2 border border-grayLineBased sm:text-sm text-base outline-none',
           errorMessage
             ? 'border-1 border-b-error'
             : ' border-1  focus:border-1 focus:border-primary',
