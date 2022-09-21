@@ -6,7 +6,6 @@ import {StepProps} from '@models/stepProps';
 import {TERM_URL, PRIVACY_URL} from 'utils/api';
 
 const OnboardingStep1 = ({onSubmit}: StepProps) => {
-
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
@@ -15,19 +14,19 @@ const OnboardingStep1 = ({onSubmit}: StepProps) => {
   const handleSeeTerms = useCallback(() => {
     // TODO detect current language
     window.open(TERM_URL('en_US'));
-  }, [])
+  }, []);
 
   const handleSeePolicy = useCallback(() => {
     // TODO detect current language
     window.open(PRIVACY_URL('en_US'));
-  }, [])
+  }, []);
 
   return (
     <form
       onSubmit={handleOnSubmit}
-      className="flex flex-col justify-between px-10 grow sm:grow-0"
+      className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
     >
-      <div className="flex flex-col h-[28rem]">
+      <div className="flex h-[28rem] flex-col">
         {' '}
         <Image
           src={logoCompony}
@@ -35,8 +34,8 @@ const OnboardingStep1 = ({onSubmit}: StepProps) => {
           height="136.59"
           alt="socious logo"
         />
-        <h1 className="font-helmet text-center my-6 ">Welcome to Socious</h1>
-        <p className="text-base text-center my-6 text-graySubtitle">
+        <h1 className="font-helmet my-6 text-center ">Welcome to Socious</h1>
+        <p className="my-6 text-center text-base text-graySubtitle">
           To continue, please agree to our terms of service and privacy policy
           <Button variant="link" onClick={handleSeeTerms} className="px-1">
             {' '}
@@ -50,9 +49,9 @@ const OnboardingStep1 = ({onSubmit}: StepProps) => {
         </p>
       </div>
 
-      <div className="sm:h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
+      <div className="-mx-16  divide-x border-t-2 border-b-grayLineBased pl-10 pb-12 sm:h-48 sm:pl-0">
         <Button
-          className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+          className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"

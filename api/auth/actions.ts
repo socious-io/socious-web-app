@@ -43,6 +43,10 @@ export function changePassword(currentPassword: string, newPassword: string) {
   });
 }
 
+export function updateProfile(userBody: any) {
+  return post('/user/profile', userBody);
+}
+
 export function logout() {
   return post('/auth/logout', {});
 }

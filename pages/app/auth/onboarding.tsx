@@ -207,7 +207,7 @@ import {
   schemaOnboardingStep8,
 } from '@api/auth/validation';
 import {get, post} from 'utils/request';
-import {updateProfile} from '@api/user/actions';
+import {updateProfile} from '@api/auth/actions';
 import useUser from 'hooks/useUser/useUser';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 
@@ -230,7 +230,7 @@ const Onboarding: NextPage = () => {
 
   console.log('USER', user);
 
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(9);
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const handleBack = useCallback(() => {
@@ -338,7 +338,7 @@ const Onboarding: NextPage = () => {
   return (
     <div
       className={twMerge(
-        'mx-auto -my-10 flex h-screen w-screen flex-col items-stretch border border-grayLineBased py-7 px-6 sm:my-auto sm:block sm:h-[45rem] sm:max-w-xl sm:rounded-3xl',
+        'mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7',
         step === 10 ? ' bg-primary' : 'bg-background',
       )}
     >

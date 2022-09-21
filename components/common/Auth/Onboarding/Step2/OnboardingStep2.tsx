@@ -9,19 +9,19 @@ const OnboardingStep2 = ({onSubmit}: StepProps) => {
   return (
     <form
       onSubmit={handleOnSubmit}
-      className="flex flex-col justify-between px-10 grow sm:grow-0"
+      className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
     >
-      <div className="flex flex-col h-[28rem]">
+      <div className="flex h-[28rem] flex-col">
         {' '}
-        <h1 className="font-helmet text-center pt-16">Congratulations</h1>
-        <p className="text-base text-center py-2 text-graySubtitle ">
+        <h1 className="font-helmet pt-16 text-center">Congratulations</h1>
+        <p className="py-2 text-center text-base text-graySubtitle ">
           You’ve successfully created an account
         </p>
       </div>
 
-      <div className="md:h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
+      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 sm:h-48 sm:pl-0">
         <Button
-          className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+          className="m-auto mt-4  mb-12 flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"

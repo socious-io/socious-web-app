@@ -12,16 +12,16 @@ const OnboardingStep9 = ({onSubmit}: StepProps) => {
   return (
     <form
       onSubmit={handleOnSubmit}
-      className="flex flex-col justify-between px-10 grow sm:grow-0"
+      className="flex grow flex-col justify-between px-10 sm:grow-0"
     >
-      <div className="flex flex-col h-[28rem]">
+      <div className="flex h-[28rem] flex-col">
         {' '}
-        <h1 className="font-helmet text-center my-6 ">Add a profile photo</h1>
-        <div className="h-48 flex flex-col items-center">
+        <h1 className="font-helmet my-6 text-center ">Add a profile photo</h1>
+        <div className="flex h-48 flex-col items-center">
           <ImageUploader onChange={(file: any) => {}} src={profile_img_icon}>
             {(setOpen: any) => (
               <Button
-                className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+                className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
                 size="lg"
                 variant="outline"
                 onClick={setOpen}
@@ -33,9 +33,9 @@ const OnboardingStep9 = ({onSubmit}: StepProps) => {
         </div>
       </div>
 
-      <div className="sm:h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
+      <div className="-mx-16 divide-x  border-t-2 border-b-grayLineBased sm:h-48 ">
         <Button
-          className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
+          className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"

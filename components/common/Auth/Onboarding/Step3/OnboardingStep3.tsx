@@ -39,16 +39,16 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
         <p className="text-base text-graySubtitle ">
           Select up to 5 social causes that you are passionate about
         </p>
-        <div className="my-5 -mx-16 flex flex-col bg-offWhite px-5">
+        <div className="my-5 -mx-16  flex  h-72 flex-col bg-offWhite px-5">
           <SearchBar
             type="text"
             placeholder="Search"
             onChangeText={filterWith}
             className="my-6"
           />
-          <div className="-mx-5 flex  flex-col border-t-2 border-b-grayLineBased px-5">
+          <div className="-mx-5 flex h-full flex-col border-t-2 border-b-grayLineBased bg-offWhite px-5">
             <h3 className="py-3">Popular</h3>
-            <div className="flex h-32 flex-wrap space-x-2 overflow-y-auto ">
+            <div className="flex h-full flex-wrap space-x-2 overflow-y-auto sm:h-32 ">
               {filteredItems.map((skill, index) => (
                 <Chip
                   onSelected={onSelect}
@@ -67,7 +67,7 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
 
       <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased sm:h-48 ">
         <Button
-          className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+          className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"
