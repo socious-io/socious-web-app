@@ -1,7 +1,7 @@
-import {initializeApp} from "firebase/app";
-import {getMessaging, onBackgroundMessage} from "firebase/messaging/sw";
+importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js');
 
-const firebaseApp = initializeApp({
+firebase.initializeApp({
   apiKey: 'AIzaSyA11IaAlKkmRuV4FSe3mVgaIlGNSyUrkP8',
   authDomain: 'social-network-dbc4f.firebaseapp.com',
   projectId: 'social-network-dbc4f',
@@ -11,11 +11,11 @@ const firebaseApp = initializeApp({
   measurementId: 'G-PGTGQXSNST',
 });
 
-const messaging = getMessaging(firebaseApp);
+const messaging = firebase.messaging();
 
 //background notifications will be received here
 
-onBackgroundMessage(messaging, (payload) => {
+messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here
   const notificationTitle = 'Background Message Title';
