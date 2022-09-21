@@ -206,7 +206,7 @@ const Post = () => {
           {shareStep === 2 && <ShareModalStep2 onShare={onShare} />}
         </Modal>
 
-        {user.id === post.identity_id && (
+        {user?.id === post.identity_id && (
           <>
             {/* EDIT MODAL */}
             <EditModal
