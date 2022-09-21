@@ -1,26 +1,16 @@
-import {Avatar, SearchBar} from '@components/common';
-import Bubble from '@components/common/Chat/Bubble/Bubble';
 import MainChat from '@components/common/Chat/MainChat/MainChat';
 import SideBar from '@components/common/Chat/SideBar/SideBar';
-import CommentField from '@components/common/Post/CommentField/CommentField';
-import {
-  ArrowLeftIcon,
-  ChevronLeftIcon,
-  EllipsisHorizontalIcon,
-  PlusIcon,
-} from '@heroicons/react/24/outline';
 import {useCallback, useEffect, useState} from 'react';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 
 const Chat = () => {
-  const {data, error} = useSWR<any>('/chats/summary', get);
+  const {data, error} = useSWR<any>('/chats/summary?page=1&filter=', get);
 
   if (!data?.items) <p>Loading....</p>;
 
   if (!error) <p>Error in fetch</p>;
 
-  const [chats, setChats] = useState<any[]>([]);
   const [selectedChat, setSelectedChat] = useState<any>();
   const [width, setWidth] = useState<number>();
 
@@ -35,21 +25,25 @@ const Chat = () => {
     };
   }, []);
 
-  useEffect(() => setChats(data?.items), [data]);
-
   const backToChatList = useCallback(() => setSelectedChat(undefined), []);
 
   return (
     <>
       {width && width >= 640 ? (
         <div className="hidden h-full sm:mt-10 sm:flex sm:space-x-4">
-          <SideBar chats={chats} onChatOpen={setSelectedChat} />
+          <SideBar
+            onChatOpen={setSelectedChat}
+            haveChats={data?.items && data?.items.length > 0}
+          />
           <MainChat selectedChat={selectedChat ?? ''} goBack={backToChatList} />
         </div>
       ) : (
         <div className="flex h-full sm:mt-10 sm:hidden sm:space-x-4">
           {!selectedChat ? (
-            <SideBar chats={chats} onChatOpen={setSelectedChat} />
+            <SideBar
+              onChatOpen={setSelectedChat}
+              haveChats={data?.items && data?.items?.length > 0}
+            />
           ) : (
             <MainChat
               selectedChat={selectedChat ?? ''}

@@ -5,9 +5,8 @@ import {
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/outline';
 import {useUser} from '@hooks';
-import React from 'react';
+import React, {useMemo} from 'react';
 import useSWR from 'swr';
-import useSWRImmutable from 'swr/immutable';
 import {get} from 'utils/request';
 import Bubble from '../Bubble/Bubble';
 
@@ -24,14 +23,7 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
     get,
   );
 
-  const {data: participant} = useSWRImmutable<any>(
-    selectedChat?.participants?.[0]?.identity_meta?.id
-      ? `/user/${selectedChat?.participants?.[0]?.identity_meta?.id}/profile`
-      : null,
-    get,
-  );
-
-  const {currentIdentity} = useUser();
+  const {user, currentIdentity} = useUser();
 
   if (messageError?.response?.data?.error?.startsWith(INVALID_UUID)) goBack();
 
@@ -49,7 +41,11 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
             </span>
             <Avatar
               size="l"
-              src={participant?.avatar?.url ?? ''}
+              src={
+                selectedChat?.participants?.[0]?.identity_type === 'users'
+                  ? selectedChat?.participants?.[0]?.identity_meta?.avatar
+                  : selectedChat?.participants?.[0]?.identity_meta?.image
+              }
               type={
                 selectedChat?.participants?.[0]?.identity_type === 'users'
                   ? 0
@@ -72,20 +68,56 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
                 <Bubble
                   key={message.id}
                   self={message.identity_id === currentIdentity?.id}
+                  userInfo={
+                    message.identity_id === currentIdentity?.id
+                      ? {
+                          identity_meta: currentIdentity.meta,
+                          identity_type: currentIdentity.type,
+                        }
+                      : selectedChat.participants.find(
+                          (x: any) =>
+                            x.identity_meta.id === message.identity_id,
+                        )
+                  }
                   content={message.text}
-                  identity_id={message.identity_id}
                   link={message.link ?? ''}
                 />
               ))}
             </div>
           ) : (
-            <div className="flex w-full grow items-center justify-center">
+            <div className="flex w-full grow items-center justify-center text-center">
               <div>
-                <Avatar />
+                <Avatar
+                  size="xxl"
+                  type={
+                    selectedChat?.participants?.[0]?.identity_type === 'users'
+                      ? 0
+                      : 1
+                  }
+                  src={
+                    selectedChat?.participants?.[0]?.identity_type === 'users'
+                      ? selectedChat?.participants?.[0]?.identity_meta?.avatar
+                      : selectedChat?.participants?.[0]?.identity_meta?.image
+                  }
+                />
+                <div className="mt-2 space-y-2">
+                  <h2 className="text-2xl text-primary">Start charting with</h2>
+                  <h2 className="text-2xl">
+                    {selectedChat?.type === 'CHAT'
+                      ? selectedChat?.participants?.[0]?.identity_meta?.name
+                      : selectedChat?.name}
+                  </h2>
+                </div>
               </div>
             </div>
           )}
           <CommentField
+            src={
+              currentIdentity?.type === 'users'
+                ? user?.avatar?.url
+                : user?.image?.url
+            }
+            avatarSize="m"
             onSend={(comment) => console.log(comment)}
             placeholder="Write a message"
             className="border-offsetcolor rounded-none rounded-b-2xl border-0 border-t-[1px]"

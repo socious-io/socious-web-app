@@ -33,11 +33,11 @@ export function confirmOTP(email: string, code: string) {
 }
 
 export function directChangePassword(password: string) {
-  return put('/user/change-password-direct', {password});
+  return post('/user/change-password-direct', {password});
 }
 
 export function changePassword(currentPassword: string, newPassword: string) {
-  return put('/user/change-password', {
+  return post('/user/change-password', {
     current_password: currentPassword,
     password: newPassword,
   });
