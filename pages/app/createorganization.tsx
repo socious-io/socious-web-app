@@ -46,11 +46,11 @@ const CreateOrganization = () => {
         ) : step === 3 ? (
           <BasicInfo onSubmit={nextHandler}/>
         ) : step === 4 ? (
-          <Mission />
+          <Mission onSubmit={nextHandler} />
         ) : step === 5 ? (
-          <Culture />
+          <Culture onSubmit={nextHandler}/>
         ) : step === 6 ? (
-          <Impact />
+          <Impact onSubmit={nextHandler}/>
         ) : step === 7 ? (
           <CreateSuccessfully />
         ) : step === 8 ? (
