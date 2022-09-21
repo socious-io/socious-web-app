@@ -194,8 +194,6 @@ import OnboardingStep8 from '@components/common/Auth/Onboarding/Step8/Onboarding
 import OnboardingStep9 from '@components/common/Auth/Onboarding/Step9/OnboardingStep9';
 import OnboardingStep10 from '@components/common/Auth/Onboarding/Step10/OnboardingStep10';
 
-import {ChevronLeftIcon} from '@heroicons/react';
-
 import {useForm, FormProvider} from 'react-hook-form';
 
 import {joiResolver} from '@hookform/resolvers/joi';
@@ -211,6 +209,7 @@ import {
 import {get, post} from 'utils/request';
 import {updateProfile} from '@api/user/actions';
 import useUser from 'hooks/useUser/useUser';
+import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 
 const schemaStep = {
   3: schemaOnboardingStep3,
@@ -320,7 +319,7 @@ const Onboarding: NextPage = () => {
       skills: skills,
     };
     if (bio) profileBody.bio = bio;
-
+    console.log('PROFILE BODY :---: ', profileBody);
     updateProfile(profileBody)
       .then(() => {
         setStep(step + 1);
