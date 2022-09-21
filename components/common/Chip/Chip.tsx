@@ -4,11 +4,11 @@ import {CheckIcon} from '@heroicons/react/24/outline';
 export interface ChipProps {
   size?: 's' | 'm' | 'l';
   content: string;
-  value?: string | number;
+  value?: string;
   selected?: boolean;
   containerClassName?: string;
   contentClassName?: string;
-  onSelected?: (value: string | number) => void;
+  onSelected?: (value: string) => void;
 }
 
 const PADDING_LIST = {

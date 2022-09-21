@@ -43,7 +43,7 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
           <SearchBar
             type="text"
             placeholder="Search"
-            onChangeText={filterWith}
+            onChangeTxt={filterWith}
             className="my-6"
           />
           <div className="-mx-5 flex h-full flex-col border-t-2 border-b-grayLineBased bg-offWhite px-5">

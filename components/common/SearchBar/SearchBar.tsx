@@ -1,8 +1,7 @@
-import * as React from 'react';
 import {UseFormRegisterReturn} from 'react-hook-form';
 import {twMerge} from 'tailwind-merge';
 import {MagnifyingGlassIcon} from '@heroicons/react/24/outline';
-
+import React, {useCallback} from 'react';
 export interface SearchBarProps
   extends React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -10,6 +9,7 @@ export interface SearchBarProps
   > {
   disabled?: boolean;
   register?: UseFormRegisterReturn;
+  onChangeTxt: (text: string) => void;
 }
 
 export const SearchBar = ({
@@ -20,8 +20,18 @@ export const SearchBar = ({
   name,
   register,
   className,
+  onChangeTxt,
   ...props
 }: SearchBarProps) => {
+  const onInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e?.currentTarget?.value !== undefined) {
+        onChangeTxt(e?.currentTarget?.value || '');
+      }
+    },
+    [onChangeTxt],
+  );
+
   return (
     <div className={twMerge('relative', className && className)}>
       <span className="absolute left-2 top-2">
@@ -41,6 +51,7 @@ export const SearchBar = ({
           'block w-full rounded-full border-2 border-grayLineBased   bg-background py-1.5 pl-8 text-sm outline-none  focus:border-2 focus:border-primary',
           disabled && 'border-opacity-40 bg-transparent text-opacity-40',
         )}
+        onChange={onInputChange}
         {...register}
       />
     </div>
