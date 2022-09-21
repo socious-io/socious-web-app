@@ -1,9 +1,12 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {getMessaging, MessagePayload, onMessage} from 'firebase/messaging';
 import {firebaseCloudMessaging} from '../../../utils/firebase';
-import {ToastContainer, toast} from 'react-toastify';
+import Toast from '../Toast/Toast';
+import {useToggle} from '@hooks';
 
 function PushNotificationLayout({children}: any) {
+  const {state: notify, handlers: notifyHandler} = useToggle();
+  const message = useRef<MessagePayload>({} as MessagePayload);
   useEffect(() => {
     setToken();
 
@@ -33,23 +36,21 @@ function PushNotificationLayout({children}: any) {
     const messaging = getMessaging();
     onMessage(messaging, (payload: MessagePayload) => {
       if (payload) {
-        console.log('payload===>', payload);
-        toast(
-          <div>
-            <h5>{payload.notification?.title}</h5>
-            <h6>{payload.notification?.body}</h6>
-          </div>,
-          {
-            closeOnClick: false,
-          },
-        );
+        message.current = payload;
+        notifyHandler.on();
       }
     });
   }
 
   return (
     <>
-      <ToastContainer />
+      <Toast
+        onClose={notifyHandler.off}
+        variant="copySuccess"
+        isOpen={notify}
+        text={message.current.notification?.title ?? ''}
+        body={message.current.notification?.body}
+      />
       {children}
     </>
   );

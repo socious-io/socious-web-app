@@ -4,6 +4,7 @@ import {
   LinkIcon,
 } from '@heroicons/react/24/outline';
 import {CheckCircleIcon} from '@heroicons/react/24/solid';
+import {string} from 'joi';
 import {twMerge} from 'tailwind-merge';
 
 interface VariantSubValues {
@@ -51,6 +52,7 @@ const VARIANT: VariantValues = {
 
 export interface ToastProps {
   text: string;
+  body?: string;
   isOpen?: boolean;
   onClose?: () => void;
   variant?: 'error' | 'success' | 'copySuccess';
@@ -58,6 +60,7 @@ export interface ToastProps {
 
 export function Toast({
   text,
+  body,
   onClose,
   isOpen = false,
   variant = 'error',
@@ -83,10 +86,13 @@ export function Toast({
             >
               <i>{VARIANT[variant].icon}</i>
             </div>
-            <div className="px-3 py-2">
+            <div className="space-y-1 px-3 py-2">
               <p className={`font-medium ${VARIANT[variant].textColor}`}>
                 {text}
               </p>
+              {body && (
+                <p className={`${VARIANT[variant].textColor}`}>{body}</p>
+              )}
             </div>
           </div>
           {onClose && (
