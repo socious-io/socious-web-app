@@ -77,7 +77,7 @@ export function Combobox({
             <UiCombobox.Label
               htmlFor={id || name}
               className={twMerge(
-                'font-base block',
+                'block text-base font-semibold sm:text-sm',
                 errorMessage ? 'text-error' : 'text-black',
                 disabled && 'text-opacity-40 ',
               )}
@@ -87,9 +87,12 @@ export function Combobox({
               </div>
             </UiCombobox.Label>
           )}
-          <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+          <div className="relative w-full cursor-default overflow-hidden  bg-white text-left  focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <UiCombobox.Input
-              className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 outline-none focus:ring-0"
+              className={twMerge(
+                'w-full rounded-lg border border-grayLineBased py-3 pl-3 pr-10 text-sm leading-5 text-gray-900 outline-none focus:ring-0',
+                className && className,
+              )}
               displayValue={(item: any) => item?.name}
               onChange={(event) => setQuery(event.target.value)}
               // required={required}
