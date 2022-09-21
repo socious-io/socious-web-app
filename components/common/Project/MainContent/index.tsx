@@ -40,24 +40,22 @@ const MainContent = ({onClickShow}: Props) => {
   const {state: showMore, handlers: seeAll} = useToggle();
 
   return (
-    <div className="mb-10 w-full space-y-6">
+    <div className="mb-10 w-full space-y-6 ">
       {!showMore ? (
         <div>
           <ImageBanner />
-          <div className="mt-4 flex justify-between">
-            <p className="mb-4  text-base font-semibold text-secondary">
+          <div className="my-4 flex w-full justify-between pr-8 md:pr-0">
+            <p className="text-base font-semibold text-secondary">
               Recommended you
             </p>
-            <button
+            <span
               onClick={() => {
                 seeAll.on();
                 onClickShow();
               }}
             >
-              <p className=" mb-4 text-base font-semibold text-primary">
-                See all
-              </p>
-            </button>
+              <p className="text-base font-semibold text-primary">See all</p>
+            </span>
           </div>
         </div>
       ) : (
