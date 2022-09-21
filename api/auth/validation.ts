@@ -76,6 +76,22 @@ export const schemaLogin = Joi.object({
   }),
 });
 
+export const schemaOnboardingStep3 = Joi.object({
+  passions: Joi.array().items(Joi.string()).min(1).max(5).required().messages({
+    'array.max': `Please select only {#limit} causes.`,
+    'array.min': `Please select {#limit} causes`,
+    'array.empty': `Please select {#limit} causes`,
+  }),
+});
+
+export const schemaOnboardingStep4 = Joi.object({
+  skills: Joi.array().items(Joi.string()).min(1).max(10).required().messages({
+    'array.max': `Please select only {#limit} causes.`,
+    'array.min': `Please select {#limit} causes`,
+    'array.empty': `Please select {#limit} causes`,
+  }),
+});
+
 export const schemaOnboardingStep5 = Joi.object({
   country: Joi.required().label('Country').messages({
     'any.required': `cannot be an empty field`,

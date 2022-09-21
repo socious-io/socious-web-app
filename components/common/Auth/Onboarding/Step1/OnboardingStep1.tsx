@@ -1,25 +1,33 @@
 import {Button} from '@components/common';
 import Image from 'next/image';
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import logoCompony from 'asset/icons/logo-color.svg';
 import {StepProps} from '@models/stepProps';
+import {TERM_URL, PRIVACY_URL} from 'utils/api';
+
 const OnboardingStep1 = ({onSubmit}: StepProps) => {
-  const [seePolicy, setSePolicy] = useState<boolean>(false);
 
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
   };
 
-  const handleSeePolicy = () => {
-    setSePolicy(true);
-  };
+  const handleSeeTerms = useCallback(() => {
+    // TODO detect current language
+    window.open(TERM_URL('en_US'));
+  }, [])
+
+  const handleSeePolicy = useCallback(() => {
+    // TODO detect current language
+    window.open(PRIVACY_URL('en_US'));
+  }, [])
+
   return (
     <form
       onSubmit={handleOnSubmit}
-      className="flex flex-col justify-between  px-10    "
+      className="flex flex-col justify-between px-10 grow sm:grow-0"
     >
-      <div className="flex h-[28rem] flex-col">
+      <div className="flex flex-col h-[28rem]">
         {' '}
         <Image
           src={logoCompony}
@@ -27,24 +35,28 @@ const OnboardingStep1 = ({onSubmit}: StepProps) => {
           height="136.59"
           alt="socious logo"
         />
-        <h1 className="font-helmet my-6 text-center ">Welcome to Socious</h1>
-        <p className="my-6 text-center text-base text-graySubtitle">
+        <h1 className="font-helmet text-center my-6 ">Welcome to Socious</h1>
+        <p className="text-base text-center my-6 text-graySubtitle">
           To continue, please agree to our terms of service and privacy policy
-          <Button variant="link" onClick={handleSeePolicy}>
+          <Button variant="link" onClick={handleSeeTerms} className="px-1">
             {' '}
-            terms of service and privacy policy{' '}
+            terms of service{' '}
+          </Button>
+          and
+          <Button variant="link" onClick={handleSeePolicy} className="px-1">
+            {' '}
+            privacy policy{' '}
           </Button>
         </p>
       </div>
 
-      <div className="-mx-16  h-48 divide-x border-t-2 border-b-grayLineBased ">
+      <div className="sm:h-48  border-t-2 border-b-grayLineBased divide-x -mx-16 ">
         <Button
-          className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+          className="max-w-xs w-full  m-auto flex items-center justify-center align-middle mt-4 "
           type="submit"
           size="lg"
           variant="fill"
           value="Submit"
-          disabled={!seePolicy}
         >
           I agree
         </Button>
