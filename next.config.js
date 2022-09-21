@@ -4,6 +4,7 @@ const path = require('path');
 const withImages = require('next-images');
 
 module.exports = withImages({
+  output: 'standalone',
   images: {
     disableStaticImages: true,
     unoptimized: true,
