@@ -4,18 +4,22 @@ interface Props {
   children: ReactNode;
   description?: string;
   border?: boolean;
+  textAlign?: 'text-left' | 'text-center' | 'text-right';
 }
 
-const Title: React.FC<Props> = ({children, description, border = true}) => {
+const Title: React.FC<Props> = ({
+  children,
+  textAlign = 'text-left',
+  description,
+  border = true,
+}) => {
   return (
     <>
       <h1
-        className={`py-6 text-lg sm:text-base text-left pl-6 ${
-          border ? 'border-b' : null
-        } border-grayLineBased`}
+        className={`py-6 text-lg sm:text-base ${textAlign}  px-6 ${border ? 'border-b' : null} border-grayLineBased `}
       >
         {children}
-        <span className="block text-graySubtitle mt-2 font-worksans text-base sm:text-sm">
+        <span className="font-worksans mt-2 block text-base text-graySubtitle sm:text-sm">
           {description}
         </span>
       </h1>

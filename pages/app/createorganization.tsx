@@ -33,9 +33,11 @@ const CreateOrganization = () => {
   };
 
   return (
-    <div className="bg-clearWhite w-screen h-screen absolute top-0 left-0 flex items-center justify-center">
-      <div className="bg-white w-screen h-full sm:max-w-lg sm:h-5/6 sm:rounded-3xl flex flex-col ">
-        {step === 0 ? null : <Carousel onPress={backHandler} step={step} />}
+    <div className="absolute top-0 left-0 flex h-screen w-screen items-center justify-center bg-clearWhite">
+      <div className="flex h-full w-screen flex-col bg-white sm:h-5/6 sm:max-w-lg sm:rounded-3xl ">
+        {step === 0 || step === 7 || step === 8 ? null : (
+          <Carousel onPress={backHandler} step={step} />
+        )}
 
         {step === 0 ? (
           <Starter onSubmit={nextHandler} />
@@ -44,20 +46,18 @@ const CreateOrganization = () => {
         ) : step === 2 ? (
           <SocialCauses onSubmit={nextHandler} />
         ) : step === 3 ? (
-          <BasicInfo onSubmit={nextHandler}/>
+          <BasicInfo onSubmit={nextHandler} />
         ) : step === 4 ? (
           <Mission onSubmit={nextHandler} />
         ) : step === 5 ? (
-          <Culture onSubmit={nextHandler}/>
+          <Culture onSubmit={nextHandler} />
         ) : step === 6 ? (
-          <Impact onSubmit={nextHandler}/>
+          <Impact onSubmit={nextHandler} />
         ) : step === 7 ? (
-          <CreateSuccessfully />
+          <CreateSuccessfully onSubmit={nextHandler} />
         ) : step === 8 ? (
-          <VerifyOrganization />
+          <VerifyOrganization onSubmit={nextHandler}/>
         ) : null}
-
-       
       </div>
     </div>
   );

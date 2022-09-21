@@ -3,7 +3,9 @@ import Title from '../components/Title';
 import {StepProps} from '@models/stepProps';
 import TextArea from '@components/common/TextArea/TextArea';
 import {Button} from '@components/common/Button/Button';
+
 const Impact = ({onSubmit}: StepProps) => {
+  
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
@@ -16,7 +18,7 @@ const Impact = ({onSubmit}: StepProps) => {
       <form onSubmit={handleOnSubmit} className="flex h-full flex-col">
         <div className="h-14  w-full grow overflow-y-scroll px-4  py-2">
           <TextArea
-            placeholder="Your organization’s culture"
+            placeholder="Your organization’s achievements"
             className="my-3"
             rows={3}
           />
