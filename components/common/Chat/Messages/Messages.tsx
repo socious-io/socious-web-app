@@ -1,9 +1,11 @@
 import {MessageType} from '@models/message';
 import {useUser} from '@hooks';
-import {useCallback, useMemo, useRef} from 'react';
+import {useCallback, useEffect, useMemo, useRef} from 'react';
 import {isoToHumanTime} from 'services/toHumanTime';
 import Bubble from '../Bubble/Bubble';
 import Avatar from '@components/common/Avatar/Avatar';
+import {all, post} from 'utils/request';
+import {mutate} from 'swr';
 
 interface MessagesProps {
   infiniteMessage: any[];
@@ -37,6 +39,29 @@ const Messages = ({
       loadMore();
     }
   }, [loadMore, noMoreMessage]);
+
+  useEffect(() => {
+    if (activeChat.unread_count == 0) return;
+    const endpoints: string[] = [];
+    for (let i = 0, size = infiniteMessage.length; i < size; i++) {
+      let messages = infiniteMessage[i]?.items;
+      for (let j = 0, len = messages?.length; j < len; j++) {
+        endpoints.unshift(
+          `https://dev.socious.io/api/v2/chats/update/${activeChat.id}/messages/${messages[j].id}/read`,
+        );
+        if (endpoints.length == activeChat.unread_count) break;
+      }
+      if (endpoints.length == activeChat.unread_count) break;
+    }
+    console.log('I SHOULD BE MUTATING THE LIST IN LEFT');
+    all(
+      endpoints.map((endpoint) =>
+        post(endpoint, {}).then((data: any) =>
+          mutate('/chats/summary?page=1&filter='),
+        ),
+      ),
+    );
+  }, [activeChat, infiniteMessage]);
 
   const showDate = useCallback(
     (message: MessageType) => {
