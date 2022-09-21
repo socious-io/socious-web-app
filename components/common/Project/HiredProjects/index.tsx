@@ -43,11 +43,10 @@ function HiredProjectsBoxes() {
         expandToggle={showPendingHandler.toggle}
       />
       {data.map((item) => (
-        <div>
-          <BodyCard
-            refixAddress={`/app/projects/hired/section/${item.projectId}`}
-          />
-        </div>
+        <BodyCard
+          key={item.id}
+          refixAddress={`/app/projects/hired/section/${item.projectId}`}
+        />
       ))}
       <HeaderBox
         title={'Awaiting review 3'}
@@ -57,6 +56,7 @@ function HiredProjectsBoxes() {
       {showAwaiting &&
         data2.map((item) => (
           <BodyCard
+            key={item.id}
             refixAddress={`/app/projects/hired/section/${item.projectId}`}
           />
         ))}

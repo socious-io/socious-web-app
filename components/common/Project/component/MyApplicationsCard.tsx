@@ -19,7 +19,7 @@ function MyApplicationsCard() {
         </div>
         <div>
           {data.map((e) => (
-            <div className="my-4 flex flex-col">
+            <div key={e.id} className="my-4 flex flex-col">
               <p className="text-black">Question1</p>
               <p className="text-graySubtitle">Question</p>
             </div>

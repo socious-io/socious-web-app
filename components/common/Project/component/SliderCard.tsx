@@ -50,20 +50,19 @@ function SliderCard() {
       className="scroll w-full flex-row overflow-x-scroll scroll-smooth whitespace-nowrap scrollbar-hide md:max-w-3xl "
     >
       {data.map((item) => (
-        <div className="inline-block  w-5/6 cursor-pointer pl-2  duration-300  ease-in-out md:w-[50%]">
-          <RecommendCard
-            title={''}
-            description={''}
-            country_id={0}
-            project_type={0}
-            project_length={0}
-            payment_type={0}
-            payment_scheme={0}
-            payment_range_lower={''}
-            payment_range_higher={''}
-            experience_level={0}
-          />
-        </div>
+        <RecommendCard
+          key={item.id}
+          title={''}
+          description={''}
+          country_id={0}
+          project_type={0}
+          project_length={0}
+          payment_type={0}
+          payment_scheme={0}
+          payment_range_lower={''}
+          payment_range_higher={''}
+          experience_level={0}
+        />
       ))}
     </div>
   );

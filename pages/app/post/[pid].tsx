@@ -136,7 +136,7 @@ const Post = () => {
         isOpen={notify}
         text="Post link copied"
       />
-      <SideBar />
+      <SideBar selectBar={''} />
       <div className="mb-10 w-full space-y-6">
         {!!post.shared_id ? (
           <SharedCard

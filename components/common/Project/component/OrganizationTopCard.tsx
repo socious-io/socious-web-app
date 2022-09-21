@@ -7,10 +7,10 @@ import PostData from '@components/common/Project/PostData/PostData';
 import {Modal, Button} from '@components/common';
 import {useToggle} from '@hooks';
 import {FormProvider, useForm} from 'react-hook-form';
-import ApplyStep1 from '@components/common/Project/Apply/Step1/ApplyStep1';
+import ApplyStep1 from '../Apply/Step1/ApplyStep1';
 import {useState} from 'react';
-import ApplyStep2 from '@components/common/Project/Apply/Step2/ApplyStep2';
-import ApplyStep4 from '@components/common/Project/Apply/step4/ApplyStep4';
+import ApplyStep2 from '../Apply/Step2/ApplyStep2';
+import ApplyStep4 from '../Apply/Step4/ApplyStep4';
 
 const dislikeSrc = require('../../../../asset/icons/thumbs-dislike.svg');
 const bookmarkSrc = require('../../../../asset/icons/bookmark.svg');

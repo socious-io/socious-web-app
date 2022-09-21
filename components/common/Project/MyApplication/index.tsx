@@ -56,11 +56,10 @@ function MyApplicationBoxes() {
         expandToggle={showPendingHandler.toggle}
       />
       {data.map((item) => (
-        <div>
-          <BodyCard
-            refixAddress={`/app/projects/applications/section/${item.projectId}`}
-          />
-        </div>
+        <BodyCard
+          key={item.id}
+          refixAddress={`/app/projects/applications/section/${item.projectId}`}
+        />
       ))}
       <HeaderBox
         title={'Awaiting review 3'}
@@ -70,6 +69,7 @@ function MyApplicationBoxes() {
       {showAwaiting &&
         data2.map((item) => (
           <BodyCard
+            key={item.id}
             refixAddress={`/app/projects/applications/section/${item.projectId}`}
           />
         ))}
@@ -81,6 +81,7 @@ function MyApplicationBoxes() {
       {showDecline &&
         data3.map((item) => (
           <BodyCard
+            key={item.id}
             refixAddress={`/app/projects/applications/section/${item.projectId}`}
           />
         ))}

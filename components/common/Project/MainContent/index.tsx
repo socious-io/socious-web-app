@@ -67,6 +67,7 @@ const MainContent = ({onClickShow}: Props) => {
       {showMore && <RecommendCheck />}
       {itemsToRender.map((item) => (
         <ProjectCard
+          key={item.id}
           title={''}
           description={''}
           country_id={0}
