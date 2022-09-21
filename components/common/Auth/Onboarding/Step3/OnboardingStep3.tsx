@@ -1,32 +1,37 @@
 import {SearchBar, Button, Chip} from '@components/common';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useMemo} from 'react';
 import {StepProps} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
 import useFilter from 'hooks/auth/useFilter';
 import useHandleSelected from 'hooks/auth/useHandleSelected';
 
+import Data, {getText} from '@socious/data';
+
+const passionData = Object.keys(Data.SocialCauses);
+
 const OnboardingStep3 = ({onSubmit}: StepProps) => {
+  const formMethods = useFormContext();
+  const {handleSubmit, watch, getValues} = formMethods;
+  const passion = watch('passions');
+
   const maxCauses = 5;
   const [selecteds, onSelect] = useHandleSelected('passions', maxCauses);
 
-  const formMethods = useFormContext();
-  const {handleSubmit, watch} = formMethods;
-
   const passions = useMemo(
-    () => [
-      'inequilty',
-      'Mental Health',
-      'Neurodiversity',
-      'Civic Engagement',
-      'Climate Change',
-      'Substance Abuse',
-      'Veganism',
+    () => {
+      const sorted = passionData.map((id) => ({
+        id,
+        name: getText('en', `PASSION.${id}`),
+      }));
+      sorted.sort((a, b) => (a.name > b.name ? 1 : -1));
+      return sorted;
+    },
+    [
+      // todo: language
     ],
-    [],
   );
-  const [filteredItems, filterWith] = useFilter(passions);
 
-  const passion = watch('passions');
+  const [filteredItems, filterWith] = useFilter(passions);
 
   return (
     <form
@@ -43,7 +48,7 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
           <SearchBar
             type="text"
             placeholder="Search"
-            onChangeTxt={filterWith}
+            onChange={(e) => filterWith(e?.currentTarget?.value || '')}
             className="my-6"
           />
           <div className="-mx-5 flex h-full flex-col border-t-2 border-b-grayLineBased bg-offWhite px-5">
@@ -52,10 +57,10 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
               {filteredItems.map((skill, index) => (
                 <Chip
                   onSelected={onSelect}
-                  selected={selecteds?.includes(skill)}
-                  value={skill}
-                  key={`skill-${index}`}
-                  content={skill}
+                  selected={selecteds?.includes(skill.id)}
+                  value={skill.id}
+                  key={skill.id}
+                  content={skill.name}
                   contentClassName="text-secondary cursor-pointer"
                   containerClassName="bg-background my-2  h-8"
                 />

@@ -4,7 +4,7 @@ import {CheckIcon} from '@heroicons/react/24/outline';
 export interface ChipProps {
   size?: 's' | 'm' | 'l';
   content: string;
-  value?: string;
+  value?: string | number;
   selected?: boolean;
   containerClassName?: string;
   contentClassName?: string;
@@ -29,7 +29,7 @@ export function Chip({
   return (
     <span
       onClick={() => {
-        onSelected && value && onSelected(value);
+        onSelected && value && onSelected(value as string);
       }}
       className={twMerge(
         'flex flex-nowrap items-center space-x-2 rounded-full bg-secondarySLight text-secondary',

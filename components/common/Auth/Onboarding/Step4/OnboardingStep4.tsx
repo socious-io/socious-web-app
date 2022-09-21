@@ -4,32 +4,34 @@ import {StepProps} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
 import useFilter from 'hooks/auth/useFilter';
 import useHandleSelected from 'hooks/auth/useHandleSelected';
+import {getText} from '@socious/data';
 
-const OnboardingStep4 = ({onSubmit}: StepProps) => {
+interface StepPropsWithSkills extends StepProps {
+  rawSkills: any[];
+}
+
+const OnboardingStep4 = ({onSubmit, rawSkills}: StepPropsWithSkills) => {
   const maxSkills = 10;
   const [selecteds, onSelect] = useHandleSelected('skills', maxSkills);
 
   const formMethods = useFormContext();
   const {watch, handleSubmit} = formMethods;
 
-  const skills = useMemo(
-    () => [
-      'Sustainable Financse',
-      'Bloomberg Taerminal',
-      'Impact aInvesting',
-      'Financaiald Analysis',
-      'Sustainadbaility',
-      'Sustainadble Finance',
-      'Sustainadbility',
-      'Sustainablde Finance',
-      'Bsloomberg Terminal',
-      'Impact Investing',
-      'Financial Analysis',
-      'Sustainability',
-    ],
-    [],
-  );
+  console.log('rawSkill :---: ', rawSkills);
+  const skills = useMemo(() => {
+    const sorted: {id: string; name: string}[] = [];
+    rawSkills?.forEach((skill) => {
+      const name = getText('en', `SKILL.${skill.name}`);
+      if (name) sorted.push({id: skill.name, name});
+    });
+    sorted.sort((a, b) => (a.name > b.name ? 1 : -1));
+    return sorted;
+  }, [
+    // todo: language
+    rawSkills,
+  ]);
   const [filteredItems, filterWith] = useFilter(skills);
+  console.log('FILTERED ITEMS ====', filteredItems);
 
   const skill = watch('skills');
 
@@ -49,7 +51,7 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
           <SearchBar
             type="text"
             placeholder="Search"
-            onChangeTxt={filterWith}
+            onChange={(e) => filterWith(e.currentTarget?.value || '')}
             className="my-6"
           />
           <div className="-mx-5 flex h-full flex-col border-t-2 border-b-grayLineBased bg-offWhite px-5">
@@ -58,10 +60,10 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
               {filteredItems.map((skill: any, index: number) => (
                 <Chip
                   onSelected={onSelect}
-                  selected={selecteds?.includes(skill + index)}
-                  value={skill + index}
+                  selected={selecteds?.includes(skill.id)}
+                  value={skill.id}
                   key={`skill-${skill + index}`}
-                  content={skill + index}
+                  content={skill.name}
                   contentClassName="text-secondary cursor-pointer "
                   containerClassName="bg-background my-2 h-8"
                 />
