@@ -1,34 +1,49 @@
-import Chip from '@components/common/Chip/Chip';
 import React, {useState} from 'react';
+
+//components
+import Chip from '@components/common/Chip/Chip';
 import Search from '../components/Search';
 import Title from '../components/Title';
-import Data, {getText} from '@socious/data';
-import {StepProps} from '@models/stepProps';
 import {Button} from '@components/common/Button/Button';
+
+//constants
+import Data from '@socious/data';
+
+//interfaces
+import {StepProps} from '@models/stepProps';
+
+//get social causes array from 'Data'
 const items = Object.keys(Data.SocialCauses);
 
 const SocialCauses = ({onSubmit}: StepProps) => {
   const [selecteds, setSelecteds] = useState<any[]>([]);
+  const [search, setSearch] = useState<string>('');
 
   const handleOnSubmit = (e: any) => {
-    console.log('submit');
-    console.log(selecteds);
     e.preventDefault();
     onSubmit('true');
   };
 
+  //select social causes function
   const handleSelecteds = (itemSelected: any) => {
     console.log(selecteds);
     selecteds?.includes(itemSelected)
       ? setSelecteds(selecteds?.filter((i) => i === itemSelected))
       : setSelecteds([...selecteds, itemSelected]);
   };
+
+  const searchHandler = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setSearch(event.target.value);
+  };
+
+  const searchedItem = items.filter(item=> item.toLowerCase().includes(search.toLowerCase()))
+console.log(searchedItem)
   return (
     <>
       <Title description="Select up to 5 social causes." border={false}>
         What are your social causes?
       </Title>
-      <Search />
+      <Search value={search} onChange={searchHandler} />
       <form
         onSubmit={handleOnSubmit}
         className="flex h-full flex-col border-t border-grayLineBased  "
@@ -41,7 +56,7 @@ const SocialCauses = ({onSubmit}: StepProps) => {
             Popular
           </p>
           <div className="flex w-5/6 flex-wrap  gap-2 px-4 py-4 ">
-            {items.map((item) => {
+            {searchedItem.map((item) => {
               return (
                 <Chip
                   onSelected={handleSelecteds}

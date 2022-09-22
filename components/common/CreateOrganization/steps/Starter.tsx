@@ -1,9 +1,16 @@
 import React from 'react';
 import Image from 'next/image';
+
+//icons
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
+
+//components
 import StarterCard from '../components/StarterCard';
-import { Button } from '@components/common/Button/Button';
+import {Button} from '@components/common/Button/Button';
+
+//interface
 import {StepProps} from '@models/stepProps';
+
 const data = [
   {
     id: 1,
@@ -25,39 +32,39 @@ const data = [
 const Starter = ({onSubmit}: StepProps) => {
   return (
     <>
-      <div className="w-full h-56 relative ">
+      <div className="relative h-56 w-full ">
         <Image
           src={require('../../../../asset/images/TopHeader.png')}
           layout="fill"
           className="sm:rounded-t-3xl"
         />
-        <ChevronLeftIcon className="h-6 w-6 text-white stroke-1.5 absolute left-2 top-12 hover:text-primary" />
+        <ChevronLeftIcon className="absolute left-2 top-12 h-6 w-6 stroke-1.5 text-white hover:text-primary" />
       </div>
 
       <div className="h-full overflow-y-scroll">
-        <p className="sm:text-base text-lg font-medium text-left px-10 pb-4 pt-5 text-black">
+        <p className="px-10 pb-4 pt-5 text-left text-lg font-medium text-black sm:text-base">
           Find talented professionals to help your social cause:
         </p>
-        <div className="bg-offWhite flex flex-col divide-y divide-grayLineBased  items-center justify-center mx-6 rounded-3xl">
+        <div className="mx-6 flex flex-col items-center justify-center  divide-y divide-grayLineBased rounded-3xl bg-offWhite">
           {data.map((item) => {
             return (
               <StarterCard key={item.id} text={item.text} icon={item.icon} />
             );
           })}
         </div>
-        <p className="px-10 sm:text-xs text-sm text-graySubtitle leading-6 py-3">
+        <p className="px-10 py-3 text-sm leading-6 text-graySubtitle sm:text-xs">
           * You can post projects when your company has been successfully
           verified by our team.
         </p>
       </div>
-      <footer className="flex pt-6 pb-28 sm:pb-10 sm:pt-4 justify-center border-grayLineBased border-t">
-          <Button
-            onClick={onSubmit}
-            className="w-8/12 flex justify-center py-1.5 font-medium"
-          >
-            continue
-          </Button>
-        </footer>
+      <footer className="flex justify-center border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">
+        <Button
+          onClick={onSubmit}
+          className="flex w-8/12 justify-center py-1.5 font-medium"
+        >
+          continue
+        </Button>
+      </footer>
     </>
   );
 };
