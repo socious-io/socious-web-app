@@ -6,7 +6,12 @@ import {twMerge} from 'tailwind-merge';
 import {ExclamationCircleIcon} from '@heroicons/react/24/solid';
 import useDebounce from 'hooks/useDebounce';
 import {ReactElement} from 'react';
-import {UseFormRegisterReturn} from 'react-hook-form';
+import {UseControllerReturn} from 'react-hook-form';
+
+export type ComboBoxSelectionType = {
+  id: string;
+  name: string;
+};
 
 export interface ComboboxProps
   extends React.DetailedHTMLProps<
@@ -15,7 +20,7 @@ export interface ComboboxProps
   > {
   label?: string | ReactElement;
   disabled?: boolean;
-  register?: UseFormRegisterReturn;
+  controller?: UseControllerReturn;
   errorMessage?: any;
   suffixContent?: any;
   prefixContent?: any;
@@ -35,7 +40,7 @@ export function Combobox({
   errorMessage,
   required,
   selected,
-  register,
+  controller,
   onSelected,
   onChangeInputSearch,
   ...props
@@ -44,6 +49,11 @@ export function Combobox({
   const [filteredItems, setFilteredItems] = useState<any[]>([]);
 
   const debouncedAmount = useDebounce(query, 500);
+
+  if (!name && controller?.field.name) name = controller.field.name;
+  if (controller) errorMessage = controller.fieldState.error?.message;
+  if (controller?.field.value && !controller.fieldState.isDirty)
+    selected = items.find((item) => item.id === controller.field.value) || '';
 
   useEffect(() => {
     onChangeInputSearch && onChangeInputSearch(debouncedAmount);
@@ -67,6 +77,7 @@ export function Combobox({
       value={selected}
       onChange={(item) => {
         onSelected && onSelected(item);
+        controller && controller.field.onChange(item.id);
       }}
       name={name}
       disabled={disabled}
@@ -77,7 +88,7 @@ export function Combobox({
             <UiCombobox.Label
               htmlFor={id || name}
               className={twMerge(
-                'font-base block',
+                'font-base mb-1 block',
                 errorMessage ? 'text-error' : 'text-black',
                 disabled && 'text-opacity-40 ',
               )}
@@ -87,19 +98,21 @@ export function Combobox({
               </div>
             </UiCombobox.Label>
           )}
-          <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+          <div className="relative w-full cursor-default overflow-hidden rounded-lg border bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <UiCombobox.Input
+              name={`${name}-input`}
               className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 outline-none focus:ring-0"
               displayValue={(item: any) => item?.name}
               onChange={(event) => setQuery(event.target.value)}
               // required={required}
               {...props}
-              {...register}
+              ref={controller?.field.ref}
+              onBlur={controller?.field.onBlur}
             />
 
             <UiCombobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronDownIcon
-                className="h-5 w-5 text-gray-400"
+                className="h-5 w-5 text-black"
                 aria-hidden="true"
               />
             </UiCombobox.Button>

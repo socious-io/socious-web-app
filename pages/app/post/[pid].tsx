@@ -136,7 +136,7 @@ const Post = () => {
         isOpen={notify}
         text="Post link copied"
       />
-      <SideBar />
+      <SideBar selectBar={''} />
       <div className="mb-10 w-full space-y-6">
         {!!post.shared_id ? (
           <SharedCard
@@ -206,7 +206,7 @@ const Post = () => {
           {shareStep === 2 && <ShareModalStep2 onShare={onShare} />}
         </Modal>
 
-        {user.id === post.identity_id && (
+        {user?.id === post.identity_id && (
           <>
             {/* EDIT MODAL */}
             <EditModal
