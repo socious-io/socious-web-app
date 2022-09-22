@@ -48,14 +48,13 @@ type OnBoardingProps = {
 const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   const {user} = useUser();
 
-  const [step, setStep] = useState<number>(4);
+  const [step, setStep] = useState<number>(5);
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const handleBack = useCallback(() => {
     setStep(step - 1);
   }, [step]);
 
-  console.log('SKILLS :---:', skills);
   const handleToggleModal = useCallback(() => {
     setShowModal(!showModal);
   }, [showModal]);
@@ -109,16 +108,29 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     const avatar = formMethodsStep9.getValues('file');
     const formData = new FormData();
     formData.append('file', avatar, avatar.name);
-    post('/api/v2/media/upload', formData, {
-      'Content-Type': 'multipart/form-data',
-      'Current-Identity': 'b5dbfb0a-cbe7-49f2-8154-bfcdcca2754c',
-    })
-      .then((response) => {
-        console.log('RESPONSE', response);
-        // make another update with reponse id.
-      })
-      .catch((error) => console.log('ERROR', error.response));
-  }, [formMethodsStep9]);
+    let media_id: string;
+    try {
+      const response: any = post('/media/upload', formData, {
+        'Content-Type': 'multipart/form-data',
+        'Current-Identity': 'b5dbfb0a-cbe7-49f2-8154-bfcdcca2754c',
+      });
+      console.log('MEDIA RESPONSE :---: ', response);
+      media_id = response.id;
+    } catch (error) {
+      console.error('SERVER ERROR', error);
+      return;
+    }
+
+    try {
+      const profileBody: any = {
+        first_name: user?.first_name,
+        last_name: user?.last_name,
+        username: user?.username,
+      };
+    } catch (error) {
+      console.error('ERROR :', error);
+    }
+  }, [formMethodsStep9, user]);
 
   const handleUpdateProfileRequest = useCallback(() => {
     const bio = formMethodsStep8.getValues('bio');
@@ -252,8 +264,6 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 export default Onboarding;
 
 export const getStaticProps: GetStaticProps = async () => {
-  console.log('I CAME HERE In STATIC');
   const skills = await getGlobalData();
-  console.log('SKILLS :---:', skills);
-  return {props: {skills}, revalidate: 60 * 2};
+  return {props: {skills}, revalidate: 60 * 60 * 24};
 };

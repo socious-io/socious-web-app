@@ -17,7 +17,6 @@ const OnboardingStep4 = ({onSubmit, rawSkills}: StepPropsWithSkills) => {
   const formMethods = useFormContext();
   const {watch, handleSubmit} = formMethods;
 
-  console.log('rawSkill :---: ', rawSkills);
   const skills = useMemo(() => {
     const sorted: {id: string; name: string}[] = [];
     rawSkills?.forEach((skill) => {
@@ -31,7 +30,6 @@ const OnboardingStep4 = ({onSubmit, rawSkills}: StepPropsWithSkills) => {
     rawSkills,
   ]);
   const [filteredItems, filterWith] = useFilter(skills);
-  console.log('FILTERED ITEMS ====', filteredItems);
 
   const skill = watch('skills');
 
