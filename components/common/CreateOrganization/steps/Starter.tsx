@@ -11,6 +11,7 @@ import {Button} from '@components/common/Button/Button';
 //interface
 import {StepProps} from '@models/stepProps';
 
+//this is information data for display in 'StarterCard'
 const data = [
   {
     id: 1,

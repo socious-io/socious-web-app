@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
+//interfaces
 interface Props {
   item: {text: string; icon: string; title: string; id: number};
 }

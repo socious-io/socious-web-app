@@ -8,7 +8,7 @@ import SocialCauses from '../../components/common/CreateOrganization/steps/Socia
 import OrganizationType from '../../components/common/CreateOrganization/steps/OrganizationType';
 import BasicInfo from '../../components/common/CreateOrganization/steps/BasicInfo';
 import Culture from '../../components/common/CreateOrganization/steps/Culture';
-import Impact from '../../components/common/CreateOrganization/steps/Impact';
+import SocialImpact from '../../components/common/CreateOrganization/steps/SocialImpact';
 import CreateSuccessfully from '../../components/common/CreateOrganization/steps/CreateSuccessfully';
 import VerifyOrganization from '../../components/common/CreateOrganization/steps/VerifyOrganization';
 import Starter from '../../components/common/CreateOrganization/steps/Starter';
@@ -57,7 +57,7 @@ const CreateOrganization = () => {
         ) : step === 5 ? (
           <Culture onSubmit={nextHandler} />
         ) : step === 6 ? (
-          <Impact onSubmit={nextHandler} />
+          <SocialImpact onSubmit={nextHandler} />
         ) : step === 7 ? (
           <CreateSuccessfully onSubmit={nextHandler} />
         ) : step === 8 ? (

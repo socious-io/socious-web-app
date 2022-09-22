@@ -1,13 +1,18 @@
 import React from 'react';
+
+//components
 import Title from '../components/Title';
-import {StepProps} from '@models/stepProps';
-import TextArea from '@components/common/TextArea/TextArea';
 import {Button} from '@components/common/Button/Button';
+
+//interfaces
+import {StepProps} from '@models/stepProps';
+
 const CreateSuccessfully = ({onSubmit}: StepProps) => {
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
   };
+
   return (
     <>
       <form onSubmit={handleOnSubmit} className="flex h-full flex-col">

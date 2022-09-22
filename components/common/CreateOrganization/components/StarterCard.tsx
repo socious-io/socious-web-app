@@ -1,10 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
 
+//interfaces
 interface Props {
   text: string;
   icon: string;
 }
+
 const StarterCard: React.FC<Props> = ({text, icon}) => {
   return (
     <>

@@ -6,13 +6,11 @@ import Search from '../components/Search';
 import Title from '../components/Title';
 import {Button} from '@components/common/Button/Button';
 
-//constants
-import Data from '@socious/data';
-
 //interfaces
 import {StepProps} from '@models/stepProps';
 
-//get social causes array from 'Data'
+//get social causes constant data
+import Data from '@socious/data';
 const items = Object.keys(Data.SocialCauses);
 
 const SocialCauses = ({onSubmit}: StepProps) => {
@@ -32,12 +30,18 @@ const SocialCauses = ({onSubmit}: StepProps) => {
       : setSelecteds([...selecteds, itemSelected]);
   };
 
-  const searchHandler = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+  //onchange search input
+  const searchHandler = (event: {
+    target: {value: React.SetStateAction<string>};
+  }) => {
     setSearch(event.target.value);
   };
 
-  const searchedItem = items.filter(item=> item.toLowerCase().includes(search.toLowerCase()))
-console.log(searchedItem)
+  //search filter items
+  const searchedItem = items.filter((item) =>
+    item.toLowerCase().includes(search.toLowerCase()),
+  );
+
   return (
     <>
       <Title description="Select up to 5 social causes." border={false}>

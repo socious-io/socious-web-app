@@ -1,17 +1,21 @@
-import React, {useState} from 'react';
+import React from 'react';
+
+//components
 import Title from '../components/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
 import Button from '@components/common/Button/Button';
-import {StepProps} from '@models/stepProps';
 import FormTitle from '../components/FormTitle';
 import TextArea from '@components/common/TextArea/TextArea';
 
-import Combobox from '@components/common/Combobox/Combobox';
+//interfaces
+import {StepProps} from '@models/stepProps';
+
 const BasicInfo = ({onSubmit}: StepProps) => {
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
   };
+
   return (
     <>
       <Title>Organization profile</Title>
@@ -54,7 +58,6 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             className="my-3"
             required
           />
-
           <InputFiled
             label="Address"
             type="text"

@@ -1,15 +1,25 @@
 import React from 'react';
+
+//components
 import Title from '../components/Title';
-import {CheckCircleIcon} from '@heroicons/react/24/outline';
-import Data, {getText} from '@socious/data';
 import Button from '@components/common/Button/Button';
+
+//icons
+import {CheckCircleIcon} from '@heroicons/react/24/outline';
+
+//interfaces
+import Data from '@socious/data';
+
+//organization constant data
 import {StepProps} from '@models/stepProps';
 const items = Object.keys(Data.OrganizationType);
+
 const OrganizationType = ({onSubmit}: StepProps) => {
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
   };
+
   return (
     <>
       <Title>What type of organization?</Title>

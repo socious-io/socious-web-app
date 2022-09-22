@@ -1,13 +1,15 @@
 import React from 'react';
 import Image from 'next/image';
-import {ChevronLeftIcon} from '@heroicons/react/24/outline';
-import StarterCard from '../components/StarterCard';
+
+//components
 import {Button} from '@components/common/Button/Button';
-import {StepProps} from '@models/stepProps';
 import Title from '../components/Title';
 import VerifyCard from '../components/VerifyCard';
-import {title} from 'process';
 
+//interfaces
+import {StepProps} from '@models/stepProps';
+
+//this is information data for display in 'VerifyCard'
 const data = [
   {
     id: 1,
@@ -49,17 +51,12 @@ const VerifyOrganization = ({onSubmit}: StepProps) => {
       </div>
 
       <div className="h-full overflow-y-scroll">
-        <div className=" flex flex-col items-center border-t border-grayLineBased justify-center  bg-offWhite">
-          <p className='px-4 text-left w-full py-4 text-primary  font-semibold'>How to get verified?</p>
+        <div className=" flex flex-col items-center justify-center border-t border-grayLineBased  bg-offWhite">
+          <p className="w-full px-4 py-4 text-left font-semibold  text-primary">
+            How to get verified?
+          </p>
           {data.map((item) => {
-            return (
-              <VerifyCard
-                key={item.id}
-                item={item}
-                
-              
-              />
-            );
+            return <VerifyCard key={item.id} item={item} />;
           })}
         </div>
       </div>

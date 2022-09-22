@@ -1,15 +1,19 @@
 import React from 'react';
+
+//components
 import Title from '../components/Title';
-import {StepProps} from '@models/stepProps';
 import TextArea from '@components/common/TextArea/TextArea';
 import {Button} from '@components/common/Button/Button';
 
-const Impact = ({onSubmit}: StepProps) => {
-  
+//interfaces
+import {StepProps} from '@models/stepProps';
+
+const SocialImpact = ({onSubmit}: StepProps) => {
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
   };
+
   return (
     <>
       <Title border={false}>
@@ -36,4 +40,4 @@ const Impact = ({onSubmit}: StepProps) => {
   );
 };
 
-export default Impact;
+export default SocialImpact;
