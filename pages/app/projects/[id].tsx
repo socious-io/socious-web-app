@@ -1,5 +1,5 @@
-import SideBar from '@components/common/Home/SideBar';
 import DetailContent from '@components/common/Project/MainContent/DetailContent';
+import SideBar from '@components/common/Project/SideBar/SideBar';
 
 const Detail = () => {
   return (

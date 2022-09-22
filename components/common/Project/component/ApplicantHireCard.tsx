@@ -33,14 +33,12 @@ function ApplicantHiredCard() {
           value="Submit"
         >
           <div className="relative mx-2 h-5 w-5 ">
-            <a>
-              <Image
-                src={endhireSrc}
-                className="fill-warning"
-                alt="dislike"
-                layout="fill" // required
-              />
-            </a>
+            <Image
+              src={endhireSrc}
+              className="fill-warning"
+              alt="dislike"
+              layout="fill" // required
+            />
           </div>
           End hire
         </Button>

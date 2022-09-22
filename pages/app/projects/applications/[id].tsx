@@ -10,7 +10,7 @@ import {useRouter} from 'next/router';
 import useSWR from 'swr';
 
 //components
-import MainContent from '@components/common/UserProfile/MainContent';
+
 import {get} from 'utils/request';
 import MyApplicationBoxes from '@components/common/Project/MyApplication';
 import SideBar from '@components/common/Home/SideBar';
