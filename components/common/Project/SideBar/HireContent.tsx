@@ -46,7 +46,6 @@ function HiredContent() {
             title={'End hire'}
             isExpand={showOnGoing}
             expandToggle={showOnGoingHandler.toggle}
-            isExpandable={true}
           />
           {showOnGoing &&
             data.map((item) => (

@@ -53,7 +53,7 @@ function OverviewProjectCard() {
 
       <div className="grid grid-cols-3 gap-4">
         {data.map((e) => (
-          <div className="flex flex-col">
+          <div key={e.id} className="flex flex-col">
             <p className=" text-bold text-primary">Location</p>
             <p className="text-normal">Amsterdam</p>
           </div>
