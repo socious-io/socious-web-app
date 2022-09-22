@@ -26,11 +26,11 @@ import {
   schemaOnboardingStep7,
   schemaOnboardingStep8,
 } from '@api/auth/validation';
-import {post} from 'utils/request';
 import {updateProfile} from '@api/auth/actions';
 import useUser from 'hooks/useUser/useUser';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import getGlobalData from 'services/cacheSkills';
+import {uploadMedia} from '@api/media/actions';
 
 const schemaStep = {
   3: schemaOnboardingStep3,
@@ -48,7 +48,7 @@ type OnBoardingProps = {
 const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   const {user} = useUser();
 
-  const [step, setStep] = useState<number>(5);
+  const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const handleBack = useCallback(() => {
@@ -96,7 +96,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     if (step === 8) {
       handleUpdateProfileRequest();
     } else if (step === 9) {
-      handleImageUpload();
+      handleImageUpload(data);
     } else if (step === 10) {
       handleToggleModal();
     } else {
@@ -104,40 +104,41 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     }
   };
 
-  const handleImageUpload = useCallback(async () => {
-    const avatar = formMethodsStep9.getValues('file');
-    const formData = new FormData();
-    formData.append('file', avatar, avatar.name);
-    let media_id: string;
-    try {
-      const response: any = post('/media/upload', formData, {
-        'Content-Type': 'multipart/form-data',
-        'Current-Identity': 'b5dbfb0a-cbe7-49f2-8154-bfcdcca2754c',
-      });
-      console.log('MEDIA RESPONSE :---: ', response);
-      media_id = response.id;
-    } catch (error) {
-      console.error('SERVER ERROR', error);
-      return;
-    }
+  const handleImageUpload = useCallback(
+    async (file: any) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      let media_id: string;
+      try {
+        const response: any = await uploadMedia(formData);
+        media_id = response.id;
+      } catch (error) {
+        console.error('SERVER ERROR', error);
+        return;
+      }
 
-    try {
-      const profileBody: any = {
-        first_name: user?.first_name,
-        last_name: user?.last_name,
-        username: user?.username,
-      };
-    } catch (error) {
-      console.error('ERROR :', error);
-    }
-  }, [formMethodsStep9, user]);
+      try {
+        const profileBody: any = {
+          first_name: user?.first_name,
+          last_name: user?.last_name,
+          username: user?.username,
+        };
+        profileBody.avatar = media_id;
+        updateProfile(profileBody).then((response) => {
+          setStep(step + 1);
+        });
+      } catch (error) {
+        console.log('ERROR :', error);
+      }
+    },
+    [step, user],
+  );
 
   const handleUpdateProfileRequest = useCallback(() => {
     const bio = formMethodsStep8.getValues('bio');
+    const passions = formMethodsStep3.getValues('passions');
     const city = formMethodsStep5.getValues('city');
-    // const passions = formMethodsStep3.getValues('passions')
-    // Waiting for new githubpackage with enum and types
-    const passions = ['SOCIAL', 'POVERTY', 'HOMELESSNESS', 'HUNGER', 'HEALTH'];
+
     const skills = formMethodsStep4.getValues('skills');
 
     if (user === undefined) return;
@@ -150,12 +151,21 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
       skills: skills,
     };
     if (bio) profileBody.bio = bio;
+    if (city) profileBody.city = city;
+    console.log('PROFILE BODY', profileBody);
     updateProfile(profileBody)
       .then(() => {
         setStep(step + 1);
       })
       .catch((error: any) => console.error(error));
-  }, [user, formMethodsStep4, formMethodsStep5, formMethodsStep8, step]);
+  }, [
+    formMethodsStep8,
+    formMethodsStep3,
+    formMethodsStep5,
+    formMethodsStep4,
+    user,
+    step,
+  ]);
 
   const handleNext = useCallback(() => {
     if (step === 8) {

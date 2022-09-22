@@ -44,7 +44,7 @@ export function changePassword(currentPassword: string, newPassword: string) {
 }
 
 export function updateProfile(userBody: any) {
-  return post('/user/profile', userBody);
+  return post('/user/update/profile', userBody);
 }
 
 export function logout() {

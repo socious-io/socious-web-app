@@ -31,7 +31,7 @@ const AutoCompleteInput = ({
         </label>
       )}
       <GooglePlacesAutocomplete
-        apiKey={GOOGLE_API}
+        apiKey={'AIzaSyA4C20qGCrnRiCPh9gJfllrbtaSVc7X9K4'}
         apiOptions={{language: 'en', region: 'us'}}
         autocompletionRequest={autocompletionRequest}
         selectProps={{

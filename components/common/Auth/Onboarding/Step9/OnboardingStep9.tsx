@@ -2,11 +2,13 @@ import {Button} from '@components/common';
 import ImageUploader from '@components/common/ImageUploader/ImageUploader';
 import profile_img_icon from 'asset/images/user.png';
 import {StepProps} from '@models/stepProps';
+import {useState} from 'react';
 
 const OnboardingStep9 = ({onSubmit}: StepProps) => {
+  const [file, setFile] = useState<any>();
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
-    onSubmit('true');
+    onSubmit(file);
   };
 
   return (
@@ -18,7 +20,10 @@ const OnboardingStep9 = ({onSubmit}: StepProps) => {
         {' '}
         <h1 className="font-helmet my-6 text-center ">Add a profile photo</h1>
         <div className="flex h-48 flex-col items-center">
-          <ImageUploader onChange={(file: any) => {}} src={profile_img_icon}>
+          <ImageUploader
+            onChange={(file: any) => setFile(file)}
+            src={profile_img_icon}
+          >
             {(setOpen: any) => (
               <Button
                 className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
