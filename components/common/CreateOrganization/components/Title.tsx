@@ -17,7 +17,7 @@ const Title: React.FC<Props> = ({
   return (
     <>
       <h1
-        className={`py-6 text-xl sm:text-lg  ${textAlign}  px-6 ${
+        className={`py-6 text-xl sm:text-lg ${textAlign} px-6 ${
           border ? 'border-b' : null
         } border-grayLineBased `}
       >

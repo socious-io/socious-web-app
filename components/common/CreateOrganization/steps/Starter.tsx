@@ -37,6 +37,7 @@ const Starter = ({onSubmit}: StepProps) => {
         <Image
           src={require('../../../../asset/images/TopHeader.png')}
           layout="fill"
+          alt="bg-image"
           className="sm:rounded-t-3xl"
         />
         <ChevronLeftIcon className="absolute left-2 top-12 h-6 w-6 stroke-1.5 text-white hover:text-primary" />
@@ -46,7 +47,7 @@ const Starter = ({onSubmit}: StepProps) => {
         <p className="px-10 pb-4 pt-5 text-left text-lg font-medium text-black sm:text-base">
           Find talented professionals to help your social cause:
         </p>
-        <div className="mx-6 flex flex-col items-center justify-center  divide-y divide-grayLineBased rounded-3xl bg-offWhite">
+        <div className="mx-6 flex flex-col items-center justify-center divide-y divide-grayLineBased rounded-3xl bg-offWhite">
           {data.map((item) => {
             return (
               <StarterCard key={item.id} text={item.text} icon={item.icon} />

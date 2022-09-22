@@ -16,7 +16,7 @@ const CreateSuccessfully = ({onSubmit}: StepProps) => {
   return (
     <>
       <form onSubmit={handleOnSubmit} className="flex h-full flex-col">
-        <div className="  w-full grow ">
+        <div className="w-full grow">
           <div className="mx-auto mt-20 h-56 w-56 rounded-xl bg-clearWhite" />
           <Title
             description="You have successfully created a page for Green Peace!"
@@ -26,7 +26,7 @@ const CreateSuccessfully = ({onSubmit}: StepProps) => {
             Organization created
           </Title>
         </div>
-        <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28  sm:pb-10 sm:pt-4">
+        <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">
           <Button
             type="submit"
             className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"

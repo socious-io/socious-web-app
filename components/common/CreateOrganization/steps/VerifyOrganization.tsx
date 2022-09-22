@@ -34,7 +34,7 @@ const data = [
 const VerifyOrganization = ({onSubmit}: StepProps) => {
   return (
     <>
-      <div className="flex w-full flex-col px-8 pt-10 ">
+      <div className="flex w-full flex-col px-8 pt-10">
         <Image
           src={require('../../../../asset/icons/Verified.svg')}
           alt="socious logo"
@@ -51,8 +51,8 @@ const VerifyOrganization = ({onSubmit}: StepProps) => {
       </div>
 
       <div className="h-full overflow-y-scroll">
-        <div className=" flex flex-col items-center justify-center border-t border-grayLineBased  bg-offWhite">
-          <p className="w-full px-4 py-4 text-left font-semibold  text-primary">
+        <div className=" flex flex-col items-center justify-center border-t border-grayLineBased bg-offWhite">
+          <p className="w-full px-4 py-4 text-left font-semibold text-primary">
             How to get verified?
           </p>
           {data.map((item) => {

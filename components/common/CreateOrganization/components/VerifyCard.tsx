@@ -10,9 +10,9 @@ const VerifyCard: React.FC<Props> = ({item}) => {
 
   return (
     <>
-      <div className="flex  items-start pl-4 pr-6">
+      <div className="flex items-start pl-4 pr-6">
         <div
-          className={`relative flex h-10 w-10 items-center justify-center rounded-full  border-2 border-primary ${
+          className={`relative flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary ${
             id === 1 ? 'bg-primary' : 'bg-white'
           } `}
         >
@@ -23,8 +23,8 @@ const VerifyCard: React.FC<Props> = ({item}) => {
             title !== 'Verified!' && 'border-l-2 border-primary'
           }`}
         >
-          <p className="text-lg  font-bold sm:text-base">{title}</p>
-          <p className=" mb-6 pt-2 text-base text-graySubtitle sm:text-sm ">
+          <p className="text-lg font-bold sm:text-base">{title}</p>
+          <p className="mb-6 pt-2 text-base text-graySubtitle sm:text-sm">
             {text}
           </p>
         </div>

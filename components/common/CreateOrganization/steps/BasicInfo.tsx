@@ -20,7 +20,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
     <>
       <Title>Organization profile</Title>
       <form onSubmit={handleOnSubmit} className="flex h-full flex-col">
-        <div className="h-14  w-full grow overflow-y-scroll px-4  py-2">
+        <div className="h-14 w-full grow overflow-y-scroll px-4 py-2">
           <FormTitle>Basic info</FormTitle>
           <InputFiled
             label="Organization name"
@@ -84,7 +84,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             className="my-3"
           />
         </div>
-        <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28  sm:pb-10 sm:pt-4">
+        <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">
           <Button
             type="submit"
             className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"

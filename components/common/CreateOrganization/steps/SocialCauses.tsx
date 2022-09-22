@@ -50,16 +50,16 @@ const SocialCauses = ({onSubmit}: StepProps) => {
       <Search value={search} onChange={searchHandler} />
       <form
         onSubmit={handleOnSubmit}
-        className="flex h-full flex-col border-t border-grayLineBased  "
+        className="flex h-full flex-col border-t border-grayLineBased"
       >
-        <div className="h-14  grow overflow-y-scroll bg-offWhite">
+        <div className="h-14 grow overflow-y-scroll bg-offWhite">
           <p
             onClick={handleSelecteds}
             className="px-6 pt-4 text-sm font-semibold text-black"
           >
             Popular
           </p>
-          <div className="flex w-5/6 flex-wrap  gap-2 px-4 py-4 ">
+          <div className="flex w-5/6 flex-wrap gap-2 px-4 py-4">
             {searchedItem.map((item) => {
               return (
                 <Chip

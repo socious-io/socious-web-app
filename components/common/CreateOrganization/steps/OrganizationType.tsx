@@ -24,10 +24,11 @@ const OrganizationType = ({onSubmit}: StepProps) => {
     <>
       <Title>What type of organization?</Title>
       <form onSubmit={handleOnSubmit} className="flex h-full flex-col">
-        <div className="h-14 w-full grow overflow-y-scroll px-4  py-2">
+        <div className="h-14 w-full grow overflow-y-scroll px-4 py-2">
           {items.map((item) => {
             return (
               <button
+                key={item}
                 onClick={(e) => {
                   e.preventDefault();
                 }}
@@ -36,12 +37,12 @@ const OrganizationType = ({onSubmit}: StepProps) => {
                 <p className="w-fit py-2 text-left text-lg lowercase sm:text-base">
                   {item}
                 </p>
-                <CheckCircleIcon className="ml-2 h-6 w-6 stroke-1.5 text-white " />
+                <CheckCircleIcon className="ml-2 h-6 w-6 stroke-1.5 text-white" />
               </button>
             );
           })}
         </div>
-        <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28  sm:pb-10 sm:pt-4">
+        <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">
           <Button
             type="submit"
             className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"

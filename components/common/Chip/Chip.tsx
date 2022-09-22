@@ -35,7 +35,6 @@ export function Chip({
         'flex flex-nowrap items-center space-x-2 rounded-full bg-secondarySLight text-secondary',
         `${PADDING_LIST[size]}`,
         containerClassName && containerClassName,
-        
       )}
     >
       {/* {selected && <CheckIcon className="h-5 w-5" />} */}

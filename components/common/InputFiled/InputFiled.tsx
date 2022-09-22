@@ -39,7 +39,7 @@ export const InputFiled = ({
         <label
           htmlFor={id || name}
           className={twMerge(
-            'sm:text-sm text-base font-semibold block',
+            'block text-base font-semibold sm:text-sm',
             errorMessage ? 'text-error' : 'text-black',
             labelFloat && 'absolute left-3 -top-2 bg-white px-1 text-sm',
             disabled && 'text-opacity-40 ',
@@ -62,7 +62,7 @@ export const InputFiled = ({
         aria-label={label}
         data-testid={`${label}-testid`}
         className={twMerge(
-          'block w-full rounded-lg border border-grayLineBased py-3 sm:text-sm text-base outline-none',
+          'block w-full rounded-lg border border-grayLineBased py-3 text-base outline-none sm:text-sm',
           errorMessage
             ? ' border-b-error focus:border-b-error'
             : '  focus:border-b-1 focus:border-b-primary',

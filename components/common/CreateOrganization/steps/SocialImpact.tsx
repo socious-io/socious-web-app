@@ -20,14 +20,14 @@ const SocialImpact = ({onSubmit}: StepProps) => {
         What social impact has your organization made?
       </Title>
       <form onSubmit={handleOnSubmit} className="flex h-full flex-col">
-        <div className="h-14  w-full grow overflow-y-scroll px-4  py-2">
+        <div className="h-14 w-full grow overflow-y-scroll px-4 py-2">
           <TextArea
             placeholder="Your organization’s achievements"
             className="my-3"
             rows={4}
           />
         </div>
-        <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28  sm:pb-10 sm:pt-4">
+        <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">
           <Button
             type="submit"
             className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"
