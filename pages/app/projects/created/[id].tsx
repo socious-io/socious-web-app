@@ -10,10 +10,9 @@ import {useRouter} from 'next/router';
 import useSWR from 'swr';
 
 //components
-
 import {get} from 'utils/request';
-import MyApplicationBoxes from '@components/common/Project/MyApplication';
 import SideBar from '@components/common/Home/SideBar';
+import MyApplicationBoxes from '@components/common/Project/created';
 
 const ProjectApplications: NextPage = () => {
   // get id from route
