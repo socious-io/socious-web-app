@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 
 //components
 import Chip from '@components/common/Chip/Chip';
@@ -10,12 +10,27 @@ import {Button} from '@components/common/Button/Button';
 import {StepProps} from '@models/stepProps';
 
 //get social causes constant data
-import Data from '@socious/data';
+import Data, {getText} from '@socious/data';
 const items = Object.keys(Data.SocialCauses);
 
 const SocialCauses = ({onSubmit}: StepProps) => {
   const [selecteds, setSelecteds] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
+
+  //the English human version data of social causes
+  const localItems = useMemo(
+    () => {
+      const sorted = items.map((id) => ({
+        id,
+        name: getText('en', `PASSION.${id}`),
+      }));
+      sorted.sort((a, b) => (a.name > b.name ? 1 : -1));
+      return sorted;
+    },
+    [
+      // todo: language
+    ],
+  );
 
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
@@ -38,8 +53,8 @@ const SocialCauses = ({onSubmit}: StepProps) => {
   };
 
   //search filter items
-  const searchedItem = items.filter((item) =>
-    item.toLowerCase().includes(search.toLowerCase()),
+  const searchedItem = localItems.filter((item) =>
+    item.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -65,13 +80,11 @@ const SocialCauses = ({onSubmit}: StepProps) => {
                 <Chip
                   onSelected={handleSelecteds}
                   selected={selecteds?.includes(item)}
-                  value={item}
-                  key={item}
-                  content={item}
+                  value={item.name}
+                  key={item.id}
+                  content={item.name}
                   containerClassName={
-                    selecteds?.includes(item)
-                      ? 'bg-secondary lowercase'
-                      : 'bg-white lowercase'
+                    selecteds?.includes(item) ? 'bg-secondary' : 'bg-white'
                   }
                   contentClassName={
                     selecteds?.includes(item) ? 'text-white' : 'text-secondary'
