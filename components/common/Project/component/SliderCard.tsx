@@ -1,5 +1,6 @@
 import {useEffect} from 'react';
 import RecommendCard from './RecommendCard';
+
 var data = [
   {
     id: 1,
@@ -46,23 +47,22 @@ function SliderCard() {
   return (
     <div
       id="slider"
-      className="scroll -ml-2 w-full flex-row overflow-x-scroll scroll-smooth whitespace-nowrap scrollbar-hide"
+      className="scroll w-full flex-row overflow-x-scroll scroll-smooth whitespace-nowrap scrollbar-hide md:max-w-3xl "
     >
       {data.map((item) => (
-        <div className="inline-block w-5/6 cursor-pointer  p-2 duration-300  ease-in-out md:w-1/2">
-          <RecommendCard
-            title={''}
-            description={''}
-            country_id={0}
-            project_type={0}
-            project_length={0}
-            payment_type={0}
-            payment_scheme={0}
-            payment_range_lower={''}
-            payment_range_higher={''}
-            experience_level={0}
-          />
-        </div>
+        <RecommendCard
+          key={item.id}
+          title={''}
+          description={''}
+          country_id={0}
+          project_type={0}
+          project_length={0}
+          payment_type={0}
+          payment_scheme={0}
+          payment_range_lower={''}
+          payment_range_higher={''}
+          experience_level={0}
+        />
       ))}
     </div>
   );

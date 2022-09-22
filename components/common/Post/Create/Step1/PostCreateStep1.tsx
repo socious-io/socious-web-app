@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import Modal from '@components/common/Modal/Modal';
 import {StepProps} from '@models/stepProps';
-import {useFormContext} from 'react-hook-form';
+import {useFormContext, useController, FieldValues} from 'react-hook-form';
 import TextArea from '@components/common/TextArea/TextArea';
 import Button from '@components/common/Button/Button';
 import useUser from 'hooks/useUser/useUser';
@@ -17,6 +17,9 @@ const PostCreateStep1 = ({onSubmit, setFile}: PostCreateStepProps) => {
   const {user} = useUser();
   const formMethods = useFormContext();
   const {handleSubmit, formState, register, getValues} = formMethods;
+  const causesTagsController = useController<FieldValues, string>({
+    name: 'causes_tags',
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -27,9 +30,7 @@ const PostCreateStep1 = ({onSubmit, setFile}: PostCreateStepProps) => {
         <div className="mt-2 space-y-8">
           <CausesTagBar
             src={user?.avatar?.url}
-            register={register('causes_tags')}
-            preSelected={getValues('causes_tags')}
-            errorMessage={formState?.errors?.['causes_tags']?.message}
+            controller={causesTagsController}
           />
           <TextArea
             placeholder="I feel like......"
