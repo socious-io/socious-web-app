@@ -5,10 +5,16 @@ import Title from '../components/Title';
 import TextArea from '@components/common/TextArea/TextArea';
 import {Button} from '@components/common/Button/Button';
 
+//libraries
+import {useFormContext} from 'react-hook-form';
+
 //interfaces
 import {StepProps} from '@models/stepProps';
 
 const Culture = ({onSubmit}: StepProps) => {
+  const formMethods = useFormContext();
+  const {register} = formMethods;
+
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
@@ -22,6 +28,7 @@ const Culture = ({onSubmit}: StepProps) => {
         <div className="h-14 w-full grow overflow-y-scroll px-4 py-2">
           <TextArea
             placeholder="Your organization’s culture"
+            register={register('culture')}
             className="my-3"
             rows={4}
           />

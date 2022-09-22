@@ -7,10 +7,16 @@ import Button from '@components/common/Button/Button';
 import FormTitle from '../components/FormTitle';
 import TextArea from '@components/common/TextArea/TextArea';
 
+//libraries
+import {useFormContext} from 'react-hook-form';
+
 //interfaces
 import {StepProps} from '@models/stepProps';
 
 const BasicInfo = ({onSubmit}: StepProps) => {
+  const formMethods = useFormContext();
+  const {register} = formMethods;
+
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
@@ -26,12 +32,14 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="Organization name"
             type="text"
             placeholder="Organization name"
+            register={register('name')}
             className="my-3"
             required
           />
           <TextArea
             label="Bio"
             placeholder="Your organization’s bio"
+            register={register('bio')}
             className="my-3"
             required
             rows={4}
@@ -41,6 +49,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="Organization email"
             type="text"
             placeholder="Organization email"
+            register={register('email')}
             className="my-3"
             required
           />
@@ -48,6 +57,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="Country"
             type="text"
             placeholder="Country"
+            register={register('country')}
             className="my-3"
             required
           />
@@ -55,6 +65,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="City"
             type="text"
             placeholder="City"
+            register={register('country')}
             className="my-3"
             required
           />
@@ -62,6 +73,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="Address"
             type="text"
             placeholder="Address"
+            register={register('address')}
             className="my-3"
           />
           <div className="flex items-end gap-x-4">
@@ -69,11 +81,13 @@ const BasicInfo = ({onSubmit}: StepProps) => {
               label="Phone number"
               type="text"
               placeholder="+000"
+              register={register('mobile_country_code')}
               className="my-3"
             />
             <InputFiled
               type="text"
               placeholder="Phone number"
+              register={register('phone')}
               className="my-3 w-full"
             />
           </div>
@@ -81,6 +95,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="Website"
             type="text"
             placeholder="Website"
+            register={register('website')}
             className="my-3"
           />
         </div>

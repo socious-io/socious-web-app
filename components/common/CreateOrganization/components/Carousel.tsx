@@ -1,7 +1,6 @@
 /*
  * this components is for showing steps of create organization
  */
-
 import React from 'react';
 
 //icons
@@ -16,7 +15,7 @@ interface Props {
 }
 //show skip in carousel send skip={true}
 
-const Carousel: React.FC<Props> = ({step, skip = false, onBack,onSkip}) => {
+const Carousel: React.FC<Props> = ({step, skip = false, onBack, onSkip}) => {
   return (
     <div className="relative flex h-20 items-center justify-center border-b border-grayLineBased py-4 sm:h-16">
       <ChevronLeftIcon
@@ -33,7 +32,12 @@ const Carousel: React.FC<Props> = ({step, skip = false, onBack,onSkip}) => {
         />
       ))}
       {skip && (
-        <p className="absolute right-8 font-medium text-primary cursor-pointer" onClick={onSkip}>Skip</p>
+        <p
+          className="absolute right-8 cursor-pointer font-medium text-primary"
+          onClick={onSkip}
+        >
+          Skip
+        </p>
       )}
     </div>
   );

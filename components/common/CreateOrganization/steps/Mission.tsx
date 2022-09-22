@@ -5,14 +5,21 @@ import Title from '../components/Title';
 import TextArea from '@components/common/TextArea/TextArea';
 import {Button} from '@components/common/Button/Button';
 
+//libraries
+import {useFormContext} from 'react-hook-form';
+
 //interfaces
 import {StepProps} from '@models/stepProps';
 
 const Mission = ({onSubmit}: StepProps) => {
+  const formMethods = useFormContext();
+  const {register} = formMethods;
+
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
   };
+
   return (
     <>
       <Title border={false}>What’s your organization’s mission?</Title>
@@ -22,6 +29,7 @@ const Mission = ({onSubmit}: StepProps) => {
             placeholder="Your organization’s mission"
             className="my-3"
             rows={4}
+            register={register('mission')}
           />
         </div>
         <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">

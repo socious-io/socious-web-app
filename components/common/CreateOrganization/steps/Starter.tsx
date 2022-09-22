@@ -13,6 +13,7 @@ interface Props {
   onSubmit: (value: any) => void;
   onBack: () => void;
 }
+
 //this is information data for display in 'StarterCard'
 const data = [
   {
@@ -32,7 +33,7 @@ const data = [
   },
 ];
 
-const Starter: React.FC<Props> = ({onSubmit,onBack}) => {
+const Starter: React.FC<Props> = ({onSubmit, onBack}) => {
   return (
     <>
       <div className="relative h-56 w-full ">

@@ -9,6 +9,9 @@ import {Button} from '@components/common/Button/Button';
 //interfaces
 import {StepProps} from '@models/stepProps';
 
+//libraries
+import {useFormContext} from 'react-hook-form';
+
 //get social causes constant data
 import Data, {getText} from '@socious/data';
 const items = Object.keys(Data.SocialCauses);
@@ -16,6 +19,9 @@ const items = Object.keys(Data.SocialCauses);
 const SocialCauses = ({onSubmit}: StepProps) => {
   const [selecteds, setSelecteds] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
+
+  const formMethods = useFormContext();
+  const {setValue} = formMethods;
 
   //the English human version data of social causes
   const localItems = useMemo(
@@ -34,6 +40,7 @@ const SocialCauses = ({onSubmit}: StepProps) => {
 
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
+    setValue('social_causes', selecteds);
     onSubmit('true');
   };
 
@@ -84,10 +91,12 @@ const SocialCauses = ({onSubmit}: StepProps) => {
                   key={item.id}
                   content={item.name}
                   containerClassName={
-                    selecteds?.includes(item) ? 'bg-secondary' : 'bg-white'
+                    selecteds?.includes(item.name) ? 'bg-secondary' : 'bg-white'
                   }
                   contentClassName={
-                    selecteds?.includes(item) ? 'text-white' : 'text-secondary'
+                    selecteds?.includes(item.name)
+                      ? 'text-white'
+                      : 'text-secondary'
                   }
                 />
               );

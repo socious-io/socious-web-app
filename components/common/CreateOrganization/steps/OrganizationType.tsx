@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 //components
 import Title from '../components/Title';
@@ -8,13 +8,19 @@ import Button from '@components/common/Button/Button';
 import {CheckCircleIcon} from '@heroicons/react/24/outline';
 
 //interfaces
-import Data from '@socious/data';
+import {StepProps} from '@models/stepProps';
+
+//libraries
+import {useFormContext} from 'react-hook-form';
 
 //organization constant data
-import {StepProps} from '@models/stepProps';
+import Data from '@socious/data';
 const items = Object.keys(Data.OrganizationType);
 
 const OrganizationType = ({onSubmit}: StepProps) => {
+  const formMethods = useFormContext();
+  const {setValue} = formMethods;
+
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
@@ -31,6 +37,7 @@ const OrganizationType = ({onSubmit}: StepProps) => {
                 key={item}
                 onClick={(e) => {
                   e.preventDefault();
+                  setValue('type', item);
                 }}
                 className="flex w-full items-center justify-between px-4 transition-all duration-300 focus:rounded-2xl focus:bg-secondary focus:pl-5 focus:text-white"
               >
