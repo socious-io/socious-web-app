@@ -9,8 +9,10 @@ import StarterCard from '../components/StarterCard';
 import {Button} from '@components/common/Button/Button';
 
 //interface
-import {StepProps} from '@models/stepProps';
-
+interface Props {
+  onSubmit: (value: any) => void;
+  onBack: () => void;
+}
 //this is information data for display in 'StarterCard'
 const data = [
   {
@@ -30,7 +32,7 @@ const data = [
   },
 ];
 
-const Starter = ({onSubmit}: StepProps) => {
+const Starter: React.FC<Props> = ({onSubmit,onBack}) => {
   return (
     <>
       <div className="relative h-56 w-full ">
@@ -40,7 +42,10 @@ const Starter = ({onSubmit}: StepProps) => {
           alt="bg-image"
           className="sm:rounded-t-3xl"
         />
-        <ChevronLeftIcon className="absolute left-2 top-12 h-6 w-6 stroke-1.5 text-white hover:text-primary" />
+        <ChevronLeftIcon
+          onClick={onBack}
+          className="absolute left-2 top-12 h-6 w-6 stroke-1.5 text-white hover:text-primary"
+        />
       </div>
 
       <div className="h-full overflow-y-scroll">

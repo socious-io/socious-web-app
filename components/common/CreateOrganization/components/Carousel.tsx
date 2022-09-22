@@ -10,16 +10,17 @@ import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 //interfaces
 interface Props {
   step: number;
-  onPress: () => void;
+  onBack: () => void;
+  onSkip?: () => void;
   skip: boolean;
 }
 //show skip in carousel send skip={true}
 
-const Carousel: React.FC<Props> = ({step, skip = false, onPress}) => {
+const Carousel: React.FC<Props> = ({step, skip = false, onBack,onSkip}) => {
   return (
     <div className="relative flex h-20 items-center justify-center border-b border-grayLineBased py-4 sm:h-16">
       <ChevronLeftIcon
-        onClick={onPress}
+        onClick={onBack}
         className="absolute left-4 h-8 w-8 stroke-1.5 text-black hover:text-primary sm:h-6 sm:w-6"
       />
       {/* show 6 circle */}
@@ -32,7 +33,7 @@ const Carousel: React.FC<Props> = ({step, skip = false, onPress}) => {
         />
       ))}
       {skip && (
-        <p className="absolute right-8 font-medium text-primary">Skip</p>
+        <p className="absolute right-8 font-medium text-primary cursor-pointer" onClick={onSkip}>Skip</p>
       )}
     </div>
   );
