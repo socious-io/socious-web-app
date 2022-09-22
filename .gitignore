@@ -60,6 +60,7 @@ jspm_packages/
 .env.test.local
 .env.production.local
 .env.local
+.env
 
 # Next.js build output
 .next

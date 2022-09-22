@@ -1,7 +1,8 @@
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import {twMerge} from 'tailwind-merge';
 import {ExclamationCircleIcon} from '@heroicons/react/24/outline';
-import {GOOGLE_API} from 'utils/api';
+const NEXT_PUBLIC_GOOGLE_PLACES_API =
+  process.env['NEXT_PUBLIC_GOOGLE_PLACES_API'];
 
 interface AutoCompleteInputProps {
   onSelected: (data: any) => void;
@@ -31,7 +32,7 @@ const AutoCompleteInput = ({
         </label>
       )}
       <GooglePlacesAutocomplete
-        apiKey={'AIzaSyA4C20qGCrnRiCPh9gJfllrbtaSVc7X9K4'}
+        apiKey={NEXT_PUBLIC_GOOGLE_PLACES_API}
         apiOptions={{language: 'en', region: 'us'}}
         autocompletionRequest={autocompletionRequest}
         selectProps={{

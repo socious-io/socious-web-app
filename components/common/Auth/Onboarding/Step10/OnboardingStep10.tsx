@@ -1,6 +1,7 @@
 import {Button} from '@components/common';
 import {BellIcon} from '@heroicons/react/24/outline';
 import {StepProps} from '@models/stepProps';
+import Link from 'next/link';
 const OnboardingStep10 = ({onSubmit}: StepProps) => {
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
@@ -24,7 +25,7 @@ const OnboardingStep10 = ({onSubmit}: StepProps) => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center divide-x border-b-grayLineBased pb-12 sm:h-48 ">
+      <div className="flex flex-col items-center border-b-grayLineBased pb-12 sm:h-48 ">
         <Button
           className="mt-4 flex   w-full max-w-xs items-center justify-center align-middle "
           type="submit"
@@ -34,13 +35,17 @@ const OnboardingStep10 = ({onSubmit}: StepProps) => {
         >
           Allow notifications
         </Button>
-        <Button
-          className="flex w-full  max-w-xs items-center justify-center align-middle text-white  "
-          size="lg"
-          variant="link"
-        >
-          I’ll do it later
-        </Button>
+        <Link href={'/app'} passHref>
+          <a className="block">
+            <Button
+              className="flex w-full  max-w-xs items-center justify-center align-middle text-white"
+              size="lg"
+              variant="link"
+            >
+              I’ll do it later
+            </Button>
+          </a>
+        </Link>
       </div>
     </form>
   );
