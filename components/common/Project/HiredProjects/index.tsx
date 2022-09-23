@@ -41,6 +41,8 @@ function HiredProjectsBoxes() {
         title={'pending'}
         isExpand={showPending}
         expandToggle={showPendingHandler.toggle}
+        isExpandable={true}
+        isRound={true}
       />
       {data.map((item) => (
         <BodyCard
@@ -52,6 +54,8 @@ function HiredProjectsBoxes() {
         title={'Awaiting review 3'}
         isExpand={showAwaiting}
         expandToggle={showAwaitingHandler.toggle}
+        isExpandable={true}
+        isRound={true}
       />
       {showAwaiting &&
         data2.map((item) => (
@@ -64,6 +68,8 @@ function HiredProjectsBoxes() {
         title={'Declined'}
         isExpand={showDecline}
         expandToggle={showDeclineHandler.toggle}
+        isExpandable={true}
+        isRound={true}
       />
     </div>
   );

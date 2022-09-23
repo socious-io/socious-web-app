@@ -8,7 +8,7 @@ export interface ChipProps {
   selected?: boolean;
   containerClassName?: string;
   contentClassName?: string;
-  onSelected?: (value: string | number) => void;
+  onSelected?: (value: string) => void;
 }
 
 const PADDING_LIST = {
@@ -29,7 +29,7 @@ export function Chip({
   return (
     <span
       onClick={() => {
-        onSelected && value && onSelected(value);
+        onSelected && value && onSelected(value as string);
       }}
       className={twMerge(
         'flex flex-nowrap items-center space-x-2 rounded-full bg-secondarySLight text-secondary',
