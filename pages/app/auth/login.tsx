@@ -15,12 +15,14 @@ import {schemaLogin} from '@api/auth/validation';
 import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
+import {useUser} from '@hooks';
 
 const Login: NextPage = () => {
   const router = useRouter();
   const {redirect_to} = router.query;
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const {mutateIdentities} = useUser({redirect: false});
 
   const [errorMessage, setError] = useState<ErrorMessage>();
 
@@ -40,6 +42,7 @@ const Login: NextPage = () => {
     const password = getValues('password');
     try {
       await login(email, password);
+      await mutateIdentities();
       redirect_to ? router.push(redirect_to as string) : router.push('/app');
     } catch (e) {
       const error = e as AxiosError<any>;
