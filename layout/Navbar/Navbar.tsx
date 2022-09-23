@@ -36,7 +36,7 @@ const Navbar = () => {
     const res = await logout();
     mutateIdentities();
     mutateUser();
-    if (res) Router.push('/');
+    if (res) Router.push('/app');
   };
 
   return (
