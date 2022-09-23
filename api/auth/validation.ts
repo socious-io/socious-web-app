@@ -86,9 +86,9 @@ export const schemaOnboardingStep3 = Joi.object({
 
 export const schemaOnboardingStep4 = Joi.object({
   skills: Joi.array().items(Joi.string()).min(1).max(10).required().messages({
-    'array.max': `Please select only {#limit} causes.`,
-    'array.min': `Please select {#limit} causes`,
-    'array.empty': `Please select {#limit} causes`,
+    'array.max': `Please select only {#limit} skills.`,
+    'array.min': `Please select {#limit} skills`,
+    'array.empty': `Please select {#limit} skills`,
   }),
 });
 
