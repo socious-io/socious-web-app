@@ -15,17 +15,17 @@ import {StepProps} from '@models/stepProps';
 
 const BasicInfo = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {register} = formMethods;
+  const {register,handleSubmit,formState: { errors }} = formMethods;
 
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
   };
-
+console.log('er',errors)
   return (
     <>
       <Title>Organization profile</Title>
-      <form onSubmit={handleOnSubmit} className="flex h-full flex-col">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex h-full flex-col">
         <div className="h-14 w-full grow overflow-y-scroll px-4 py-2">
           <FormTitle>Basic info</FormTitle>
           <InputFiled
@@ -33,6 +33,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             type="text"
             placeholder="Organization name"
             register={register('name')}
+            errorMessage={errors?.['name']?.message}
             className="my-3"
             required
           />
@@ -40,6 +41,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="Bio"
             placeholder="Your organization’s bio"
             register={register('bio')}
+            errorMessage={errors?.['bio']?.message}
             className="my-3"
             required
             rows={4}
@@ -50,6 +52,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             type="text"
             placeholder="Organization email"
             register={register('email')}
+            errorMessage={errors?.['email']?.message}
             className="my-3"
             required
           />
@@ -58,6 +61,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             type="text"
             placeholder="Country"
             register={register('country')}
+            errorMessage={errors?.['country']?.message}
             className="my-3"
             required
           />
@@ -65,7 +69,8 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="City"
             type="text"
             placeholder="City"
-            register={register('country')}
+            register={register('city')}
+            errorMessage={errors?.['city']?.message}
             className="my-3"
             required
           />
@@ -73,7 +78,8 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="Address"
             type="text"
             placeholder="Address"
-            register={register('address')}
+            register={register('address',{required:false})}
+            errorMessage={errors?.['address']?.message}
             className="my-3"
           />
           <div className="flex items-end gap-x-4">
@@ -81,13 +87,15 @@ const BasicInfo = ({onSubmit}: StepProps) => {
               label="Phone number"
               type="text"
               placeholder="+000"
-              register={register('mobile_country_code')}
+              register={register('mobile_country_code',{required:false})}
+              errorMessage={errors?.['mobile_country_code']?.message}
               className="my-3"
             />
             <InputFiled
               type="text"
               placeholder="Phone number"
-              register={register('phone')}
+              register={register('phone',{required:false})}
+              errorMessage={errors?.['phone']?.message}
               className="my-3 w-full"
             />
           </div>
@@ -95,7 +103,8 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="Website"
             type="text"
             placeholder="Website"
-            register={register('website')}
+            {...register('website',{required:false})}
+            errorMessage={errors?.['website']?.message}
             className="my-3"
           />
         </div>
@@ -103,6 +112,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
           <Button
             type="submit"
             className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"
+            disabled={!errors}
           >
             continue
           </Button>

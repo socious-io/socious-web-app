@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 
 //components
 import Title from '../components/Title';
@@ -14,18 +14,35 @@ import {StepProps} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
 
 //organization constant data
-import Data from '@socious/data';
+import Data, {getText} from '@socious/data';
 const items = Object.keys(Data.OrganizationType);
 
 const OrganizationType = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {setValue} = formMethods;
+  const {setValue,formState: { errors },handleSubmit} = formMethods;
 
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
   };
 
+  //the English human version data of social causes
+  const localItems = useMemo(
+    () => {
+      const sorted = items.map((id) => ({
+        id,
+        name: getText('en', `ORGTYPE.${id}`),
+      }));
+      sorted.sort((a, b) => (a.name > b.name ? 1 : -1));
+      return sorted;
+    },
+    [
+      // todo: language
+    ],
+  );
+  
+  console.log('localItems', localItems);
+  console.log('errorss',errors?.['type'])
   return (
     <>
       <Title>What type of organization?</Title>
@@ -53,6 +70,7 @@ const OrganizationType = ({onSubmit}: StepProps) => {
           <Button
             type="submit"
             className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"
+            //disabled={!!formState?.errors}
           >
             continue
           </Button>
