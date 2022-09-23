@@ -1,7 +1,7 @@
 import type {NextPage} from 'next';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
-import {useState, useCallback, useContext} from 'react';
+import {useState, useCallback, useContext, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 import Link from 'next/link';
@@ -22,13 +22,18 @@ const Login: NextPage = () => {
   const {redirect_to} = router.query;
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const {mutateIdentities} = useUser({redirect: false});
+  const {identities, mutateIdentities} = useUser({redirect: false});
 
   const [errorMessage, setError] = useState<ErrorMessage>();
 
   const {register, handleSubmit, formState, getValues} = useForm({
     resolver: joiResolver(schemaLogin),
   });
+
+  useEffect(() => {
+    if (identities)
+      redirect_to ? router.push(redirect_to as string) : router.push('/app');
+  }, [identities, redirect_to, router]);
 
   const onSubmit = (data: any) => {
     handleLoginRequest();
