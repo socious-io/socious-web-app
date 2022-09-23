@@ -8,6 +8,7 @@ import {twMerge} from 'tailwind-merge';
 interface CommentFieldProps {
   src?: string;
   avatarSize?: 's' | 'm' | 'l' | 'xl' | 'xxl';
+  type?: 0 | 1;
   onSend: (data?: any) => void;
   placeholder?: string;
   className?: string;
@@ -16,27 +17,33 @@ interface CommentFieldProps {
 const CommentField = ({
   src,
   avatarSize,
+  type,
   onSend,
   placeholder = 'Write a comment.......',
   className,
 }: CommentFieldProps) => {
   const [comment, setComment] = useState<string>('');
 
-  const onClickSend = useCallback(() => {
-    if (comment.length !== 0) {
-      onSend(comment);
-      setComment('');
-    }
-  }, [comment, onSend]);
+  const onClickSend = useCallback(
+    (e?: React.FormEvent<HTMLFormElement>) => {
+      e?.preventDefault();
+      if (comment.length !== 0) {
+        onSend(comment);
+        setComment('');
+      }
+    },
+    [comment, onSend],
+  );
 
   return (
-    <div
+    <form
       className={twMerge(
         'flex w-full items-center justify-between rounded-2xl border border-grayLineBased bg-white p-4 pr-2',
         className && className,
       )}
+      onSubmit={(e) => onClickSend(e)}
     >
-      <Avatar src={src ?? ''} size={avatarSize} />
+      <Avatar src={src ?? ''} size={avatarSize} type={type} />
       <TextInput
         className="border-grayLineBased focus:border-grayLineBased"
         containerClassName="w-9/12 md:w-11/12 md:mx-2"
@@ -47,12 +54,12 @@ const CommentField = ({
       <Button
         variant="ghost"
         className="border-0 p-2"
-        onClick={onClickSend}
         disabled={comment.length === 0}
+        onClick={() => onClickSend()}
       >
         <PaperAirplaneIcon className="w-5 rotate-45 cursor-pointer text-grayDisableButton hover:text-grayInputField" />
       </Button>
-    </div>
+    </form>
   );
 };
 
