@@ -32,9 +32,9 @@ const CreateOrganization = () => {
   //   ********************     functions     *****************************//
   ///////////////////////////////////////////////////////////////////////////
 
-  const handleSubmit = () => {
+  const handleSubmit = (data: any) => {
     if (step === 6) {
-      requestHandler();
+      requestHandler(data);
       nextHandler();
     } else if (step === 8) {
       console.log('go organization profile');
@@ -43,20 +43,8 @@ const CreateOrganization = () => {
     }
   };
 
-  const requestHandler = () => {
-    const name = methods.getValues('name');
-    const bio = methods.getValues('bio');
-    const email = methods.getValues('email');
-    const phone = methods.getValues('phone');
-    const type = methods.getValues('type');
-    const city = methods.getValues('city');
-    const address = methods.getValues('address');
-    const country = methods.getValues('country');
-    const social_causes = methods.getValues('social_causes');
-    const website = methods.getValues('website');
-    const mobile_country_code = methods.getValues('mobile_country_code');
-    const description = methods.getValues('description');
-    const culture = methods.getValues('culture');
+  const requestHandler = (data: any) => {
+    console.log('data', data);
   };
 
   const backHandler = () => {

@@ -21,7 +21,7 @@ const SocialImpact = ({onSubmit}: StepProps) => {
         What social impact has your organization made?
       </Title>
       <form
-        onSubmit={handleSubmit(console.log)}
+        onSubmit={handleSubmit(onSubmit)}
         className="flex h-full flex-col"
       >
         <div className="h-14 w-full grow overflow-y-scroll px-4 py-2">
