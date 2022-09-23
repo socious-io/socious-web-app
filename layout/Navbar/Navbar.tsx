@@ -18,7 +18,9 @@ import {logout} from '@api/auth/actions';
 import Router from 'next/router';
 
 const Navbar = () => {
-  const {currentIdentity, identities, mutateIdentities, mutateUser} = useUser();
+  const {currentIdentity, identities, mutateIdentities, mutateUser} = useUser({
+    redirect: false,
+  });
 
   const onSwitchIdentity = async (identity: LoginIdentity) => {
     try {
