@@ -15,13 +15,8 @@ import {StepProps} from '@models/stepProps';
 
 const BasicInfo = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {register,handleSubmit,formState: { errors }} = formMethods;
+  const {register, handleSubmit, formState} = formMethods;
 
-  const handleOnSubmit = (e: any) => {
-    e.preventDefault();
-    onSubmit('true');
-  };
-console.log('er',errors)
   return (
     <>
       <Title>Organization profile</Title>
@@ -33,7 +28,7 @@ console.log('er',errors)
             type="text"
             placeholder="Organization name"
             register={register('name')}
-            errorMessage={errors?.['name']?.message}
+            errorMessage={formState.errors?.['name']?.message}
             className="my-3"
             required
           />
@@ -41,7 +36,7 @@ console.log('er',errors)
             label="Bio"
             placeholder="Your organization’s bio"
             register={register('bio')}
-            errorMessage={errors?.['bio']?.message}
+            errorMessage={formState.errors?.['bio']?.message}
             className="my-3"
             required
             rows={4}
@@ -52,7 +47,7 @@ console.log('er',errors)
             type="text"
             placeholder="Organization email"
             register={register('email')}
-            errorMessage={errors?.['email']?.message}
+            errorMessage={formState.errors?.['email']?.message}
             className="my-3"
             required
           />
@@ -61,7 +56,7 @@ console.log('er',errors)
             type="text"
             placeholder="Country"
             register={register('country')}
-            errorMessage={errors?.['country']?.message}
+            errorMessage={formState.errors?.['country']?.message}
             className="my-3"
             required
           />
@@ -70,7 +65,7 @@ console.log('er',errors)
             type="text"
             placeholder="City"
             register={register('city')}
-            errorMessage={errors?.['city']?.message}
+            errorMessage={formState.errors?.['city']?.message}
             className="my-3"
             required
           />
@@ -78,8 +73,8 @@ console.log('er',errors)
             label="Address"
             type="text"
             placeholder="Address"
-            register={register('address',{required:false})}
-            errorMessage={errors?.['address']?.message}
+            register={register('address')}
+            errorMessage={formState.errors?.['address']?.message}
             className="my-3"
           />
           <div className="flex items-end gap-x-4">
@@ -87,15 +82,13 @@ console.log('er',errors)
               label="Phone number"
               type="text"
               placeholder="+000"
-              register={register('mobile_country_code',{required:false})}
-              errorMessage={errors?.['mobile_country_code']?.message}
+              register={register('mobile_country_code')}
               className="my-3"
             />
             <InputFiled
               type="text"
               placeholder="Phone number"
-              register={register('phone',{required:false})}
-              errorMessage={errors?.['phone']?.message}
+              register={register('phone')}
               className="my-3 w-full"
             />
           </div>
@@ -103,8 +96,8 @@ console.log('er',errors)
             label="Website"
             type="text"
             placeholder="Website"
-            {...register('website',{required:false})}
-            errorMessage={errors?.['website']?.message}
+            register={register('website')}
+            errorMessage={formState.errors?.['website']?.message}
             className="my-3"
           />
         </div>
@@ -112,7 +105,6 @@ console.log('er',errors)
           <Button
             type="submit"
             className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"
-            disabled={!errors}
           >
             continue
           </Button>
