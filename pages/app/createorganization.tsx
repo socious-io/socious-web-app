@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
+import {useRouter} from 'next/router';
 
 // components
 import Carousel from '../../components/common/CreateOrganization/components/Carousel';
+import {Modal, Button} from '@components/common';
 
 // steps of create organization
 import SocialCauses from '../../components/common/CreateOrganization/steps/SocialCauses';
@@ -20,10 +22,20 @@ import {validate} from '@socious/data';
 //libraries
 import {useForm, FormProvider} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
+import {AxiosError} from 'axios';
+
+//actions
+import {create_organization} from '@api/createorganization/actions';
+
+//request functions
+import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
 const CreateOrganization = () => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [errorMessage, setError] = useState<ErrorMessage>();
   const [step, setStep] = useState<number>(0);
 
+  const router = useRouter();
   const methods = useForm({
     resolver: joiResolver(validate.OrganizationSchema),
   });
@@ -35,7 +47,6 @@ const CreateOrganization = () => {
   const handleSubmit = (data: any) => {
     if (step === 6) {
       requestHandler(data);
-      nextHandler();
     } else if (step === 8) {
       console.log('go organization profile');
     } else {
@@ -43,15 +54,31 @@ const CreateOrganization = () => {
     }
   };
 
-  const requestHandler = (data: any) => {
+  const requestHandler = async (data: any) => {
     console.log('data', data);
+    try {
+      await create_organization(data);
+      nextHandler();
+    } catch (e) {
+      const error = e as AxiosError<any>;
+      let msg = DefaultErrorMessage;
+      if (error.isAxiosError) {
+        if (error.response?.data?.error === 'Not matched')
+          msg = {
+            title: 'Invalid login',
+            message: 'Email or password is incorrect',
+          };
+      }
+      setError(msg);
+      setShowModal(!showModal);
+    }
   };
 
   const backHandler = () => {
     if (step > 0) {
       setStep((step) => step - 1);
     } else if (step === 0) {
-      console.log('go Home');
+      goHome();
     }
   };
 
@@ -62,7 +89,11 @@ const CreateOrganization = () => {
   };
 
   const goHome = () => {
-    console.log('go Home');
+    router.push('/app');
+  };
+
+  const handleToggleModal = () => {
+    setShowModal(!showModal);
   };
 
   ///////////////////////////////////////////////////////////////////////////
@@ -107,6 +138,30 @@ const CreateOrganization = () => {
           ) : null}
         </FormProvider>
       </div>
+
+      {/* show modal for error */}
+      <Modal isOpen={showModal} onClose={handleToggleModal}>
+        <Modal.Title>
+          <h2 className="text-center text-error">{errorMessage?.title}</h2>
+        </Modal.Title>
+        <Modal.Description>
+          <div className="mt-2">
+            <p className="text-sm text-gray-500">{errorMessage?.message}</p>
+          </div>
+        </Modal.Description>
+        <div className="mt-4">
+          <Button
+            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+            type="submit"
+            size="lg"
+            variant="fill"
+            value="Submit"
+            onClick={handleToggleModal}
+          >
+            Close
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };
