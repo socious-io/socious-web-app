@@ -2,7 +2,7 @@ export type messageBodyType = {
   text: string;
 };
 
-export interface createMessageResponseType {
+export interface CreateMessageResponseType {
   chat_id: string;
   created_at: string;
   deleted_at: string | null;
@@ -15,6 +15,8 @@ export interface createMessageResponseType {
   updated_at: string;
 }
 
-export interface MessageType extends createMessageResponseType {
+export type ReadResponse = {message: 'success'};
+
+export interface MessageType extends CreateMessageResponseType {
   media_url: string | null | any[];
 }
