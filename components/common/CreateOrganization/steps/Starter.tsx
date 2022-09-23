@@ -34,6 +34,10 @@ const data = [
 ];
 
 const Starter: React.FC<Props> = ({onSubmit, onBack}) => {
+  const handleOnSubmit = (e: any) => {
+    e.preventDefault();
+    onSubmit('true');
+  };
   return (
     <>
       <div className="relative h-56 w-full ">
@@ -67,7 +71,7 @@ const Starter: React.FC<Props> = ({onSubmit, onBack}) => {
       </div>
       <footer className="flex justify-center border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">
         <Button
-          onClick={onSubmit}
+          onClick={handleOnSubmit}
           className="flex w-8/12 justify-center py-1.5 font-medium"
         >
           continue

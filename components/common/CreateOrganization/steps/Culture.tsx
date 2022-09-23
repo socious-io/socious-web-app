@@ -15,20 +15,15 @@ const Culture = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
   const {register} = formMethods;
 
-  const handleOnSubmit = (e: any) => {
-    e.preventDefault();
-    onSubmit('true');
-  };
-
   return (
     <>
       <Title border={false}>Tell us about your organization’s culture.</Title>
 
-      <form onSubmit={handleOnSubmit} className="flex h-full flex-col">
+      <form onSubmit={onSubmit} className="flex h-full flex-col">
         <div className="h-14 w-full grow overflow-y-scroll px-4 py-2">
           <TextArea
             placeholder="Your organization’s culture"
-            register={register('culture')}
+            register={register('description')}
             className="my-3"
             rows={4}
           />

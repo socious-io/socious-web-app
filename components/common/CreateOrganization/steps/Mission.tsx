@@ -13,23 +13,19 @@ import {StepProps} from '@models/stepProps';
 
 const Mission = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {register} = formMethods;
-
-  const handleOnSubmit = (e: any) => {
-    e.preventDefault();
-    onSubmit('true');
-  };
+  const {register, formState} = formMethods;
 
   return (
     <>
       <Title border={false}>What’s your organization’s mission?</Title>
-      <form onSubmit={handleOnSubmit} className="flex h-full flex-col">
+      <form onSubmit={onSubmit} className="flex h-full flex-col">
         <div className="h-14 w-full grow overflow-y-scroll px-4 py-2">
           <TextArea
             placeholder="Your organization’s mission"
             className="my-3"
             rows={4}
-            register={register('mission')}
+            register={register('description')}
+            errorMessage={formState.errors?.['description']?.message}
           />
         </div>
         <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">

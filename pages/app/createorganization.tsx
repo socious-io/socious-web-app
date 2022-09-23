@@ -55,7 +55,7 @@ const CreateOrganization = () => {
     const social_causes = methods.getValues('social_causes');
     const website = methods.getValues('website');
     const mobile_country_code = methods.getValues('mobile_country_code');
-    const mission = methods.getValues('mission');
+    const description = methods.getValues('description');
     const culture = methods.getValues('culture');
   };
 
@@ -96,36 +96,28 @@ const CreateOrganization = () => {
 
         {/* steps of create organization */}
         {step === 0 ? (
-          <Starter onSubmit={handleSubmit} onBack={backHandler} />
-        ) : step === 1 ? (
-          <FormProvider {...methods}>
-            <OrganizationType onSubmit={handleSubmit} />
-          </FormProvider>
-        ) : step === 2 ? (
-          <FormProvider {...methods}>
-            <SocialCauses onSubmit={handleSubmit} />
-          </FormProvider>
-        ) : step === 3 ? (
-          <FormProvider {...methods}>
-            <BasicInfo onSubmit={handleSubmit} />
-          </FormProvider>
-        ) : step === 4 ? (
-          <FormProvider {...methods}>
-            <Mission onSubmit={handleSubmit} />
-          </FormProvider>
-        ) : step === 5 ? (
-          <FormProvider {...methods}>
-            <Culture onSubmit={handleSubmit} />
-          </FormProvider>
-        ) : step === 6 ? (
-          <FormProvider {...methods}>
-            <SocialImpact onSubmit={handleSubmit} />
-          </FormProvider>
+          <Starter onSubmit={nextHandler} onBack={backHandler} />
         ) : step === 7 ? (
-          <CreateSuccessfully onSubmit={handleSubmit} />
+          <CreateSuccessfully onSubmit={nextHandler} />
         ) : step === 8 ? (
-          <VerifyOrganization onSubmit={handleSubmit} />
+          <VerifyOrganization onSubmit={nextHandler} />
         ) : null}
+
+        <FormProvider {...methods}>
+          {step === 1 ? (
+            <OrganizationType onSubmit={handleSubmit} />
+          ) : step === 2 ? (
+            <SocialCauses onSubmit={handleSubmit} />
+          ) : step === 3 ? (
+            <BasicInfo onSubmit={handleSubmit} />
+          ) : step === 4 ? (
+            <Mission onSubmit={handleSubmit} />
+          ) : step === 5 ? (
+            <Culture onSubmit={handleSubmit} />
+          ) : step === 6 ? (
+            <SocialImpact onSubmit={handleSubmit} />
+          ) : null}
+        </FormProvider>
       </div>
     </div>
   );

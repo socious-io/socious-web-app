@@ -13,23 +13,21 @@ import {StepProps} from '@models/stepProps';
 
 const SocialImpact = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {register} = formMethods;
-
-  const handleOnSubmit = (e: any) => {
-    e.preventDefault();
-    onSubmit('true');
-  };
+  const {register, handleSubmit} = formMethods;
 
   return (
     <>
       <Title border={false}>
         What social impact has your organization made?
       </Title>
-      <form onSubmit={handleOnSubmit} className="flex h-full flex-col">
+      <form
+        onSubmit={handleSubmit(console.log)}
+        className="flex h-full flex-col"
+      >
         <div className="h-14 w-full grow overflow-y-scroll px-4 py-2">
           <TextArea
             placeholder="Your organization’s achievements"
-            register={register('social_impact')}
+            register={register('description')}
             className="my-3"
             rows={4}
           />
