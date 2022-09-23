@@ -31,6 +31,8 @@ import useUser from 'hooks/useUser/useUser';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import getGlobalData from 'services/cacheSkills';
 import {uploadMedia} from '@api/media/actions';
+import {AxiosError} from 'axios';
+import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
 const schemaStep = {
   3: schemaOnboardingStep3,
@@ -47,6 +49,7 @@ type OnBoardingProps = {
 
 const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   const {user} = useUser();
+  const [errorMessage, setError] = useState<ErrorMessage>();
 
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -112,8 +115,18 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
       try {
         const response: any = await uploadMedia(formData);
         media_id = response.id;
-      } catch (error) {
-        console.error('SERVER ERROR', error);
+      } catch (e) {
+        const error = e as AxiosError<any>;
+        let msg = DefaultErrorMessage;
+        if (error.isAxiosError) {
+          if (error?.code === 'ERR_NETWORK')
+            msg = {
+              title: 'Image size is too large.',
+              message: 'Please, try again with smaller sized image.',
+            };
+        }
+        setError(msg);
+        handleToggleModal();
         return;
       }
 
@@ -128,10 +141,11 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
           setStep(step + 1);
         });
       } catch (error) {
-        console.log('ERROR :', error);
+        setError(DefaultErrorMessage);
+        handleToggleModal();
       }
     },
-    [step, user],
+    [handleToggleModal, step, user],
   );
 
   const handleUpdateProfileRequest = useCallback(() => {
@@ -152,12 +166,14 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     };
     if (bio) profileBody.bio = bio;
     if (city) profileBody.city = city;
-    console.log('PROFILE BODY', profileBody);
     updateProfile(profileBody)
       .then(() => {
         setStep(step + 1);
       })
-      .catch((error: any) => console.error(error));
+      .catch((e) => {
+        setError(DefaultErrorMessage);
+        handleToggleModal();
+      });
   }, [
     formMethodsStep8,
     formMethodsStep3,
@@ -165,6 +181,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     formMethodsStep4,
     user,
     step,
+    handleToggleModal,
   ]);
 
   const handleNext = useCallback(() => {
@@ -184,13 +201,12 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     >
       <div className="relative  flex  h-20 justify-center">
         <Modal isOpen={showModal} onClose={handleToggleModal}>
-          <Modal.Title>Title</Modal.Title>
+          <Modal.Title>
+            <h2 className="text-center text-error">{errorMessage?.title}</h2>
+          </Modal.Title>
           <Modal.Description>
             <div className="mt-2">
-              <p className="text-sm text-gray-500">
-                Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-                amet sint. Velit de.
-              </p>
+              <p className="text-sm text-gray-500">{errorMessage?.message}</p>
             </div>
           </Modal.Description>
           <div className="mt-4">
@@ -200,9 +216,9 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
               size="lg"
               variant="fill"
               value="Submit"
-              //disabled={!!formState[step]?.errors}
+              onClick={handleToggleModal}
             >
-              Ok
+              Close
             </Button>
           </div>
         </Modal>
