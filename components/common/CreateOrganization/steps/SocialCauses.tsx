@@ -56,7 +56,7 @@ const SocialCauses = ({onSubmit}: StepProps) => {
         type="text"
         placeholder="Search"
         onChange={(e) => filterWith(e?.currentTarget?.value || '')}
-        className="my-6"
+        className="my-6 mx-6"
       />
       <form
         onSubmit={onSubmit}
@@ -96,7 +96,6 @@ const SocialCauses = ({onSubmit}: StepProps) => {
           </Button>
         </footer>
       </form>
-      0
     </>
   );
 };
