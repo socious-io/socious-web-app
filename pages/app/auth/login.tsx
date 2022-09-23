@@ -14,7 +14,7 @@ import {schemaLogin} from '@api/auth/validation';
 
 import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
-import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
+import {DefaultErrorMessage, ErrorMessage, get} from 'utils/request';
 import {useUser} from '@hooks';
 
 const Login: NextPage = () => {
@@ -22,7 +22,7 @@ const Login: NextPage = () => {
   const {redirect_to} = router.query;
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const {identities, mutateIdentities} = useUser({redirect: false});
+  const {user, mutateIdentities} = useUser({redirect: false});
 
   const [errorMessage, setError] = useState<ErrorMessage>();
 
@@ -31,9 +31,13 @@ const Login: NextPage = () => {
   });
 
   useEffect(() => {
-    if (identities)
-      redirect_to ? router.push(redirect_to as string) : router.push('/app');
-  }, [identities, redirect_to, router]);
+    if (user) {
+      if (!user.skills?.length && !user.social_causes?.length)
+        router.push('/app/auth/onboarding');
+      else if (redirect_to) router.push(redirect_to as string);
+      else router.push('/app');
+    }
+  }, [user, redirect_to, router]);
 
   const onSubmit = (data: any) => {
     handleLoginRequest();
@@ -47,8 +51,6 @@ const Login: NextPage = () => {
     const password = getValues('password');
     try {
       await login(email, password);
-      await mutateIdentities();
-      redirect_to ? router.push(redirect_to as string) : router.push('/app');
     } catch (e) {
       const error = e as AxiosError<any>;
       let msg = DefaultErrorMessage;
@@ -61,7 +63,9 @@ const Login: NextPage = () => {
       }
       setError(msg);
       setShowModal(!showModal);
+      return;
     }
+    await mutateIdentities();
   };
 
   const onTogglePassword = useCallback(() => {
