@@ -1,8 +1,7 @@
-import * as React from 'react';
 import {UseFormRegisterReturn} from 'react-hook-form';
 import {twMerge} from 'tailwind-merge';
 import {MagnifyingGlassIcon} from '@heroicons/react/24/outline';
-
+import React, {useCallback} from 'react';
 export interface SearchBarProps
   extends React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,

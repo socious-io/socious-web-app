@@ -1,11 +1,12 @@
 import MainChat from '@components/common/Chat/MainChat/MainChat';
-import SideBar from '@components/common/Chat/SideBar/SideBar';
-import {useCallback, useEffect, useState} from 'react';
+import {SideBar} from '@components/common/Chat/SideBar/SideBar';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 
 const Chat = () => {
   const {data, error} = useSWR<any>('/chats/summary?page=1&filter=', get);
+  const sideBarRefresh = useRef<any>(null);
 
   if (!data?.items) <p>Loading....</p>;
 
@@ -32,15 +33,21 @@ const Chat = () => {
       {width && width >= 640 ? (
         <div className="hidden h-full sm:mt-10 sm:flex sm:space-x-4">
           <SideBar
+            ref={sideBarRefresh}
             onChatOpen={setSelectedChat}
             haveChats={data?.items && data?.items.length > 0}
           />
-          <MainChat selectedChat={selectedChat ?? ''} goBack={backToChatList} />
+          <MainChat
+            selectedChat={selectedChat ?? ''}
+            goBack={backToChatList}
+            refreshSideBar={sideBarRefresh?.current?.refresh}
+          />
         </div>
       ) : (
         <div className="flex h-full sm:mt-10 sm:hidden sm:space-x-4">
           {!selectedChat ? (
             <SideBar
+              ref={sideBarRefresh}
               onChatOpen={setSelectedChat}
               haveChats={data?.items && data?.items?.length > 0}
             />
@@ -48,6 +55,7 @@ const Chat = () => {
             <MainChat
               selectedChat={selectedChat ?? ''}
               goBack={backToChatList}
+              refreshSideBar={sideBarRefresh?.current?.refresh}
             />
           )}
         </div>
