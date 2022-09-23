@@ -4,7 +4,7 @@ import {Avatar, Button, Modal, ModalProps, TextArea} from '@components/common';
 import {XMarkIcon} from '@heroicons/react/24/outline';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {useUser} from '@hooks';
-import {useForm} from 'react-hook-form';
+import {FieldValues, useController, useForm} from 'react-hook-form';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import CausesTagBar from '../CausesTagBar/CausesTagBar';
@@ -42,13 +42,17 @@ const EditModal = ({
 
   const [file, setFile] = useState<any>(null);
 
-  const {handleSubmit, register, getValues, setValue, formState} = useForm({
+  const {handleSubmit, register, getValues, control, formState} = useForm({
     resolver: joiResolver(schemaEditPost),
     defaultValues: {
       content: post ? post.content : '',
-      causes_tags: post ? post.causes_tags : '',
+      causes_tags: post ? post.causes_tags[0] : '',
       link: post ? post.link || '' : '',
-    },
+    } as FieldValues,
+  });
+  const causesTagsController = useController<FieldValues, string>({
+    name: 'causes_tags',
+    control,
   });
 
   const onSubmit = useCallback(async () => {
@@ -101,9 +105,7 @@ const EditModal = ({
           <div className="mt-2">
             <CausesTagBar
               src={user?.avatar?.url}
-              preSelected={post && post.causes_tags?.[0]}
-              register={register('causes_tags')}
-              errorMessage={formState?.errors?.['causes_tags']?.message}
+              controller={causesTagsController}
             />
             <TextArea
               rows={post?.shared_id ? 6 : 10}

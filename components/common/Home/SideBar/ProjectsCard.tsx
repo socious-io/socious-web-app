@@ -17,16 +17,18 @@ const ProjectsCard: FC<ProjectsCardProps> = ({
 }) => {
   return (
     <div className="space-y-4 rounded-2xl border border-grayLineBased bg-background p-4">
-      <Link href="/app/project">
+      <Link href="/app/projects">
         <label className="text-primary">Projects</label>
       </Link>
       <ul className="list-none space-y-4">
-        {isOrganization ? (
+        {!isOrganization ? (
           <>
-            <li className="flex items-center space-x-4">
-              <UserCircleIcon className="h-4" />
-              <p>Created</p>
-            </li>
+            <Link href={`/app/projects/created/${username}`} passHref>
+              <li className="flex items-center space-x-4">
+                <UserCircleIcon className="h-4" />
+                <p>Created</p>
+              </li>
+            </Link>
             <li className="flex items-center space-x-4">
               <FolderIcon className="h-4" />
               <p>Archived</p>
@@ -34,13 +36,13 @@ const ProjectsCard: FC<ProjectsCardProps> = ({
           </>
         ) : (
           <>
-            <Link href={`/app/user/${username}/applied`} passHref>
+            <Link href={`/app/projects/applications/${username}`} passHref>
               <li className="flex cursor-pointer items-center space-x-4">
                 <ClipboardDocumentListIcon className="h-4" />
                 <p>My applications</p>
               </li>
             </Link>
-            <Link href={`/app/user/${username}/hired`} passHref>
+            <Link href={`/app/projects/hired/${username}`} passHref>
               <li className="flex cursor-pointer items-center space-x-4">
                 <FolderIcon className="h-4" />
                 <p>Hired projects</p>

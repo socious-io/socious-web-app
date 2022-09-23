@@ -11,11 +11,11 @@ export function createPost(postBody: CreatePostBodyType) {
 
 // LIKE UNLIKE
 export function likePost(id: string) {
-  return put(`/posts/${id}/like`, {});
+  return post(`/posts/${id}/like`);
 }
 
 export function unlikePost(id: string) {
-  return deleteRequest(`/posts/${id}/like`);
+  return post(`/posts/${id}/unlike`);
 }
 
 export function sharePost(postBody: SharePostBodyType, postId: string) {
@@ -23,9 +23,9 @@ export function sharePost(postBody: SharePostBodyType, postId: string) {
 }
 
 export function editPost(postBody: EditPostBodyType, postId: string) {
-  return put(`/posts/${postId}`, postBody);
+  return post(`/posts/update/${postId}`, postBody);
 }
 
 export function deletePost(postId: string) {
-  return deleteRequest(`/posts/${postId}`);
+  return post(`/posts/remove/${postId}`);
 }

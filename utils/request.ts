@@ -29,7 +29,7 @@ export async function deleteRequest<T>(
 
 export async function post<T>(
   url: string,
-  data: any,
+  data: any = {},
   headers?: AxiosRequestHeaders,
 ) {
   const response = await request.post<T>(url, data, headers);
