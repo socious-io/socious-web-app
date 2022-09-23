@@ -37,7 +37,7 @@ export const SearchBar = ({
         aria-label={placeholder}
         data-testid={`${id || name}-testid`}
         className={twMerge(
-          'block w-full rounded-full border-2 border-grayLineBased   bg-background py-1.5 pl-8 text-sm outline-none  focus:border-2 focus:border-primary',
+          'block w-full rounded-full border-1 border-grayLineBased   bg-background py-1.5 pl-8 text-sm outline-none  focus:border-1 focus:border-primary',
           disabled && 'border-opacity-40 bg-transparent text-opacity-40',
         )}
         {...register}
