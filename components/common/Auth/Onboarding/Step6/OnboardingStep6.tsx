@@ -1,13 +1,14 @@
 import {Radio, Button} from '@components/common';
 import {StepProps} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
+
 const OnboardingStep6 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
   const {handleSubmit, formState, register} = formMethods;
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col justify-between  px-10    "
+      className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
     >
       <div className="flex h-[28rem] flex-col">
         {' '}
@@ -32,9 +33,9 @@ const OnboardingStep6 = ({onSubmit}: StepProps) => {
         </div>
       </div>
 
-      <div className="-mx-16  h-48 divide-x border-t-2 border-b-grayLineBased ">
+      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 sm:h-48 sm:pl-0">
         <Button
-          className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+          className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"

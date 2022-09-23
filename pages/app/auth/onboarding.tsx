@@ -1,8 +1,8 @@
 import type {NextPage} from 'next';
-import {useState} from 'react';
+import {GetStaticProps} from 'next';
+import {useCallback, useMemo, useState} from 'react';
 import {Button, Modal} from '@components/common';
 import {twMerge} from 'tailwind-merge';
-
 import OnboardingStep1 from '@components/common/Auth/Onboarding/Step1/OnboardingStep1';
 import OnboardingStep2 from '@components/common/Auth/Onboarding/Step2/OnboardingStep2';
 import OnboardingStep3 from '@components/common/Auth/Onboarding/Step3/OnboardingStep3';
@@ -14,43 +14,68 @@ import OnboardingStep8 from '@components/common/Auth/Onboarding/Step8/Onboarding
 import OnboardingStep9 from '@components/common/Auth/Onboarding/Step9/OnboardingStep9';
 import OnboardingStep10 from '@components/common/Auth/Onboarding/Step10/OnboardingStep10';
 
-import {ChevronLeftIcon} from '@heroicons/react/24/outline';
-
 import {useForm, FormProvider} from 'react-hook-form';
 
 import {joiResolver} from '@hookform/resolvers/joi';
 
 import {
+  schemaOnboardingStep3,
+  schemaOnboardingStep4,
   schemaOnboardingStep5,
   schemaOnboardingStep6,
   schemaOnboardingStep7,
   schemaOnboardingStep8,
-} from 'api/auth/validation';
+} from '@api/auth/validation';
+import {updateProfile} from '@api/auth/actions';
 import useUser from 'hooks/useUser/useUser';
+import {ChevronLeftIcon} from '@heroicons/react/24/outline';
+import getGlobalData from 'services/cacheSkills';
+import {uploadMedia} from '@api/media/actions';
+import {AxiosError} from 'axios';
+import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
 const schemaStep = {
+  3: schemaOnboardingStep3,
+  4: schemaOnboardingStep4,
   5: schemaOnboardingStep5,
   6: schemaOnboardingStep6,
   7: schemaOnboardingStep7,
   8: schemaOnboardingStep8,
 };
 
-const Onboarding: NextPage = () => {
+type OnBoardingProps = {
+  skills: any[];
+};
+
+const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
+  const {user} = useUser();
+  const [errorMessage, setError] = useState<ErrorMessage>();
+
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  // const {updateProfile} = useUser();
-
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     setStep(step - 1);
-  };
-  const handleNext = () => {
-    setStep(step + 1);
-  };
+  }, [step]);
 
-  const handleToggleModal = () => {
+  const handleToggleModal = useCallback(() => {
     setShowModal(!showModal);
-  };
+  }, [showModal]);
+
+  const formMethodsStep3 = useForm({
+    mode: 'all',
+    resolver: joiResolver(schemaStep[3]),
+    defaultValues: {
+      passions: [],
+    },
+  });
+  const formMethodsStep4 = useForm({
+    mode: 'all',
+    resolver: joiResolver(schemaStep[4]),
+    defaultValues: {
+      skills: [],
+    },
+  });
 
   const formMethodsStep5 = useForm({resolver: joiResolver(schemaStep[5])});
   const formMethodsStep6 = useForm({
@@ -68,56 +93,132 @@ const Onboarding: NextPage = () => {
   const formMethodsStep8 = useForm({
     resolver: joiResolver(schemaStep[8]),
   });
+  const formMethodsStep9 = useForm();
 
   const handleSubmit = (data: any) => {
     if (step === 8) {
       handleUpdateProfileRequest();
-    }
-    if (step === 10) {
+    } else if (step === 9) {
+      handleImageUpload(data);
+    } else if (step === 10) {
       handleToggleModal();
     } else {
       setStep(step + 1);
     }
   };
-  const handleUpdateProfileRequest = () => {
-    const biography = formMethodsStep8.getValues('bio');
+
+  const handleImageUpload = useCallback(
+    async (file: any) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      let media_id: string;
+      try {
+        const response: any = await uploadMedia(formData);
+        media_id = response.id;
+      } catch (e) {
+        const error = e as AxiosError<any>;
+        let msg = DefaultErrorMessage;
+        if (error.isAxiosError) {
+          if (error?.code === 'ERR_NETWORK')
+            msg = {
+              title: 'Image size is too large.',
+              message: 'Please, try again with smaller sized image.',
+            };
+        }
+        setError(msg);
+        handleToggleModal();
+        return;
+      }
+
+      try {
+        const profileBody: any = {
+          first_name: user?.first_name,
+          last_name: user?.last_name,
+          username: user?.username,
+        };
+        profileBody.avatar = media_id;
+        updateProfile(profileBody).then((response) => {
+          setStep(step + 1);
+        });
+      } catch (error) {
+        setError(DefaultErrorMessage);
+        handleToggleModal();
+      }
+    },
+    [handleToggleModal, step, user],
+  );
+
+  const handleUpdateProfileRequest = useCallback(() => {
+    const bio = formMethodsStep8.getValues('bio');
+    const passions = formMethodsStep3.getValues('passions');
     const city = formMethodsStep5.getValues('city');
 
-    const user = {bio: biography, city: city?.name};
+    const skills = formMethodsStep4.getValues('skills');
 
-    // updateProfile(user).then(() => {
-    setStep(step + 1);
-    // });
-  };
+    if (user === undefined) return;
+
+    const profileBody: any = {
+      first_name: user?.first_name,
+      last_name: user?.last_name,
+      username: user?.username,
+      social_causes: passions,
+      skills: skills,
+    };
+    if (bio) profileBody.bio = bio;
+    if (city) profileBody.city = city;
+    updateProfile(profileBody)
+      .then(() => {
+        setStep(step + 1);
+      })
+      .catch((e) => {
+        setError(DefaultErrorMessage);
+        handleToggleModal();
+      });
+  }, [
+    formMethodsStep8,
+    formMethodsStep3,
+    formMethodsStep5,
+    formMethodsStep4,
+    user,
+    step,
+    handleToggleModal,
+  ]);
+
+  const handleNext = useCallback(() => {
+    if (step === 8) {
+      handleUpdateProfileRequest();
+    } else {
+      setStep(step + 1);
+    }
+  }, [handleUpdateProfileRequest, step]);
 
   return (
     <div
       className={twMerge(
-        'm-auto h-[45rem]  max-w-xl rounded-3xl border border-grayLineBased bg-background py-7 px-6',
+        'mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7',
         step === 10 ? ' bg-primary' : 'bg-background',
       )}
     >
       <div className="relative  flex  h-20 justify-center">
         <Modal isOpen={showModal} onClose={handleToggleModal}>
-          <Modal.Title>Title</Modal.Title>
+          <Modal.Title>
+            <h2 className="text-center text-error">{errorMessage?.title}</h2>
+          </Modal.Title>
           <Modal.Description>
             <div className="mt-2">
-              <p className="text-sm text-gray-500">
-                Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-                amet sint. Velit de.
-              </p>
+              <p className="text-sm text-gray-500">{errorMessage?.message}</p>
             </div>
           </Modal.Description>
           <div className="mt-4">
             <Button
-              className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+              className="m-auto mt-4 flex w-full max-w-xs items-center justify-center align-middle "
               type="submit"
               size="lg"
               variant="fill"
               value="Submit"
-              //disabled={!!formState[step]?.errors}
+              onClick={handleToggleModal}
             >
-              Ok
+              Close
             </Button>
           </div>
         </Modal>
@@ -157,8 +258,15 @@ const Onboarding: NextPage = () => {
 
       {step === 1 && <OnboardingStep1 onSubmit={handleSubmit} />}
       {step === 2 && <OnboardingStep2 onSubmit={handleSubmit} />}
-      {step === 3 && <OnboardingStep3 onSubmit={handleSubmit} />}
-      {step === 4 && <OnboardingStep4 onSubmit={handleSubmit} />}
+      <FormProvider {...formMethodsStep3}>
+        {step === 3 && <OnboardingStep3 onSubmit={handleSubmit} />}
+      </FormProvider>
+      <FormProvider {...formMethodsStep4}>
+        {step === 4 && (
+          <OnboardingStep4 onSubmit={handleSubmit} rawSkills={skills} />
+        )}
+      </FormProvider>
+
       <FormProvider {...formMethodsStep5}>
         {step === 5 && <OnboardingStep5 onSubmit={handleSubmit} />}
       </FormProvider>
@@ -171,10 +279,17 @@ const Onboarding: NextPage = () => {
       <FormProvider {...formMethodsStep8}>
         {step === 8 && <OnboardingStep8 onSubmit={handleSubmit} />}
       </FormProvider>
-      {step === 9 && <OnboardingStep9 onSubmit={handleSubmit} />}
+      <FormProvider {...formMethodsStep9}>
+        {step === 9 && <OnboardingStep9 onSubmit={handleSubmit} />}
+      </FormProvider>
       {step === 10 && <OnboardingStep10 onSubmit={handleSubmit} />}
     </div>
   );
 };
 
 export default Onboarding;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const skills = await getGlobalData();
+  return {props: {skills}, revalidate: 60 * 60 * 24};
+};
