@@ -1,12 +1,12 @@
-import {sendMessage} from '@api/chat/actions';
+import {readMessage, sendMessage} from '@api/chat/message/actions';
 import Avatar from '@components/common/Avatar/Avatar';
 import CommentField from '@components/common/Post/CommentField/CommentField';
 import {
   ChevronLeftIcon,
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/outline';
-import {createMessageResponseType} from '@models/message';
-import {useCallback, useMemo} from 'react';
+import {CreateMessageResponseType} from '@models/message';
+import {useCallback, useEffect, useMemo, useRef} from 'react';
 import useSWRInfinite from 'swr/infinite';
 import Messages from '../Messages/Messages';
 import {useUser} from '@hooks';
@@ -17,9 +17,10 @@ const INVALID_UUID = 'invalid input syntax for type uuid:';
 type MainChatProps = {
   selectedChat: any;
   goBack: () => void;
+  refreshSideBar: () => void;
 };
 
-const MainChat = ({selectedChat, goBack}: MainChatProps) => {
+const MainChat = ({selectedChat, goBack, refreshSideBar}: MainChatProps) => {
   const getKey = useCallback(
     (initialSize: number, previousData: any) => {
       if (
@@ -56,12 +57,16 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
   const onSendMessage = useCallback(
     async (message: string) => {
       try {
-        const response: createMessageResponseType = await sendMessage(
+        // SENDING NEW MESSAGE
+        const response: CreateMessageResponseType = await sendMessage(
           selectedChat.id,
           {
             text: message,
           },
         );
+        // READING NEW SEND MESSAGE
+        await readMessage(selectedChat.id, response.id);
+        // MUTATING MESSAGES
         const newMessage = {...response, media_url: null};
         mutateInfinite(
           (old) => {
@@ -77,6 +82,18 @@ const MainChat = ({selectedChat, goBack}: MainChatProps) => {
     [mutateInfinite, selectedChat],
   );
 
+  useEffect(() => {
+    if (
+      !selectedChat ||
+      selectedChat?.unread_count == 0 ||
+      !infiniteMessage ||
+      infiniteMessage?.length > 1
+    )
+      return;
+    readMessage(selectedChat.id, infiniteMessage?.[0]?.items?.[0].id)
+      .then(() => refreshSideBar())
+      .catch((error) => console.log('ERROR from READ :---:', error));
+  }, [selectedChat, infiniteMessage, refreshSideBar]);
   return (
     <>
       {/* ON CHAT SELECTED */}

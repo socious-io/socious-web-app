@@ -1,7 +1,13 @@
 import Avatar from '@components/common/Avatar/Avatar';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import {ChevronLeftIcon, PlusIcon} from '@heroicons/react/24/outline';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react';
 import ChatCard from '../ChatCard/ChatCard';
 import {useRouter} from 'next/router';
 import useSWR from 'swr';
@@ -13,7 +19,7 @@ type ChatSideBarProps = {
   haveChats: boolean;
 };
 
-const SideBar = ({haveChats, onChatOpen}: ChatSideBarProps) => {
+const SideBarToBe = ({haveChats, onChatOpen}: ChatSideBarProps, ref: any) => {
   const router = useRouter();
   const [query, setQuery] = useState<string>('');
   const [filteredChats, setFilteredChats] = useState<any[]>([]);
@@ -21,10 +27,17 @@ const SideBar = ({haveChats, onChatOpen}: ChatSideBarProps) => {
   const goBack = useCallback(() => router.back(), [router]);
   const {user, currentIdentity} = useUser();
 
-  const {data: chatResponse, error: chatError} = useSWR<any>(
-    `/chats/summary?page=1&filter=${query}`,
-    get,
-  );
+  const {
+    data: chatResponse,
+    error: chatError,
+    mutate: mutateChats,
+  } = useSWR<any>(`/chats/summary?page=1&filter=${query}`, get);
+
+  useImperativeHandle(ref, () => ({
+    refresh: () => {
+      mutateChats();
+    },
+  }));
 
   useEffect(() => {
     if (chatResponse?.items) setFilteredChats(chatResponse.items);
@@ -101,4 +114,4 @@ const SideBar = ({haveChats, onChatOpen}: ChatSideBarProps) => {
   );
 };
 
-export default SideBar;
+export const SideBar = forwardRef(SideBarToBe);
