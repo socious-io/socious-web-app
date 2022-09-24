@@ -55,7 +55,9 @@ const OrganizationType = ({onSubmit}: StepProps) => {
                 <p className="w-fit py-2 text-left text-lg lowercase sm:text-base">
                   {item.name}
                 </p>
-                <CheckCircleIcon className="ml-2 h-6 w-6 stroke-1.5 text-white" />
+                {type_organization === item.id && (
+                  <CheckCircleIcon className="ml-2 h-6 w-6 stroke-1.5 text-white" />
+                )}
               </button>
             );
           })}
