@@ -107,7 +107,7 @@ const CreateOrganization = () => {
         {step === 0 || step === 7 || step === 8 ? null : (
           <Carousel
             onBack={backHandler}
-            onSkip={nextHandler}
+            onSkip={step===6? requestHandler: nextHandler}
             step={step}
             skip={step === 4 || step === 5 || step === 6 ? true : false}
           />

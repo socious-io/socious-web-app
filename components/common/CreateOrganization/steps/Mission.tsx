@@ -13,7 +13,8 @@ import {StepProps} from '@models/stepProps';
 
 const Mission = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {register, formState} = formMethods;
+  const {register, watch} = formMethods;
+  const description = watch('description');
 
   return (
     <>
@@ -25,12 +26,12 @@ const Mission = ({onSubmit}: StepProps) => {
             className="my-3"
             rows={4}
             register={register('description')}
-            errorMessage={formState.errors?.['description']?.message}
           />
         </div>
         <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">
           <Button
             type="submit"
+            disabled={!description}
             className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"
           >
             continue

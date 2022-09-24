@@ -10,7 +10,7 @@ import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 interface Props {
   step: number;
   onBack: () => void;
-  onSkip?: () => void;
+  onSkip?: (data:any) => void;
   skip: boolean;
 }
 //show skip in carousel send skip={true}

@@ -13,7 +13,8 @@ import {StepProps} from '@models/stepProps';
 
 const Culture = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {register} = formMethods;
+  const {register, watch} = formMethods;
+  const description = watch('description');
 
   return (
     <>
@@ -31,6 +32,7 @@ const Culture = ({onSubmit}: StepProps) => {
         <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">
           <Button
             type="submit"
+            disabled={!description}
             className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"
           >
             continue
