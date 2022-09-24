@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,memo} from 'react';
 import {useRouter} from 'next/router';
 
 // components
@@ -169,4 +169,4 @@ const CreateOrganization = () => {
   );
 };
 
-export default CreateOrganization;
+export default memo(CreateOrganization);
