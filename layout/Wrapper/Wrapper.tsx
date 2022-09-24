@@ -23,7 +23,7 @@ export function Wrapper({children}: LayoutProps) {
   const isNotAuth = !asPath?.includes('auth');
 
   /////////////////////////////////////
-const createOrg=!asPath?.includes('createorganization');
+  const createOrg = !asPath?.includes('createorganization');
 
   ///////////////////////////////////
   const {user, userError} = useUser({redirect: false});
@@ -64,7 +64,7 @@ const createOrg=!asPath?.includes('createorganization');
         ></script>
       </Head>
       {isNotAuth && !isStarter && createOrg && <Navbar />}
-      {!createOrg?<>{children}</>:<Container>{children}</Container>}
+      {!createOrg ? <>{children}</> : <Container>{children}</Container>}
     </>
   );
 }

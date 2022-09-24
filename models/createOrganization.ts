@@ -1,4 +1,3 @@
-
 export type CreateOrganizationType = {
   address?: string;
   bio?: string;

@@ -1,4 +1,4 @@
-import React, {useState,memo} from 'react';
+import React, {useState, memo} from 'react';
 import {useRouter} from 'next/router';
 
 // components
