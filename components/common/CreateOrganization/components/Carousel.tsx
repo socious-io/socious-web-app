@@ -7,10 +7,11 @@ import React from 'react';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 
 //interfaces
+import {CreateOrganizationType} from '@models/createOrganization';
 interface Props {
   step: number;
   onBack: () => void;
-  onSkip?: (data:any) => void;
+  onSkip?: (data: CreateOrganizationType) => void;
   skip: boolean;
 }
 //show skip in carousel send skip={true}

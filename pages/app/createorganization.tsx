@@ -30,6 +30,9 @@ import {create_organization} from '@api/createorganization/actions';
 //request functions
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
+//interfaces
+import {CreateOrganizationType} from '@models/createOrganization';
+
 const CreateOrganization = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessage, setError] = useState<ErrorMessage>();
@@ -44,7 +47,7 @@ const CreateOrganization = () => {
   //   ********************     functions     *****************************//
   ///////////////////////////////////////////////////////////////////////////
 
-  const handleSubmit = (data: any) => {
+  const handleSubmit = (data: CreateOrganizationType) => {
     if (step === 6) {
       requestHandler(data);
     } else if (step === 8) {
@@ -54,7 +57,7 @@ const CreateOrganization = () => {
     }
   };
 
-  const requestHandler = async (data: any) => {
+  const requestHandler = async (data: CreateOrganizationType) => {
     console.log('data', data);
     try {
       await create_organization(data);
@@ -107,7 +110,7 @@ const CreateOrganization = () => {
         {step === 0 || step === 7 || step === 8 ? null : (
           <Carousel
             onBack={backHandler}
-            onSkip={step===6? requestHandler: nextHandler}
+            onSkip={step === 6 ? requestHandler : nextHandler}
             step={step}
             skip={step === 4 || step === 5 || step === 6 ? true : false}
           />
