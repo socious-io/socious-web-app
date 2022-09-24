@@ -14,6 +14,8 @@ COPY . .
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN npm run build
+# next standalone tree-shakes the json file out of socious-data for some reason
+RUN cp -r node_modules/@socious/data/src/translations .next/standalone/node_modules/@socious/data/src
 
 # Production image, copy all the files and run next
 FROM node:16 AS runner

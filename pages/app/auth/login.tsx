@@ -1,7 +1,7 @@
 import type {NextPage} from 'next';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
-import {useState, useCallback, useContext} from 'react';
+import {useState, useCallback, useContext, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 import Link from 'next/link';
@@ -14,19 +14,30 @@ import {schemaLogin} from '@api/auth/validation';
 
 import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
-import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
+import {DefaultErrorMessage, ErrorMessage, get} from 'utils/request';
+import {useUser} from '@hooks';
 
 const Login: NextPage = () => {
   const router = useRouter();
   const {redirect_to} = router.query;
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const {user, mutateIdentities} = useUser({redirect: false});
 
   const [errorMessage, setError] = useState<ErrorMessage>();
 
   const {register, handleSubmit, formState, getValues} = useForm({
     resolver: joiResolver(schemaLogin),
   });
+
+  useEffect(() => {
+    if (user) {
+      if (!user.skills?.length && !user.social_causes?.length)
+        router.push('/app/auth/onboarding');
+      else if (redirect_to) router.push(redirect_to as string);
+      else router.push('/app');
+    }
+  }, [user, redirect_to, router]);
 
   const onSubmit = (data: any) => {
     handleLoginRequest();
@@ -40,7 +51,6 @@ const Login: NextPage = () => {
     const password = getValues('password');
     try {
       await login(email, password);
-      redirect_to ? router.push(redirect_to as string) : router.push('/app');
     } catch (e) {
       const error = e as AxiosError<any>;
       let msg = DefaultErrorMessage;
@@ -53,7 +63,9 @@ const Login: NextPage = () => {
       }
       setError(msg);
       setShowModal(!showModal);
+      return;
     }
+    await mutateIdentities();
   };
 
   const onTogglePassword = useCallback(() => {

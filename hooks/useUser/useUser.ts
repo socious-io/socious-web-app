@@ -94,11 +94,6 @@ export const useUser = (options?: UseUserOptions) => {
         // if user trying to access /auth/forgotpassword when password not expired
         Router.push('/app');
       }
-
-      // if user === new_user
-      // if (!user.skills && !user.passions && currentIdentity?.type === 'users') {
-      //   Router.push('/auth/onboarding');
-      // }
     }
   }, [
     user,
