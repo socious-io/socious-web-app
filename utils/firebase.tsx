@@ -8,7 +8,7 @@ const firebaseCloudMessaging = {
   init: async () => {
     // Initialize the Firebase app with the credentials
     const app = initializeApp({
-      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+      apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
       authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
       projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
       storageBucket: process.env.NEXT_PUBLIC_BUCKET,
@@ -24,7 +24,7 @@ const firebaseCloudMessaging = {
       if (status && status === 'granted') {
         // Get new token from Firebase
         const fcm_token = await getToken(messaging, {
-          vapidKey: process.env.NEXT_PUBLIC_VAPID,
+          vapidKey: process.env.NEXT_PUBLIC_FIREBASE_PUSH_CERT,
         });
         const tokenInDB = await getDevices();
 
