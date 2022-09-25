@@ -1,5 +1,7 @@
 import Avatar from '@components/common/Avatar/Avatar';
+import Router from 'next/router';
 import {isoToHumanTime} from 'services/toHumanTime';
+import {twMerge} from 'tailwind-merge';
 
 type ChatCardProps = {
   chat: any;
@@ -10,7 +12,7 @@ const ChatCard = ({chat, onChatOpen}: ChatCardProps) => {
   return (
     <div
       className="flex max-w-full items-center space-x-2 border-b-[1px] border-offsetColor py-2.5 px-3 font-normal"
-      onClick={() => onChatOpen(chat)}
+      onClick={() => Router.push(`/app/chat/${chat.id}`)}
     >
       <div className="cursor-pointer">
         <Avatar
@@ -37,8 +39,15 @@ const ChatCard = ({chat, onChatOpen}: ChatCardProps) => {
         <p className="mx-auto text-sm text-grayInputField">
           {chat.updated_at ? isoToHumanTime(chat.updated_at) : '0 min ago'}
         </p>
-        <div className="mx-auto mt-2 flex h-[1.25rem] w-[1.25rem] items-center justify-center rounded-full bg-primary font-semibold text-white">
-          <span className="text-xs">{chat?.unread_count}</span>
+        <div
+          className={twMerge(
+            'mx-auto mt-2 flex h-[1.25rem] w-[1.25rem] items-center justify-center rounded-full font-semibold text-white',
+            chat?.unread_count != '0' && 'bg-primary',
+          )}
+        >
+          {chat?.unread_count != '0' && (
+            <span className="text-xs">{chat?.unread_count}</span>
+          )}
         </div>
       </div>
     </div>
