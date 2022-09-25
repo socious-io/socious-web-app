@@ -25,7 +25,7 @@ type MainChatProps = {
 const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
   const getKey = useCallback(
     (initialSize: number, previousData: any) => {
-      if (!activeChat.id || (previousData && previousData?.items?.length < 10))
+      if (!activeChat?.id || (previousData && previousData?.items?.length < 10))
         return null;
       return `/chats/${activeChat.id}/messages?page=${initialSize + 1}`;
     },
@@ -48,7 +48,7 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
     Router.push('/app/chat');
 
   const {data: participants, error: participantsError} = useSWR<any>(
-    activeChat.id ? `/chats/${activeChat.id}/participants` : null,
+    activeChat?.id ? `/chats/${activeChat.id}/participants` : null,
     get,
   );
   const noMoreMessage = useMemo(
