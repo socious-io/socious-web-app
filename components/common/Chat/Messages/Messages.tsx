@@ -10,6 +10,7 @@ interface MessagesProps {
   noMoreMessage: boolean;
   loadMore: () => void;
   activeChat: any;
+  otherParticipants: any[];
 }
 
 const Messages = ({
@@ -17,6 +18,7 @@ const Messages = ({
   loadMore,
   noMoreMessage,
   activeChat,
+  otherParticipants,
 }: MessagesProps) => {
   const {currentIdentity} = useUser();
   const chatBoxRef = useRef<HTMLDivElement>(null);
@@ -83,7 +85,7 @@ const Messages = ({
                             identity_meta: currentIdentity.meta,
                             identity_type: currentIdentity.type,
                           }
-                        : activeChat.participants.find(
+                        : otherParticipants.find(
                             (x: any) =>
                               x.identity_meta.id === message.identity_id,
                           )
@@ -106,6 +108,7 @@ const Messages = ({
         </div>
       ) : (
         <div className="flex w-full grow items-center justify-center text-center">
+          {/* Move this to mainchat page */}
           <div>
             <Avatar
               size="xxl"
@@ -122,7 +125,7 @@ const Messages = ({
               <h2 className="text-2xl text-primary">Start charting with</h2>
               <h2 className="text-2xl">
                 {activeChat?.type === 'CHAT'
-                  ? activeChat?.participants?.[0]?.identity_meta?.name
+                  ? otherParticipants?.[0]?.identity_meta?.name
                   : activeChat?.name}
               </h2>
             </div>
