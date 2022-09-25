@@ -10,7 +10,7 @@ const Chat = () => {
   const {cid} = router.query;
 
   console.log('cid :---: ', cid);
-  const {data: chat, error: chatError} = useSWR(
+  const {data: chat, error: chatError} = useSWR<any>(
     cid ? `/chats/${cid}` : null,
     get,
     {
@@ -21,7 +21,7 @@ const Chat = () => {
   if (!chat && !chatError) return <p>Loading!!!</p>;
   if (
     chatError &&
-    chatError?.response?.data?.error == '"value" must be a valid GUID'
+    chatError?.response?.data?.error === '"value" must be a valid GUID'
   )
     router.push('/app/chat');
 
