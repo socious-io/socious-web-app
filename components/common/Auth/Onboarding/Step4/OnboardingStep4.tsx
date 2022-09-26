@@ -15,7 +15,11 @@ const OnboardingStep4 = ({onSubmit, rawSkills}: StepPropsWithSkills) => {
   const [selecteds, onSelect] = useHandleSelected('skills', maxSkills);
 
   const formMethods = useFormContext();
-  const {watch, handleSubmit} = formMethods;
+  const {
+    watch,
+    handleSubmit,
+    formState: {errors: formErrors},
+  } = formMethods;
 
   const skills = useMemo(() => {
     const sorted: {id: string; name: string}[] = [];
@@ -77,7 +81,7 @@ const OnboardingStep4 = ({onSubmit, rawSkills}: StepPropsWithSkills) => {
           size="lg"
           variant="fill"
           value="Submit"
-          disabled={!(skill?.length === maxSkills)}
+          disabled={!!formErrors?.['skills']?.message}
         >
           Continue
         </Button>

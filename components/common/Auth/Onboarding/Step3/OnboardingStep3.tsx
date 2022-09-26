@@ -11,7 +11,11 @@ const passionData = Object.keys(Data.SocialCauses);
 
 const OnboardingStep3 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {handleSubmit, watch, getValues} = formMethods;
+  const {
+    handleSubmit,
+    watch,
+    formState: {errors: formErrors},
+  } = formMethods;
   const passion = watch('passions');
 
   const maxCauses = 5;
@@ -77,7 +81,7 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
           size="lg"
           variant="fill"
           value="Submit"
-          disabled={!(passion?.length === maxCauses)}
+          disabled={!!formErrors?.['passions']?.message}
         >
           Continue
         </Button>
