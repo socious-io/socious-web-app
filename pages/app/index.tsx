@@ -20,7 +20,7 @@ const Index: NextPage = () => {
 
   return (
     <PushNotification>
-      <div className="mt-10 flex space-x-6">
+      <div className="mx-4 mt-10 flex sm:space-x-6">
         <SideBar selectBar={''} />
         <MainContent />
       </div>

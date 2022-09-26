@@ -42,11 +42,11 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex h-60 w-full items-center rounded-b-sm bg-primary bg-[url('/images/socious_feed.png')] bg-cover  md:flex md:h-16  md:bg-none lg:h-16  ">
-      <nav className="h-60 w-full items-center md:flex md:h-16  md:bg-none lg:h-16 ">
-        <div className="container mx-auto max-w-5xl ">
-          <div className="flex items-center justify-center space-x-4">
-            <div className="flex-row-2 ml-4 mr-4 mt-8 flex items-center justify-items-center md:ml-0 md:mt-0">
+    <div className="flex h-52 w-full items-center rounded-b-sm  bg-[url('/images/socious_feed.png')] bg-cover bg-center sm:bg-primary md:flex md:h-16 md:bg-none lg:h-16">
+      <nav className="h-full w-full items-center bg-black  bg-opacity-25  sm:bg-opacity-0 md:flex  md:h-16 md:bg-none lg:h-16 ">
+        <div className="container mx-auto max-w-5xl">
+          <div className="flex flex-col items-center justify-center sm:flex-row">
+            <div className="flex-row-2 ml-4 mr-4 mt-14 flex items-center justify-items-center md:ml-0 md:mt-0">
               <div className="flex flex-wrap content-around">
                 <div className="items-center rounded-full ">
                   <div className="relative  h-8 w-8  ">
@@ -82,6 +82,12 @@ const Navbar = () => {
                   </Link>
                 </div>
               </div>
+            </div>
+            <div className="mt-6 w-full px-4 sm:hidden">
+              <h1 className="text-4xl text-white">Your Feed</h1>
+              <p className="mt-2 text-base font-normal text-neutralGray ">
+                See what is happening in your network
+              </p>
             </div>
             <div className="hidden w-4/6 items-center justify-end space-x-6 md:flex">
               <div className="space-x-4">
