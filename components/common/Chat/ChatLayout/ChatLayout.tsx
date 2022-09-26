@@ -4,6 +4,7 @@ import Modal from '@components/common/Modal/Modal';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import {useToggle} from '@hooks';
+import {setFiles} from '@testing-library/user-event/dist/types/utils';
 import {useRouter} from 'next/router';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import useSWR from 'swr';
@@ -23,6 +24,7 @@ const ChatLayout = ({children, page}: ChatLayoutProps) => {
 
   const {state: addState, handlers: addHandlers} = useToggle();
 
+  // Mutates chats on sidebar when chat open.
   const handleRefresh = useCallback(() => {
     return sideBarRefresh?.current?.refresh();
   }, []);
@@ -35,11 +37,9 @@ const ChatLayout = ({children, page}: ChatLayoutProps) => {
   useEffect(() => {
     if (connectionsData?.items)
       setMutualConnections(() =>
-        connectionsData?.items.filter((item: any) => item?.mutual),
+        connectionsData?.items?.filter((item: any) => item?.mutual),
       );
   }, [connectionsData]);
-
-  console.log('CONNECTIONS :---: ', mutualConnections);
 
   return (
     <div className="h-full sm:mt-10 sm:flex sm:space-x-4 sm:px-4">
@@ -86,7 +86,7 @@ const ChatLayout = ({children, page}: ChatLayoutProps) => {
                       key={connection.id}
                       onClick={() =>
                         router.push(
-                          `/app/chat/create/${connection?.identity_id}`,
+                          `/app/chat/create/${connection?.identity_id}?name=${connection?.identity_meta?.name}`,
                         )
                       }
                     >
