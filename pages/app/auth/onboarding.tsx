@@ -164,6 +164,8 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
       social_causes: passions,
       skills: skills,
     };
+
+    console.log('PROFILE BODY :---: ', profileBody);
     if (bio) profileBody.bio = bio;
     if (city) profileBody.city = city;
     updateProfile(profileBody)
@@ -171,6 +173,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
         setStep(step + 1);
       })
       .catch((e) => {
+        console.log('error: 1st update', e);
         setError(DefaultErrorMessage);
         handleToggleModal();
       });
@@ -195,11 +198,11 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   return (
     <div
       className={twMerge(
-        'mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7',
+        'mx-auto flex min-h-screen w-screen flex-col items-stretch justify-between border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[calc(100vh-theme(space.24))] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7',
         step === 10 ? ' bg-primary' : 'bg-background',
       )}
     >
-      <div className="relative  flex  h-20 justify-center">
+      <div className="relative flex h-14 justify-center">
         <Modal isOpen={showModal} onClose={handleToggleModal}>
           <Modal.Title>
             <h2 className="text-center text-error">{errorMessage?.title}</h2>
