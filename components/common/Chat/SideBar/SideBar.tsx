@@ -18,9 +18,13 @@ import {twMerge} from 'tailwind-merge';
 type ChatSideBarProps = {
   onChatOpen?: (data: any) => void;
   page: string;
+  toggleAddChat: () => void;
 };
 
-const SideBarToBe = ({onChatOpen, page}: ChatSideBarProps, ref: any) => {
+const SideBarToBe = (
+  {onChatOpen, page, toggleAddChat}: ChatSideBarProps,
+  ref: any,
+) => {
   const router = useRouter();
   const [query, setQuery] = useState<string>('');
   const [filteredChats, setFilteredChats] = useState<any[]>([]);
@@ -53,7 +57,10 @@ const SideBarToBe = ({onChatOpen, page}: ChatSideBarProps, ref: any) => {
       aria-label="Sidebar"
     >
       {/* ADD PARTICIPANT BUTTON */}
-      <div className="absolute bottom-10 right-4 inline-block rounded-full bg-primary p-3">
+      <div
+        className="absolute bottom-10 right-4 inline-block rounded-full bg-primary p-3"
+        onClick={toggleAddChat}
+      >
         <PlusIcon className="w-6 text-white" />
       </div>
 
