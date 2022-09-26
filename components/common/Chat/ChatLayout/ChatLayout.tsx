@@ -1,10 +1,8 @@
 import Avatar from '@components/common/Avatar/Avatar';
-import Button from '@components/common/Button/Button';
 import Modal from '@components/common/Modal/Modal';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import {useToggle} from '@hooks';
-import {setFiles} from '@testing-library/user-event/dist/types/utils';
 import {useRouter} from 'next/router';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import useSWR from 'swr';
