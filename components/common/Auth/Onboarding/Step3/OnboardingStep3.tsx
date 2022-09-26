@@ -54,13 +54,13 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
           <div className="-mx-5 flex h-full grow flex-col overflow-hidden border-t-2 border-b-grayLineBased bg-offWhite px-5">
             <h3 className="py-3">Popular</h3>
             <div className="flex h-full flex-wrap space-x-2 overflow-y-auto">
-              {filteredItems.map((skill, index) => (
+              {filteredItems.map((passion) => (
                 <Chip
                   onSelected={onSelect}
-                  selected={selecteds?.includes(skill.id)}
-                  value={skill.id}
-                  key={skill.id}
-                  content={skill.name}
+                  selected={selecteds?.includes(passion.id)}
+                  value={passion.id}
+                  key={passion.id}
+                  content={passion.name}
                   contentClassName="text-secondary cursor-pointer"
                   containerClassName="bg-background my-2 h-6"
                 />
