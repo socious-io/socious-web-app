@@ -52,7 +52,7 @@ const OrganizationType = ({onSubmit}: StepProps) => {
                 }}
                 className="flex w-full items-center justify-between px-4 transition-all duration-300 focus:rounded-2xl focus:bg-secondary focus:pl-5 focus:text-white"
               >
-                <p className="w-fit py-2 text-left text-lg lowercase sm:text-base">
+                <p className="w-fit py-2 text-left text-lg sm:text-base">
                   {item.name}
                 </p>
                 {type_organization === item.id && (
