@@ -35,7 +35,7 @@ const Post = () => {
     },
   });
 
-  const {user} = useUser();
+  const {user} = useUser({redirect: false});
 
   const [page, setPage] = useState<number>(1);
   const {mutate} = useSWRConfig();
@@ -136,7 +136,8 @@ const Post = () => {
         isOpen={notify}
         text="Post link copied"
       />
-      <SideBar selectBar={''} />
+      {/* Disable sidebar for now, we have some semantics to figure out */}
+      {/* <SideBar selectBar={''} /> */}
       <div className="mb-10 w-full space-y-6">
         {!!post.shared_id ? (
           <SharedCard

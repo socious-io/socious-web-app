@@ -78,7 +78,8 @@ export const useUser = (options?: UseUserOptions) => {
 
     // if user unauthorized
     if (identities === null && redirect) {
-      Router.push(`/app/auth/login?redirect_to=${pathname}`);
+      // Router.push(`/app/auth/login?redirect_to=${pathname}`);
+      console.log('redirect triggered in useUser');
     }
 
     // if user && error both are undefined
