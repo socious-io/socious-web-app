@@ -5,14 +5,16 @@ const NEXT_PUBLIC_GOOGLE_API_KEY = process.env['NEXT_PUBLIC_GOOGLE_API_KEY'];
 
 interface AutoCompleteInputProps {
   onSelected: (data: any) => void;
+  initialValue?: string;
   selected: any;
-  label: string;
+  label?: string;
   errorMessage?: any;
   autocompletionRequest: any;
 }
 
 const AutoCompleteInput = ({
   onSelected,
+  initialValue = '',
   selected,
   label,
   errorMessage,
@@ -36,6 +38,7 @@ const AutoCompleteInput = ({
         autocompletionRequest={autocompletionRequest}
         selectProps={{
           selected,
+          initialValue,
           onChange: onSelected,
           inputClassName:
             'w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 outline-none focus:ring-0',

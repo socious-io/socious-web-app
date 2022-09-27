@@ -51,8 +51,9 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   const {user} = useUser();
   const [errorMessage, setError] = useState<ErrorMessage>();
 
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(7);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [placeId, setPlaceId] = useState<string>('');
 
   const handleBack = useCallback(() => {
     setStep(step - 1);
@@ -86,7 +87,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   });
   const formMethodsStep7 = useForm({
     defaultValues: {
-      countryNumber: {id: 1, name: 'Japan'},
+      countryNumber: '+81',
     },
     resolver: joiResolver(schemaStep[7]),
   });
@@ -96,7 +97,10 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   const formMethodsStep9 = useForm();
 
   const handleSubmit = (data: any) => {
-    if (step === 8) {
+    if (step === 5) {
+      setPlaceId(data);
+      setStep(step + 1);
+    } else if (step === 8) {
       handleUpdateProfileRequest();
     } else if (step === 9) {
       handleImageUpload(data);
@@ -277,7 +281,9 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
         {step === 6 && <OnboardingStep6 onSubmit={handleSubmit} />}
       </FormProvider>
       <FormProvider {...formMethodsStep7}>
-        {step === 7 && <OnboardingStep7 onSubmit={handleSubmit} />}
+        {step === 7 && (
+          <OnboardingStep7 onSubmit={handleSubmit} defaultCountry={placeId} />
+        )}
       </FormProvider>
       <FormProvider {...formMethodsStep8}>
         {step === 8 && <OnboardingStep8 onSubmit={handleSubmit} />}

@@ -1,16 +1,54 @@
 import {TextInput, Button} from '@components/common';
+import AutoCompleteInput from '@components/common/AutoCompleteInput/AutoCompleteInput';
 import Combobox from '@components/common/Combobox/Combobox';
 import {StepProps} from '@models/stepProps';
+import {useCallback, useEffect, useState} from 'react';
+import {geocodeByPlaceId} from 'react-google-places-autocomplete';
 import {useFormContext} from 'react-hook-form';
-const OnboardingStep7 = ({onSubmit}: StepProps) => {
+import {getPhoneCode} from 'services/getPhoneCode';
+
+interface OnboardingStep7Props extends StepProps {
+  defaultCountry: string;
+}
+
+const OnboardingStep7 = ({onSubmit, defaultCountry}: OnboardingStep7Props) => {
   const formMethods = useFormContext();
   const {handleSubmit, formState, register, setValue, getValues} = formMethods;
-  const handleSetCountryNumber = (data: any) => {
-    setValue('countryNumber', data, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
-  };
+  const [countryKey, setCountryKey] = useState<string>(defaultCountry);
+  const [countryNumber, setCountryNumber] = useState<string>(
+    getValues('countryNumber'),
+  );
+
+  const handleSetCountryNumber = useCallback(
+    (data: any) => {
+      setValue('countryNumber', data, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    [setValue],
+  );
+
+  const onCountrySelected = useCallback((data: any) => {
+    geocodeByPlaceId(data.value.place_id)
+      .then((data: any) => {
+        setCountryKey(
+          data?.[0]?.address_components[0]?.short_name?.toLowerCase(),
+        );
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    if (!countryKey) return;
+    getPhoneCode(countryKey)
+      .then((number) => {
+        setCountryNumber(number);
+        handleSetCountryNumber(number);
+      })
+      .catch((error) => console.error(error));
+  }, [countryKey, handleSetCountryNumber]);
+
   const items = [{id: 1, name: 'Japan'}];
   return (
     <form
@@ -24,8 +62,8 @@ const OnboardingStep7 = ({onSubmit}: StepProps) => {
           Share your phone number with organisations you’d like to work together
           with
         </p>
-        <div className="flex flex-row  space-x-5  ">
-          <Combobox
+        <div className="flex space-x-5">
+          {/* <Combobox
             selected={getValues('countryNumber')}
             onSelected={handleSetCountryNumber}
             items={items}
@@ -33,6 +71,14 @@ const OnboardingStep7 = ({onSubmit}: StepProps) => {
             placeholder="countryNumber"
             // errorMessage={formState?.errors?.['countryNumber']?.message}
             className="my-6  basis-3/12"
+          /> */}
+          <AutoCompleteInput
+            selected={countryKey}
+            onSelected={onCountrySelected}
+            errorMessage={formState?.errors?.['country']?.message}
+            autocompletionRequest={{
+              types: ['country'],
+            }}
           />
           <TextInput
             placeholder="Phone number"
