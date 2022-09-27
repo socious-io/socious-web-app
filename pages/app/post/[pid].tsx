@@ -35,7 +35,7 @@ const Post = () => {
     },
   });
 
-  const {user} = useUser({redirect: false});
+  const {user, currentIdentity} = useUser({redirect: false});
 
   const [page, setPage] = useState<number>(1);
   const {mutate} = useSWRConfig();
@@ -121,8 +121,6 @@ const Post = () => {
 
   if (error?.response?.status === 404) return <h1>404</h1>;
 
-  console.log('POST:---', post);
-
   const comments = [];
   for (let i = 1; i <= page; i++) {
     comments.push(<CommentsBox pid={post.id} page={i} key={i} />);
@@ -154,8 +152,9 @@ const Post = () => {
               ...post.shared_post,
               identity_meta: post.shared_from_identity.meta,
             }}
-            hideOption={user.id !== post.identity_id}
+            hideOption={currentIdentity?.id !== post.identity_id}
             optionClicked={onOptionClicked}
+            showAction={user != null}
           />
         ) : (
           <PostCard
@@ -168,11 +167,12 @@ const Post = () => {
             liked={post.liked}
             likes={post.likes}
             shared={post.shared}
-            hideOption={user?.id !== post.identity_id}
+            hideOption={currentIdentity?.id !== post.identity_id}
             optionClicked={onOptionClicked}
+            showAction={user != null}
           />
         )}
-        <CommentField onSend={onCommentSend} />
+        {user ? <CommentField onSend={onCommentSend} /> : null}
         <div>{comments}</div>
         <div className="flex justify-center">
           <Button
