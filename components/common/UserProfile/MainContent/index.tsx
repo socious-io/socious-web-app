@@ -23,7 +23,7 @@ interface Props {
 }
 
 const MainContent: React.FC<Props> = ({data, status}) => {
-  const {user} = useUser();
+  const {user} = useUser({redirect: false});
   console.log(data);
   return (
     <div className="border-1 mb-8  rounded-xl border border-grayLineBased md:w-4/6  ">

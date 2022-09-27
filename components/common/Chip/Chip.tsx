@@ -37,7 +37,7 @@ export function Chip({
         containerClassName && containerClassName,
       )}
     >
-      {selected && <CheckIcon className="h-5 w-5" />}
+      {/* {selected && <CheckIcon className="h-5 w-5" />} */}
       <label className={contentClassName && contentClassName}>{content}</label>
     </span>
   );

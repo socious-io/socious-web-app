@@ -13,13 +13,18 @@ import {useRouter} from 'next/router';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {useUser} from '@hooks';
+import {twMerge} from 'tailwind-merge';
 
 type ChatSideBarProps = {
-  onChatOpen: (data: any) => void;
-  haveChats: boolean;
+  onChatOpen?: (data: any) => void;
+  page: string;
+  toggleAddChat: () => void;
 };
 
-const SideBarToBe = ({haveChats, onChatOpen}: ChatSideBarProps, ref: any) => {
+const SideBarToBe = (
+  {onChatOpen, page, toggleAddChat}: ChatSideBarProps,
+  ref: any,
+) => {
   const router = useRouter();
   const [query, setQuery] = useState<string>('');
   const [filteredChats, setFilteredChats] = useState<any[]>([]);
@@ -45,11 +50,17 @@ const SideBarToBe = ({haveChats, onChatOpen}: ChatSideBarProps, ref: any) => {
 
   return (
     <div
-      className="min-w-80 relative flex h-screen w-full flex-col rounded-2xl border-grayLineBased bg-background sm:h-[48rem] sm:w-80 sm:border"
+      className={twMerge(
+        'min-w-80 relative h-screen w-full flex-col rounded-2xl border-grayLineBased bg-background sm:h-[48rem] sm:w-80 sm:border',
+        page === 'show' ? 'hidden sm:flex' : 'flex',
+      )}
       aria-label="Sidebar"
     >
       {/* ADD PARTICIPANT BUTTON */}
-      <div className="absolute bottom-10 right-4 inline-block rounded-full bg-primary p-3">
+      <div
+        className="absolute bottom-10 right-4 inline-block rounded-full bg-primary p-3"
+        onClick={toggleAddChat}
+      >
         <PlusIcon className="w-6 text-white" />
       </div>
 
@@ -79,16 +90,20 @@ const SideBarToBe = ({haveChats, onChatOpen}: ChatSideBarProps, ref: any) => {
         />
       </div>
       {/* USER-CARD BOX */}
-      {haveChats ? (
+      {query || (!query && chatResponse?.items?.length > 0) ? (
         filteredChats?.length > 0 ? (
           <div className="hide-scrollbar grow overflow-y-auto sm:w-80">
             {/* USER-CARD */}
             {filteredChats?.map((chat: any) => (
-              <ChatCard key={chat.id} chat={chat} onChatOpen={onChatOpen} />
+              <ChatCard
+                key={chat.id}
+                chat={chat}
+                onChatOpen={(text) => onChatOpen && onChatOpen(text)}
+              />
             ))}
           </div>
         ) : (
-          <div className="mb-10  flex h-auto w-full grow items-center justify-center bg-background sm:min-h-full sm:w-80">
+          <div className="flex h-auto w-full grow items-center justify-center bg-background px-4 sm:w-80">
             {/* SEARCH NOT FOUND */}
             <div className="font-worksans max-w-[32rem] text-center">
               <h2>Sorry, no chat found.</h2>{' '}
