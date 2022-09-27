@@ -5,6 +5,7 @@ import React, {useEffect} from 'react';
 
 const Index: NextPage = () => {
   useEffect(() => {
+    alert('sdd');
     Router.push('/app');
   });
   return <Link href="/app">Check /app</Link>;
