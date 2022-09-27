@@ -40,7 +40,7 @@ export const ShareModalStep2 = ({onShare}: shareModalStep2Props) => {
   const {register, handleSubmit, formState, control, getValues} = useForm({
     resolver: joiResolver(schemaSharePost),
     defaultValues: {
-      causes_tags: post ? post.causes_tags[0] : '',
+      causes_tags: post ? post.causes_tags?.[0] : '',
     } as FieldValues,
   });
   const causesTagsController = useController<FieldValues, string>({

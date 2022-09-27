@@ -18,7 +18,7 @@ import {sharePost} from '@api/posts/actions';
 import DeleteModal from '@components/common/Post/DeleteModal/DeleteModal';
 import EditModal from '@components/common/Post/EditModal/EditModal';
 import Toast from '@components/common/Toast/Toast';
-
+import {GeneralLayout} from 'layout';
 // invalid input syntax for type uuid
 const Post = () => {
   const router = useRouter();
@@ -127,7 +127,7 @@ const Post = () => {
   }
 
   return (
-    <div className="mt-10 flex space-x-6">
+    <GeneralLayout hasDetailNavbar>
       <Toast
         onClose={notifyHandler.off}
         variant="copySuccess"
@@ -135,8 +135,8 @@ const Post = () => {
         text="Post link copied"
       />
       {/* Disable sidebar for now, we have some semantics to figure out */}
-      {/* <SideBar selectBar={''} /> */}
-      <div className="mb-10 w-full space-y-6">
+      {/* <SideBar /> */}
+      <div className="mx-4 mb-10 w-full space-y-6 sm:mx-0">
         {!!post.shared_id ? (
           <SharedCard
             id={post.id}
@@ -225,7 +225,7 @@ const Post = () => {
           </>
         )}
       </div>
-    </div>
+    </GeneralLayout>
   );
 };
 

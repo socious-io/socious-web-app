@@ -1,12 +1,12 @@
 import DetailContent from '@components/common/Project/created/DetailContent';
 import SideBar from '@components/common/Project/SideBar/SideBar';
-
+import {GeneralLayout} from 'layout';
 const Overview = () => {
   return (
-    <div className="mt-10 flex md:space-x-6">
+    <GeneralLayout hasNavbar>
       <SideBar selectBar={'REVIEW'} />
       <DetailContent />
-    </div>
+    </GeneralLayout>
   );
 };
 

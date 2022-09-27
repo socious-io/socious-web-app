@@ -10,7 +10,7 @@ const AddPost = ({onClickAdd}: AddPostProps) => {
   return (
     <>
       <div
-        className="hidden space-y-2 rounded-2xl bg-clearWhite bg-cover bg-center px-4 pt-11 pb-7 bg-blend-overlay md:flex"
+        className="hidden flex-col space-y-2 rounded-2xl bg-clearWhite bg-cover bg-center px-4 pt-11 pb-7 bg-blend-overlay md:flex"
         style={{backgroundImage: `url(${ImgUrl})`}}
       >
         <h1 className="text-4xl text-white">Your Feed</h1>
@@ -19,7 +19,7 @@ const AddPost = ({onClickAdd}: AddPostProps) => {
         </p>
       </div>
 
-      <div className="flex space-x-4 rounded-2xl border border-grayLineBased bg-white p-6">
+      <div className="flex justify-center space-x-4 rounded-2xl border border-grayLineBased bg-white p-4 sm:flex sm:p-6">
         <Avatar size="xl" />
         <Button
           variant="outline"

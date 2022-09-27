@@ -14,6 +14,7 @@ import {useState} from 'react';
 //   TextInput,
 // } from "@components/common";
 import {useToggle} from 'hooks';
+import {GeneralLayout} from 'layout';
 
 // import { ReactComponent as WalletIcon } from "../asset/icons/wallet.svg";
 // import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
@@ -104,7 +105,7 @@ const Offer = () => {
   // };
 
   return (
-    <div className="mt-10 flex h-auto flex-row space-x-4">
+    <GeneralLayout>
       <div className="w-1/3">
         <ProfileCard
           name="Childhood Cancer"
@@ -142,7 +143,7 @@ const Offer = () => {
           experience_level={0}
         />
       </div>
-    </div>
+    </GeneralLayout>
   );
 };
 
