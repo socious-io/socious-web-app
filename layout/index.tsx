@@ -1,4 +1,4 @@
-import HomeLayout from './HomeLayout';
+import GeneralLayout from './GeneralLayout';
 import PreAuthLayout from './PreAuthLayout';
 
-export {HomeLayout, PreAuthLayout};
+export {GeneralLayout, PreAuthLayout};

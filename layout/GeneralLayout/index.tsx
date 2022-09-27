@@ -18,13 +18,24 @@ import Router from 'next/router';
 import styles from './index.module.scss';
 
 type TLayoutType = {
-  isHomePage?: boolean;
-  backGroundStyle?: CSSProperties;
+  hasNavbar?: boolean;
+  style?: CSSProperties;
 };
-const HomeLayout: FC<PropsWithChildren<TLayoutType>> = ({
+type TNavbarItem = {
+  label: string;
+  route: string;
+};
+export const NavbarItem: FC<TNavbarItem> = ({label, route}) => {
+  return (
+    <Link href={route} passHref>
+      <span className="cursor-pointer text-sm text-white">{label}</span>
+    </Link>
+  );
+};
+const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   children,
-  isHomePage = false,
-  backGroundStyle,
+  hasNavbar = false,
+  style,
 }) => {
   const {currentIdentity, identities, mutateIdentities, mutateUser} = useUser({
     redirect: false,
@@ -52,14 +63,20 @@ const HomeLayout: FC<PropsWithChildren<TLayoutType>> = ({
   return (
     <div className="flex w-full flex-col">
       <div
-        className={`flex h-52 w-full items-center rounded-b-sm   bg-cover bg-center sm:bg-primary md:flex md:h-16 md:bg-none lg:h-16 ${
-          isHomePage ? `bg-[url('/images/socious_feed.png')]` : 'bg-none'
+        className={`flex  w-full items-center rounded-b-sm   bg-cover bg-center sm:bg-primary md:flex md:h-16 md:bg-none lg:h-16 ${
+          hasNavbar
+            ? `h-52 bg-[url('/images/socious_feed.png')]`
+            : 'h-0 bg-none'
         }`}
       >
         <nav className="h-full w-full items-center bg-black  bg-opacity-25  sm:bg-opacity-0 md:flex  md:h-16 md:bg-none lg:h-16 ">
           <div className="container mx-auto max-w-5xl">
             <div className="flex flex-col items-center justify-center sm:flex-row">
-              <div className="flex-row-2 ml-4 mr-4 mt-14 flex items-center justify-items-center md:ml-0 md:mt-0">
+              <div
+                className={`flex-row-2 ml-4 mr-4 mt-14  items-center justify-items-center sm:flex md:ml-0 md:mt-0 ${
+                  hasNavbar ? 'flex' : 'hidden'
+                }`}
+              >
                 <div className="flex flex-wrap content-around">
                   <div className="items-center rounded-full ">
                     <div className="relative  h-8 w-8  ">
@@ -96,29 +113,25 @@ const HomeLayout: FC<PropsWithChildren<TLayoutType>> = ({
                   </div>
                 </div>
               </div>
-              <div className="mt-6 w-full px-4 sm:hidden">
-                <h1 className="text-4xl text-white">Your Feed</h1>
-                <p className="mt-2 text-base font-normal text-neutralGray ">
-                  See what is happening in your network
-                </p>
-              </div>
+
+              {hasNavbar && (
+                <div className="mt-6 w-full px-4 sm:hidden">
+                  <h1 className="text-4xl text-white">Your Feed</h1>
+                  <p className="mt-2 text-base font-normal text-neutralGray ">
+                    See what is happening in your network
+                  </p>
+                </div>
+              )}
               <div className="hidden w-4/6 items-center justify-end space-x-6 md:flex">
-                <div className="space-x-4">
-                  <Link href="/app" passHref>
-                    <span className="text-sm text-white">Home</span>
-                  </Link>
-                  <Link href="/app/network" passHref>
-                    <span className="text-sm text-white">Network</span>
-                  </Link>
-                  <Link href="/app/chat" passHref>
-                    <span className="text-sm text-white">Chats</span>
-                  </Link>
-                  <Link href="/app/notifications" passHref>
-                    <span className="text-sm text-white">Notifications</span>
-                  </Link>
-                  <Link href="/app/projects" passHref>
-                    <span className="text-sm text-white">Projects</span>
-                  </Link>
+                <div className="space-x-4 ">
+                  <NavbarItem label="Home" route="/app" />
+                  <NavbarItem label="Network" route="/app/network" />
+                  <NavbarItem label="Chats" route="/app/chat" />
+                  <NavbarItem
+                    label="Notifications"
+                    route="/app/notifications"
+                  />
+                  <NavbarItem label="Projects" route="/app/projects" />
                 </div>
                 <div className="space-between flex items-center space-x-3">
                   <Dropdown
@@ -164,12 +177,14 @@ const HomeLayout: FC<PropsWithChildren<TLayoutType>> = ({
         </nav>
       </div>
       <div
-        className={`m-auto flex px-4 sm:px-0 ${styles.layoutBase}`}
-        style={backGroundStyle}
+        className={`m-auto flex ${
+          hasNavbar ? 'mt-10 px-4' : 'sm:mt-10'
+        } sm:px-0 ${styles.layoutBase}`}
+        style={style}
       >
-        {children}
+        <div className="flex w-full md:space-x-6">{children}</div>
       </div>
     </div>
   );
 };
-export default HomeLayout;
+export default GeneralLayout;

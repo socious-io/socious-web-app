@@ -5,7 +5,7 @@
 import React from 'react';
 import type {NextPage} from 'next';
 import {useRouter} from 'next/router';
-
+import {GeneralLayout} from 'layout';
 //libraries
 import useSWR from 'swr';
 
@@ -33,9 +33,11 @@ const UserProfile: NextPage = () => {
     return <p>invalid user</p>;
 
   return (
-    <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">
-      <MainContent data={data} status="user" />
-    </div>
+    <GeneralLayout>
+      <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">
+        <MainContent data={data} status="user" />
+      </div>
+    </GeneralLayout>
   );
 };
 

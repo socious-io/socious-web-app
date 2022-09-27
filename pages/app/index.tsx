@@ -5,7 +5,7 @@ import MainContent from '@components/common/Home/MainContent';
 import StartScreen from '@components/common/StartScreen/StartScreen';
 import useUser from 'hooks/useUser/useUser';
 import IdealScreen from 'layout/IdealScreen/IdealScreen';
-import {HomeLayout, PreAuthLayout} from '../../layout';
+import {GeneralLayout, PreAuthLayout} from '../../layout';
 const HomePage: NextPage = () => {
   const {identities, identitiesError} = useUser({redirect: false});
 
@@ -26,10 +26,10 @@ const HomePage: NextPage = () => {
   }
 
   return (
-    <HomeLayout isHomePage backGroundStyle={{marginTop: 40}}>
+    <GeneralLayout hasNavbar>
       <SideBar />
       <MainContent />
-    </HomeLayout>
+    </GeneralLayout>
   );
 };
 

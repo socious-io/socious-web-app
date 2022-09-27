@@ -3,7 +3,7 @@ import {SideBar} from '@components/common/Chat/SideBar/SideBar';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import useSWR from 'swr';
 import {get} from 'utils/request';
-
+import {GeneralLayout} from 'layout';
 const Chat = () => {
   const {data, error} = useSWR<any>('/chats/summary?page=1&filter=', get);
   const sideBarRefresh = useRef<any>(null);
@@ -29,9 +29,9 @@ const Chat = () => {
   const backToChatList = useCallback(() => setSelectedChat(undefined), []);
 
   return (
-    <>
+    <GeneralLayout>
       {width && width >= 640 ? (
-        <div className="hidden h-full sm:mt-10 sm:flex sm:space-x-4">
+        <div className="hidden h-full w-full sm:flex sm:space-x-4">
           <SideBar
             ref={sideBarRefresh}
             onChatOpen={setSelectedChat}
@@ -44,7 +44,7 @@ const Chat = () => {
           />
         </div>
       ) : (
-        <div className="flex h-full sm:mt-10 sm:hidden sm:space-x-4">
+        <div className="flex h-full sm:hidden">
           {!selectedChat ? (
             <SideBar
               ref={sideBarRefresh}
@@ -60,7 +60,7 @@ const Chat = () => {
           )}
         </div>
       )}
-    </>
+    </GeneralLayout>
   );
 };
 

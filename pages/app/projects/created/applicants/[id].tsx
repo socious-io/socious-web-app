@@ -1,13 +1,13 @@
 import ApplicantsContent from '@components/common/Project/created/ApplicantsContent';
 
 import SideBar from '@components/common/Project/SideBar/SideBar';
-
+import {GeneralLayout} from 'layout';
 const Applicant = () => {
   return (
-    <div className=" mt-10 flex md:space-x-6">
+    <GeneralLayout hasNavbar>
       <SideBar selectBar={'APPLICANT'} />
       <ApplicantsContent />
-    </div>
+    </GeneralLayout>
   );
 };
 

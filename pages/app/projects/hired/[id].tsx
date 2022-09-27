@@ -36,7 +36,7 @@ const ProjectHired: NextPage = () => {
 
   return (
     <div className="mx-6 mt-10 flex md:space-x-6 ">
-      <SideBar selectBar={''} />
+      <SideBar />
       <HiredProjectsBoxes />
     </div>
   );

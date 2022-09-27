@@ -18,7 +18,7 @@ import {sharePost} from '@api/posts/actions';
 import DeleteModal from '@components/common/Post/DeleteModal/DeleteModal';
 import EditModal from '@components/common/Post/EditModal/EditModal';
 import Toast from '@components/common/Toast/Toast';
-
+import {GeneralLayout} from 'layout';
 // invalid input syntax for type uuid
 const Post = () => {
   const router = useRouter();
@@ -129,14 +129,14 @@ const Post = () => {
   }
 
   return (
-    <div className="mt-10 flex space-x-6">
+    <GeneralLayout hasNavbar>
       <Toast
         onClose={notifyHandler.off}
         variant="copySuccess"
         isOpen={notify}
         text="Post link copied"
       />
-      <SideBar selectBar={''} />
+      <SideBar />
       <div className="mb-10 w-full space-y-6">
         {!!post.shared_id ? (
           <SharedCard
@@ -153,7 +153,7 @@ const Post = () => {
               ...post.shared_post,
               identity_meta: post.shared_from_identity.meta,
             }}
-            hideOption={user.id !== post.identity_id}
+            hideOption={user?.id !== post.identity_id}
             optionClicked={onOptionClicked}
           />
         ) : (
@@ -224,7 +224,7 @@ const Post = () => {
           </>
         )}
       </div>
-    </div>
+    </GeneralLayout>
   );
 };
 

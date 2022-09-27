@@ -46,7 +46,7 @@ const EditModal = ({
     resolver: joiResolver(schemaEditPost),
     defaultValues: {
       content: post ? post.content : '',
-      causes_tags: post ? post.causes_tags[0] : '',
+      causes_tags: post ? post.causes_tags?.[0] : '',
       link: post ? post.link || '' : '',
     } as FieldValues,
   });
