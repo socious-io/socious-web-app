@@ -15,7 +15,12 @@ export interface InputFiledProps
   errorMessage?: any;
   suffixContent?: any;
   prefixContent?: any;
+  inputType?: 'borderBottom';
 }
+
+const inputTypeOptions = {
+  borderBottom: 'border-0 rounded-none border-b-2',
+};
 
 export const InputFiled = ({
   label = '',
@@ -24,6 +29,7 @@ export const InputFiled = ({
   disabled = false,
   placeholder,
   id,
+  inputType,
   name,
   register,
   className,
@@ -68,6 +74,7 @@ export const InputFiled = ({
             : '  focus:border-b-1 focus:border-b-primary',
           disabled && 'border-opacity-40 bg-transparent text-opacity-40',
           className && className,
+          inputType && inputTypeOptions[inputType],
         )}
         {...register}
       />

@@ -20,6 +20,7 @@ const SignupStep1 = ({onSubmit}: StepProps) => {
           errorMessage={formState?.errors?.['firstName']?.message}
           required
           className="my-6"
+          inputType="borderBottom"
         />
 
         <InputFiled
@@ -30,6 +31,7 @@ const SignupStep1 = ({onSubmit}: StepProps) => {
           errorMessage={formState?.errors?.['lastName']?.message}
           required
           className="my-6"
+          inputType="borderBottom"
         />
       </div>
       <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 sm:h-48 sm:pl-0 ">

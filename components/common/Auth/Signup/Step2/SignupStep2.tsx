@@ -22,6 +22,7 @@ const SignupStep2 = ({onSubmit}: StepProps) => {
           errorMessage={formState?.errors?.['email']?.message}
           required
           className="my-6"
+          inputType="borderBottom"
         />
       </div>
       <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 sm:h-48 sm:pl-0 ">
