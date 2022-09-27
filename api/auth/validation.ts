@@ -126,10 +126,10 @@ export const schemaOnboardingStep8 = Joi.object({
 
 export const schemaSignupStep1 = Joi.object({
   firstName: Joi.string().required().label('FirstName').messages({
-    'string.empty': `cannot be an empty field`,
+    'string.empty': `First name cannot be an empty field`,
   }),
   lastName: Joi.string().required().label('LastName').messages({
-    'string.empty': `LastName cannot be an empty field`,
+    'string.empty': `Last name cannot be an empty field`,
   }),
 });
 export const schemaSignupStep2 = Joi.object({
