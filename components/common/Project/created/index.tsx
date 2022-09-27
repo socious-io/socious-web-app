@@ -3,6 +3,7 @@ import {useToggle, useUser} from '@hooks';
 import BodyCard from '../component/BodyCard';
 import HeaderBox from '../component/HeaderBox';
 import HiredCard from '../component/HiredCard';
+import {PlusIcon} from '@heroicons/react/24/solid';
 var data = [
   {
     id: 1,
@@ -50,37 +51,37 @@ function MyApplicationBoxes() {
   const {state: showDrafts, handlers: showDraftsHandler} = useToggle();
   const {user} = useUser();
   return (
-    <div className="w-full pb-4 ">
+    <div className="w-3/4 pb-4">
       <div className="flex items-center rounded-2xl border border-grayLineBased bg-white p-6">
-        <p className="font-semibold">created project</p>
+        <p className="text-xl font-semibold">Created Project</p>
       </div>
       <Button
-        className=" m-6  flex  max-w-xs items-center justify-center align-middle "
+        className="my-6 flex w-52 items-center justify-center align-middle "
         type="submit"
-        size="lg"
+        size="md"
         variant="fill"
         value="Submit"
+        leftIcon={() => <PlusIcon width={20} height={20} />}
         //disabled={!!formState?.errors}
       >
         Create Project
       </Button>
-      <div className="w-full rounded-2xl border border-grayLineBased">
+      <div className="w-full space-y-4 rounded-t-2xl border border-grayLineBased ">
         <HeaderBox
           isRound={true}
           title={'onGoing'}
-          isExpand={showOnGoing}
+          isExpand={true}
           expandToggle={showOnGoingHandler.toggle}
-          isExpandable={true}
+          isExpandable={false}
         />
-        {showOnGoing &&
-          data.map((item) => (
-            <BodyCard
-              key={item.id}
-              refixAddress={`/app/projects/created/overview/${user.username}`}
-            />
-          ))}
+        {data.map((item) => (
+          <BodyCard
+            key={item.id}
+            refixAddress={`/app/projects/created/overview/${user.username}`}
+          />
+        ))}
         <HeaderBox
-          isRound={true}
+          isRound={false}
           title={'Drafts  3'}
           isExpand={showDrafts}
           expandToggle={showDraftsHandler.toggle}

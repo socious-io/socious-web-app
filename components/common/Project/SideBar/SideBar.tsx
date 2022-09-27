@@ -12,19 +12,19 @@ const SideBar = ({selectBar}: Props) => {
   const {user, currentIdentity} = useUser();
 
   return (
-    <div className="hidden md:flex md:w-[375px]" aria-label="Sidebar">
-      <div className="space-y-4 overflow-y-auto bg-gray-50">
+    <div className="hidden w-full md:flex md:w-[375px]" aria-label="Sidebar">
+      <div className="w-full space-y-4 overflow-y-auto bg-gray-50">
         <div
           onClick={() => router.back()}
-          className="flex flex-row rounded-2xl border border-grayLineBased bg-white px-2 py-4  "
+          className="flex cursor-pointer flex-row rounded-2xl border border-grayLineBased bg-white px-2 py-4  "
         >
           <ChevronLeftIcon className=" w-6" />
-          <span className="w-full text-center">
+          <span className="ml-2 w-full">
             <p className=" font-semibold ">Projects</p>
           </span>
         </div>
 
-        <div className="space-y-4 overflow-y-auto bg-gray-50">
+        <div className="cursor-pointer space-y-4 overflow-y-auto bg-gray-50">
           <ProjectCard
             isOrganization={currentIdentity?.type === 'organizations'}
             username={user?.username}
