@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-import {rxNotMobileNumber} from 'utils/regex';
+import {rxNotMobileNumber, rxNoSpecialCharacters} from 'utils/regex';
 
 export const schemaChangePassword = Joi.object({
   currentPassword: Joi.string().min(8).required().messages({
@@ -125,22 +125,33 @@ export const schemaOnboardingStep8 = Joi.object({
 });
 
 export const schemaSignupStep1 = Joi.object({
-  firstName: Joi.string().required().label('FirstName').messages({
-    'string.empty': `First name cannot be an empty field`,
-  }),
-  lastName: Joi.string().required().label('LastName').messages({
-    'string.empty': `Last name cannot be an empty field`,
-  }),
+  firstName: Joi.string()
+    .required()
+    .label('FirstName')
+    .regex(rxNoSpecialCharacters)
+    .messages({
+      'string.empty': `First name cannot be an empty field.`,
+      'string.pattern.base': `Should not contain special characters.`,
+      'any.required': `First name cannot be an empty field.`,
+    }),
+  lastName: Joi.string()
+    .required()
+    .label('LastName')
+    .regex(rxNoSpecialCharacters)
+    .messages({
+      'string.empty': `Last name cannot be an empty field`,
+      'string.pattern.base': `Should not contain special characters.`,
+    }),
 });
 export const schemaSignupStep2 = Joi.object({
   email: Joi.string()
     .email({tlds: {allow: false}})
     .required()
     .messages({
-      'string.base': `Email should be a type of 'text'`,
-      'string.empty': `Email cannot be an empty field`,
-      'any.required': `Email is a required field`,
-      'string.email': `Email must be a valid email`,
+      'string.base': `Email should be a type of 'text'.`,
+      'string.empty': `Email cannot be an empty field.`,
+      'any.required': `Email is a required field.`,
+      'string.email': `Email address is not valid.`,
     }),
 });
 export const schemaSignupStep3 = Joi.object({
