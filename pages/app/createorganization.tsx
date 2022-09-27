@@ -17,7 +17,7 @@ import Starter from '../../components/common/CreateOrganization/steps/Starter';
 import Mission from '../../components/common/CreateOrganization/steps/Mission';
 
 // validation Schema
-import {validate} from '@socious/data';
+import { schemaCreateOrganization } from '@api/createorganization/validation';
 
 //libraries
 import {useForm, FormProvider} from 'react-hook-form';
@@ -40,7 +40,7 @@ const CreateOrganization = () => {
 
   const router = useRouter();
   const methods = useForm({
-    resolver: joiResolver(validate.OrganizationSchema),
+    resolver: joiResolver(schemaCreateOrganization),
   });
 
   ///////////////////////////////////////////////////////////////////////////
@@ -110,9 +110,9 @@ const CreateOrganization = () => {
         {step === 0 || step === 7 || step === 8 ? null : (
           <Carousel
             onBack={backHandler}
-            onSkip={step === 6 ? requestHandler : nextHandler}
+            onSkip={nextHandler}
             step={step}
-            skip={step === 4 || step === 5 || step === 6 ? true : false}
+            skip={step === 4 || step === 5 ? true : false}
           />
         )}
 
