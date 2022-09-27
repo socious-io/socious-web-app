@@ -11,16 +11,17 @@ import Title from './Title';
 
 //interfaces
 interface Props {
-  social_causes: string[];
+  items: string[];
+  title: string;
 }
 
-const SocialCauses: React.FC<Props> = ({social_causes}) => {
+const ProjectItem: React.FC<Props> = ({title, items}) => {
   return (
     <div className="p-4">
-      <Title>Social causes</Title>
+      <Title>{title}</Title>
       <div className="flex w-4/6 flex-wrap gap-2 ">
-        {social_causes &&
-          social_causes?.map((item: string) => {
+        {items &&
+          items?.map((item: string) => {
             return (
               <Chip
                 key={item}
@@ -33,4 +34,4 @@ const SocialCauses: React.FC<Props> = ({social_causes}) => {
   );
 };
 
-export default SocialCauses;
+export default ProjectItem;
