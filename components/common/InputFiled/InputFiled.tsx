@@ -19,7 +19,8 @@ export interface InputFiledProps
 }
 
 const inputTypeOptions = {
-  borderBottom: 'border-0 rounded-none border-b-2',
+  borderBottom:
+    'border-0 rounded-none border-b-2 focus:shadow-none focus:ring-offset-0',
 };
 
 export const InputFiled = ({
