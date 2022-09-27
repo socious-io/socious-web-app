@@ -55,7 +55,7 @@ const Signup: NextPage = () => {
           if (response.email) {
             setEmailError('email', {
               type: 'userExists',
-              message: 'This email is already registered',
+              message: 'This email is already registered.',
             });
           } else {
             setStep(step + 1);
@@ -100,7 +100,7 @@ const Signup: NextPage = () => {
 
   return (
     <PreAuthLayout>
-      <div className="mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased bg-background px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7">
+      <div className="mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased bg-background px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7 lg:h-[calc(100vh-theme(space.24))]">
         <div className="relative  flex  h-20 justify-center">
           {![1, 4].includes(step) && (
             <span
