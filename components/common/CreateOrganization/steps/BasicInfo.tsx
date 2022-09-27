@@ -16,7 +16,7 @@ import {StepProps} from '@models/stepProps';
 const BasicInfo = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
   const {register, handleSubmit, formState} = formMethods;
-
+  console.log(formState.errors);
   return (
     <>
       <Title>Organization profile</Title>
@@ -73,8 +73,8 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="Address"
             type="text"
             placeholder="Address"
-            register={register('address')}
-            errorMessage={formState.errors?.['address']?.message}
+            {...register('address', {required: false})}
+            // errorMessage={formState.errors?.['address']?.message}
             className="my-3"
           />
           <div className="flex items-end gap-x-4">
@@ -82,13 +82,13 @@ const BasicInfo = ({onSubmit}: StepProps) => {
               label="Phone number"
               type="text"
               placeholder="+000"
-              register={register('mobile_country_code')}
+              {...register('mobile_country_code', {required: false})}
               className="my-3"
             />
             <InputFiled
               type="text"
               placeholder="Phone number"
-              register={register('phone')}
+              {...register('phone', {required: false})}
               className="my-3 w-full"
             />
           </div>
@@ -96,8 +96,8 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             label="Website"
             type="text"
             placeholder="Website"
-            register={register('website')}
-            errorMessage={formState.errors?.['website']?.message}
+            {...register('website', {required: false})}
+            // errorMessage={formState.errors?.['website']?.message}
             className="my-3"
           />
         </div>
