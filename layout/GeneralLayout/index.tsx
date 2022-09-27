@@ -16,10 +16,13 @@ import {getOrganization} from '@api/organizations/actions';
 import {logout} from '@api/auth/actions';
 import Router from 'next/router';
 import styles from './index.module.scss';
-
+import {ChevronLeftIcon} from '@heroicons/react/24/outline';
+import {useRouter} from 'next/router';
 type TLayoutType = {
   hasNavbar?: boolean;
   style?: CSSProperties;
+  hasDetailNavbar?: boolean;
+  detailNavbarTitle?: string;
 };
 type TNavbarItem = {
   label: string;
@@ -36,7 +39,10 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   children,
   hasNavbar = false,
   style,
+  hasDetailNavbar,
+  detailNavbarTitle,
 }) => {
+  const route = useRouter();
   const {currentIdentity, identities, mutateIdentities, mutateUser} = useUser({
     redirect: false,
   });
@@ -100,7 +106,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                 </div>
                 <div className="items-center ">
                   <div className="relative h-6 w-6 md:hidden">
-                    <Link href="/">
+                    <Link href="/app/chat">
                       <a>
                         <Image
                           src={imgLikeSrc}
@@ -176,6 +182,19 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
           </div>
         </nav>
       </div>
+      {hasDetailNavbar && (
+        <div className="flex w-full flex-col pt-14 sm:hidden">
+          <div className=" flex items-center justify-between px-4 pb-3.5">
+            <span className="flex w-full " onClick={() => route.back()}>
+              <ChevronLeftIcon className="w-5" />
+            </span>
+            <h3 className="font-worksans w-full text-center text-xl font-semibold">
+              {detailNavbarTitle || 'Post'}
+            </h3>
+            <div className="flex w-full" />
+          </div>
+        </div>
+      )}
       <div
         className={`m-auto flex ${
           hasNavbar ? 'mt-10 px-4' : 'sm:mt-10'
