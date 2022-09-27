@@ -42,14 +42,14 @@ const OnboardingStep5 = ({onSubmit}: StepProps) => {
             data?.[0]?.address_components[0]?.short_name?.toLowerCase(),
           );
         })
-        .catch((error) => console.error(error));
+        .catch((error: any) => console.error(error));
     },
     [handleSetCountry],
   );
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(() => onSubmit(countryKey))}
       className="flex grow flex-col justify-between pl-0 pr-10 sm:pl-10"
     >
       <div className="flex flex-col">
