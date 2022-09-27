@@ -51,7 +51,7 @@ const CreateOrganization = () => {
     if (step === 6) {
       requestHandler(data);
     } else if (step === 8) {
-      console.log('go organization profile');
+      goHome();
     } else {
       nextHandler();
     }
