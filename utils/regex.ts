@@ -7,6 +7,8 @@ export const rxPassword =
   /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W])(?!.*['"]).{7,128}$/;
 export const rxName = /^[a-zA-Zぁ-ん一-龥\s]+$/;
 export const rxHasUpperLower = /(?=.*[a-z])(?=.*[A-Z])/;
+export const rxHasUpperCase = /(?=.*[A-Z])/;
+export const rxHasLowerCase = /(?=.*[a-z])/;
 export const rxHasNumber = /(?=.*\d)/;
 export const rxNoSpecialCharacters = /^[^\W]*$/;
 export const rxFirstLastName =
