@@ -1,0 +1,7 @@
+.layoutBase {
+  width: 100%;
+  @screen sm {
+    min-height: calc(100vh - 64px);
+    max-width: 1020px;
+  }
+}

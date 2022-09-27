@@ -5,27 +5,32 @@ import MainContent from '@components/common/Home/MainContent';
 import StartScreen from '@components/common/StartScreen/StartScreen';
 import useUser from 'hooks/useUser/useUser';
 import IdealScreen from 'layout/IdealScreen/IdealScreen';
-import PushNotification from '@components/common/PushNotification/PushNotification';
-
-const Index: NextPage = () => {
+import {HomeLayout, PreAuthLayout} from '../../layout';
+const HomePage: NextPage = () => {
   const {identities, identitiesError} = useUser({redirect: false});
 
   if (identities === null) {
-    return <StartScreen />;
+    return (
+      <PreAuthLayout>
+        <StartScreen />
+      </PreAuthLayout>
+    );
   }
 
   if (!identitiesError && !identities) {
-    return <IdealScreen />;
+    return (
+      <PreAuthLayout>
+        <IdealScreen />
+      </PreAuthLayout>
+    );
   }
 
   return (
-    <PushNotification>
-      <div className="mx-4 mt-10 flex sm:space-x-6">
-        <SideBar selectBar={''} />
-        <MainContent />
-      </div>
-    </PushNotification>
+    <HomeLayout isHomePage backGroundStyle={{marginTop: 40}}>
+      <SideBar />
+      <MainContent />
+    </HomeLayout>
   );
 };
 
-export default Index;
+export default HomePage;

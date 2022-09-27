@@ -8,9 +8,9 @@ import useUser from 'hooks/useUser/useUser';
 import router from 'next/router';
 
 interface Props {
-  selectBar: string;
+  selectBar?: string;
 }
-const SideBar = ({selectBar}: Props) => {
+const SideBar = ({selectBar = ''}: Props) => {
   const {user, currentIdentity} = useUser();
 
   return (

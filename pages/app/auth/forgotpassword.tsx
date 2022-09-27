@@ -16,6 +16,7 @@ import {
   schemaForgotPasswordStep3,
 } from '@api/auth/validation';
 import {AxiosError} from 'axios';
+import {PreAuthLayout} from 'layout';
 
 import {
   forgetPassword,
@@ -159,67 +160,69 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased bg-background px-6 pt-12 sm:my-auto sm:block sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:pt-7">
-      <div className="relative flex h-20 justify-center">
-        <Modal isOpen={showModal} onClose={handleToggleModal}>
-          <Modal.Title>
-            <h2 className="text-center text-error">
-              {errorMessages.defaultMessage.title}
-            </h2>
-          </Modal.Title>
-          <Modal.Description>
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">
-                {errorMessages.defaultMessage.message}
-              </p>
+    <PreAuthLayout>
+      <div className="mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased bg-background px-6 pt-12 sm:my-auto sm:block sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:pt-7">
+        <div className="relative flex h-20 justify-center">
+          <Modal isOpen={showModal} onClose={handleToggleModal}>
+            <Modal.Title>
+              <h2 className="text-center text-error">
+                {errorMessages.defaultMessage.title}
+              </h2>
+            </Modal.Title>
+            <Modal.Description>
+              <div className="mt-2">
+                <p className="text-sm text-gray-500">
+                  {errorMessages.defaultMessage.message}
+                </p>
+              </div>
+            </Modal.Description>
+            <div className="mt-4">
+              <Button
+                className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+                type="submit"
+                size="lg"
+                variant="fill"
+                value="Submit"
+                onClick={handleToggleModal}
+                //disabled={!!formState?.errors}
+              >
+                Close
+              </Button>
             </div>
-          </Modal.Description>
-          <div className="mt-4">
-            <Button
-              className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
-              type="submit"
-              size="lg"
-              variant="fill"
-              value="Submit"
-              onClick={handleToggleModal}
-              //disabled={!!formState?.errors}
-            >
-              Close
-            </Button>
-          </div>
-        </Modal>
+          </Modal>
 
-        {step != 1 && (
-          <span
-            className="absolute left-0 cursor-pointer"
-            title="Back"
-            onClick={handleBack}
-          >
-            <ChevronLeftIcon className="h-5 w-5 cursor-pointer" />
-          </span>
-        )}
-      </div>
-      <FormProvider {...formMethodsStep1}>
-        {step === 1 && (
-          <ForgotPasswordStep1
+          {step != 1 && (
+            <span
+              className="absolute left-0 cursor-pointer"
+              title="Back"
+              onClick={handleBack}
+            >
+              <ChevronLeftIcon className="h-5 w-5 cursor-pointer" />
+            </span>
+          )}
+        </div>
+        <FormProvider {...formMethodsStep1}>
+          {step === 1 && (
+            <ForgotPasswordStep1
+              onSubmit={handleSubmit}
+              error={errorMessages.emailCheckError}
+            />
+          )}
+        </FormProvider>
+
+        {step === 2 && (
+          <ForgotPasswordStep2
             onSubmit={handleSubmit}
-            error={errorMessages.emailCheckError}
+            onResendCode={handleResendCode}
+            error={errorMessages.otpError}
           />
         )}
-      </FormProvider>
 
-      {step === 2 && (
-        <ForgotPasswordStep2
-          onSubmit={handleSubmit}
-          onResendCode={handleResendCode}
-          error={errorMessages.otpError}
-        />
-      )}
-
-      <FormProvider {...formMethodsStep3}>
-        {step === 3 && <ForgotPasswordStep3 onSubmit={handleSubmit} />}
-      </FormProvider>
-    </div>
+        <FormProvider {...formMethodsStep3}>
+          {step === 3 && <ForgotPasswordStep3 onSubmit={handleSubmit} />}
+        </FormProvider>
+      </div>
+    </PreAuthLayout>
   );
 };
 
