@@ -18,7 +18,7 @@ import {sharePost} from '@api/posts/actions';
 import DeleteModal from '@components/common/Post/DeleteModal/DeleteModal';
 import EditModal from '@components/common/Post/EditModal/EditModal';
 import Toast from '@components/common/Toast/Toast';
-
+import {GeneralLayout} from 'layout';
 // invalid input syntax for type uuid
 const Post = () => {
   const router = useRouter();
@@ -35,7 +35,7 @@ const Post = () => {
     },
   });
 
-  const {user} = useUser();
+  const {user, currentIdentity} = useUser({redirect: false});
 
   const [page, setPage] = useState<number>(1);
   const {mutate} = useSWRConfig();
@@ -121,23 +121,22 @@ const Post = () => {
 
   if (error?.response?.status === 404) return <h1>404</h1>;
 
-  console.log('POST:---', post);
-
   const comments = [];
   for (let i = 1; i <= page; i++) {
     comments.push(<CommentsBox pid={post.id} page={i} key={i} />);
   }
 
   return (
-    <div className="mt-10 flex space-x-6">
+    <GeneralLayout hasDetailNavbar>
       <Toast
         onClose={notifyHandler.off}
         variant="copySuccess"
         isOpen={notify}
         text="Post link copied"
       />
-      <SideBar selectBar={''} />
-      <div className="mb-10 w-full space-y-6">
+      {/* Disable sidebar for now, we have some semantics to figure out */}
+      {/* <SideBar /> */}
+      <div className="mx-4 mb-10 w-full space-y-6 sm:mx-0">
         {!!post.shared_id ? (
           <SharedCard
             id={post.id}
@@ -153,8 +152,9 @@ const Post = () => {
               ...post.shared_post,
               identity_meta: post.shared_from_identity.meta,
             }}
-            hideOption={user.id !== post.identity_id}
+            hideOption={currentIdentity?.id !== post.identity_id}
             optionClicked={onOptionClicked}
+            showAction={user != null}
           />
         ) : (
           <PostCard
@@ -167,11 +167,12 @@ const Post = () => {
             liked={post.liked}
             likes={post.likes}
             shared={post.shared}
-            hideOption={user?.id !== post.identity_id}
+            hideOption={currentIdentity?.id !== post.identity_id}
             optionClicked={onOptionClicked}
+            showAction={user != null}
           />
         )}
-        <CommentField onSend={onCommentSend} />
+        {user ? <CommentField onSend={onCommentSend} /> : null}
         <div>{comments}</div>
         <div className="flex justify-center">
           <Button
@@ -224,7 +225,7 @@ const Post = () => {
           </>
         )}
       </div>
-    </div>
+    </GeneralLayout>
   );
 };
 

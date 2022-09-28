@@ -5,7 +5,7 @@ import NotificationContainer from '@components/common/Notification/NotificationC
 import StartScreen from '@components/common/StartScreen/StartScreen';
 import useUser from 'hooks/useUser/useUser';
 import IdealScreen from 'layout/IdealScreen/IdealScreen';
-
+import {GeneralLayout} from 'layout';
 const Index: NextPage = () => {
   const {user, userError} = useUser();
 
@@ -18,10 +18,12 @@ const Index: NextPage = () => {
   }
 
   return (
-    <div className="mt-10 flex lg:space-x-6">
-      <SideBar />
-      <NotificationContainer />
-    </div>
+    <GeneralLayout>
+      <div className="mt-10 flex w-full sm:mt-0 lg:space-x-6">
+        <SideBar />
+        <NotificationContainer />
+      </div>
+    </GeneralLayout>
   );
 };
 

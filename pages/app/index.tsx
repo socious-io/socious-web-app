@@ -5,27 +5,32 @@ import MainContent from '@components/common/Home/MainContent';
 import StartScreen from '@components/common/StartScreen/StartScreen';
 import useUser from 'hooks/useUser/useUser';
 import IdealScreen from 'layout/IdealScreen/IdealScreen';
-import PushNotification from '@components/common/PushNotification/PushNotification';
-
-const Index: NextPage = () => {
+import {GeneralLayout, PreAuthLayout} from '../../layout';
+const HomePage: NextPage = () => {
   const {identities, identitiesError} = useUser({redirect: false});
 
   if (identities === null) {
-    return <StartScreen />;
+    return (
+      <PreAuthLayout>
+        <StartScreen />
+      </PreAuthLayout>
+    );
   }
 
   if (!identitiesError && !identities) {
-    return <IdealScreen />;
+    return (
+      <PreAuthLayout>
+        <IdealScreen />
+      </PreAuthLayout>
+    );
   }
 
   return (
-    <PushNotification>
-      <div className="mt-10 flex space-x-6">
-        <SideBar selectBar={''} />
-        <MainContent />
-      </div>
-    </PushNotification>
+    <GeneralLayout hasNavbar>
+      <SideBar />
+      <MainContent />
+    </GeneralLayout>
   );
 };
 
-export default Index;
+export default HomePage;

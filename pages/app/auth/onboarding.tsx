@@ -13,6 +13,7 @@ import OnboardingStep7 from '@components/common/Auth/Onboarding/Step7/Onboarding
 import OnboardingStep8 from '@components/common/Auth/Onboarding/Step8/OnboardingStep8';
 import OnboardingStep9 from '@components/common/Auth/Onboarding/Step9/OnboardingStep9';
 import OnboardingStep10 from '@components/common/Auth/Onboarding/Step10/OnboardingStep10';
+import {PreAuthLayout} from 'layout';
 
 import {useForm, FormProvider} from 'react-hook-form';
 
@@ -213,99 +214,101 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   }, [handleUpdateProfileRequest, step]);
 
   return (
-    <div
-      className={twMerge(
-        'mx-auto flex min-h-screen w-screen flex-col items-stretch justify-between border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7 lg:h-[calc(100vh-theme(space.24))]',
-        step === 10 ? ' bg-primary' : 'bg-background',
-      )}
-    >
-      <div className="relative flex h-14 justify-center">
-        <Modal isOpen={showModal} onClose={handleToggleModal}>
-          <Modal.Title>
-            <h2 className="text-center text-error">{errorMessage?.title}</h2>
-          </Modal.Title>
-          <Modal.Description>
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">{errorMessage?.message}</p>
-            </div>
-          </Modal.Description>
-          <div className="mt-4">
-            <Button
-              className="m-auto mt-4 flex w-full max-w-xs items-center justify-center align-middle "
-              type="submit"
-              size="lg"
-              variant="fill"
-              value="Submit"
-              onClick={handleToggleModal}
-            >
-              Close
-            </Button>
-          </div>
-        </Modal>
-
-        {![1, 10].includes(step) && (
-          <span
-            className="absolute left-0 cursor-pointer"
-            title="Back"
-            onClick={handleBack}
-          >
-            <ChevronLeftIcon className="h-5 w-5 cursor-pointer" />
-          </span>
+    <PreAuthLayout>
+      <div
+        className={twMerge(
+          'mx-auto flex min-h-screen w-screen flex-col items-stretch justify-between border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7 lg:h-[calc(100vh-theme(space.24))]',
+          step === 10 ? ' bg-primary' : 'bg-background',
         )}
-        <div className="flex h-20 pt-1">
-          {[3, 4, 5, 6, 7, 8, 9].includes(step) &&
-            [3, 4, 5, 6, 7, 8, 9].map((stepNumber) => (
-              <div key={`stepper-${stepNumber}`} className="flex">
-                <span
-                  className={twMerge(
-                    'mx-1 h-3 w-3 cursor-pointer rounded-3xl  border border-grayLineBased ',
-                    stepNumber === step && 'bg-primary',
-                  )}
-                />
+      >
+        <div className="relative flex h-20 justify-center">
+          <Modal isOpen={showModal} onClose={handleToggleModal}>
+            <Modal.Title>
+              <h2 className="text-center text-error">{errorMessage?.title}</h2>
+            </Modal.Title>
+            <Modal.Description>
+              <div className="mt-2">
+                <p className="text-sm text-gray-500">{errorMessage?.message}</p>
               </div>
-            ))}
+            </Modal.Description>
+            <div className="mt-4">
+              <Button
+                className="m-auto mt-4 flex w-full max-w-xs items-center justify-center align-middle "
+                type="submit"
+                size="lg"
+                variant="fill"
+                value="Submit"
+                onClick={handleToggleModal}
+              >
+                Close
+              </Button>
+            </div>
+          </Modal>
+
+          {![1, 10].includes(step) && (
+            <span
+              className="absolute left-0 cursor-pointer"
+              title="Back"
+              onClick={handleBack}
+            >
+              <ChevronLeftIcon className="h-5 w-5 cursor-pointer" />
+            </span>
+          )}
+          <div className="flex h-20 pt-1">
+            {[3, 4, 5, 6, 7, 8, 9].includes(step) &&
+              [3, 4, 5, 6, 7, 8, 9].map((stepNumber) => (
+                <div key={`stepper-${stepNumber}`} className="flex">
+                  <span
+                    className={twMerge(
+                      'mx-1 h-3 w-3 cursor-pointer rounded-3xl  border border-grayLineBased ',
+                      stepNumber === step && 'bg-primary',
+                    )}
+                  />
+                </div>
+              ))}
+          </div>
+          {[6, 7, 8].includes(step) && (
+            <span
+              className="absolute right-0 cursor-pointer text-base text-primary"
+              title="Next"
+              onClick={handleNext}
+            >
+              Skip
+            </span>
+          )}
         </div>
-        {[6, 7, 8].includes(step) && (
-          <span
-            className="absolute right-0 cursor-pointer text-base text-primary"
-            title="Next"
-            onClick={handleNext}
-          >
-            Skip
-          </span>
-        )}
+
+        {step === 1 && <OnboardingStep1 onSubmit={handleSubmit} />}
+        {step === 2 && <OnboardingStep2 onSubmit={handleSubmit} />}
+        <FormProvider {...formMethodsStep3}>
+          {step === 3 && <OnboardingStep3 onSubmit={handleSubmit} />}
+        </FormProvider>
+        <FormProvider {...formMethodsStep4}>
+          {step === 4 && (
+            <OnboardingStep4 onSubmit={handleSubmit} rawSkills={skills} />
+          )}
+        </FormProvider>
+
+        <FormProvider {...formMethodsStep5}>
+          {step === 5 && <OnboardingStep5 onSubmit={handleSubmit} />}
+        </FormProvider>
+        <FormProvider {...formMethodsStep6}>
+          {step === 6 && <OnboardingStep6 onSubmit={handleSubmit} />}
+        </FormProvider>
+        <FormProvider {...formMethodsStep7}>
+          {step === 7 && (
+            <OnboardingStep7 onSubmit={handleSubmit} defaultCountry={placeId} />
+          )}
+        </FormProvider>
+        <FormProvider {...formMethodsStep8}>
+          {step === 8 && <OnboardingStep8 onSubmit={handleSubmit} />}
+        </FormProvider>
+        <FormProvider {...formMethodsStep9}>
+          {step === 9 && <OnboardingStep9 onSubmit={handleSubmit} />}
+        </FormProvider>
+        {step === 10 && <OnboardingStep10 onSubmit={handleSubmit} />}
       </div>
-
-      {step === 1 && <OnboardingStep1 onSubmit={handleSubmit} />}
-      {step === 2 && <OnboardingStep2 onSubmit={handleSubmit} />}
-      <FormProvider {...formMethodsStep3}>
-        {step === 3 && <OnboardingStep3 onSubmit={handleSubmit} />}
-      </FormProvider>
-      <FormProvider {...formMethodsStep4}>
-        {step === 4 && (
-          <OnboardingStep4 onSubmit={handleSubmit} rawSkills={skills} />
-        )}
-      </FormProvider>
-
-      <FormProvider {...formMethodsStep5}>
-        {step === 5 && <OnboardingStep5 onSubmit={handleSubmit} />}
-      </FormProvider>
-      <FormProvider {...formMethodsStep6}>
-        {step === 6 && <OnboardingStep6 onSubmit={handleSubmit} />}
-      </FormProvider>
-      <FormProvider {...formMethodsStep7}>
-        {step === 7 && (
-          <OnboardingStep7 onSubmit={handleSubmit} defaultCountry={placeId} />
-        )}
-      </FormProvider>
-      <FormProvider {...formMethodsStep8}>
-        {step === 8 && <OnboardingStep8 onSubmit={handleSubmit} />}
-      </FormProvider>
-      <FormProvider {...formMethodsStep9}>
-        {step === 9 && <OnboardingStep9 onSubmit={handleSubmit} />}
-      </FormProvider>
-      {step === 10 && <OnboardingStep10 onSubmit={handleSubmit} />}
-    </div>
+    </PreAuthLayout>
   );
 };
 

@@ -75,7 +75,7 @@ const MainContent = () => {
   );
 
   return (
-    <div className="mb-10 w-full space-y-6">
+    <div className="mb-10 w-full sm:space-y-6">
       <AddPost onClickAdd={addPostHandlers.on} />
       <PostContainer />
       {/* Like Modal */}
@@ -84,7 +84,7 @@ const MainContent = () => {
           <h2 className="text-center">Likes</h2>
         </Modal.Title>
         <Modal.Description>
-          <div className="mt-2 mt-8 h-80 overflow-y-auto">
+          <div className="mt-8 h-80 overflow-y-auto">
             <div className="flex justify-between border-t-2 py-3">
               <div className="flex items-center">
                 <Avatar />

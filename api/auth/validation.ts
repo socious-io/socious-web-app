@@ -1,6 +1,11 @@
 import Joi from 'joi';
 
-import {rxNotMobileNumber} from 'utils/regex';
+import {
+  rxNotMobileNumber,
+  rxNoSpecialCharacters,
+  rxHasUpperLower,
+  rxHasNumber,
+} from 'utils/regex';
 
 export const schemaChangePassword = Joi.object({
   currentPassword: Joi.string().min(8).required().messages({
@@ -125,37 +130,54 @@ export const schemaOnboardingStep8 = Joi.object({
 });
 
 export const schemaSignupStep1 = Joi.object({
-  firstName: Joi.string().required().label('FirstName').messages({
-    'string.empty': `cannot be an empty field`,
-  }),
-  lastName: Joi.string().required().label('LastName').messages({
-    'string.empty': `LastName cannot be an empty field`,
-  }),
+  firstName: Joi.string()
+    .required()
+    .label('FirstName')
+    .regex(rxNoSpecialCharacters)
+    .messages({
+      'string.empty': `First name cannot be an empty field.`,
+      'string.pattern.base': `Should not contain special characters.`,
+      'any.required': `First name cannot be an empty field.`,
+    }),
+  lastName: Joi.string()
+    .required()
+    .label('LastName')
+    .regex(rxNoSpecialCharacters)
+    .messages({
+      'string.empty': `Last name cannot be an empty field`,
+      'string.pattern.base': `Should not contain special characters.`,
+    }),
 });
 export const schemaSignupStep2 = Joi.object({
   email: Joi.string()
     .email({tlds: {allow: false}})
     .required()
     .messages({
-      'string.base': `Email should be a type of 'text'`,
-      'string.empty': `Email cannot be an empty field`,
-      'any.required': `Email is a required field`,
-      'string.email': `Email must be a valid email`,
+      'string.base': `Email should be a type of 'text'.`,
+      'string.empty': `Email cannot be an empty field.`,
+      'any.required': `Email is a required field.`,
+      'string.email': `Email address is not valid.`,
     }),
 });
 export const schemaSignupStep3 = Joi.object({
-  password: Joi.string().min(8).required().messages({
-    'string.base': `Password should be a type of 'text'`,
-    'string.empty': `Password cannot be an empty field`,
-    'string.min': `Password should have a minimum length of {#limit}`,
-    'any.required': `Password is a required field`,
-  }),
+  password: Joi.string()
+    .min(8)
+    .required()
+    .regex(rxHasUpperLower)
+    .regex(rxHasNumber)
+    .messages({
+      'string.base': `Password should be a type of 'text'`,
+      'string.empty': `Password cannot be an empty field`,
+      'string.min': `Password should have a minimum length of {#limit}`,
+      'any.required': `Password is a required field`,
+      'string.pattern.base': `Password is not strong.`,
+    }),
   confirmPassword: Joi.string()
     .min(8)
     .valid(Joi.ref('password'))
     .required()
     .messages({
-      'any.only': '{{#label}} does not match',
+      'any.only': 'The passwords you entered do not match.',
       'string.base': `Confirm password should be a type of 'text'`,
       'string.empty': `Confirm password cannot be an empty field`,
       'any.required': `Confirm password is a required field`,
