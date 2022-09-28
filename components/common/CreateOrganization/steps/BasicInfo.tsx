@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useCallback} from 'react';
+import React, {useState, useMemo, useCallback, useEffect} from 'react';
 
 //components
 import Title from '../components/Title';
@@ -14,20 +14,22 @@ import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 //interfaces
 import {StepProps} from '@models/stepProps';
 
-const BasicInfo = ({onSubmit}: StepProps) => {
-  const [countryName, setCountryName] = useState<any>('');
+// services
+import {getPhoneCode} from 'services/getPhoneCode';
 
+const BasicInfo = ({onSubmit}: StepProps) => {
+  const [country_code, set_country_code] = useState<string>();
   const formMethods = useFormContext();
   const {register, handleSubmit, formState, watch, setValue} = formMethods;
 
-  const selectedCountryCode = watch('country');
-  const selectedCity = watch('city');
-
+  const country = watch('country');
+  const city = watch('city');
+  const mobile_country_code = watch('mobile_country_code');
   ///////////////////////////////////////////////////////////////////////////
   //   **********   get list of cities & countries & methodes    **********//
   ///////////////////////////////////////////////////////////////////////////
 
-  //use-places-autocomplete: Method to get countries.
+  //get countries
   const {
     ready: countryReady,
     value: countryValue,
@@ -39,8 +41,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
     cacheKey: 'country-restricted',
   });
 
-  /*use-places-autocomplete: Method to get cities filtered by 
-   country. Returns Full city address.*/
+  //to get cities filtered by country. Returns Full city address.
   const {
     ready: cityReady,
     value: cityValue,
@@ -50,10 +51,10 @@ const BasicInfo = ({onSubmit}: StepProps) => {
     requestOptions: {
       language: 'en',
       types: ['locality', 'administrative_area_level_3'],
-      componentRestrictions: {country: selectedCountryCode},
+      componentRestrictions: {country: country},
     },
     debounce: 300,
-    cacheKey: `${selectedCountryCode}-restricted`,
+    cacheKey: `${country}-restricted`,
   });
 
   //Creating list of countries for Combobox
@@ -65,7 +66,6 @@ const BasicInfo = ({onSubmit}: StepProps) => {
       })) || [{id: '1', name: 'Japan'}],
     [countries],
   );
-  console.log(countries, 'con');
 
   // Creating list of cities for Combobox
   const filterCities = useMemo(
@@ -77,7 +77,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
     [cities],
   );
 
-  //form-hook: Method for applying city to 'city'
+  //set city in form
   const handleSetCity = useCallback(
     (data: any) => {
       setValue('city', data?.name, {
@@ -88,32 +88,53 @@ const BasicInfo = ({onSubmit}: StepProps) => {
     [setValue],
   );
 
-  //form-hook: Method for applying country to 'country'
+  //set country-code('jp') in form
   const handleSetCountry = useCallback(
     (countryCode: any) => {
       setValue('country', countryCode, {
         shouldValidate: true,
         shouldDirty: true,
       });
-      if (selectedCity) handleSetCity('');
+      if (city) handleSetCity('');
     },
-    [handleSetCity, selectedCity, setValue],
+    [handleSetCity, city, setValue],
   );
 
-  // Method to get Country-Code('jp') on countrySelected and calls 'handleSetCountry'.
+  //get country-code('jp') of country
   const onCountrySelected = useCallback(
     (data: any) => {
-      setCountryName(data.name);
       getGeocode({placeId: data.id})
         .then((result: any) => {
           const countryCode =
             result?.[0]?.address_components[0]?.short_name?.toLowerCase();
+          set_country_code(countryCode);
           handleSetCountry(countryCode);
         })
         .catch((error: any) => console.error(error));
     },
     [handleSetCountry],
   );
+
+  //form-hook: Method for applying country to 'country'
+  const handleSetCountryNumber = useCallback(
+    (data: any) => {
+      setValue('mobile_country_code', data, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    [setValue],
+  );
+
+  // Get 'countryNumber' for default and each 'countryKey' change. i.e. after each 'onCountrySelected'.
+  useEffect(() => {
+    if (!country_code) return;
+    getPhoneCode(country_code)
+      .then((number) => {
+        handleSetCountryNumber(number);
+      })
+      .catch((error) => console.error(error));
+  }, [country_code, handleSetCountryNumber]);
 
   return (
     <>
@@ -160,7 +181,6 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             errorMessage={formState?.errors?.['country']?.message}
             className="my-6"
           />
-
           <Combobox
             label="City"
             onSelected={handleSetCity}
@@ -183,12 +203,16 @@ const BasicInfo = ({onSubmit}: StepProps) => {
           <p className="font-base mb-3 mt-6 text-sm font-medium">
             Phone number
           </p>
-          <div className="flex h-fit gap-x-4">
-            <InputFiled
-              type="text"
+          <div className="flex h-fit gap-x-4 ">
+            <Combobox
+              selected={{id: country_code, name: mobile_country_code}}
+              onChange={(e) => setCountryValue(e.currentTarget.value || '')}
+              onSelected={onCountrySelected}
+              items={filterCountries}
+              name="mobile_country_code"
               placeholder="+000"
-              register={register('mobile_country_code')}
-              className="mb-3"
+              errorMessage={formState?.errors?.['mobile_country_code']?.message}
+              className="mb-3  basis-3/12"
             />
             <InputFiled
               type="text"

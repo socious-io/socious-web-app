@@ -83,7 +83,7 @@ export function Combobox({
       disabled={disabled}
     >
       {({open}) => (
-        <div className={twMerge('relative mt-1', className && className)}>
+        <div className={twMerge('relative', className && className)}>
           {label && (
             <UiCombobox.Label
               htmlFor={id || name}
