@@ -23,6 +23,7 @@ import {schemaCreateOrganization} from '@api/createorganization/validation';
 import {useForm, FormProvider} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {AxiosError} from 'axios';
+import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
 
 //actions
 import {create_organization} from '@api/createorganization/actions';
@@ -42,6 +43,13 @@ const CreateOrganization = () => {
   const router = useRouter();
   const methods = useForm({
     resolver: joiResolver(schemaCreateOrganization),
+  });
+
+  //Loading Map
+  const libraries: Libraries = ['places'];
+  const {isLoaded, loadError} = useGoogleMapsScript({
+    googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
+    libraries,
   });
 
   ///////////////////////////////////////////////////////////////////////////

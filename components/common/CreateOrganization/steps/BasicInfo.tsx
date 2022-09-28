@@ -14,17 +14,20 @@ import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 //interfaces
 import {StepProps} from '@models/stepProps';
 
-// services
+//services
 import {getPhoneCode} from 'services/getPhoneCode';
 
 const BasicInfo = ({onSubmit}: StepProps) => {
   const [country_code, set_country_code] = useState<string>();
+
   const formMethods = useFormContext();
   const {register, handleSubmit, formState, watch, setValue} = formMethods;
 
+  // watch form inputs
   const country = watch('country');
   const city = watch('city');
   const mobile_country_code = watch('mobile_country_code');
+
   ///////////////////////////////////////////////////////////////////////////
   //   **********   get list of cities & countries & methodes    **********//
   ///////////////////////////////////////////////////////////////////////////
