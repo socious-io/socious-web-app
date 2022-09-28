@@ -13,7 +13,10 @@ const OnboardingStep5 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
   const {handleSubmit, formState, setValue, watch} = formMethods;
 
-  const [countryKey, setCountryKey] = useState<any>('jp');
+  const selectedCountryCode = watch('country');
+  const selectedCity = watch('country');
+
+  const [countryName, setCountryName] = useState<any>('');
 
   //use-places-autocomplete: Method to get countries.
   const {
@@ -37,10 +40,10 @@ const OnboardingStep5 = ({onSubmit}: StepProps) => {
     requestOptions: {
       language: 'en',
       types: ['locality', 'administrative_area_level_3'],
-      componentRestrictions: {country: countryKey},
+      componentRestrictions: {country: selectedCountryCode},
     },
     debounce: 300,
-    cacheKey: 'city-restricted',
+    cacheKey: `${selectedCountryCode}-restricted`,
   });
 
   //Creating [] of countries for Combobox
@@ -59,19 +62,8 @@ const OnboardingStep5 = ({onSubmit}: StepProps) => {
       cities.map(({place_id, description, structured_formatting}) => ({
         id: place_id,
         name: structured_formatting.main_text || description,
-      })) || [{id: 1, name: 'Tokyo, Japan'}],
+      })) || [{id: 1, name: 'Tokyo'}],
     [cities],
-  );
-
-  //form-hook: Method for applying country to 'country'
-  const handleSetCountry = useCallback(
-    (countryName: any) => {
-      setValue('country', countryName, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    },
-    [setValue],
   );
 
   //form-hook: Method for applying city to 'city'
@@ -85,26 +77,36 @@ const OnboardingStep5 = ({onSubmit}: StepProps) => {
     [setValue],
   );
 
+  //form-hook: Method for applying country to 'country'
+  const handleSetCountry = useCallback(
+    (countryCode: any) => {
+      setValue('country', countryCode, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      if (selectedCity) handleSetCity('');
+    },
+    [handleSetCity, selectedCity, setValue],
+  );
+
   // Method to get Country-Code('jp') on countrySelected and calls 'handleSetCountry'.
   const onCountrySelected = useCallback(
     (data: any) => {
-      handleSetCountry(data.name);
+      setCountryName(data.name);
       getGeocode({placeId: data.id})
         .then((result: any) => {
-          setCountryKey(
-            result?.[0]?.address_components[0]?.short_name?.toLowerCase(),
-          );
+          const countryCode =
+            result?.[0]?.address_components[0]?.short_name?.toLowerCase();
+          handleSetCountry(countryCode);
         })
         .catch((error: any) => console.error(error));
     },
     [handleSetCountry],
   );
 
-  const selectedCountry = watch('country');
-
   return (
     <form
-      onSubmit={handleSubmit(() => onSubmit(countryKey))}
+      onSubmit={handleSubmit(() => onSubmit(selectedCountryCode))}
       className="flex grow flex-col justify-between pl-0 pr-10 sm:pl-10"
     >
       <div className="flex flex-col">
@@ -125,7 +127,7 @@ const OnboardingStep5 = ({onSubmit}: StepProps) => {
           errorMessage={formState?.errors?.['country']?.message}
           className="my-6"
         />
-        {selectedCountry}
+        {countryName}
         <Combobox
           label="City"
           onSelected={handleSetCity}
@@ -138,9 +140,9 @@ const OnboardingStep5 = ({onSubmit}: StepProps) => {
           className="my-6"
         />
       </div>
-      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 sm:pl-0">
+      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 pb-12 sm:pl-0">
         <Button
-          className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center align-middle "
+          className="m-auto mt-4 flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"
