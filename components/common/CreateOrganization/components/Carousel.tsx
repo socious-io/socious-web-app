@@ -11,7 +11,7 @@ import {CreateOrganizationType} from '@models/createOrganization';
 interface Props {
   step: number;
   onBack: () => void;
-  onSkip?: (data: CreateOrganizationType) => void;
+  onSkip?: (data: any) => void;
   skip: boolean;
 }
 //show skip in carousel send skip={true}
