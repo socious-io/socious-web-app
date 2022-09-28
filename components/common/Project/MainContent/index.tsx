@@ -79,6 +79,7 @@ const MainContent = ({onClickShow}: Props) => {
             payment_range_lower={''}
             payment_range_higher={''}
             experience_level={0}
+            remote_preference={''}
           />
         ))}
       </div>

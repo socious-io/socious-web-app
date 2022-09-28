@@ -55,7 +55,7 @@ function SliderCard() {
   return (
     <div
       id="slider"
-      className="scroll w-full flex-row overflow-x-scroll scroll-smooth whitespace-nowrap scrollbar-hide md:max-w-2xl "
+      className="scroll w-full flex-row overflow-x-scroll scroll-smooth whitespace-nowrap scrollbar-hide"
     >
       {data.map((item, index) => (
         <RecommendCard key={item.id} title={item.title} index={index} />

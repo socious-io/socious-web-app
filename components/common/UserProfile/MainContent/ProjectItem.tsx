@@ -13,23 +13,33 @@ import Title from './Title';
 interface Props {
   items: string[];
   title: string;
+  isRow?: boolean;
 }
 
-const ProjectItem: React.FC<Props> = ({title, items}) => {
+const ProjectItem: React.FC<Props> = ({title, items, isRow = false}) => {
   return (
     <div className="p-4">
       <Title>{title}</Title>
-      <div className="flex w-4/6 flex-wrap gap-2 ">
-        {items &&
-          items?.map((item: string) => {
-            return (
-              <Chip
-                key={item}
-                name={getText('en', `PASSION.${item}`) || item}
-              />
-            );
-          })}
-      </div>
+      {isRow ? (
+        <div className="flex w-4/6 flex-col gap-2 ">
+          {items &&
+            items?.map((item: string) => {
+              return <div key={item}>{item}</div>;
+            })}
+        </div>
+      ) : (
+        <div className="flex w-4/6 flex-wrap gap-2 ">
+          {items &&
+            items?.map((item: string) => {
+              return (
+                <Chip
+                  key={item}
+                  name={getText('en', `PASSION.${item}`) || item}
+                />
+              );
+            })}
+        </div>
+      )}
     </div>
   );
 };

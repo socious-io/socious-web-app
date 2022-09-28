@@ -1,11 +1,13 @@
 import DetailContent from '@components/common/Project/MainContent/DetailContent';
 import SideBar from '@components/common/Project/SideBar/SideBar';
-import {GeneralLayout} from 'layout';
+import {GeneralLayout, DetailLayout} from 'layout';
 const Detail = () => {
   return (
     <GeneralLayout hasNavbar>
       <SideBar selectBar={'PROJECT_DETAIL'} />
-      <DetailContent />
+      <DetailLayout>
+        <DetailContent />
+      </DetailLayout>
     </GeneralLayout>
   );
 };

@@ -23,6 +23,7 @@ function OrganizationTopCard({
   experience_level,
   payment_range_higher,
   payment_range_lower,
+  remote_preference,
 }: Project) {
   const {state: showApply, handlers: setShowApply} = useToggle();
 
@@ -76,16 +77,10 @@ function OrganizationTopCard({
         <p className="font-semibold">{title}</p>
       </div>
       <div className="mt-4 flex flex-row space-x-2 divide-x divide-solid divide-graySubtitle">
-        <p className="text-sm text-graySubtitle ">World wide</p>
+        <p className="text-sm text-graySubtitle ">{country_id}</p>
         <p className="pl-2 text-sm text-graySubtitle ">{`$${payment_range_lower}-$${payment_range_higher}`}</p>
         <p className="pl-2 text-sm text-graySubtitle ">{experience_level}</p>
-        <p className="pl-2 text-sm text-graySubtitle ">Part-time</p>
-      </div>
-      <div>
-        <p className="my-4 text-sm">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Equat
-          faucibus sed facilisi sit id blandiacilisi sit id blandit
-        </p>
+        <p className="pl-2 text-sm text-graySubtitle ">{remote_preference}</p>
       </div>
 
       <PostData />

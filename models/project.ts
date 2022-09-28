@@ -1,5 +1,5 @@
 import {Passion} from './passion';
-import {Questionnaire} from './question';
+import {Question} from './question';
 import {TopSkills} from './topSkills';
 
 export interface Project {
@@ -18,8 +18,9 @@ export interface Project {
   passions?: Array<number> | Array<Passion>;
   skills?: Array<number> | Array<TopSkills>;
   payment_currency?: string;
-  questionnaire?: Array<Questionnaire>;
+  questions?: Array<Question>;
   project_status?: number;
+  remote_preference: string;
 }
 
 export interface CreateProjectType {
