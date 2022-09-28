@@ -9,8 +9,7 @@ const useHandleSelected = (
   maxNum: number,
 ): [string[], OnSelectType] => {
   const {setValue, getValues} = useFormContext();
-  // const [selecteds, setSelecteds] = useState<string[]>(getValues(field));
-  const [selecteds, setSelecteds] = useState<string[]>([]);
+  const [selecteds, setSelecteds] = useState<string[]>(getValues(field) || []);
 
   const onSetValueForm = useCallback(
     (value: string[]) => {

@@ -19,6 +19,8 @@ import {useForm, FormProvider} from 'react-hook-form';
 
 import {joiResolver} from '@hookform/resolvers/joi';
 
+import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
+
 import {
   schemaOnboardingStep3,
   schemaOnboardingStep4,
@@ -48,12 +50,22 @@ type OnBoardingProps = {
   skills: any[];
 };
 
+// IMP: This needs to be constant.
+const libraries: Libraries = ['places'];
+
 const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
+  //Loading Map
+  const {isLoaded, loadError} = useGoogleMapsScript({
+    googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
+    libraries,
+  });
+
   const {user} = useUser();
   const [errorMessage, setError] = useState<ErrorMessage>();
 
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [placeId, setPlaceId] = useState<string>('');
 
   const handleBack = useCallback(() => {
     setStep(step - 1);
@@ -87,7 +99,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   });
   const formMethodsStep7 = useForm({
     defaultValues: {
-      countryNumber: {id: 1, name: 'Japan'},
+      countryNumber: '+81',
     },
     resolver: joiResolver(schemaStep[7]),
   });
@@ -97,7 +109,10 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   const formMethodsStep9 = useForm();
 
   const handleSubmit = (data: any) => {
-    if (step === 8) {
+    if (step === 5) {
+      setPlaceId(data);
+      setStep(step + 1);
+    } else if (step === 8) {
       handleUpdateProfileRequest();
     } else if (step === 9) {
       handleImageUpload(data);
@@ -153,7 +168,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     const bio = formMethodsStep8.getValues('bio');
     const passions = formMethodsStep3.getValues('passions');
     const city = formMethodsStep5.getValues('city');
-
+    const country = formMethodsStep5.getValues('country');
     const skills = formMethodsStep4.getValues('skills');
 
     if (user === undefined) return;
@@ -165,13 +180,18 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
       social_causes: passions,
       skills: skills,
     };
+
     if (bio) profileBody.bio = bio;
     if (city) profileBody.city = city;
+    if (country) profileBody.country = country;
+
     updateProfile(profileBody)
       .then(() => {
         setStep(step + 1);
       })
       .catch((e) => {
+        // TODO: REMOVE THIS AFTER CHECK COMPLETE
+        console.log('error: 1st update', e);
         setError(DefaultErrorMessage);
         handleToggleModal();
       });
@@ -197,11 +217,11 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     <PreAuthLayout>
       <div
         className={twMerge(
-          'mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7',
+          'mx-auto flex min-h-screen w-screen flex-col items-stretch justify-between border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7 lg:h-[calc(100vh-theme(space.24))]',
           step === 10 ? ' bg-primary' : 'bg-background',
         )}
       >
-        <div className="relative  flex  h-20 justify-center">
+        <div className="relative flex h-20 justify-center">
           <Modal isOpen={showModal} onClose={handleToggleModal}>
             <Modal.Title>
               <h2 className="text-center text-error">{errorMessage?.title}</h2>
@@ -276,7 +296,9 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
           {step === 6 && <OnboardingStep6 onSubmit={handleSubmit} />}
         </FormProvider>
         <FormProvider {...formMethodsStep7}>
-          {step === 7 && <OnboardingStep7 onSubmit={handleSubmit} />}
+          {step === 7 && (
+            <OnboardingStep7 onSubmit={handleSubmit} defaultCountry={placeId} />
+          )}
         </FormProvider>
         <FormProvider {...formMethodsStep8}>
           {step === 8 && <OnboardingStep8 onSubmit={handleSubmit} />}
