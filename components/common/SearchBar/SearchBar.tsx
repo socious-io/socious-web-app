@@ -9,7 +9,7 @@ export interface SearchBarProps
   > {
   disabled?: boolean;
   register?: UseFormRegisterReturn;
-  bgColor?:string;
+  bgColor?: string;
 }
 
 export const SearchBar = ({
@@ -20,7 +20,7 @@ export const SearchBar = ({
   name,
   register,
   className,
-  bgColor='background',
+  bgColor = 'background',
   ...props
 }: SearchBarProps) => {
   return (
