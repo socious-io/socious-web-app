@@ -62,7 +62,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   const {user} = useUser();
   const [errorMessage, setError] = useState<ErrorMessage>();
 
-  const [step, setStep] = useState<number>(7);
+  const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [placeId, setPlaceId] = useState<string>('');
 
@@ -109,10 +109,6 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 
   const handleSubmit = (data: any) => {
     if (step === 5) {
-      console.log({
-        country: formMethodsStep5.getValues('country'),
-        city: formMethodsStep5.getValues('city'),
-      });
       setPlaceId(data);
       setStep(step + 1);
     } else if (step === 8) {
@@ -171,7 +167,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     const bio = formMethodsStep8.getValues('bio');
     const passions = formMethodsStep3.getValues('passions');
     const city = formMethodsStep5.getValues('city');
-
+    const country = formMethodsStep5.getValues('country');
     const skills = formMethodsStep4.getValues('skills');
 
     if (user === undefined) return;
@@ -184,14 +180,16 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
       skills: skills,
     };
 
-    console.log('PROFILE BODY :---: ', profileBody);
     if (bio) profileBody.bio = bio;
     if (city) profileBody.city = city;
+    if (country) profileBody.country = country;
+
     updateProfile(profileBody)
       .then(() => {
         setStep(step + 1);
       })
       .catch((e) => {
+        // TODO: REMOVE THIS AFTER CHECK COMPLETE
         console.log('error: 1st update', e);
         setError(DefaultErrorMessage);
         handleToggleModal();
@@ -217,7 +215,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   return (
     <div
       className={twMerge(
-        'mx-auto flex min-h-screen w-screen flex-col items-stretch justify-between border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[calc(100vh-theme(space.24))] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7',
+        'mx-auto flex min-h-screen w-screen flex-col items-stretch justify-between border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7 lg:h-[calc(100vh-theme(space.24))]',
         step === 10 ? ' bg-primary' : 'bg-background',
       )}
     >
