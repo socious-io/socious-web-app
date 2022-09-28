@@ -1,24 +1,48 @@
-import {TextInput, Button} from '@components/common';
-import AutoCompleteInput from '@components/common/AutoCompleteInput/AutoCompleteInput';
-import Combobox from '@components/common/Combobox/Combobox';
-import {StepProps} from '@models/stepProps';
-import {useCallback, useEffect, useState} from 'react';
-import {geocodeByPlaceId} from 'react-google-places-autocomplete';
+// Packages
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useFormContext} from 'react-hook-form';
+import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
+
+// Components
+import {TextInput, Button, Combobox} from '@components/common';
+
+// Services
 import {getPhoneCode} from 'services/getPhoneCode';
 
+// Types
+import {StepProps} from '@models/stepProps';
 interface OnboardingStep7Props extends StepProps {
   defaultCountry: string;
 }
 
 const OnboardingStep7 = ({onSubmit, defaultCountry}: OnboardingStep7Props) => {
   const formMethods = useFormContext();
-  const {handleSubmit, formState, register, setValue, getValues} = formMethods;
+  const {handleSubmit, formState, register, setValue, watch} = formMethods;
   const [countryKey, setCountryKey] = useState<string>(defaultCountry);
-  const [countryNumber, setCountryNumber] = useState<string>(
-    getValues('countryNumber'),
+
+  //use-places-autocomplete: Method to get countries.
+  const {
+    ready: countryReady,
+    value: countryValue,
+    suggestions: {status: countryStatus, data: countries},
+    setValue: setCountryValue,
+  } = usePlacesAutocomplete({
+    requestOptions: {language: 'en', types: ['country']},
+    debounce: 300,
+    cacheKey: 'country-restricted',
+  });
+
+  //Creating [] of countries for Combobox
+  const filterCountries = useMemo(
+    () =>
+      countries.map(({place_id, description}) => ({
+        id: place_id,
+        name: description,
+      })) || [{id: '1', name: 'Japan'}],
+    [countries],
   );
 
+  //form-hook: Method for applying country to 'country'
   const handleSetCountryNumber = useCallback(
     (data: any) => {
       setValue('countryNumber', data, {
@@ -29,8 +53,9 @@ const OnboardingStep7 = ({onSubmit, defaultCountry}: OnboardingStep7Props) => {
     [setValue],
   );
 
+  // Method to get Country-Code('jp') on countrySelected so we call call another API for 'countryNumber' for that country
   const onCountrySelected = useCallback((data: any) => {
-    geocodeByPlaceId(data.value.place_id)
+    getGeocode({placeId: data.id})
       .then((data: any) => {
         setCountryKey(
           data?.[0]?.address_components[0]?.short_name?.toLowerCase(),
@@ -39,17 +64,18 @@ const OnboardingStep7 = ({onSubmit, defaultCountry}: OnboardingStep7Props) => {
       .catch((error) => console.error(error));
   }, []);
 
+  // Get 'countryNumber' for default and each 'countryKey' change. i.e. after each 'onCountrySelected'.
   useEffect(() => {
     if (!countryKey) return;
     getPhoneCode(countryKey)
       .then((number) => {
-        setCountryNumber(number);
         handleSetCountryNumber(number);
       })
       .catch((error) => console.error(error));
   }, [countryKey, handleSetCountryNumber]);
 
-  const items = [{id: 1, name: 'Japan'}];
+  const countryNumber = watch('countryNumber');
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -63,22 +89,15 @@ const OnboardingStep7 = ({onSubmit, defaultCountry}: OnboardingStep7Props) => {
           with
         </p>
         <div className="flex space-x-5">
-          {/* <Combobox
-            selected={getValues('countryNumber')}
-            onSelected={handleSetCountryNumber}
-            items={items}
+          <Combobox
+            selected={{id: countryKey, name: countryNumber}}
+            onChange={(e) => setCountryValue(e.currentTarget.value || '')}
+            onSelected={onCountrySelected}
+            items={filterCountries}
             name="countryNumber"
             placeholder="countryNumber"
-            // errorMessage={formState?.errors?.['countryNumber']?.message}
+            errorMessage={formState?.errors?.['countryNumber']?.message}
             className="my-6  basis-3/12"
-          /> */}
-          <AutoCompleteInput
-            selected={countryKey}
-            onSelected={onCountrySelected}
-            errorMessage={formState?.errors?.['country']?.message}
-            autocompletionRequest={{
-              types: ['country'],
-            }}
           />
           <TextInput
             placeholder="Phone number"
