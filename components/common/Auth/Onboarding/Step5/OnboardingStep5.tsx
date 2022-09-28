@@ -1,31 +1,83 @@
-import {Button} from '@components/common';
-import {StepProps} from '@models/stepProps';
-import {useCallback, useEffect, useState} from 'react';
+// Packages
+import {useCallback, useMemo, useState} from 'react';
 import {useFormContext} from 'react-hook-form';
-import {geocodeByPlaceId} from 'react-google-places-autocomplete';
-import AutoCompleteInput from '@components/common/AutoCompleteInput/AutoCompleteInput';
+import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
+
+//Components
+import {Button, Combobox} from '@components/common';
+
+// Type
+import {StepProps} from '@models/stepProps';
 
 const OnboardingStep5 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {handleSubmit, formState, setValue, getValues, watch} = formMethods;
+  const {handleSubmit, formState, setValue, watch} = formMethods;
 
-  const [countryKey, setCountryKey] = useState<any>('Japan');
+  const [countryKey, setCountryKey] = useState<any>('jp');
 
-  const selectedCountry = watch('country');
-  const selectedCity = watch('city');
+  //use-places-autocomplete: Method to get countries.
+  const {
+    ready: countryReady,
+    value: countryValue,
+    suggestions: {status: countryStatus, data: countries},
+    setValue: setCountryValue,
+  } = usePlacesAutocomplete({
+    requestOptions: {language: 'en', types: ['country']},
+    debounce: 300,
+    cacheKey: 'country-restricted',
+  });
 
+  //use-places-autocomplete: Method to get cities filtered by country. Returns Full city address.
+  const {
+    ready: cityReady,
+    value: cityValue,
+    suggestions: {status: cityStatus, data: cities},
+    setValue: setCitiesValue,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      language: 'en',
+      types: ['locality', 'administrative_area_level_3'],
+      componentRestrictions: {country: countryKey},
+    },
+    debounce: 300,
+    cacheKey: 'city-restricted',
+  });
+
+  //Creating [] of countries for Combobox
+  const filterCountries = useMemo(
+    () =>
+      countries.map(({place_id, description}) => ({
+        id: place_id,
+        name: description,
+      })) || [{id: '1', name: 'Japan'}],
+    [countries],
+  );
+
+  // Creating [] of cities for Combobox
+  const filterCities = useMemo(
+    () =>
+      cities.map(({place_id, description, structured_formatting}) => ({
+        id: place_id,
+        name: structured_formatting.main_text || description,
+      })) || [{id: 1, name: 'Tokyo, Japan'}],
+    [cities],
+  );
+
+  //form-hook: Method for applying country to 'country'
   const handleSetCountry = useCallback(
-    (data: any) => {
-      setValue('country', data, {
+    (countryName: any) => {
+      setValue('country', countryName, {
         shouldValidate: true,
         shouldDirty: true,
       });
     },
     [setValue],
   );
+
+  //form-hook: Method for applying city to 'city'
   const handleSetCity = useCallback(
     (data: any) => {
-      setValue('city', data?.label, {
+      setValue('city', data?.name, {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -33,19 +85,22 @@ const OnboardingStep5 = ({onSubmit}: StepProps) => {
     [setValue],
   );
 
+  // Method to get Country-Code('jp') on countrySelected and calls 'handleSetCountry'.
   const onCountrySelected = useCallback(
     (data: any) => {
-      handleSetCountry(data.label);
-      geocodeByPlaceId(data.value.place_id)
-        .then((data: any) => {
+      handleSetCountry(data.name);
+      getGeocode({placeId: data.id})
+        .then((result: any) => {
           setCountryKey(
-            data?.[0]?.address_components[0]?.short_name?.toLowerCase(),
+            result?.[0]?.address_components[0]?.short_name?.toLowerCase(),
           );
         })
         .catch((error: any) => console.error(error));
     },
     [handleSetCountry],
   );
+
+  const selectedCountry = watch('country');
 
   return (
     <form
@@ -59,30 +114,30 @@ const OnboardingStep5 = ({onSubmit}: StepProps) => {
           Connect with other like-minded individuals and organizations around
           you
         </p>
-        <AutoCompleteInput
-          selected={selectedCountry}
-          onSelected={onCountrySelected}
+        <Combobox
           label="Country"
+          onSelected={onCountrySelected}
+          onChange={(e) => setCountryValue(e.currentTarget.value || '')}
+          required
+          name="country"
+          items={filterCountries}
+          placeholder="Country"
           errorMessage={formState?.errors?.['country']?.message}
-          autocompletionRequest={{
-            types: ['country'],
-          }}
+          className="my-6"
         />
         {selectedCountry}
-        <AutoCompleteInput
-          selected={selectedCity}
-          onSelected={handleSetCity}
+        <Combobox
           label="City"
-          errorMessage={formState?.errors?.['country']?.message}
-          autocompletionRequest={{
-            types: ['locality', 'administrative_area_level_3'],
-            componentRestrictions: {
-              country: [countryKey],
-            },
-          }}
+          onSelected={handleSetCity}
+          onChange={(e) => setCitiesValue(e.currentTarget.value || '')}
+          required
+          name="city"
+          items={filterCities}
+          placeholder="City"
+          errorMessage={formState?.errors?.['city']?.message}
+          className="my-6"
         />
       </div>
-
       <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 sm:pl-0">
         <Button
           className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center align-middle "
