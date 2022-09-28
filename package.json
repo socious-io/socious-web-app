@@ -37,7 +37,9 @@
     "sharp": "^0.31.0",
     "swr": "^1.3.0",
     "tailwind-merge": "^1.6.0",
-    "tailwind-scrollbar-hide": "^1.1.7"
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "use-google-maps-script": "^0.1.2",
+    "use-places-autocomplete": "^4.0.0"
   },
   "disabled-web3-deps-please-fix": {
     "@web3-react/core": "^6.1.9",
