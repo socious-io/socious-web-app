@@ -44,7 +44,7 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
         <p className="text-base text-graySubtitle ">
           Select up to 5 social causes that you are passionate about
         </p>
-        <div className="my-5 -mx-16  flex h-80 grow flex-col bg-offWhite px-5">
+        <div className="my-5 -mx-16 flex h-80 grow flex-col bg-offWhite px-5">
           <SearchBar
             type="text"
             placeholder="Search"
@@ -70,9 +70,9 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
         </div>
       </div>
 
-      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased">
+      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pb-12">
         <Button
-          className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center align-middle "
+          className="m-auto mt-4 flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"
