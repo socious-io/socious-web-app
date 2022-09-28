@@ -51,7 +51,7 @@ function MyApplicationBoxes() {
   const {state: showDrafts, handlers: showDraftsHandler} = useToggle();
   const {user} = useUser();
   return (
-    <div className="w-3/4 pb-4">
+    <div className="w-2/3 pb-4">
       <div className="flex items-center rounded-2xl border border-grayLineBased bg-white p-6">
         <p className="text-xl font-semibold">Created Project</p>
       </div>
@@ -77,7 +77,7 @@ function MyApplicationBoxes() {
         {data.map((item) => (
           <BodyCard
             key={item.id}
-            refixAddress={`/app/projects/created/overview/${user.username}`}
+            refixAddress={`/app/projects/created/overview/${user?.username}`}
           />
         ))}
         <HeaderBox
@@ -91,7 +91,7 @@ function MyApplicationBoxes() {
           data2.map((item) => (
             <BodyCard
               key={item.id}
-              refixAddress={`/app/projects/created/overview/${user.username}}`}
+              refixAddress={`/app/projects/created/overview/${user?.username}}`}
             />
           ))}
       </div>

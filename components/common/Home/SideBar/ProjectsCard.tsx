@@ -24,12 +24,12 @@ const ProjectsCard: FC<ProjectsCardProps> = ({
         {!isOrganization ? (
           <>
             <Link href={`/app/projects/created/${username}`} passHref>
-              <li className="flex items-center space-x-4">
+              <li className="flex cursor-pointer items-center space-x-4">
                 <UserCircleIcon className="h-4" />
                 <p>Created</p>
               </li>
             </Link>
-            <li className="flex items-center space-x-4">
+            <li className="flex cursor-pointer items-center space-x-4">
               <FolderIcon className="h-4" />
               <p>Archived</p>
             </li>
