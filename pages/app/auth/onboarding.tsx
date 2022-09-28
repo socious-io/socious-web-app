@@ -18,6 +18,8 @@ import {useForm, FormProvider} from 'react-hook-form';
 
 import {joiResolver} from '@hookform/resolvers/joi';
 
+import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
+
 import {
   schemaOnboardingStep3,
   schemaOnboardingStep4,
@@ -47,7 +49,16 @@ type OnBoardingProps = {
   skills: any[];
 };
 
+// IMP: This needs to be constant.
+const libraries: Libraries = ['places'];
+
 const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
+  //Loading Map
+  const {isLoaded, loadError} = useGoogleMapsScript({
+    googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
+    libraries,
+  });
+
   const {user} = useUser();
   const [errorMessage, setError] = useState<ErrorMessage>();
 
@@ -98,6 +109,10 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 
   const handleSubmit = (data: any) => {
     if (step === 5) {
+      console.log({
+        country: formMethodsStep5.getValues('country'),
+        city: formMethodsStep5.getValues('city'),
+      });
       setPlaceId(data);
       setStep(step + 1);
     } else if (step === 8) {
