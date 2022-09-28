@@ -12,7 +12,7 @@ const PostContainer = () => {
   }
 
   return (
-    <div className="space-y-2">
+    <div className="sm:space-y-2">
       <div className="space-y-10">{posts}</div>
       {!fullPost && (
         <div className="flex justify-center">

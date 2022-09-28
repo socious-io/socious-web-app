@@ -24,9 +24,9 @@ const OnboardingStep1 = ({onSubmit}: StepProps) => {
   return (
     <form
       onSubmit={handleOnSubmit}
-      className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
+      className="ml-10 flex grow flex-col justify-between pl-0 pr-10 sm:ml-0 sm:pl-10"
     >
-      <div className="flex h-[28rem] flex-col">
+      <div className="flex grow flex-col items-center justify-center">
         {' '}
         <Image
           src={logoCompony}
@@ -35,21 +35,29 @@ const OnboardingStep1 = ({onSubmit}: StepProps) => {
           alt="socious logo"
         />
         <h1 className="font-helmet my-6 text-center ">Welcome to Socious</h1>
-        <p className="my-6 text-center text-base text-graySubtitle">
+        <p className="mb-6 text-center text-base text-graySubtitle">
           To continue, please agree to our terms of service and privacy policy
-          <Button variant="link" onClick={handleSeeTerms} className="px-1">
+          <Button
+            variant="link"
+            onClick={handleSeeTerms}
+            className="m-0 px-1 py-0"
+          >
             {' '}
             terms of service{' '}
           </Button>
           and
-          <Button variant="link" onClick={handleSeePolicy} className="px-1">
+          <Button
+            variant="link"
+            onClick={handleSeePolicy}
+            className="m-0 px-1 py-0"
+          >
             {' '}
             privacy policy{' '}
           </Button>
         </p>
       </div>
 
-      <div className="-mx-16  divide-x border-t-2 border-b-grayLineBased pl-10 pb-12 sm:h-48 sm:pl-0">
+      <div className="-mx-16  divide-x border-t-2 border-b-grayLineBased pb-12">
         <Button
           className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"

@@ -1,37 +1,102 @@
-import {TextInput, Button} from '@components/common';
-import Combobox from '@components/common/Combobox/Combobox';
-import {StepProps} from '@models/stepProps';
+// Packages
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useFormContext} from 'react-hook-form';
-const OnboardingStep7 = ({onSubmit}: StepProps) => {
+import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
+
+// Components
+import {TextInput, Button, Combobox} from '@components/common';
+
+// Services
+import {getPhoneCode} from 'services/getPhoneCode';
+
+// Types
+import {StepProps} from '@models/stepProps';
+interface OnboardingStep7Props extends StepProps {
+  defaultCountry: string;
+}
+
+const OnboardingStep7 = ({onSubmit, defaultCountry}: OnboardingStep7Props) => {
   const formMethods = useFormContext();
-  const {handleSubmit, formState, register, setValue, getValues} = formMethods;
-  const handleSetCountryNumber = (data: any) => {
-    setValue('countryNumber', data, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
-  };
-  const items = [{id: 1, name: 'Japan'}];
+  const {handleSubmit, formState, register, setValue, watch} = formMethods;
+  const [countryKey, setCountryKey] = useState<string>(defaultCountry);
+
+  //use-places-autocomplete: Method to get countries.
+  const {
+    ready: countryReady,
+    value: countryValue,
+    suggestions: {status: countryStatus, data: countries},
+    setValue: setCountryValue,
+  } = usePlacesAutocomplete({
+    requestOptions: {language: 'en', types: ['country']},
+    debounce: 300,
+    cacheKey: 'country-restricted',
+  });
+
+  //Creating [] of countries for Combobox
+  const filterCountries = useMemo(
+    () =>
+      countries.map(({place_id, description}) => ({
+        id: place_id,
+        name: description,
+      })) || [{id: '1', name: 'Japan'}],
+    [countries],
+  );
+
+  //form-hook: Method for applying country to 'country'
+  const handleSetCountryNumber = useCallback(
+    (data: any) => {
+      setValue('countryNumber', data, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    [setValue],
+  );
+
+  // Method to get Country-Code('jp') on countrySelected so we call call another API for 'countryNumber' for that country
+  const onCountrySelected = useCallback((data: any) => {
+    getGeocode({placeId: data.id})
+      .then((data: any) => {
+        setCountryKey(
+          data?.[0]?.address_components[0]?.short_name?.toLowerCase(),
+        );
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  // Get 'countryNumber' for default and each 'countryKey' change. i.e. after each 'onCountrySelected'.
+  useEffect(() => {
+    if (!countryKey) return;
+    getPhoneCode(countryKey)
+      .then((number) => {
+        handleSetCountryNumber(number);
+      })
+      .catch((error) => console.error(error));
+  }, [countryKey, handleSetCountryNumber]);
+
+  const countryNumber = watch('countryNumber');
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
+      className="flex grow flex-col justify-between pl-0 pr-10 sm:pl-10"
     >
-      <div className="flex h-[28rem] flex-col">
+      <div className="flex grow flex-col">
         {' '}
-        <h1 className="font-helmet my-6 ">What’s your phone number?</h1>
+        <h1 className="font-helmet mb-6">What’s your phone number?</h1>
         <p className="text-base text-graySubtitle">
           Share your phone number with organisations you’d like to work together
           with
         </p>
-        <div className="flex flex-row  space-x-5  ">
+        <div className="flex space-x-5">
           <Combobox
-            selected={getValues('countryNumber')}
-            onSelected={handleSetCountryNumber}
-            items={items}
+            selected={{id: countryKey, name: countryNumber}}
+            onChange={(e) => setCountryValue(e.currentTarget.value || '')}
+            onSelected={onCountrySelected}
+            items={filterCountries}
             name="countryNumber"
             placeholder="countryNumber"
-            // errorMessage={formState?.errors?.['countryNumber']?.message}
+            errorMessage={formState?.errors?.['countryNumber']?.message}
             className="my-6  basis-3/12"
           />
           <TextInput
@@ -44,7 +109,7 @@ const OnboardingStep7 = ({onSubmit}: StepProps) => {
         </div>
       </div>
 
-      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 sm:h-48 sm:pl-0">
+      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 sm:pl-0">
         <Button
           className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"

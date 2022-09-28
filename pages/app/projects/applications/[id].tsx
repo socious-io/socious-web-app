@@ -5,7 +5,7 @@
 import React from 'react';
 import type {NextPage} from 'next';
 import {useRouter} from 'next/router';
-
+import {GeneralLayout} from 'layout';
 //libraries
 import useSWR from 'swr';
 
@@ -35,10 +35,12 @@ const ProjectApplications: NextPage = () => {
     return <p>invalid user</p>;
 
   return (
-    <div className="mx-6 mt-10 flex md:space-x-6 ">
-      <SideBar selectBar={''} />
-      <MyApplicationBoxes />
-    </div>
+    <GeneralLayout hasNavbar>
+      <div className="mx-6 mt-10 flex md:space-x-6 ">
+        <SideBar />
+        <MyApplicationBoxes />
+      </div>
+    </GeneralLayout>
   );
 };
 
