@@ -54,6 +54,7 @@ const SocialCauses = ({onSubmit}: StepProps) => {
       </Title>
       <SearchBar
         type="text"
+        bgColor='offWhite'
         placeholder="Search"
         onChange={(e) => filterWith(e?.currentTarget?.value || '')}
         className="my-6 mx-6"

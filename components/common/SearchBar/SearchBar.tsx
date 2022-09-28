@@ -9,6 +9,7 @@ export interface SearchBarProps
   > {
   disabled?: boolean;
   register?: UseFormRegisterReturn;
+  bgColor?:string;
 }
 
 export const SearchBar = ({
@@ -19,6 +20,7 @@ export const SearchBar = ({
   name,
   register,
   className,
+  bgColor='background',
   ...props
 }: SearchBarProps) => {
   return (
@@ -37,7 +39,7 @@ export const SearchBar = ({
         aria-label={placeholder}
         data-testid={`${id || name}-testid`}
         className={twMerge(
-          'border-1 focus:border-1 block w-full rounded-full   border-grayLineBased bg-background py-1.5 pl-8 text-sm  outline-none focus:border-primary',
+          `border-1 focus:border-1 block w-full rounded-full   border-grayLineBased bg-${bgColor} py-1.5 pl-8 text-sm  outline-none focus:border-primary`,
           disabled && 'border-opacity-40 bg-transparent text-opacity-40',
         )}
         {...register}
