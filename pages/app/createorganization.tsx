@@ -60,7 +60,8 @@ const CreateOrganization = () => {
   const requestHandler = async (data: CreateOrganizationType) => {
     console.log('data', data);
     try {
-      await create_organization(data);
+      const res=await create_organization(data);
+      console.log('res',res)
       nextHandler();
     } catch (e) {
       const error = e as AxiosError<any>;
