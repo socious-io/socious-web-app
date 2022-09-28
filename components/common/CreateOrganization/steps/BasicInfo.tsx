@@ -1,21 +1,119 @@
-import React from 'react';
+import React, {useState, useMemo, useCallback} from 'react';
 
 //components
 import Title from '../components/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
-import Button from '@components/common/Button/Button';
+import {Button, Combobox} from '@components/common';
 import FormTitle from '../components/FormTitle';
 import TextArea from '@components/common/TextArea/TextArea';
 
 //libraries
 import {useFormContext} from 'react-hook-form';
+import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 
 //interfaces
 import {StepProps} from '@models/stepProps';
 
 const BasicInfo = ({onSubmit}: StepProps) => {
+  const [countryName, setCountryName] = useState<any>('');
+
   const formMethods = useFormContext();
-  const {register, handleSubmit, formState} = formMethods;
+  const {register, handleSubmit, formState, watch, setValue} = formMethods;
+
+  const selectedCountryCode = watch('country');
+  const selectedCity = watch('city');
+
+  ///////////////////////////////////////////////////////////////////////////
+  //   **********   get list of cities & countries & methodes    **********//
+  ///////////////////////////////////////////////////////////////////////////
+
+  //use-places-autocomplete: Method to get countries.
+  const {
+    ready: countryReady,
+    value: countryValue,
+    suggestions: {status: countryStatus, data: countries},
+    setValue: setCountryValue,
+  } = usePlacesAutocomplete({
+    requestOptions: {language: 'en', types: ['country']},
+    debounce: 300,
+    cacheKey: 'country-restricted',
+  });
+
+  /*use-places-autocomplete: Method to get cities filtered by 
+   country. Returns Full city address.*/
+  const {
+    ready: cityReady,
+    value: cityValue,
+    suggestions: {status: cityStatus, data: cities},
+    setValue: setCitiesValue,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      language: 'en',
+      types: ['locality', 'administrative_area_level_3'],
+      componentRestrictions: {country: selectedCountryCode},
+    },
+    debounce: 300,
+    cacheKey: `${selectedCountryCode}-restricted`,
+  });
+
+  //Creating list of countries for Combobox
+  const filterCountries = useMemo(
+    () =>
+      countries.map(({place_id, description}) => ({
+        id: place_id,
+        name: description,
+      })) || [{id: '1', name: 'Japan'}],
+    [countries],
+  );
+  console.log(countries, 'con');
+
+  // Creating list of cities for Combobox
+  const filterCities = useMemo(
+    () =>
+      cities.map(({place_id, description, structured_formatting}) => ({
+        id: place_id,
+        name: structured_formatting.main_text || description,
+      })) || [{id: 1, name: 'Tokyo'}],
+    [cities],
+  );
+
+  //form-hook: Method for applying city to 'city'
+  const handleSetCity = useCallback(
+    (data: any) => {
+      setValue('city', data?.name, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    [setValue],
+  );
+
+  //form-hook: Method for applying country to 'country'
+  const handleSetCountry = useCallback(
+    (countryCode: any) => {
+      setValue('country', countryCode, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      if (selectedCity) handleSetCity('');
+    },
+    [handleSetCity, selectedCity, setValue],
+  );
+
+  // Method to get Country-Code('jp') on countrySelected and calls 'handleSetCountry'.
+  const onCountrySelected = useCallback(
+    (data: any) => {
+      setCountryName(data.name);
+      getGeocode({placeId: data.id})
+        .then((result: any) => {
+          const countryCode =
+            result?.[0]?.address_components[0]?.short_name?.toLowerCase();
+          handleSetCountry(countryCode);
+        })
+        .catch((error: any) => console.error(error));
+    },
+    [handleSetCountry],
+  );
 
   return (
     <>
@@ -51,23 +149,28 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             className="my-3"
             required
           />
-          <InputFiled
+          <Combobox
             label="Country"
-            type="text"
+            onSelected={onCountrySelected}
+            onChange={(e) => setCountryValue(e.currentTarget.value || '')}
+            required
+            name="Country"
+            items={filterCountries}
             placeholder="Country"
-            register={register('country')}
-            errorMessage={formState.errors?.['country']?.message}
-            className="my-3"
-            required
+            errorMessage={formState?.errors?.['country']?.message}
+            className="my-6"
           />
-          <InputFiled
+
+          <Combobox
             label="City"
-            type="text"
-            placeholder="City"
-            register={register('city')}
-            errorMessage={formState.errors?.['city']?.message}
-            className="my-3"
+            onSelected={handleSetCity}
+            onChange={(e) => setCitiesValue(e.currentTarget.value || '')}
             required
+            name="city"
+            items={filterCities}
+            placeholder="City"
+            errorMessage={formState?.errors?.['city']?.message}
+            className="my-6"
           />
           <InputFiled
             label="Address"
@@ -77,19 +180,22 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             errorMessage={formState.errors?.['address']?.message}
             className="my-3"
           />
-          <div className="flex items-end gap-x-4">
+          <p className="font-base mb-3 mt-6 text-sm font-medium">
+            Phone number
+          </p>
+          <div className="flex h-fit gap-x-4">
             <InputFiled
-              label="Phone number"
               type="text"
               placeholder="+000"
               register={register('mobile_country_code')}
-              className="my-3"
+              className="mb-3"
             />
             <InputFiled
               type="text"
               placeholder="Phone number"
               register={register('phone')}
-              className="my-3 w-full"
+              errorMessage={formState.errors?.['phone']?.message}
+              className="mb-3 w-full"
             />
           </div>
           <InputFiled
