@@ -14,31 +14,33 @@ const OnboardingStep9 = ({onSubmit}: StepProps) => {
   return (
     <form
       onSubmit={handleOnSubmit}
-      className="flex grow flex-col justify-between px-10 sm:grow-0"
+      className="flex grow flex-col justify-between px-10"
     >
-      <div className="flex h-[28rem] flex-col">
-        {' '}
-        <h1 className="font-helmet my-6 text-center ">Add a profile photo</h1>
-        <div className="flex h-48 flex-col items-center">
-          <ImageUploader
-            onChange={(file: any) => setFile(file)}
-            src={profile_img_icon}
-          >
-            {(setOpen: any) => (
-              <Button
-                className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
-                size="lg"
-                variant="outline"
-                onClick={setOpen}
-              >
-                Add from album
-              </Button>
-            )}
-          </ImageUploader>
+      <div className="align-center flex grow justify-center">
+        <div className="flex flex-col">
+          {' '}
+          <h1 className="font-helmet my-6 text-center">Add a profile photo</h1>
+          <div className="flex flex-col items-center">
+            <ImageUploader
+              onChange={(file: any) => setFile(file)}
+              src={profile_img_icon}
+            >
+              {(setOpen: any) => (
+                <Button
+                  className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+                  size="lg"
+                  variant="outline"
+                  onClick={setOpen}
+                >
+                  Add from album
+                </Button>
+              )}
+            </ImageUploader>
+          </div>
         </div>
       </div>
 
-      <div className="-mx-16 divide-x  border-t-2 border-b-grayLineBased sm:h-48 ">
+      <div className="-mx-16 divide-x  border-t-2 border-b-grayLineBased">
         <Button
           className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"

@@ -70,7 +70,7 @@ export function Combobox({
               .includes(query.toLowerCase().replace(/\s+/g, '')),
           ),
         );
-  }, [filteredItems, query]);
+  }, [filteredItems, query, items]);
 
   return (
     <UiCombobox

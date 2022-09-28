@@ -11,7 +11,7 @@ const passionData = Object.keys(Data.SocialCauses);
 
 const OnboardingStep3 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {handleSubmit, watch, getValues} = formMethods;
+  const {handleSubmit, watch} = formMethods;
   const passion = watch('passions');
 
   const maxCauses = 5;
@@ -36,33 +36,33 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex grow flex-col justify-between px-10 sm:grow-0"
+      className="flex grow flex-col justify-between px-10"
     >
-      <div className="flex h-[28rem] flex-col">
+      <div className="flex grow flex-col">
         {' '}
         <h1 className="font-helmet ">What are your social causes?</h1>
         <p className="text-base text-graySubtitle ">
           Select up to 5 social causes that you are passionate about
         </p>
-        <div className="my-5 -mx-16  flex  h-72 flex-col bg-offWhite px-5">
+        <div className="my-5 -mx-16 flex h-80 grow flex-col bg-offWhite px-5">
           <SearchBar
             type="text"
             placeholder="Search"
             onChange={(e) => filterWith(e?.currentTarget?.value || '')}
             className="my-6"
           />
-          <div className="-mx-5 flex h-full flex-col border-t-2 border-b-grayLineBased bg-offWhite px-5">
+          <div className="-mx-5 flex h-full grow flex-col overflow-hidden border-t-2 border-b-grayLineBased bg-offWhite px-5">
             <h3 className="py-3">Popular</h3>
-            <div className="flex h-full flex-wrap space-x-2 overflow-y-auto sm:h-32 ">
-              {filteredItems.map((skill, index) => (
+            <div className="flex h-full flex-wrap space-x-2 overflow-y-auto">
+              {filteredItems.map((passion) => (
                 <Chip
                   onSelected={onSelect}
-                  selected={selecteds?.includes(skill.id)}
-                  value={skill.id}
-                  key={skill.id}
-                  content={skill.name}
+                  selected={selecteds?.includes(passion.id)}
+                  value={passion.id}
+                  key={passion.id}
+                  content={passion.name}
                   contentClassName="text-secondary cursor-pointer"
-                  containerClassName="bg-background my-2  h-8"
+                  containerClassName="bg-background my-2 h-6"
                 />
               ))}
             </div>
@@ -70,14 +70,14 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
         </div>
       </div>
 
-      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased sm:h-48 ">
+      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pb-12">
         <Button
-          className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center align-middle "
+          className="m-auto mt-4 flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"
           value="Submit"
-          disabled={!(passion?.length === maxCauses)}
+          disabled={passion.length === 0}
         >
           Continue
         </Button>

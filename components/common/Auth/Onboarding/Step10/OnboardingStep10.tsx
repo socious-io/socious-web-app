@@ -11,9 +11,9 @@ const OnboardingStep10 = ({onSubmit}: StepProps) => {
   return (
     <form
       onSubmit={handleOnSubmit}
-      className="flex grow flex-col justify-between px-10 sm:grow-0"
+      className="flex grow flex-col justify-between px-10"
     >
-      <div className="flex h-[28rem] flex-col">
+      <div className="flex grow flex-col">
         {' '}
         <BellIcon className="mx-auto h-16 w-16 rounded-full border-2 border-white bg-background fill-white " />
         <div className="flex flex-col justify-between      ">
@@ -25,7 +25,7 @@ const OnboardingStep10 = ({onSubmit}: StepProps) => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center border-b-grayLineBased pb-12 sm:h-48 ">
+      <div className="flex flex-col items-center border-b-grayLineBased pb-12">
         <Button
           className="mt-4 flex   w-full max-w-xs items-center justify-center align-middle "
           type="submit"
@@ -38,7 +38,7 @@ const OnboardingStep10 = ({onSubmit}: StepProps) => {
         <Link href={'/app'} passHref>
           <a className="block">
             <Button
-              className="flex w-full  max-w-xs items-center justify-center align-middle text-white"
+              className="mt-4 flex  w-full max-w-xs items-center justify-center py-0 align-middle text-white"
               size="lg"
               variant="link"
             >
