@@ -53,9 +53,7 @@ const Login: NextPage = () => {
     try {
       await login(email, password);
     } catch (e) {
-      console.log(e);
       const error = e as AxiosError<any>;
-      console.log(error);
       let msg = DefaultErrorMessage;
       if (error.isAxiosError) {
         if (error.response?.data?.error === 'Not matched')
