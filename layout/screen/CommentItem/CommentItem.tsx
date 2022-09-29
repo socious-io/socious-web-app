@@ -12,14 +12,13 @@ import {onLikedComment, onUnlikedComment} from '@api/posts/comments/actions';
 import useUser from 'hooks/useUser/useUser';
 export interface CommentProps {
   content: string;
-  name: string;
+  identity: any;
   time: string;
   passion?: string;
   likes: number;
   className?: string;
   post_id: string;
   id: string;
-  mutateComments: () => void;
   liked: boolean;
 }
 
@@ -27,11 +26,10 @@ export function CommentItem({
   id,
   post_id,
   content,
-  name = 'User Name',
+  identity,
   time,
   likes,
   liked = false,
-  mutateComments,
   className,
 }: CommentProps) {
   const [isLiked, setIsLiked] = useState<boolean>(liked);
@@ -53,15 +51,22 @@ export function CommentItem({
     } catch (error) {
       console.log(error);
     }
-    mutateComments();
-  }, [id, isLiked, liked, likesCount, mutateComments, post_id]);
+  }, [id, isLiked, liked, likesCount, post_id]);
 
   return (
     <div className={twMerge('space-y-4 p-4 ', className && className)}>
       <div className="flex items-center justify-between">
         <div className="p-b flex items-center space-x-2">
-          <Avatar size="s" />
-          <p className="text-sm">{name}</p>
+          <Avatar
+            size="s"
+            type={identity?.identity_type === 'users' ? 0 : 1}
+            src={
+              identity?.identity_type === 'users'
+                ? identity?.avatar
+                : identity?.image
+            }
+          />
+          <p className="text-sm">{identity?.name}</p>
           <div className="h-1.5 w-1.5 rounded-full bg-grayInputField" />
           <p className="text-sm text-grayInputField">{time ?? '0 min ago'}</p>
         </div>
