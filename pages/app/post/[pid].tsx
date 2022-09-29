@@ -19,6 +19,7 @@ import DeleteModal from '@components/common/Post/DeleteModal/DeleteModal';
 import EditModal from '@components/common/Post/EditModal/EditModal';
 import Toast from '@components/common/Toast/Toast';
 import {GeneralLayout} from 'layout';
+import {GridLoader} from 'react-spinners';
 // invalid input syntax for type uuid
 const Post = () => {
   const router = useRouter();
@@ -93,7 +94,6 @@ const Post = () => {
       console.log('TYPE: ', type);
       switch (type) {
         case 'EDIT':
-          console.log('[pid].tsx:- IT IS EDIT');
           editHandler.on();
           break;
         case 'SHARE':
@@ -115,15 +115,31 @@ const Post = () => {
     setShareStep(2);
   }, [shareHandler]);
 
-  if (!post) {
-    return <div>Loading!!!</div>;
-  }
+  // Show loading until post is fetched.
+  if (!post && !error)
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center">
+        <GridLoader color="#36d7b7" />;
+      </div>
+    );
 
-  if (error?.response?.status === 404) return <h1>404</h1>;
+  // if 404 || Invalid Post, redirect to home.
+  if (
+    error?.response?.status === 404 ||
+    error?.response?.data?.error === '"value" must be a valid GUID'
+  ) {
+    router.push('/app');
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center">
+        <GridLoader color="#36d7b7" />
+        <h3 className="pt-4">Invalid Post. Returning back.</h3>
+      </div>
+    );
+  }
 
   const comments = [];
   for (let i = 1; i <= page; i++) {
-    comments.push(<CommentsBox pid={post.id} page={i} key={i} />);
+    comments.push(<CommentsBox pid={post?.id} page={i} key={i} />);
   }
 
   return (
