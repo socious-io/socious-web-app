@@ -1,21 +1,23 @@
-import {useCallback, forwardRef} from 'react';
-import CommentItem from 'layout/screen/CommentItem/CommentItem';
-import useSWR from 'swr';
-import {get} from 'utils/request';
-import {useSWRConfig} from 'swr';
+// Packages
+import {useCallback, forwardRef, useImperativeHandle, useMemo} from 'react';
 import useSWRInfinite from 'swr/infinite';
 
-import {InsertNewComment} from 'pages/app/post/[pid]';
-import Button from '@components/common/Button/Button';
-import {useMemo} from 'react';
+// Methods/Services
+import {get} from 'utils/request';
 
+// Components
+import CommentItem from 'layout/screen/CommentItem/CommentItem';
+import Button from '@components/common/Button/Button';
+
+// Types
+import {InsertNewComment} from 'pages/app/post/[pid]';
 interface CommentsBoxProps {
   pid: string;
 }
 
 const CommentsBox = forwardRef<InsertNewComment, CommentsBoxProps>(
   ({pid}, ref) => {
-    //Get key to make comments.
+    //Get key to fetch comments.
     const getKey = useCallback(
       (initialSize: number, previousData: any) => {
         if (!pid || (previousData && previousData?.items?.length < 10))
@@ -34,19 +36,25 @@ const CommentsBox = forwardRef<InsertNewComment, CommentsBoxProps>(
     } = useSWRInfinite<any>(getKey, get, {
       shouldRetryOnError: false,
     });
-    const {data: comments, error} = useSWR<any>(
-      pid ? `/posts/${pid}/comments` : null,
-      get,
-    );
 
     const noMoreMessage = useMemo(
       () => size * 10 >= infiniteComments?.[0]?.['total_count'],
       [size, infiniteComments],
     );
 
-    if (!comments?.items) {
-      <> ERROR </>;
-    }
+    useImperativeHandle(ref, () => ({
+      setNewComment: (comment: any) => {
+        mutateComments(
+          (oldComments) => {
+            oldComments?.[0]?.items.unshift(comment);
+            return oldComments;
+          },
+          {revalidate: false},
+        );
+      },
+    }));
+
+    if (!infiniteComments && !infiniteError) <div>Loading....</div>;
 
     console.log('Infinite Comments :---: ', infiniteComments);
 

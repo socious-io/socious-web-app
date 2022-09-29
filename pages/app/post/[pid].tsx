@@ -20,11 +20,10 @@ import EditModal from '@components/common/Post/EditModal/EditModal';
 import Toast from '@components/common/Toast/Toast';
 import {GeneralLayout} from 'layout';
 import {GridLoader} from 'react-spinners';
-// invalid input syntax for type uuid
 
 // Types
 export interface InsertNewComment {
-  setNewComment(data: any): void;
+  setNewComment(comment: any): void;
 }
 
 const Post = () => {
@@ -58,20 +57,20 @@ const Post = () => {
     (content: string) => {
       if (!post.id || !content) return;
       createComment({content}, post.id)
-        .then((response) => {
-          // {...response, identity_meta: currentIdentity?.meta, identity_type: currentIdentity?.type }
-          // This data needs be shift to first [], items. So, we don't need to mutate anything.
-          console.log('RESPONSE OF CREATE COMMENT :---: ', response);
-          console.log('CURRENT IDENTITY :---: ', currentIdentity);
-          for (let i = 1; i <= page; i++) {
-            mutate(`/posts/${post.id}/comments?page=${i}`);
-          }
+        .then((response: any) => {
+          // Create new Comment body and mutate Comments.
+          addComment?.current?.setNewComment({
+            ...response,
+            liked: false,
+            identity_meta: currentIdentity?.meta,
+            identity_type: currentIdentity?.type,
+          });
         })
         .catch((error) => {
           console.error(error);
         });
     },
-    [post, currentIdentity, page, mutate],
+    [post, currentIdentity],
   );
 
   const onCopied = useCallback(() => {
