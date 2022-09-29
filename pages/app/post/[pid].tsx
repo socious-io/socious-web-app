@@ -2,15 +2,15 @@ import {useRouter} from 'next/router';
 import CommentField from '@components/common/Post/CommentField/CommentField';
 import CommentsBox from '@components/common/Post/CommentsBox/CommentsBox';
 import {Button, Modal, Notification} from '@components/common';
-import {useCallback, useState} from 'react';
+import {useCallback, useRef, useState} from 'react';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {createComment} from '@api/posts/comments/actions';
 import {useSWRConfig} from 'swr';
-import ShareModalStep1 from '@components/common/Post/ShareModal/ShareModalStep1/ShareModalStep1';
 import ShareModalStep2 from '@components/common/Post/ShareModal/ShareModalStep2/ShareModalStep2';
 import {SharedCard, PostCard} from 'layout/screen/PostCard';
-import SideBar from '@components/common/Home/SideBar';
+// import ShareModalStep1 from '@components/common/Post/ShareModal/ShareModalStep1/ShareModalStep1';
+// import SideBar from '@components/common/Home/SideBar';
 import {useToggle, useUser} from '@hooks';
 import {XMarkIcon} from '@heroicons/react/24/outline';
 import {SharePostBodyType} from '@models/post';
@@ -21,9 +21,16 @@ import Toast from '@components/common/Toast/Toast';
 import {GeneralLayout} from 'layout';
 import {GridLoader} from 'react-spinners';
 // invalid input syntax for type uuid
+
+// Types
+export interface InsertNewComment {
+  setNewComment(data: any): void;
+}
+
 const Post = () => {
   const router = useRouter();
   const {pid} = router.query;
+  const addComment = useRef<InsertNewComment>(null);
   const {data: post, error} = useSWR<any>(`/posts/${pid}`, get, {
     onErrorRetry: (error) => {
       if (
@@ -49,9 +56,13 @@ const Post = () => {
 
   const onCommentSend = useCallback(
     (content: string) => {
-      if (!post?.id || !content) return;
+      if (!post.id || !content) return;
       createComment({content}, post.id)
         .then((response) => {
+          // {...response, identity_meta: currentIdentity?.meta, identity_type: currentIdentity?.type }
+          // This data needs be shift to first [], items. So, we don't need to mutate anything.
+          console.log('RESPONSE OF CREATE COMMENT :---: ', response);
+          console.log('CURRENT IDENTITY :---: ', currentIdentity);
           for (let i = 1; i <= page; i++) {
             mutate(`/posts/${post.id}/comments?page=${i}`);
           }
@@ -60,7 +71,7 @@ const Post = () => {
           console.error(error);
         });
     },
-    [post, mutate, page],
+    [post, currentIdentity, page, mutate],
   );
 
   const onCopied = useCallback(() => {
@@ -119,13 +130,14 @@ const Post = () => {
   if (!post && !error)
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center">
-        <GridLoader color="#36d7b7" />;
+        <GridLoader color="#36d7b7" />
       </div>
     );
 
-  // if 404 || Invalid Post, redirect to home.
+  // if 404 || 500 || Invalid Post, redirect to home while showing Loading Screen.
   if (
     error?.response?.status === 404 ||
+    error?.response?.status === 500 ||
     error?.response?.data?.error === '"value" must be a valid GUID'
   ) {
     router.push('/app');
@@ -135,11 +147,6 @@ const Post = () => {
         <h3 className="pt-4">Invalid Post. Returning back.</h3>
       </div>
     );
-  }
-
-  const comments = [];
-  for (let i = 1; i <= page; i++) {
-    comments.push(<CommentsBox pid={post?.id} page={i} key={i} />);
   }
 
   return (
@@ -189,16 +196,8 @@ const Post = () => {
           />
         )}
         {user ? <CommentField onSend={onCommentSend} /> : null}
-        <div>{comments}</div>
-        <div className="flex justify-center">
-          <Button
-            variant="link"
-            className="font-semibold text-primary"
-            onClick={() => setPage(page + 1)}
-          >
-            See more
-          </Button>
-        </div>
+        {/* <div>{comments}</div> */}
+        <CommentsBox pid={post?.id} ref={addComment} />
 
         {/* SHARE MODAL */}
         <Modal
