@@ -1,16 +1,22 @@
-import {Avatar, Button} from '@components/common';
-import {
-  ChatBubbleLeftEllipsisIcon,
-  EllipsisHorizontalIcon,
-  HeartIcon,
-  ShareIcon,
-} from '@heroicons/react/24/outline';
-import {HeartIcon as LikedIcon} from '@heroicons/react/24/solid';
+// Packages
 import {useCallback, useEffect, useState} from 'react';
 import {twMerge} from 'tailwind-merge';
+
+// Services
+import {isoToHumanTime} from 'services/toHumanTime';
+
+// Api
 import {onLikedComment, onUnlikedComment} from '@api/posts/comments/actions';
-import useUser from 'hooks/useUser/useUser';
-export interface CommentProps {
+
+// Components
+import {Avatar, Button} from '@components/common';
+
+// Icons
+import {EllipsisHorizontalIcon, HeartIcon} from '@heroicons/react/24/outline';
+import {HeartIcon as LikedIcon} from '@heroicons/react/24/solid';
+
+//Type
+export interface CommentItemProps {
   content: string;
   identity: any;
   time: string;
@@ -31,7 +37,7 @@ export function CommentItem({
   likes,
   liked = false,
   className,
-}: CommentProps) {
+}: CommentItemProps) {
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const [likesCount, setLikesCount] = useState<number>(likes || 0);
 
@@ -68,7 +74,9 @@ export function CommentItem({
           />
           <p className="text-sm">{identity?.name}</p>
           <div className="h-1.5 w-1.5 rounded-full bg-grayInputField" />
-          <p className="text-sm text-grayInputField">{time ?? '0 min ago'}</p>
+          <p className="text-sm text-grayInputField">
+            {isoToHumanTime(time) ?? '0 min ago'}
+          </p>
         </div>
         <div className="flex">
           <EllipsisHorizontalIcon className="h-5 w-5" />
