@@ -9,7 +9,7 @@ export interface Project {
   description: string;
   country_id: number;
   project_type: number;
-  project_length: number;
+  project_length: string;
   payment_type: number;
   payment_scheme: number;
   payment_range_lower: string;

@@ -12,6 +12,7 @@ import {useState} from 'react';
 import ApplyStep2 from '../Apply/Step2/ApplyStep2';
 import ApplyStep4 from '../Apply/Step4/ApplyStep4';
 import useUser from 'hooks/useUser/useUser';
+import {getText} from '@socious/data';
 
 const dislikeSrc = require('../../../../asset/icons/thumbs-dislike.svg');
 const bookmarkSrc = require('../../../../asset/icons/bookmark.svg');
@@ -24,6 +25,7 @@ function OrganizationTopCard({
   payment_range_higher,
   payment_range_lower,
   remote_preference,
+  project_length,
 }: Project) {
   const {state: showApply, handlers: setShowApply} = useToggle();
 
@@ -80,7 +82,12 @@ function OrganizationTopCard({
         <p className="text-sm text-graySubtitle ">{country_id}</p>
         <p className="pl-2 text-sm text-graySubtitle ">{`$${payment_range_lower}-$${payment_range_higher}`}</p>
         <p className="pl-2 text-sm text-graySubtitle ">{experience_level}</p>
-        <p className="pl-2 text-sm text-graySubtitle ">{remote_preference}</p>
+        <p className="pl-2 text-sm text-graySubtitle ">
+          {getText('en', `.${remote_preference}`)}
+        </p>
+        <p className="pl-2 text-sm text-graySubtitle">
+          {getText('en', `PROJECT.${project_length}`)}
+        </p>
       </div>
 
       <PostData />

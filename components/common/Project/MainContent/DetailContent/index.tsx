@@ -14,10 +14,6 @@ const Detail = () => {
   const {data: projectQuestion} = useSWR<any>(`/projects/${id}/questions`, get);
 
   if (!data && !projectQuestion) return <p>loading</p>;
-  console.log('*********');
-  console.log(projectQuestion);
-  console.log(projectQuestion?.questions?.length > 0);
-  console.log('*********');
   const questionTitle = projectQuestion?.questions?.map(
     (q: Question) => q?.question,
   );

@@ -73,7 +73,7 @@ const MainContent = ({onClickShow}: Props) => {
             description={''}
             country_id={0}
             project_type={0}
-            project_length={0}
+            project_length={''}
             payment_type={0}
             payment_scheme={0}
             payment_range_lower={''}

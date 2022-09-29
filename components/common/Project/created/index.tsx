@@ -4,6 +4,11 @@ import BodyCard from '../component/BodyCard';
 import HeaderBox from '../component/HeaderBox';
 import HiredCard from '../component/HiredCard';
 import {PlusIcon} from '@heroicons/react/24/solid';
+import {FC} from 'react';
+type TApplicationInput = {
+  onchange: () => void;
+};
+
 var data = [
   {
     id: 1,
@@ -46,7 +51,7 @@ var data3 = [
     projectId: '3',
   },
 ];
-function MyApplicationBoxes() {
+const MyApplicationBoxes: FC<TApplicationInput> = ({onchange}) => {
   const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
   const {state: showDrafts, handlers: showDraftsHandler} = useToggle();
   const {user} = useUser();
@@ -62,6 +67,7 @@ function MyApplicationBoxes() {
         variant="fill"
         value="Submit"
         leftIcon={() => <PlusIcon width={20} height={20} />}
+        onClick={onchange}
         //disabled={!!formState?.errors}
       >
         Create Project
@@ -97,6 +103,6 @@ function MyApplicationBoxes() {
       </div>
     </div>
   );
-}
+};
 
 export default MyApplicationBoxes;
