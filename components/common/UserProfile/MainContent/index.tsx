@@ -13,6 +13,12 @@ import SocialCauses from './SocialCauses';
 import Description from './Description';
 import Contact from './Contact';
 
+// libraries
+import useSWR from 'swr';
+
+// utils
+import {get} from 'utils/request';
+
 // hooks
 import {useUser} from '@hooks';
 
@@ -24,14 +30,28 @@ interface Props {
 
 const MainContent: React.FC<Props> = ({data, status}) => {
   const {user} = useUser({redirect: false});
-  console.log(data);
+
+  //getting user identities
+  const {data: identities, error} = useSWR<any>(`/identities/${data.id}`, get);
+
+  if (!identities && !error) return <p>loading</p>;
+  if (
+    error?.response?.status === 400 ||
+    (500 &&
+      error?.response?.data?.error.startsWith(
+        'invalid input syntax for type uuid',
+      ))
+  )
+    return <p>invalid user identitiy</p>;
+  console.log(user, data, identities);
   return (
-    <div className="border-1 mb-8  rounded-xl border border-grayLineBased md:w-4/6  ">
+    <div className="border-1 mb-8 rounded-xl border border-grayLineBased md:w-4/6">
       <Header
         avatar={status === 'user' ? data?.avatar : data?.image}
         cover_image={data?.cover_image}
         status={status}
-        own_user={user?.username === data?.username? true:false}
+        following={identities?.following}
+        own_user={user?.username === data?.username ? true : false}
       />
       <ProfileInfo
         first_name={data?.first_name}
