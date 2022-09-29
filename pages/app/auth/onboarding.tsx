@@ -222,7 +222,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     <PreAuthLayout>
       <div
         className={twMerge(
-          'mx-auto flex min-h-screen w-screen flex-col items-stretch justify-between border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7 lg:h-[calc(100vh-theme(space.24))]',
+          'mx-auto flex min-h-screen w-screen flex-col items-stretch justify-between border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7',
           step === 9 ? ' bg-primary' : 'bg-background',
         )}
       >
