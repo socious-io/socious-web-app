@@ -15,4 +15,4 @@ export const rxCheckUrl = /^(https?):\//;
 export const rxNotNumber = /[^0-9]/g;
 export const rxParsedName = /~.*~/g;
 export const usernamePattern =
-  /^(?=.{6,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
+  /^(?=.{6,24}$)(?![_.])(?!.*[_.]{2})[a-z][a-z0-9._-]+$/;
