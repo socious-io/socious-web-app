@@ -32,7 +32,7 @@ const StartScreen = () => {
       <div className="grow">
         {step === 1 && (
           <div className="flex grow flex-col sm:max-h-[28rem]">
-            <div className="pt-12 pb-4 sm:px-4">
+            <div className="pt-12 pb-4 sm:px-6">
               <h1 className="font-semibold">Make a social impact</h1>
               <p className="py-2 text-base text-graySubtitle ">
                 Find projects that align with your passion to solve social
@@ -52,7 +52,7 @@ const StartScreen = () => {
         )}
         {step === 2 && (
           <div className="flex grow flex-col sm:max-h-[28rem]">
-            <div className="pt-12 pb-4 sm:px-4">
+            <div className="pt-12 pb-4 sm:px-6">
               <h1 className="font-semibold">Connect with contributors</h1>
               <p className="py-2 text-base text-graySubtitle ">
                 Hire professionals that add values and contribute to the culture
@@ -71,7 +71,7 @@ const StartScreen = () => {
         )}
         {step === 3 && (
           <div className="flex grow flex-col sm:max-h-[28rem]">
-            <div className="px-4 pt-12 pb-4 sm:px-4">
+            <div className="pt-12 pb-4 sm:px-6">
               <h1 className="font-semibold">Social Impact Focus</h1>
               <p className="py-2 text-base text-graySubtitle ">
                 A marketplace specifies to realizing positive global change
@@ -89,7 +89,7 @@ const StartScreen = () => {
           </div>
         )}
 
-        <div className="mb-auto mt-6 flex justify-center sm:mt-8">
+        <div className="mb-auto mt-7 flex justify-center sm:mt-9">
           {[1, 2, 3].map((stepNumber) => (
             <span
               key={`stepper-${stepNumber}`}
