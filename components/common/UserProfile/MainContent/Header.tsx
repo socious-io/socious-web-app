@@ -26,9 +26,15 @@ interface Props {
     url: string;
   };
   status: 'user' | 'organization';
+  own_user?: boolean;
 }
 
-const Header: React.FC<Props> = ({cover_image, avatar, status}) => {
+const Header: React.FC<Props> = ({
+  cover_image,
+  avatar,
+  status,
+  own_user = false,
+}) => {
   // backgground image not exist svg
   const bg_icon = require('../../../../asset/icons/bg-image.svg');
 
@@ -53,7 +59,7 @@ const Header: React.FC<Props> = ({cover_image, avatar, status}) => {
         />
       </div>
       <div className="mt-6 flex h-12 flex-row justify-end gap-4 pr-4">
-        <Button>connect</Button>
+        {!own_user && <Button>Connect</Button>}
         <MoreButton />
       </div>
     </div>

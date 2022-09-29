@@ -31,6 +31,7 @@ const MainContent: React.FC<Props> = ({data, status}) => {
         avatar={status === 'user' ? data?.avatar : data?.image}
         cover_image={data?.cover_image}
         status={status}
+        own_user={user?.username === data?.username? true:false}
       />
       <ProfileInfo
         first_name={data?.first_name}
