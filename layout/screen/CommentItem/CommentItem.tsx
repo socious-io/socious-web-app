@@ -26,6 +26,7 @@ export interface CommentItemProps {
   post_id: string;
   id: string;
   liked: boolean;
+  onLikeToggle: (commentId: string, liked: boolean) => void;
 }
 
 export function CommentItem({
@@ -37,6 +38,7 @@ export function CommentItem({
   likes,
   liked = false,
   className,
+  onLikeToggle,
 }: CommentItemProps) {
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const [likesCount, setLikesCount] = useState<number>(likes || 0);
@@ -46,18 +48,19 @@ export function CommentItem({
     setLikesCount(() => likes);
   }, [liked, likes]);
 
-  const onCommentLikedToggle = useCallback(async () => {
+  // On Like Icon Clicked.
+  const onLikedClicked = useCallback(async () => {
     setLikesCount(() => (liked ? likesCount - 1 : likesCount + 1));
     setIsLiked(!isLiked);
     try {
-      console.log('Like Status', isLiked);
       isLiked
-        ? console.log('Unliking', await onUnlikedComment(post_id, id))
-        : console.log('Liking', await onLikedComment(post_id, id));
+        ? await onUnlikedComment(post_id, id)
+        : await onLikedComment(post_id, id);
+      onLikeToggle(id, !isLiked);
     } catch (error) {
       console.log(error);
     }
-  }, [id, isLiked, liked, likesCount, post_id]);
+  }, [id, isLiked, liked, likesCount, onLikeToggle, post_id]);
 
   return (
     <div className={twMerge('space-y-4 p-4 ', className && className)}>
@@ -95,7 +98,7 @@ export function CommentItem({
         <Button
           className="flex cursor-pointer flex-row items-center justify-start space-x-1 pl-0"
           variant="link"
-          onClick={onCommentLikedToggle}
+          onClick={onLikedClicked}
         >
           {isLiked ? (
             <LikedIcon className="w-5 text-red-500" />
