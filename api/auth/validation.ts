@@ -3,6 +3,7 @@ import Joi from 'joi';
 import {
   rxNotMobileNumber,
   rxNoSpecialCharacters,
+  rxNoSpecialCharactersMultiWords,
   rxHasUpperLower,
   rxHasNumber,
 } from 'utils/regex';
@@ -133,7 +134,7 @@ export const schemaSignupStep1 = Joi.object({
   firstName: Joi.string()
     .required()
     .label('FirstName')
-    .regex(rxNoSpecialCharacters)
+    .regex(rxNoSpecialCharactersMultiWords)
     .messages({
       'string.empty': `First name cannot be an empty field.`,
       'string.pattern.base': `Should not contain special characters.`,
