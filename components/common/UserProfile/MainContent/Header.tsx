@@ -9,6 +9,7 @@ import Image from 'next/image';
 import Button from '@components/common/Button/Button';
 import MoreButton from './MoreButton';
 import Avatar from '@components/common/Avatar/Avatar';
+import {followUser, unfollowUser} from '@api/network/action';
 
 interface Props {
   cover_image: null | {
@@ -28,6 +29,7 @@ interface Props {
   status: 'user' | 'organization';
   own_user?: boolean;
   following: boolean;
+  id: string;
 }
 
 const Header: React.FC<Props> = ({
@@ -36,9 +38,27 @@ const Header: React.FC<Props> = ({
   status,
   own_user = false,
   following,
+  id,
 }) => {
   // backgground image not exist svg
   const bg_icon = require('../../../../asset/icons/bg-image.svg');
+
+  const followHandler = async () => {
+    try {
+      const res = await followUser(id);
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const unfollowHandler = async () => {
+    try {
+      const res = await unfollowUser(id);
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <div className="mb-4 text-right ">
@@ -61,15 +81,17 @@ const Header: React.FC<Props> = ({
         />
       </div>
       <div className="mt-6 flex h-12 flex-row justify-end gap-4 pr-4">
-
         {!own_user && following ? (
-          <Button className="border border-primary bg-white text-primary">
+          <Button
+            onClick={unfollowHandler}
+            className="border border-primary bg-white text-primary"
+          >
             Following
           </Button>
         ) : !own_user && !following ? (
-          <Button>Connect</Button>
+          <Button onClick={followHandler}>Connect</Button>
         ) : null}
-        
+
         <MoreButton />
       </div>
     </div>

@@ -51,6 +51,7 @@ const MainContent: React.FC<Props> = ({data, status}) => {
         cover_image={data?.cover_image}
         status={status}
         following={identities?.following}
+        id={data?.id}
         own_user={user?.username === data?.username ? true : false}
       />
       <ProfileInfo
