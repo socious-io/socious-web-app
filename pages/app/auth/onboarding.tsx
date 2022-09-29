@@ -12,7 +12,6 @@ import OnboardingStep6 from '@components/common/Auth/Onboarding/Step6/Onboarding
 import OnboardingStep7 from '@components/common/Auth/Onboarding/Step7/OnboardingStep7';
 import OnboardingStep8 from '@components/common/Auth/Onboarding/Step8/OnboardingStep8';
 import OnboardingStep9 from '@components/common/Auth/Onboarding/Step9/OnboardingStep9';
-import OnboardingStep10 from '@components/common/Auth/Onboarding/Step10/OnboardingStep10';
 import {PreAuthLayout} from 'layout';
 
 import {useForm, FormProvider} from 'react-hook-form';
@@ -22,12 +21,12 @@ import {joiResolver} from '@hookform/resolvers/joi';
 import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
 
 import {
+  schemaOnboardingStep2,
   schemaOnboardingStep3,
   schemaOnboardingStep4,
   schemaOnboardingStep5,
   schemaOnboardingStep6,
   schemaOnboardingStep7,
-  schemaOnboardingStep8,
 } from '@api/auth/validation';
 import {updateProfile} from '@api/auth/actions';
 import useUser from 'hooks/useUser/useUser';
@@ -38,12 +37,12 @@ import {AxiosError} from 'axios';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
 const schemaStep = {
+  2: schemaOnboardingStep2,
   3: schemaOnboardingStep3,
   4: schemaOnboardingStep4,
   5: schemaOnboardingStep5,
   6: schemaOnboardingStep6,
   7: schemaOnboardingStep7,
-  8: schemaOnboardingStep8,
 };
 
 type OnBoardingProps = {
@@ -75,48 +74,49 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     setShowModal(!showModal);
   }, [showModal]);
 
-  const formMethodsStep3 = useForm({
+  const formMethodsStep2 = useForm({
     mode: 'all',
-    resolver: joiResolver(schemaStep[3]),
+    resolver: joiResolver(schemaStep[2]),
     defaultValues: {
       passions: [],
     },
   });
-  const formMethodsStep4 = useForm({
+  const formMethodsStep3 = useForm({
     mode: 'all',
-    resolver: joiResolver(schemaStep[4]),
+    resolver: joiResolver(schemaStep[3]),
     defaultValues: {
       skills: [],
     },
   });
 
-  const formMethodsStep5 = useForm({resolver: joiResolver(schemaStep[5])});
-  const formMethodsStep6 = useForm({
+  const formMethodsStep4 = useForm({resolver: joiResolver(schemaStep[4])});
+  const formMethodsStep5 = useForm({
     defaultValues: {
       availableProject: 'true',
+    },
+    resolver: joiResolver(schemaStep[5]),
+  });
+  const formMethodsStep6 = useForm({
+    defaultValues: {
+      countryNumber: '+81',
     },
     resolver: joiResolver(schemaStep[6]),
   });
   const formMethodsStep7 = useForm({
-    defaultValues: {
-      countryNumber: '+81',
-    },
     resolver: joiResolver(schemaStep[7]),
   });
-  const formMethodsStep8 = useForm({
-    resolver: joiResolver(schemaStep[8]),
-  });
-  const formMethodsStep9 = useForm();
 
   const handleSubmit = (data: any) => {
-    if (step === 5) {
+    if (step === 4) {
       setPlaceId(data);
       setStep(step + 1);
-    } else if (step === 8) {
+    } else if (step === 7) {
+      console.log('Step 7');
       handleUpdateProfileRequest();
-    } else if (step === 9) {
+    } else if (step === 8) {
+      console.log('STEP 8');
       handleImageUpload(data);
-    } else if (step === 10) {
+    } else if (step === 9) {
       handleToggleModal();
     } else {
       setStep(step + 1);
@@ -128,12 +128,14 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
       const formData = new FormData();
       formData.append('file', file);
       let media_id: string;
+      console.log('FORMDATA :---: ', ...formData);
       try {
         const response: any = await uploadMedia(formData);
         media_id = response.id;
       } catch (e) {
         const error = e as AxiosError<any>;
         let msg = DefaultErrorMessage;
+        console.log('ERROR Media Upload :---:', e);
         if (error.isAxiosError) {
           if (error?.code === 'ERR_NETWORK')
             msg = {
@@ -152,6 +154,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
           last_name: user?.last_name,
           username: user?.username,
         };
+        console.log('PROFILE BODY :2 ', profileBody);
         profileBody.avatar = media_id;
         updateProfile(profileBody).then((response) => {
           setStep(step + 1);
@@ -165,11 +168,11 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   );
 
   const handleUpdateProfileRequest = useCallback(() => {
-    const bio = formMethodsStep8.getValues('bio');
-    const passions = formMethodsStep3.getValues('passions');
-    const city = formMethodsStep5.getValues('city');
-    const country = formMethodsStep5.getValues('country');
-    const skills = formMethodsStep4.getValues('skills');
+    const bio = formMethodsStep7.getValues('bio');
+    const passions = formMethodsStep2.getValues('passions');
+    const city = formMethodsStep4.getValues('city');
+    const country = formMethodsStep4.getValues('country');
+    const skills = formMethodsStep3.getValues('skills');
 
     if (user === undefined) return;
 
@@ -185,6 +188,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     if (city) profileBody.city = city;
     if (country) profileBody.country = country;
 
+    console.log('USER PROFILE 1: ', profileBody);
     updateProfile(profileBody)
       .then(() => {
         setStep(step + 1);
@@ -196,17 +200,18 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
         handleToggleModal();
       });
   }, [
-    formMethodsStep8,
-    formMethodsStep3,
-    formMethodsStep5,
+    formMethodsStep7,
     formMethodsStep4,
+    formMethodsStep3,
+    formMethodsStep2,
     user,
     step,
     handleToggleModal,
   ]);
 
   const handleNext = useCallback(() => {
-    if (step === 8) {
+    if (step === 7) {
+      console.log('I came here throught skip');
       handleUpdateProfileRequest();
     } else {
       setStep(step + 1);
@@ -218,7 +223,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
       <div
         className={twMerge(
           'mx-auto flex min-h-screen w-screen flex-col items-stretch justify-between border border-grayLineBased px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7 lg:h-[calc(100vh-theme(space.24))]',
-          step === 10 ? ' bg-primary' : 'bg-background',
+          step === 9 ? ' bg-primary' : 'bg-background',
         )}
       >
         <div className="relative flex h-20 justify-center">
@@ -255,8 +260,8 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
             </span>
           )}
           <div className="flex h-20 pt-1">
-            {[3, 4, 5, 6, 7, 8, 9].includes(step) &&
-              [3, 4, 5, 6, 7, 8, 9].map((stepNumber) => (
+            {[2, 3, 4, 5, 6, 7, 8].includes(step) &&
+              [2, 3, 4, 5, 6, 7, 8].map((stepNumber) => (
                 <div key={`stepper-${stepNumber}`} className="flex">
                   <span
                     className={twMerge(
@@ -267,7 +272,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
                 </div>
               ))}
           </div>
-          {[6, 7, 8].includes(step) && (
+          {[5, 6, 7].includes(step) && (
             <span
               className="absolute right-0 cursor-pointer text-base text-primary"
               title="Next"
@@ -279,34 +284,31 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
         </div>
 
         {step === 1 && <OnboardingStep1 onSubmit={handleSubmit} />}
-        {step === 2 && <OnboardingStep2 onSubmit={handleSubmit} />}
+        <FormProvider {...formMethodsStep2}>
+          {step === 2 && <OnboardingStep2 onSubmit={handleSubmit} />}
+        </FormProvider>
         <FormProvider {...formMethodsStep3}>
-          {step === 3 && <OnboardingStep3 onSubmit={handleSubmit} />}
+          {step === 3 && (
+            <OnboardingStep3 onSubmit={handleSubmit} rawSkills={skills} />
+          )}
         </FormProvider>
         <FormProvider {...formMethodsStep4}>
-          {step === 4 && (
-            <OnboardingStep4 onSubmit={handleSubmit} rawSkills={skills} />
-          )}
+          {step === 4 && <OnboardingStep4 onSubmit={handleSubmit} />}
         </FormProvider>
 
         <FormProvider {...formMethodsStep5}>
           {step === 5 && <OnboardingStep5 onSubmit={handleSubmit} />}
         </FormProvider>
         <FormProvider {...formMethodsStep6}>
-          {step === 6 && <OnboardingStep6 onSubmit={handleSubmit} />}
-        </FormProvider>
-        <FormProvider {...formMethodsStep7}>
-          {step === 7 && (
-            <OnboardingStep7 onSubmit={handleSubmit} defaultCountry={placeId} />
+          {step === 6 && (
+            <OnboardingStep6 onSubmit={handleSubmit} defaultCountry={placeId} />
           )}
         </FormProvider>
-        <FormProvider {...formMethodsStep8}>
-          {step === 8 && <OnboardingStep8 onSubmit={handleSubmit} />}
+        <FormProvider {...formMethodsStep7}>
+          {step === 7 && <OnboardingStep7 onSubmit={handleSubmit} />}
         </FormProvider>
-        <FormProvider {...formMethodsStep9}>
-          {step === 9 && <OnboardingStep9 onSubmit={handleSubmit} />}
-        </FormProvider>
-        {step === 10 && <OnboardingStep10 onSubmit={handleSubmit} />}
+        {step === 8 && <OnboardingStep8 onSubmit={handleSubmit} />}
+        {step === 9 && <OnboardingStep9 onSubmit={handleSubmit} />}
       </div>
     </PreAuthLayout>
   );
