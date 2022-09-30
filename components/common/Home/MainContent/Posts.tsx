@@ -44,6 +44,8 @@ const Posts = ({page, onFull}: PostsProps) => {
               ...post.shared_post,
               identity_meta: post.shared_from_identity.meta,
             }}
+            // placeHolder for now.
+            toggleLike={(liked) => console.log('LIKED: ', liked)}
           />
         ) : (
           <HomeCard
@@ -58,6 +60,8 @@ const Posts = ({page, onFull}: PostsProps) => {
             likes={post.likes}
             shared={post.shared}
             media={post.media}
+            // placeHolder For now.
+            toggleLike={(liked) => console.log('LIKED: ', liked)}
           />
         );
       })}

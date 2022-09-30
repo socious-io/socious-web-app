@@ -17,7 +17,7 @@ export interface PostCardProps {
   shared?: number;
   src?: string;
   hideOption?: boolean;
-  toggleLike: (liked: boolean) => void;
+  toggleLike?: (liked: boolean) => void;
   focusCommentField?: () => void;
   optionClicked?: (data: string) => void;
 }
@@ -47,7 +47,7 @@ export function PostCard({
         onOptionClicked={optionClicked}
       />
       <PostContent content={content} passion={passion} media={media} noBorder />
-      {showAction && (
+      {showAction && toggleLike && (
         <PostAction
           liked={liked}
           likes={likes}

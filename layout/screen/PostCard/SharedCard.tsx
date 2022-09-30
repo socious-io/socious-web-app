@@ -30,6 +30,7 @@ export function SharedCard({
   liked,
   likes,
   shared,
+  toggleLike,
   focusCommentField,
   showAction = true,
   optionClicked,
@@ -58,7 +59,7 @@ export function SharedCard({
         showAction={false}
         hideOption={true}
       />
-      {showAction && (
+      {showAction && toggleLike && (
         <PostAction
           id={id}
           liked={liked}
