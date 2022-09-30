@@ -13,6 +13,7 @@ export interface PostActionProps {
   likes?: number;
   shared?: number;
   id: string;
+  onLike: (liked: boolean) => void;
   onShare?: () => void;
   onCommentClicked?: () => void;
 }
@@ -22,6 +23,7 @@ const PostAction = ({
   likes,
   shared,
   id,
+  onLike,
   onShare,
   onCommentClicked,
 }: PostActionProps) => {
@@ -34,10 +36,11 @@ const PostAction = ({
     setIsLiked(() => !isLiked);
     try {
       isLiked ? await unlikePost(id) : await likePost(id);
+      onLike(!isLiked);
     } catch (error) {
       console.error(error);
     }
-  }, [id, isLiked, likesCount]);
+  }, [id, isLiked, likesCount, onLike]);
 
   return (
     <div className="flex items-center justify-between divide-x divide-x-[1px] divide-grayLineBased">

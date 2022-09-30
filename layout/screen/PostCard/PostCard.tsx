@@ -17,6 +17,7 @@ export interface PostCardProps {
   shared?: number;
   src?: string;
   hideOption?: boolean;
+  toggleLike: (liked: boolean) => void;
   focusCommentField?: () => void;
   optionClicked?: (data: string) => void;
 }
@@ -33,6 +34,7 @@ export function PostCard({
   media,
   shared,
   showAction = true,
+  toggleLike,
   focusCommentField,
   optionClicked,
 }: PostCardProps) {
@@ -51,6 +53,7 @@ export function PostCard({
           likes={likes}
           shared={shared}
           id={id}
+          onLike={toggleLike}
           onCommentClicked={focusCommentField}
           onShare={optionClicked ? () => optionClicked('SHARE') : undefined}
         />

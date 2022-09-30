@@ -17,6 +17,7 @@ import Button from '@components/common/Button/Button';
 
 // Types
 import {InsertNewComment} from 'pages/app/post/[pid]';
+import {memo} from 'react';
 interface CommentsBoxProps {
   pid: string;
 }
@@ -35,7 +36,6 @@ const CommentsBox = forwardRef<InsertNewComment, CommentsBoxProps>(
       },
       [pid],
     );
-
     const {
       data: infiniteComments,
       error: infiniteError,
@@ -141,4 +141,4 @@ const CommentsBox = forwardRef<InsertNewComment, CommentsBoxProps>(
 
 CommentsBox.displayName = 'CommentBox';
 
-export default CommentsBox;
+export default memo(CommentsBox);

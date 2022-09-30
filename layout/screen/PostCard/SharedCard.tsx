@@ -30,7 +30,7 @@ export function SharedCard({
   liked,
   likes,
   shared,
-  hideOption,
+  focusCommentField,
   showAction = true,
   optionClicked,
 }: SharedCardProps) {
@@ -64,6 +64,8 @@ export function SharedCard({
           liked={liked}
           likes={likes}
           shared={shared}
+          onLike={toggleLike}
+          onCommentClicked={focusCommentField}
           onShare={optionClicked ? () => optionClicked('SHARE') : undefined}
         />
       )}

@@ -1,7 +1,7 @@
 import {useRouter} from 'next/router';
 import CommentField from '@components/common/Post/CommentField/CommentField';
 import CommentsBox from '@components/common/Post/CommentsBox/CommentsBox';
-import {Button, Modal, Notification} from '@components/common';
+import {Modal} from '@components/common';
 import {useCallback, useRef, useState} from 'react';
 import useSWR from 'swr';
 import {get} from 'utils/request';
@@ -34,7 +34,11 @@ const Post = () => {
   const {pid} = router.query;
   const addComment = useRef<InsertNewComment>(null);
   const commentFieldRef = useRef<FocusComment>(null);
-  const {data: post, error} = useSWR<any>(`/posts/${pid}`, get, {
+  const {
+    data: post,
+    error,
+    mutate: mutatePost,
+  } = useSWR<any>(`/posts/${pid}`, get, {
     onErrorRetry: (error) => {
       if (
         error?.response?.status === 500 &&
@@ -48,8 +52,6 @@ const Post = () => {
 
   const {user, currentIdentity} = useUser({redirect: false});
 
-  const [page, setPage] = useState<number>(1);
-  const {mutate} = useSWRConfig();
   const {state: notify, handlers: notifyHandler} = useToggle();
   const {state: showShare, handlers: shareHandler} = useToggle();
   const {state: showEdit, handlers: editHandler} = useToggle();
@@ -134,6 +136,22 @@ const Post = () => {
     () => commentFieldRef.current?.focusField(),
     [],
   );
+  console.log('Post :--: ', post);
+
+  // Toggle Like
+  const toggleLike = useCallback(
+    (liked: boolean) => {
+      mutatePost(
+        (oldPost: any) => ({
+          ...oldPost,
+          liked: liked,
+          likes: liked ? oldPost.likes + 1 : oldPost.likes - 1,
+        }),
+        {revalidate: false},
+      );
+    },
+    [mutatePost],
+  );
 
   // Show loading until post is fetched.
   if (!post && !error)
@@ -143,11 +161,10 @@ const Post = () => {
       </div>
     );
 
-  // if 404 || 500 || Invalid Post, redirect to home while showing Loading Screen.
+  // 404 || 500 || Invalid Post, redirect to home
   if (
     error?.response?.status === 404 ||
     error?.response?.status === 500 ||
-    // This can also be checked as 400
     // '"value" must be a valid GUID' || 'Not matched'
     error?.response?.status === 400
   ) {
@@ -192,6 +209,7 @@ const Post = () => {
                 ? onOptionClicked
                 : undefined
             }
+            toggleLike={toggleLike}
             focusCommentField={focusCommentField}
             showAction={user != null}
           />
@@ -212,6 +230,7 @@ const Post = () => {
                 ? onOptionClicked
                 : undefined
             }
+            toggleLike={toggleLike}
             focusCommentField={focusCommentField}
             showAction={user != null}
           />
