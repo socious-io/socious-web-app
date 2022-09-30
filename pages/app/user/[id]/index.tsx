@@ -6,6 +6,7 @@ import React from 'react';
 import type {NextPage} from 'next';
 import {useRouter} from 'next/router';
 import {GeneralLayout} from 'layout';
+
 //libraries
 import useSWR from 'swr';
 
@@ -19,7 +20,10 @@ const UserProfile: NextPage = () => {
   const {id} = router.query;
 
   //get user profile data by user id
-  const {data, error} = useSWR<any>(`/user/by-username/${id}/profile`, get);
+  const {data, mutate, error} = useSWR<any>(
+    `/user/by-username/${id}/profile`,
+    get,
+  );
 
   // Show this until the data is fetched
   if (!data && !error) return <p>loading</p>;
@@ -35,7 +39,7 @@ const UserProfile: NextPage = () => {
   return (
     <GeneralLayout>
       <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">
-        <MainContent data={data} status="user" />
+        <MainContent data={data} status="user" profile_mutate={mutate} />
       </div>
     </GeneralLayout>
   );

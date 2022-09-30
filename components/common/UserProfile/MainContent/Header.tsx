@@ -34,7 +34,8 @@ interface Props {
   own_user?: boolean;
   following: boolean;
   id: string;
-  mutate: KeyedMutator<any>;
+  identities_mutate: KeyedMutator<any>;
+  profile_mutate: KeyedMutator<any>;
   loggedIn: boolean;
 }
 
@@ -45,7 +46,8 @@ const Header: React.FC<Props> = ({
   own_user = false,
   following,
   id,
-  mutate,
+  identities_mutate,
+  profile_mutate,
   loggedIn,
 }) => {
   const [disabled, setDisabled] = useState(false);
@@ -59,7 +61,8 @@ const Header: React.FC<Props> = ({
     setDisabled(true);
     try {
       const res = await followUser(id);
-      mutate();
+      identities_mutate(); //refresh identities api
+      profile_mutate(); //refresh profile(user or organization) api
     } catch (e) {}
     setDisabled(false);
   };
@@ -69,7 +72,8 @@ const Header: React.FC<Props> = ({
     setDisabled(true);
     try {
       const res = await unfollowUser(id);
-      mutate();
+      identities_mutate(); //refresh identities api
+      profile_mutate(); //refresh profile(user or organization) api
       handleToggleModal();
     } catch (e) {}
     setDisabled(false);
@@ -111,7 +115,7 @@ const Header: React.FC<Props> = ({
           </Button>
         ) : loggedIn && !own_user && !following ? (
           <Button onClick={followHandler} disabled={disabled}>
-            Connect
+            {status === 'user' ? 'Connect' : 'Follow'}
           </Button>
         ) : null}
 

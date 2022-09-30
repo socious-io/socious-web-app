@@ -14,7 +14,7 @@ import Description from './Description';
 import Contact from './Contact';
 
 // libraries
-import useSWR from 'swr';
+import useSWR, {KeyedMutator} from 'swr';
 
 // utils
 import {get} from 'utils/request';
@@ -26,15 +26,16 @@ import {useUser} from '@hooks';
 interface Props {
   data: any;
   status: 'user' | 'organization';
+  profile_mutate: KeyedMutator<any>;
 }
 
-const MainContent: React.FC<Props> = ({data, status}) => {
+const MainContent: React.FC<Props> = ({data, status, profile_mutate}) => {
   const {user} = useUser({redirect: false});
 
   //getting user identities
   const {
     data: identities,
-    mutate,
+    mutate: identities_mutate,
     error,
   } = useSWR<any>(`/identities/${data.id}`, get);
 
@@ -57,7 +58,8 @@ const MainContent: React.FC<Props> = ({data, status}) => {
         status={status}
         following={identities?.following}
         id={data?.id}
-        mutate={mutate}
+        identities_mutate={identities_mutate}
+        profile_mutate={profile_mutate}
         loggedIn={user ? true : false}
         own_user={user?.username === data?.username ? true : false}
       />
