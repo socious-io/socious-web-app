@@ -52,7 +52,9 @@ export function SharedCard({
         time={sharedPost?.created_at}
         passion={sharedPost?.causes_tags}
         name={sharedPost?.identity_meta?.username}
-        src={sharedPost?.identity_meta?.avatar}
+        src={
+          sharedPost.identity_meta.avatar ?? sharedPost?.identity_meta?.image
+        }
         likes={sharedPost?.likes}
         liked={sharedPost?.liked}
         shared={sharedPost?.shared}

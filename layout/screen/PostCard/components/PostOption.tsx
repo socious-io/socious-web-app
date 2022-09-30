@@ -29,7 +29,7 @@ type OptionType = {
 // Options
 const options: OptionType[] = [
   {action: 'EDIT', label: 'Edit post', icon: <PencilIcon className="w-4" />},
-  {action: 'SHARE', label: 'Share post', icon: <ShareIcon className="w-4" />},
+  // {action: 'SHARE', label: 'Share post', icon: <ShareIcon className="w-4" />},
   {action: 'DELETE', label: 'Delete post', icon: <TrashIcon className="w-4" />},
 ];
 

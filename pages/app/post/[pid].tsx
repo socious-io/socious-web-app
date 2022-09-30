@@ -195,7 +195,7 @@ const Post = () => {
             time={post.created_at}
             passion={post.causes_tags}
             name={post.identity_meta.name}
-            src={post.identity_meta.image}
+            src={post.identity_meta.image ?? post.identity_meta.avatar}
             shared={post.shared}
             liked={post.liked}
             likes={post.likes}
@@ -220,7 +220,7 @@ const Post = () => {
             content={post.content}
             time={post.created_at}
             passion={post.causes_tags}
-            src={post.identity_meta.image}
+            src={post.identity_meta.image ?? post.identity_meta.avatar}
             liked={post.liked}
             likes={post.likes}
             media={post.media}

@@ -85,7 +85,7 @@ const PostAction = ({
       )}
 
       {/* Share Button */}
-      {onShare ? (
+      {/* {onShare ? (
         <Button
           variant="ghost"
           className="flex grow items-center justify-center space-x-1 rounded-none border-0 text-graySubtitle"
@@ -110,7 +110,7 @@ const PostAction = ({
             </Button>
           </a>
         </Link>
-      )}
+      )} */}
     </div>
   );
 };
