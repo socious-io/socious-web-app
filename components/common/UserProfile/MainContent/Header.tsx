@@ -93,6 +93,7 @@ const Header: React.FC<Props> = ({
         />
       </div>
       <div className="mt-6 flex h-12 flex-row justify-end gap-4 pr-4">
+        {/* show connect or following button */}
         {loggedIn && !own_user && following ? (
           <Button
             onClick={unfollowHandler}
