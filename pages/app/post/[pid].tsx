@@ -134,11 +134,15 @@ const Post = () => {
       </div>
     );
 
+  console.log('error: ', error);
   // if 404 || 500 || Invalid Post, redirect to home while showing Loading Screen.
   if (
     error?.response?.status === 404 ||
     error?.response?.status === 500 ||
-    error?.response?.data?.error === '"value" must be a valid GUID'
+    // This can also be checked as 400
+    // error?.response?.data?.error === '"value" must be a valid GUID' ||
+    // error?.response?.data?.error === 'Not matched'
+    error?.response?.status === 400
   ) {
     router.push('/app');
     return (
