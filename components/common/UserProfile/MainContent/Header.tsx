@@ -116,7 +116,7 @@ const Header: React.FC<Props> = ({
         ) : null}
 
         {/* show edit profile button just for own user */}
-        {loggedIn && own_user && <Button>edit profile</Button>}
+        {loggedIn && own_user && <Button>Edit profile</Button>}
       </div>
 
       {/* show modal before unfollow */}
