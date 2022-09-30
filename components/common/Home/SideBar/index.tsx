@@ -60,7 +60,7 @@ const SideBar = ({selectBar = ''}: Props) => {
                 {currentIdentity?.type === 'users' ? (
                   <NetworkCard username={user?.username} />
                 ) : (
-                  <OrganizationCard />
+                  <OrganizationCard username={user?.shortname} />
                 )}
                 <ProjectsCard
                   isOrganization={currentIdentity?.type === 'organizations'}
