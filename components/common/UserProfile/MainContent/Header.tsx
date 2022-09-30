@@ -5,13 +5,15 @@
 import React, {useState} from 'react';
 import Image from 'next/image';
 
-//components
+// components
 import Button from '@components/common/Button/Button';
-import MoreButton from './MoreButton';
 import Avatar from '@components/common/Avatar/Avatar';
-import {followUser, unfollowUser} from '@api/network/action';
-import {KeyedMutator} from 'swr';
 
+// actions
+import {followUser, unfollowUser} from '@api/network/action';
+
+// interfaces
+import {KeyedMutator} from 'swr';
 interface Props {
   cover_image: null | {
     created_at: string;
@@ -48,6 +50,7 @@ const Header: React.FC<Props> = ({
   // backgground image not exist svg
   const bg_icon = require('../../../../asset/icons/bg-image.svg');
 
+  //follow user function
   const followHandler = async () => {
     setDisabled(true);
     try {
@@ -56,12 +59,13 @@ const Header: React.FC<Props> = ({
     } catch (e) {}
     setDisabled(false);
   };
+
+  //unfollow user function
   const unfollowHandler = async () => {
     setDisabled(true);
     try {
       const res = await unfollowUser(id);
       mutate();
-      console.log(res);
     } catch (e) {}
     setDisabled(false);
   };
@@ -87,6 +91,7 @@ const Header: React.FC<Props> = ({
         />
       </div>
       <div className="mt-6 flex h-12 flex-row justify-end gap-4 pr-4">
+
         {!own_user && following ? (
           <Button
             onClick={unfollowHandler}
@@ -101,7 +106,8 @@ const Header: React.FC<Props> = ({
           </Button>
         ) : null}
 
-        <MoreButton />
+        {/* show edit profile button just for own user */}
+        {own_user && <Button>edit profile</Button>}
       </div>
     </div>
   );
