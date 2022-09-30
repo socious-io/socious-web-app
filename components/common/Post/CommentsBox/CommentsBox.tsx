@@ -54,7 +54,6 @@ const CommentsBox = forwardRef<InsertNewComment, CommentsBoxProps>(
 
     useImperativeHandle(ref, () => ({
       setNewComment: (comment: any) => {
-        console.log('NEW COMMENT :---: ', comment);
         mutateComments(
           (oldComments) => {
             oldComments?.[0]?.items.unshift(comment);
@@ -74,7 +73,7 @@ const CommentsBox = forwardRef<InsertNewComment, CommentsBoxProps>(
             if (!oldComments) return [];
             for (let i = 0; i < size; i++) {
               let comments = oldComments[i].items;
-              for (let j = 0, len = oldComments[i].limit; j < len; j++) {
+              for (let j = 0, len = oldComments[i].items.length; j < len; j++) {
                 let oldComment = comments[j];
                 //if likeToggled Comment, change the value.
                 comments[j] =

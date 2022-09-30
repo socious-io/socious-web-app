@@ -42,7 +42,6 @@ const Post = () => {
     },
   });
 
-  console.log('SELECTED POST :---: ', post);
   const {user, currentIdentity} = useUser({redirect: false});
 
   const [page, setPage] = useState<number>(1);
