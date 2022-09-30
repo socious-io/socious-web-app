@@ -38,6 +38,7 @@ const MainContent: React.FC<Props> = ({data, status}) => {
     error,
   } = useSWR<any>(`/identities/${data.id}`, get);
 
+  //handel get identities error
   if (!identities && !error) return <p>loading</p>;
   if (
     error?.response?.status === 400 ||
@@ -47,7 +48,7 @@ const MainContent: React.FC<Props> = ({data, status}) => {
       ))
   )
     return <p>invalid user identitiy</p>;
-  console.log(user, data, identities);
+
   return (
     <div className="border-1 mb-8 rounded-xl border border-grayLineBased md:w-4/6">
       <Header

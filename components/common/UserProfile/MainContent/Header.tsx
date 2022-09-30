@@ -8,6 +8,7 @@ import Image from 'next/image';
 // components
 import Button from '@components/common/Button/Button';
 import Avatar from '@components/common/Avatar/Avatar';
+import {Modal} from '@components/common';
 
 // actions
 import {followUser, unfollowUser} from '@api/network/action';
@@ -48,6 +49,7 @@ const Header: React.FC<Props> = ({
   loggedIn,
 }) => {
   const [disabled, setDisabled] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   // backgground image not exist svg
   const bg_icon = require('../../../../asset/icons/bg-image.svg');
@@ -68,8 +70,13 @@ const Header: React.FC<Props> = ({
     try {
       const res = await unfollowUser(id);
       mutate();
+      handleToggleModal();
     } catch (e) {}
     setDisabled(false);
+  };
+
+  const handleToggleModal = () => {
+    setShowModal(!showModal);
   };
 
   return (
@@ -96,7 +103,7 @@ const Header: React.FC<Props> = ({
         {/* show connect or following button */}
         {loggedIn && !own_user && following ? (
           <Button
-            onClick={unfollowHandler}
+            onClick={handleToggleModal}
             disabled={disabled}
             variant={'outline'}
           >
@@ -111,6 +118,48 @@ const Header: React.FC<Props> = ({
         {/* show edit profile button just for own user */}
         {loggedIn && own_user && <Button>edit profile</Button>}
       </div>
+
+      {/* show modal before unfollow */}
+      <Modal isOpen={showModal} onClose={handleToggleModal}>
+        <Modal.Title>
+          <div className="flex flex-col py-6">
+            <Avatar
+              src={avatar?.url}
+              size="xl"
+              rounded={false}
+              className=" mx-auto "
+              type={status === 'organization' ? 1 : 0}
+            />
+            <div className="pb-4 pt-8">
+              <p className="font-worksans text-center text-lg font-semibold text-black">
+                Do you want to unfollow this account?
+              </p>
+            </div>
+          </div>
+        </Modal.Title>
+        <div className="flex gap-x-12 px-4">
+          <Button
+            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+            type="submit"
+            size="lg"
+            variant="fill"
+            value="Submit"
+            onClick={unfollowHandler}
+          >
+            Yes
+          </Button>
+          <Button
+            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+            type="submit"
+            size="lg"
+            variant="outline"
+            value="Submit"
+            onClick={handleToggleModal}
+          >
+            Cancel
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };
