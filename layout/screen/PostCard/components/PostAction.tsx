@@ -49,7 +49,9 @@ const PostAction = ({
         ) : (
           <HeartIcon className="w-5" />
         )}
-        <p className="text-xs">{likesCount} Like</p>
+        <p className="text-xs">
+          {likesCount ?? '0'} {likesCount === 1 ? 'like' : 'likes'}
+        </p>
       </Button>
       <Link href={`/app/post/${id}`} passHref>
         <a className="flex grow items-center justify-center">
@@ -69,7 +71,9 @@ const PostAction = ({
           onClick={onShare}
         >
           <ShareIcon className="w-5" />
-          <p className="text-xs">{shared} Share</p>
+          <p className="text-xs">
+            {shared ?? '0'} {shared === 1 ? 'share' : 'shares'}
+          </p>
         </Button>
       ) : (
         <Link href={`/app/post/${id}`} passHref>
@@ -79,7 +83,9 @@ const PostAction = ({
               className="space-x-1  rounded-none border-0 text-graySubtitle"
             >
               <ShareIcon className="w-5" />
-              <p className="text-xs">{shared} Share</p>
+              <p className="text-xs">
+                {shared ?? '0'} {shared === 1 ? 'share' : 'shares'}
+              </p>
             </Button>
           </a>
         </Link>

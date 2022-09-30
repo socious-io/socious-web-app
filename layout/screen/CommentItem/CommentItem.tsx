@@ -105,7 +105,9 @@ export function CommentItem({
           ) : (
             <HeartIcon className="w-5" />
           )}
-          <p className="text-xs text-graySubtitle">{likesCount ?? '0'} Like</p>
+          <p className="text-xs text-graySubtitle">
+            {likesCount ?? '0'} {likesCount === 1 ? 'like' : 'likes'}
+          </p>
         </Button>
       </div>
     </div>
