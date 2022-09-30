@@ -61,7 +61,13 @@ const MainContent: React.FC<Props> = ({data, status, profile_mutate}) => {
         identities_mutate={identities_mutate}
         profile_mutate={profile_mutate}
         loggedIn={user ? true : false}
-        own_user={user?.username === data?.username ? true : false}
+        own_user={
+          status === 'user' && user?.username === data?.username
+            ? true
+            : status === 'organization' && user?.name === data?.name
+            ? true
+            : false
+        }
       />
       <ProfileInfo
         first_name={data?.first_name}
@@ -71,10 +77,13 @@ const MainContent: React.FC<Props> = ({data, status, profile_mutate}) => {
         followers={data?.followers}
       />
 
-      {/* if user is current user show 'You' */}
-      {user?.username === data?.username && (
+      {/* if user/organization is current user/organization show 'You' */}
+      {status === 'user' && user?.username === data?.username ? (
         <p className="mt-3 px-4 text-sm text-secondary">You </p>
-      )}
+      ) : status === 'organization' && user?.name === data?.name ? (
+        <p className="mt-3 px-4 text-sm text-secondary">You </p>
+      ) : null}
+
       <SocialCauses social_causes={data?.social_causes} />
       {status === 'user' ? (
         <Contact
