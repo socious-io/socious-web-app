@@ -1,27 +1,19 @@
-import {EllipsisHorizontalIcon} from '@heroicons/react/24/outline';
+// Components
 import {Avatar} from '@components/common';
-import {useCallback, useEffect} from 'react';
-import {Button} from 'components/common';
+import PostOption from './PostOption';
+
+// Service
 import {isoToHumanTime} from 'services/toHumanTime';
+
+// Type
 export interface PostHeadProps {
   name?: string;
   time?: string;
-  hideOption?: boolean;
   src?: string;
-  toggleOptions?: () => void;
+  onOptionClicked?: any;
 }
 
-const PostHead = ({
-  name,
-  time,
-  hideOption = false,
-  src,
-  toggleOptions,
-}: PostHeadProps) => {
-  const handleOptions = useCallback(() => {
-    if (toggleOptions) toggleOptions();
-  }, [toggleOptions]);
-
+const PostHead = ({name, time, src, onOptionClicked}: PostHeadProps) => {
   return (
     <div className="flex items-center justify-between">
       <div className="p-b flex items-center space-x-2">
@@ -33,15 +25,7 @@ const PostHead = ({
         </p>
       </div>
       {/* HideOption from unauthorized User */}
-      {!hideOption && (
-        <Button
-          variant="ghost"
-          className="flex border-0 p-2"
-          onClick={handleOptions}
-        >
-          <EllipsisHorizontalIcon className="h-5 w-5" />
-        </Button>
-      )}
+      {!!onOptionClicked && <PostOption optionClicked={onOptionClicked} />}
     </div>
   );
 };

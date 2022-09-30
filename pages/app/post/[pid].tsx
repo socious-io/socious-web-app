@@ -176,8 +176,11 @@ const Post = () => {
               ...post.shared_post,
               identity_meta: post.shared_from_identity.meta,
             }}
-            hideOption={currentIdentity?.id !== post.identity_id}
-            optionClicked={onOptionClicked}
+            optionClicked={
+              currentIdentity?.id === post.identity_id
+                ? onOptionClicked
+                : undefined
+            }
             showAction={user != null}
           />
         ) : (
@@ -192,8 +195,11 @@ const Post = () => {
             likes={post.likes}
             media={post.media}
             shared={post.shared}
-            hideOption={currentIdentity?.id !== post.identity_id}
-            optionClicked={onOptionClicked}
+            optionClicked={
+              currentIdentity?.id === post.identity_id
+                ? onOptionClicked
+                : undefined
+            }
             showAction={user != null}
           />
         )}

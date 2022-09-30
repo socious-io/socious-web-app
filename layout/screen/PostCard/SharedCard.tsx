@@ -1,10 +1,14 @@
+// Components
 import PostContent from './components/PostContent';
 import PostHead from './components/PostHead';
-import PostCard, {PostCardProps} from './PostCard';
+import PostCard from './PostCard';
 import PostAction from './components/PostAction';
-import {useToggle} from '@hooks';
-import PostOption from './components/PostOption';
 
+// Custom Hook
+import {useToggle} from '@hooks';
+
+// Types
+import {PostCardProps} from './PostCard';
 interface SharedPostType extends PostCardProps {
   identity_meta: any;
   created_at: string;
@@ -38,8 +42,7 @@ export function SharedCard({
         name={(name || 'name') + ' Shared'}
         time={time}
         src={src}
-        hideOption={hideOption}
-        toggleOptions={handlers.toggle}
+        onOptionClicked={optionClicked}
       />
       <PostContent content={content} passion={passion} media={media} noBorder />
       <PostCard
@@ -64,7 +67,6 @@ export function SharedCard({
           onShare={optionClicked ? () => optionClicked('SHARE') : undefined}
         />
       )}
-      {optionClicked && state && <PostOption optionClicked={optionClicked} />}
     </div>
   );
 }

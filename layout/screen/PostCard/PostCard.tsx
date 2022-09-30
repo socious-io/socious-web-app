@@ -1,9 +1,9 @@
+// Components
 import PostHead from './components/PostHead';
 import PostContent from './components/PostContent';
 import PostAction from './components/PostAction';
-import {useToggle} from '@hooks';
-import PostOption from './components/PostOption';
 
+//Types
 export interface PostCardProps {
   id: string;
   content?: string;
@@ -31,20 +31,16 @@ export function PostCard({
   likes,
   media,
   shared,
-  hideOption,
   showAction = true,
   optionClicked,
 }: PostCardProps) {
-  const {state, handlers} = useToggle();
-
   return (
     <div className="relative space-y-5 rounded-2xl border border-grayLineBased bg-white p-4">
       <PostHead
         name={name}
         time={time}
         src={src}
-        hideOption={hideOption}
-        toggleOptions={handlers.toggle}
+        onOptionClicked={optionClicked}
       />
       <PostContent content={content} passion={passion} media={media} noBorder />
       {showAction && (
@@ -56,7 +52,6 @@ export function PostCard({
           onShare={optionClicked ? () => optionClicked('SHARE') : undefined}
         />
       )}
-      {optionClicked && state && <PostOption optionClicked={optionClicked} />}
     </div>
   );
 }
