@@ -14,6 +14,7 @@ export interface PostActionProps {
   shared?: number;
   id: string;
   onShare?: () => void;
+  onCommentClicked?: () => void;
 }
 
 const PostAction = ({
@@ -22,6 +23,7 @@ const PostAction = ({
   shared,
   id,
   onShare,
+  onCommentClicked,
 }: PostActionProps) => {
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const [likesCount, setlikesCount] = useState<number>(likes || 0);
@@ -39,6 +41,7 @@ const PostAction = ({
 
   return (
     <div className="flex items-center justify-between divide-x divide-x-[1px] divide-grayLineBased">
+      {/* Like Button */}
       <Button
         variant="ghost"
         className="flex grow items-center justify-center space-x-1 rounded-none border-0 text-graySubtitle"
@@ -53,17 +56,32 @@ const PostAction = ({
           {likesCount ?? '0'} {likesCount === 1 ? 'like' : 'likes'}
         </p>
       </Button>
-      <Link href={`/app/post/${id}`} passHref>
-        <a className="flex grow items-center justify-center">
-          <Button
-            variant="ghost"
-            className="space-x-1 rounded-none border-0 text-graySubtitle"
-          >
-            <ChatBubbleLeftEllipsisIcon className="w-5" />
-            <p className="text-xs">Comment</p>
-          </Button>
-        </a>
-      </Link>
+
+      {/* Comment Button */}
+      {onCommentClicked ? (
+        <Button
+          variant="ghost"
+          className="flex grow items-center justify-center space-x-1 rounded-none border-0 text-graySubtitle"
+          onClick={onCommentClicked}
+        >
+          <ChatBubbleLeftEllipsisIcon className="w-5" />
+          <p className="text-xs">Comment</p>
+        </Button>
+      ) : (
+        <Link href={`/app/post/${id}`} passHref>
+          <a className="flex grow items-center justify-center">
+            <Button
+              variant="ghost"
+              className="space-x-1 rounded-none border-0 text-graySubtitle"
+            >
+              <ChatBubbleLeftEllipsisIcon className="w-5" />
+              <p className="text-xs">Comment</p>
+            </Button>
+          </a>
+        </Link>
+      )}
+
+      {/* Share Button */}
       {onShare ? (
         <Button
           variant="ghost"

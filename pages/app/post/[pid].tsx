@@ -23,13 +23,17 @@ import {GridLoader} from 'react-spinners';
 
 // Types
 export interface InsertNewComment {
-  setNewComment(comment: any): void;
+  setNewComment: (comment: any) => void;
+}
+export interface FocusComment {
+  focusField: () => void;
 }
 
 const Post = () => {
   const router = useRouter();
   const {pid} = router.query;
   const addComment = useRef<InsertNewComment>(null);
+  const commentFieldRef = useRef<FocusComment>(null);
   const {data: post, error} = useSWR<any>(`/posts/${pid}`, get, {
     onErrorRetry: (error) => {
       if (
@@ -125,6 +129,12 @@ const Post = () => {
     setShareStep(2);
   }, [shareHandler]);
 
+  // Focus CommentField
+  const focusCommentField = useCallback(
+    () => commentFieldRef.current?.focusField(),
+    [],
+  );
+
   // Show loading until post is fetched.
   if (!post && !error)
     return (
@@ -133,14 +143,12 @@ const Post = () => {
       </div>
     );
 
-  console.log('error: ', error);
   // if 404 || 500 || Invalid Post, redirect to home while showing Loading Screen.
   if (
     error?.response?.status === 404 ||
     error?.response?.status === 500 ||
     // This can also be checked as 400
-    // error?.response?.data?.error === '"value" must be a valid GUID' ||
-    // error?.response?.data?.error === 'Not matched'
+    // '"value" must be a valid GUID' || 'Not matched'
     error?.response?.status === 400
   ) {
     router.push('/app');
@@ -184,6 +192,7 @@ const Post = () => {
                 ? onOptionClicked
                 : undefined
             }
+            focusCommentField={focusCommentField}
             showAction={user != null}
           />
         ) : (
@@ -199,14 +208,17 @@ const Post = () => {
             media={post.media}
             shared={post.shared}
             optionClicked={
-              currentIdentity?.id === post.identity_id
+              user && currentIdentity?.id === post.identity_id
                 ? onOptionClicked
                 : undefined
             }
+            focusCommentField={focusCommentField}
             showAction={user != null}
           />
         )}
-        {user ? <CommentField onSend={onCommentSend} /> : null}
+        {user ? (
+          <CommentField onSend={onCommentSend} ref={commentFieldRef} />
+        ) : null}
         {/* <div>{comments}</div> */}
         <CommentsBox pid={post?.id} ref={addComment} />
 
