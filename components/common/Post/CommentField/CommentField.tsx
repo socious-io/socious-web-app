@@ -1,5 +1,5 @@
 import {PaperAirplaneIcon} from '@heroicons/react/24/outline';
-import React, {forwardRef, useCallback, useState} from 'react';
+import React, {forwardRef, useCallback, useEffect, useState} from 'react';
 import Avatar from '../../Avatar/Avatar';
 import Button from '../../Button/Button';
 import {twMerge} from 'tailwind-merge';
@@ -42,6 +42,17 @@ const CommentField = forwardRef<FocusComment, CommentFieldProps>(
       },
       [comment, onSend],
     );
+
+    useEffect(() => {
+      const onKeyboardPress = (e: any) => {
+        const code = e.keyCode ? e.keyCode : e.which;
+        console.log('keyPress', code);
+        if (code == 13) onClickSend();
+      };
+      const textArea = inputField.current;
+      textArea?.addEventListener('keyup', onKeyboardPress);
+      return () => textArea?.removeEventListener('keyup', onKeyboardPress);
+    }, [onClickSend]);
 
     useImperativeHandle(ref, () => ({
       focusField: () => inputField?.current?.focus(),
