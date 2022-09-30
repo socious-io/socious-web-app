@@ -3,6 +3,7 @@ import PostContent from './components/PostContent';
 import PostAction from './components/PostAction';
 import {useToggle} from '@hooks';
 import PostOption from './components/PostOption';
+import {type} from 'os';
 
 export interface PostCardProps {
   id: string;
@@ -18,6 +19,8 @@ export interface PostCardProps {
   src?: string;
   hideOption?: boolean;
   optionClicked?: (data: string) => void;
+  username?: string;
+  type?: string;
 }
 
 export function PostCard({
