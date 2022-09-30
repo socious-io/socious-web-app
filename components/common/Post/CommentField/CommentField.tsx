@@ -57,7 +57,7 @@ const CommentField = forwardRef<FocusComment, CommentFieldProps>(
       >
         <Avatar src={src ?? ''} size={avatarSize} type={type} />
         <TextArea
-          className="resize-none border-grayLineBased focus:border-grayLineBased md:resize"
+          className="resize-none border-grayLineBased focus:border-grayLineBased md:resize-y"
           containerClassName="w-9/12 md:w-11/12 md:mx-2"
           placeholder={placeholder}
           value={comment}
