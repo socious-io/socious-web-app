@@ -32,7 +32,11 @@ const MainContent: React.FC<Props> = ({data, status}) => {
   const {user} = useUser({redirect: false});
 
   //getting user identities
-  const {data: identities, error} = useSWR<any>(`/identities/${data.id}`, get);
+  const {
+    data: identities,
+    mutate,
+    error,
+  } = useSWR<any>(`/identities/${data.id}`, get);
 
   if (!identities && !error) return <p>loading</p>;
   if (
@@ -52,6 +56,7 @@ const MainContent: React.FC<Props> = ({data, status}) => {
         status={status}
         following={identities?.following}
         id={data?.id}
+        mutate={mutate}
         own_user={user?.username === data?.username ? true : false}
       />
       <ProfileInfo

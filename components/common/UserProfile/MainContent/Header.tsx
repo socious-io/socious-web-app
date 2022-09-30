@@ -2,7 +2,7 @@
  * header of user profile component
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import Image from 'next/image';
 
 //components
@@ -10,6 +10,7 @@ import Button from '@components/common/Button/Button';
 import MoreButton from './MoreButton';
 import Avatar from '@components/common/Avatar/Avatar';
 import {followUser, unfollowUser} from '@api/network/action';
+import {KeyedMutator} from 'swr';
 
 interface Props {
   cover_image: null | {
@@ -30,6 +31,7 @@ interface Props {
   own_user?: boolean;
   following: boolean;
   id: string;
+  mutate: KeyedMutator<any>;
 }
 
 const Header: React.FC<Props> = ({
@@ -39,25 +41,29 @@ const Header: React.FC<Props> = ({
   own_user = false,
   following,
   id,
+  mutate,
 }) => {
+  const [disabled, setDisabled] = useState(false);
+
   // backgground image not exist svg
   const bg_icon = require('../../../../asset/icons/bg-image.svg');
 
   const followHandler = async () => {
+    setDisabled(true);
     try {
       const res = await followUser(id);
-      console.log(res);
-    } catch (e) {
-      console.log(e);
-    }
+      mutate();
+    } catch (e) {}
+    setDisabled(false);
   };
   const unfollowHandler = async () => {
+    setDisabled(true);
     try {
       const res = await unfollowUser(id);
+      mutate();
       console.log(res);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
+    setDisabled(false);
   };
 
   return (
@@ -84,12 +90,15 @@ const Header: React.FC<Props> = ({
         {!own_user && following ? (
           <Button
             onClick={unfollowHandler}
-            className="border border-primary bg-white text-primary"
+            disabled={disabled}
+            variant={'outline'}
           >
             Following
           </Button>
         ) : !own_user && !following ? (
-          <Button onClick={followHandler}>Connect</Button>
+          <Button onClick={followHandler} disabled={disabled}>
+            Connect
+          </Button>
         ) : null}
 
         <MoreButton />
