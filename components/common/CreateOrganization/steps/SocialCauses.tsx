@@ -54,6 +54,7 @@ const SocialCauses = ({onSubmit}: StepProps) => {
       </Title>
       <SearchBar
         type="text"
+        bgColor="offWhite"
         placeholder="Search"
         onChange={(e) => filterWith(e?.currentTarget?.value || '')}
         className="my-6 mx-6"
@@ -89,7 +90,7 @@ const SocialCauses = ({onSubmit}: StepProps) => {
         <footer className="w-full flex-none justify-center border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">
           <Button
             type="submit"
-            disabled={!(passion?.length === maxCauses)}
+            disabled={!(passion?.length <= maxCauses)}
             className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"
           >
             continue

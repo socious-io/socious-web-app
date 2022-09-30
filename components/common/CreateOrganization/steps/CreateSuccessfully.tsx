@@ -5,9 +5,12 @@ import Title from '../components/Title';
 import {Button} from '@components/common/Button/Button';
 
 //interfaces
-import {StepProps} from '@models/stepProps';
+interface Props {
+  onSubmit: any;
+  name: string;
+}
 
-const CreateSuccessfully = ({onSubmit}: StepProps) => {
+const CreateSuccessfully: React.FC<Props> = ({name, onSubmit}) => {
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
@@ -19,7 +22,7 @@ const CreateSuccessfully = ({onSubmit}: StepProps) => {
         <div className="w-full grow">
           <div className="mx-auto mt-20 h-56 w-56 rounded-xl bg-clearWhite" />
           <Title
-            description="You have successfully created a page for Green Peace!"
+            description={`You have successfully created a page for ${name}!`}
             border={false}
             textAlign="text-center"
           >
