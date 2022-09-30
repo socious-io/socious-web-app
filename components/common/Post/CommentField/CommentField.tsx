@@ -1,9 +1,9 @@
 import {PaperAirplaneIcon} from '@heroicons/react/24/outline';
 import React, {useCallback, useState} from 'react';
 import Avatar from '../../Avatar/Avatar';
-import TextInput from '../../TextInput/TextInput';
 import Button from '../../Button/Button';
 import {twMerge} from 'tailwind-merge';
+import TextArea from '@components/common/TextArea/TextArea';
 
 interface CommentFieldProps {
   src?: string;
@@ -44,11 +44,12 @@ const CommentField = ({
       onSubmit={(e) => onClickSend(e)}
     >
       <Avatar src={src ?? ''} size={avatarSize} type={type} />
-      <TextInput
-        className="border-grayLineBased focus:border-grayLineBased"
+      <TextArea
+        className="resize-none border-grayLineBased focus:border-grayLineBased md:resize"
         containerClassName="w-9/12 md:w-11/12 md:mx-2"
         placeholder={placeholder}
         value={comment}
+        rows={2}
         onChange={(e) => setComment(e.currentTarget.value)}
       />
       <Button
