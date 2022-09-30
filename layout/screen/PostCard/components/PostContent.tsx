@@ -27,7 +27,7 @@ const PostContent = ({
         </div>
       )}
       {passion && (
-        <div>
+        <div className="mb-3">
           <Chip
             content={getText('en', `PASSION.${passion}`) || passion}
             containerClassName="bg-secondarySLight inline"
