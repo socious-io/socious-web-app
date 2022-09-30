@@ -1,6 +1,7 @@
 import {getText} from '@socious/data';
 
 import {Chip} from '@components/common';
+import Image from 'next/image';
 
 export interface PostContentProps {
   passion?: string;
@@ -27,13 +28,11 @@ const PostContent = ({
         </div>
       )}
       {passion && (
-        <div>
-          <Chip
-            content={getText('en', `PASSION.${passion}`) || passion}
-            containerClassName="bg-secondarySLight inline"
-            contentClassName="text-secondary"
-          />
-        </div>
+        <Chip
+          content={getText('en', `PASSION.${passion}`) || passion}
+          containerClassName="bg-secondarySLight inline-block mb-4 mt-2"
+          contentClassName="text-secondary"
+        />
       )}
       <div>
         <p className="text-small">
