@@ -39,6 +39,7 @@ const Posts = ({page, onFull}: PostsProps) => {
             shared={post.shared}
             liked={post.liked}
             likes={post.likes}
+            media={post.media}
             sharedPost={{
               ...post.shared_post,
               identity_meta: post.shared_from_identity.meta,
@@ -56,6 +57,7 @@ const Posts = ({page, onFull}: PostsProps) => {
             liked={post.liked}
             likes={post.likes}
             shared={post.shared}
+            media={post.media}
           />
         );
       })}

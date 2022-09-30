@@ -29,6 +29,7 @@ export function PostCard({
   liked,
   src,
   likes,
+  media,
   shared,
   hideOption,
   showAction = true,
@@ -45,7 +46,7 @@ export function PostCard({
         hideOption={hideOption}
         toggleOptions={handlers.toggle}
       />
-      <PostContent content={content} passion={passion} noBorder />
+      <PostContent content={content} passion={passion} media={media} noBorder />
       {showAction && (
         <PostAction
           liked={liked}

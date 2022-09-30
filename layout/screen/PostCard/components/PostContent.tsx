@@ -1,7 +1,6 @@
 import {getText} from '@socious/data';
-
+import Image from 'next/future/image';
 import {Chip} from '@components/common';
-import Image from 'next/image';
 
 export interface PostContentProps {
   passion?: string;
@@ -16,6 +15,7 @@ const PostContent = ({
   noBorder = false,
   media = [],
 }: PostContentProps) => {
+  console.log('MEDIA :---: ', media);
   return (
     <div
       className={
@@ -23,8 +23,13 @@ const PostContent = ({
       }
     >
       {media && media.length > 0 && (
-        <div>
-          <div className="h-40 w-full rounded-lg bg-offWhite" />
+        <div className="relative h-40 w-full overflow-hidden rounded-lg bg-offWhite">
+          <Image
+            alt={passion ?? 'post media'}
+            src={media[0]}
+            className="object-cover"
+            fill
+          />
         </div>
       )}
       {passion && (

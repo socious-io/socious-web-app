@@ -42,6 +42,7 @@ const Post = () => {
     },
   });
 
+  console.log('SELECTED POST :---: ', post);
   const {user, currentIdentity} = useUser({redirect: false});
 
   const [page, setPage] = useState<number>(1);
@@ -170,6 +171,7 @@ const Post = () => {
             shared={post.shared}
             liked={post.liked}
             likes={post.likes}
+            media={post.media}
             sharedPost={{
               ...post.shared_post,
               identity_meta: post.shared_from_identity.meta,
@@ -188,6 +190,7 @@ const Post = () => {
             src={post.identity_meta.image}
             liked={post.liked}
             likes={post.likes}
+            media={post.media}
             shared={post.shared}
             hideOption={currentIdentity?.id !== post.identity_id}
             optionClicked={onOptionClicked}
