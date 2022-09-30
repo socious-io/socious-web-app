@@ -34,6 +34,7 @@ interface Props {
   following: boolean;
   id: string;
   mutate: KeyedMutator<any>;
+  loggedIn: boolean;
 }
 
 const Header: React.FC<Props> = ({
@@ -44,6 +45,7 @@ const Header: React.FC<Props> = ({
   following,
   id,
   mutate,
+  loggedIn,
 }) => {
   const [disabled, setDisabled] = useState(false);
 
@@ -91,8 +93,7 @@ const Header: React.FC<Props> = ({
         />
       </div>
       <div className="mt-6 flex h-12 flex-row justify-end gap-4 pr-4">
-
-        {!own_user && following ? (
+        {loggedIn && !own_user && following ? (
           <Button
             onClick={unfollowHandler}
             disabled={disabled}
@@ -100,14 +101,14 @@ const Header: React.FC<Props> = ({
           >
             Following
           </Button>
-        ) : !own_user && !following ? (
+        ) : loggedIn && !own_user && !following ? (
           <Button onClick={followHandler} disabled={disabled}>
             Connect
           </Button>
         ) : null}
 
         {/* show edit profile button just for own user */}
-        {own_user && <Button>edit profile</Button>}
+        {loggedIn && own_user && <Button>edit profile</Button>}
       </div>
     </div>
   );

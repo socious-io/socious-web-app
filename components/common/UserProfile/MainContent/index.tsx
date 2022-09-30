@@ -57,6 +57,7 @@ const MainContent: React.FC<Props> = ({data, status}) => {
         following={identities?.following}
         id={data?.id}
         mutate={mutate}
+        loggedIn={user ? true : false}
         own_user={user?.username === data?.username ? true : false}
       />
       <ProfileInfo
