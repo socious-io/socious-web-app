@@ -75,7 +75,7 @@ const Login: NextPage = () => {
 
   return (
     <PreAuthLayout>
-      <div className="mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased bg-background px-6 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl">
+      <div className="mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased bg-background px-6 sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl">
         <div className="relative flex h-36 justify-center">
           <span className="mx-auto py-16">
             <Image
@@ -97,7 +97,7 @@ const Login: NextPage = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
         >
-          <div className="flex h-[28rem] flex-col">
+          <div className="flex grow flex-col pb-14 sm:max-h-[28rem]">
             {' '}
             <h1 className="font-helmet">Sign in</h1>
             <InputFiled
@@ -143,7 +143,7 @@ const Login: NextPage = () => {
             </div>
           </div>
 
-          <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pb-12 pl-10 sm:h-48 sm:pl-0">
+          <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pb-12 pl-10 sm:pl-0">
             <Button
               className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle"
               type="submit"
