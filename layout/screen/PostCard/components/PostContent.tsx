@@ -16,7 +16,6 @@ const PostContent = ({
   noBorder = false,
   media = [],
 }: PostContentProps) => {
-  console.log('MEDIA :---: ', media);
   return (
     <div
       className={twMerge(
@@ -35,11 +34,13 @@ const PostContent = ({
         </div>
       )}
       {passion && (
-        <Chip
-          content={getText('en', `PASSION.${passion}`) || passion}
-          containerClassName="bg-secondarySLight inline-block"
-          contentClassName="text-secondary"
-        />
+        <div className="mb-3">
+          <Chip
+            content={getText('en', `PASSION.${passion}`) || passion}
+            containerClassName="bg-secondarySLight inline-block"
+            contentClassName="text-secondary"
+          />
+        </div>
       )}
       <div>
         <p className="text-small">{content}</p>

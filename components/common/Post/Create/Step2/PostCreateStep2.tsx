@@ -18,7 +18,8 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
   const content = getValues('content');
   const [url, setUrl] = React.useState<any>('');
   // const link = getValues("link");
-  const {user} = useUser();
+  const {user, currentIdentity} = useUser();
+  const isUser = currentIdentity?.type === 'users' ? true : false;
 
   useEffect(() => {
     const reader = new FileReader();
@@ -47,7 +48,7 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
         <div className="-mr-6 -ml-6 border-y-[.5px] p-4">
           <div className="flex items-center space-x-3">
             <Avatar src={user?.avatar?.url} size="m" />
-            <span>{user?.username ?? 'User Name'}</span>
+            <span>{isUser ? user?.username : user?.shortname}</span>
           </div>
           <Chip
             containerClassName="bg-secondarySLight inline-block mt-4 mb-6"

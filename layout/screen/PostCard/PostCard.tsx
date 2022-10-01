@@ -2,6 +2,8 @@
 import PostHead from './components/PostHead';
 import PostContent from './components/PostContent';
 import PostAction from './components/PostAction';
+import {useToggle} from '@hooks';
+import PostOption from './components/PostOption';
 
 //Types
 export interface PostCardProps {
@@ -20,6 +22,8 @@ export interface PostCardProps {
   toggleLike?: (liked: boolean) => void;
   focusCommentField?: () => void;
   optionClicked?: (data: string) => void;
+  username?: string;
+  type?: string;
 }
 
 export function PostCard({

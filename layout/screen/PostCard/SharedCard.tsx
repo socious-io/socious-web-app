@@ -33,6 +33,8 @@ export function SharedCard({
   toggleLike,
   focusCommentField,
   showAction = true,
+  type,
+  username,
   optionClicked,
 }: SharedCardProps) {
   const {state, handlers} = useToggle();
@@ -40,6 +42,9 @@ export function SharedCard({
   return (
     <div className="relative space-y-5 border-b border-neutralGray py-4">
       <PostHead
+        id={id}
+        type={type}
+        username={username}
         name={(name || 'name') + ' Shared'}
         time={time}
         src={src}

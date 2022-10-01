@@ -21,7 +21,7 @@ const ProjectsCard: FC<ProjectsCardProps> = ({
         <label className="text-primary">Projects</label>
       </Link>
       <ul className="list-none space-y-4">
-        {!isOrganization ? (
+        {isOrganization ? (
           <>
             <Link href={`/app/projects/created/${username}`} passHref>
               <li className="flex items-center space-x-4">
