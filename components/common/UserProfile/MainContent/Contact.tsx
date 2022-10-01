@@ -45,21 +45,27 @@ const Contact: React.FC<Props> = ({
           <div className="mb-4 flex">
             <MapPinIcon className="h-6 w-6 stroke-1.5 text-secondary" />
             <p className="w-3/6 pl-4 text-sm text-black">
-              {address && address + ' ,'}
+              {address ? (
+                address
+              ) : (
+                <p className="text-graySubtitle">Location</p>
+              )}
             </p>
           </div>
           <div className="mb-4 flex">
             <AtSymbolIcon className="h-6 w-6 stroke-1.5 text-secondary " />
             <p className="w-3/6 pl-4 text-sm text-black">
-              {mobile_country_code && phone
-                ? mobile_country_code + phone
-                : 'No phone Number'}
+              {mobile_country_code && phone ? (
+                mobile_country_code + phone
+              ) : (
+                <p className="text-graySubtitle">Phone Number</p>
+              )}
             </p>
           </div>
           <div className="mb-4 flex">
             <PhoneIcon className="h-6 w-6 stroke-1.5 text-secondary" />
             <p className="w-3/6 pl-4 text-sm text-black">
-              {email ? email : 'No Email'}
+              {email ? email : <p className="text-graySubtitle">Email</p>}
             </p>
           </div>
           <div className="mb-4 flex">
@@ -70,7 +76,7 @@ const Contact: React.FC<Props> = ({
                   {website}
                 </a>
               ) : (
-                'No website'
+                'Website'
               )}
             </p>
           </div>
@@ -79,7 +85,8 @@ const Contact: React.FC<Props> = ({
         <div className="mb-4 flex">
           <MapPinIcon className="h-6 w-6 stroke-1.5 text-secondary" />
           <p className="w-3/6 pl-4 text-sm text-black">
-            {city && city + ' ,'} {country}
+            {city && city + ' ,'} {country}{' '}
+            {!city && !country && <p className="text-graySubtitle">Location</p>}
           </p>
         </div>
       )}

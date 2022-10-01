@@ -11,6 +11,9 @@ import useSWR from 'swr';
 
 //components
 import MainContent from '@components/common/UserProfile/MainContent';
+import {GeneralLayout} from 'layout';
+
+//utils
 import {get} from 'utils/request';
 
 const OrganizationProfile: NextPage = () => {
@@ -19,7 +22,7 @@ const OrganizationProfile: NextPage = () => {
   const {id} = router.query;
 
   //get user profile data by user id
-  const {data, error} = useSWR<any>(`/orgs/by-shortname/${id}`, get);
+  const {data, mutate, error} = useSWR<any>(`/orgs/by-shortname/${id}`, get);
 
   // Show this until the data is fetched
   if (!data && !error) return <p>loading</p>;
@@ -33,9 +36,15 @@ const OrganizationProfile: NextPage = () => {
     return <p>invalid user</p>;
 
   return (
-    <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">
-      <MainContent data={data} status="organization" />
-    </div>
+    <GeneralLayout>
+      <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">
+        <MainContent
+          data={data}
+          status="organization"
+          profile_mutate={mutate}
+        />
+      </div>
+    </GeneralLayout>
   );
 };
 
