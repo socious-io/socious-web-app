@@ -83,7 +83,7 @@ export function Combobox({
       disabled={disabled}
     >
       {({open}) => (
-        <div className={twMerge('relative mt-1', className && className)}>
+        <div className={twMerge('relative', className && className)}>
           {label && (
             <UiCombobox.Label
               htmlFor={id || name}
@@ -93,7 +93,7 @@ export function Combobox({
                 disabled && 'text-opacity-40 ',
               )}
             >
-              <div className="flex items-baseline">
+              <div className="mb-3 flex items-baseline text-sm font-medium">
                 {label} {required && <span className="text-error">*</span>}
               </div>
             </UiCombobox.Label>
@@ -101,7 +101,7 @@ export function Combobox({
           <div className="relative w-full cursor-default overflow-hidden rounded-lg border bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <UiCombobox.Input
               name={`${name}-input`}
-              className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 outline-none focus:ring-0"
+              className="w-full border-none py-3 pl-3 pr-10 text-sm leading-5 text-gray-900 outline-none focus:ring-0"
               displayValue={(item: any) => item?.name}
               onChange={(event) => setQuery(event.target.value)}
               // required={required}

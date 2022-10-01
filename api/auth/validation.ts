@@ -3,6 +3,7 @@ import Joi from 'joi';
 import {
   rxNotMobileNumber,
   rxNoSpecialCharacters,
+  rxNoSpecialCharactersMultiWords,
   rxHasUpperLower,
   rxHasNumber,
 } from 'utils/regex';
@@ -81,7 +82,7 @@ export const schemaLogin = Joi.object({
   }),
 });
 
-export const schemaOnboardingStep3 = Joi.object({
+export const schemaOnboardingStep2 = Joi.object({
   passions: Joi.array().items(Joi.string()).min(1).max(5).required().messages({
     'array.max': `Please select only {#limit} causes.`,
     'array.min': `Please select {#limit} causes`,
@@ -89,7 +90,7 @@ export const schemaOnboardingStep3 = Joi.object({
   }),
 });
 
-export const schemaOnboardingStep4 = Joi.object({
+export const schemaOnboardingStep3 = Joi.object({
   skills: Joi.array().items(Joi.string()).min(1).max(10).required().messages({
     'array.max': `Please select only {#limit} skills.`,
     'array.min': `Please select {#limit} skills`,
@@ -97,7 +98,7 @@ export const schemaOnboardingStep4 = Joi.object({
   }),
 });
 
-export const schemaOnboardingStep5 = Joi.object({
+export const schemaOnboardingStep4 = Joi.object({
   country: Joi.required().label('Country').messages({
     'any.required': `cannot be an empty field`,
   }),
@@ -105,12 +106,12 @@ export const schemaOnboardingStep5 = Joi.object({
     'any.required': `cannot be an empty field`,
   }),
 });
-export const schemaOnboardingStep6 = Joi.object({
+export const schemaOnboardingStep5 = Joi.object({
   availableProject: Joi.required().label('availableProject').messages({
     'any.required': `cannot be an empty field`,
   }),
 });
-export const schemaOnboardingStep7 = Joi.object({
+export const schemaOnboardingStep6 = Joi.object({
   countryNumber: Joi.required().label('countryNumber').messages({
     'any.required': `cannot be an empty field`,
   }),
@@ -123,7 +124,7 @@ export const schemaOnboardingStep7 = Joi.object({
       'string.pattern.base': `Phone number must have 10 digits.`,
     }),
 });
-export const schemaOnboardingStep8 = Joi.object({
+export const schemaOnboardingStep7 = Joi.object({
   bio: Joi.string().max(160).required().label('Bio').messages({
     'any.required': `cannot be an empty field`,
   }),
@@ -133,7 +134,7 @@ export const schemaSignupStep1 = Joi.object({
   firstName: Joi.string()
     .required()
     .label('FirstName')
-    .regex(rxNoSpecialCharacters)
+    .regex(rxNoSpecialCharactersMultiWords)
     .messages({
       'string.empty': `First name cannot be an empty field.`,
       'string.pattern.base': `Should not contain special characters.`,

@@ -11,6 +11,7 @@ export const rxHasUpperCase = /(?=.*[A-Z])/;
 export const rxHasLowerCase = /(?=.*[a-z])/;
 export const rxHasNumber = /(?=.*\d)/;
 export const rxNoSpecialCharacters = /^[\p{L}'-]+$/u;
+export const rxNoSpecialCharactersMultiWords = /^[\p{L}'-]+(?: [\p{L}'-]+)*$/u;
 export const rxCheckUrl = /^(https?):\//;
 export const rxNotNumber = /[^0-9]/g;
 export const rxParsedName = /~.*~/g;
