@@ -1,6 +1,7 @@
 import {getText} from '@socious/data';
-
+import Image from 'next/future/image';
 import {Chip} from '@components/common';
+import {twMerge} from 'tailwind-merge';
 
 export interface PostContentProps {
   passion?: string;
@@ -17,29 +18,32 @@ const PostContent = ({
 }: PostContentProps) => {
   return (
     <div
-      className={
-        noBorder ? '' : `rounded-2xl border border-grayLineBased bg-white p-4`
-      }
+      className={twMerge(
+        'space-y-4',
+        noBorder ? '' : `rounded-2xl border border-grayLineBased bg-white p-4`,
+      )}
     >
       {media && media.length > 0 && (
-        <div>
-          <div className="h-40 w-full rounded-lg bg-offWhite" />
+        <div className="relative h-40 w-full overflow-hidden rounded-lg bg-offWhite">
+          <Image
+            alt={passion ?? 'post media'}
+            src={media[0]}
+            className="object-cover"
+            fill
+          />
         </div>
       )}
       {passion && (
         <div className="mb-3">
           <Chip
             content={getText('en', `PASSION.${passion}`) || passion}
-            containerClassName="bg-secondarySLight inline"
+            containerClassName="bg-secondarySLight inline-block"
             contentClassName="text-secondary"
           />
         </div>
       )}
       <div>
-        <p className="text-small">
-          {content ??
-            'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime cupiditate amet perspiciatis blanditiis tempore tempora obcaecati? Eum id excepturi, corrupti vel vitae, quidem perferendis atque, illum odio aperiam eveniet pariatur.'}
-        </p>
+        <p className="text-small">{content}</p>
       </div>
     </div>
   );

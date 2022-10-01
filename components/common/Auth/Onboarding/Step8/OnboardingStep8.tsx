@@ -1,39 +1,46 @@
-import {TextArea, Button} from '@components/common';
+import {Button} from '@components/common';
+import ImageUploader from '@components/common/ImageUploader/ImageUploader';
+import profile_img_icon from 'asset/images/user.png';
 import {StepProps} from '@models/stepProps';
-import {useFormContext} from 'react-hook-form';
-const OnboardingStep8 = ({onSubmit}: StepProps) => {
-  const formMethods = useFormContext();
-  const {handleSubmit, formState, register, watch} = formMethods;
+import {useState} from 'react';
 
-  const bio = watch('bio');
+const OnboardingStep8 = ({onSubmit}: StepProps) => {
+  const [file, setFile] = useState<any>();
+  const handleOnSubmit = (e: any) => {
+    e.preventDefault();
+    onSubmit(file);
+  };
+
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex grow flex-col justify-between pl-0 pr-10 sm:pl-10"
+      onSubmit={handleOnSubmit}
+      className="flex grow flex-col justify-between px-10"
     >
-      <div className="flex grow flex-col">
-        {' '}
-        <h1 className="font-helmet ">Tell us about who you are</h1>
-        <p className="text-base text-graySubtitle">
-          Highlight who you are in 160 characters or less
-        </p>
-        <div>
-          <TextArea
-            placeholder="Write bio"
-            register={register('bio')}
-            errorMessage={formState?.errors?.['bio']?.message}
-            containerClassName="basis-4/5 mt-5"
-            className="border-2 border-grayLineBased "
-            rows={10}
-          />
-          <span className="text-sm text-graySubtitle">
-            {' '}
-            {`${bio?.length || 0} /160`}
-          </span>
+      <div className="align-center flex grow justify-center">
+        <div className="flex flex-col">
+          {' '}
+          <h1 className="font-helmet my-6 text-center">Add a profile photo</h1>
+          <div className="flex flex-col items-center">
+            <ImageUploader
+              onChange={(file: any) => setFile(file)}
+              src={profile_img_icon}
+            >
+              {(setOpen: any) => (
+                <Button
+                  className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+                  size="lg"
+                  variant="outline"
+                  onClick={setOpen}
+                >
+                  Add from album
+                </Button>
+              )}
+            </ImageUploader>
+          </div>
         </div>
       </div>
 
-      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 sm:pl-0">
+      <div className="-mx-16 divide-x  border-t-2 border-b-grayLineBased">
         <Button
           className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
@@ -41,7 +48,7 @@ const OnboardingStep8 = ({onSubmit}: StepProps) => {
           variant="fill"
           value="Submit"
         >
-          Continue
+          Complete your profile
         </Button>
       </div>
     </form>

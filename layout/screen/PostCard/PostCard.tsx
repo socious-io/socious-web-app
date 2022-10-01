@@ -1,10 +1,11 @@
+// Components
 import PostHead from './components/PostHead';
 import PostContent from './components/PostContent';
 import PostAction from './components/PostAction';
 import {useToggle} from '@hooks';
 import PostOption from './components/PostOption';
-import {type} from 'os';
 
+//Types
 export interface PostCardProps {
   id: string;
   content?: string;
@@ -18,6 +19,8 @@ export interface PostCardProps {
   shared?: number;
   src?: string;
   hideOption?: boolean;
+  toggleLike?: (liked: boolean) => void;
+  focusCommentField?: () => void;
   optionClicked?: (data: string) => void;
   username?: string;
   type?: string;
@@ -32,33 +35,33 @@ export function PostCard({
   liked,
   src,
   likes,
+  media,
   shared,
-  hideOption,
   showAction = true,
+  toggleLike,
+  focusCommentField,
   optionClicked,
 }: PostCardProps) {
-  const {state, handlers} = useToggle();
-
   return (
     <div className="relative space-y-5 rounded-2xl border border-grayLineBased bg-white p-4">
       <PostHead
         name={name}
         time={time}
         src={src}
-        hideOption={hideOption}
-        toggleOptions={handlers.toggle}
+        onOptionClicked={optionClicked}
       />
-      <PostContent content={content} passion={passion} noBorder />
-      {showAction && (
+      <PostContent content={content} passion={passion} media={media} noBorder />
+      {showAction && toggleLike && (
         <PostAction
           liked={liked}
           likes={likes}
           shared={shared}
           id={id}
+          onLike={toggleLike}
+          onCommentClicked={focusCommentField}
           onShare={optionClicked ? () => optionClicked('SHARE') : undefined}
         />
       )}
-      {optionClicked && state && <PostOption optionClicked={optionClicked} />}
     </div>
   );
 }
