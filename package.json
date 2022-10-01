@@ -10,6 +10,9 @@
     "yarn": "please-use-npm"
   },
   "dependencies": {
+    "@capacitor/android": "^4.3.0",
+    "@capacitor/core": "^4.3.0",
+    "@capacitor/ios": "^4.3.0",
     "@hookform/resolvers": "^2.9.8",
     "@socious/data": "^1.0.3",
     "@svgr/webpack": "^6.3.1",
@@ -24,6 +27,7 @@
     "luxon": "^3.0.4",
     "next": "^12.3.1",
     "next-images": "^1.8.4",
+    "patch-package": "^6.4.7",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
     "react": "^18.2.0",
@@ -50,6 +54,7 @@
     "web3modal": "^1.9.9"
   },
   "devDependencies": {
+    "@capacitor/cli": "^4.3.0",
     "@headlessui/react": "^1.7.2",
     "@heroicons/react": "^2.0.11",
     "@types/chai": "^4.3.3",
@@ -95,7 +100,11 @@
     "lint": "next lint",
     "prettier:check": "prettier --check **/*.ts **/*.tsx",
     "prettier:fix": "prettier --write  **/*.ts **/*.tsx",
-    "update-all": "ncu -u"
+    "update-all": "ncu -u",
+    "build-mobile": "next build && next export && npx cap sync",
+    "ios": "npx cap run ios",
+    "android": "npx cap run android",
+    "postinstall": "patch-package"
   },
   "lint-staged": {
     "*.js": "next lint",
