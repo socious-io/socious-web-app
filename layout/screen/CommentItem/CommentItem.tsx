@@ -1,39 +1,45 @@
-import {Avatar, Button} from '@components/common';
-import {
-  ChatBubbleLeftEllipsisIcon,
-  EllipsisHorizontalIcon,
-  HeartIcon,
-  ShareIcon,
-} from '@heroicons/react/24/outline';
-import {HeartIcon as LikedIcon} from '@heroicons/react/24/solid';
+// Packages
 import {useCallback, useEffect, useState} from 'react';
 import {twMerge} from 'tailwind-merge';
+
+// Services
+import {isoToHumanTime} from 'services/toHumanTime';
+
+// Api
 import {onLikedComment, onUnlikedComment} from '@api/posts/comments/actions';
-import useUser from 'hooks/useUser/useUser';
-export interface CommentProps {
+
+// Components
+import {Avatar, Button} from '@components/common';
+
+// Icons
+import {EllipsisHorizontalIcon, HeartIcon} from '@heroicons/react/24/outline';
+import {HeartIcon as LikedIcon} from '@heroicons/react/24/solid';
+
+//Type
+export interface CommentItemProps {
   content: string;
-  name: string;
+  identity: any;
   time: string;
   passion?: string;
   likes: number;
   className?: string;
   post_id: string;
   id: string;
-  mutateComments: () => void;
   liked: boolean;
+  onLikeToggle: (commentId: string, liked: boolean) => void;
 }
 
 export function CommentItem({
   id,
   post_id,
   content,
-  name = 'User Name',
+  identity,
   time,
   likes,
   liked = false,
-  mutateComments,
   className,
-}: CommentProps) {
+  onLikeToggle,
+}: CommentItemProps) {
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const [likesCount, setLikesCount] = useState<number>(likes || 0);
 
@@ -42,28 +48,38 @@ export function CommentItem({
     setLikesCount(() => likes);
   }, [liked, likes]);
 
-  const onCommentLikedToggle = useCallback(async () => {
+  // On Like Icon Clicked.
+  const onLikedClicked = useCallback(async () => {
     setLikesCount(() => (liked ? likesCount - 1 : likesCount + 1));
     setIsLiked(!isLiked);
     try {
-      console.log('Like Status', isLiked);
       isLiked
-        ? console.log('Unliking', await onUnlikedComment(post_id, id))
-        : console.log('Liking', await onLikedComment(post_id, id));
+        ? await onUnlikedComment(post_id, id)
+        : await onLikedComment(post_id, id);
+      onLikeToggle(id, !isLiked);
     } catch (error) {
       console.log(error);
     }
-    mutateComments();
-  }, [id, isLiked, liked, likesCount, mutateComments, post_id]);
+  }, [id, isLiked, liked, likesCount, onLikeToggle, post_id]);
 
   return (
     <div className={twMerge('space-y-4 p-4 ', className && className)}>
       <div className="flex items-center justify-between">
         <div className="p-b flex items-center space-x-2">
-          <Avatar size="s" />
-          <p className="text-sm">{name}</p>
+          <Avatar
+            size="s"
+            type={identity?.identity_type === 'users' ? 0 : 1}
+            src={
+              identity?.identity_type === 'users'
+                ? identity?.avatar
+                : identity?.image
+            }
+          />
+          <p className="text-sm">{identity?.name}</p>
           <div className="h-1.5 w-1.5 rounded-full bg-grayInputField" />
-          <p className="text-sm text-grayInputField">{time ?? '0 min ago'}</p>
+          <p className="text-sm text-grayInputField">
+            {isoToHumanTime(time) ?? '0 min ago'}
+          </p>
         </div>
         <div className="flex">
           <EllipsisHorizontalIcon className="h-5 w-5" />
@@ -82,14 +98,16 @@ export function CommentItem({
         <Button
           className="flex cursor-pointer flex-row items-center justify-start space-x-1 pl-0"
           variant="link"
-          onClick={onCommentLikedToggle}
+          onClick={onLikedClicked}
         >
           {isLiked ? (
             <LikedIcon className="w-5 text-red-500" />
           ) : (
             <HeartIcon className="w-5" />
           )}
-          <p className="text-xs text-graySubtitle">{likesCount ?? '0'} Like</p>
+          <p className="text-xs text-graySubtitle">
+            {likesCount ?? '0'} {likesCount === 1 ? 'like' : 'likes'}
+          </p>
         </Button>
       </div>
     </div>

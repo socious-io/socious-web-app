@@ -12,6 +12,7 @@ interface Props {
 }
 const SideBar = ({selectBar = ''}: Props) => {
   const {user, currentIdentity} = useUser();
+  const isUser = currentIdentity?.type === 'users' ? true : false;
 
   return (
     <div className="hidden w-80 md:flex" aria-label="Sidebar">
@@ -45,16 +46,21 @@ const SideBar = ({selectBar = ''}: Props) => {
               }
               following={user?.following}
               followers={user?.followers}
-              username={user?.username}
+              username={
+                currentIdentity?.type === 'users'
+                  ? user?.username
+                  : user?.shortname
+              }
+              isUser={isUser}
             />
             {/* TODO: Uncomment after status is fixed */}
             {/* <StatusCard status={user?.status} /> */}
             {selectBar == '' && (
-              <div>
+              <div className="space-y-4">
                 {currentIdentity?.type === 'users' ? (
                   <NetworkCard username={user?.username} />
                 ) : (
-                  <OrganizationCard />
+                  <OrganizationCard username={user?.shortname} />
                 )}
                 <ProjectsCard
                   isOrganization={currentIdentity?.type === 'organizations'}

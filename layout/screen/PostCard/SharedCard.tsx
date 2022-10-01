@@ -1,10 +1,14 @@
+// Components
 import PostContent from './components/PostContent';
 import PostHead from './components/PostHead';
-import PostCard, {PostCardProps} from './PostCard';
+import PostCard from './PostCard';
 import PostAction from './components/PostAction';
-import {useToggle} from '@hooks';
-import PostOption from './components/PostOption';
 
+// Custom Hook
+import {useToggle} from '@hooks';
+
+// Types
+import {PostCardProps} from './PostCard';
 interface SharedPostType extends PostCardProps {
   identity_meta: any;
   created_at: string;
@@ -26,8 +30,11 @@ export function SharedCard({
   liked,
   likes,
   shared,
-  hideOption,
+  toggleLike,
+  focusCommentField,
   showAction = true,
+  type,
+  username,
   optionClicked,
 }: SharedCardProps) {
   const {state, handlers} = useToggle();
@@ -35,11 +42,13 @@ export function SharedCard({
   return (
     <div className="relative space-y-5 border-b border-neutralGray py-4">
       <PostHead
+        id={id}
+        type={type}
+        username={username}
         name={(name || 'name') + ' Shared'}
         time={time}
         src={src}
-        hideOption={hideOption}
-        toggleOptions={handlers.toggle}
+        onOptionClicked={optionClicked}
       />
       <PostContent content={content} passion={passion} media={media} noBorder />
       <PostCard
@@ -48,23 +57,26 @@ export function SharedCard({
         time={sharedPost?.created_at}
         passion={sharedPost?.causes_tags}
         name={sharedPost?.identity_meta?.username}
-        src={sharedPost?.identity_meta?.avatar}
+        src={
+          sharedPost.identity_meta.avatar ?? sharedPost?.identity_meta?.image
+        }
         likes={sharedPost?.likes}
         liked={sharedPost?.liked}
         shared={sharedPost?.shared}
         showAction={false}
         hideOption={true}
       />
-      {showAction && (
+      {showAction && toggleLike && (
         <PostAction
           id={id}
           liked={liked}
           likes={likes}
           shared={shared}
+          onLike={toggleLike}
+          onCommentClicked={focusCommentField}
           onShare={optionClicked ? () => optionClicked('SHARE') : undefined}
         />
       )}
-      {optionClicked && state && <PostOption optionClicked={optionClicked} />}
     </div>
   );
 }

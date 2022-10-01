@@ -1,81 +1,11 @@
-// Packages
-import {useCallback, useEffect, useMemo, useState} from 'react';
-import {useFormContext} from 'react-hook-form';
-import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
-
-// Components
-import {TextInput, Button, Combobox} from '@components/common';
-
-// Services
-import {getPhoneCode} from 'services/getPhoneCode';
-
-// Types
+import {TextArea, Button} from '@components/common';
 import {StepProps} from '@models/stepProps';
-interface OnboardingStep7Props extends StepProps {
-  defaultCountry: string;
-}
-
-const OnboardingStep7 = ({onSubmit, defaultCountry}: OnboardingStep7Props) => {
+import {useFormContext} from 'react-hook-form';
+const OnboardingStep7 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {handleSubmit, formState, register, setValue, watch} = formMethods;
-  const [countryKey, setCountryKey] = useState<string>(defaultCountry);
+  const {handleSubmit, formState, register, watch} = formMethods;
 
-  //use-places-autocomplete: Method to get countries.
-  const {
-    ready: countryReady,
-    value: countryValue,
-    suggestions: {status: countryStatus, data: countries},
-    setValue: setCountryValue,
-  } = usePlacesAutocomplete({
-    requestOptions: {language: 'en', types: ['country']},
-    debounce: 300,
-    cacheKey: 'country-restricted',
-  });
-
-  //Creating [] of countries for Combobox
-  const filterCountries = useMemo(
-    () =>
-      countries.map(({place_id, description}) => ({
-        id: place_id,
-        name: description,
-      })) || [{id: '1', name: 'Japan'}],
-    [countries],
-  );
-
-  //form-hook: Method for applying country to 'country'
-  const handleSetCountryNumber = useCallback(
-    (data: any) => {
-      setValue('countryNumber', data, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    },
-    [setValue],
-  );
-
-  // Method to get Country-Code('jp') on countrySelected so we call call another API for 'countryNumber' for that country
-  const onCountrySelected = useCallback((data: any) => {
-    getGeocode({placeId: data.id})
-      .then((data: any) => {
-        setCountryKey(
-          data?.[0]?.address_components[0]?.short_name?.toLowerCase(),
-        );
-      })
-      .catch((error) => console.error(error));
-  }, []);
-
-  // Get 'countryNumber' for default and each 'countryKey' change. i.e. after each 'onCountrySelected'.
-  useEffect(() => {
-    if (!countryKey) return;
-    getPhoneCode(countryKey)
-      .then((number) => {
-        handleSetCountryNumber(number);
-      })
-      .catch((error) => console.error(error));
-  }, [countryKey, handleSetCountryNumber]);
-
-  const countryNumber = watch('countryNumber');
-
+  const bio = watch('bio');
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -83,29 +13,23 @@ const OnboardingStep7 = ({onSubmit, defaultCountry}: OnboardingStep7Props) => {
     >
       <div className="flex grow flex-col">
         {' '}
-        <h1 className="font-helmet mb-6">What’s your phone number?</h1>
+        <h1 className="font-helmet ">Tell us about who you are</h1>
         <p className="text-base text-graySubtitle">
-          Share your phone number with organisations you’d like to work together
-          with
+          Highlight who you are in 160 characters or less
         </p>
-        <div className="flex space-x-5">
-          <Combobox
-            selected={{id: countryKey, name: countryNumber}}
-            onChange={(e) => setCountryValue(e.currentTarget.value || '')}
-            onSelected={onCountrySelected}
-            items={filterCountries}
-            name="countryNumber"
-            placeholder="countryNumber"
-            errorMessage={formState?.errors?.['countryNumber']?.message}
-            className="my-6  basis-3/12"
+        <div>
+          <TextArea
+            placeholder="Write bio"
+            register={register('bio')}
+            errorMessage={formState?.errors?.['bio']?.message}
+            containerClassName="basis-4/5 mt-5"
+            className="border-2 border-grayLineBased "
+            rows={10}
           />
-          <TextInput
-            placeholder="Phone number"
-            register={register('phoneNumber')}
-            errorMessage={formState?.errors?.['phoneNumber']?.message}
-            containerClassName="basis-9/12 my-6"
-            className="border-2 border-grayLineBased"
-          />
+          <span className="text-sm text-graySubtitle">
+            {' '}
+            {`${bio?.length || 0} /160`}
+          </span>
         </div>
       </div>
 

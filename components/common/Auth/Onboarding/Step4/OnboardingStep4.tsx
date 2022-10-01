@@ -1,83 +1,152 @@
-import {SearchBar, Button, Chip} from '@components/common';
-import {useState, useMemo, useCallback} from 'react';
-import {StepProps} from '@models/stepProps';
+// Packages
+import {useCallback, useMemo, useState} from 'react';
 import {useFormContext} from 'react-hook-form';
-import useFilter from 'hooks/auth/useFilter';
-import useHandleSelected from 'hooks/auth/useHandleSelected';
-import {getText} from '@socious/data';
+import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 
-interface StepPropsWithSkills extends StepProps {
-  rawSkills: any[];
-}
+//Components
+import {Button, Combobox} from '@components/common';
 
-const OnboardingStep4 = ({onSubmit, rawSkills}: StepPropsWithSkills) => {
-  const maxSkills = 10;
-  const [selecteds, onSelect] = useHandleSelected('skills', maxSkills);
+// Type
+import {StepProps} from '@models/stepProps';
 
+const OnboardingStep4 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {watch, handleSubmit} = formMethods;
+  const {handleSubmit, formState, setValue, watch} = formMethods;
 
-  const skills = useMemo(() => {
-    const sorted: {id: string; name: string}[] = [];
-    rawSkills?.forEach((skill) => {
-      const name = getText('en', `SKILL.${skill.name}`);
-      if (name) sorted.push({id: skill.name, name});
-    });
-    sorted.sort((a, b) => (a.name > b.name ? 1 : -1));
-    return sorted;
-  }, [
-    // todo: language
-    rawSkills,
-  ]);
-  const [filteredItems, filterWith] = useFilter(skills);
+  const selectedCountryCode = watch('country');
+  const selectedCity = watch('country');
 
-  const skill = watch('skills');
+  const [countryName, setCountryName] = useState<any>('');
+
+  //use-places-autocomplete: Method to get countries.
+  const {
+    ready: countryReady,
+    value: countryValue,
+    suggestions: {status: countryStatus, data: countries},
+    setValue: setCountryValue,
+  } = usePlacesAutocomplete({
+    requestOptions: {language: 'en', types: ['country']},
+    debounce: 300,
+    cacheKey: 'country-restricted',
+  });
+
+  //use-places-autocomplete: Method to get cities filtered by country. Returns Full city address.
+  const {
+    ready: cityReady,
+    value: cityValue,
+    suggestions: {status: cityStatus, data: cities},
+    setValue: setCitiesValue,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      language: 'en',
+      types: ['locality', 'administrative_area_level_3'],
+      componentRestrictions: {country: selectedCountryCode},
+    },
+    debounce: 300,
+    cacheKey: `${selectedCountryCode}-restricted`,
+  });
+
+  //Creating [] of countries for Combobox
+  const filterCountries = useMemo(
+    () =>
+      countries.map(({place_id, description}) => ({
+        id: place_id,
+        name: description,
+      })) || [{id: '1', name: 'Japan'}],
+    [countries],
+  );
+
+  // Creating [] of cities for Combobox
+  const filterCities = useMemo(
+    () =>
+      cities.map(({place_id, description, structured_formatting}) => ({
+        id: place_id,
+        name: structured_formatting.main_text || description,
+      })) || [{id: 1, name: 'Tokyo'}],
+    [cities],
+  );
+
+  //form-hook: Method for applying city to 'city'
+  const handleSetCity = useCallback(
+    (data: any) => {
+      setValue('city', data?.name, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    [setValue],
+  );
+
+  //form-hook: Method for applying country to 'country'
+  const handleSetCountry = useCallback(
+    (countryCode: any) => {
+      setValue('country', countryCode, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      if (selectedCity) handleSetCity('');
+    },
+    [handleSetCity, selectedCity, setValue],
+  );
+
+  // Method to get Country-Code('jp') on countrySelected and calls 'handleSetCountry'.
+  const onCountrySelected = useCallback(
+    (data: any) => {
+      setCountryName(data.name);
+      getGeocode({placeId: data.id})
+        .then((result: any) => {
+          const countryCode =
+            result?.[0]?.address_components[0]?.short_name?.toLowerCase();
+          handleSetCountry(countryCode);
+        })
+        .catch((error: any) => console.error(error));
+    },
+    [handleSetCountry],
+  );
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex grow flex-col justify-between px-10"
+      onSubmit={handleSubmit(() => onSubmit(selectedCountryCode))}
+      className="flex grow flex-col justify-between pl-0 pr-10 sm:pl-10"
     >
-      <div className="flex grow flex-col ">
+      <div className="flex flex-col">
         {' '}
-        <h1 className="font-helmet ">What skills do you have?</h1>
+        <h1 className="font-helmet">What’s your location?</h1>
         <p className="text-base text-graySubtitle">
-          Showcase up to 10 skills you can contribute to help social impact
-          initiatives and organizations
+          Connect with other like-minded individuals and organizations around
+          you
         </p>
-        <div className="my-5 -mx-16 flex h-80 grow flex-col bg-offWhite px-5">
-          <SearchBar
-            type="text"
-            placeholder="Search"
-            onChange={(e) => filterWith(e.currentTarget?.value || '')}
-            className="my-6"
-          />
-          <div className="-mx-5 flex h-full grow flex-col overflow-hidden border-t-2 border-b-grayLineBased bg-offWhite px-5">
-            <h3 className="py-3">Accounting & Consultancy</h3>
-            <div className="flex h-full flex-wrap space-x-2 overflow-y-auto">
-              {filteredItems.map((skill: any, index: number) => (
-                <Chip
-                  onSelected={onSelect}
-                  selected={selecteds?.includes(skill.id)}
-                  value={skill.id}
-                  key={`skill-${skill + index}`}
-                  content={skill.name}
-                  contentClassName="text-secondary cursor-pointer "
-                  containerClassName="bg-background my-2 h-6"
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+        <Combobox
+          label="Country"
+          onSelected={onCountrySelected}
+          onChange={(e) => setCountryValue(e.currentTarget.value || '')}
+          required
+          name="country"
+          items={filterCountries}
+          placeholder="Country"
+          errorMessage={formState?.errors?.['country']?.message}
+          className="my-6"
+        />
+        {countryName}
+        <Combobox
+          label="City"
+          onSelected={handleSetCity}
+          onChange={(e) => setCitiesValue(e.currentTarget.value || '')}
+          required
+          name="city"
+          items={filterCities}
+          placeholder="City"
+          errorMessage={formState?.errors?.['city']?.message}
+          className="my-6"
+        />
       </div>
-      <div className="-mx-16  divide-x border-t-2 border-b-grayLineBased pb-12">
+      <div className="-mx-16 divide-x border-t-2 border-b-grayLineBased pl-10 pb-12 sm:pl-0">
         <Button
           className="m-auto mt-4 flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
           variant="fill"
           value="Submit"
-          disabled={skill.length === 0}
         >
           Continue
         </Button>
