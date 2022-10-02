@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 export const schemaCreatePost = Joi.object({
-  content: Joi.string().required().messages({
+  content: Joi.string().trim().required().messages({
     'string.empty': `Content is required for Post.`,
     'string.base': `Content is required.`,
   }),
