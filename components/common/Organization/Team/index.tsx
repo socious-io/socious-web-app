@@ -3,9 +3,8 @@ import Image from 'next/image';
 import {users} from '../data';
 import MemberItem from './MemberItem';
 import NewMemberModal from './NewMemberModal';
-const AddTeamMember = require('@icons/addTeamMember.svg');
-const MenuVertical = require('@icons/menuVertical.svg');
-
+import AddTeamMember from '@icons/addTeamMembers.svg';
+import MenuVertical from '@icons/menuVertical.svg';
 export interface IUserType {
   id: number;
   name: string;
@@ -21,7 +20,7 @@ const TeamComponent = () => {
     <div className="w-full rounded-2xl border border-grayLineBased bg-white ">
       <div className="flex border-b p-4">
         <div className="flex grow items-center justify-center text-center">
-          <p className="text-lg font-bold text-black">Team</p>
+          <p className="text-xl font-bold text-black">Team</p>
         </div>
         <div>
           <span className=" cursor-pointer " onClick={addHandlers.on}>
