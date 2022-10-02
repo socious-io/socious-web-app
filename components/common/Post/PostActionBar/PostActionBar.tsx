@@ -1,5 +1,6 @@
 import {ImageUploader, Button, TextInput} from '@components/common';
 import {CameraIcon, LinkIcon, PhotoIcon} from '@heroicons/react/24/outline';
+import {XCircleIcon, XMarkIcon} from '@heroicons/react/24/solid';
 import {useToggle} from '@hooks';
 import {useCallback, useRef} from 'react';
 import {UseFormRegisterReturn} from 'react-hook-form';
@@ -8,12 +9,14 @@ interface PostActionBarProps {
   register: UseFormRegisterReturn;
   errorMessage: any;
   setFile: (file: any) => void;
+  fileExist: boolean;
 }
 
 export const PostActionBar = ({
   register,
   errorMessage,
   setFile,
+  fileExist,
 }: PostActionBarProps) => {
   const {state: showLinkBox, handlers: linkHandler} = useToggle();
   // const { state: cameraState, handlers: cameraHandler } = useToggle();
@@ -83,14 +86,22 @@ export const PostActionBar = ({
           <span></span>
           <ImageUploader onChange={setFile} withPreview={false}>
             {(setOpen: any) => (
-              <Button
-                className="mr-auto flex max-w-xs items-center justify-center bg-transparent p-2 align-middle"
-                size="lg"
-                variant="ghost"
-                onClick={setOpen}
-              >
-                <PhotoIcon className="w-5" />
-              </Button>
+              <div className="relative">
+                {fileExist && (
+                  <XCircleIcon
+                    className="absolute top-0 right-0 w-5 cursor-pointer text-graySubtitle hover:text-rose-600"
+                    onClick={() => setFile(null)}
+                  />
+                )}
+                <Button
+                  className="mr-auto flex max-w-xs items-center justify-center bg-transparent p-2 align-middle"
+                  size="lg"
+                  variant="ghost"
+                  onClick={setOpen}
+                >
+                  <PhotoIcon className="w-5" />
+                </Button>
+              </div>
             )}
           </ImageUploader>
         </div>

@@ -40,7 +40,7 @@ const EditModal = ({
     },
   });
 
-  const [file, setFile] = useState<any>(null);
+  const [file, setFile] = useState<any>(post.media[0] || null);
 
   const {handleSubmit, register, getValues, control, formState, reset} =
     useForm({
@@ -60,15 +60,20 @@ const EditModal = ({
     const content = getValues('content');
     const causes_tags = getValues('causes_tags');
     const link = getValues('link');
-
-    let fileId = '';
-    if (file) {
+    let fileId: string = '';
+    console.log('FILE :---: ', file);
+    if (typeof file === 'string') {
+      //TODO: UNCOMMENT WHEN BE MERGED. if file is ID
+      // fileId = file;
+    } else if (file.type) {
+      // Image upload feature is not working.
+      const formData = new FormData();
+      formData.append('file', file);
       try {
-        // Image upload feature is not working.
-        const formData = new FormData();
-        formData.append('file', file);
-        const response: any = await uploadMedia(formData);
-        fileId = response?.id;
+        console.log('Making request with :---:', file);
+        const mediaRes: any = await uploadMedia(formData);
+        console.log('FILE RESPONSE :---: ', mediaRes);
+        fileId = mediaRes?.id;
       } catch (error) {
         console.error(error);
         return;
@@ -79,11 +84,13 @@ const EditModal = ({
       content,
       causes_tags: [causes_tags],
     };
-    if (fileId) postEditBody.media = [fileId];
+    if (file && fileId) postEditBody.media = [fileId];
+    console.table(postEditBody);
     try {
-      await editPost(postEditBody, post.id);
+      const postEditRes = await editPost(postEditBody, post.id);
+      console.log('Post Edit :---: ', postEditRes);
       onClose();
-      mutate();
+      mutate(postEditRes, {revalidate: false});
     } catch (error) {
       console.error(error);
     }
@@ -137,6 +144,7 @@ const EditModal = ({
           register={register('link')}
           errorMessage={formState?.errors?.['link']?.message}
           setFile={setFile}
+          fileExist={!!file}
         />
         <Button
           className="ml-auto mt-4 flex max-w-xs items-center justify-center align-middle "
