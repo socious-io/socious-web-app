@@ -90,6 +90,7 @@ const ConfrimUserRole: FC<IConfrimUserRole> = ({
       <Modal.Description>
         <div className=" py-2">
           <div className={'h-80  p-2 px-4'}>
+            {/* TODO add classNames package to use conditional classes on the components */}
             <div
               onClick={() => onConfirmRole('admin')}
               className={
