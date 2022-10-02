@@ -26,7 +26,10 @@ const BasicInfo = ({onSubmit}: StepProps) => {
   // watch form inputs
   const country = watch('country');
   const city = watch('city');
+  const mobile = watch('phone');
   const mobile_country_code = watch('mobile_country_code');
+
+  console.log('PHONE :---: ', mobile);
 
   ///////////////////////////////////////////////////////////////////////////
   //   **********   get list of cities & countries & methodes    **********//
@@ -129,6 +132,17 @@ const BasicInfo = ({onSubmit}: StepProps) => {
     [setValue],
   );
 
+  //form-hook: Method for applying 'phoneNumber'
+  const handleSetPhoneNumber = useCallback(
+    (phoneNumber: string) => {
+      setValue('phone', phoneNumber.replaceAll(/[ -]/g, '') || '', {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    [setValue],
+  );
+
   // Get 'countryNumber' for default and each 'countryKey' change. i.e. after each 'onCountrySelected'.
   useEffect(() => {
     if (!country_code) return;
@@ -220,7 +234,10 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             <InputFiled
               type="text"
               placeholder="Phone number"
-              register={register('phone')}
+              // register={register('phone')}
+              onChange={(e) =>
+                handleSetPhoneNumber(e.currentTarget.value || '')
+              }
               errorMessage={formState.errors?.['phone']?.message}
               className="mb-3 w-full"
             />

@@ -44,8 +44,19 @@ const OnboardingStep6 = ({onSubmit, defaultCountry}: OnboardingStep6Props) => {
 
   //form-hook: Method for applying country to 'country'
   const handleSetCountryNumber = useCallback(
-    (data: any) => {
+    (data: string) => {
       setValue('countryNumber', data, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    [setValue],
+  );
+
+  //form-hook: Method for applying 'phoneNumber'
+  const handleSetPhoneNumber = useCallback(
+    (phoneNumber: string) => {
+      setValue('phoneNumber', phoneNumber.replaceAll(/[ -]/g, '') || '', {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -75,6 +86,8 @@ const OnboardingStep6 = ({onSubmit, defaultCountry}: OnboardingStep6Props) => {
   }, [countryKey, handleSetCountryNumber]);
 
   const countryNumber = watch('countryNumber');
+  const phoneNumber = watch('phoneNumber');
+  console.log('PHONE NUMBER :---: ', phoneNumber);
 
   return (
     <form
@@ -101,7 +114,8 @@ const OnboardingStep6 = ({onSubmit, defaultCountry}: OnboardingStep6Props) => {
           />
           <TextInput
             placeholder="Phone number"
-            register={register('phoneNumber')}
+            // register={register('phoneNumber')}
+            onChange={(e) => handleSetPhoneNumber(e.currentTarget.value || '')}
             errorMessage={formState?.errors?.['phoneNumber']?.message}
             containerClassName="basis-9/12 my-6"
             className="border-2 border-grayLineBased"
