@@ -8,8 +8,9 @@ export const schemaCreatePost = Joi.object({
   media: Joi.array().items(Joi.string()),
   hashtags: Joi.array().items(Joi.string()),
   causes_tags: Joi.string().required().messages({
-    'string.empty': `Social Causes is required.`,
-    'string.base': `Social Causes is required.`,
+    'string.empty': `Social Cause is required.`,
+    'string.required': `Social Cause is required.`,
+    'string.base': `Social Cause is required.`,
   }),
   link: Joi.string().allow('', null),
   identity_tags: Joi.array().items(Joi.string()),

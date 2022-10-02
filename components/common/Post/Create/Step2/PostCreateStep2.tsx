@@ -84,7 +84,7 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
         value="Submit"
         onClick={(e) => onPreviewDone(e)}
       >
-        Create Post
+        Post
       </Button>
     </div>
   );

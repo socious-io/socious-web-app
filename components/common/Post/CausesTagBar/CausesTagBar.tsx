@@ -33,7 +33,7 @@ export const CausesTagBar = ({src, controller}: CausesTagBarProps) => {
         items={localItems}
         required
         className="w-full"
-        placeholder="social causes"
+        placeholder="Social cause"
       />
     </div>
   );
