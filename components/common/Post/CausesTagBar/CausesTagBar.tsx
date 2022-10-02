@@ -25,7 +25,6 @@ export const CausesTagBar = ({src, controller}: CausesTagBarProps) => {
     ],
   );
 
-  console.log('Controller field :---: ', controller?.field?.value);
   return (
     <div className="-ml-6 -mr-6 flex items-center space-x-3 border-y-[0.5px] border-[#C3C8D9] p-4">
       <Avatar src={src} size="m" />
