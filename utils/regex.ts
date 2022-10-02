@@ -1,4 +1,4 @@
-export const rxNotMobileNumber = /^[0-9]{10}$/;
+export const rxNotMobileNumber = /^\d{3,15}$/;
 
 export const rxEmail =
   /^[a-zA-Z0-9][a-zA-Z0-9_\.\-]*@[a-zA-Z0-9][[a-zA-Z0-9_\.\-]*(\.[a-zA-Z]+)$/;
