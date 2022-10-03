@@ -4,7 +4,8 @@ import {users} from '../data';
 import MemberItem from './MemberItem';
 import NewMemberModal from './NewMemberModal';
 import AddTeamMember from '@icons/addTeamMembers.svg';
-import MenuVertical from '@icons/menuVertical.svg';
+import More from '@icons/more.svg';
+
 export interface IUserType {
   id: number;
   name: string;
@@ -46,7 +47,7 @@ const TeamComponent = () => {
               Extra={
                 <div>
                   <Image
-                    src={MenuVertical}
+                    src={More}
                     alt="add-new-member-icon"
                     width={24}
                     height={24}
@@ -71,7 +72,7 @@ const TeamComponent = () => {
               Extra={
                 <div>
                   <Image
-                    src={MenuVertical}
+                    src={More}
                     alt="add-new-member-icon"
                     width={24}
                     height={24}
