@@ -34,6 +34,9 @@ import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 //interfaces
 import {CreateOrganizationType} from '@models/createOrganization';
 
+//libraries for GoogleMaps
+const libraries: Libraries = ['places'];
+
 const CreateOrganization = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessage, setError] = useState<ErrorMessage>();
@@ -46,7 +49,6 @@ const CreateOrganization = () => {
   });
 
   //Loading Map
-  const libraries: Libraries = ['places'];
   const {isLoaded, loadError} = useGoogleMapsScript({
     googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
     libraries,
