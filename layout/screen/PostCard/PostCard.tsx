@@ -19,7 +19,7 @@ export interface PostCardProps {
   shared?: number;
   src?: string;
   hideOption?: boolean;
-  toggleLike?: (liked: boolean) => void;
+  toggleLike?: (id: string, liked: boolean) => void;
   focusCommentField?: () => void;
   optionClicked?: (data: string) => void;
   username?: string;

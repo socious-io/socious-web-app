@@ -140,7 +140,7 @@ const Post = () => {
 
   // Toggle Like
   const toggleLike = useCallback(
-    (liked: boolean) => {
+    (id: string, liked: boolean) => {
       mutatePost(
         (oldPost: any) => ({
           ...oldPost,
