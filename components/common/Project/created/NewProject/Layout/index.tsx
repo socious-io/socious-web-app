@@ -2,46 +2,61 @@ import {FC, PropsWithChildren} from 'react';
 import styles from './index.module.scss';
 import {Modal} from '@components/common';
 import {XMarkIcon, ChevronLeftIcon} from '@heroicons/react/24/solid';
+import {useProjectContext} from '../context';
 type TLayoutType = {
   title: string;
-  onClose: () => void;
-  isOpen: boolean;
-  setFormStep: (x: number) => void;
-  formStep: number;
 };
 
-const CreateProjectLayout: FC<PropsWithChildren<TLayoutType>> = ({
+export const CreateProjectLayout: FC<PropsWithChildren<TLayoutType>> = ({
   children,
-  isOpen,
   title,
-  onClose,
-  setFormStep,
-  formStep,
 }) => {
+  const {ProjectContext, setProjectContext} = useProjectContext();
   return (
     <Modal
-      isOpen={isOpen}
+      isOpen={ProjectContext.isModalOpen}
       className={`${styles.layoutBase} flex  max-w-xl flex-col p-0`}
     >
-      {formStep < 5 ? (
+      {ProjectContext.formStep < 5 ? (
         <div className="flex justify-between border-b p-5 py-5">
           <div
-            onClick={() => setFormStep(formStep - 1)}
+            onClick={() =>
+              setProjectContext({
+                ...ProjectContext,
+                formStep: ProjectContext.formStep - 1,
+              })
+            }
             className="cursor-pointer"
           >
-            {!(formStep === 0 || formStep === 4) && (
-              <ChevronLeftIcon width={30} height={30} />
-            )}
+            {!(
+              ProjectContext.formStep === 0 || ProjectContext.formStep === 4
+            ) && <ChevronLeftIcon width={30} height={30} />}
           </div>
 
           <div className="text-xl font-semibold">{title}</div>
-          <div onClick={onClose} className="cursor-pointer">
+          <div
+            onClick={() =>
+              setProjectContext({
+                ...ProjectContext,
+                isModalOpen: !ProjectContext.isModalOpen,
+              })
+            }
+            className="cursor-pointer"
+          >
             <XMarkIcon width={30} height={30} />
           </div>
         </div>
       ) : (
         <div className="flex justify-between border-b p-5 py-5">
-          <div onClick={() => setFormStep(2)} className="cursor-pointer">
+          <div
+            onClick={() =>
+              setProjectContext({
+                ...ProjectContext,
+                formStep: 2,
+              })
+            }
+            className="cursor-pointer"
+          >
             <XMarkIcon width={30} height={30} />
           </div>
 
@@ -56,4 +71,10 @@ const CreateProjectLayout: FC<PropsWithChildren<TLayoutType>> = ({
   );
 };
 
-export default CreateProjectLayout;
+export const FromLayout: FC<PropsWithChildren> = ({children}) => {
+  return (
+    <div className={` ${styles.contentBase} flex w-full flex-col`}>
+      {children}
+    </div>
+  );
+};

@@ -88,7 +88,7 @@ export function Combobox({
             <UiCombobox.Label
               htmlFor={id || name}
               className={twMerge(
-                'font-base mb-1 block',
+                'text-base font-semibold sm:text-sm',
                 errorMessage ? 'text-error' : 'text-black',
                 disabled && 'text-opacity-40 ',
               )}

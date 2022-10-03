@@ -1,7 +1,8 @@
 import {Button} from '@components/common';
 import {FC} from 'react';
-
-const Congrats: FC<{onClose: () => void}> = ({onClose}) => {
+import {useProjectContext} from '../context';
+const Congrats: FC = () => {
+  const {ProjectContext, setProjectContext} = useProjectContext();
   return (
     <div className="flex h-full w-full flex-col">
       <div className="flex h-full flex-col items-center justify-center">
@@ -14,7 +15,12 @@ const Congrats: FC<{onClose: () => void}> = ({onClose}) => {
       </div>
       <div className="flex h-28 w-full items-center justify-center border-t">
         <Button
-          onClick={() => onClose()}
+          onClick={() =>
+            setProjectContext({
+              ...ProjectContext,
+              isModalOpen: !ProjectContext.isModalOpen,
+            })
+          }
           className="m-4 flex w-8/12 items-center justify-center"
         >
           Back to project

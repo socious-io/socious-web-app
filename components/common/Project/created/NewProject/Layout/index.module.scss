@@ -5,3 +5,9 @@
     width: 760px;
   }
 }
+
+.contentBase {
+  @screen sm {
+    height: 575px;
+  }
+}

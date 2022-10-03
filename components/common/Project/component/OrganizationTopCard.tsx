@@ -80,7 +80,11 @@ function OrganizationTopCard({
       </div>
       <div className="mt-4 flex flex-row space-x-2 divide-x divide-solid divide-graySubtitle">
         <p className="text-sm text-graySubtitle ">{country_id}</p>
-        <p className="pl-2 text-sm text-graySubtitle ">{`$${payment_range_lower}-$${payment_range_higher}`}</p>
+        {(payment_range_lower || payment_range_higher) && (
+          <p className="pl-2 text-sm text-graySubtitle ">{`$${
+            payment_range_lower || ''
+          }-$${payment_range_higher || ''}`}</p>
+        )}
         <p className="pl-2 text-sm text-graySubtitle ">{experience_level}</p>
         <p className="pl-2 text-sm text-graySubtitle ">
           {getText('en', `.${remote_preference}`)}

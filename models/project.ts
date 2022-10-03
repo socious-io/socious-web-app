@@ -26,12 +26,16 @@ export interface Project {
 export interface CreateProjectType {
   title: string;
   description: string;
-  status: string;
-  payment_type: string;
-  payment_scheme: string;
+  status?: string;
+  payment_type?: string;
+  payment_scheme?: string;
   remote_preference: string;
-  payment_currency: string;
-  payment_range_lower: string;
-  payment_range_higher: string;
-  experience_level: number;
+  payment_currency?: string;
+  payment_range_lower?: string;
+  payment_range_higher?: string;
+  experience_level?: number;
+  causes_tags?: string[];
+  country?: string;
+  project_length?: string;
+  project_type?: string;
 }

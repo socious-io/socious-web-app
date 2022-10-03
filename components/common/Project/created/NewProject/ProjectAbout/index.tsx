@@ -1,72 +1,122 @@
 import React, {FC, useEffect, useMemo} from 'react';
 import Chip from '@components/common/Chip/Chip';
 import SearchBar from '@components/common/SearchBar/SearchBar';
-import {useFormContext} from 'react-hook-form';
-import useHandleSelected from 'hooks/auth/useHandleSelected';
+import {useForm} from 'react-hook-form';
 import useFilter from 'hooks/auth/useFilter';
 import Title from '@components/common/CreateOrganization/components/Title';
-import Data, {getText} from '@socious/data';
+import useGetData from '../ProjectInfo/useGetData';
+import {useProjectContext} from '../context';
+import {toast} from 'react-toastify';
+import {joiResolver} from '@hookform/resolvers/joi';
+import {schemaCreateProjectStep1} from '@api/projects/validation';
+import {Button} from '@components/common';
+import {FromLayout} from '../Layout';
+import {TOnSubmit} from '../sharedType';
 
-const ProjectAbout = () => {
-  const passionData = Object.keys(Data.SocialCauses);
-  const formMethods = useFormContext();
-
+const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
   const {
-    watch,
-    getValues,
-    getFieldState,
-    formState: {isValid, isDirty, errors},
-  } = formMethods;
-  const passion = watch();
-  console.log(passion);
+    handleSubmit,
+    formState: {isValid},
+    setValue,
+  } = useForm({
+    resolver: joiResolver(schemaCreateProjectStep1),
+  });
 
-  const passions = useMemo(() => {
-    const sorted = passionData.map((id) => ({
-      id,
-      name: getText('en', `PASSION.${id}`),
-    }));
-    sorted.sort((a, b) => (a.name > b.name ? 1 : -1));
-    return sorted;
-  }, [passionData]);
+  const {items} = useGetData();
+  const {ProjectContext, setProjectContext} = useProjectContext();
 
   const maxCauses = 5;
-  const [selecteds, onSelect] = useHandleSelected('causes_tags', maxCauses);
-  const [filteredItems, filterWith] = useFilter(passions);
+  const [filteredItems, filterWith] = useFilter(items?.passionDataItems);
 
   return (
-    <div className="flex h-full w-full flex-col bg-zinc-200">
-      <Title description="Select up to 5 passions." border={false}>
-        What is your project about?
-      </Title>
-      <SearchBar
-        type="text"
-        placeholder="Search"
-        onChange={(e) => filterWith(e?.currentTarget?.value || '')}
-        className="my-6 mx-6"
-      />
-      <div className="h-14 grow overflow-y-scroll bg-offWhite">
-        <p className="px-6 pt-4 text-sm font-semibold text-black">Popular</p>
-        <div className="flex w-5/6 flex-wrap gap-2 px-4 py-4">
-          {filteredItems.map((item) => {
-            return (
-              <Chip
-                onSelected={onSelect}
-                selected={selecteds?.includes(item.id)}
-                value={item.id}
-                key={item.id}
-                content={item.name}
-                containerClassName={
-                  selecteds?.includes(item.id) ? 'bg-secondary' : 'bg-white'
-                }
-                contentClassName={
-                  selecteds?.includes(item.id) ? 'text-white' : 'text-secondary'
-                }
-              />
-            );
-          })}
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex h-full w-full flex-col"
+    >
+      <FromLayout>
+        <Title description="Select up to 5 passions." border={false}>
+          What is your project about?
+        </Title>
+        <SearchBar
+          type="text"
+          placeholder="Search"
+          onChange={(e) => filterWith(e?.currentTarget?.value || '')}
+          className="my-6 mx-6"
+        />
+        <div className="h-14 w-full grow overflow-y-scroll bg-offWhite">
+          <p className="px-6 pt-4 text-sm font-semibold text-black">Popular</p>
+          <div className="flex w-5/6 flex-wrap gap-2 px-4 py-4">
+            {filteredItems.map((item) => {
+              return (
+                <Chip
+                  onSelected={() => {
+                    if (ProjectContext.causes_tags?.includes(item?.id)) {
+                      setValue(
+                        'causes_tags',
+                        ProjectContext.causes_tags?.filter(
+                          (i) => i !== item.id,
+                        ),
+                        {
+                          shouldValidate: true,
+                        },
+                      );
+                      setProjectContext({
+                        ...ProjectContext,
+                        causes_tags: ProjectContext.causes_tags?.filter(
+                          (i) => i !== item?.id,
+                        ),
+                      });
+                    } else {
+                      if (ProjectContext.causes_tags?.length < maxCauses) {
+                        setValue(
+                          'causes_tags',
+                          [...ProjectContext.causes_tags, item.id],
+                          {
+                            shouldValidate: true,
+                          },
+                        );
+                        setProjectContext({
+                          ...ProjectContext,
+                          causes_tags: [
+                            ...ProjectContext.causes_tags,
+                            item?.id,
+                          ],
+                        });
+                      } else {
+                        toast.success('You selected 5 passions');
+                      }
+                    }
+                  }}
+                  selected={ProjectContext.causes_tags?.includes(item?.id)}
+                  value={item.id}
+                  key={item.id}
+                  content={item.name}
+                  containerClassName={
+                    ProjectContext.causes_tags?.includes(item?.id)
+                      ? 'bg-secondary'
+                      : 'bg-white'
+                  }
+                  contentClassName={
+                    ProjectContext.causes_tags?.includes(item?.id)
+                      ? 'text-white'
+                      : 'text-secondary'
+                  }
+                />
+              );
+            })}
+          </div>
         </div>
+      </FromLayout>
+      <div className=" flex items-end justify-end  border-t p-4">
+        <Button
+          disabled={!isValid}
+          type="submit"
+          className="flex h-11 w-52 items-center justify-center"
+        >
+          Continue
+        </Button>
       </div>
-    </div>
+    </form>
   );
 };
 

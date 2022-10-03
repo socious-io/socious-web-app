@@ -1,133 +1,90 @@
-import CreateProjectLayout from '../Layout';
-import React, {FC, useState, useEffect} from 'react';
-import {Button} from '@components/common';
+import {CreateProjectLayout} from '../Layout';
+import React, {FC, useEffect} from 'react';
 import ProjectAbout from '../ProjectAbout';
 import ProjectQuestions from '../ProjectQuestions';
 import ProjectReview from '../ProjectReview';
 import QuestionDetail from '../QuestionDetail';
 import Congrats from '../Congrats';
-import {useForm, FormProvider} from 'react-hook-form';
 import ProjectInfo from '../ProjectInfo';
-import styles from './index.module.scss';
-import {joiResolver} from '@hookform/resolvers/joi';
-import {
-  schemaCreateProjectStep1,
-  schemaCreateProjectStep2,
-  schemaCreateProjectQuestion,
-} from '@api/projects/validation';
-type TLayoutType = {
-  onClose: () => void;
-  isOpen: boolean;
-};
+import {useProjectContext, initContext} from '../context';
+import {createProject} from '@api/projects/actions';
+import {CreateProjectType} from '@models/project';
+import {toast} from 'react-toastify';
+const CreateProjectMain: FC = () => {
+  const {ProjectContext, setProjectContext} = useProjectContext();
 
-const schemaStep = {
-  1: schemaCreateProjectStep1,
-  2: schemaCreateProjectStep2,
-  3: schemaCreateProjectQuestion,
-};
-const CreateProjectMain: FC<TLayoutType> = ({onClose, isOpen}) => {
-  const [formStep, setFormStep] = useState(0);
-  const isStep0 = formStep === 0;
-  const isStep1 = formStep === 1;
-  const isStep2 = formStep === 2;
-  const isStep3 = formStep === 3;
-  const isStep4 = formStep === 4;
-  const isStep5 = formStep === 5;
+  const isStep0 = ProjectContext.formStep === 0;
+  const isStep1 = ProjectContext.formStep === 1;
+  const isStep2 = ProjectContext.formStep === 2;
+  const isStep3 = ProjectContext.formStep === 3;
+  const isStep4 = ProjectContext.formStep === 4;
+  const isStep5 = ProjectContext.formStep === 5;
 
-  const method1 = useForm({
-    resolver: joiResolver(schemaStep[1]),
-    mode: 'all',
-  });
-  const method2 = useForm({
-    resolver: joiResolver(schemaStep[2]),
-    mode: 'all',
-  });
-  const method3 = useForm({
-    resolver: joiResolver(schemaStep[3]),
-    mode: 'all',
-  });
+  const onSubmit = async () => {
+    if (isStep3) {
+      const postBody: CreateProjectType = {
+        title: ProjectContext.title,
+        description: ProjectContext.description,
+        remote_preference: ProjectContext.remote_preference,
+      };
 
-  const getMethod = () => {
-    if (isStep0) return method1;
-    if (isStep1) return method2;
-    if (isStep5) return method3;
-    return method1;
+      if (ProjectContext.experience_level)
+        postBody.experience_level = ProjectContext.experience_level;
+      if (ProjectContext.payment_currency)
+        postBody.payment_currency = ProjectContext.payment_currency;
+      if (ProjectContext.payment_range_higher)
+        postBody.payment_range_higher = ProjectContext.payment_range_higher;
+      if (ProjectContext.payment_range_lower)
+        postBody.payment_range_lower = ProjectContext.payment_range_lower;
+      if (ProjectContext.payment_scheme)
+        postBody.payment_scheme = ProjectContext.payment_scheme;
+      if (ProjectContext.payment_type)
+        postBody.payment_type = ProjectContext.payment_type;
+      if (ProjectContext.status) postBody.status = ProjectContext.status;
+      if (ProjectContext.country) postBody.country = ProjectContext.country;
+      if (ProjectContext.project_length)
+        postBody.project_length = ProjectContext.project_length;
+      if (ProjectContext.causes_tags)
+        postBody.causes_tags = ProjectContext.causes_tags;
+      if (ProjectContext.project_type)
+        postBody.project_type = ProjectContext.project_type;
+
+      try {
+        await createProject(postBody);
+      } catch (error) {
+        toast.error(`${error}`);
+      }
+    }
+    setProjectContext({
+      ...ProjectContext,
+      formStep: ProjectContext.formStep + 1,
+    });
   };
-
-  const {
-    handleSubmit,
-    getValues,
-    formState: {isValid},
-  } = getMethod();
-  console.log('@@@@@@');
-
-  console.log(getValues());
-
-  const onSubmit = (data: any) => {
-    // console.log(data);
-    setFormStep((formStep) => formStep + 1);
-  };
+  useEffect(() => {
+    if (!ProjectContext.isModalOpen) {
+      setProjectContext(initContext);
+    }
+  }, [ProjectContext]);
 
   const PageDisplay = () => {
     if (isStep0) {
-      return <ProjectAbout />;
+      return <ProjectAbout onSubmit={onSubmit} />;
     } else if (isStep1) {
-      return <ProjectInfo />;
+      return <ProjectInfo onSubmit={onSubmit} />;
     } else if (isStep2) {
-      return <ProjectQuestions setFormStep={() => setFormStep(4)} />;
+      return <ProjectQuestions onSubmit={onSubmit} />;
     } else if (isStep3) {
-      return <ProjectReview />;
+      return <ProjectReview onSubmit={onSubmit} />;
     } else if (isStep4) {
-      return <Congrats onClose={onClose} />;
+      return <Congrats />;
     } else if (isStep5) {
-      return <QuestionDetail setFormStep={() => setFormStep(2)} />;
+      return <QuestionDetail />;
     }
   };
 
   return (
-    <CreateProjectLayout
-      title={isStep4 ? '' : 'Create Project'}
-      onClose={onClose}
-      isOpen={isOpen}
-      setFormStep={setFormStep}
-      formStep={formStep}
-    >
-      <FormProvider {...getMethod()}>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex h-full w-full flex-col "
-        >
-          <div
-            className={`flex overflow-y-scroll border-b ${
-              !(isStep4 || isStep3) ? styles.FormBase : 'h-full'
-            }`}
-          >
-            {PageDisplay()}
-          </div>
-          {!(isStep4 || isStep3) && (
-            <div className=" flex h-20 items-end justify-end p-4">
-              <Button
-                disabled={!isValid}
-                type="submit"
-                className={`flex h-11 ${
-                  isStep2 || isStep3 ? 'w-36' : 'w-52'
-                }  items-center justify-center`}
-              >
-                {isStep3 ? 'Create' : 'Continue'}
-              </Button>
-              {(isStep2 || isStep3) && (
-                <Button
-                  variant="outline"
-                  type="button"
-                  className="ml-2 flex h-11 w-36 items-center justify-center"
-                >
-                  {isStep2 ? 'Skip' : 'Save project'}
-                </Button>
-              )}
-            </div>
-          )}
-        </form>
-      </FormProvider>
+    <CreateProjectLayout title={isStep4 ? '' : 'Create Project'}>
+      {PageDisplay()}
     </CreateProjectLayout>
   );
 };

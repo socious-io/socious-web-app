@@ -1,16 +1,19 @@
 import TextArea from '@components/common/TextArea/TextArea';
-import {useFormContext} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import {Button} from '@components/common';
 import {PlusCircleIcon} from '@heroicons/react/24/outline';
-import {FC} from 'react';
-import {TProjectInput} from '../sharedType';
+import {useProjectContext} from '../context';
+import {joiResolver} from '@hookform/resolvers/joi';
+import {schemaCreateProjectQuestion} from '@api/projects/validation';
 
-const QuestionDetail: FC<TProjectInput> = ({setFormStep}) => {
-  const formMethods = useFormContext();
+const QuestionDetail = () => {
   const {
     register,
+    setValue,
     formState: {errors},
-  } = formMethods;
+  } = useForm({resolver: joiResolver(schemaCreateProjectQuestion)});
+
+  const {setProjectContext, ProjectContext} = useProjectContext();
 
   return (
     <div className="flex h-full w-full flex-col">
@@ -46,7 +49,12 @@ const QuestionDetail: FC<TProjectInput> = ({setFormStep}) => {
       </div>
       <div className="flex h-20 items-end justify-end p-4">
         <Button
-          onClick={setFormStep}
+          onClick={() =>
+            setProjectContext({
+              ...ProjectContext,
+              formStep: 2,
+            })
+          }
           type="button"
           className="'flex h-11 w-36 items-center justify-center"
         >
@@ -54,7 +62,12 @@ const QuestionDetail: FC<TProjectInput> = ({setFormStep}) => {
         </Button>
 
         <Button
-          onClick={setFormStep}
+          onClick={() =>
+            setProjectContext({
+              ...ProjectContext,
+              formStep: 2,
+            })
+          }
           variant="outline"
           type="button"
           className="ml-2 flex h-11 w-36 items-center justify-center"

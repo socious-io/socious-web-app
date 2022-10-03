@@ -5,10 +5,7 @@ import HeaderBox from '../component/HeaderBox';
 import HiredCard from '../component/HiredCard';
 import {PlusIcon} from '@heroicons/react/24/solid';
 import {FC} from 'react';
-type TApplicationInput = {
-  onchange: () => void;
-};
-
+import {useProjectContext} from '../created/NewProject/context';
 var data = [
   {
     id: 1,
@@ -51,10 +48,11 @@ var data3 = [
     projectId: '3',
   },
 ];
-const MyApplicationBoxes: FC<TApplicationInput> = ({onchange}) => {
+const MyApplicationBoxes: FC = () => {
   const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
   const {state: showDrafts, handlers: showDraftsHandler} = useToggle();
   const {user} = useUser();
+  const {ProjectContext, setProjectContext} = useProjectContext();
   return (
     <div className="w-2/3 pb-4">
       <div className="flex items-center rounded-2xl border border-grayLineBased bg-white p-6">
@@ -67,7 +65,12 @@ const MyApplicationBoxes: FC<TApplicationInput> = ({onchange}) => {
         variant="fill"
         value="Submit"
         leftIcon={() => <PlusIcon width={20} height={20} />}
-        onClick={onchange}
+        onClick={() =>
+          setProjectContext({
+            ...ProjectContext,
+            isModalOpen: !ProjectContext.isModalOpen,
+          })
+        }
         //disabled={!!formState?.errors}
       >
         Create Project
