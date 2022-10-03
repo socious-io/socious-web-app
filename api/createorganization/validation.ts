@@ -34,9 +34,9 @@ export const schemaCreateOrganization = Joi.object({
   social_causes: Joi.array().items(
     Joi.string().valid(...Object.values(enums.SocialCauses)),
   ),
-  phone: Joi.string().regex(rxNotMobileNumber).allow(null, '').messages({
-    'any.required': `cannot be an empty field`,
-    'string.pattern.base': `Phone number must have 10 digits.`,
+  phone: Joi.string().allow(null, '').regex(rxNotMobileNumber).messages({
+    'any.required': `Phone number cannot be an empty field.`,
+    'string.pattern.base': `Phone number must be within 3-15 digits.`,
   }),
   mobile_country_code: Joi.string()
     .regex(/^\+[0-9 -]+/)
