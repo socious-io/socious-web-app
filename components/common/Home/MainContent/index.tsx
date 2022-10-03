@@ -126,7 +126,11 @@ const MainContent = () => {
         )}
         <FormProvider {...formMethodsStep1}>
           {step === 1 && (
-            <PostCreateStep1 onSubmit={handleSubmit} setFile={setFile} />
+            <PostCreateStep1
+              onSubmit={handleSubmit}
+              setFile={setFile}
+              file={file}
+            />
           )}
           {step === 2 && (
             <PostCreateStep2 onSubmit={handleSubmit} file={file} />
