@@ -20,7 +20,11 @@ const Posts = ({infinitePosts}: PostsProps) => {
               time={post.created_at}
               passion={post.causes_tags}
               name={post.identity_meta.name}
-              src={post.identity_meta.image}
+              src={
+                post.identity_type === 'users'
+                  ? post.identity_meta.avatar
+                  : post.identity_meta.image
+              }
               shared={post.shared}
               liked={post.liked}
               likes={post.likes}
@@ -46,7 +50,11 @@ const Posts = ({infinitePosts}: PostsProps) => {
               content={post.content}
               time={post.created_at}
               passion={post.causes_tags}
-              src={post.identity_meta.image}
+              src={
+                post.identity_type === 'users'
+                  ? post.identity_meta.avatar
+                  : post.identity_meta.image
+              }
               liked={post.liked}
               likes={post.likes}
               shared={post.shared}

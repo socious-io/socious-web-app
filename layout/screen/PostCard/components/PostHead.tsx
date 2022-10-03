@@ -36,7 +36,11 @@ const PostHead = ({
           passHref
         >
           <div className="justify-betwee flex items-center space-x-2">
-            <Avatar size="s" src={src} />
+            <Avatar
+              size="s"
+              src={src}
+              type={type && type === 'users' ? 0 : 1}
+            />
             <p className="text-sm">{name || 'Clear Me'}</p>
             <div className="h-1.5 w-1.5 rounded-full bg-grayInputField" />
           </div>

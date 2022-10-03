@@ -1,16 +1,22 @@
-import Button from '@components/common/Button/Button';
-import Posts from './Posts';
-import {useCallback, useMemo, useState} from 'react';
-
+// Packages
+import {forwardRef, useCallback, useImperativeHandle, useMemo} from 'react';
 import useSWRInfinite from 'swr/infinite';
-import {get} from 'utils/request';
 import {GridLoader} from 'react-spinners';
 
-const PostContainer = () => {
+// Components
+import Button from '@components/common/Button/Button';
+import Posts from './Posts';
+
+// Services/functions
+import {get} from 'utils/request';
+
+// Types
+import {InsertNewPost} from '.';
+
+const PostContainer = forwardRef<InsertNewPost>((props, ref) => {
   //Get key to fetch comments.
   const getKey = useCallback((initialSize: number, previousData: any) => {
     if (previousData && previousData?.items?.length < 10) return null;
-    console.log('I was called');
     return `/posts?page=${initialSize + 1}`;
   }, []);
 
@@ -24,6 +30,18 @@ const PostContainer = () => {
     shouldRetryOnError: false,
     revalidateFirstPage: false,
   });
+
+  useImperativeHandle(ref, () => ({
+    setNewPost: (post: any) => {
+      mutatePosts(
+        (oldPosts) => {
+          oldPosts?.[0]?.items.unshift(post);
+          return oldPosts;
+        },
+        {revalidate: false},
+      );
+    },
+  }));
 
   const noMorePosts = useMemo(
     () => size * 10 >= infinitePosts?.[0]?.['total_count'],
@@ -54,6 +72,8 @@ const PostContainer = () => {
       )}
     </div>
   );
-};
+});
+
+PostContainer.displayName = 'PostContainer';
 
 export default PostContainer;
