@@ -142,7 +142,15 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                 <div className="space-between flex items-center space-x-3">
                   <Dropdown
                     display={
-                      <Avatar size="m" src={currentIdentity?.meta?.avatar} />
+                      <Avatar
+                        size="m"
+                        type={currentIdentity?.type === 'users' ? 0 : 1}
+                        src={
+                          currentIdentity?.type === 'users'
+                            ? currentIdentity?.meta?.avatar
+                            : currentIdentity?.meta?.image
+                        }
+                      />
                     }
                   >
                     {identities &&
@@ -158,6 +166,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                               <div className="w-1/4">
                                 <Avatar
                                   size="m"
+                                  type={identity.type === 'users' ? 0 : 1}
                                   src={
                                     identity.type === 'users'
                                       ? identity?.meta?.avatar
