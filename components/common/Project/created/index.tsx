@@ -54,7 +54,7 @@ const MyApplicationBoxes: FC = () => {
   const {user} = useUser();
   const {ProjectContext, setProjectContext} = useProjectContext();
   return (
-    <div className="w-2/3 pb-4">
+    <div className="w-full pb-4 sm:w-2/3">
       <div className="flex items-center rounded-2xl border border-grayLineBased bg-white p-6">
         <p className="text-xl font-semibold">Created Project</p>
       </div>
