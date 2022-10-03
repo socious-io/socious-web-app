@@ -14,7 +14,7 @@ export interface PostCardProps {
   passion?: string;
   showAction?: boolean;
   liked?: boolean;
-  media?: string[] | null;
+  media?: {id: string; url: string}[] | null;
   likes?: number;
   shared?: number;
   src?: string;
