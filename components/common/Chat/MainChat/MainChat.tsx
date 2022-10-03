@@ -160,7 +160,7 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
               ? user?.avatar?.url
               : user?.image?.url
           }
-          type={currentIdentity?.type === 'users' ? 0 : 1}
+          type={currentIdentity?.type}
           avatarSize="m"
           onSend={onSendMessage}
           placeholder="Write a message"
