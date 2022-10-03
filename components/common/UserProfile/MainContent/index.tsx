@@ -23,9 +23,10 @@ import {get} from 'utils/request';
 import {useUser} from '@hooks';
 
 // interfaces
+import {IdentityType} from '@models/identity';
 interface Props {
   data: any;
-  status: 'users' | 'organizations';
+  status: IdentityType;
   profile_mutate: KeyedMutator<any>;
 }
 
