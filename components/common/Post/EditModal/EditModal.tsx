@@ -40,7 +40,7 @@ const EditModal = ({
     },
   });
 
-  const [file, setFile] = useState<any>(post.media[0] || null);
+  const [file, setFile] = useState<any>(post.media?.[0]?.id || null);
 
   const {handleSubmit, register, getValues, control, formState, reset} =
     useForm({
@@ -60,19 +60,17 @@ const EditModal = ({
     const content = getValues('content');
     const causes_tags = getValues('causes_tags');
     const link = getValues('link');
-    let fileId: string = '';
-    console.log('FILE :---: ', file);
+    let fileId: string | null = null;
     if (typeof file === 'string') {
-      //TODO: UNCOMMENT WHEN BE MERGED. if file is ID
-      // fileId = file;
-    } else if (file.type) {
+      // File is ID. i.e. No change in Image
+      fileId = file;
+    } else if (file?.type) {
       // Image upload feature is not working.
       const formData = new FormData();
       formData.append('file', file);
       try {
-        console.log('Making request with :---:', file);
         const mediaRes: any = await uploadMedia(formData);
-        console.log('FILE RESPONSE :---: ', mediaRes);
+        setFile(mediaRes?.id);
         fileId = mediaRes?.id;
       } catch (error) {
         console.error(error);
@@ -84,11 +82,10 @@ const EditModal = ({
       content,
       causes_tags: [causes_tags],
     };
-    if (file && fileId) postEditBody.media = [fileId];
-    console.table(postEditBody);
+    if (fileId) postEditBody.media = [fileId];
+    // Editing Post
     try {
       const postEditRes = await editPost(postEditBody, post.id);
-      console.log('Post Edit :---: ', postEditRes);
       onClose();
       mutate(postEditRes, {revalidate: false});
     } catch (error) {
