@@ -194,13 +194,12 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
       {hasDetailNavbar && (
         <div className="flex w-full flex-col pt-14 sm:hidden">
           <div className=" flex items-center justify-between px-4 pb-3.5">
-            <span className="flex w-full " onClick={() => route.back()}>
+            <span className="flex " onClick={() => route.back()}>
               <ChevronLeftIcon className="w-5" />
             </span>
-            <h3 className="font-worksans w-full text-center text-xl font-semibold">
+            <h3 className="mr-5 w-full text-center font-sans text-xl font-semibold">
               {detailNavbarTitle || 'Post'}
             </h3>
-            <div className="flex w-full" />
           </div>
         </div>
       )}
