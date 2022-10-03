@@ -31,6 +31,7 @@ const PostContainer = forwardRef<InsertNewPost>((props, ref) => {
     revalidateFirstPage: false,
   });
 
+  // Add new Post onCreate
   useImperativeHandle(ref, () => ({
     setNewPost: (post: any) => {
       mutatePosts(
@@ -43,11 +44,43 @@ const PostContainer = forwardRef<InsertNewPost>((props, ref) => {
     },
   }));
 
+  //Check for available Posts
   const noMorePosts = useMemo(
     () => size * 10 >= infinitePosts?.[0]?.['total_count'],
     [size, infinitePosts],
   );
 
+  //Toggle Like
+  const toggleLike = useCallback(
+    (id: string, liked: boolean) => {
+      mutatePosts(
+        (oldPosts) => {
+          if (!oldPosts) return [];
+          for (let i = 0; i < size; i++) {
+            let posts = oldPosts[i].items;
+            for (let j = 0, len = oldPosts[i].items.length; j < len; j++) {
+              let oldPost = posts[j];
+              //if this is toggle-post, change the value.
+              posts[j] =
+                oldPost.id === id
+                  ? {
+                      ...oldPost,
+                      liked: liked,
+                      likes: liked ? oldPost.likes + 1 : oldPost.likes - 1,
+                    }
+                  : oldPost;
+            }
+            oldPosts[i].items = posts;
+          }
+          return oldPosts;
+        },
+        {revalidate: false},
+      );
+    },
+    [mutatePosts, size],
+  );
+
+  // If loading.
   if (!infinitePosts && !infiniteError)
     return (
       <div className="flex w-full flex-col items-center justify-center">
@@ -57,7 +90,8 @@ const PostContainer = forwardRef<InsertNewPost>((props, ref) => {
 
   return (
     <div className="sm:space-y-2">
-      <Posts infinitePosts={infinitePosts ?? []} />
+      {/* Passing infintePosts to render on mutation */}
+      <Posts infinitePosts={infinitePosts ?? []} toggleLike={toggleLike} />
       {!noMorePosts && (
         <div className="flex justify-center">
           <Button

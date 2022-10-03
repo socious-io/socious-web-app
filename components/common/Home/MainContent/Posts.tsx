@@ -1,13 +1,13 @@
-import Button from '@components/common/Button/Button';
+// Components
 import {SharedCard, HomeCard} from 'layout/screen/PostCard';
-import useSWR from 'swr';
-import {get} from 'utils/request';
 
+// Types
 interface PostsProps {
   infinitePosts: any[];
+  toggleLike: (id: string, liked: boolean) => void;
 }
 
-const Posts = ({infinitePosts}: PostsProps) => {
+const Posts = ({infinitePosts, toggleLike}: PostsProps) => {
   return (
     <div className="space-y-10">
       {infinitePosts.map((posts) =>
@@ -40,7 +40,7 @@ const Posts = ({infinitePosts}: PostsProps) => {
                   : post.identity_meta.shortname
               }
               // placeHolder for now.
-              toggleLike={(liked) => console.log('LIKED: ', liked)}
+              toggleLike={toggleLike}
             />
           ) : (
             <HomeCard
@@ -66,7 +66,7 @@ const Posts = ({infinitePosts}: PostsProps) => {
               }
               media={post.media}
               // placeHolder For now.
-              toggleLike={(liked) => console.log('LIKED: ', liked)}
+              toggleLike={toggleLike}
             />
           ),
         ),
