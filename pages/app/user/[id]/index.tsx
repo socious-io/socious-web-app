@@ -39,7 +39,7 @@ const UserProfile: NextPage = () => {
   return (
     <GeneralLayout>
       <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">
-        <MainContent data={data} status="user" profile_mutate={mutate} />
+        <MainContent data={data} status="users" profile_mutate={mutate} />
       </div>
     </GeneralLayout>
   );
