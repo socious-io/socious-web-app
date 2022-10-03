@@ -5,7 +5,7 @@ import SideBar from '@components/common/Home/SideBar';
 import MyApplicationBoxes from '@components/common/Project/created';
 import CreateProjectMain from '@components/common/Project/created/NewProject';
 import {ProjectContextProvider} from 'components/common/Project/created/NewProject/context';
-import {GetStaticProps} from 'next';
+import {GetServerSideProps} from 'next';
 import getGlobalData from 'services/cacheSkills';
 type ProjectApplicationsProps = {
   skills: any[];
@@ -25,7 +25,7 @@ const ProjectApplications: NextPage<ProjectApplicationsProps> = ({skills}) => {
 
 export default ProjectApplications;
 
-export const getServerSideProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const skills = await getGlobalData();
   return {props: {skills}};
 };
