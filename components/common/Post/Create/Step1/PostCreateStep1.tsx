@@ -56,7 +56,7 @@ const PostCreateStep1 = ({onSubmit, setFile, file}: PostCreateStepProps) => {
         variant="fill"
         value="Submit"
       >
-        Create Post
+        Next
       </Button>
     </form>
   );

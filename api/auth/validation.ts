@@ -116,12 +116,13 @@ export const schemaOnboardingStep6 = Joi.object({
     'any.required': `cannot be an empty field`,
   }),
   phoneNumber: Joi.string()
-    .regex(rxNotMobileNumber)
     .required()
+    .regex(rxNotMobileNumber)
     .label('phoneNumber')
     .messages({
-      'any.required': `cannot be an empty field`,
-      'string.pattern.base': `Phone number must have 10 digits.`,
+      'string.empty': `Phone number cannot be an empty field.`,
+      'string.required': `Phone number cannot be an empty field.`,
+      'string.pattern.base': `Phone number must be within 3-15 digits.`,
     }),
 });
 export const schemaOnboardingStep7 = Joi.object({
