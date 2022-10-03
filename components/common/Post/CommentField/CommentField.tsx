@@ -35,7 +35,7 @@ const CommentField = forwardRef<FocusComment, CommentFieldProps>(
     const onClickSend = useCallback(
       (e?: React.FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
-        if (comment.length !== 0) {
+        if (comment.trim().length !== 0) {
           onSend(comment);
           setComment('');
         }
