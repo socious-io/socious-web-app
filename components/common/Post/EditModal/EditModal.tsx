@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useDebugValue, useState} from 'react';
 import {schemaEditPost} from '@api/posts/validation';
 import {Avatar, Button, Modal, ModalProps, TextArea} from '@components/common';
 import {XMarkIcon} from '@heroicons/react/24/outline';
@@ -40,16 +40,17 @@ const EditModal = ({
     },
   });
 
-  const [file, setFile] = useState<any>(null);
+  const [file, setFile] = useState<any>(post.media?.[0]?.id || null);
 
-  const {handleSubmit, register, getValues, control, formState} = useForm({
-    resolver: joiResolver(schemaEditPost),
-    defaultValues: {
-      content: post ? post.content : '',
-      causes_tags: post ? post.causes_tags?.[0] : '',
-      link: post ? post.link || '' : '',
-    } as FieldValues,
-  });
+  const {handleSubmit, register, getValues, control, formState, reset} =
+    useForm({
+      resolver: joiResolver(schemaEditPost),
+      defaultValues: {
+        content: post ? post.content : '',
+        causes_tags: post ? post.causes_tags?.[0] : '',
+        link: post ? post.link || '' : '',
+      } as FieldValues,
+    });
   const causesTagsController = useController<FieldValues, string>({
     name: 'causes_tags',
     control,
@@ -59,15 +60,18 @@ const EditModal = ({
     const content = getValues('content');
     const causes_tags = getValues('causes_tags');
     const link = getValues('link');
-
-    let fileId = '';
-    if (file) {
+    let fileId: string | null = null;
+    if (typeof file === 'string') {
+      // File is ID. i.e. No change in Image
+      fileId = file;
+    } else if (file?.type) {
+      // Image upload feature is not working.
+      const formData = new FormData();
+      formData.append('file', file);
       try {
-        // Image upload feature is not working.
-        const formData = new FormData();
-        formData.append('file', file);
-        const response: any = await uploadMedia(formData);
-        fileId = response?.id;
+        const mediaRes: any = await uploadMedia(formData);
+        setFile(mediaRes?.id);
+        fileId = mediaRes?.id;
       } catch (error) {
         console.error(error);
         return;
@@ -78,22 +82,25 @@ const EditModal = ({
       content,
       causes_tags: [causes_tags],
     };
+    if (fileId) postEditBody.media = [fileId];
+    // Editing Post
     try {
-      await editPost(postEditBody, post.id);
+      const postEditRes = await editPost(postEditBody, post.id);
       onClose();
-      mutate();
+      mutate(postEditRes, {revalidate: false});
     } catch (error) {
       console.error(error);
     }
   }, [getValues, file, post, onClose, mutate]);
 
+  // Reset Form to default onClose.
+  const onModalClose = useCallback(() => {
+    onClose();
+    reset();
+  }, [onClose, reset]);
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      // className={`${shareStep === 1 ? "bg-offWhite" : ""}`}
-      className=""
-    >
+    <Modal isOpen={isOpen} onClose={onModalClose}>
       <span className="absolute right-3 cursor-pointer " onClick={onClose}>
         <XMarkIcon className="w-6" />
       </span>
@@ -134,6 +141,7 @@ const EditModal = ({
           register={register('link')}
           errorMessage={formState?.errors?.['link']?.message}
           setFile={setFile}
+          fileExist={!!file}
         />
         <Button
           className="ml-auto mt-4 flex max-w-xs items-center justify-center align-middle "

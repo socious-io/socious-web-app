@@ -37,9 +37,11 @@ const PostOption = ({optionClicked}: PostOptionProps) => {
   return (
     <Menu>
       <Menu.Button as={Fragment}>
-        <Button variant="ghost" className="flex border-0 p-2">
-          <EllipsisHorizontalIcon className="h-5 w-5" />
-        </Button>
+        <a>
+          <Button variant="ghost" className="flex border-0 p-2">
+            <EllipsisHorizontalIcon className="h-5 w-5" />
+          </Button>
+        </a>
       </Menu.Button>
       <Transition
         as={Fragment}

@@ -7,7 +7,7 @@ export interface PostContentProps {
   passion?: string;
   content?: string;
   noBorder?: boolean;
-  media?: string[] | null;
+  media?: {id: string; url: string}[] | null;
 }
 
 const PostContent = ({
@@ -27,7 +27,7 @@ const PostContent = ({
         <div className="relative h-40 w-full overflow-hidden rounded-lg bg-offWhite">
           <Image
             alt={passion ?? 'post media'}
-            src={media[0]}
+            src={media[0]?.url}
             className="object-cover"
             fill
           />

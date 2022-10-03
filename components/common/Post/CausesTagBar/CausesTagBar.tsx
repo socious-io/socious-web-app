@@ -30,9 +30,9 @@ export const CausesTagBar = ({src, controller}: CausesTagBarProps) => {
       <Avatar src={src} size="m" />
       <Combobox
         selected={
-          controller?.field.value
+          controller?.field?.value
             ? {
-                id: controller?.field.value,
+                id: controller?.field?.value,
                 name: getText('en', `PASSION.${controller?.field?.value}`),
               }
             : undefined
