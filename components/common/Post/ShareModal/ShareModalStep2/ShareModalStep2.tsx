@@ -70,7 +70,6 @@ export const ShareModalStep2 = ({onShare}: shareModalStep2Props) => {
     if (content) postData.content = content;
     if (fileId) postData.media = [fileId];
     // if (link) postData.link = link;
-
     onShare(postData);
   }, [getValues, onShare, file]);
 
@@ -122,6 +121,7 @@ export const ShareModalStep2 = ({onShare}: shareModalStep2Props) => {
                 time={post.created_at}
                 passion={post.causes_tags}
                 src={post.identity_meta.image}
+                media={post.media}
                 liked={post.liked}
                 likes={post.likes}
                 showAction={false}
@@ -132,6 +132,7 @@ export const ShareModalStep2 = ({onShare}: shareModalStep2Props) => {
         </div>
       </Modal.Description>
       <PostActionBar
+        fileExist={!!file}
         register={register('link')}
         errorMessage={formState?.errors?.['link']?.message}
         setFile={setFile}

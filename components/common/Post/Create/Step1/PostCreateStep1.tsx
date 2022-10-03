@@ -11,9 +11,10 @@ import PostActionBar from '../../PostActionBar/PostActionBar';
 
 interface PostCreateStepProps extends StepProps {
   setFile: React.Dispatch<React.SetStateAction<any>>;
+  file: any;
 }
 
-const PostCreateStep1 = ({onSubmit, setFile}: PostCreateStepProps) => {
+const PostCreateStep1 = ({onSubmit, setFile, file}: PostCreateStepProps) => {
   const {user} = useUser();
   const formMethods = useFormContext();
   const {handleSubmit, formState, register, getValues} = formMethods;
@@ -42,6 +43,7 @@ const PostCreateStep1 = ({onSubmit, setFile}: PostCreateStepProps) => {
           />
         </div>
         <PostActionBar
+          fileExist={!!file}
           register={register('link')}
           errorMessage={formState?.errors?.['link']?.message}
           setFile={setFile}
@@ -54,7 +56,7 @@ const PostCreateStep1 = ({onSubmit, setFile}: PostCreateStepProps) => {
         variant="fill"
         value="Submit"
       >
-        Create Post
+        Next
       </Button>
     </form>
   );

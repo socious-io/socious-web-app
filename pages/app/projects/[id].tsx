@@ -3,7 +3,7 @@ import SideBar from '@components/common/Project/SideBar/SideBar';
 import {GeneralLayout, DetailLayout} from 'layout';
 const Detail = () => {
   return (
-    <GeneralLayout hasNavbar>
+    <GeneralLayout hasDetailNavbar>
       <SideBar selectBar={'PROJECT_DETAIL'} />
       <DetailLayout>
         <DetailContent />

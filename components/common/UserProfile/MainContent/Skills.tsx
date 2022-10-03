@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import {getText} from '@socious/data';
 
 // components
 import Chip from './Chip';
@@ -19,7 +20,9 @@ const Skills: React.FC<Props> = ({skills}) => {
       <div className="flex w-4/6 flex-wrap gap-2 ">
         {skills &&
           skills.map((item: string) => {
-            return <Chip key={item} name={item} />;
+            return (
+              <Chip key={item} name={getText('en', `SKILL.${item}`) || item} />
+            );
           })}
       </div>
     </div>

@@ -17,12 +17,13 @@ import Starter from '../../components/common/CreateOrganization/steps/Starter';
 import Mission from '../../components/common/CreateOrganization/steps/Mission';
 
 // validation Schema
-import {validate} from '@socious/data';
+import {schemaCreateOrganization} from '@api/createorganization/validation';
 
 //libraries
 import {useForm, FormProvider} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {AxiosError} from 'axios';
+import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
 
 //actions
 import {create_organization} from '@api/createorganization/actions';
@@ -33,14 +34,24 @@ import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 //interfaces
 import {CreateOrganizationType} from '@models/createOrganization';
 
+//libraries for GoogleMaps
+const libraries: Libraries = ['places'];
+
 const CreateOrganization = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessage, setError] = useState<ErrorMessage>();
   const [step, setStep] = useState<number>(0);
+  const [company_name, set_company_name] = useState<string>();
 
   const router = useRouter();
   const methods = useForm({
-    resolver: joiResolver(validate.OrganizationSchema),
+    resolver: joiResolver(schemaCreateOrganization),
+  });
+
+  //Loading Map
+  const {isLoaded, loadError} = useGoogleMapsScript({
+    googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
+    libraries,
   });
 
   ///////////////////////////////////////////////////////////////////////////
@@ -51,7 +62,7 @@ const CreateOrganization = () => {
     if (step === 6) {
       requestHandler(data);
     } else if (step === 8) {
-      console.log('go organization profile');
+      goHome();
     } else {
       nextHandler();
     }
@@ -60,7 +71,9 @@ const CreateOrganization = () => {
   const requestHandler = async (data: CreateOrganizationType) => {
     console.log('data', data);
     try {
-      await create_organization(data);
+      const response = await create_organization(data);
+      //set organization name
+      set_company_name(response?.name);
       nextHandler();
     } catch (e) {
       const error = e as AxiosError<any>;
@@ -110,17 +123,17 @@ const CreateOrganization = () => {
         {step === 0 || step === 7 || step === 8 ? null : (
           <Carousel
             onBack={backHandler}
-            onSkip={step === 6 ? requestHandler : nextHandler}
+            onSkip={nextHandler}
             step={step}
-            skip={step === 4 || step === 5 || step === 6 ? true : false}
+            skip={step === 4 || step === 5 ? true : false}
           />
         )}
 
         {/* steps of create organization */}
         {step === 0 ? (
           <Starter onSubmit={nextHandler} onBack={backHandler} />
-        ) : step === 7 ? (
-          <CreateSuccessfully onSubmit={nextHandler} />
+        ) : step === 7 && company_name ? (
+          <CreateSuccessfully name={company_name} onSubmit={nextHandler} />
         ) : step === 8 ? (
           <VerifyOrganization onSubmit={nextHandler} />
         ) : null}

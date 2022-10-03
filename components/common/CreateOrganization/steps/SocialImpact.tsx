@@ -13,9 +13,9 @@ import {StepProps} from '@models/stepProps';
 
 const SocialImpact = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
-  const {register, handleSubmit, watch} = formMethods;
-  const description = watch('description');
+  const {register, handleSubmit, formState} = formMethods;
 
+  console.log(formState.errors);
   return (
     <>
       <Title border={false}>
@@ -33,7 +33,6 @@ const SocialImpact = ({onSubmit}: StepProps) => {
         <footer className="w-full flex-none border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">
           <Button
             type="submit"
-            disabled={!description}
             className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"
           >
             continue

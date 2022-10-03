@@ -7,6 +7,7 @@ import Avatar from '@components/common/Avatar/Avatar';
 import Button from '@components/common/Button/Button';
 import Image from 'next/image';
 import useUser from 'hooks/useUser/useUser';
+import {getText} from '@socious/data';
 
 interface PostCreateStep2Props extends StepProps {
   file: any | null;
@@ -18,7 +19,8 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
   const content = getValues('content');
   const [url, setUrl] = React.useState<any>('');
   // const link = getValues("link");
-  const {user} = useUser();
+  const {user, currentIdentity} = useUser();
+  const isUser = currentIdentity?.type === 'users' ? true : false;
 
   useEffect(() => {
     const reader = new FileReader();
@@ -47,13 +49,12 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
         <div className="-mr-6 -ml-6 border-y-[.5px] p-4">
           <div className="flex items-center space-x-3">
             <Avatar src={user?.avatar?.url} size="m" />
-            <span>{user?.username ?? 'User Name'}</span>
+            <span>{isUser ? user?.username : user?.shortname}</span>
           </div>
           <Chip
             containerClassName="bg-secondarySLight inline-block mt-4 mb-6"
             contentClassName="text-secondary font-normal text-sm"
-            // content={"apple"}
-            content={social_causes}
+            content={getText('en', `PASSION.${social_causes}`)}
           />
           <p className={file ? 'min-h-[4rem]' : 'min-h-[8rem]'}>
             {content ||
@@ -83,7 +84,7 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
         value="Submit"
         onClick={(e) => onPreviewDone(e)}
       >
-        Create Post
+        Post
       </Button>
     </div>
   );

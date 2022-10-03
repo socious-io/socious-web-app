@@ -5,13 +5,16 @@
   "author": "Socious",
   "license": "MIT",
   "engines": {
-    "node": ">=14.0.0",
+    "node": ">=16.15.0",
     "npm": ">=8.0.0",
     "yarn": "please-use-npm"
   },
   "dependencies": {
+    "@capacitor/android": "^4.3.0",
+    "@capacitor/core": "^4.3.0",
+    "@capacitor/ios": "^4.3.0",
     "@hookform/resolvers": "^2.9.8",
-    "@socious/data": "^1.0.2",
+    "@socious/data": "^1.0.3",
     "@svgr/webpack": "^6.3.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -22,14 +25,13 @@
     "fs-extra": "^10.1.0",
     "joi": "^17.6.0",
     "luxon": "^3.0.4",
-    "next": "12.3.1",
-    "next-auth": "^4.10.3",
+    "next": "^12.3.1",
     "next-images": "^1.8.4",
+    "patch-package": "^6.4.7",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-google-places-autocomplete": "^3.4.0",
     "react-hook-form": "^7.35.0",
     "react-responsive": "^9.0.0",
     "react-spinners": "^0.13.4",
@@ -39,7 +41,9 @@
     "sharp": "^0.31.0",
     "swr": "^1.3.0",
     "tailwind-merge": "^1.6.0",
-    "tailwind-scrollbar-hide": "^1.1.7"
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "use-google-maps-script": "^0.1.2",
+    "use-places-autocomplete": "^4.0.0"
   },
   "disabled-web3-deps-please-fix": {
     "@web3-react/core": "^6.1.9",
@@ -51,6 +55,7 @@
     "web3modal": "^1.9.9"
   },
   "devDependencies": {
+    "@capacitor/cli": "^4.3.0",
     "@headlessui/react": "^1.7.2",
     "@heroicons/react": "^2.0.11",
     "@types/chai": "^4.3.3",
@@ -96,7 +101,11 @@
     "lint": "next lint",
     "prettier:check": "prettier --check **/*.ts **/*.tsx",
     "prettier:fix": "prettier --write  **/*.ts **/*.tsx",
-    "update-all": "ncu -u"
+    "update-all": "ncu -u",
+    "build-mobile": "next build && next export && npx cap sync",
+    "ios": "npx cap run ios",
+    "android": "npx cap run android",
+    "postinstall": "patch-package"
   },
   "lint-staged": {
     "*.js": "next lint",

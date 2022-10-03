@@ -8,6 +8,7 @@ export interface ProfileCardProps {
   avatar?: string;
   following?: number;
   followers?: number;
+  isUser?: boolean;
 }
 
 export function ProfileCard({
@@ -17,6 +18,7 @@ export function ProfileCard({
   avatar,
   following,
   followers,
+  isUser,
 }: ProfileCardProps) {
   return (
     <div className="flex w-full space-y-4 rounded-2xl border border-grayLineBased bg-background p-4">
@@ -26,8 +28,11 @@ export function ProfileCard({
           <p className="text-base font-semibold">
             {name || 'FirstName LastName'}
           </p>
-          <Link href={`/app/user/${username}`} passHref>
-            <label className="cursor-pointer text-base text-primary">
+          <Link
+            href={`/app/${isUser ? 'user' : 'organization'}/${username}`}
+            passHref
+          >
+            <label className="cursor-pointer text-primary">
               View my profile
             </label>
           </Link>

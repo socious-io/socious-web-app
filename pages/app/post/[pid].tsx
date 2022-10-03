@@ -1,16 +1,16 @@
 import {useRouter} from 'next/router';
 import CommentField from '@components/common/Post/CommentField/CommentField';
 import CommentsBox from '@components/common/Post/CommentsBox/CommentsBox';
-import {Button, Modal, Notification} from '@components/common';
-import {useCallback, useState} from 'react';
+import {Modal} from '@components/common';
+import {useCallback, useRef, useState} from 'react';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {createComment} from '@api/posts/comments/actions';
 import {useSWRConfig} from 'swr';
-import ShareModalStep1 from '@components/common/Post/ShareModal/ShareModalStep1/ShareModalStep1';
 import ShareModalStep2 from '@components/common/Post/ShareModal/ShareModalStep2/ShareModalStep2';
 import {SharedCard, PostCard} from 'layout/screen/PostCard';
-import SideBar from '@components/common/Home/SideBar';
+// import ShareModalStep1 from '@components/common/Post/ShareModal/ShareModalStep1/ShareModalStep1';
+// import SideBar from '@components/common/Home/SideBar';
 import {useToggle, useUser} from '@hooks';
 import {XMarkIcon} from '@heroicons/react/24/outline';
 import {SharePostBodyType} from '@models/post';
@@ -19,11 +19,26 @@ import DeleteModal from '@components/common/Post/DeleteModal/DeleteModal';
 import EditModal from '@components/common/Post/EditModal/EditModal';
 import Toast from '@components/common/Toast/Toast';
 import {GeneralLayout} from 'layout';
-// invalid input syntax for type uuid
+import {GridLoader} from 'react-spinners';
+
+// Types
+export interface InsertNewComment {
+  setNewComment: (comment: any) => void;
+}
+export interface FocusComment {
+  focusField: () => void;
+}
+
 const Post = () => {
   const router = useRouter();
   const {pid} = router.query;
-  const {data: post, error} = useSWR<any>(`/posts/${pid}`, get, {
+  const addComment = useRef<InsertNewComment>(null);
+  const commentFieldRef = useRef<FocusComment>(null);
+  const {
+    data: post,
+    error,
+    mutate: mutatePost,
+  } = useSWR<any>(`/posts/${pid}`, get, {
     onErrorRetry: (error) => {
       if (
         error?.response?.status === 500 &&
@@ -37,8 +52,6 @@ const Post = () => {
 
   const {user, currentIdentity} = useUser({redirect: false});
 
-  const [page, setPage] = useState<number>(1);
-  const {mutate} = useSWRConfig();
   const {state: notify, handlers: notifyHandler} = useToggle();
   const {state: showShare, handlers: shareHandler} = useToggle();
   const {state: showEdit, handlers: editHandler} = useToggle();
@@ -48,18 +61,22 @@ const Post = () => {
 
   const onCommentSend = useCallback(
     (content: string) => {
-      if (!post?.id || !content) return;
+      if (!post.id || !content) return;
       createComment({content}, post.id)
-        .then((response) => {
-          for (let i = 1; i <= page; i++) {
-            mutate(`/posts/${post.id}/comments?page=${i}`);
-          }
+        .then((response: any) => {
+          // Create new Comment body and mutate Comments.
+          addComment?.current?.setNewComment({
+            ...response,
+            liked: false,
+            identity_meta: currentIdentity?.meta,
+            identity_type: currentIdentity?.type,
+          });
         })
         .catch((error) => {
           console.error(error);
         });
     },
-    [post, mutate, page],
+    [post, currentIdentity],
   );
 
   const onCopied = useCallback(() => {
@@ -93,7 +110,6 @@ const Post = () => {
       console.log('TYPE: ', type);
       switch (type) {
         case 'EDIT':
-          console.log('[pid].tsx:- IT IS EDIT');
           editHandler.on();
           break;
         case 'SHARE':
@@ -115,15 +131,50 @@ const Post = () => {
     setShareStep(2);
   }, [shareHandler]);
 
-  if (!post) {
-    return <div>Loading!!!</div>;
-  }
+  // Focus CommentField
+  const focusCommentField = useCallback(
+    () => commentFieldRef.current?.focusField(),
+    [],
+  );
+  console.log('Post :--: ', post);
 
-  if (error?.response?.status === 404) return <h1>404</h1>;
+  // Toggle Like
+  const toggleLike = useCallback(
+    (liked: boolean) => {
+      mutatePost(
+        (oldPost: any) => ({
+          ...oldPost,
+          liked: liked,
+          likes: liked ? oldPost.likes + 1 : oldPost.likes - 1,
+        }),
+        {revalidate: false},
+      );
+    },
+    [mutatePost],
+  );
 
-  const comments = [];
-  for (let i = 1; i <= page; i++) {
-    comments.push(<CommentsBox pid={post.id} page={i} key={i} />);
+  // Show loading until post is fetched.
+  if (!post && !error)
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center">
+        <GridLoader color="#36d7b7" />
+      </div>
+    );
+
+  // 404 || 500 || Invalid Post, redirect to home
+  if (
+    error?.response?.status === 404 ||
+    error?.response?.status === 500 ||
+    // '"value" must be a valid GUID' || 'Not matched'
+    error?.response?.status === 400
+  ) {
+    router.push('/app');
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center">
+        <GridLoader color="#36d7b7" />
+        <h3 className="pt-4">Invalid Post. Returning back.</h3>
+      </div>
+    );
   }
 
   return (
@@ -144,16 +195,22 @@ const Post = () => {
             time={post.created_at}
             passion={post.causes_tags}
             name={post.identity_meta.name}
-            src={post.identity_meta.image}
+            src={post.identity_meta.image ?? post.identity_meta.avatar}
             shared={post.shared}
             liked={post.liked}
             likes={post.likes}
+            media={post.media}
             sharedPost={{
               ...post.shared_post,
               identity_meta: post.shared_from_identity.meta,
             }}
-            hideOption={currentIdentity?.id !== post.identity_id}
-            optionClicked={onOptionClicked}
+            optionClicked={
+              currentIdentity?.id === post.identity_id
+                ? onOptionClicked
+                : undefined
+            }
+            toggleLike={toggleLike}
+            focusCommentField={focusCommentField}
             showAction={user != null}
           />
         ) : (
@@ -163,26 +220,26 @@ const Post = () => {
             content={post.content}
             time={post.created_at}
             passion={post.causes_tags}
-            src={post.identity_meta.image}
+            src={post.identity_meta.image ?? post.identity_meta.avatar}
             liked={post.liked}
             likes={post.likes}
+            media={post.media}
             shared={post.shared}
-            hideOption={currentIdentity?.id !== post.identity_id}
-            optionClicked={onOptionClicked}
+            optionClicked={
+              user && currentIdentity?.id === post.identity_id
+                ? onOptionClicked
+                : undefined
+            }
+            toggleLike={toggleLike}
+            focusCommentField={focusCommentField}
             showAction={user != null}
           />
         )}
-        {user ? <CommentField onSend={onCommentSend} /> : null}
-        <div>{comments}</div>
-        <div className="flex justify-center">
-          <Button
-            variant="link"
-            className="font-semibold text-primary"
-            onClick={() => setPage(page + 1)}
-          >
-            See more
-          </Button>
-        </div>
+        {user ? (
+          <CommentField onSend={onCommentSend} ref={commentFieldRef} />
+        ) : null}
+        {/* <div>{comments}</div> */}
+        <CommentsBox pid={post?.id} ref={addComment} />
 
         {/* SHARE MODAL */}
         <Modal

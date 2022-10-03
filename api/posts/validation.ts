@@ -1,15 +1,16 @@
 import Joi from 'joi';
 
 export const schemaCreatePost = Joi.object({
-  content: Joi.string().required().messages({
+  content: Joi.string().trim().required().messages({
     'string.empty': `Content is required for Post.`,
     'string.base': `Content is required.`,
   }),
   media: Joi.array().items(Joi.string()),
   hashtags: Joi.array().items(Joi.string()),
   causes_tags: Joi.string().required().messages({
-    'string.empty': `Social Causes is required.`,
-    'string.base': `Social Causes is required.`,
+    'string.empty': `Social Cause is required.`,
+    'string.required': `Social Cause is required.`,
+    'string.base': `Social Cause is required.`,
   }),
   link: Joi.string().allow('', null),
   identity_tags: Joi.array().items(Joi.string()),

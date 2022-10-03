@@ -1,53 +1,51 @@
 import {Button} from '@components/common';
-import ImageUploader from '@components/common/ImageUploader/ImageUploader';
-import profile_img_icon from 'asset/images/user.png';
+import {BellIcon} from '@heroicons/react/24/outline';
 import {StepProps} from '@models/stepProps';
-import {useState} from 'react';
-
+import Link from 'next/link';
 const OnboardingStep9 = ({onSubmit}: StepProps) => {
-  const [file, setFile] = useState<any>();
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
-    onSubmit(file);
+    onSubmit('true');
   };
 
   return (
     <form
       onSubmit={handleOnSubmit}
-      className="flex grow flex-col justify-between px-10 sm:grow-0"
+      className="flex grow flex-col justify-between px-10"
     >
-      <div className="flex h-[28rem] flex-col">
+      <div className="flex grow flex-col">
         {' '}
-        <h1 className="font-helmet my-6 text-center ">Add a profile photo</h1>
-        <div className="flex h-48 flex-col items-center">
-          <ImageUploader
-            onChange={(file: any) => setFile(file)}
-            src={profile_img_icon}
-          >
-            {(setOpen: any) => (
-              <Button
-                className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
-                size="lg"
-                variant="outline"
-                onClick={setOpen}
-              >
-                Add from album
-              </Button>
-            )}
-          </ImageUploader>
+        <BellIcon className="mx-auto h-16 w-16 rounded-full border-2 border-white bg-background fill-white " />
+        <div className="flex flex-col justify-between      ">
+          {' '}
+          <h1 className="mx-auto text-white">Allow notifications</h1>
+          <p className="mx-auto py-5 text-base text-grayDisableButton">
+            Stay up to date with messages, recommendations and posts
+          </p>
         </div>
       </div>
 
-      <div className="-mx-16 divide-x  border-t-2 border-b-grayLineBased sm:h-48 ">
+      <div className="flex flex-col items-center border-b-grayLineBased pb-12">
         <Button
-          className="m-auto mt-4 mb-12 flex w-full max-w-xs items-center justify-center align-middle "
+          className="mt-4 flex   w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
-          variant="fill"
+          variant="outline"
           value="Submit"
         >
-          Complete your profile
+          Allow notifications
         </Button>
+        <Link href={'/app'} passHref>
+          <a className="block">
+            <Button
+              className="mt-4 flex  w-full max-w-xs items-center justify-center py-0 align-middle text-white"
+              size="lg"
+              variant="link"
+            >
+              I’ll do it later
+            </Button>
+          </a>
+        </Link>
       </div>
     </form>
   );
