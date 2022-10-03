@@ -1,8 +1,30 @@
 import Button from '@components/common/Button/Button';
 import Posts from './Posts';
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
+
+import useSWRInfinite from 'swr/infinite';
+import {get} from 'utils/request';
 
 const PostContainer = () => {
+  //Get key to fetch comments.
+  const getKey = useCallback((initialSize: number, previousData: any) => {
+    if (previousData && previousData?.items?.length < 10) return null;
+    console.log('I was called');
+    return `/posts?page=${initialSize + 1}`;
+  }, []);
+
+  const {
+    data: infinitePosts,
+    error: infiniteError,
+    mutate: mutatePosts,
+    size,
+    setSize,
+  } = useSWRInfinite<any>(getKey, get, {
+    shouldRetryOnError: false,
+    revalidateFirstPage: false,
+  });
+
+  console.log('POSTS :---: ', infinitePosts);
   const [page, setPage] = useState<number>(1);
   const posts = [];
   const [fullPost, setFullPost] = useState<boolean>(false);
