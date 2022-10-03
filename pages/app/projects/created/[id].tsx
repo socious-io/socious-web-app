@@ -13,9 +13,6 @@ type ProjectApplicationsProps = {
 };
 
 const ProjectApplications: NextPage<ProjectApplicationsProps> = ({skills}) => {
-  console.log('#######');
-  console.log(skills);
-
   return (
     <ProjectContextProvider>
       <GeneralLayout hasNavbar>

@@ -15,7 +15,7 @@ export interface Project {
   payment_range_lower: string;
   payment_range_higher: string;
   experience_level: number;
-  passions?: Array<number> | Array<Passion>;
+  causes_tags?: Array<string>;
   skills?: Array<number> | Array<TopSkills>;
   payment_currency?: string;
   questions?: Array<Question>;
@@ -34,9 +34,9 @@ export interface CreateProjectType {
   payment_range_lower?: string;
   payment_range_higher?: string;
   experience_level?: number;
-  causes_tags?: string[];
+  causes_tags?: Array<string>;
   country?: string;
   project_length?: string;
   project_type?: string;
-  skills?: string[];
+  skills?: Array<string>;
 }

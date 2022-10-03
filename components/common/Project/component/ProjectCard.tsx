@@ -1,15 +1,36 @@
 import {Avatar, Chip} from '@components/common';
-
 import {Project} from 'models/project';
 import Link from 'next/link';
 import Image from 'next/image';
 import {ChevronRightIcon} from '@heroicons/react/24/outline';
-
+import {getText} from '@socious/data';
 const imgUserSrc = require('../../../../asset/icons/userWithBorder.svg');
 const dislikeSrc = require('../../../../asset/icons/thumbs-dislike.svg');
 const bookmarkSrc = require('../../../../asset/icons/bookmark.svg');
-
-function ProjectCard({title}: Project) {
+import {FC} from 'react';
+export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
+  return (
+    <div className="flex flex-row space-x-4">
+      {causes_tags?.map((ct) => {
+        return (
+          <Chip
+            key={`${ct}`}
+            content={`${getText('en', `PASSION.${ct}`)}`}
+            contentClassName="text-secondary text-sm"
+          />
+        );
+      })}
+    </div>
+  );
+};
+function ProjectCard({
+  title,
+  description,
+  project_type,
+  payment_type,
+  country_id,
+  causes_tags,
+}: Project) {
   return (
     <div className="cursor-pointer rounded-2xl border border-grayLineBased bg-white p-4">
       <Link href={`/app/projects/73c1ceea-0bc3-416b-a528-ccc6ff2c4031`}>
@@ -17,9 +38,11 @@ function ProjectCard({title}: Project) {
           <div className="flex flex-row items-center justify-between ">
             <div className="flex flex-row space-x-2">
               <Avatar size="l" />
-              <div className="flex flex-col">
+              <div className="flex flex-col justify-center">
                 <p className="text-black">Organization</p>
-                <p className="text-graySubtitle">Location</p>
+                {country_id && (
+                  <p className="text-graySubtitle">{country_id}</p>
+                )}
               </div>
             </div>
             <div className="flex flex-col">
@@ -57,81 +80,35 @@ function ProjectCard({title}: Project) {
             <p className="font-semibold">{title}</p>
           </div>
           <div className="mt-4 flex flex-row space-x-2 divide-x divide-solid divide-graySubtitle">
-            <p className="text-sm text-graySubtitle ">Part time</p>
-            <p className="pl-2 text-sm text-graySubtitle ">Volunteer</p>
-            <p className="pl-2 text-sm text-graySubtitle ">Expert</p>
+            {project_type && (
+              <p className="text-sm text-graySubtitle ">
+                {getText('en', `PROJECT.${project_type}`)}
+              </p>
+            )}
+            {payment_type && (
+              <p className="pl-2 text-sm text-graySubtitle ">
+                {getText('en', `PAYMENT.${payment_type}`)}
+              </p>
+            )}
           </div>
-          <div>
+          <div className="flex flex-row">
             <p className="my-4 text-sm">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Equat
-              faucibus sed facilisi sit id blandiacilisi sit id blandit
+              {description?.length > 200
+                ? `${description?.slice(0, 200)}...`
+                : description}
+              <span className="text-secondary">
+                {description?.length > 200 && ' See more'}
+              </span>
             </p>
           </div>
 
-          <div className="flex flex-row ">
+          <div className="flex flex-row justify-between ">
             <div className="hide-scroll-bar whitespace-no-wrap w-7/10 flex  flex-row space-x-2  overflow-auto">
-              <Chip
-                content="Environment"
-                contentClassName="text-secondary text-sm"
-              />
-              <Chip
-                content="Peacebuilding"
-                contentClassName="text-secondary text-sm"
-              />
-              <Chip
-                content="MentalHealth"
-                contentClassName="text-secondary text-xs"
-              />
+              <GroupsOfChips causes_tags={causes_tags?.slice(0, 3)} />
             </div>
-            <span className="ml-2 flex flex-row items-center ">
+            <span className="ml-2 flex flex-row items-center">
               <ChevronRightIcon className="w-6" />
             </span>
-          </div>
-          <div className="mt-4 flex justify-between">
-            <dt className="flex font-medium text-gray-900">Post date</dt>
-            <div className="flex flex-row items-center ">
-              <div className="relative  h-6 w-6 ">
-                <Link href="/">
-                  <a>
-                    <Image
-                      src={imgUserSrc}
-                      className="fill-warning"
-                      alt="socious logo"
-                      layout="fill" // required
-                    />
-                  </a>
-                </Link>
-              </div>
-              <div className="relative -ml-2  h-6 w-6 ">
-                <Link href="/">
-                  <a>
-                    <Image
-                      src={imgUserSrc}
-                      className="fill-warning"
-                      alt="socious logo"
-                      layout="fill" // required
-                      width={24}
-                      height={24}
-                    />
-                  </a>
-                </Link>
-              </div>
-              <div className="relative -ml-2  h-6 w-6 ">
-                <Link href="/">
-                  <a>
-                    <Image
-                      src={imgUserSrc}
-                      className="fill-warning"
-                      alt="socious logo"
-                      layout="fill" // required
-                      width={32}
-                      height={32}
-                    />
-                  </a>
-                </Link>
-              </div>
-              <dd className="ml-2 text-sm text-secondary">connections</dd>
-            </div>
           </div>
         </div>
       </Link>
