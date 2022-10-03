@@ -7,6 +7,7 @@ import Avatar from '@components/common/Avatar/Avatar';
 import Button from '@components/common/Button/Button';
 import Image from 'next/image';
 import useUser from 'hooks/useUser/useUser';
+import {getText} from '@socious/data';
 
 interface PostCreateStep2Props extends StepProps {
   file: any | null;
@@ -53,8 +54,7 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
           <Chip
             containerClassName="bg-secondarySLight inline-block mt-4 mb-6"
             contentClassName="text-secondary font-normal text-sm"
-            // content={"apple"}
-            content={social_causes}
+            content={getText('en', `PASSION.${social_causes}`)}
           />
           <p className={file ? 'min-h-[4rem]' : 'min-h-[8rem]'}>
             {content ||
@@ -84,7 +84,7 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
         value="Submit"
         onClick={(e) => onPreviewDone(e)}
       >
-        Create Post
+        Post
       </Button>
     </div>
   );
