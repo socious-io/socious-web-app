@@ -29,11 +29,19 @@ export const CausesTagBar = ({src, controller}: CausesTagBarProps) => {
     <div className="-ml-6 -mr-6 flex items-center space-x-3 border-y-[0.5px] border-[#C3C8D9] p-4">
       <Avatar src={src} size="m" />
       <Combobox
+        selected={
+          controller?.field.value
+            ? {
+                id: controller?.field.value,
+                name: getText('en', `PASSION.${controller?.field?.value}`),
+              }
+            : undefined
+        }
         controller={controller}
         items={localItems}
         required
         className="w-full"
-        placeholder="social causes"
+        placeholder="Social cause"
       />
     </div>
   );
