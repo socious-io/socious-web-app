@@ -1,9 +1,10 @@
 import Button from '@components/common/Button/Button';
 import Posts from './Posts';
-import {useCallback, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 
 import useSWRInfinite from 'swr/infinite';
 import {get} from 'utils/request';
+import {GridLoader} from 'react-spinners';
 
 const PostContainer = () => {
   //Get key to fetch comments.
@@ -24,25 +25,28 @@ const PostContainer = () => {
     revalidateFirstPage: false,
   });
 
-  console.log('POSTS :---: ', infinitePosts);
-  const [page, setPage] = useState<number>(1);
-  const posts = [];
-  const [fullPost, setFullPost] = useState<boolean>(false);
+  const noMorePosts = useMemo(
+    () => size * 10 >= infinitePosts?.[0]?.['total_count'],
+    [size, infinitePosts],
+  );
 
-  for (let i = 1; i <= page; i++) {
-    posts.push(<Posts page={i} key={i} onFull={() => setFullPost(true)} />);
-  }
+  if (!infinitePosts && !infiniteError)
+    return (
+      <div className="flex w-full flex-col items-center justify-center">
+        <GridLoader color="#36d7b7" />
+      </div>
+    );
 
   return (
     <div className="sm:space-y-2">
-      <div className="space-y-10">{posts}</div>
-      {!fullPost && (
+      <Posts infinitePosts={infinitePosts ?? []} />
+      {!noMorePosts && (
         <div className="flex justify-center">
           <Button
             variant="link"
             className="font-semibold text-primary"
-            onClick={() => setPage(page + 1)}
-            disabled={fullPost}
+            onClick={() => setSize((size) => size + 1)}
+            disabled={noMorePosts}
           >
             See more
           </Button>
