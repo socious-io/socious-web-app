@@ -144,7 +144,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     display={
                       <Avatar
                         size="m"
-                        type={currentIdentity?.type === 'users' ? 0 : 1}
+                        type={currentIdentity?.type}
                         src={
                           currentIdentity?.type === 'users'
                             ? currentIdentity?.meta?.avatar
@@ -166,7 +166,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                               <div className="w-1/4">
                                 <Avatar
                                   size="m"
-                                  type={identity.type === 'users' ? 0 : 1}
+                                  type={identity.type}
                                   src={
                                     identity.type === 'users'
                                       ? identity?.meta?.avatar

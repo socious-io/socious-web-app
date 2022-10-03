@@ -39,7 +39,6 @@ const Posts = ({infinitePosts, toggleLike}: PostsProps) => {
                   ? post.identity_meta.username
                   : post.identity_meta.shortname
               }
-              // placeHolder for now.
               toggleLike={toggleLike}
             />
           ) : (
@@ -65,7 +64,6 @@ const Posts = ({infinitePosts, toggleLike}: PostsProps) => {
                   : post.identity_meta.shortname
               }
               media={post.media}
-              // placeHolder For now.
               toggleLike={toggleLike}
             />
           ),

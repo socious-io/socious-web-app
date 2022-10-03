@@ -23,7 +23,7 @@ const EditModal = ({
   onClose = () => null,
   pid,
 }: EditModalProps) => {
-  const {user} = useUser();
+  const {user, currentIdentity} = useUser();
   const {
     data: post,
     error: postError,
@@ -111,8 +111,13 @@ const EditModal = ({
         <Modal.Description>
           <div className="mt-2">
             <CausesTagBar
-              src={user?.avatar?.url}
+              src={
+                currentIdentity?.type === 'users'
+                  ? currentIdentity?.meta?.avatar
+                  : currentIdentity?.meta?.image
+              }
               controller={causesTagsController}
+              type={currentIdentity?.type}
             />
             <TextArea
               rows={post?.shared_id ? 6 : 10}
@@ -132,6 +137,7 @@ const EditModal = ({
               src={post.shared_from_identity.meta.avatar}
               liked={post.shared_post.liked}
               likes={post.shared_post.likes}
+              type={post.identity_type}
               showAction={false}
               shared={post.shared_post.shared}
             />

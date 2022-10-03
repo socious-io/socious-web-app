@@ -112,9 +112,7 @@ const Messages = ({
           <div>
             <Avatar
               size="xxl"
-              type={
-                activeChat?.participants?.[0]?.identity_type === 'users' ? 0 : 1
-              }
+              type={activeChat?.participants?.[0]?.identity_type}
               src={
                 activeChat?.participants?.[0]?.identity_type === 'users'
                   ? activeChat?.participants?.[0]?.identity_meta?.avatar

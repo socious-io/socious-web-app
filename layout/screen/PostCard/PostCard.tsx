@@ -6,6 +6,7 @@ import {useToggle} from '@hooks';
 import PostOption from './components/PostOption';
 
 //Types
+import {IdentityType} from '@models/identity';
 export interface PostCardProps {
   id: string;
   content?: string;
@@ -23,7 +24,7 @@ export interface PostCardProps {
   focusCommentField?: () => void;
   optionClicked?: (data: string) => void;
   username?: string;
-  type?: string;
+  type?: IdentityType;
 }
 
 export function PostCard({

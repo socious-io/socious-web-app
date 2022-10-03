@@ -6,14 +6,15 @@ import PostOption from './PostOption';
 import {isoToHumanTime} from 'services/toHumanTime';
 import Link from 'next/link';
 
-// Type
+// Types
+import {IdentityType} from '@models/identity';
 export interface PostHeadProps {
   id?: string;
   name?: string;
   time?: string;
   src?: string;
   onOptionClicked?: any;
-  type?: string;
+  type?: IdentityType;
   username?: string;
 }
 
@@ -36,11 +37,7 @@ const PostHead = ({
           passHref
         >
           <div className="justify-betwee flex items-center space-x-2">
-            <Avatar
-              size="s"
-              src={src}
-              type={type && type === 'users' ? 0 : 1}
-            />
+            <Avatar size="s" src={src} type={type} />
             <p className="text-sm">{name || 'Clear Me'}</p>
             <div className="h-1.5 w-1.5 rounded-full bg-grayInputField" />
           </div>

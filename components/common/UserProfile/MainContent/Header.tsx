@@ -30,7 +30,7 @@ interface Props {
     identity_id: string;
     url: string;
   };
-  status: 'user' | 'organization';
+  status: 'users' | 'organizations';
   own_user?: boolean;
   following: boolean;
   id: string;
@@ -100,7 +100,7 @@ const Header: React.FC<Props> = ({
           src={avatar?.url}
           size="xxl"
           className="absolute top-24 left-4"
-          type={status === 'organization' ? 1 : 0}
+          type={status}
         />
       </div>
       <div className="mt-6 flex h-12 flex-row justify-end gap-4 pr-4">
@@ -115,7 +115,7 @@ const Header: React.FC<Props> = ({
           </Button>
         ) : loggedIn && !own_user && !following ? (
           <Button onClick={followHandler} disabled={disabled}>
-            {status === 'user' ? 'Connect' : 'Follow'}
+            {status === 'users' ? 'Connect' : 'Follow'}
           </Button>
         ) : null}
 
@@ -132,7 +132,7 @@ const Header: React.FC<Props> = ({
               size="xl"
               rounded={false}
               className=" mx-auto "
-              type={status === 'organization' ? 1 : 0}
+              type={status}
             />
             <div className="pb-4 pt-8">
               <p className="font-worksans text-center text-lg font-semibold text-black">

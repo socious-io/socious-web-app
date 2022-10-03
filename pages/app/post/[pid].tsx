@@ -236,7 +236,16 @@ const Post = () => {
           />
         )}
         {user ? (
-          <CommentField onSend={onCommentSend} ref={commentFieldRef} />
+          <CommentField
+            onSend={onCommentSend}
+            ref={commentFieldRef}
+            src={
+              currentIdentity?.type === 'users'
+                ? currentIdentity?.meta?.avatar
+                : currentIdentity?.meta?.image
+            }
+            type={currentIdentity?.type}
+          />
         ) : null}
         {/* <div>{comments}</div> */}
         <CommentsBox pid={post?.id} ref={addComment} />

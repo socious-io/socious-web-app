@@ -23,7 +23,7 @@ interface Props {
   email?: string;
   phone?: string;
   website?: string;
-  status: 'user' | 'organization';
+  status: 'users' | 'organizations';
 }
 
 const Contact: React.FC<Props> = ({

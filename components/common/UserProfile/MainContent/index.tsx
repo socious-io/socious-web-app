@@ -25,7 +25,7 @@ import {useUser} from '@hooks';
 // interfaces
 interface Props {
   data: any;
-  status: 'user' | 'organization';
+  status: 'users' | 'organizations';
   profile_mutate: KeyedMutator<any>;
 }
 
@@ -53,7 +53,7 @@ const MainContent: React.FC<Props> = ({data, status, profile_mutate}) => {
   return (
     <div className="border-1 mb-8 rounded-xl border border-grayLineBased md:w-4/6">
       <Header
-        avatar={status === 'user' ? data?.avatar : data?.image}
+        avatar={status === 'users' ? data?.avatar : data?.image}
         cover_image={data?.cover_image}
         status={status}
         following={identities?.following}
@@ -62,9 +62,9 @@ const MainContent: React.FC<Props> = ({data, status, profile_mutate}) => {
         profile_mutate={profile_mutate}
         loggedIn={user ? true : false}
         own_user={
-          status === 'user' && user?.username === data?.username
+          status === 'users' && user?.username === data?.username
             ? true
-            : status === 'organization' && user?.name === data?.name
+            : status === 'organizations' && user?.name === data?.name
             ? true
             : false
         }
@@ -78,14 +78,14 @@ const MainContent: React.FC<Props> = ({data, status, profile_mutate}) => {
       />
 
       {/* if user/organization is current user/organization show 'You' */}
-      {status === 'user' && user?.username === data?.username ? (
+      {status === 'users' && user?.username === data?.username ? (
         <p className="mt-3 px-4 text-sm text-secondary">You </p>
-      ) : status === 'organization' && user?.name === data?.name ? (
+      ) : status === 'organizations' && user?.name === data?.name ? (
         <p className="mt-3 px-4 text-sm text-secondary">You </p>
       ) : null}
 
       <SocialCauses social_causes={data?.social_causes} />
-      {status === 'user' ? (
+      {status === 'users' ? (
         <Contact
           address={data?.address}
           country={data?.country}
@@ -106,9 +106,9 @@ const MainContent: React.FC<Props> = ({data, status, profile_mutate}) => {
       )}
       <Description
         paragraph={data?.mission}
-        title={status === 'user' ? 'About' : 'Mission'}
+        title={status === 'users' ? 'About' : 'Mission'}
       />
-      {status === 'user' && <Skills skills={data?.skills} />}
+      {status === 'users' && <Skills skills={data?.skills} />}
       <hr className="mb-20 border-grayLineBased" />
     </div>
   );
