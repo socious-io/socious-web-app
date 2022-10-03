@@ -132,6 +132,7 @@ export const ShareModalStep2 = ({onShare}: shareModalStep2Props) => {
         </div>
       </Modal.Description>
       <PostActionBar
+        fileExist={!!file}
         register={register('link')}
         errorMessage={formState?.errors?.['link']?.message}
         setFile={setFile}
