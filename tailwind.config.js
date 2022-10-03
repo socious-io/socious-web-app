@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
@@ -7,6 +8,12 @@ module.exports = {
   theme: {
     Container: {
       center: true,
+    },
+    height: {
+      'h-812':'612px'
+    },
+    width: {
+      'w-375':'375px'
     },
     extend: {
       backgroundImage: {

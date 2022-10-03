@@ -1,6 +1,8 @@
+/* eslint-disable prettier/prettier */
 import StatusCard from './StatusCard';
 import NetworkCard from './NetworkCard';
 import ProjectsCard from './ProjectsCard';
+import SettingsCard from './SettingsCard';
 import ProfileCard from 'layout/screen/ProfileCard/ProfileCard';
 import OrganizationCard from './OrganizationCard';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
@@ -63,6 +65,10 @@ const SideBar = ({selectBar = ''}: Props) => {
                   <OrganizationCard username={user?.shortname} />
                 )}
                 <ProjectsCard
+                  isOrganization={currentIdentity?.type === 'organizations'}
+                  username={user?.username}
+                />{' '}
+                <SettingsCard
                   isOrganization={currentIdentity?.type === 'organizations'}
                   username={user?.username}
                 />{' '}
