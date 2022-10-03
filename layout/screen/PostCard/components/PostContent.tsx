@@ -43,7 +43,7 @@ const PostContent = ({
         </div>
       )}
       <div>
-        <p className="text-small">{content}</p>
+        <p className="text-small break-words">{content}</p>
       </div>
     </div>
   );
