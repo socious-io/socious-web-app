@@ -23,7 +23,7 @@ export function ProfileCard({
   return (
     <div className="space-y-4 rounded-2xl border border-grayLineBased bg-background p-4">
       <div className="space-y-4">
-        <Avatar src={avatar ?? ''} size="xxl" type={1} />
+        <Avatar src={avatar ?? ''} size="xxl" type={isUser ? 0 : 1} />
         <div>
           <p className="text-2xl font-semibold">
             {name || 'FirstName LastName'}
