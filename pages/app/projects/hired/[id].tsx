@@ -14,6 +14,7 @@ import useSWR from 'swr';
 import {get} from 'utils/request';
 import SideBar from '@components/common/Home/SideBar';
 import HiredProjectsBoxes from '@components/common/Project/HiredProjects';
+import {GeneralLayout} from 'layout';
 
 const ProjectHired: NextPage = () => {
   // get id from route
@@ -35,10 +36,12 @@ const ProjectHired: NextPage = () => {
     return <p>invalid user</p>;
 
   return (
-    <div className="mx-6 mt-10 flex md:space-x-6 ">
-      <SideBar />
-      <HiredProjectsBoxes />
-    </div>
+    <GeneralLayout hasNavbar>
+      <div className="mx-6 flex w-full md:space-x-6 ">
+        <SideBar />
+        <HiredProjectsBoxes />
+      </div>
+    </GeneralLayout>
   );
 };
 
