@@ -58,7 +58,7 @@
     "@headlessui/react": "^1.7.2",
     "@heroicons/react": "^2.0.11",
     "@types/chai": "^4.3.3",
-    "@types/jest": "^29.0.3",
+    "@types/jest": "^29.1.1",
     "@types/lodash": "^4.14.185",
     "@types/luxon": "^3.0.1",
     "@types/mocha": "^9.1.1",
