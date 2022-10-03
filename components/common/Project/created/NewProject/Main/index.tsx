@@ -1,16 +1,20 @@
 import {CreateProjectLayout} from '../Layout';
 import React, {FC, useEffect} from 'react';
 import ProjectAbout from '../ProjectAbout';
-import ProjectQuestions from '../ProjectQuestions';
 import ProjectReview from '../ProjectReview';
-import QuestionDetail from '../QuestionDetail';
 import Congrats from '../Congrats';
+import ProjectSkill from '../ProjectSkill';
 import ProjectInfo from '../ProjectInfo';
 import {useProjectContext, initContext} from '../context';
 import {createProject} from '@api/projects/actions';
 import {CreateProjectType} from '@models/project';
 import {toast} from 'react-toastify';
-const CreateProjectMain: FC = () => {
+
+type CreateProjectMainType = {
+  skills: any[];
+};
+
+const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
 
   const isStep0 = ProjectContext.formStep === 0;
@@ -18,7 +22,6 @@ const CreateProjectMain: FC = () => {
   const isStep2 = ProjectContext.formStep === 2;
   const isStep3 = ProjectContext.formStep === 3;
   const isStep4 = ProjectContext.formStep === 4;
-  const isStep5 = ProjectContext.formStep === 5;
 
   const onSubmit = async () => {
     if (isStep3) {
@@ -48,6 +51,7 @@ const CreateProjectMain: FC = () => {
         postBody.causes_tags = ProjectContext.causes_tags;
       if (ProjectContext.project_type)
         postBody.project_type = ProjectContext.project_type;
+      if (ProjectContext.skills) postBody.skills = ProjectContext.skills;
 
       try {
         await createProject(postBody);
@@ -70,15 +74,13 @@ const CreateProjectMain: FC = () => {
     if (isStep0) {
       return <ProjectAbout onSubmit={onSubmit} />;
     } else if (isStep1) {
-      return <ProjectInfo onSubmit={onSubmit} />;
+      return <ProjectSkill onSubmit={onSubmit} rawSkills={skills} />;
     } else if (isStep2) {
-      return <ProjectQuestions onSubmit={onSubmit} />;
+      return <ProjectInfo onSubmit={onSubmit} />;
     } else if (isStep3) {
       return <ProjectReview onSubmit={onSubmit} />;
     } else if (isStep4) {
       return <Congrats />;
-    } else if (isStep5) {
-      return <QuestionDetail />;
     }
   };
 

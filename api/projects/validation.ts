@@ -8,6 +8,9 @@ export const schemaCreateProjectStep1 = Joi.object({
 });
 
 export const schemaCreateProjectStep2 = Joi.object({
+  skills: Joi.array().items(Joi.string()).length(10),
+});
+export const schemaCreateProjectStep3 = Joi.object({
   title: Joi.string().required().messages({
     'string.empty': `Title is required for Project.`,
     'string.base': `Title is required.`,
@@ -34,7 +37,6 @@ export const schemaCreateProjectStep2 = Joi.object({
   status: Joi.string().allow(...Object.values(enums.ProjectStatusType)),
   project_type: Joi.string().allow(...Object.values(enums.ProjectType)),
   project_length: Joi.string().allow(...Object.values(enums.ProjectLengthType)),
-  // skills: Joi.array().items(Joi.string()),
   country: Joi.string().min(2).max(3),
 });
 

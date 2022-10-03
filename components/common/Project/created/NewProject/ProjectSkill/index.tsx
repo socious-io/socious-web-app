@@ -4,29 +4,45 @@ import SearchBar from '@components/common/SearchBar/SearchBar';
 import {useForm} from 'react-hook-form';
 import useFilter from 'hooks/auth/useFilter';
 import Title from '@components/common/CreateOrganization/components/Title';
-import useGetData from '../ProjectInfo/useGetData';
 import {useProjectContext} from '../context';
 import {toast} from 'react-toastify';
 import {joiResolver} from '@hookform/resolvers/joi';
-import {schemaCreateProjectStep1} from '@api/projects/validation';
+import {schemaCreateProjectStep2} from '@api/projects/validation';
 import {Button} from '@components/common';
 import {FromLayout} from '../Layout';
 import {TOnSubmit} from '../sharedType';
+import type {NextPage} from 'next';
+import {getText} from '@socious/data';
 
-const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
+interface ProjectSkillType extends TOnSubmit {
+  rawSkills: any[];
+}
+
+const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
   const {
     handleSubmit,
     formState: {isValid},
     setValue,
   } = useForm({
-    resolver: joiResolver(schemaCreateProjectStep1),
+    resolver: joiResolver(schemaCreateProjectStep2),
   });
 
-  const {items} = useGetData();
+  const skills = useMemo(() => {
+    const sorted: {id: string; name: string}[] = [];
+    rawSkills?.forEach((skill) => {
+      const name = getText('en', `SKILL.${skill?.name}`);
+      if (name) sorted.push({id: skill.name, name});
+    });
+    sorted.sort((a, b) => (a.name > b.name ? 1 : -1));
+    return sorted;
+  }, [
+    // todo: language
+    rawSkills,
+  ]);
   const {ProjectContext, setProjectContext} = useProjectContext();
 
-  const maxCauses = 5;
-  const [filteredItems, filterWith] = useFilter(items?.passionDataItems);
+  const maxSkills = 10;
+  const [filteredItems, filterWith] = useFilter(skills);
 
   return (
     <form
@@ -34,8 +50,9 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
       className="flex h-full w-full flex-col"
     >
       <FromLayout>
-        <Title description="Select up to 5 passions." border={false}>
-          What is your project about?
+        <Title description="What skills do you have?" border={false}>
+          Showcase up to 10 skills you can contribute to help social impact
+          initiatives and organizations
         </Title>
         <SearchBar
           type="text"
@@ -50,49 +67,44 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
               return (
                 <Chip
                   onSelected={() => {
-                    if (ProjectContext.causes_tags?.includes(item?.id)) {
+                    if (ProjectContext.skills.includes(item?.id)) {
                       setValue(
-                        'causes_tags',
-                        ProjectContext.causes_tags?.filter(
-                          (i) => i !== item.id,
-                        ),
+                        'skills',
+                        ProjectContext.skills?.filter((i) => i !== item.id),
                         {
                           shouldValidate: true,
                         },
                       );
                       setProjectContext({
                         ...ProjectContext,
-                        causes_tags: ProjectContext.causes_tags?.filter(
+                        skills: ProjectContext.skills?.filter(
                           (i) => i !== item?.id,
                         ),
                       });
                     } else {
-                      if (ProjectContext.causes_tags?.length < maxCauses) {
+                      if (ProjectContext.skills?.length < maxSkills) {
                         setValue(
-                          'causes_tags',
-                          [...ProjectContext.causes_tags, item.id],
+                          'skills',
+                          [...ProjectContext.skills, item.id],
                           {
                             shouldValidate: true,
                           },
                         );
                         setProjectContext({
                           ...ProjectContext,
-                          causes_tags: [
-                            ...ProjectContext.causes_tags,
-                            item?.id,
-                          ],
+                          skills: [...ProjectContext.skills, item?.id],
                         });
                       } else {
-                        toast.success('You selected 5 passions');
+                        toast.success('You selected 10 skills');
                       }
                     }
                   }}
-                  selected={ProjectContext.causes_tags?.includes(item?.id)}
+                  selected={ProjectContext.skills?.includes(item?.id)}
                   value={item.id}
                   key={item.id}
-                  content={item.name}
                   contentClassName="text-secondary cursor-pointer "
                   containerClassName="bg-background my-2 h-6"
+                  content={item.name}
                 />
               );
             })}
@@ -112,4 +124,4 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
   );
 };
 
-export default ProjectAbout;
+export default ProjectSkill;

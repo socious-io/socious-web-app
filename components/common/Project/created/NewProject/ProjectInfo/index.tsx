@@ -6,7 +6,7 @@ import TextArea from '@components/common/TextArea/TextArea';
 import {Combobox} from '@components/common';
 import useGetData from './useGetData';
 import {joiResolver} from '@hookform/resolvers/joi';
-import {schemaCreateProjectStep2} from '@api/projects/validation';
+import {schemaCreateProjectStep3} from '@api/projects/validation';
 import {useProjectContext} from '../context';
 import {FromLayout} from '../Layout';
 import {TOnSubmit} from '../sharedType';
@@ -17,7 +17,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
     setValue,
     handleSubmit,
     formState: {errors, isValid},
-  } = useForm({resolver: joiResolver(schemaCreateProjectStep2)});
+  } = useForm({resolver: joiResolver(schemaCreateProjectStep3)});
   const {setProjectContext, ProjectContext} = useProjectContext();
   const {items} = useGetData();
 
@@ -65,7 +65,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
             />
             <Combobox
               label="Remote Preference"
-              // required
+              required
               name="remote_preference"
               onSelected={(e) => handleChange('remote_preference', e?.id)}
               items={items.projectRemotePreferenceItems}

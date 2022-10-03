@@ -25,6 +25,7 @@ export type TProjectContext = {
   project_type: string;
   project_length: string;
   country: string;
+  skills: string[];
 };
 
 export const initContext: TProjectContext = {
@@ -44,6 +45,7 @@ export const initContext: TProjectContext = {
   project_type: '',
   project_length: '',
   country: '',
+  skills: [],
 };
 
 const ProjectContext = createContext<{

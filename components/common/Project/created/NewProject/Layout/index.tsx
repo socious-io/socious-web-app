@@ -17,53 +17,34 @@ export const CreateProjectLayout: FC<PropsWithChildren<TLayoutType>> = ({
       isOpen={ProjectContext.isModalOpen}
       className={`${styles.layoutBase} flex  max-w-xl flex-col p-0`}
     >
-      {ProjectContext.formStep < 5 ? (
-        <div className="flex justify-between border-b p-5 py-5">
-          <div
-            onClick={() =>
-              setProjectContext({
-                ...ProjectContext,
-                formStep: ProjectContext.formStep - 1,
-              })
-            }
-            className="cursor-pointer"
-          >
-            {!(
-              ProjectContext.formStep === 0 || ProjectContext.formStep === 4
-            ) && <ChevronLeftIcon width={30} height={30} />}
-          </div>
-
-          <div className="text-xl font-semibold">{title}</div>
-          <div
-            onClick={() =>
-              setProjectContext({
-                ...ProjectContext,
-                isModalOpen: !ProjectContext.isModalOpen,
-              })
-            }
-            className="cursor-pointer"
-          >
-            <XMarkIcon width={30} height={30} />
-          </div>
+      <div className="flex justify-between border-b p-5 py-5">
+        <div
+          onClick={() =>
+            setProjectContext({
+              ...ProjectContext,
+              formStep: ProjectContext.formStep - 1,
+            })
+          }
+          className="cursor-pointer"
+        >
+          {!(
+            ProjectContext.formStep === 0 || ProjectContext.formStep === 4
+          ) && <ChevronLeftIcon width={30} height={30} />}
         </div>
-      ) : (
-        <div className="flex justify-between border-b p-5 py-5">
-          <div
-            onClick={() =>
-              setProjectContext({
-                ...ProjectContext,
-                formStep: 2,
-              })
-            }
-            className="cursor-pointer"
-          >
-            <XMarkIcon width={30} height={30} />
-          </div>
 
-          <div className="text-xl font-semibold">{title}</div>
-          <div />
+        <div className="text-xl font-semibold">{title}</div>
+        <div
+          onClick={() =>
+            setProjectContext({
+              ...ProjectContext,
+              isModalOpen: !ProjectContext.isModalOpen,
+            })
+          }
+          className="cursor-pointer"
+        >
+          <XMarkIcon width={30} height={30} />
         </div>
-      )}
+      </div>
       <div className={`flex h-full w-full`}>
         <div className="flex h-full w-full">{children}</div>
       </div>

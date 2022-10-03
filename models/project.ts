@@ -38,4 +38,5 @@ export interface CreateProjectType {
   country?: string;
   project_length?: string;
   project_type?: string;
+  skills?: string[];
 }
