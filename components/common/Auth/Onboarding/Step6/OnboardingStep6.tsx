@@ -114,7 +114,6 @@ const OnboardingStep6 = ({onSubmit, defaultCountry}: OnboardingStep6Props) => {
           />
           <TextInput
             placeholder="Phone number"
-            // register={register('phoneNumber')}
             onChange={(e) => handleSetPhoneNumber(e.currentTarget.value || '')}
             errorMessage={formState?.errors?.['phoneNumber']?.message}
             containerClassName="basis-9/12 my-6"

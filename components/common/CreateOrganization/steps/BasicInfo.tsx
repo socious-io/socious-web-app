@@ -29,8 +29,6 @@ const BasicInfo = ({onSubmit}: StepProps) => {
   const mobile = watch('phone');
   const mobile_country_code = watch('mobile_country_code');
 
-  console.log('PHONE :---: ', mobile);
-
   ///////////////////////////////////////////////////////////////////////////
   //   **********   get list of cities & countries & methodes    **********//
   ///////////////////////////////////////////////////////////////////////////
@@ -234,7 +232,6 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             <InputFiled
               type="text"
               placeholder="Phone number"
-              // register={register('phone')}
               onChange={(e) =>
                 handleSetPhoneNumber(e.currentTarget.value || '')
               }
