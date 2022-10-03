@@ -14,7 +14,7 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
   const {handleSubmit, formState, setValue, watch} = formMethods;
 
   const selectedCountryCode = watch('country');
-  const selectedCity = watch('country');
+  const selectedCity = watch('city');
 
   const [countryName, setCountryName] = useState<any>('');
 

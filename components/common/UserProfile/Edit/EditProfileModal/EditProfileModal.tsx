@@ -1,0 +1,228 @@
+// Packages
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {twMerge} from 'tailwind-merge';
+import useSWRInfinite from 'swr/immutable';
+import {FormProvider, useForm} from 'react-hook-form';
+import {joiResolver} from '@hookform/resolvers/joi';
+
+// Components
+import {Modal} from '@components/common';
+import EditSubMenu from '../EditSubMenu/EditSubMenu';
+import EditMainMenu from '../EditMainMenu/EditMainMenu';
+import {get} from 'utils/request';
+
+// Icons
+import {ChevronLeftIcon, XMarkIcon} from '@heroicons/react/24/solid';
+
+// Validation
+import {schemaProfileUpdate} from '@api/user/validation';
+
+// custom hooks/functions
+import {useUser} from '@hooks';
+import {updateProfile} from '@api/user/actions';
+
+// Socious Data
+import Data, {getText} from '@socious/data';
+const passionData = Object.keys(Data.SocialCauses);
+
+// Types
+import {UpdateProfileBodyType} from '@models/profile';
+interface EditProfileModalProps {
+  openState: boolean;
+  user: any;
+  closeModal: () => void;
+}
+
+const EditProfileModal = ({
+  openState,
+  user,
+  closeModal,
+}: EditProfileModalProps) => {
+  const {mutateUser} = useUser();
+  const [editState, setEditState] = useState<'MAIN' | 'CAUSES' | 'SKILLS'>(
+    'MAIN',
+  );
+
+  //Passions
+  const passions = useMemo(
+    () => {
+      const sorted = passionData.map((id) => ({
+        id,
+        name: getText('en', `PASSION.${id}`),
+      }));
+      sorted.sort((a, b) => (a.name > b.name ? 1 : -1));
+      return sorted;
+    },
+    [
+      // todo: language
+    ],
+  );
+
+  //Skills
+  const {data: skillsData, error} = useSWRInfinite<any>(
+    '/skills?limit=1000',
+    get,
+  );
+  const skills = useMemo(() => {
+    const sorted: {id: string; name: string}[] = [];
+    skillsData?.items?.forEach((skill: any) => {
+      const name = getText('en', `SKILL.${skill.name}`);
+      if (name) sorted.push({id: skill.name, name});
+    });
+    sorted.sort((a, b) => (a.name > b.name ? 1 : -1));
+    return sorted;
+  }, [
+    // todo: language
+    skillsData,
+  ]);
+
+  console.log('USER :---: ', user);
+  //FORM-HOOKS
+  const formMethods = useForm({
+    resolver: joiResolver(schemaProfileUpdate),
+    defaultValues: {
+      firstName: user?.first_name ?? '',
+      lastName: user?.last_name ?? '',
+      userName: user?.username ?? '',
+      email: user?.email,
+      bio: user?.bio,
+      passions: user?.social_causes ?? [],
+      skills: user?.skills ?? [],
+      country: user?.country,
+      city: user?.city,
+      address: user?.address,
+      countryNumber: user?.mobile_country_code,
+      phoneNumber: user?.phone,
+    },
+  });
+
+  // When doesn't want to save.
+  const onForceClose = useCallback(() => {
+    setEditState('MAIN');
+    formMethods.reset();
+    closeModal();
+  }, [closeModal, formMethods]);
+
+  // Left arrow onClick
+  const goBack = useCallback(
+    () => (editState === 'MAIN' ? onForceClose() : setEditState('MAIN')),
+    [editState, onForceClose],
+  );
+
+  const onSubmit = useCallback(async () => {
+    //fetching values from Form
+    const first_name: string = formMethods.getValues('firstName');
+    const last_name: string = formMethods.getValues('lastName');
+    const username: string = formMethods.getValues('userName');
+    // const email: string = formMethods.getValues('email');
+    const bio: string = formMethods.getValues('bio').trim();
+    const social_causes: string[] = formMethods.getValues('passions');
+    const skills: string[] = formMethods.getValues('skills');
+    const country: string = formMethods.getValues('country');
+    const city: string = formMethods.getValues('city');
+    const address: string = formMethods.getValues('address');
+    const mobile_country_code: string = formMethods.getValues('countryNumber');
+    const phone: string = formMethods.getValues('phoneNumber');
+
+    // Creating Profile Body
+    const updateProfileBody: UpdateProfileBodyType = {
+      first_name,
+      last_name,
+      username,
+      // email,
+      bio,
+      social_causes,
+      skills,
+      country,
+      city,
+    };
+    if (address) updateProfileBody.address = address;
+    if (mobile_country_code)
+      updateProfileBody.mobile_country_code = mobile_country_code;
+    if (phone) updateProfileBody.phone = phone;
+
+    //Making a API call
+    try {
+      const response = await updateProfile(updateProfileBody);
+      mutateUser(response, {revalidate: false});
+      onForceClose();
+    } catch (error) {
+      console.log('ERROR :---: ', error);
+    }
+  }, [formMethods, mutateUser, onForceClose]);
+  return (
+    <Modal
+      isOpen={openState}
+      onClose={onForceClose}
+      className={twMerge(
+        '-m-4 flex w-screen max-w-2xl flex-col rounded-none p-0 pt-14 sm:m-0 sm:max-h-[45rem] sm:w-full sm:max-w-md sm:rounded-2xl sm:pt-0',
+        editState !== 'MAIN' && 'h-screen',
+      )}
+    >
+      <div className="relative sticky top-0">
+        <Modal.Title>
+          <h3 className="font-worksans border-b-2 pt-6 pb-2 text-center text-xl font-semibold">
+            {editState === 'MAIN' && 'Edit profile'}
+            {editState === 'SKILLS' && 'Skills'}
+            {editState === 'CAUSES' && 'Social causes'}
+          </h3>
+        </Modal.Title>
+        {/* Arrow Button */}
+        <span
+          className={twMerge(
+            'absolute top-6 left-3',
+            editState === 'MAIN' && 'sm:hidden',
+          )}
+          onClick={goBack}
+        >
+          <ChevronLeftIcon className="w-6" />
+        </span>
+        {/* Cross */}
+        {editState === 'MAIN' && (
+          <>
+            <span
+              className="absolute top-6 right-3 hidden cursor-pointer sm:block"
+              onClick={() => onForceClose()}
+            >
+              <XMarkIcon className="w-6" />
+            </span>
+
+            <span
+              className="absolute top-6 right-3 cursor-pointer text-base text-primary sm:hidden"
+              onClick={() => false}
+            >
+              Save
+            </span>
+          </>
+        )}
+      </div>
+      <FormProvider {...formMethods}>
+        {editState === 'MAIN' && (
+          <EditMainMenu
+            goTo={(data: 'SKILLS' | 'CAUSES') => setEditState(data)}
+            editProfile={onSubmit}
+          />
+        )}
+        {editState === 'CAUSES' && (
+          <EditSubMenu
+            items={passions}
+            formField="passions"
+            maxSize={5}
+            customText="Popular"
+          />
+        )}
+        {editState === 'SKILLS' && (
+          <EditSubMenu
+            items={skills}
+            formField="skills"
+            maxSize={10}
+            customText="Accounting & Consultancy"
+          />
+        )}
+      </FormProvider>
+      {/* {editState === 'SKILLS' && <EditSkillsModal />} */}
+    </Modal>
+  );
+};
+
+export default EditProfileModal;

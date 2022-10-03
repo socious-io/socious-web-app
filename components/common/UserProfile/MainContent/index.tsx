@@ -27,9 +27,15 @@ interface Props {
   data: any;
   status: 'user' | 'organization';
   profile_mutate: KeyedMutator<any>;
+  editProfile: () => void;
 }
 
-const MainContent: React.FC<Props> = ({data, status, profile_mutate}) => {
+const MainContent: React.FC<Props> = ({
+  data,
+  status,
+  profile_mutate,
+  editProfile,
+}) => {
   const {user} = useUser({redirect: false});
 
   //getting user identities
@@ -68,6 +74,7 @@ const MainContent: React.FC<Props> = ({data, status, profile_mutate}) => {
             ? true
             : false
         }
+        editProfile={editProfile}
       />
       <ProfileInfo
         first_name={data?.first_name}
