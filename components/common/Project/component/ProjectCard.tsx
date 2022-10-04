@@ -4,11 +4,9 @@ import Link from 'next/link';
 import {ChevronRightIcon} from '@heroicons/react/24/outline';
 import {getText} from '@socious/data';
 import {FC} from 'react';
+import useSWR from 'swr';
+import {get} from 'utils/request';
 
-interface ProjectCardInput extends Project {
-  name?: string;
-  image?: string;
-}
 export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
   return (
     <div className="flex flex-row space-x-4">
@@ -31,18 +29,19 @@ function ProjectCard({
   payment_type,
   country_id,
   causes_tags,
-  name,
-  image,
-}: ProjectCardInput) {
+  identity_id,
+}: Project) {
+  const {data: orgData} = useSWR<any>(`/orgs/${identity_id}`, get);
+
   return (
     <div className="cursor-pointer rounded-2xl border border-grayLineBased bg-white p-4">
       <Link href={`/app/projects/73c1ceea-0bc3-416b-a528-ccc6ff2c4031`}>
         <div className="space-y-6">
           <div className="flex flex-row items-center justify-between ">
             <div className="flex flex-row space-x-2">
-              <Avatar size="l" type={1} src={image} />
+              <Avatar size="l" type={1} src={orgData?.image} />
               <div className="flex flex-col justify-center">
-                <p className="text-black">{name}</p>
+                <p className="text-black">{orgData?.name}</p>
                 {country_id && (
                   <p className="text-graySubtitle">{country_id}</p>
                 )}
