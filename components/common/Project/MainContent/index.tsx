@@ -5,17 +5,44 @@ import {useToggle} from '@hooks';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {Project} from '@models/project';
-
+import {useUser} from '@hooks';
+import {useMemo} from 'react';
+import useSWRInfinite from 'swr/infinite';
+import {Button} from '@components/common';
 interface Props {
   onClickShow: () => void;
 }
 
 const MainContent = ({onClickShow}: Props) => {
   const {state: showMore, handlers: seeAll} = useToggle();
-  const {data: allProject} = useSWR<any>(`/projects`, get);
-  const allData = allProject?.items?.filter(
-    (p: any) => p?.identity_type === 'organizations',
+  const {currentIdentity} = useUser();
+
+  const getKey = (initialSize: number, previousData: any) => {
+    if (previousData && !previousData?.items?.length) return null;
+    return `/projects?identity=${currentIdentity?.id}&page=${initialSize + 1}`;
+  };
+  const {
+    data: infiniteProject,
+    error: infiniteError,
+    size,
+    setSize,
+  } = useSWRInfinite<any>(getKey, get, {
+    shouldRetryOnError: false,
+    revalidateFirstPage: false,
+  });
+
+  const flatProjectArray = useMemo(() => {
+    if (!isNaN(infiniteProject as any)) return [];
+    return infiniteProject?.map((page) => page?.items)?.flat(1);
+  }, [infiniteProject]);
+  console.log(flatProjectArray);
+
+  const noMoreMessage = useMemo(
+    () => size * 10 >= infiniteProject?.[0]?.['total_count'],
+    [size, infiniteProject],
   );
+
+  if (!infiniteProject && !infiniteError) <div>Loading....</div>;
 
   return (
     <div className="mb-10 space-y-6">
@@ -25,7 +52,7 @@ const MainContent = ({onClickShow}: Props) => {
 
       <div className="space-y-6 px-4">
         {showMore && <RecommendCheck />}
-        {allData?.map((item: Project) => (
+        {flatProjectArray?.map((item: Project) => (
           <ProjectCard
             key={item?.id}
             title={item?.title}
@@ -40,9 +67,22 @@ const MainContent = ({onClickShow}: Props) => {
             experience_level={item?.experience_level}
             remote_preference={item?.remote_preference}
             causes_tags={item?.causes_tags}
+            name={currentIdentity?.meta?.name}
+            image={currentIdentity?.meta?.image}
           />
         ))}
       </div>
+      {!noMoreMessage && (
+        <div className="flex justify-center">
+          <Button
+            variant="link"
+            className="font-semibold text-primary"
+            onClick={() => setSize(size + 1)}
+          >
+            See more
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

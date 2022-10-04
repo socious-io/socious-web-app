@@ -40,7 +40,7 @@ const ProjectPreview: FC<TOnSubmit> = ({onSubmit}) => {
           />
           <PreviewItem
             label="Remote Preference"
-            text={ProjectContext.remote_preference}
+            text={getText('en', `PROJECT.${ProjectContext.remote_preference}`)}
           />
           {ProjectContext.country && (
             <PreviewItem label="Location" text={ProjectContext.country} />
@@ -49,13 +49,13 @@ const ProjectPreview: FC<TOnSubmit> = ({onSubmit}) => {
             {ProjectContext.project_type && (
               <PreviewItem
                 label="Project type"
-                text={ProjectContext.project_type}
+                text={getText('en', `PROJECT.${ProjectContext.project_type}`)}
               />
             )}
             {ProjectContext.project_length && (
               <PreviewItem
                 label="Project length"
-                text={ProjectContext.project_length}
+                text={getText('en', `PROJECT.${ProjectContext.project_length}`)}
               />
             )}
           </div>
@@ -63,17 +63,17 @@ const ProjectPreview: FC<TOnSubmit> = ({onSubmit}) => {
             {ProjectContext.payment_type && (
               <PreviewItem
                 label="Payment type"
-                text={ProjectContext.payment_type}
+                text={getText('en', `PAYMENT.${ProjectContext.payment_type}`)}
               />
             )}
             {ProjectContext.payment_scheme && (
               <PreviewItem
                 label="Payment rate"
-                text={ProjectContext.payment_scheme}
+                text={getText('en', `PAYMENT.${ProjectContext.payment_scheme}`)}
               />
             )}
           </div>
-          <div className="flex flex-row">
+          <div className="flex flex-col">
             {ProjectContext.payment_range_lower && (
               <PreviewItem
                 label="Payment range lower"
@@ -97,6 +97,23 @@ const ProjectPreview: FC<TOnSubmit> = ({onSubmit}) => {
                       <Chip
                         key={item}
                         name={getText('en', `PASSION.${item}`) || item}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            {ProjectContext?.skills?.length > 0 && (
+              <div className="mb-6 flex flex-col ">
+                <span className="mb-2 text-base font-normal text-primary">
+                  Skill
+                </span>
+                <div className="flex w-full flex-wrap gap-2 ">
+                  {ProjectContext?.skills?.map((item: string) => {
+                    return (
+                      <Chip
+                        key={item}
+                        name={getText('en', `SKILL.${item}`) || item}
                       />
                     );
                   })}

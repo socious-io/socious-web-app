@@ -1,13 +1,14 @@
 import {Avatar, Chip} from '@components/common';
 import {Project} from 'models/project';
 import Link from 'next/link';
-import Image from 'next/image';
 import {ChevronRightIcon} from '@heroicons/react/24/outline';
 import {getText} from '@socious/data';
-const imgUserSrc = require('../../../../asset/icons/userWithBorder.svg');
-const dislikeSrc = require('../../../../asset/icons/thumbs-dislike.svg');
-const bookmarkSrc = require('../../../../asset/icons/bookmark.svg');
 import {FC} from 'react';
+
+interface ProjectCardInput extends Project {
+  name?: string;
+  image?: string;
+}
 export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
   return (
     <div className="flex flex-row space-x-4">
@@ -30,49 +31,21 @@ function ProjectCard({
   payment_type,
   country_id,
   causes_tags,
-}: Project) {
+  name,
+  image,
+}: ProjectCardInput) {
   return (
     <div className="cursor-pointer rounded-2xl border border-grayLineBased bg-white p-4">
       <Link href={`/app/projects/73c1ceea-0bc3-416b-a528-ccc6ff2c4031`}>
         <div className="space-y-6">
           <div className="flex flex-row items-center justify-between ">
             <div className="flex flex-row space-x-2">
-              <Avatar size="l" />
+              <Avatar size="l" type={1} src={image} />
               <div className="flex flex-col justify-center">
-                <p className="text-black">Organization</p>
+                <p className="text-black">{name}</p>
                 {country_id && (
                   <p className="text-graySubtitle">{country_id}</p>
                 )}
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <div className="flex flex-row items-center ">
-                <div className="relative  h-5 w-5 ">
-                  <Link href="/">
-                    <a>
-                      <Image
-                        src={dislikeSrc}
-                        className="fill-warning"
-                        alt="dislike"
-                        layout="fill" // required
-                      />
-                    </a>
-                  </Link>
-                </div>
-                <div className="relative ml-8 h-6 w-6 ">
-                  <Link href="/">
-                    <a>
-                      <Image
-                        src={bookmarkSrc}
-                        className="fill-warning"
-                        alt="bookmark"
-                        layout="fill" // required
-                        width={24}
-                        height={24}
-                      />
-                    </a>
-                  </Link>
-                </div>
               </div>
             </div>
           </div>
