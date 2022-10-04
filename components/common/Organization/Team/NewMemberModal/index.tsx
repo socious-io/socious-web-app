@@ -3,27 +3,38 @@ import Modal from '@components/common/Modal/Modal';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import {FC, useState} from 'react';
-import {IUserType} from '..';
-import Avatar from '@components/common/Avatar/Avatar';
 import Button from '@components/common/Button/Button';
 import MemberItem from '../MemberItem';
 import AddTeamMember from '@icons/addTeamMembers.svg';
 import LeftIcon from '@icons/iconLeft.svg';
 import checkIcon from '@icons/check.svg';
+import {IOrganizationFollowerType} from '@models/organization';
+import {addMember} from '@api/organizations/team/actions';
 interface INewMemberModalProps {
   open: boolean;
-  users: Array<IUserType>;
+  users: Array<IOrganizationFollowerType> | undefined;
+  orgId: string;
   onClose: () => void;
+  getOrgMembers: () => void;
 }
 
-const NewMemberModal: FC<INewMemberModalProps> = ({open, users, onClose}) => {
+const NewMemberModal: FC<INewMemberModalProps> = ({
+  open,
+  users,
+  orgId,
+  onClose,
+  getOrgMembers,
+}) => {
   const [step, setStep] = useState<number>(1);
   const [role, setRole] = useState<UserRole>('admin');
+  const [selectedUserId, setSelectedUserId] = useState<string>();
+
   const changeRole = (newRole: UserRole) => {
     setRole(newRole);
   };
 
-  const onAddMember = () => {
+  const onAddMember = (userId: string) => {
+    setSelectedUserId(userId);
     setStep(2);
   };
   const onClickBack = () => {
@@ -35,6 +46,21 @@ const NewMemberModal: FC<INewMemberModalProps> = ({open, users, onClose}) => {
       setStep(1);
     }, 500);
     onClose();
+  };
+
+  const onConfirm = async () => {
+    if (selectedUserId) {
+      try {
+        const response = await addMember(orgId, selectedUserId);
+        // TODO 2 following lines should call if member  successfully added
+        onClose();
+        getOrgMembers();
+      } catch (error) {
+        console.error(error);
+        onClose();
+        setStep(1);
+      }
+    }
   };
 
   return (
@@ -52,6 +78,7 @@ const NewMemberModal: FC<INewMemberModalProps> = ({open, users, onClose}) => {
           onConfirmRole={changeRole}
           onClose={onResetStep}
           onClickBack={onClickBack}
+          onConfirm={onConfirm}
         />
       )}
     </Modal>
@@ -65,10 +92,12 @@ interface IConfrimUserRole {
   onConfirmRole: (role: UserRole) => void;
   onClose: () => void;
   onClickBack: () => void;
+  onConfirm: () => void;
 }
 const ConfrimUserRole: FC<IConfrimUserRole> = ({
   role,
   onConfirmRole,
+  onConfirm,
   onClose,
   onClickBack,
 }) => {
@@ -139,7 +168,7 @@ const ConfrimUserRole: FC<IConfrimUserRole> = ({
             </div>
           </div>
           <div className="fixed  right-0 left-0 bottom-4 flex justify-end gap-2 p-2 px-4">
-            <Button variant="fill" onClick={onClose}>
+            <Button variant="fill" onClick={onConfirm}>
               Confirm
             </Button>
             <Button variant="outline" onClick={onClose}>
@@ -153,9 +182,9 @@ const ConfrimUserRole: FC<IConfrimUserRole> = ({
 };
 
 interface IAddMemberProps {
-  users: Array<IUserType>;
+  users: Array<IOrganizationFollowerType> | undefined;
   onClose: () => void;
-  onAddMember: (id: number) => void;
+  onAddMember: (id: string) => void;
 }
 const AddMember: FC<IAddMemberProps> = ({users, onAddMember, onClose}) => {
   return (
@@ -170,7 +199,7 @@ const AddMember: FC<IAddMemberProps> = ({users, onAddMember, onClose}) => {
       </Modal.Title>
       <div>
         <Modal.Description>
-          <div className="flex h-full flex-col">
+          <div className="flex h-full h-80 flex-col">
             <div className="mt-3 border-t border-b bg-zinc-100 p-3">
               <SearchBar
                 type="text"
@@ -178,20 +207,20 @@ const AddMember: FC<IAddMemberProps> = ({users, onAddMember, onClose}) => {
                 onChange={(e) => console.log(e)}
               />
             </div>
-            {users.map((item, index) => (
+            {users?.map((item, index) => (
               <MemberItem
-                key={`m-${item.name}-${index}`}
-                name={item.name}
-                location={item.location}
+                key={`m-${item.identity_meta.id}-${index}`}
+                name={item.identity_meta.name}
+                detail={item.identity_meta.email}
                 Extra={
-                  item.requested ? (
+                  false ? (
                     <Button variant="outline" size="sm">
                       request sent
                     </Button>
                   ) : (
                     <span
                       className="cursor-pointer"
-                      onClick={() => onAddMember(item.id)}
+                      onClick={() => onAddMember(item.identity_meta.id)}
                     >
                       <Image
                         src={AddTeamMember}

@@ -1,21 +1,58 @@
-import {useToggle} from '@hooks';
+import {useToggle, useUser} from '@hooks';
 import Image from 'next/image';
-import {users} from '../data';
 import MemberItem from './MemberItem';
 import NewMemberModal from './NewMemberModal';
 import AddTeamMember from '@icons/addTeamMembers.svg';
 import More from '@icons/more.svg';
-
-export interface IUserType {
-  id: number;
-  name: string;
-  location: string;
-  img: string;
-  requested: boolean;
-}
+import {useEffect, useState} from 'react';
+import {
+  getFollowers,
+  getOrganizationMembers,
+} from '@api/organizations/team/actions';
+import {
+  GlobalResponseType,
+  IOrganizationFollowerType,
+  IOrganizationUserType,
+} from '@models/organization';
 
 const TeamComponent = () => {
+  const {currentIdentity} = useUser({
+    redirect: false,
+  });
   const {state: addState, handlers: addHandlers} = useToggle();
+  const [members, setMembers] = useState<IOrganizationUserType[]>();
+  const [followers, setFollowers] = useState<IOrganizationFollowerType[]>();
+
+  const getOrgMembers = async () => {
+    try {
+      if (currentIdentity && currentIdentity.type === 'organizations') {
+        const data: GlobalResponseType<IOrganizationUserType> =
+          await getOrganizationMembers(currentIdentity.id);
+        setMembers(data.items);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getOrgFollowers = async () => {
+    try {
+      if (currentIdentity) {
+        console.log('innnnnn');
+        const data: GlobalResponseType<IOrganizationFollowerType> =
+          await getFollowers();
+        setFollowers(data.items);
+        console.log('hereeee', data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    console.log('ooooo', currentIdentity);
+    getOrgMembers();
+    getOrgFollowers();
+  }, [currentIdentity?.id]);
 
   return (
     <div className="w-full rounded-2xl border border-grayLineBased bg-white ">
@@ -39,11 +76,11 @@ const TeamComponent = () => {
           <h3 className="text-xl font-semibold">Admin</h3>
         </div>
         <div>
-          {users.map((item, index) => (
+          {members?.map((item, index) => (
             <MemberItem
-              key={`${item.name}-${index}`}
-              name={item.name}
-              location={item.location}
+              key={`${item.first_name}-${index}`}
+              name={item.first_name}
+              detail={item.location}
               Extra={
                 <div>
                   <Image
@@ -59,31 +96,15 @@ const TeamComponent = () => {
         </div>
       </div>
 
-      <div>
-        <div className="border-b p-4">
-          <h3 className="text-xl font-semibold">Members</h3>
-        </div>
-        <div>
-          {users.map((item, index) => (
-            <MemberItem
-              key={`${item.name}-${index}`}
-              name={item.name}
-              location={item.location}
-              Extra={
-                <div>
-                  <Image
-                    src={More}
-                    alt="add-new-member-icon"
-                    width={24}
-                    height={24}
-                  />
-                </div>
-              }
-            />
-          ))}
-        </div>
-      </div>
-      <NewMemberModal open={addState} onClose={addHandlers.off} users={users} />
+      {currentIdentity && (
+        <NewMemberModal
+          getOrgMembers={getOrgMembers}
+          open={addState}
+          onClose={addHandlers.off}
+          users={followers}
+          orgId={currentIdentity.id}
+        />
+      )}
     </div>
   );
 };
