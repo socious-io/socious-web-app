@@ -44,6 +44,35 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
   const maxSkills = 10;
   const [filteredItems, filterWith] = useFilter(skills);
 
+  const handleChange = (field: string, item: {id: string; name: string}) => {
+    const skills = ProjectContext.skills;
+    if (skills?.includes(item?.id)) {
+      setValue(
+        field,
+        skills?.filter((i) => i !== item.id),
+        {
+          shouldValidate: true,
+        },
+      );
+      setProjectContext({
+        ...ProjectContext,
+        skills: skills?.filter((i) => i !== item?.id),
+      });
+    } else {
+      if (skills?.length < maxSkills) {
+        setValue(field, [...skills, item.id], {
+          shouldValidate: true,
+        });
+        setProjectContext({
+          ...ProjectContext,
+          skills: [...skills, item?.id],
+        });
+      } else {
+        toast.success('You selected 10 skills');
+      }
+    }
+  };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -66,39 +95,7 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
             {filteredItems.map((item) => {
               return (
                 <Chip
-                  onSelected={() => {
-                    if (ProjectContext.skills.includes(item?.id)) {
-                      setValue(
-                        'skills',
-                        ProjectContext.skills?.filter((i) => i !== item.id),
-                        {
-                          shouldValidate: true,
-                        },
-                      );
-                      setProjectContext({
-                        ...ProjectContext,
-                        skills: ProjectContext.skills?.filter(
-                          (i) => i !== item?.id,
-                        ),
-                      });
-                    } else {
-                      if (ProjectContext.skills?.length < maxSkills) {
-                        setValue(
-                          'skills',
-                          [...ProjectContext.skills, item.id],
-                          {
-                            shouldValidate: true,
-                          },
-                        );
-                        setProjectContext({
-                          ...ProjectContext,
-                          skills: [...ProjectContext.skills, item?.id],
-                        });
-                      } else {
-                        toast.success('You selected 10 skills');
-                      }
-                    }
-                  }}
+                  onSelected={() => handleChange('skills', item)}
                   selected={ProjectContext.skills?.includes(item?.id)}
                   value={item.id}
                   key={item.id}

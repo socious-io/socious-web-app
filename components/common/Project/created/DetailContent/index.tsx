@@ -29,8 +29,6 @@ var skills = [
   'nnnn Analysis',
 ];
 
-var data = [{id: 1}, {id: 2}, {id: 3}];
-
 const Detail = () => {
   const {state: closeProject, handlers: closeProjectHandlers} = useToggle();
   const {state: avoidClose, handlers: avoidCloseHandlers} = useToggle();
@@ -61,7 +59,7 @@ const Detail = () => {
         <OverviewProjectCard />
         <ProjectItem items={social_causes} title="Social causes" />
         <ProjectItem items={skills} title="Skills" />
-        <div className="p-4">
+        {/* <div className="p-4">
           <div className="flex flex-row items-center justify-between ">
             <Title>Screen review</Title>
             <div className="relative  h-5 w-5 ">
@@ -77,32 +75,12 @@ const Detail = () => {
               </Link>
             </div>
           </div>
-          {data.map((e) => (
-            <div key={e.id} className="my-4 flex flex-col">
-              <p className="text-black">Question1</p>
-              <p className="text-graySubtitle">Question</p>
-            </div>
-          ))}
-        </div>
+        </div> */}
       </div>
       <Modal isOpen={closeProject} onClose={closeProjectHandlers.off}>
         <EditProjectModal onSubmit={() => {}} />
         <Modal.CloseButton />
       </Modal>
-      {/* <Modal isOpen={closeProject} onClose={closeProjectHandlers.off}>
-        <AlertCard
-          close={closeProjectHandlers.off}
-          accept={closeProjectHandlers.off}
-          title={'Close project'}
-          description={
-            'Are you sure you want to close this project? It will be archived.'
-          }
-          buttonTitleAccept={'Close project'}
-          buttonTitleCancel={'Cancel'}
-          isOpen={false}
-          titleColor={'text-error'}
-        />
-      </Modal> */}
       <Modal isOpen={avoidClose} onClose={avoidCloseHandlers.off}>
         <AlertCard
           title={''}
