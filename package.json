@@ -35,6 +35,7 @@
     "react-hook-form": "^7.35.0",
     "react-responsive": "^9.0.0",
     "react-spinners": "^0.13.4",
+    "react-toastify": "^9.0.8",
     "react-tooltip": "^4.2.21",
     "sass": "^1.55.0",
     "sharp": "^0.31.0",

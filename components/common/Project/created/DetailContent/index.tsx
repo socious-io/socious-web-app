@@ -1,5 +1,5 @@
 import BodyBox from '@components/common/Project/BodyBox/BodyBox';
-import SocialCauses from '@components/common/UserProfile/MainContent/SocialCauses';
+import ProjectItem from '@components/common/UserProfile/MainContent/ProjectItem';
 import Title from '@components/common/UserProfile/MainContent/Title';
 import Link from 'next/link';
 import {Modal, Button} from '@components/common';
@@ -59,8 +59,8 @@ const Detail = () => {
           </div>
         </div>
         <OverviewProjectCard />
-        <SocialCauses social_causes={social_causes} />
-        <SocialCauses social_causes={skills} />
+        <ProjectItem items={social_causes} title="Social causes" />
+        <ProjectItem items={skills} title="Skills" />
         <div className="p-4">
           <div className="flex flex-row items-center justify-between ">
             <Title>Screen review</Title>

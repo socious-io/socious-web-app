@@ -9,6 +9,7 @@ export interface ButtonProps
   > {
   variant?: 'fill' | 'outline' | 'ghost' | 'link' | 'simple' | 'filter';
   size?: 'lg' | 'md' | 'sm';
+  leftIcon?: (width: number, height: number) => JSX.Element;
 }
 
 const defaultBtnClass =
@@ -42,6 +43,18 @@ const sizeClass = {
   sm: 'px-3 py-2 leading-4 text-sm',
 };
 
+const getIconSize = (s: ButtonProps['size']) => {
+  switch (s) {
+    case 'sm':
+      return 16;
+    case 'md':
+      return 20;
+    case 'lg':
+      return 24;
+    default:
+      return 16;
+  }
+};
 export function Button({
   children = 'Button',
   disabled = false,
@@ -49,8 +62,10 @@ export function Button({
   variant = 'fill',
   size = 'md',
   className,
+  leftIcon,
   ...props
 }: ButtonProps) {
+  const iconSize = getIconSize(size);
   return (
     <button
       {...props}
@@ -64,6 +79,7 @@ export function Button({
       )}
       disabled={disabled}
     >
+      <div className="mr-2">{leftIcon && leftIcon(iconSize, iconSize)}</div>
       {children}
     </button>
   );

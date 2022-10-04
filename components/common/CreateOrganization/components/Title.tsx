@@ -6,6 +6,7 @@ interface Props {
   description?: string;
   border?: boolean; //border={true} => show bottom border
   textAlign?: 'text-left' | 'text-center' | 'text-right';
+  className?: string;
 }
 
 const Title: React.FC<Props> = ({
@@ -13,11 +14,12 @@ const Title: React.FC<Props> = ({
   textAlign = 'text-left',
   description,
   border = true,
+  className,
 }) => {
   return (
     <>
       <h1
-        className={`py-6 text-xl sm:text-lg ${textAlign} px-6 ${
+        className={`py-6 text-xl sm:text-lg ${className} ${textAlign} px-6 ${
           border ? 'border-b' : null
         } border-grayLineBased `}
       >

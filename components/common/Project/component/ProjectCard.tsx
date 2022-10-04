@@ -11,8 +11,8 @@ const bookmarkSrc = require('../../../../asset/icons/bookmark.svg');
 
 function ProjectCard({title}: Project) {
   return (
-    <div className="rounded-2xl  border border-grayLineBased bg-white p-4">
-      <Link href={`/app/projects/${1}`}>
+    <div className="cursor-pointer rounded-2xl border border-grayLineBased bg-white p-4">
+      <Link href={`/app/projects/73c1ceea-0bc3-416b-a528-ccc6ff2c4031`}>
         <div className="space-y-6">
           <div className="flex flex-row items-center justify-between ">
             <div className="flex flex-row space-x-2">
