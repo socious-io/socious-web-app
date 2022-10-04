@@ -2,10 +2,8 @@ import ImageBanner from '../component/ImageBanner';
 import RecommendCheck from '../component/RecommendCheck';
 import ProjectCard from '../component/ProjectCard';
 import {useToggle} from '@hooks';
-import useSWR from 'swr';
 import {get} from 'utils/request';
 import {Project} from '@models/project';
-import {useUser} from '@hooks';
 import {useMemo} from 'react';
 import useSWRInfinite from 'swr/infinite';
 import {Button} from '@components/common';
@@ -15,11 +13,9 @@ interface Props {
 
 const MainContent = ({onClickShow}: Props) => {
   const {state: showMore, handlers: seeAll} = useToggle();
-  const {currentIdentity} = useUser();
-
   const getKey = (initialSize: number, previousData: any) => {
     if (previousData && !previousData?.items?.length) return null;
-    return `/projects?identity=${currentIdentity?.id}&page=${initialSize + 1}`;
+    return `/projects?page=${initialSize + 1}`;
   };
   const {
     data: infiniteProject,
@@ -43,6 +39,7 @@ const MainContent = ({onClickShow}: Props) => {
   );
 
   if (!infiniteProject && !infiniteError) <div>Loading....</div>;
+  console.log(flatProjectArray);
 
   return (
     <div className="mb-10 space-y-6">
@@ -67,8 +64,7 @@ const MainContent = ({onClickShow}: Props) => {
             experience_level={item?.experience_level}
             remote_preference={item?.remote_preference}
             causes_tags={item?.causes_tags}
-            name={currentIdentity?.meta?.name}
-            image={currentIdentity?.meta?.image}
+            identity_id={item?.identity_id}
           />
         ))}
       </div>

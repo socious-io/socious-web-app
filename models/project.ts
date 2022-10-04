@@ -21,6 +21,7 @@ export interface Project {
   questions?: Array<Question>;
   project_status?: number;
   remote_preference: string;
+  identity_id?: number;
 }
 
 export interface CreateProjectType {
