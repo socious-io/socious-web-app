@@ -97,7 +97,6 @@ const EditProfileModal = ({
     skillsData,
   ]);
 
-  console.log('USER :---: ', user);
   //FORM-HOOKS
   const formMethods = useForm({
     resolver: joiResolver(schemaProfileUpdate),

@@ -39,7 +39,7 @@ const EditSubMenu = ({
           className="my-3"
         />
       </div>
-      <div className="flex grow flex-col overflow-hidden border-t-2 border-b-grayLineBased bg-offWhite px-4">
+      <div className="flex grow flex-col overflow-hidden border-t-2 border-b-grayLineBased bg-offWhite px-4 pb-4">
         <h3 className="py-3">{customText}</h3>
         <div className="hide-scrollbar flex h-full flex-wrap gap-2 overflow-y-auto">
           {filteredItems.map((passion) => (

@@ -36,7 +36,8 @@ const EditMainMenu = ({
   avatar,
 }: EditMainMenuProps) => {
   const formMethods = useFormContext();
-  const {register, formState, watch, handleSubmit, setValue} = formMethods;
+  const {register, formState, watch, handleSubmit, setValue, getValues} =
+    formMethods;
   const [countryKey, setCountryKey] = useState<string>();
   const [countryName, setCountryName] = useState<any>('');
 
@@ -389,6 +390,7 @@ const EditMainMenu = ({
                     />
                     <InputFiled
                       placeholder="Phone number"
+                      value={getValues('phoneNumber')}
                       onChange={(e) =>
                         handleSetPhoneNumber(e.currentTarget.value || '')
                       }
