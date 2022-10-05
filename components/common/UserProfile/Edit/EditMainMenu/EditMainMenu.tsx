@@ -15,20 +15,30 @@ import {getText} from '@socious/data';
 import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 import {getPhoneCode} from 'services/getPhoneCode';
 import {ExclamationCircleIcon} from '@heroicons/react/24/solid';
+import Image from 'next/future/image';
 
 // types
 interface EditMainMenuProps {
   goTo: (data: 'SKILLS' | 'CAUSES') => void;
   editProfile: () => void;
+  setNewAvatar: React.Dispatch<any>;
+  setNewCover: React.Dispatch<any>;
+  coverImage?: string;
+  avatar?: string;
 }
 
-const EditMainMenu = ({goTo, editProfile}: EditMainMenuProps) => {
+const EditMainMenu = ({
+  goTo,
+  editProfile,
+  setNewAvatar,
+  setNewCover,
+  coverImage,
+  avatar,
+}: EditMainMenuProps) => {
   const formMethods = useFormContext();
   const {register, formState, watch, handleSubmit, setValue} = formMethods;
   const [countryKey, setCountryKey] = useState<string>();
   const [countryName, setCountryName] = useState<any>('');
-
-  const [file, setFile] = useState<any>();
 
   const bio = watch('bio');
   const skills = watch('skills');
@@ -195,22 +205,36 @@ const EditMainMenu = ({goTo, editProfile}: EditMainMenuProps) => {
             {/* Images Upload */}
             <div className="border-b-2 border-grayLineBased bg-offWhite pb-4">
               <ImageUploader
-                onChange={(file: any) => setFile(file)}
-                src={profile_img_icon}
+                onChange={(file: any) => setNewCover(file)}
+                src={coverImage}
                 withPreview={false}
                 className="h-32 w-full rounded-none"
               >
-                {(setOpen: any) => (
+                {(setOpen: any, imagePreviewUrl: any) => (
                   <div
-                    className="h-32 w-full bg-[#959595]"
+                    className="h-32 w-full overflow-hidden bg-[#959595]"
                     onClick={setOpen}
-                  ></div>
+                  >
+                    {imagePreviewUrl && (
+                      <Image
+                        src={imagePreviewUrl}
+                        alt="Make a social impact"
+                        width="100"
+                        height="100"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
+                      />
+                    )}
+                  </div>
                 )}
               </ImageUploader>
               <div className="mx-4 -mt-8">
                 <ImageUploader
-                  onChange={(file: any) => setFile(file)}
-                  src={profile_img_icon}
+                  onChange={(file: any) => setNewAvatar(file)}
+                  src={avatar ?? profile_img_icon}
                   className="h-32 w-32 border border-grayLineBased bg-[#959595]"
                 ></ImageUploader>
               </div>

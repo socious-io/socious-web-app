@@ -19,7 +19,8 @@ import {schemaProfileUpdate} from '@api/user/validation';
 
 // custom hooks/functions
 import {useUser} from '@hooks';
-import {updateProfile} from '@api/user/actions';
+import {updateProfile} from '@api/auth/actions';
+import {checkAndUploadMedia} from 'services/ImageUpload';
 
 // Socious Data
 import Data, {getText} from '@socious/data';
@@ -41,6 +42,11 @@ const EditProfileModal = ({
   const {mutateUser} = useUser();
   const [editState, setEditState] = useState<'MAIN' | 'CAUSES' | 'SKILLS'>(
     'MAIN',
+  );
+
+  const [avatar, setAvatar] = useState<any>(user?.avatar?.id ?? null);
+  const [coverImage, setCoverImage] = useState<any>(
+    user?.cover_image?.id ?? null,
   );
 
   //Passions
@@ -110,6 +116,11 @@ const EditProfileModal = ({
   );
 
   const onSubmit = useCallback(async () => {
+    //CHECKING IMAGE UPLOAD
+    // TODO: Check if size exceeds limit. Better to wait for UI.( try/catch )
+    let avatarId: string | null = await checkAndUploadMedia(avatar);
+    let coverId: string | null = await checkAndUploadMedia(coverImage);
+
     //fetching values from Form
     const first_name: string = formMethods.getValues('firstName');
     const last_name: string = formMethods.getValues('lastName');
@@ -120,7 +131,7 @@ const EditProfileModal = ({
     const skills: string[] = formMethods.getValues('skills');
     const country: string = formMethods.getValues('country');
     const city: string = formMethods.getValues('city');
-    const address: string = formMethods.getValues('address');
+    const address: string = formMethods.getValues('address').trim();
     const mobile_country_code: string = formMethods.getValues('countryNumber');
     const phone: string = formMethods.getValues('phoneNumber');
 
@@ -140,16 +151,18 @@ const EditProfileModal = ({
     if (mobile_country_code)
       updateProfileBody.mobile_country_code = mobile_country_code;
     if (phone) updateProfileBody.phone = phone;
+    if (avatarId) updateProfileBody.avatar = avatarId;
+    if (coverId) updateProfileBody.cover_image = coverId;
 
     //Making a API call
     try {
       const response = await updateProfile(updateProfileBody);
-      mutateUser(response, {revalidate: false});
+      mutateUser(response);
       onForceClose();
     } catch (error) {
       console.log('ERROR :---: ', error);
     }
-  }, [formMethods, mutateUser, onForceClose]);
+  }, [avatar, coverImage, formMethods, mutateUser, onForceClose]);
   return (
     <Modal
       isOpen={openState}
@@ -201,6 +214,10 @@ const EditProfileModal = ({
           <EditMainMenu
             goTo={(data: 'SKILLS' | 'CAUSES') => setEditState(data)}
             editProfile={onSubmit}
+            setNewCover={setCoverImage}
+            setNewAvatar={setAvatar}
+            coverImage={user?.cover_image?.url ?? null}
+            avatar={user?.avatar?.url ?? null}
           />
         )}
         {editState === 'CAUSES' && (

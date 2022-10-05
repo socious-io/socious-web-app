@@ -132,4 +132,6 @@ export interface UpdateProfileBodyType {
   address?: string;
   mobile_country_code?: string;
   phone?: string;
+  cover_image?: string;
+  avatar?: string;
 }
