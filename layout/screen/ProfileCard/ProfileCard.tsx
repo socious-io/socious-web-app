@@ -21,7 +21,7 @@ export function ProfileCard({
   isUser,
 }: ProfileCardProps) {
   return (
-    <div className="space-y-4 rounded-2xl border border-grayLineBased bg-background p-4">
+    <div className="flex w-full space-y-4 rounded-2xl border border-grayLineBased bg-background p-4">
       <div className="space-y-4">
         <Avatar
           src={avatar ?? ''}
@@ -29,7 +29,7 @@ export function ProfileCard({
           type={isUser ? 'users' : 'organizations'}
         />
         <div>
-          <p className="text-2xl font-semibold">
+          <p className="text-base font-semibold">
             {name || 'FirstName LastName'}
           </p>
           <Link

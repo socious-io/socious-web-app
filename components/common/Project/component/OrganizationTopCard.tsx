@@ -1,5 +1,4 @@
 import {Avatar, Chip} from '@components/common';
-
 import {Project} from 'models/project';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,32 +7,50 @@ import {Modal, Button} from '@components/common';
 import {useToggle} from '@hooks';
 import {FormProvider, useForm} from 'react-hook-form';
 import ApplyStep1 from '../Apply/Step1/ApplyStep1';
-import {useState} from 'react';
+import {useState, useMemo} from 'react';
 import ApplyStep2 from '../Apply/Step2/ApplyStep2';
 import ApplyStep4 from '../Apply/Step4/ApplyStep4';
-
+import useUser from 'hooks/useUser/useUser';
+import {getText} from '@socious/data';
+import {
+  MapPinIcon,
+  CalendarDaysIcon,
+  CurrencyDollarIcon,
+  ClockIcon,
+} from '@heroicons/react/24/outline';
 const dislikeSrc = require('../../../../asset/icons/thumbs-dislike.svg');
 const bookmarkSrc = require('../../../../asset/icons/bookmark.svg');
 
-function OrganizationTopCard({title}: Project) {
+function OrganizationTopCard({
+  title,
+  country_id,
+  project_type,
+  experience_level,
+  payment_range_higher,
+  payment_range_lower,
+  remote_preference,
+  project_length,
+}: Project) {
   const {state: showApply, handlers: setShowApply} = useToggle();
 
   const [step, setStep] = useState<number>(1);
   const formMethodsStep1 = useForm({});
   const {getValues, setValue} = formMethodsStep1;
+  const {identities} = useUser({redirect: false});
+  const projectType = getText('en', `PROJECT.${project_type}`);
 
   return (
     <div className="space-y-6 p-4">
       <div className="flex flex-row items-center justify-between ">
         <div className="flex flex-row space-x-2">
           <Avatar size="l" />
-          <div className="flex flex-col">
-            <p className="text-black">Organization</p>
-            <p className="text-graySubtitle">Location</p>
+          <div className="flex flex-col justify-center">
+            <p className="text-black">{projectType || ''}</p>
+            <p className="text-graySubtitle">{country_id || ''}</p>
           </div>
         </div>
         <div className="flex flex-col">
-          <div className="flex flex-row items-center ">
+          {/* <div className="flex flex-row items-center ">
             <div className="relative  h-5 w-5 ">
               <Link href="/">
                 <a>
@@ -60,40 +77,70 @@ function OrganizationTopCard({title}: Project) {
                 </a>
               </Link>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="">
-        <p className="font-semibold">Project Title</p>
+        <p className="font-semibold">{title}</p>
       </div>
-      <div className="mt-4 flex flex-row space-x-2 divide-x divide-solid divide-graySubtitle">
-        <p className="text-sm text-graySubtitle ">World wide</p>
-        <p className="pl-2 text-sm text-graySubtitle ">$30-$50 /hr</p>
-        <p className="pl-2 text-sm text-graySubtitle ">
-          Intermediate experience
-        </p>
-        <p className="pl-2 text-sm text-graySubtitle ">Part-time</p>
+      <div className="mt-4 flex space-x-5">
+        {country_id && (
+          <div className="flex flex-row">
+            <MapPinIcon width={20} height={20} className="text-primary" />
+            <p className="ml-2 text-sm text-graySubtitle">{country_id}</p>
+          </div>
+        )}
+        {projectType && (
+          <div className="flex flex-row">
+            <CalendarDaysIcon width={20} height={20} className="text-primary" />
+            <p className="ml-2 text-sm text-graySubtitle">{projectType}</p>
+          </div>
+        )}
+        {(payment_range_lower || payment_range_higher) && (
+          <div className="flex flex-row">
+            <CurrencyDollarIcon
+              width={20}
+              height={20}
+              className="text-primary"
+            />
+            <p className="pl-2 text-sm text-graySubtitle ">{`$${
+              payment_range_lower || ''
+            }-$${payment_range_higher || ''}`}</p>
+          </div>
+        )}
       </div>
-      <div>
-        <p className="my-4 text-sm">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Equat
-          faucibus sed facilisi sit id blandiacilisi sit id blandit
-        </p>
+      <div className="mt-4 flex space-x-5">
+        {/* <p className="pl-2 text-sm text-graySubtitle ">{experience_level}</p> */}
+        {remote_preference && (
+          <p className="pl-2 text-sm text-graySubtitle ">
+            {getText('en', `.${remote_preference}`)}
+          </p>
+        )}
+        {project_length && (
+          <div className="flex flex-row">
+            <ClockIcon width={20} height={20} className="text-primary" />
+            <p className="pl-2 text-sm text-graySubtitle">
+              {getText('en', `PROJECT.${project_length}`)}
+            </p>
+          </div>
+        )}
       </div>
 
-      <PostData />
+      {/* <PostData /> */}
       <div className="mt-4 flex justify-between">
-        <Button
-          className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
-          type="submit"
-          size="lg"
-          variant="fill"
-          value="Submit"
-          onClick={() => setShowApply.on()}
-        >
-          Apply now
-        </Button>
-        <Button
+        {identities !== null && (
+          <Button
+            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+            type="submit"
+            size="lg"
+            variant="fill"
+            value="Submit"
+            onClick={() => setShowApply.on()}
+          >
+            Apply now
+          </Button>
+        )}
+        {/* <Button
           className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"
           size="lg"
@@ -102,7 +149,7 @@ function OrganizationTopCard({title}: Project) {
           onClick={() => setShowApply.off()}
         >
           Save project
-        </Button>
+        </Button> */}
       </div>
       {/* Add Post Modal */}
       <Modal isOpen={showApply} onClose={() => setShowApply.off()}>
