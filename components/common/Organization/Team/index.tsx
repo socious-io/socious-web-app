@@ -5,10 +5,8 @@ import NewMemberModal from './NewMemberModal';
 import AddTeamMember from '@icons/addTeamMembers.svg';
 import More from '@icons/more.svg';
 import {useEffect, useState} from 'react';
-import {
-  getFollowers,
-  getOrganizationMembers,
-} from '@api/organizations/team/actions';
+import useSWR, {mutate, useSWRConfig} from 'swr';
+import {get} from 'utils/request';
 import {
   GlobalResponseType,
   IOrganizationFollowerType,
@@ -16,43 +14,27 @@ import {
 } from '@models/organization';
 
 const TeamComponent = () => {
+  const {mutate} = useSWRConfig();
   const {currentIdentity} = useUser({
     redirect: false,
   });
   const {state: addState, handlers: addHandlers} = useToggle();
-  const [members, setMembers] = useState<IOrganizationUserType[]>();
-  const [followers, setFollowers] = useState<IOrganizationFollowerType[]>();
+  const {data: members} = useSWR<GlobalResponseType<IOrganizationUserType>>(
+    currentIdentity ? `/orgs/${currentIdentity?.id}/members` : null,
+    get,
+  );
 
-  const getOrgMembers = async () => {
+  const {data: followers} = useSWR<
+    GlobalResponseType<IOrganizationFollowerType>
+  >(`/follows/followers`, get);
+
+  const onAddNewMember = async () => {
     try {
-      if (currentIdentity && currentIdentity.type === 'organizations') {
-        const data: GlobalResponseType<IOrganizationUserType> =
-          await getOrganizationMembers(currentIdentity.id);
-        setMembers(data.items);
-      }
+      await mutate(`/orgs/${currentIdentity?.id}/members`);
     } catch (error) {
-      console.error(error);
+      // Handle error
     }
   };
-
-  const getOrgFollowers = async () => {
-    try {
-      if (currentIdentity) {
-        console.log('innnnnn');
-        const data: GlobalResponseType<IOrganizationFollowerType> =
-          await getFollowers();
-        setFollowers(data.items);
-        console.log('hereeee', data);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  useEffect(() => {
-    console.log('ooooo', currentIdentity);
-    getOrgMembers();
-    getOrgFollowers();
-  }, [currentIdentity?.id]);
 
   return (
     <div className="w-full rounded-2xl border border-grayLineBased bg-white ">
@@ -76,7 +58,7 @@ const TeamComponent = () => {
           <h3 className="text-xl font-semibold">Admin</h3>
         </div>
         <div>
-          {members?.map((item, index) => (
+          {members?.items?.map((item, index) => (
             <MemberItem
               key={`${item.first_name}-${index}`}
               name={item.first_name}
@@ -98,10 +80,10 @@ const TeamComponent = () => {
 
       {currentIdentity && (
         <NewMemberModal
-          getOrgMembers={getOrgMembers}
+          onAddNewMember={onAddNewMember}
           open={addState}
           onClose={addHandlers.off}
-          users={followers}
+          users={followers?.items}
           orgId={currentIdentity.id}
         />
       )}

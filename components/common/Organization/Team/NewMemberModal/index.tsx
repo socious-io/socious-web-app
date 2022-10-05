@@ -15,7 +15,7 @@ interface INewMemberModalProps {
   users: Array<IOrganizationFollowerType> | undefined;
   orgId: string;
   onClose: () => void;
-  getOrgMembers: () => void;
+  onAddNewMember: () => void;
 }
 
 const NewMemberModal: FC<INewMemberModalProps> = ({
@@ -23,18 +23,18 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
   users,
   orgId,
   onClose,
-  getOrgMembers,
+  onAddNewMember,
 }) => {
   const [step, setStep] = useState<number>(1);
   const [role, setRole] = useState<UserRole>('admin');
-  const [selectedUserId, setSelectedUserId] = useState<string>();
+  const [selectedUser, setSelectedUser] = useState<IOrganizationFollowerType>();
 
   const changeRole = (newRole: UserRole) => {
     setRole(newRole);
   };
 
-  const onAddMember = (userId: string) => {
-    setSelectedUserId(userId);
+  const onAddMember = (user: IOrganizationFollowerType) => {
+    setSelectedUser(user);
     setStep(2);
   };
   const onClickBack = () => {
@@ -49,12 +49,12 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
   };
 
   const onConfirm = async () => {
-    if (selectedUserId) {
+    if (selectedUser) {
       try {
-        const response = await addMember(orgId, selectedUserId);
+        const response = await addMember(orgId, selectedUser.identity_meta.id);
         // TODO 2 following lines should call if member  successfully added
         onClose();
-        getOrgMembers();
+        onAddNewMember();
       } catch (error) {
         console.error(error);
         onClose();
@@ -184,7 +184,7 @@ const ConfrimUserRole: FC<IConfrimUserRole> = ({
 interface IAddMemberProps {
   users: Array<IOrganizationFollowerType> | undefined;
   onClose: () => void;
-  onAddMember: (id: string) => void;
+  onAddMember: (member: IOrganizationFollowerType) => void;
 }
 const AddMember: FC<IAddMemberProps> = ({users, onAddMember, onClose}) => {
   return (
@@ -220,7 +220,7 @@ const AddMember: FC<IAddMemberProps> = ({users, onAddMember, onClose}) => {
                   ) : (
                     <span
                       className="cursor-pointer"
-                      onClick={() => onAddMember(item.identity_meta.id)}
+                      onClick={() => onAddMember(item)}
                     >
                       <Image
                         src={AddTeamMember}
