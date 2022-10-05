@@ -11,28 +11,30 @@ export const schemaProfileUpdate = Joi.object({
     .label('FirstName')
     .regex(rxNoSpecialCharactersMultiWords)
     .messages({
-      'string.empty': `First name cannot be an empty field.`,
+      'string.empty': `Please enter a first name.`,
       'string.pattern.base': `Should not contain special characters.`,
-      'any.required': `First name cannot be an empty field.`,
+      'any.required': `Please enter a first name.`,
     }),
   lastName: Joi.string()
     .required()
     .label('LastName')
     .regex(rxNoSpecialCharactersMultiWords)
     .messages({
-      'string.empty': `Last name cannot be an empty field`,
+      'string.empty': `Please enter a last name.`,
       'string.pattern.base': `Should not contain special characters.`,
+      'any.required': `Please enter a last name.`,
     }),
   userName: Joi.string()
     .required()
     .label('Username')
     .regex(usernamePattern)
     .messages({
-      'string.empty': `Username cannot be an empty field`,
+      'string.empty': `Please enter a username.`,
       'string.pattern.base': `Pattern doesn't match.`,
+      'any.required': `Please enter a username.`,
     }),
   address: Joi.string().allow(null, '').label('Address').messages({
-    'string.base': `Address should be text.`,
+    'string.base': `Address should be a string.`,
   }),
   email: Joi.string()
     .email({tlds: {allow: false}})
@@ -54,25 +56,21 @@ export const schemaProfileUpdate = Joi.object({
     'array.empty': `Please select {#limit} skills`,
   }),
   country: Joi.string().required().label('Country').messages({
-    'any.required': `cannot be an empty field`,
-    'string.base': `Email should be a type of 'text'.`,
-    'string.empty': `Email cannot be an empty field.`,
+    'any.required': `Please select a country`,
+    'string.base': `Please select a country`,
+    'string.empty': `Please select a country`,
   }),
   city: Joi.string().required().label('City').messages({
-    'any.required': `cannot be an empty field`,
-    'string.base': `Email should be a type of 'text'.`,
-    'string.empty': `Email cannot be an empty field.`,
+    'any.required': `Please select a city`,
+    'string.base': `Please select a city.`,
+    'string.empty': `Please select a city.`,
   }),
-  countryNumber: Joi.string().allow(null, '').label('countryNumber').messages({
-    'any.required': `cannot be an empty field`,
-  }),
+  countryNumber: Joi.string().allow(null, '').label('countryNumber'),
   phoneNumber: Joi.string()
     .allow(null, '')
     .regex(rxNotMobileNumber)
     .label('phoneNumber')
     .messages({
-      'string.empty': `Phone number cannot be an empty field.`,
-      'string.required': `Phone number cannot be an empty field.`,
       'string.pattern.base': `Phone number must be within 3-15 digits.`,
     }),
   bio: Joi.string().max(160).required().label('Bio').messages({
