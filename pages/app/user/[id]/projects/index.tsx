@@ -10,7 +10,6 @@ import {useRouter} from 'next/router';
 import useSWR from 'swr';
 
 //components
-import MainContent from '@components/common/UserProfile/MainContent';
 import {get} from 'utils/request';
 
 const UserHiredProjects: NextPage = () => {
