@@ -72,7 +72,7 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
           </div>
         )}
       </div>
-      {children && children(handleChooseMedia)}
+      {children && children(handleChooseMedia, imagePreviewUrl)}
     </>
   );
 };
