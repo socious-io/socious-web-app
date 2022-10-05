@@ -1,0 +1,14 @@
+.layoutBase {
+  width: 100%;
+  @screen sm {
+    height: 720px;
+    width: 760px;
+  }
+}
+
+.contentBase {
+  height : 500px;
+  @screen sm {
+    height: 575px;
+  }
+}

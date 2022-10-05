@@ -10,7 +10,7 @@ import {useRouter} from 'next/router';
 import Header from './Header';
 import ProfileInfo from './ProfileInfo';
 import Skills from './Skills';
-import SocialCauses from './SocialCauses';
+import ProjectItem from './ProjectItem';
 import Description from './Description';
 import Contact from './Contact';
 import RightPaneContainer from '../RightPane/RightPaneContainer';
@@ -54,7 +54,7 @@ const MainContent: React.FC<Props> = ({data, status, profile_mutate}) => {
         'invalid input syntax for type uuid',
       ))
   )
-    return <p>invalid user identitiy</p>;
+    return <p>invalid user identity</p>;
 
   const handleProjectsFooterClick = () => {
     router.push(`/app/organization/${data.shortname}/projects`);
@@ -94,8 +94,7 @@ const MainContent: React.FC<Props> = ({data, status, profile_mutate}) => {
         ) : status === 'organization' && user?.name === data?.name ? (
           <p className="mt-3 px-4 text-sm text-secondary">You </p>
         ) : null}
-
-        <SocialCauses social_causes={data?.social_causes} />
+        <ProjectItem title="Social Causes" items={data?.social_causes} />
         {status === 'user' ? (
           <Contact
             address={data?.address}
