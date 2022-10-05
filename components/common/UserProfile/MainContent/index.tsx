@@ -48,7 +48,7 @@ const MainContent: React.FC<Props> = ({data, status, profile_mutate}) => {
         'invalid input syntax for type uuid',
       ))
   )
-    return <p>invalid user identitiy</p>;
+    return <p>invalid user identity</p>;
 
   return (
     <div className="border-1 mb-8 rounded-xl border border-grayLineBased md:w-4/6">
