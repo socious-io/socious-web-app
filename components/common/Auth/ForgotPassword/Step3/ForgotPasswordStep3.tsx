@@ -2,7 +2,7 @@ import {InputFiled, Button} from '@components/common';
 import {useState, useMemo, useCallback} from 'react';
 import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
 import {twMerge} from 'tailwind-merge';
-import {rxHasNumber} from 'utils/regex';
+import {rxHasLowerCase, rxHasNumber, rxHasUpperCase} from 'utils/regex';
 import {StepProps} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
 const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
@@ -26,13 +26,21 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
     () => newPassword && rxHasNumber.test(newPassword),
     [newPassword],
   );
+  const isValidPasswordHasUpCase = useMemo<boolean>(
+    () => newPassword && rxHasUpperCase.test(newPassword),
+    [newPassword],
+  );
+  const isValidPasswordHasLowCase = useMemo<boolean>(
+    () => newPassword && rxHasLowerCase.test(newPassword),
+    [newPassword],
+  );
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
     >
-      <div className="flex h-[28rem] flex-col">
+      <div className="sm:min-h[28rem] flex grow flex-col">
         {' '}
         <h1 className="font-helmet">Reset your password </h1>
         <InputFiled
@@ -66,14 +74,14 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
           className="my-6"
           autoComplete="on"
         />
-        <div className="grid w-full grid-cols-2  gap-3 py-5">
+        <div className="grid w-full grid-cols-4  gap-3 py-5 sm:py-3 md:py-5 2xl:py-3">
           <div
             className={twMerge(
               'flex flex-col  border-t-4 border-t-success py-3',
               !isValidPasswordLength && 'border-opacity-40',
             )}
           >
-            <p className="text-sm">・7 characters </p>
+            <p className="text-sm">・8 characters </p>
           </div>
           <div
             className={twMerge(
@@ -82,6 +90,22 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
             )}
           >
             <p className="text-sm">・1 number </p>
+          </div>
+          <div
+            className={twMerge(
+              'flex flex-col  border-t-4 border-t-success py-3',
+              !isValidPasswordHasUpCase && 'border-opacity-40',
+            )}
+          >
+            <p className="text-sm">・1 uppercase </p>
+          </div>
+          <div
+            className={twMerge(
+              'flex flex-col border-t-4 border-t-success py-3',
+              !isValidPasswordHasLowCase && 'border-opacity-40',
+            )}
+          >
+            <p className="text-sm">・1 lowercase </p>
           </div>
         </div>
       </div>
