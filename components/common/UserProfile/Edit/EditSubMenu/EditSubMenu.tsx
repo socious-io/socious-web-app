@@ -28,7 +28,6 @@ const EditSubMenu = ({
 }: EditSubMenuProps) => {
   const [selecteds, onSelect] = useHandleSelected(formField, maxSize);
 
-  console.log(formField + ' : ' + items);
   const [filteredItems, filterWith] = useFilter(items);
   return (
     <div className="flex grow flex-col overflow-y-auto">

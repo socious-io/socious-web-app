@@ -56,8 +56,6 @@ const UserProfile: NextPage = () => {
   )
     return <p>invalid user</p>;
 
-  console.log('USER :---: ', user);
-
   return (
     <GeneralLayout>
       <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">
