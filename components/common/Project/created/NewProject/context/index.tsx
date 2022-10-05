@@ -26,6 +26,7 @@ export type TProjectContext = {
   project_length: string;
   country: string;
   skills: string[];
+  isEditModalOpen: boolean;
 };
 
 export const initContext: TProjectContext = {
@@ -46,6 +47,7 @@ export const initContext: TProjectContext = {
   project_length: '',
   country: '',
   skills: [],
+  isEditModalOpen: false,
 };
 
 const ProjectContext = createContext<{

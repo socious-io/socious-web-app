@@ -110,11 +110,11 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
       </FromLayout>
       <div className=" flex items-end justify-end  border-t p-4">
         <Button
-          disabled={!isValid}
+          disabled={ProjectContext.isEditModalOpen ? false : !isValid}
           type="submit"
           className="flex h-11 w-52 items-center justify-center"
         >
-          Continue
+          {ProjectContext.isEditModalOpen ? 'Save Changes' : ' Continue'}
         </Button>
       </div>
     </form>

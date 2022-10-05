@@ -1,81 +1,93 @@
 import BodyBox from '@components/common/Project/BodyBox/BodyBox';
 import ProjectItem from '@components/common/UserProfile/MainContent/ProjectItem';
 import Title from '@components/common/UserProfile/MainContent/Title';
-import Link from 'next/link';
-import {Modal, Button} from '@components/common';
+import {Modal} from '@components/common';
 import OverviewProjectCard from '../../component/OverviewProjectCard';
-import Image from 'next/image';
 import {useToggle} from 'hooks';
 import AlertCard from '@components/common/AlertCard/AlertCard';
-import TopTileBox from '@components/common/TopTileBox/TopTileBox';
 import EditProjectModal from '../../component/EditProjectModal';
+import {Project} from 'models/project';
+import {useProjectContext} from '@components/common/Project/created/NewProject/context';
 
-const editSrc = require('../../../../../asset/icons/edit.svg');
-const moreSrc = require('../../../../../asset/icons/more.svg');
-const bagSrc = require('../../../../../asset/icons/bag.svg');
-
-var social_causes = [
-  'Armed Conflict',
-  'Abortion',
-  'Biodiversity',
-  'Anti-Semitism',
-  'Animal Rights',
-];
-var skills = [
-  'Bloomberg Terminal',
-  'Investment Banking',
-  'Sustainable Finance',
-  'Impact Investing',
-  'nnnn Analysis',
-];
-
-const Detail = () => {
+function Detail({
+  title,
+  country_id,
+  project_type,
+  payment_range_higher,
+  payment_range_lower,
+  remote_preference,
+  project_length,
+  experience_level,
+  description,
+  payment_type,
+  payment_scheme,
+  payment_currency = '',
+  status = '',
+  causes_tags = [],
+  skills = [],
+}: Project) {
   const {state: closeProject, handlers: closeProjectHandlers} = useToggle();
   const {state: avoidClose, handlers: avoidCloseHandlers} = useToggle();
+  const {ProjectContext, setProjectContext} = useProjectContext();
+
+  console.log(causes_tags);
+  const clickEditIcon = (formStep: number) => {
+    setProjectContext({
+      ...ProjectContext,
+      isEditModalOpen: !ProjectContext.isEditModalOpen,
+      title,
+      country: String(country_id),
+      description,
+      payment_type,
+      experience_level,
+      payment_currency,
+      payment_range_higher,
+      payment_range_lower,
+      payment_scheme,
+      project_length,
+      project_type,
+      remote_preference,
+      status,
+      causes_tags,
+      skills,
+      formStep,
+    });
+  };
+
   return (
     <div className="mb-10 w-full ">
-      <TopTileBox
-        title={'Project was closed on 12 Dec'}
-        titleClassname={'text-white'}
-        backColor={'bg-error'}
-        iconSrc={bagSrc}
-      />
       <div className="divide-y rounded-2xl border border-grayLineBased bg-white ">
         <div className="flex flex-row items-center justify-between px-4 ">
-          <Title>Project Title</Title>
-          <div className="relative  h-5 w-5 ">
-            <span onClick={closeProjectHandlers.on}>
-              <a>
-                <Image
-                  src={moreSrc}
-                  className="fill-warning"
-                  alt="dislike"
-                  layout="fill" // required
-                />
-              </a>
-            </span>
-          </div>
+          <Title>{title}</Title>
         </div>
-        <OverviewProjectCard />
-        <ProjectItem items={social_causes} title="Social causes" />
-        <ProjectItem items={skills} title="Skills" />
-        {/* <div className="p-4">
-          <div className="flex flex-row items-center justify-between ">
-            <Title>Screen review</Title>
-            <div className="relative  h-5 w-5 ">
-              <Link href="/">
-                <a>
-                  <Image
-                    src={editSrc}
-                    className="fill-warning"
-                    alt="dislike"
-                    layout="fill" // required
-                  />
-                </a>
-              </Link>
-            </div>
-          </div>
-        </div> */}
+        <OverviewProjectCard
+          title={title}
+          description={description}
+          country_id={country_id}
+          project_type={project_type}
+          project_length={project_length}
+          payment_type={payment_type}
+          payment_scheme={payment_scheme}
+          payment_range_lower={payment_range_lower}
+          payment_range_higher={payment_range_higher}
+          experience_level={experience_level}
+          remote_preference={remote_preference}
+          payment_currency={payment_currency}
+          status={status}
+          onclick={() => clickEditIcon(0)}
+        />
+        <ProjectItem
+          items={causes_tags}
+          title="Social causes"
+          isEdit
+          onclick={() => clickEditIcon(1)}
+        />
+        <ProjectItem
+          items={skills}
+          title="Skills"
+          isEdit
+          onclick={() => clickEditIcon(2)}
+        />
       </div>
       <Modal isOpen={closeProject} onClose={closeProjectHandlers.off}>
         <EditProjectModal onSubmit={() => {}} />
@@ -85,7 +97,7 @@ const Detail = () => {
         <AlertCard
           title={''}
           description={
-            'You can not close projects while theer are still on-going assignements. Please end all assignememts before closing the project.'
+            'You can not close projects while there are still on-going assignments. Please end all assignments before closing the project.'
           }
           buttonTitleAccept={'Back'}
           buttonTitleCancel={''}
@@ -96,6 +108,6 @@ const Detail = () => {
       </Modal>
     </div>
   );
-};
+}
 
 export default Detail;
