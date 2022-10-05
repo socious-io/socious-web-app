@@ -30,7 +30,7 @@ interface Props {
   data: any;
   status: 'user' | 'organization';
   profile_mutate: KeyedMutator<any>;
-  editProfile: () => void;
+  editProfile?: () => void;
 }
 
 const MainContent: React.FC<Props> = ({

@@ -37,7 +37,7 @@ interface Props {
   identities_mutate: KeyedMutator<any>;
   profile_mutate: KeyedMutator<any>;
   loggedIn: boolean;
-  editProfile: () => void;
+  editProfile?: () => void;
 }
 
 const Header: React.FC<Props> = ({
@@ -123,7 +123,9 @@ const Header: React.FC<Props> = ({
 
         {/* show edit profile button just for own user */}
         {loggedIn && own_user && (
-          <Button onClick={editProfile}>Edit profile</Button>
+          <Button onClick={() => editProfile && editProfile()}>
+            Edit profile
+          </Button>
         )}
       </div>
 
