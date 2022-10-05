@@ -39,7 +39,7 @@ function ProjectCard({
         <div className="space-y-6">
           <div className="flex flex-row items-center justify-between ">
             <div className="flex flex-row space-x-2">
-              <Avatar size="l" type={1} src={orgData?.image} />
+              <Avatar size="l" type={'organizations'} src={orgData?.image} />
               <div className="flex flex-col justify-center">
                 <p className="text-black">{orgData?.name}</p>
                 {country_id && (
