@@ -1,5 +1,5 @@
 /*
- * user profile page with dynamik route
+ * user profile page with dynamic route
  */
 
 import React from 'react';
@@ -10,8 +10,8 @@ import {useRouter} from 'next/router';
 import useSWR from 'swr';
 
 //components
-import MainContent from '@components/common/UserProfile/MainContent';
 import {GeneralLayout} from 'layout';
+import MainContent from '@components/common/UserProfile/MainContent';
 
 //utils
 import {get} from 'utils/request';

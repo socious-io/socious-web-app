@@ -75,7 +75,7 @@ const MainContent = () => {
   );
 
   return (
-    <div className="mb-10 w-full sm:space-y-6">
+    <div className="mb-10 sm:space-y-6">
       <AddPost onClickAdd={addPostHandlers.on} />
       <PostContainer />
       {/* Like Modal */}

@@ -16,7 +16,11 @@ const SideBar = ({selectBar = ''}: Props) => {
 
   return (
     <div className="hidden w-80 md:flex" aria-label="Sidebar">
-      <div className="space-y-4 overflow-y-auto bg-gray-50">
+      <div
+        className={`${
+          selectBar != 'PROJECT_BACKBAR' && 'flex w-full'
+        } space-y-4 overflow-y-auto bg-gray-50`}
+      >
         {(selectBar == 'PROJECT_BACKBAR' || selectBar == 'PROJECT_DETAIL') && (
           <div className="flex flex-row rounded-2xl border  border-grayLineBased bg-white py-4 pr-20 ">
             <ChevronLeftIcon className="mr-5 w-6" />
@@ -31,7 +35,7 @@ const SideBar = ({selectBar = ''}: Props) => {
         )}
 
         {selectBar != 'PROJECT_BACKBAR' && (
-          <div className="space-y-4 overflow-y-auto bg-gray-50">
+          <div className="flex w-full flex-col space-y-4 overflow-y-auto bg-gray-50">
             <ProfileCard
               content={user?.mission}
               name={
@@ -56,7 +60,7 @@ const SideBar = ({selectBar = ''}: Props) => {
             {/* TODO: Uncomment after status is fixed */}
             {/* <StatusCard status={user?.status} /> */}
             {selectBar == '' && (
-              <div className="space-y-4">
+              <div className="space-y-4 overflow-y-auto">
                 {currentIdentity?.type === 'users' ? (
                   <NetworkCard username={user?.username} />
                 ) : (
@@ -65,7 +69,7 @@ const SideBar = ({selectBar = ''}: Props) => {
                 <ProjectsCard
                   isOrganization={currentIdentity?.type === 'organizations'}
                   username={user?.username}
-                />{' '}
+                />
               </div>
             )}
           </div>

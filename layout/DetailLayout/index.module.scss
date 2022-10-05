@@ -1,0 +1,6 @@
+.container {
+  width: 100%;
+  @screen sm {
+    max-width: 616px;
+  }
+}

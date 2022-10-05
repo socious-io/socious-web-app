@@ -4,27 +4,35 @@ import RecommendCard from './RecommendCard';
 var data = [
   {
     id: 1,
+    title: 'Project Title',
   },
   {
     id: 2,
+    title: 'Project Title',
   },
   {
     id: 3,
+    title: 'Project Title',
   },
   {
     id: 4,
+    title: 'Project Title',
   },
   {
     id: 5,
+    title: 'Project Title',
   },
   {
     id: 6,
+    title: 'Project Title',
   },
   {
     id: 7,
+    title: 'Project Title',
   },
   {
     id: 8,
+    title: 'Project Title',
   },
 ];
 function SliderCard() {
@@ -47,22 +55,10 @@ function SliderCard() {
   return (
     <div
       id="slider"
-      className="scroll w-full flex-row overflow-x-scroll scroll-smooth whitespace-nowrap scrollbar-hide md:max-w-3xl "
+      className="scroll w-full flex-row overflow-x-scroll scroll-smooth whitespace-nowrap scrollbar-hide"
     >
-      {data.map((item) => (
-        <RecommendCard
-          key={item.id}
-          title={''}
-          description={''}
-          country_id={0}
-          project_type={0}
-          project_length={0}
-          payment_type={0}
-          payment_scheme={0}
-          payment_range_lower={''}
-          payment_range_higher={''}
-          experience_level={0}
-        />
+      {data.map((item, index) => (
+        <RecommendCard key={item.id} title={item.title} index={index} />
       ))}
     </div>
   );
