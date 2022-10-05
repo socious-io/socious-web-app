@@ -167,6 +167,8 @@ const EditMainMenu = ({
           const countryCode =
             result?.[0]?.address_components[0]?.short_name?.toLowerCase();
           handleSetCountry(countryCode);
+          // Remove this if no need to change countryNumber
+          setCountryKey(countryCode);
         })
         .catch((error: any) => console.error(error));
     },
@@ -183,9 +185,6 @@ const EditMainMenu = ({
       })
       .catch((error: any) => console.error(error));
   }, []);
-
-  //Change CountryKey when new country is selected.
-  useEffect(() => setCountryKey(countryCode), [countryCode]);
 
   //Set Default Country when country is available.
   useEffect(() => {
