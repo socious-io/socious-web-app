@@ -14,6 +14,10 @@ import {Button} from '@components/common';
 
 const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
   const {setProjectContext, ProjectContext} = useProjectContext();
+  const disableIcon =
+    !ProjectContext.title ||
+    !ProjectContext.description ||
+    !ProjectContext.remote_preference;
   const {
     setValue,
     handleSubmit,
@@ -188,7 +192,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
       </FromLayout>
       <div className=" flex items-end justify-end  border-t p-4">
         <Button
-          disabled={ProjectContext.isEditModalOpen ? false : !isValid}
+          disabled={ProjectContext.isEditModalOpen ? disableIcon : !isValid}
           type="submit"
           className="flex h-11 w-52 items-center justify-center"
         >
