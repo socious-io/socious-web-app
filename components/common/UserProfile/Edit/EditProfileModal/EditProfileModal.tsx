@@ -1,5 +1,11 @@
 // Packages
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react';
 import {twMerge} from 'tailwind-merge';
 import useSWRInfinite from 'swr/immutable';
 import {FormProvider, useForm} from 'react-hook-form';
@@ -18,7 +24,6 @@ import {ChevronLeftIcon, XMarkIcon} from '@heroicons/react/24/solid';
 import {schemaProfileUpdate} from '@api/user/validation';
 
 // custom hooks/functions
-import {useUser} from '@hooks';
 import {updateProfile} from '@api/auth/actions';
 import {checkAndUploadMedia} from 'services/ImageUpload';
 
@@ -28,6 +33,9 @@ const passionData = Object.keys(Data.SocialCauses);
 
 // Types
 import {UpdateProfileBodyType} from '@models/profile';
+import {mutate} from 'swr';
+import Router from 'next/router';
+import {useUser} from '@hooks';
 interface EditProfileModalProps {
   openState: boolean;
   user: any;
@@ -39,15 +47,21 @@ const EditProfileModal = ({
   user,
   closeModal,
 }: EditProfileModalProps) => {
-  const {mutateUser} = useUser();
+  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
   const [editState, setEditState] = useState<'MAIN' | 'CAUSES' | 'SKILLS'>(
     'MAIN',
   );
 
-  const [avatar, setAvatar] = useState<any>(user?.avatar?.id ?? null);
-  const [coverImage, setCoverImage] = useState<any>(
-    user?.cover_image?.id ?? null,
-  );
+  const {mutateUser} = useUser();
+  const [avatar, setAvatar] = useState<any>();
+  const [coverImage, setCoverImage] = useState<any>();
+
+  useEffect(() => {
+    if (user) {
+      setAvatar(user?.avatar?.id ?? null);
+      setCoverImage(user?.cover_image?.id ?? null);
+    }
+  }, [user]);
 
   //Passions
   const passions = useMemo(
@@ -131,7 +145,7 @@ const EditProfileModal = ({
     const skills: string[] = formMethods.getValues('skills');
     const country: string = formMethods.getValues('country');
     const city: string = formMethods.getValues('city');
-    const address: string = formMethods.getValues('address').trim();
+    const address: string = formMethods.getValues('address')?.trim();
     const mobile_country_code: string = formMethods.getValues('countryNumber');
     const phone: string = formMethods.getValues('phoneNumber');
 
@@ -156,13 +170,18 @@ const EditProfileModal = ({
 
     //Making a API call
     try {
-      const response = await updateProfile(updateProfileBody);
+      const response: any = await updateProfile(updateProfileBody);
       mutateUser(response);
-      onForceClose();
+      user?.username === response.username
+        ? mutate(`/user/by-username/${user?.username}/profile`)
+        : Router.push(`/app/user/${response.username}`);
+      closeModal();
+      forceUpdate();
     } catch (error) {
       console.log('ERROR :---: ', error);
     }
-  }, [avatar, coverImage, formMethods, mutateUser, onForceClose]);
+  }, [avatar, closeModal, coverImage, formMethods, mutateUser, user?.username]);
+
   return (
     <Modal
       isOpen={openState}
