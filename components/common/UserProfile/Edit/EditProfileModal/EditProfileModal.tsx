@@ -36,6 +36,7 @@ import {UpdateProfileBodyType} from '@models/profile';
 import {mutate} from 'swr';
 import Router from 'next/router';
 import {useUser} from '@hooks';
+import {close} from 'inspector';
 interface EditProfileModalProps {
   openState: boolean;
   user: any;
@@ -221,7 +222,7 @@ const EditProfileModal = ({
 
             <span
               className="absolute top-6 right-3 cursor-pointer text-base text-primary sm:hidden"
-              onClick={() => false}
+              onClick={() => closeModal()}
             >
               Save
             </span>
