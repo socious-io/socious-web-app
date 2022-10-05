@@ -323,7 +323,8 @@ const EditMainMenu = ({
                 Contact
               </h3>
               <div className="space-y-8">
-                <InputFiled
+                {/* Commenting out bc BE doesn't like it. Will have different process for changing it. */}
+                {/* <InputFiled
                   label="Email"
                   type="email"
                   placeholder="Email"
@@ -331,7 +332,7 @@ const EditMainMenu = ({
                   errorMessage={formState?.errors?.['email']?.message}
                   required
                   className="my-6"
-                />
+                /> */}
                 <Combobox
                   label="Country"
                   onSelected={onCountrySelected}
