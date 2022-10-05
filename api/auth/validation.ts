@@ -144,10 +144,11 @@ export const schemaSignupStep1 = Joi.object({
   lastName: Joi.string()
     .required()
     .label('LastName')
-    .regex(rxNoSpecialCharacters)
+    .regex(rxNoSpecialCharactersMultiWords)
     .messages({
       'string.empty': `Last name cannot be an empty field`,
       'string.pattern.base': `Should not contain special characters.`,
+      'any.required': `Last name cannot be an empty field.`,
     }),
 });
 export const schemaSignupStep2 = Joi.object({
