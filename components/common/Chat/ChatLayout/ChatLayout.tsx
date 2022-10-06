@@ -12,7 +12,7 @@ import {SideBar} from '../SideBar/SideBar';
 // type
 interface ChatLayoutProps {
   children: (handleRefresh?: any) => React.ReactNode;
-  page: string;
+  page: 'index' | 'show';
 }
 const ChatLayout = ({children, page}: ChatLayoutProps) => {
   const router = useRouter();

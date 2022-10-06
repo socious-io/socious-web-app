@@ -17,7 +17,7 @@ import {twMerge} from 'tailwind-merge';
 
 type ChatSideBarProps = {
   onChatOpen?: (data: any) => void;
-  page: string;
+  page: 'index' | 'show';
   toggleAddChat: () => void;
 };
 
