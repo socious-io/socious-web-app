@@ -46,18 +46,24 @@ export const schemaForgotPasswordStep1 = Joi.object({
 });
 
 export const schemaForgotPasswordStep3 = Joi.object({
-  newPassword: Joi.string().min(8).required().messages({
-    'string.base': `Password should be a type of 'text'`,
-    'string.empty': `Password cannot be an empty field`,
-    'string.min': `Password should have a minimum length of {#limit}`,
-    'any.required': `Password is a required field`,
-  }),
+  newPassword: Joi.string()
+    .min(8)
+    .required()
+    .regex(rxHasUpperLower)
+    .regex(rxHasNumber)
+    .messages({
+      'string.base': `Password should be a type of 'text'`,
+      'string.empty': `Password cannot be an empty field`,
+      'string.min': `Password should have a minimum length of {#limit}`,
+      'any.required': `Password is a required field`,
+      'string.pattern.base': `Password is not strong enough`,
+    }),
   confirmNewPassword: Joi.string()
     .min(8)
     .valid(Joi.ref('newPassword '))
     .required()
     .messages({
-      'any.only': '{{#label}} does not match',
+      'any.only': 'The passwords you entered do not match.',
       'string.base': `Confirm password should be a type of 'text'`,
       'string.empty': `Confirm password cannot be an empty field`,
       'any.required': `Confirm password is a required field`,
@@ -144,10 +150,11 @@ export const schemaSignupStep1 = Joi.object({
   lastName: Joi.string()
     .required()
     .label('LastName')
-    .regex(rxNoSpecialCharacters)
+    .regex(rxNoSpecialCharactersMultiWords)
     .messages({
       'string.empty': `Last name cannot be an empty field`,
       'string.pattern.base': `Should not contain special characters.`,
+      'any.required': `Last name cannot be an empty field.`,
     }),
 });
 export const schemaSignupStep2 = Joi.object({
@@ -172,7 +179,7 @@ export const schemaSignupStep3 = Joi.object({
       'string.empty': `Password cannot be an empty field`,
       'string.min': `Password should have a minimum length of {#limit}`,
       'any.required': `Password is a required field`,
-      'string.pattern.base': `Password is not strong.`,
+      'string.pattern.base': `Password is not strong enough`,
     }),
   confirmPassword: Joi.string()
     .min(8)
