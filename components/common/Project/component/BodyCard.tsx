@@ -16,7 +16,7 @@ function BodyCard({item, name, image}: Props) {
           <p className="font-semibold">{item?.title}</p>
         </div>
         <div className="flex flex-row items-center  space-x-2">
-          <Avatar size="l" src={image} type={1} />
+          <Avatar size="l" src={image} type={'organizations'} />
           <p className="text-black">{name}</p>
         </div>
         <div>
