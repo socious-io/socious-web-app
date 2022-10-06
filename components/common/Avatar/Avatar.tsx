@@ -4,12 +4,14 @@
 // import AvatarDefault from "../../../asset/images/user.png";
 // import OraganizationDefault from "../../../asset/images/company-avatar-filled.png";
 import {twMerge} from 'tailwind-merge';
+import enums from '@socious/data';
 
+import {IdentityType} from '@models/identity';
 export interface AvatarProps {
   src?: string;
   size?: 's' | 'm' | 'l' | 'xl' | 'xxl';
   status?: 'offline' | 'online' | 'busy';
-  type?: 0 | 1;
+  type?: IdentityType;
   rounded?: boolean;
   className?: any;
 }
@@ -47,14 +49,14 @@ export function Avatar({
   size = 's',
   status,
   src,
-  type = 0,
+  type = 'users',
   rounded = true,
   className,
 }: AvatarProps) {
   const {imageSize, statusSize} = SIZE_LIST[size];
   const statusColor = status && STATUS_COLOR[status];
 
-  const imgSrc = require(type === 1
+  const imgSrc = require(type === 'organizations'
     ? '../../../asset/images/company-avatar-filled.png'
     : '../../../asset/images/user.png');
 

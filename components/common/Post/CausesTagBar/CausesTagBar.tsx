@@ -5,12 +5,14 @@ import Data, {getText} from '@socious/data';
 
 const items = Object.keys(Data.SocialCauses);
 
+import {IdentityType} from '@models/identity';
 interface CausesTagBarProps {
-  src: string;
+  src?: string;
+  type?: IdentityType;
   controller: UseControllerReturn;
 }
 
-export const CausesTagBar = ({src, controller}: CausesTagBarProps) => {
+export const CausesTagBar = ({src, type, controller}: CausesTagBarProps) => {
   const localItems = useMemo(
     () => {
       const sorted = items.map((id) => ({
@@ -27,7 +29,7 @@ export const CausesTagBar = ({src, controller}: CausesTagBarProps) => {
 
   return (
     <div className="-ml-6 -mr-6 flex items-center space-x-3 border-y-[0.5px] border-[#C3C8D9] p-4">
-      <Avatar src={src} size="m" />
+      <Avatar src={src} size="m" type={type} />
       <Combobox
         selected={
           controller?.field?.value

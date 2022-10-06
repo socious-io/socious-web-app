@@ -15,18 +15,24 @@ export const schemaChangePassword = Joi.object({
     'string.min': `Password should have a minimum length of {#limit}`,
     'any.required': `Password is a required field`,
   }),
-  newPassword: Joi.string().min(8).required().messages({
-    'string.base': `Password should be a type of 'text'`,
-    'string.empty': `Password cannot be an empty field`,
-    'string.min': `Password should have a minimum length of {#limit}`,
-    'any.required': `Password is a required field`,
-  }),
+  newPassword: Joi.string()
+    .min(8)
+    .required()
+    .regex(rxHasUpperLower)
+    .regex(rxHasNumber)
+    .messages({
+      'string.base': `Password should be a type of 'text'`,
+      'string.empty': `Password cannot be an empty field`,
+      'string.min': `Password should have a minimum length of {#limit}`,
+      'any.required': `Password is a required field`,
+      'string.pattern.base': `Password is not strong enough`,
+    }),
   confirmNewPassword: Joi.string()
     .min(8)
     .valid(Joi.ref('newPassword '))
     .required()
     .messages({
-      'any.only': '{{#label}} does not match',
+      'any.only': 'The passwords you entered do not match.',
       'string.base': `Confirm password should be a type of 'text'`,
       'string.empty': `Confirm password cannot be an empty field`,
       'any.required': `Confirm password is a required field`,

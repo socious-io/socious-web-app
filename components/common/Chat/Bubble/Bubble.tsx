@@ -23,7 +23,7 @@ const Bubble = ({self = true, content, link, userInfo}: BubbleProps) => {
           src={
             userInfo?.identity_meta?.avatar || userInfo?.identity_meta?.image
           }
-          type={userInfo?.identity_type === 'users' ? 0 : 1}
+          type={userInfo?.identity_type}
         />
       </div>
       <div

@@ -133,7 +133,7 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
                 ? otherParticipants?.[0]?.identity_meta?.avatar
                 : otherParticipants?.[0]?.identity_meta?.image
             }
-            type={otherParticipants?.[0]?.identity_type === 'users' ? 0 : 1}
+            type={otherParticipants?.[0]?.identity_type}
           />
           <div className="grow">
             <p className="cursor-pointer text-base">
@@ -160,7 +160,7 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
               ? user?.avatar?.url
               : user?.image?.url
           }
-          type={currentIdentity?.type === 'users' ? 0 : 1}
+          type={currentIdentity?.type}
           avatarSize="m"
           onSend={onSendMessage}
           placeholder="Write a message"

@@ -6,8 +6,9 @@ type ObjectType = {id: string; name: string};
 const useFilter = (
   defaultValue: ObjectType[],
 ): [ObjectType[], (text: string) => void] => {
-  const [filteredItems, setFilteredItems] =
-    useState<ObjectType[]>(defaultValue);
+  const [filteredItems, setFilteredItems] = useState<ObjectType[]>(
+    defaultValue ?? [],
+  );
 
   // const defaultValue1 = useMemo(() => defaultValue, [defaultValue])
   const filterWith = useCallback(

@@ -15,6 +15,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 //interfaces
+import {IdentityType} from '@models/identity';
 interface Props {
   address?: string;
   country?: string;
@@ -23,7 +24,7 @@ interface Props {
   email?: string;
   phone?: string;
   website?: string;
-  status: 'user' | 'organization';
+  status: IdentityType;
 }
 
 const Contact: React.FC<Props> = ({
@@ -40,7 +41,7 @@ const Contact: React.FC<Props> = ({
     <div className="border-t  border-grayLineBased px-4">
       <Title>Contact</Title>
 
-      {status === 'organization' ? (
+      {status === 'organizations' ? (
         <>
           <div className="mb-4 flex">
             <MapPinIcon className="h-6 w-6 stroke-1.5 text-secondary" />

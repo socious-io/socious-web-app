@@ -1,6 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import AddPost from './AddPost';
-import Posts from './Posts';
 import {Modal, Button} from '@components/common';
 import {useToggle} from '@hooks';
 import {Avatar} from '@components/common';
@@ -17,6 +16,11 @@ import PostCreateStep1 from '@components/common/Post/Create/Step1/PostCreateStep
 import PostCreateStep2 from '@components/common/Post/Create/Step2/PostCreateStep2';
 import PostContainer from './PostContainer';
 
+// Types
+export interface InsertNewPost {
+  setNewPost: (post: any) => void;
+}
+
 const MainContent = () => {
   const {state: addPostState, handlers: addPostHandlers} = useToggle();
   const {state: likeState, handlers: likeHandlers} = useToggle();
@@ -24,6 +28,7 @@ const MainContent = () => {
   const formMethodsStep1 = useForm({resolver: joiResolver(schemaCreatePost)});
   const {getValues, setValue} = formMethodsStep1;
   const [step, setStep] = useState<number>(1);
+  const addPost = useRef<InsertNewPost>(null);
 
   const resetCreatePostForm = useCallback(() => {
     addPostHandlers.off();
@@ -56,7 +61,7 @@ const MainContent = () => {
 
     try {
       const res = await createPost(postBody);
-      console.log('response: ', res);
+      addPost?.current?.setNewPost(res);
     } catch (error) {
       console.error(error);
     }
@@ -77,7 +82,7 @@ const MainContent = () => {
   return (
     <div className="mb-10 sm:space-y-6">
       <AddPost onClickAdd={addPostHandlers.on} />
-      <PostContainer />
+      <PostContainer ref={addPost} />
       {/* Like Modal */}
       <Modal isOpen={likeState} onClose={likeHandlers.off}>
         <Modal.Title>

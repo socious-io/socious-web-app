@@ -22,7 +22,7 @@ const ChatCard = ({chat, onChatOpen}: ChatCardProps) => {
               ? chat?.participants?.[0]?.identity_meta?.avatar
               : chat?.participants?.[0]?.identity_meta?.image
           }
-          type={chat?.participants?.[0]?.identity_type === 'users' ? 0 : 1}
+          type={chat?.participants?.[0]?.identity_type}
         />
       </div>
       <div className="w-2/5 grow cursor-pointer">

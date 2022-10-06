@@ -15,7 +15,7 @@ interface PostCreateStepProps extends StepProps {
 }
 
 const PostCreateStep1 = ({onSubmit, setFile, file}: PostCreateStepProps) => {
-  const {user} = useUser();
+  const {user, currentIdentity} = useUser();
   const formMethods = useFormContext();
   const {handleSubmit, formState, register, getValues} = formMethods;
   const causesTagsController = useController<FieldValues, string>({
@@ -30,7 +30,12 @@ const PostCreateStep1 = ({onSubmit, setFile, file}: PostCreateStepProps) => {
       <Modal.Description>
         <div className="mt-2 space-y-8">
           <CausesTagBar
-            src={user?.avatar?.url}
+            type={currentIdentity?.type}
+            src={
+              currentIdentity?.type === 'users'
+                ? currentIdentity?.meta?.avatar
+                : currentIdentity?.meta?.image
+            }
             controller={causesTagsController}
           />
           <TextArea
