@@ -39,7 +39,6 @@ const MainContent = ({onClickShow}: Props) => {
   );
 
   if (!infiniteProject && !infiniteError) <div>Loading....</div>;
-  console.log(flatProjectArray);
 
   return (
     <div className="mb-10 space-y-6">

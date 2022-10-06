@@ -23,6 +23,8 @@ export interface Project {
   remote_preference: string;
   identity_id?: number;
   status?: string;
+  created_at?: number;
+  expires_at?: number;
 }
 
 export interface CreateProjectType {
