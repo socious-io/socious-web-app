@@ -37,8 +37,6 @@ export function SharedCard({
   username,
   optionClicked,
 }: SharedCardProps) {
-  const {state, handlers} = useToggle();
-
   return (
     <div className="relative space-y-5 border-b border-neutralGray py-4">
       <PostHead

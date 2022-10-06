@@ -23,7 +23,11 @@ export function ProfileCard({
   return (
     <div className="flex w-full space-y-4 rounded-2xl border border-grayLineBased bg-background p-4">
       <div className="space-y-4">
-        <Avatar src={avatar ?? ''} size="xl" type={1} />
+        <Avatar
+          src={avatar ?? ''}
+          size="xxl"
+          type={isUser ? 'users' : 'organizations'}
+        />
         <div>
           <p className="text-base font-semibold">
             {name || 'FirstName LastName'}
