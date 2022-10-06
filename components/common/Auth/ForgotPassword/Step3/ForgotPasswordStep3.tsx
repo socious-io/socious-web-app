@@ -18,7 +18,7 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
   const newPassword = watch('newPassword');
 
   const isValidPasswordLength = useMemo<boolean>(
-    () => newPassword && newPassword.length >= 7,
+    () => newPassword && newPassword.length >= 8,
     [newPassword],
   );
 
