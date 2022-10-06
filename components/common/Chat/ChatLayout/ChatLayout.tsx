@@ -40,7 +40,7 @@ const ChatLayout = ({children, page}: ChatLayoutProps) => {
   }, [connectionsData]);
 
   return (
-    <div className="h-full sm:mt-10 sm:flex sm:space-x-4 sm:px-4">
+    <div className="h-full w-full sm:flex sm:space-x-4 sm:px-4">
       <SideBar
         ref={sideBarRefresh}
         page={page}
