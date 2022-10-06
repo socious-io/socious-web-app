@@ -114,7 +114,7 @@ const ChangePassword: NextPage = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
         >
-          <div className="flex h-[28rem] flex-col">
+          <div className="h-min-[28rem] flex flex-col sm:h-[28rem]">
             <InputFiled
               label="Current password"
               type={passwordShown ? 'text' : 'password'}
