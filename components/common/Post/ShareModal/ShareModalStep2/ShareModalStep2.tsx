@@ -34,7 +34,7 @@ export const ShareModalStep2 = ({onShare}: shareModalStep2Props) => {
     },
   });
 
-  const {user} = useUser();
+  const {user, currentIdentity} = useUser();
   const [file, setFile] = useState<string>('');
 
   const {register, handleSubmit, formState, control, getValues} = useForm({
@@ -78,12 +78,28 @@ export const ShareModalStep2 = ({onShare}: shareModalStep2Props) => {
       <Modal.Description>
         <div className="mt-2">
           <CausesTagBar
-            src={user?.avatar?.url}
+            src={
+              currentIdentity?.type === 'users'
+                ? currentIdentity?.meta?.avatar
+                : currentIdentity?.meta?.image
+            }
+            type={currentIdentity?.type}
             controller={causesTagsController}
           />
           <div className="-mr-6 -ml-6 flex items-center space-x-4 p-4">
-            <Avatar src={user?.avatar?.url} size="m" />
-            <span>{user?.first_name + ' ' + user?.last_name}</span>
+            <Avatar
+              src={
+                currentIdentity?.type === 'users'
+                  ? currentIdentity?.meta?.avatar
+                  : currentIdentity?.meta?.image
+              }
+              size="m"
+              type={currentIdentity?.type}
+            />
+            <span>
+              {currentIdentity?.meta?.name ||
+                user?.first_name + ' ' + user?.last_name}
+            </span>
           </div>
           <TextArea
             placeholder="I feel like......"

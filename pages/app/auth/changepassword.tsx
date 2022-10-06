@@ -4,7 +4,7 @@ import {useState, useMemo, useCallback} from 'react';
 import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {InputFiled, Button, Modal} from '@components/common';
-import {rxHasNumber} from 'utils/regex';
+import {rxHasLowerCase, rxHasNumber, rxHasUpperCase} from 'utils/regex';
 import {twMerge} from 'tailwind-merge';
 import {AxiosError} from 'axios';
 
@@ -74,12 +74,22 @@ const ChangePassword: NextPage = () => {
   const newPassword = watch('newPassword');
 
   const isValidPasswordLength = useMemo<boolean>(
-    () => newPassword && newPassword.length >= 7,
+    () => newPassword && newPassword.length >= 8,
     [newPassword],
   );
 
   const isValidPasswordHasNumber = useMemo<boolean>(
     () => newPassword && rxHasNumber.test(newPassword),
+    [newPassword],
+  );
+
+  const isValidPasswordHasUpCase = useMemo<boolean>(
+    () => newPassword && rxHasUpperCase.test(newPassword),
+    [newPassword],
+  );
+
+  const isValidPasswordHasLowCase = useMemo<boolean>(
+    () => newPassword && rxHasLowerCase.test(newPassword),
     [newPassword],
   );
 
@@ -104,7 +114,7 @@ const ChangePassword: NextPage = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
         >
-          <div className="flex h-[28rem] flex-col">
+          <div className="h-min-[28rem] flex flex-col sm:h-[28rem]">
             <InputFiled
               label="Current password"
               type={passwordShown ? 'text' : 'password'}
@@ -124,6 +134,7 @@ const ChangePassword: NextPage = () => {
                   </span>
                 )
               }
+              inputType="borderBottom"
             />
             <InputFiled
               label="New password"
@@ -144,6 +155,7 @@ const ChangePassword: NextPage = () => {
                   </span>
                 )
               }
+              inputType="borderBottom"
             />
             <InputFiled
               label="Confirm new password"
@@ -153,15 +165,16 @@ const ChangePassword: NextPage = () => {
               errorMessage={formState?.errors?.['confirmNewPassword']?.message}
               required
               className="pb-6"
+              inputType="borderBottom"
             />
-            <div className="grid w-full grid-cols-2  gap-3 py-5">
+            <div className="grid w-full grid-cols-4  gap-3 py-5 sm:py-3 md:py-5 2xl:py-3">
               <div
                 className={twMerge(
                   'flex flex-col  border-t-4 border-t-success py-3',
                   !isValidPasswordLength && 'border-opacity-40',
                 )}
               >
-                <p className="text-sm">・7 characters </p>
+                <p className="text-sm">・8 characters </p>
               </div>
               <div
                 className={twMerge(
@@ -170,6 +183,22 @@ const ChangePassword: NextPage = () => {
                 )}
               >
                 <p className="text-sm">・1 number </p>
+              </div>
+              <div
+                className={twMerge(
+                  'flex flex-col  border-t-4 border-t-success py-3',
+                  !isValidPasswordHasUpCase && 'border-opacity-40',
+                )}
+              >
+                <p className="text-sm">・1 uppercase </p>
+              </div>
+              <div
+                className={twMerge(
+                  'flex flex-col border-t-4 border-t-success py-3',
+                  !isValidPasswordHasLowCase && 'border-opacity-40',
+                )}
+              >
+                <p className="text-sm">・1 lowercase </p>
               </div>
             </div>
           </div>

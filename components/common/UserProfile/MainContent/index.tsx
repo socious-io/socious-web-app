@@ -26,9 +26,10 @@ import {get} from 'utils/request';
 import {useUser} from '@hooks';
 
 // interfaces
+import {IdentityType} from '@models/identity';
 interface Props {
   data: any;
-  status: 'user' | 'organization';
+  status: IdentityType;
   profile_mutate: KeyedMutator<any>;
   editProfile?: () => void;
 }
@@ -70,7 +71,7 @@ const MainContent: React.FC<Props> = ({
     <div className="mb-8 flex w-full flex-col items-start gap-6 md:flex-row">
       <div className="border-1 rounded-xl border border-grayLineBased bg-white md:w-4/6">
         <Header
-          avatar={status === 'user' ? data?.avatar : data?.image}
+          avatar={status === 'users' ? data?.avatar : data?.image}
           cover_image={data?.cover_image}
           status={status}
           following={identities?.following}
@@ -79,9 +80,9 @@ const MainContent: React.FC<Props> = ({
           profile_mutate={profile_mutate}
           loggedIn={user ? true : false}
           own_user={
-            status === 'user' && user?.username === data?.username
+            status === 'users' && user?.username === data?.username
               ? true
-              : status === 'organization' && user?.name === data?.name
+              : status === 'organizations' && user?.name === data?.name
               ? true
               : false
           }
@@ -96,13 +97,13 @@ const MainContent: React.FC<Props> = ({
         />
 
         {/* if user/organization is current user/organization show 'You' */}
-        {status === 'user' && user?.username === data?.username ? (
+        {status === 'users' && user?.username === data?.username ? (
           <p className="mt-3 px-4 text-sm text-secondary">You </p>
-        ) : status === 'organization' && user?.name === data?.name ? (
+        ) : status === 'organizations' && user?.name === data?.name ? (
           <p className="mt-3 px-4 text-sm text-secondary">You </p>
         ) : null}
         <ProjectItem title="Social Causes" items={data?.social_causes} />
-        {status === 'user' ? (
+        {status === 'users' ? (
           <Contact
             address={data?.address}
             country={data?.country}
@@ -123,10 +124,10 @@ const MainContent: React.FC<Props> = ({
         )}
         <Description
           paragraph={data?.mission}
-          title={status === 'user' ? 'About' : 'Mission'}
+          title={status === 'users' ? 'About' : 'Mission'}
         />
-        {status === 'user' && <Skills skills={data?.skills} />}
-        <hr className="border-grayLineBased" />
+        {status === 'users' && <Skills skills={data?.skills} />}
+        <hr className="mb-20 border-grayLineBased" />
       </div>
 
       <div className="w-full md:w-2/6">

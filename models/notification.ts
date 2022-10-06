@@ -1,3 +1,5 @@
+import {IdentityType} from './identity';
+
 export interface NotificationItem {
   id: string;
   type:
@@ -36,7 +38,7 @@ export interface NotificationItem {
         avatar: string | null;
         username: string;
       };
-      type: 'users' | 'organizations';
+      type: IdentityType;
       follower: boolean;
       following: boolean;
       created_at: string | null;

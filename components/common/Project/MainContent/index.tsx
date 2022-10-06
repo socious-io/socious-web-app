@@ -39,7 +39,6 @@ const MainContent = ({onClickShow}: Props) => {
   );
 
   if (!infiniteProject && !infiniteError) <div>Loading....</div>;
-  console.log(flatProjectArray);
 
   return (
     <div className="mb-10 space-y-6">
@@ -65,6 +64,7 @@ const MainContent = ({onClickShow}: Props) => {
             remote_preference={item?.remote_preference}
             causes_tags={item?.causes_tags}
             identity_id={item?.identity_id}
+            id={item?.id}
           />
         ))}
       </div>

@@ -61,7 +61,7 @@ const UserProfile: NextPage = () => {
       <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">
         <MainContent
           data={data}
-          status="user"
+          status="users"
           profile_mutate={mutate}
           editProfile={openEditModal}
         />

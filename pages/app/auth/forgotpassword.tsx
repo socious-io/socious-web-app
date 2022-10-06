@@ -1,13 +1,13 @@
 import type {NextPage} from 'next';
 import {useRouter} from 'next/router';
-import {useCallback, useEffect, useMemo, useReducer, useState} from 'react';
+import {useEffect, useReducer, useState} from 'react';
 import {FormProvider, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
+import {ChevronLeftIcon} from '@heroicons/react/24/outline';
+import {AxiosError} from 'axios';
+import {toast} from 'react-toastify';
 
 import {Button, Modal} from '@components/common';
-
-import {ChevronLeftIcon} from '@heroicons/react/24/outline';
-
 import ForgotPasswordStep1 from '@components/common/Auth/ForgotPassword/Step1/ForgotPasswordStep1';
 import ForgotPasswordStep2 from '@components/common/Auth/ForgotPassword/Step2/ForgotPasswordStep2';
 import ForgotPasswordStep3 from '@components/common/Auth/ForgotPassword/Step3/ForgotPasswordStep3';
@@ -15,9 +15,8 @@ import {
   schemaForgotPasswordStep1,
   schemaForgotPasswordStep3,
 } from '@api/auth/validation';
-import {AxiosError} from 'axios';
-import {PreAuthLayout} from 'layout';
 
+import {PreAuthLayout} from 'layout';
 import {
   forgetPassword,
   confirmOTP,
@@ -51,7 +50,7 @@ const reducer = (
   return state;
 };
 
-const ForgotPassword = () => {
+const ForgotPassword: NextPage = () => {
   const router = useRouter();
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -60,7 +59,7 @@ const ForgotPassword = () => {
     otpError: '',
     defaultMessage: DefaultErrorMessage,
   });
-  const {user} = useUser({redirect: false});
+  const {user, mutateUser} = useUser({redirect: false});
 
   useEffect(() => {
     if (user && user.password_expired) {
@@ -128,10 +127,13 @@ const ForgotPassword = () => {
 
     try {
       await directChangePassword(password);
-      router.push('/app/auth/login');
     } catch (error: any) {
       handleToggleModal();
+      return;
     }
+    toast.success('You changed your password', {autoClose: false});
+    await mutateUser();
+    router.push('/app');
   };
 
   const handleResendCode = async (onClickReset: () => void) => {

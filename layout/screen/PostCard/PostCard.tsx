@@ -6,6 +6,7 @@ import {useToggle} from '@hooks';
 import PostOption from './components/PostOption';
 
 //Types
+import {IdentityType} from '@models/identity';
 export interface PostCardProps {
   id: string;
   content?: string;
@@ -19,11 +20,11 @@ export interface PostCardProps {
   shared?: number;
   src?: string;
   hideOption?: boolean;
-  toggleLike?: (liked: boolean) => void;
+  toggleLike?: (id: string, liked: boolean) => void;
   focusCommentField?: () => void;
   optionClicked?: (data: string) => void;
   username?: string;
-  type?: string;
+  type?: IdentityType;
 }
 
 export function PostCard({

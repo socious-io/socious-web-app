@@ -1,63 +1,92 @@
-import {Avatar, Chip} from '@components/common';
-
 import {Project} from 'models/project';
-import Link from 'next/link';
 import Image from 'next/image';
 import Title from '@components/common/UserProfile/MainContent/Title';
-
-var data = [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}, {id: 6}];
+import {PreviewItem} from 'components/common/Project/created/NewProject/ProjectReview';
+import {getText} from '@socious/data';
 
 const editSrc = require('../../../../asset/icons/edit.svg');
-
-function OverviewProjectCard() {
+interface TInput extends Project {
+  onclick: () => void;
+}
+function OverviewProjectCard({
+  title,
+  country_id,
+  project_type,
+  payment_range_higher,
+  payment_range_lower,
+  remote_preference,
+  project_length,
+  experience_level,
+  payment_type,
+  description,
+  payment_scheme,
+  onclick,
+}: TInput) {
   return (
     <div className="space-y-6 p-4">
       <div className="flex flex-row items-center justify-between ">
-        <Title>Project A</Title>
+        <Title>{title}</Title>
         <div className="relative  h-5 w-5 ">
-          <Link href="/">
-            <a>
-              <Image
-                src={editSrc}
-                className="fill-warning"
-                alt="dislike"
-                layout="fill" // required
-              />
-            </a>
-          </Link>
+          <div className="cursor-pointer" onClick={onclick}>
+            <Image
+              src={editSrc}
+              className="fill-warning"
+              alt="dislike"
+              layout="fill"
+            />
+          </div>
         </div>
       </div>
-      <div className="">
-        <p className="font-semibold text-primary">Project Title</p>
-      </div>
-      <div>
-        <p className="my-4 text-sm">Project Title</p>
-      </div>
-      <div className="">
-        <p className="font-semibold text-primary">Project Descroption</p>
-      </div>
-      <div>
-        <p className="my-4 text-sm">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh aliquet
-          nullam odio maecenas semper. Dui felis suspendisse nunc, in vel enim
-          nunc adipiscing donec. Pellentesque a magna venenatis ut ut semper
-          dictum sit sem. Suspendisse lacus, pulvinar elit ipsum fermentum.
-          Ipsum, orci, faucibus nibh et commodo et, dignissim erat. Adipiscing
-          fusce et fames aliquam condimentum.
-        </p>
-      </div>
-      <div className="flex w-full flex-col">
-        <p className=" text-bold text-primary">Location</p>
-        <p className="text-normal">Amsterdam</p>
-      </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        {data.map((e) => (
-          <div key={e.id} className="flex flex-col">
-            <p className=" text-bold text-primary">Location</p>
-            <p className="text-normal">Amsterdam</p>
-          </div>
-        ))}
+      <PreviewItem label="Project Title" text={title} />
+      <PreviewItem label="Project Description" text={description} />
+      <div className="flex flex-row">
+        <PreviewItem
+          label="Remote Preference"
+          text={getText('en', `PROJECT.${remote_preference}`)}
+        />
+        {country_id && (
+          <PreviewItem label="Location" text={String(country_id)} />
+        )}
+      </div>
+      <div className="flex flex-row">
+        {project_type && (
+          <PreviewItem
+            label="Project type"
+            text={getText('en', `PROJECT.${project_type}`)}
+          />
+        )}
+        {project_length && (
+          <PreviewItem
+            label="Project length"
+            text={getText('en', `PROJECT.${project_length}`)}
+          />
+        )}
+      </div>
+      <div className="flex flex-row">
+        {payment_type && (
+          <PreviewItem
+            label="Payment type"
+            text={getText('en', `PAYMENT.${payment_type}`)}
+          />
+        )}
+        {payment_scheme && (
+          <PreviewItem
+            label="Payment rate"
+            text={getText('en', `PAYMENT.${payment_scheme}`)}
+          />
+        )}
+      </div>
+      <div className="flex flex-col">
+        {payment_range_lower && (
+          <PreviewItem label="Payment range lower" text={payment_range_lower} />
+        )}
+        {payment_range_higher && (
+          <PreviewItem
+            label="Payment range higher"
+            text={payment_range_higher}
+          />
+        )}
       </div>
     </div>
   );
