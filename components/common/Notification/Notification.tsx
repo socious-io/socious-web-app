@@ -24,6 +24,8 @@ export function Notification({page, onFull}: NotificationProps) {
     },
   );
 
+  console.log('NOTIFICATIONS :---: ', notifications);
+
   if (
     notifications &&
     notifications.total_count &&
@@ -55,7 +57,17 @@ export function Notification({page, onFull}: NotificationProps) {
                   <div className="flex w-1/12 items-center">
                     <Avatar
                       size="l"
-                      src={notification?.data?.identity?.meta?.avatar || ''}
+                      type={
+                        notification?.data?.consolidate_number < 2 &&
+                        notification?.data?.identity?.type == 'organizations'
+                          ? 1
+                          : 0
+                      }
+                      src={
+                        (notification?.data?.consolidate_number < 2 &&
+                          notification?.data?.identity?.meta?.avatar) ||
+                        ''
+                      }
                     />
                   </div>
                   <div className="space-y-.5 w-10/12 ">
