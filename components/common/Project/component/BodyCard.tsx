@@ -1,23 +1,32 @@
-import {Avatar, Chip} from '@components/common';
+import {Avatar} from '@components/common';
 import {Project} from 'models/project';
 import Link from 'next/link';
+import dayjs from 'dayjs';
 
 type Props = {
-  refixAddress: string;
+  item: Project;
+  image?: string;
+  name?: string;
 };
-function BodyCard({refixAddress}: Props) {
+function BodyCard({item, name, image}: Props) {
   return (
-    <Link href={refixAddress ? refixAddress : 'javascript:;'}>
-      <div className="m-4 space-y-6 rounded-2xl border border-grayLineBased  bg-white p-4">
+    <Link href={`/app/projects/${item?.id}`}>
+      <div className="m-4 cursor-pointer space-y-6 rounded-2xl border  border-grayLineBased bg-white p-4">
         <div className="">
-          <p className="font-semibold">Project Title</p>
+          <p className="font-semibold">{item?.title}</p>
         </div>
         <div className="flex flex-row items-center  space-x-2">
-          <Avatar size="l" />
-          <p className="text-black">Organization</p>
+          <Avatar size="l" src={image} type={1} />
+          <p className="text-black">{name}</p>
         </div>
         <div>
-          <p className="my-4 text-sm">Mar 1 -Mar 10</p>
+          <p className="my-4 text-sm">
+            {`${dayjs(item?.created_at)?.format('MMM d')} ${
+              item?.expires_at
+                ? `- ${dayjs(item?.expires_at)?.format('MMM d')}`
+                : ''
+            }`}
+          </p>
         </div>
       </div>
     </Link>

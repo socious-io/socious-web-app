@@ -57,13 +57,13 @@ function MyApplicationBoxes() {
         isExpandable={true}
         isRound={true}
       />
-      {showPending &&
+      {/* {showPending &&
         data.map((item) => (
           <BodyCard
             key={item.id}
             refixAddress={`/app/projects/applications/section/${item.projectId}`}
           />
-        ))}
+        ))} */}
       <HeaderBox
         title={'Awaiting review 3'}
         isExpand={showAwaiting}
@@ -71,13 +71,13 @@ function MyApplicationBoxes() {
         isExpandable={true}
         isRound={true}
       />
-      {showAwaiting &&
+      {/* {showAwaiting &&
         data2.map((item) => (
           <BodyCard
             key={item.id}
             refixAddress={`/app/projects/applications/section/${item.projectId}`}
           />
-        ))}
+        ))} */}
       <HeaderBox
         title={'Declined'}
         isExpand={showDecline}
@@ -85,13 +85,8 @@ function MyApplicationBoxes() {
         isExpandable={true}
         isRound={true}
       />
-      {showDecline &&
-        data3.map((item) => (
-          <BodyCard
-            key={item.id}
-            refixAddress={`/app/projects/applications/section/${item.projectId}`}
-          />
-        ))}
+      {/* {showDecline &&
+        data3.map((item) => <BodyCard key={item.id} item={item} />)} */}
     </div>
   );
 }
