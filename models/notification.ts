@@ -16,6 +16,7 @@ export interface NotificationItem {
       body: string;
       title: string;
     };
+    consolidate_number: number;
     type:
       | 'FOLLOWED'
       | 'COMMENT_LIKE'
