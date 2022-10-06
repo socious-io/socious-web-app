@@ -3,11 +3,13 @@
 import {FC, useState, useEffect, useRef} from 'react';
 
 import profile_img_icon from 'asset/images/user.png';
+import {twMerge} from 'tailwind-merge';
 
 interface ImageUploaderProps {
   src?: string;
   onChange: (file: any) => void;
   children?: any;
+  className?: string;
   withPreview?: boolean;
 }
 
@@ -18,6 +20,7 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
   src,
   onChange,
   children,
+  className,
   withPreview = true,
 }: ImageUploaderProps) => {
   const inputRef: any = useRef(null);
@@ -57,12 +60,19 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
           />
         </div>
         {withPreview && (
-          <div className="ui-component-img-uploader-preview">
+          <div
+            className={twMerge(
+              'h-56 w-56 rounded-full border-[6px] border-offWhite',
+              'ui-component-img-uploader-preview',
+              className && className,
+            )}
+            onClick={() => !children && handleChooseMedia()}
+          >
             <img src={imagePreviewUrl} onError={onImageError} />
           </div>
         )}
       </div>
-      {children(handleChooseMedia)}
+      {children && children(handleChooseMedia, imagePreviewUrl)}
     </>
   );
 };

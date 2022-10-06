@@ -118,3 +118,20 @@ export interface TermsPlace {
   offset: number;
   value: string;
 }
+
+export interface UpdateProfileBodyType {
+  first_name: string;
+  last_name: string;
+  username: string;
+  email?: string;
+  bio: string;
+  social_causes: string[];
+  skills: string[];
+  country: string;
+  city: string;
+  address?: string;
+  mobile_country_code?: string;
+  phone?: string;
+  cover_image?: string;
+  avatar?: string;
+}

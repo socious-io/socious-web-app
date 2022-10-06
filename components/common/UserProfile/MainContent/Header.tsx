@@ -37,6 +37,7 @@ interface Props {
   identities_mutate: KeyedMutator<any>;
   profile_mutate: KeyedMutator<any>;
   loggedIn: boolean;
+  editProfile?: () => void;
 }
 
 const Header: React.FC<Props> = ({
@@ -49,6 +50,7 @@ const Header: React.FC<Props> = ({
   identities_mutate,
   profile_mutate,
   loggedIn,
+  editProfile,
 }) => {
   const [disabled, setDisabled] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -120,7 +122,11 @@ const Header: React.FC<Props> = ({
         ) : null}
 
         {/* show edit profile button just for own user */}
-        {loggedIn && own_user && <Button>Edit profile</Button>}
+        {loggedIn && own_user && (
+          <Button onClick={() => editProfile && editProfile()}>
+            Edit profile
+          </Button>
+        )}
       </div>
 
       {/* show modal before unfollow */}
