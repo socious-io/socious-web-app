@@ -80,7 +80,6 @@ const SideBarToBe = (
         </h3>
         <Avatar
           size="m"
-          type={currentIdentity?.type === 'users' ? 0 : 1}
           src={
             currentIdentity?.type === 'users'
               ? user?.avatar?.url

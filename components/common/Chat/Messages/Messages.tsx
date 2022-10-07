@@ -114,7 +114,7 @@ const Messages = ({
               size="xxl"
               type={
                 activeChat?.type === 'CHAT'
-                  ? otherParticipants?.[0]?.identity_type === 'users'
+                  ? otherParticipants?.[0]?.identity_type
                   : 'users'
               }
               src={
