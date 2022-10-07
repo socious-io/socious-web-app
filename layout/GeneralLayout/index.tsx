@@ -64,7 +64,7 @@ export const NavbarItem: FC<TNavbarItem> = ({label, route, imgSrc}) => {
           <Image
             src={imgSrc}
             className="fill-warning hover:fill-slate-200"
-            alt="socious logo"
+            alt={`${label} icon`}
             width={100}
             height={100}
           />
@@ -133,7 +133,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   return (
     <div className="flex w-full flex-col">
       <div
-        className={`flex  w-full items-center rounded-b-sm bg-primary md:flex md:h-16 lg:h-16 ${
+        className={`flex w-full items-center rounded-b-sm bg-primary md:flex md:h-16 lg:h-16 ${
           // ? `h-52 bg-[url('/images/socious_feed.png')]`
           needsBanner ? `h-44 flex-col` : 'h-16 bg-none'
         }`}
@@ -258,7 +258,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                           className="cursor-pointer p-4 text-left hover:bg-primary hover:text-offWhite"
                           onClick={onLogout}
                         >
-                          <span className="w-full text-sm">logout</span>
+                          <span className="w-full text-sm">Log out</span>
                         </div>
                       </>
                     ) : (
