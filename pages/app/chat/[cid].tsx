@@ -4,6 +4,7 @@ import MainChat from '@components/common/Chat/MainChat/MainChat';
 import {useRouter} from 'next/router';
 import useSWR from 'swr';
 import {get} from 'utils/request';
+import {GeneralLayout} from 'layout';
 
 const Chat = () => {
   const router = useRouter();
@@ -27,11 +28,13 @@ const Chat = () => {
     router.push('/app/chat');
 
   return (
-    <ChatLayout page="show">
-      {(refreshSideBar) => (
-        <MainChat activeChat={chat} refreshSideBar={refreshSideBar} />
-      )}
-    </ChatLayout>
+    <GeneralLayout>
+      <ChatLayout page="show">
+        {(refreshSideBar) => (
+          <MainChat activeChat={chat} refreshSideBar={refreshSideBar} />
+        )}
+      </ChatLayout>
+    </GeneralLayout>
   );
 };
 
