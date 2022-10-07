@@ -1,5 +1,6 @@
 import Data, {getText} from '@socious/data';
 import {useMemo} from 'react';
+import {getAllISOCodes} from 'iso-country-currency';
 
 const projectRemotePreferenceType = Object.keys(
   Data.ProjectRemotePreferenceType,
@@ -45,6 +46,20 @@ const useGetData = () => {
     }));
     passionDataItems.sort((a, b) => (a.name > b.name ? 1 : -1));
 
+    const data = getAllISOCodes();
+    const countries = data?.map((d) => ({
+      name: d?.countryName,
+      id: d?.iso,
+    }));
+    const currency = data?.map((d) => d.currency);
+    const filteredCurrencies = currency.filter((c, index) => {
+      return currency.indexOf(c) === index;
+    });
+    const allCurrencies = filteredCurrencies?.map((m) => ({
+      name: m,
+      id: m,
+    }));
+
     return {
       projectPaymentTypeItems,
       projectStatusItems,
@@ -53,6 +68,8 @@ const useGetData = () => {
       projectItems,
       projectLengthItems,
       passionDataItems,
+      countries,
+      allCurrencies,
     };
   }, []);
 

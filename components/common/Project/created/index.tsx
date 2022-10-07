@@ -55,9 +55,6 @@ const MyApplicationBoxes: FC = () => {
   const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
   const {state: showDrafts, handlers: showDraftsHandler} = useToggle();
   const {user, currentIdentity} = useUser();
-  console.log('$$$$');
-  console.log(currentIdentity);
-
   const {ProjectContext, setProjectContext} = useProjectContext();
   const getKey = (initialSize: number, previousData: any) => {
     if (previousData && !previousData?.items?.length) return null;

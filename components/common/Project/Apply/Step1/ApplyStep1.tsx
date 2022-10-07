@@ -42,7 +42,7 @@ const ApplyStep1 = ({onSubmit}: StepProps) => {
         <div className="mt-2 flex h-full flex-col space-y-4 px-4">
           <p className="font-bold text-black">project title</p>
           <div className="flex flex-row space-x-2">
-            <Avatar size="s" type={1} />
+            <Avatar size="s" type="organizations" />
 
             <p className="text-black">Organization</p>
           </div>

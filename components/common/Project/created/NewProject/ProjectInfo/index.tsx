@@ -50,7 +50,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
           <Title description="Describe your project in detail." border>
             Tell us more about your project.
           </Title>
-          <div className="mx-4 ">
+          <div className="mx-4 my-5">
             <InputFiled
               label="Title"
               type="text"
@@ -138,15 +138,18 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 (x) => x?.id === ProjectContext.project_length,
               )}
             />
-            <InputFiled
+            <Combobox
               label="Payment Currency"
-              type="text"
+              name="payment_currency"
+              items={items.allCurrencies}
               placeholder="Payment Currency"
-              value={ProjectContext.payment_currency}
-              errorMessage={errors?.['payment_currency']?.message}
-              className="my-3"
-              onChange={(e) => handleChange('payment_currency', e.target.value)}
+              className="mt-6"
+              onSelected={(e) => handleChange('payment_currency', e?.id)}
+              selected={items.allCurrencies?.find(
+                (x) => x?.id === ProjectContext.payment_currency,
+              )}
             />
+
             <InputFiled
               min={0}
               label="Payment Range Lower"
@@ -186,14 +189,16 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                   handleChange('experience_level', e.target.value);
               }}
             />
-            <InputFiled
+            <Combobox
               label="Country"
-              type="text"
-              value={ProjectContext.country}
+              name="country"
+              items={items.countries}
               placeholder="Country"
-              errorMessage={errors?.['country']?.message}
               className="my-3"
-              onChange={(e) => handleChange('country', e.target.value)}
+              onSelected={(e) => handleChange('Country', e?.id)}
+              selected={items.countries?.find(
+                (x) => x?.id === ProjectContext.country,
+              )}
             />
           </div>
         </div>
