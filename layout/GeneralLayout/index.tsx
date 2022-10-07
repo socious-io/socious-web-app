@@ -72,12 +72,12 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   return (
     <div className="flex w-full flex-col">
       <div
-        className={`flex  w-full items-center rounded-b-sm bg-primary md:flex md:h-16 md:bg-none lg:h-16 ${
+        className={`flex  w-full items-center rounded-b-sm bg-primary md:flex md:h-16 lg:h-16 ${
           // ? `h-52 bg-[url('/images/socious_feed.png')]`
           placeHolder ? `h-44 flex-col` : 'h-16 bg-none'
         }`}
       >
-        <nav className="flex h-14 min-h-[54px] w-full items-center justify-center bg-black bg-opacity-25 sm:bg-opacity-0 md:h-16 md:justify-start md:bg-none lg:h-16 ">
+        <nav className="fixed top-0 z-10 flex h-14 min-h-[54px] w-full items-center justify-center bg-primary md:h-16 md:justify-start lg:h-16 ">
           <div className="container mx-6 w-full max-w-5xl sm:mx-2 md:mx-auto">
             <div className="flex w-full items-center justify-center gap-x-4 sm:gap-0">
               <div
@@ -177,7 +177,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
           </div>
         </nav>
         {placeHolder && (
-          <div className="h-full w-full bg-home-image bg-cover bg-center px-4 pt-9 md:hidden">
+          <div className="mt-[54px] h-full w-full bg-home-image bg-cover bg-center px-4 pt-9 md:mt-16 md:hidden">
             <h1 className="text-4xl text-white">Your Feed</h1>
             <p className="mt-2 text-base font-normal text-neutralGray ">
               See what is happening in your network
