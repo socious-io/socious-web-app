@@ -2,16 +2,15 @@ import {useToggle, useUser} from '@hooks';
 import Image from 'next/image';
 import MemberItem from './MemberItem';
 import NewMemberModal from './NewMemberModal';
-import AddTeamMember from '@icons/addTeamMembers.svg';
-import More from '@icons/more.svg';
-import {useEffect, useState} from 'react';
-import useSWR, {mutate, useSWRConfig} from 'swr';
+import {UserPlusIcon} from '@heroicons/react/24/outline';
+import useSWR, {useSWRConfig} from 'swr';
 import {get} from 'utils/request';
 import {
   GlobalResponseType,
   IOrganizationFollowerType,
   IOrganizationUserType,
 } from '@models/organization';
+const more = require('../../../../asset/icons/more.svg');
 
 const TeamComponent = () => {
   const {mutate} = useSWRConfig();
@@ -44,12 +43,7 @@ const TeamComponent = () => {
         </div>
         <div>
           <span className=" cursor-pointer " onClick={addHandlers.on}>
-            <Image
-              src={AddTeamMember}
-              alt="add-new-member-icon"
-              width={24}
-              height={24}
-            />
+            <UserPlusIcon className="w-6" />
           </span>
         </div>
       </div>
@@ -66,7 +60,7 @@ const TeamComponent = () => {
               Extra={
                 <div>
                   <Image
-                    src={More}
+                    src={more}
                     alt="add-new-member-icon"
                     width={24}
                     height={24}

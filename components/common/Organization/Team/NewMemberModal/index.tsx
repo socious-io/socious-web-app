@@ -5,9 +5,11 @@ import {XMarkIcon} from '@heroicons/react/24/solid';
 import {FC, useState} from 'react';
 import Button from '@components/common/Button/Button';
 import MemberItem from '../MemberItem';
-import AddTeamMember from '@icons/addTeamMembers.svg';
-import LeftIcon from '@icons/iconLeft.svg';
-import checkIcon from '@icons/check.svg';
+import {
+  ChevronLeftIcon,
+  CheckCircleIcon,
+  UserPlusIcon,
+} from '@heroicons/react/24/outline';
 import {IOrganizationFollowerType} from '@models/organization';
 import {addMember} from '@api/organizations/team/actions';
 interface INewMemberModalProps {
@@ -105,7 +107,7 @@ const ConfrimUserRole: FC<IConfrimUserRole> = ({
     <>
       <div className="flex items-center border-b p-3">
         <span className="cursor-pointer" onClick={onClickBack}>
-          <Image src={LeftIcon} alt="back-icon" width={18} height={18} />
+          <ChevronLeftIcon className="w-5" />
         </span>
         <div className="grow">
           <Modal.Title>
@@ -134,12 +136,7 @@ const ConfrimUserRole: FC<IConfrimUserRole> = ({
               </span>
               {role === 'admin' && (
                 <span className="absolute top-6 right-4 block">
-                  <Image
-                    src={checkIcon}
-                    alt="check-icon"
-                    width={18}
-                    height={18}
-                  />
+                  <CheckCircleIcon className="w-5" />
                 </span>
               )}
             </div>
@@ -157,12 +154,7 @@ const ConfrimUserRole: FC<IConfrimUserRole> = ({
               </span>
               {role === 'member' && (
                 <span className="absolute top-6 right-4 block">
-                  <Image
-                    src={checkIcon}
-                    alt="check-icon"
-                    width={18}
-                    height={18}
-                  />
+                  <CheckCircleIcon className="w-5" />
                 </span>
               )}
             </div>
@@ -222,12 +214,7 @@ const AddMember: FC<IAddMemberProps> = ({users, onAddMember, onClose}) => {
                       className="cursor-pointer"
                       onClick={() => onAddMember(item)}
                     >
-                      <Image
-                        src={AddTeamMember}
-                        alt="back-icon"
-                        width={24}
-                        height={24}
-                      />
+                      <UserPlusIcon className="w-6" />
                     </span>
                   )
                 }
