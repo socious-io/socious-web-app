@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {Avatar} from '../../components/common/Avatar/Avatar';
 import {TextInput} from '../../components/common/TextInput/TextInput';
 import {FC, PropsWithChildren, CSSProperties} from 'react';
-const imgSrc = require('../../asset/icons/Base.svg');
+const imgSrc = require('../../asset/icons/logo.svg');
 const imgLikeSrc = require('../../asset/icons/likes.svg');
 import Image from 'next/image';
 import {Dropdown} from '@components/common';
@@ -47,6 +47,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
     redirect: false,
   });
 
+  console.log('CURRENT USER', currentIdentity);
   const onSwitchIdentity = async (identity: LoginIdentity) => {
     try {
       await changeIdentity(identity.id);
@@ -65,28 +66,31 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
     mutateUser();
     if (res) Router.push('/app');
   };
+  // placeholder for hasNavBar
+  const placeHolder = true;
 
   return (
     <div className="flex w-full flex-col">
       <div
-        className={`flex  w-full items-center rounded-b-sm   bg-cover bg-center sm:bg-primary md:flex md:h-16 md:bg-none lg:h-16 ${
-          hasNavbar
-            ? `h-52 bg-[url('/images/socious_feed.png')]`
-            : 'h-0 bg-none'
+        className={`flex  w-full items-center rounded-b-sm bg-primary bg-cover bg-center md:flex md:h-16 md:bg-none lg:h-16 ${
+          // ? `h-52 bg-[url('/images/socious_feed.png')]`
+          placeHolder ? `h-44 flex-col` : 'h-16 bg-none'
         }`}
       >
-        <nav className="h-full w-full items-center bg-black  bg-opacity-25  sm:bg-opacity-0 md:flex  md:h-16 md:bg-none lg:h-16 ">
-          <div className="container mx-auto max-w-5xl">
-            <div className="flex flex-col items-center justify-center sm:flex-row">
+        <nav className="flex h-full h-14 w-full items-center justify-center bg-black bg-opacity-25  py-2 sm:bg-opacity-0 md:h-16 md:justify-start md:bg-none md:py-0 lg:h-16 ">
+          <div className="container mx-6 w-full max-w-5xl md:mx-auto">
+            <div className="flex w-full items-center justify-center gap-x-4 sm:gap-0">
               <div
-                className={`flex-row-2 ml-4 mr-4 mt-14  items-center justify-items-center sm:flex md:ml-0 md:mt-0 ${
-                  hasNavbar ? 'flex' : 'hidden'
-                }`}
+                className={`flex-row-2 flex items-center justify-items-center sm:mx-4 md:ml-0 ${
+                  // placeHolder ? 'flex' : 'hidden'
+                  ''
+                } w-full gap-x-4 sm:gap-0
+                `}
               >
                 <div className="flex flex-wrap content-around">
                   <div className="items-center rounded-full ">
-                    <div className="relative  h-8 w-8  ">
-                      <Link href="/">
+                    <div className="relative  h-8 w-8 ">
+                      <Link href="/app">
                         <a>
                           <Image
                             src={imgSrc}
@@ -101,35 +105,16 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     </div>
                   </div>
                 </div>
-                <div className="space-between ml-2 mr-2 flex items-center ">
-                  <TextInput className="w-72 rounded-full py-1.5" />
-                </div>
-                <div className="items-center ">
-                  <div className="relative h-6 w-6 md:hidden">
-                    <Link href="/app/chat">
-                      <a>
-                        <Image
-                          src={imgLikeSrc}
-                          className="fill-warning"
-                          alt="likes"
-                          layout="fill" // required
-                        />
-                      </a>
-                    </Link>
-                  </div>
+                <div className="space-between flex grow items-center sm:mx-2">
+                  <TextInput
+                    className="w-full max-w-[18rem] rounded-full py-1.5"
+                    containerClassName="w-full"
+                  />
                 </div>
               </div>
 
-              {hasNavbar && (
-                <div className="mt-6 w-full px-4 sm:hidden">
-                  <h1 className="text-4xl text-white">Your Feed</h1>
-                  <p className="mt-2 text-base font-normal text-neutralGray ">
-                    See what is happening in your network
-                  </p>
-                </div>
-              )}
-              <div className="hidden w-4/6 items-center justify-end space-x-6 md:flex">
-                <div className="space-x-4 ">
+              <div className="flex w-auto items-center justify-center md:w-4/6 md:space-x-6">
+                <div className="hidden space-x-4 md:flex">
                   <NavbarItem label="Home" route="/app" />
                   <NavbarItem label="Network" route="/app/network" />
                   <NavbarItem label="Chats" route="/app/chat" />
@@ -141,6 +126,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                 </div>
                 <div className="space-between flex items-center space-x-3">
                   <Dropdown
+                    displayClass="w-8 h-8"
                     display={
                       <Avatar
                         size="m"
@@ -184,12 +170,19 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                       <b>LOGOUT</b>
                     </div>
                   </Dropdown>
-                  <CogIcon className="h-6  text-white" />
                 </div>
               </div>
             </div>
           </div>
         </nav>
+        {placeHolder && (
+          <div className="h-full w-full bg-[url('/images/socious_feed.png')] px-4 pt-9 md:hidden">
+            <h1 className="text-4xl text-white">Your Feed</h1>
+            <p className="mt-2 text-base font-normal text-neutralGray ">
+              See what is happening in your network
+            </p>
+          </div>
+        )}
       </div>
       {hasDetailNavbar && (
         <div className="flex w-full flex-col pt-14 sm:hidden">
@@ -205,7 +198,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
       )}
       <div
         className={`m-auto flex ${
-          hasNavbar ? 'mt-10 px-4' : 'sm:mt-10'
+          placeHolder ? 'mt-10 px-4' : 'sm:mt-10'
         } sm:px-0 ${styles.layoutBase}`}
         style={style}
       >
