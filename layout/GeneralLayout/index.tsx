@@ -107,14 +107,14 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
     }
   };
 
+  const userLoggedOut = useMemo(() => identities === null, [identities]);
+
   const onLogout = async () => {
     const res = await logout();
     mutateIdentities();
     mutateUser();
     if (res) Router.push('/app');
   };
-  // placeholder for hasNavBar
-  const placeHolder = true;
 
   // Check if they need banner
   const needsBanner = useMemo<'feed' | 'network' | 'project' | null>(() => {
@@ -189,16 +189,20 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     imgSrc={networkIcon}
                   /> */}
                   <NavbarItem label="Feeds" route="/app" imgSrc={feedsIcon} />
-                  <NavbarItem
-                    label="Chat"
-                    route="/app/chat"
-                    imgSrc={chatIcon}
-                  />
-                  <NavbarItem
-                    label="Notifications"
-                    route="/app/notifications"
-                    imgSrc={notifyIcon}
-                  />
+                  {!userLoggedOut && (
+                    <>
+                      <NavbarItem
+                        label="Chat"
+                        route="/app/chat"
+                        imgSrc={chatIcon}
+                      />
+                      <NavbarItem
+                        label="Notifications"
+                        route="/app/notifications"
+                        imgSrc={notifyIcon}
+                      />
+                    </>
+                  )}
                 </div>
                 <div className="space-between flex items-center space-x-3 sm:ml-4 md:ml-0">
                   <Dropdown
@@ -242,9 +246,37 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                             </div>
                           ),
                       )}
-                    <div className="cursor-pointer p-4" onClick={onLogout}>
-                      <b>LOGOUT</b>
-                    </div>
+
+                    {!userLoggedOut ? (
+                      <>
+                        <Link href="/app/auth/changepassword">
+                          <div className="cursor-pointer p-4 text-left text-sm hover:bg-primary hover:text-offWhite">
+                            Change Password
+                          </div>
+                        </Link>
+                        <div
+                          className="cursor-pointer p-4 text-left hover:bg-primary hover:text-offWhite"
+                          onClick={onLogout}
+                        >
+                          <span className="w-full text-sm">logout</span>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div
+                          className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
+                          onClick={() => route.push('/app/auth/signup')}
+                        >
+                          Sign up
+                        </div>
+                        <div
+                          className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
+                          onClick={() => route.push('/app/auth/login')}
+                        >
+                          Login
+                        </div>
+                      </>
+                    )}
                   </Dropdown>
                 </div>
               </div>
@@ -253,7 +285,12 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         </nav>
         {needsBanner && (
           <div
-            className={`mt-[54px] h-full w-full bg-${bannerType[needsBanner].img} bg-cover bg-center px-4 pt-9 md:mt-16 md:hidden`}
+            className={twMerge(
+              `mt-[54px] h-full w-full bg-cover bg-center px-4 pt-9 md:mt-16 md:hidden`,
+              needsBanner === 'feed' && `bg-home-image`,
+              needsBanner === 'network' && 'bg-home-image',
+              needsBanner === 'project' && `bg-home-image`,
+            )}
           >
             <h1 className="text-4xl text-white">
               {bannerType[needsBanner].title}
@@ -277,7 +314,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         </div>
       )}
       <div
-        className={`m-auto mb-[70px] flex lg:mb-0${
+        className={`m-auto mb-[70px] flex lg:mb-0 lg:mt-16 ${
           needsBanner ? 'mt-10 px-4' : 'sm:mt-10'
         } sm:px-0 ${styles.layoutBase}`}
         style={style}
