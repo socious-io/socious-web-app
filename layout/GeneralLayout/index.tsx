@@ -47,7 +47,9 @@ export const NavbarItem: FC<TNavbarItem> = ({label, route, imgSrc}) => {
             height={100}
           />
         </div>
-        <span className="cursor-pointer text-sm text-white">{label}</span>
+        <span className="cursor-pointer text-sm text-grayDisableButton sm:hover:text-primary md:hover:text-white">
+          {label}
+        </span>
       </a>
     </Link>
   );
@@ -129,7 +131,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
               </div>
 
               <div className="flex w-auto items-center justify-center md:w-4/6 md:grow">
-                <div className="hidden grow justify-evenly space-x-4 md:relative md:flex">
+                <div className="fixed left-0 bottom-0 flex w-full grow justify-evenly space-x-4 border-t border-[#B2B2B2] bg-white py-2 md:relative md:w-auto md:border-t-0 md:bg-transparent md:py-0">
                   {/* Acting as a spacer div */}
                   <div></div>
                   <NavbarItem
