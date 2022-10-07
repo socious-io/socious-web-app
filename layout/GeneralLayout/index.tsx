@@ -1,6 +1,6 @@
 import {Cog8ToothIcon as CogIcon} from '@heroicons/react/24/outline';
 import {ReactComponent as Logo} from '../../asset/icons/logo.svg';
-import {useContext} from 'react';
+import {useContext, useMemo} from 'react';
 import Link from 'next/link';
 import {Avatar} from '../../components/common/Avatar/Avatar';
 import {TextInput} from '../../components/common/TextInput/TextInput';
@@ -24,12 +24,32 @@ import styles from './index.module.scss';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import {useRouter} from 'next/router';
 import {twMerge} from 'tailwind-merge';
+
+const bannerType = {
+  feed: {
+    title: 'Your Feed',
+    subTitle: 'See what is happening in your network',
+    img: 'home-image',
+  },
+  project: {
+    title: 'Your Projects',
+    subTitle: 'Manage and create projects',
+    img: 'home-image',
+  },
+  network: {
+    title: 'Network',
+    subTitle: 'Connect with skilled professionals',
+    img: 'home-image',
+  },
+};
+
 type TLayoutType = {
   hasNavbar?: boolean;
   style?: CSSProperties;
   hasDetailNavbar?: boolean;
   detailNavbarTitle?: string;
 };
+
 type TNavbarItem = {
   label: string;
   route: string;
@@ -51,8 +71,9 @@ export const NavbarItem: FC<TNavbarItem> = ({label, route, imgSrc}) => {
         </div>
         <span
           className={twMerge(
-            'cursor-pointer text-sm text-grayDisableButton hover:text-primary md:hover:text-white',
-            router.pathname == route && 'text-primary md:text-white',
+            'cursor-pointer text-xs text-grayDisableButton hover:text-primary md:text-sm md:hover:text-white',
+            router.pathname == route &&
+              'font-semibold text-primary md:text-white',
           )}
         >
           {label}
@@ -95,12 +116,26 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   // placeholder for hasNavBar
   const placeHolder = true;
 
+  // Check if they need banner
+  const needsBanner = useMemo<'feed' | 'network' | 'project' | null>(() => {
+    switch (route?.pathname) {
+      case '/app':
+        return 'feed';
+      case '/app/network':
+        return 'network';
+      case '/app/projects':
+        return 'project';
+      default:
+        return null;
+    }
+  }, [route?.pathname]);
+
   return (
     <div className="flex w-full flex-col">
       <div
         className={`flex  w-full items-center rounded-b-sm bg-primary md:flex md:h-16 lg:h-16 ${
           // ? `h-52 bg-[url('/images/socious_feed.png')]`
-          placeHolder ? `h-44 flex-col` : 'h-16 bg-none'
+          needsBanner ? `h-44 flex-col` : 'h-16 bg-none'
         }`}
       >
         <nav className="fixed top-0 z-10 flex h-14 min-h-[54px] w-full items-center justify-center bg-primary md:h-16 md:justify-start lg:h-16 ">
@@ -214,11 +249,15 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
             </div>
           </div>
         </nav>
-        {placeHolder && (
-          <div className="mt-[54px] h-full w-full bg-home-image bg-cover bg-center px-4 pt-9 md:mt-16 md:hidden">
-            <h1 className="text-4xl text-white">Your Feed</h1>
+        {needsBanner && (
+          <div
+            className={`mt-[54px] h-full w-full bg-${bannerType[needsBanner].img} bg-cover bg-center px-4 pt-9 md:mt-16 md:hidden`}
+          >
+            <h1 className="text-4xl text-white">
+              {bannerType[needsBanner].title}
+            </h1>
             <p className="mt-2 text-base font-normal text-neutralGray ">
-              See what is happening in your network
+              {bannerType[needsBanner].subTitle}
             </p>
           </div>
         )}
@@ -237,7 +276,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
       )}
       <div
         className={`m-auto flex ${
-          placeHolder ? 'mt-10 px-4' : 'sm:mt-10'
+          needsBanner ? 'mt-10 px-4' : 'sm:mt-10'
         } sm:px-0 ${styles.layoutBase}`}
         style={style}
       >
