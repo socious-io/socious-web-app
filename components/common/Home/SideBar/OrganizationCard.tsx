@@ -22,8 +22,12 @@ const OrganizationCard = ({username}: OrgCardProps) => {
           </Link>
         </li>
         <li className="flex items-center space-x-4">
-          <Image src={Team} alt="Logo - SVG" width="16px" height="16px" />
-          <label>Team</label>
+          <Link href={'/app/team'}>
+            <label className="flex items-center space-x-4">
+              <Image src={Team} alt="Logo - SVG" width="16px" height="16px" />
+              <label>Team</label>
+            </label>
+          </Link>
         </li>
         <li className="flex items-center space-x-4">
           <Image src={Followers} alt="Logo - SVG" width="16px" height="16px" />
