@@ -1,5 +1,5 @@
-import {CreateProjectType} from '@models/project';
-import {post, get} from 'utils/request';
+import {CreateProjectType, ApplyProjectType} from '@models/project';
+import {post} from 'utils/request';
 
 export function createProject(projectBody: CreateProjectType) {
   return post(`/projects`, projectBody);
@@ -10,4 +10,8 @@ export function updateProjectById(
   projectBody: CreateProjectType,
 ) {
   return post(`projects/update/${projectId}`, projectBody);
+}
+
+export function applyProject(projectId: string, projectBody: ApplyProjectType) {
+  return post(`projects/${projectId}/applicants`, projectBody);
 }

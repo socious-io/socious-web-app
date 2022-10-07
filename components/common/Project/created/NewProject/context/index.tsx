@@ -27,6 +27,8 @@ export type TProjectContext = {
   country: string;
   skills: string[];
   isEditModalOpen: boolean;
+  isApplyModalOpen: boolean;
+  cover_letter: string;
 };
 
 export const initContext: TProjectContext = {
@@ -48,6 +50,8 @@ export const initContext: TProjectContext = {
   country: '',
   skills: [],
   isEditModalOpen: false,
+  isApplyModalOpen: false,
+  cover_letter: '',
 };
 
 const ProjectContext = createContext<{

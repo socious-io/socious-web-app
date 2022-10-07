@@ -6,7 +6,7 @@ import {FormProvider, useForm} from 'react-hook-form';
 import ApplyStep1 from '../Apply/Step1/ApplyStep1';
 import {useState, useMemo} from 'react';
 import ApplyStep2 from '../Apply/Step2/ApplyStep2';
-import ApplyStep4 from '../Apply/Step4/ApplyStep4';
+import ApplyStep3 from '../Apply/Step3/ApplyStep3';
 import useUser from 'hooks/useUser/useUser';
 import {getText} from '@socious/data';
 import {
@@ -15,6 +15,11 @@ import {
   CurrencyDollarIcon,
   ClockIcon,
 } from '@heroicons/react/24/outline';
+import {ApplyLayout} from '../MyApplication/ApplyProject';
+import {useProjectContext} from '../created/NewProject/context';
+import {applyProject} from '@api/projects/actions';
+import {ApplyProjectType} from '@models/project';
+import {toast} from 'react-toastify';
 
 function OrganizationTopCard({
   title,
@@ -25,6 +30,7 @@ function OrganizationTopCard({
   remote_preference,
   project_length,
   experience_level,
+  id,
 }: Project) {
   const {state: showApply, handlers: setShowApply} = useToggle();
 
@@ -32,6 +38,27 @@ function OrganizationTopCard({
   const formMethodsStep1 = useForm({});
   const {identities} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);
+  const {ProjectContext, setProjectContext} = useProjectContext();
+
+  const isStep0 = ProjectContext.formStep === 0;
+  const isStep2 = ProjectContext.formStep === 2;
+  const onSubmit = async () => {
+    const postBody: ApplyProjectType = {
+      cover_letter: ProjectContext.cover_letter,
+    };
+    try {
+      await applyProject(id || '', postBody);
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  };
+  const pageDisplay = () => {
+    if (isStep0) {
+      return <ApplyStep1 onSubmit={onSubmit} />;
+    } else if (isStep2) {
+      return <ApplyStep3 />;
+    }
+  };
 
   return (
     <div className="space-y-6 p-4">
@@ -98,43 +125,22 @@ function OrganizationTopCard({
             size="lg"
             variant="fill"
             value="Submit"
-            onClick={() => setShowApply.on()}
+            onClick={() =>
+              setProjectContext({
+                ...ProjectContext,
+                isApplyModalOpen: true,
+                formStep: 0,
+              })
+            }
           >
             Apply now
           </Button>
         )}
       </div>
-      {/* Add Post Modal */}
-      <Modal isOpen={showApply} onClose={() => setShowApply.off()}>
-        <FormProvider {...formMethodsStep1}>
-          {step == 1 ? (
-            <ApplyStep1
-              onSubmit={() => {
-                setStep(4);
-              }}
-              onAttach={() => {
-                setStep(2);
-              }}
-            />
-          ) : step == 2 ? (
-            <ApplyStep2
-              onSubmit={() => {}}
-              onAttach={() => {
-                setShowApply.off();
-                setStep(1);
-              }}
-            />
-          ) : (
-            <ApplyStep4
-              onSubmit={() => {}}
-              onAttach={() => {
-                setShowApply.off();
-                setStep(1);
-              }}
-            />
-          )}
-        </FormProvider>
-      </Modal>
+
+      <ApplyLayout title={isStep2 ? '' : 'Review application'}>
+        {pageDisplay()}
+      </ApplyLayout>
     </div>
   );
 }

@@ -37,10 +37,27 @@ const ApplyStep4 = ({onSubmit, onAttach}: Props) => {
           <p className="text-black">
             Link name <span className="ml-1 font-bold text-red-500 ">*</span>
           </p>
+          <TextArea
+            placeholder="Write a message..."
+            rows={2}
+            containerClassName=""
+            className="border-gray border-1  overflow-y-scroll focus:border-none"
+            errorMessage={formState?.errors?.['content']?.message}
+            register={register('content')}
+          />
         </div>
         <div className="mt-2 space-y-4 pl-0 ">
-          <p className="text-black">Application sent</p>
-          <p className="text-black">Application sent</p>
+          <p className="text-black">
+            Link URL<span className="ml-1 font-bold text-red-500 ">*</span>
+          </p>
+          <TextArea
+            placeholder="Write a message..."
+            rows={2}
+            containerClassName=""
+            className="border-gray border-1  overflow-y-scroll focus:border-none"
+            errorMessage={formState?.errors?.['content']?.message}
+            register={register('content')}
+          />
         </div>
       </Modal.Description>
       <Button
@@ -50,7 +67,7 @@ const ApplyStep4 = ({onSubmit, onAttach}: Props) => {
         value="Submit"
         onClick={onAttach}
       >
-        Back to projects
+        Add Link
       </Button>
     </form>
   );

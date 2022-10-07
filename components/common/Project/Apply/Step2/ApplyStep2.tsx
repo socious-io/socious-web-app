@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import Modal from '@components/common/Modal/Modal';
 import Image from 'next/image';
 import {StepProps} from '@models/stepProps';
-import {useFormContext} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import TextArea from '@components/common/TextArea/TextArea';
 import Button from '@components/common/Button/Button';
 import useUser from 'hooks/useUser/useUser';
@@ -11,16 +11,11 @@ import BodyBox from '../../BodyBox/BodyBox';
 import {LinkIcon} from '@heroicons/react/24/outline';
 import {ChevronLeftIcon} from '@heroicons/react/24/solid';
 
-interface Props extends StepProps {
-  onAttach: () => void;
-}
-
 const menuExtraSrc = require('../../../../../asset/icons/logo.svg');
 
-const ApplyStep2 = ({onSubmit, onAttach}: Props) => {
+const ApplyStep2 = ({onSubmit}: StepProps) => {
   const {user} = useUser();
-  const formMethods = useFormContext();
-  const {handleSubmit, formState, register, getValues} = formMethods;
+  const {handleSubmit, formState, register} = useForm();
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -60,7 +55,7 @@ const ApplyStep2 = ({onSubmit, onAttach}: Props) => {
           />
         </div>
       </Modal.Description>
-      <Button
+      {/* <Button
         className="ml-auto mt-4 flex max-w-xs items-center justify-center align-middle "
         type="button"
         variant="fill"
@@ -68,7 +63,7 @@ const ApplyStep2 = ({onSubmit, onAttach}: Props) => {
         onClick={onAttach}
       >
         Add Link
-      </Button>
+      </Button> */}
     </form>
   );
 };

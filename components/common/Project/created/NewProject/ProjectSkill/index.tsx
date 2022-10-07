@@ -68,7 +68,7 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
           skills: [...skills, item?.id],
         });
       } else {
-        toast.success('You selected 10 skills');
+        // toast.success('You selected 10 skills');
       }
     }
   };
@@ -80,8 +80,7 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
     >
       <FromLayout>
         <Title description="What skills do you have?" border={false}>
-          Showcase up to 10 skills you can contribute to help social impact
-          initiatives and organizations
+          Select up to 10 relevant skills
         </Title>
         <SearchBar
           type="text"

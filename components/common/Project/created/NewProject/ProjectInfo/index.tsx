@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import Title from '@components/common/CreateOrganization/components/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
@@ -148,35 +148,43 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               onChange={(e) => handleChange('payment_currency', e.target.value)}
             />
             <InputFiled
+              min={0}
               label="Payment Range Lower"
-              type="text"
+              type="number"
               placeholder="Payment Range Lower"
               value={ProjectContext.payment_range_lower}
               errorMessage={errors?.['payment_range_lower']?.message}
               className="my-3"
-              onChange={(e) =>
-                handleChange('payment_range_lower', e.target.value)
-              }
+              onChange={(e) => {
+                if (e.target.value)
+                  handleChange('payment_range_lower', e.target.value);
+              }}
             />
             <InputFiled
+              min={0}
               label="Payment Range Higher"
-              type="text"
+              type="number"
               placeholder="Payment Range Higher"
               value={ProjectContext.payment_range_higher}
               errorMessage={errors?.['payment_range_higher']?.message}
               className="my-3"
-              onChange={(e) =>
-                handleChange('payment_range_higher', e.target.value)
-              }
+              onChange={(e) => {
+                if (e.target.value)
+                  handleChange('payment_range_higher', e.target.value);
+              }}
             />
             <InputFiled
+              min={0}
               label="Experience Level"
               type="number"
               placeholder="Experience Level"
               value={ProjectContext.experience_level}
               errorMessage={errors?.['experience_level']?.message}
               className="my-3"
-              onChange={(e) => handleChange('experience_level', e.target.value)}
+              onChange={(e) => {
+                if (e.target.value)
+                  handleChange('experience_level', e.target.value);
+              }}
             />
             <InputFiled
               label="Country"

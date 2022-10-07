@@ -52,7 +52,7 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
           causes_tags: [...causesTags, item?.id],
         });
       } else {
-        toast.success('You selected 5 passions');
+        // toast.success('You selected 5 passions');
       }
     }
   };
