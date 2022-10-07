@@ -5,13 +5,13 @@ import Link from 'next/link';
 import {Avatar} from '../../components/common/Avatar/Avatar';
 import {TextInput} from '../../components/common/TextInput/TextInput';
 import {FC, PropsWithChildren, CSSProperties} from 'react';
-const imgSrc = require('../../asset/icons/logo.svg');
-const chatIcon = require('../../asset/icons/chat_light.svg');
+import imgSrc from '../../asset/icons/logo.svg';
+import chatIcon from '../../asset/icons/chat_light.svg';
 // const chatIcon = require('../../asset/icons/likes.svg');
-const networkIcon = require('../../asset/icons/network_light.svg');
-const projectIcon = require('../../asset/icons/project_light.svg');
-const feedsIcon = require('../../asset/icons/feeds.svg');
-const notifyIcon = require('../../asset/icons/notifications.svg');
+import networkIcon from '../../asset/icons/network_light.svg';
+import projectIcon from '../../asset/icons/project_light.svg';
+import feedsIcon from '../../asset/icons/feeds.svg';
+import notifyIcon from '../../asset/icons/notifications.svg';
 import Image from 'next/image';
 import {Dropdown} from '@components/common';
 import {useUser} from '@hooks';
@@ -23,6 +23,7 @@ import Router from 'next/router';
 import styles from './index.module.scss';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import {useRouter} from 'next/router';
+import {twMerge} from 'tailwind-merge';
 type TLayoutType = {
   hasNavbar?: boolean;
   style?: CSSProperties;
@@ -35,6 +36,7 @@ type TNavbarItem = {
   imgSrc: any;
 };
 export const NavbarItem: FC<TNavbarItem> = ({label, route, imgSrc}) => {
+  const router = useRouter();
   return (
     <Link href={route} passHref>
       <a className="flex flex-col items-center">
@@ -47,7 +49,12 @@ export const NavbarItem: FC<TNavbarItem> = ({label, route, imgSrc}) => {
             height={100}
           />
         </div>
-        <span className="cursor-pointer text-sm text-grayDisableButton sm:hover:text-primary md:hover:text-white">
+        <span
+          className={twMerge(
+            'cursor-pointer text-sm text-grayDisableButton hover:text-primary md:hover:text-white',
+            router.pathname == route && 'text-primary md:text-white',
+          )}
+        >
           {label}
         </span>
       </a>
@@ -66,11 +73,11 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
     redirect: false,
   });
 
-  console.log('CURRENT USER', currentIdentity);
   const onSwitchIdentity = async (identity: LoginIdentity) => {
     try {
       await changeIdentity(identity.id);
       mutateIdentities();
+      mutateUser();
       if (identity.type === 'organizations') {
         await getOrganization(identity.id);
       }
@@ -133,9 +140,9 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
               <div className="flex w-auto items-center justify-center md:w-4/6 md:grow">
                 <div className="fixed left-0 bottom-0 flex w-full grow justify-evenly space-x-4 border-t border-[#B2B2B2] bg-white py-2 md:relative md:w-auto md:border-t-0 md:bg-transparent md:py-0">
                   {/* Acting as a spacer div */}
-                  <div></div>
+                  <div className="hidden md:block"></div>
                   <NavbarItem
-                    label="projects"
+                    label="Projects"
                     route="/app/projects"
                     imgSrc={projectIcon}
                   />
@@ -156,7 +163,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     imgSrc={notifyIcon}
                   />
                 </div>
-                <div className="space-between flex items-center space-x-3">
+                <div className="space-between flex items-center space-x-3 sm:ml-4 md:ml-0">
                   <Dropdown
                     displayClass="w-8 h-8"
                     display={
