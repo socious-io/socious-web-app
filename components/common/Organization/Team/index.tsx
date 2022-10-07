@@ -12,11 +12,19 @@ const TeamComponent = () => {
   const {state: addState, handlers: addHandlers} = useToggle();
   const {data: members, mutate} = useSWR<
     GlobalResponseType<IOrganizationUserType>
-  >(currentIdentity ? `/orgs/${currentIdentity?.id}/members` : null, get);
+  >(
+    // FIXME hardcoded limit
+    currentIdentity ? `/orgs/${currentIdentity?.id}/members?limit=500` : null,
+    get,
+  );
 
   const onAddNewMember = () => {
     mutate();
   };
+
+  const memberIds = members?.items
+    ? members.items.map((member) => member.id)
+    : [];
 
   return (
     <div className="w-full rounded-2xl border border-grayLineBased bg-white ">
@@ -53,6 +61,7 @@ const TeamComponent = () => {
       {currentIdentity && (
         <NewMemberModal
           onAddNewMember={onAddNewMember}
+          memberIds={memberIds}
           open={addState}
           onClose={addHandlers.off}
           orgId={currentIdentity.id}

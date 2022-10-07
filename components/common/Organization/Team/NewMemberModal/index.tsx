@@ -20,6 +20,7 @@ import {get} from 'utils/request';
 interface INewMemberModalProps {
   open: boolean;
   orgId: string;
+  memberIds: Array<string>;
   onClose: () => void;
   onAddNewMember: () => void;
 }
@@ -27,6 +28,7 @@ interface INewMemberModalProps {
 const NewMemberModal: FC<INewMemberModalProps> = ({
   open,
   orgId,
+  memberIds,
   onClose,
   onAddNewMember,
 }) => {
@@ -138,28 +140,31 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
               >
                 <div className="flex h-80 flex-col">
                   {users?.map((page) =>
-                    page.items.map((item, index) => (
-                      <MemberItem
-                        key={`m-${item.identity_meta.id}-${index}`}
-                        name={item.identity_meta.name}
-                        avatar={item.identity_meta.avatar}
-                        detail={item.identity_meta.email}
-                        Extra={
-                          false ? (
-                            <Button variant="outline" size="sm">
-                              request sent
-                            </Button>
-                          ) : (
-                            <span
-                              className="cursor-pointer"
-                              onClick={() => onAddMember(item)}
-                            >
-                              <UserPlusIcon className="w-6" />
-                            </span>
-                          )
-                        }
-                      />
-                    )),
+                    page.items.map(
+                      (item, index) =>
+                        !memberIds.includes(item.identity_meta.id) && (
+                          <MemberItem
+                            key={`m-${item.identity_meta.id}-${index}`}
+                            name={item.identity_meta.name}
+                            avatar={item.identity_meta.avatar}
+                            detail={item.identity_meta.email}
+                            Extra={
+                              false ? (
+                                <Button variant="outline" size="sm">
+                                  request sent
+                                </Button>
+                              ) : (
+                                <span
+                                  className="cursor-pointer"
+                                  onClick={() => onAddMember(item)}
+                                >
+                                  <UserPlusIcon className="w-6" />
+                                </span>
+                              )
+                            }
+                          />
+                        ),
+                    ),
                   )}
                   <div></div>
                 </div>
