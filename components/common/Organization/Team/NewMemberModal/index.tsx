@@ -104,6 +104,7 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
       )}
       {step === 2 && (
         <ConfirmUserRole
+          user={selectedUser}
           role={role}
           onConfirmRole={changeRole}
           onClose={onResetStep}
@@ -118,6 +119,7 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
 export default NewMemberModal;
 type UserRole = 'member' | 'admin';
 interface IConfirmUserRole {
+  user: IOrganizationFollowerType | undefined;
   role: UserRole;
   onConfirmRole: (role: UserRole) => void;
   onClose: () => void;
@@ -125,6 +127,7 @@ interface IConfirmUserRole {
   onConfirm: () => void;
 }
 const ConfirmUserRole: FC<IConfirmUserRole> = ({
+  user,
   role,
   onConfirmRole,
   onConfirm,
@@ -141,7 +144,7 @@ const ConfirmUserRole: FC<IConfirmUserRole> = ({
           <Modal.Title>
             <p className="min-h-[30px] py-2 text-center text-xl">
               {' '}
-              Add name as a...
+              Add {user?.identity_meta.name} as a...
             </p>
           </Modal.Title>
         </div>
