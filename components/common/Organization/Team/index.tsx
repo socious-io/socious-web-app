@@ -3,7 +3,7 @@ import Image from 'next/image';
 import MemberItem from './MemberItem';
 import NewMemberModal from './NewMemberModal';
 import {UserPlusIcon} from '@heroicons/react/24/outline';
-import useSWR, {useSWRConfig} from 'swr';
+import useSWR from 'swr';
 import {get} from 'utils/request';
 import {
   GlobalResponseType,
@@ -13,26 +13,14 @@ import {
 const more = require('../../../../asset/icons/more.svg');
 
 const TeamComponent = () => {
-  const {mutate} = useSWRConfig();
-  const {currentIdentity} = useUser({
-    redirect: false,
-  });
+  const {currentIdentity} = useUser();
   const {state: addState, handlers: addHandlers} = useToggle();
-  const {data: members} = useSWR<GlobalResponseType<IOrganizationUserType>>(
-    currentIdentity ? `/orgs/${currentIdentity?.id}/members` : null,
-    get,
-  );
+  const {data: members, mutate} = useSWR<
+    GlobalResponseType<IOrganizationUserType>
+  >(currentIdentity ? `/orgs/${currentIdentity?.id}/members` : null, get);
 
-  const {data: followers} = useSWR<
-    GlobalResponseType<IOrganizationFollowerType>
-  >(`/follows/followers`, get);
-
-  const onAddNewMember = async () => {
-    try {
-      await mutate(`/orgs/${currentIdentity?.id}/members`);
-    } catch (error) {
-      // Handle error
-    }
+  const onAddNewMember = () => {
+    mutate();
   };
 
   return (
@@ -48,9 +36,9 @@ const TeamComponent = () => {
         </div>
       </div>
       <div>
-        <div className="border-b p-4">
+        {/* <div className="border-b p-4">
           <h3 className="text-xl font-semibold">Admin</h3>
-        </div>
+        </div> */}
         <div>
           {members?.items?.map((item, index) => (
             <MemberItem
@@ -77,7 +65,6 @@ const TeamComponent = () => {
           onAddNewMember={onAddNewMember}
           open={addState}
           onClose={addHandlers.off}
-          users={followers?.items}
           orgId={currentIdentity.id}
         />
       )}

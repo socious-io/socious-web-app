@@ -9,7 +9,11 @@ export interface IOrganizationUserType {
   requested: boolean;
 }
 
+// FIXME should come from socious-data
+declare type TIdentity = 'organizations' | 'users';
+
 export interface IOrganizationFollowerType {
+  identity_type: TIdentity;
   identity_meta: {
     avatar: string | null;
     email: string;
