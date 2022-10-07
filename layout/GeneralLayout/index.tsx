@@ -164,11 +164,12 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                   </div>
                 </div>
                 <div className="space-between flex grow items-center sm:mx-2 md:min-w-[18rem] md:grow-0">
-                  <TextInput
+                  {/* Uncomment for SearchBar */}
+                  {/* <TextInput
                     className="h-8 w-full rounded-full py-1.5"
                     containerClassName="w-full max-w-[18rem]"
                     height={'32px'}
-                  />
+                  /> */}
                 </div>
               </div>
 
@@ -181,11 +182,12 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     route="/app/projects"
                     imgSrc={projectIcon}
                   />
-                  <NavbarItem
+                  {/* TODO: Uncomment for Network */}
+                  {/* <NavbarItem
                     label="Network"
                     route="/app/network"
                     imgSrc={networkIcon}
-                  />
+                  /> */}
                   <NavbarItem label="Feeds" route="/app" imgSrc={feedsIcon} />
                   <NavbarItem
                     label="Chat"
@@ -275,7 +277,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         </div>
       )}
       <div
-        className={`m-auto flex ${
+        className={`m-auto mb-[70px] flex lg:mb-0${
           needsBanner ? 'mt-10 px-4' : 'sm:mt-10'
         } sm:px-0 ${styles.layoutBase}`}
         style={style}
