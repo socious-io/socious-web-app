@@ -245,6 +245,7 @@ const AddMember: FC<IAddMemberProps> = ({
                       <MemberItem
                         key={`m-${item.identity_meta.id}-${index}`}
                         name={item.identity_meta.name}
+                        avatar={item.identity_meta.avatar}
                         detail={item.identity_meta.email}
                         Extra={
                           false ? (
