@@ -82,7 +82,7 @@ const CommentField = forwardRef<FocusComment, CommentFieldProps>(
           disabled={comment.length === 0}
           onClick={() => onClickSend()}
         >
-          <PaperAirplaneIcon className="w-5 rotate-45 cursor-pointer text-grayDisableButton hover:text-grayInputField" />
+          <PaperAirplaneIcon className="w-5 -rotate-45 cursor-pointer text-grayDisableButton hover:text-grayInputField" />
         </Button>
       </form>
     );
