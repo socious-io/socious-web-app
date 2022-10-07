@@ -223,33 +223,40 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                       />
                     }
                   >
-                    {identities &&
-                      identities.length > 0 &&
-                      identities.map(
-                        (identity: LoginIdentity) =>
-                          !identity.current && (
-                            <div
-                              key={identity?.meta?.id}
-                              className="my-4 flex w-52 cursor-pointer flex-row items-center p-4 hover:bg-primary hover:text-offWhite"
-                              onClick={() => onSwitchIdentity(identity)}
-                            >
-                              <div className="w-1/4">
-                                <Avatar
-                                  size="m"
-                                  type={identity.type}
-                                  src={
-                                    identity.type === 'users'
-                                      ? identity?.meta?.avatar
-                                      : identity?.meta?.image
-                                  }
-                                />
+                    {identities && identities.length > 0 && (
+                      <>
+                        {identities.map(
+                          (identity: LoginIdentity) =>
+                            !identity.current && (
+                              <div
+                                key={identity?.meta?.id}
+                                className="my-4 flex w-52 cursor-pointer flex-row items-center p-4 hover:bg-primary hover:text-offWhite"
+                                onClick={() => onSwitchIdentity(identity)}
+                              >
+                                <div className="w-1/4">
+                                  <Avatar
+                                    size="m"
+                                    type={identity.type}
+                                    src={
+                                      identity.type === 'users'
+                                        ? identity?.meta?.avatar
+                                        : identity?.meta?.image
+                                    }
+                                  />
+                                </div>
+                                <div className="w-3/4">
+                                  {identity?.meta?.name}
+                                </div>
                               </div>
-                              <div className="w-3/4">
-                                {identity?.meta?.name}
-                              </div>
-                            </div>
-                          ),
-                      )}
+                            ),
+                        )}
+                        <Link href="/app/organization/+new">
+                          <div className="cursor-pointer p-4 text-left text-sm hover:bg-primary hover:text-offWhite">
+                            Create Organization
+                          </div>
+                        </Link>
+                      </>
+                    )}
 
                     {!userLoggedOut ? (
                       <>
