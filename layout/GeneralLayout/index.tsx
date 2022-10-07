@@ -119,7 +119,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   // Check if they need banner
   const needsBanner = useMemo<'feed' | 'network' | 'project' | null>(() => {
     switch (route?.pathname) {
-      case '/app':
+      case '/app/feed':
         return 'feed';
       case '/app/network':
         return 'network';
@@ -188,7 +188,11 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     route="/app/network"
                     imgSrc={networkIcon}
                   /> */}
-                  <NavbarItem label="Feeds" route="/app" imgSrc={feedsIcon} />
+                  <NavbarItem
+                    label="Feeds"
+                    route="/app/feed"
+                    imgSrc={feedsIcon}
+                  />
                   {!userLoggedOut && (
                     <>
                       <NavbarItem
