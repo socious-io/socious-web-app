@@ -10,62 +10,61 @@ import Avatar from '@components/common/Avatar/Avatar';
 import BodyBox from '../../BodyBox/BodyBox';
 import {LinkIcon} from '@heroicons/react/24/outline';
 import {ChevronLeftIcon} from '@heroicons/react/24/solid';
-
-const menuExtraSrc = require('../../../../../asset/icons/logo.svg');
-
-const ApplyStep2 = ({onSubmit}: StepProps) => {
-  const {user} = useUser();
-  const {handleSubmit, formState, register} = useForm();
+import {FromLayout} from '../../created/NewProject/Layout';
+import {useProjectContext} from '../../created/NewProject/context';
+import useSWR from 'swr';
+import {get} from 'utils/request';
+import {TitlePart} from '../Step1/ApplyStep1';
+interface ApplyStep extends StepProps {
+  title: string;
+}
+const ApplicationReview = ({onSubmit, title}: ApplyStep) => {
+  const {currentIdentity} = useUser();
+  const {ProjectContext} = useProjectContext();
+  const {data} = useSWR<any>(`/orgs/${currentIdentity?.id}`, get);
+  const {handleSubmit} = useForm();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-row justify-between">
-        <ChevronLeftIcon className="h-6 w-6 cursor-pointer" />
-        <Modal.Title>
-          <h2 className="font-worksans text-center">Apply</h2>
-        </Modal.Title>
+    <form
+      className="flex h-full w-full flex-col "
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <FromLayout>
+        <div className="overflow-y-scroll px-4 pt-4">
+          <p className="font-bold text-black">{title}</p>
+          <div className="mt-3 flex flex-row space-x-2">
+            <Avatar size="s" type="organizations" />
+            <p className="text-black">{currentIdentity?.meta?.name}</p>
+          </div>
+          <p className="mt-4 text-black">{data?.description}</p>
+          <TitlePart title="Cover letter" />
+          <p className="mt-6 text-black">{ProjectContext.cover_letter}</p>
+          {ProjectContext.share_contact_info && (
+            <>
+              <TitlePart title="Contact info" />
 
-        <Image src={menuExtraSrc} alt="menu bar" width="16px" height="16px" />
+              <div className="my-4 flex w-full flex-row  justify-between">
+                <div>
+                  Your contact information (email, phone & address) will be
+                  shared with Organization.
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </FromLayout>
+      <div className=" flex items-end justify-end  border-t p-4 px-4">
+        <Button
+          className="flex h-11 w-52 items-center justify-center"
+          type="submit"
+          variant="fill"
+          value="Submit"
+        >
+          Submit
+        </Button>
       </div>
-      <Modal.Description>
-        <div className="mt-2 space-y-4 pl-0 ">
-          <p className="text-black">
-            Link name <span className="ml-1 font-bold text-red-500 ">*</span>
-          </p>
-          <TextArea
-            placeholder="Write a message..."
-            rows={2}
-            containerClassName=""
-            className="border-gray border-1  overflow-y-scroll focus:border-none"
-            errorMessage={formState?.errors?.['content']?.message}
-            register={register('content')}
-          />
-        </div>
-        <div className="mt-2 space-y-4 pl-0 ">
-          <p className="text-black">
-            Link URL<span className="ml-1 font-bold text-red-500 ">*</span>
-          </p>
-          <TextArea
-            placeholder="Write a message..."
-            rows={2}
-            containerClassName=""
-            className="border-gray border-1  overflow-y-scroll focus:border-none"
-            errorMessage={formState?.errors?.['content']?.message}
-            register={register('content')}
-          />
-        </div>
-      </Modal.Description>
-      {/* <Button
-        className="ml-auto mt-4 flex max-w-xs items-center justify-center align-middle "
-        type="button"
-        variant="fill"
-        value="Submit"
-        onClick={onAttach}
-      >
-        Add Link
-      </Button> */}
     </form>
   );
 };
 
-export default ApplyStep2;
+export default ApplicationReview;

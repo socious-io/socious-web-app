@@ -29,6 +29,9 @@ export type TProjectContext = {
   isEditModalOpen: boolean;
   isApplyModalOpen: boolean;
   cover_letter: string;
+  share_contact_info: boolean;
+  cv_link: string;
+  cv_name: string;
 };
 
 export const initContext: TProjectContext = {
@@ -52,6 +55,9 @@ export const initContext: TProjectContext = {
   isEditModalOpen: false,
   isApplyModalOpen: false,
   cover_letter: '',
+  share_contact_info: false,
+  cv_link: '',
+  cv_name: '',
 };
 
 const ProjectContext = createContext<{

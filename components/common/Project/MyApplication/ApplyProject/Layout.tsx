@@ -2,7 +2,7 @@ import {FC, PropsWithChildren} from 'react';
 import styles from '../../created/NewProject/Layout/index.module.scss';
 import {Modal} from '@components/common';
 import {XMarkIcon, ChevronLeftIcon} from '@heroicons/react/24/solid';
-import {useProjectContext} from '../../created/NewProject/context';
+import {useProjectContext, initContext} from '../../created/NewProject/context';
 
 type TLayoutType = {
   title: string;
@@ -16,28 +16,27 @@ const ApplyLayout: FC<PropsWithChildren<TLayoutType>> = ({children, title}) => {
       className={`${styles.layoutBase} flex  max-w-xl flex-col p-0`}
     >
       <div className="flex justify-between border-b p-5 py-5">
-        <div
-          onClick={() =>
-            setProjectContext({
-              ...ProjectContext,
-              formStep: ProjectContext.formStep - 1,
-            })
-          }
-          className="cursor-pointer"
-        >
-          {ProjectContext.formStep === 1 && (
+        {!(ProjectContext.formStep === 0 || ProjectContext.formStep === 2) ? (
+          <div
+            onClick={() =>
+              setProjectContext({
+                ...ProjectContext,
+                formStep:
+                  ProjectContext.formStep === 3
+                    ? 0
+                    : ProjectContext.formStep - 1,
+              })
+            }
+            className="cursor-pointer"
+          >
             <ChevronLeftIcon width={30} height={30} />
-          )}
-        </div>
-
+          </div>
+        ) : (
+          <div />
+        )}
         <div className="text-xl font-semibold">{title}</div>
         <div
-          onClick={() =>
-            setProjectContext({
-              ...ProjectContext,
-              isApplyModalOpen: !ProjectContext.isApplyModalOpen,
-            })
-          }
+          onClick={() => setProjectContext(initContext)}
           className="cursor-pointer"
         >
           <XMarkIcon width={30} height={30} />

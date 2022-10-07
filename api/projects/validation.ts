@@ -50,6 +50,10 @@ export const schemaCreateProjectQuestion = Joi.object({
 
 export const schemaApplyProject = Joi.object({
   cover_letter: Joi.string().required(),
-  payment_type: Joi.number(),
-  payment_rate: Joi.number(),
+  share_contact_info: Joi.boolean(),
+});
+
+export const schemaLink = Joi.object({
+  cv_link: Joi.string().uri().allow('', null),
+  cv_name: Joi.string().allow('', null),
 });

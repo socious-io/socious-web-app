@@ -1,3 +1,4 @@
+import {string} from 'joi';
 import {Question} from './question';
 
 export interface Project {
@@ -45,6 +46,7 @@ export interface CreateProjectType {
 
 export interface ApplyProjectType {
   cover_letter: string;
-  payment_rate?: number;
-  payment_type?: number;
+  share_contact_info?: boolean;
+  cv_link?: string;
+  cv_name?: string;
 }

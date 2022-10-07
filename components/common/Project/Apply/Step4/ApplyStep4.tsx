@@ -1,76 +1,82 @@
-import React, {useRef} from 'react';
-import Modal from '@components/common/Modal/Modal';
-import Image from 'next/image';
-import {StepProps} from '@models/stepProps';
-import {useFormContext} from 'react-hook-form';
+import React from 'react';
+import {useForm} from 'react-hook-form';
 import TextArea from '@components/common/TextArea/TextArea';
 import Button from '@components/common/Button/Button';
 import useUser from 'hooks/useUser/useUser';
-import Avatar from '@components/common/Avatar/Avatar';
-import BodyBox from '../../BodyBox/BodyBox';
-import {LinkIcon} from '@heroicons/react/24/outline';
-import {ChevronLeftIcon} from '@heroicons/react/24/solid';
+import {FromLayout} from '../../created/NewProject/Layout';
+import {useProjectContext} from '../../created/NewProject/context';
+import {joiResolver} from '@hookform/resolvers/joi';
+import {schemaLink} from '@api/projects/validation';
 
-interface Props extends StepProps {
-  onAttach: () => void;
-}
-
-const menuExtraSrc = require('../../../../../asset/icons/logo.svg');
-
-const ApplyStep4 = ({onSubmit, onAttach}: Props) => {
+const AddLink = () => {
   const {user} = useUser();
-  const formMethods = useFormContext();
-  const {handleSubmit, formState, register, getValues} = formMethods;
+  const {
+    formState: {errors, isValid},
+    register,
+    setValue,
+  } = useForm({
+    resolver: joiResolver(schemaLink),
+  });
+  const {ProjectContext, setProjectContext} = useProjectContext();
+
+  const handleChange = (field: string, input: string) => {
+    setValue(field, input, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    setProjectContext({
+      ...ProjectContext,
+      [field]: input,
+    });
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-row justify-between">
-        <ChevronLeftIcon className="h-6 w-6 cursor-pointer" />
-        <Modal.Title>
-          <h2 className="font-worksans text-center">Apply</h2>
-        </Modal.Title>
-
-        <Image src={menuExtraSrc} alt="menu bar" width="16px" height="16px" />
+    <div className="flex h-full w-full flex-col">
+      <FromLayout>
+        <div className="mt-2 flex h-full flex-col space-y-4 px-4">
+          <div className="mt-2 space-y-4 pl-0 ">
+            <TextArea
+              label="Link name "
+              placeholder="Write a message..."
+              rows={2}
+              value={ProjectContext.cv_name}
+              containerClassName=""
+              className="border-gray border-1  overflow-y-scroll focus:border-none"
+              errorMessage={errors?.['cv_name']?.message}
+              onChange={(e) => handleChange('cv_name', e.target.value)}
+            />
+          </div>
+          <div className="mt-2 space-y-4 pl-0 ">
+            <TextArea
+              label="Link URL"
+              placeholder="Write a message..."
+              rows={2}
+              value={ProjectContext.cv_link}
+              containerClassName=""
+              className="border-gray border-1  overflow-y-scroll focus:border-none"
+              errorMessage={errors?.['cv_link']?.message}
+              onChange={(e) => handleChange('cv_link', e.target.value)}
+            />
+          </div>
+        </div>
+      </FromLayout>
+      <div className=" flex items-end justify-end  border-t p-4 px-4">
+        <Button
+          type="button"
+          variant="fill"
+          disabled={!isValid}
+          onClick={() =>
+            setProjectContext({
+              ...ProjectContext,
+              formStep: 0,
+            })
+          }
+        >
+          Add Link
+        </Button>
       </div>
-      <Modal.Description>
-        <div className="mt-2 space-y-4 pl-0 ">
-          <p className="text-black">
-            Link name <span className="ml-1 font-bold text-red-500 ">*</span>
-          </p>
-          <TextArea
-            placeholder="Write a message..."
-            rows={2}
-            containerClassName=""
-            className="border-gray border-1  overflow-y-scroll focus:border-none"
-            errorMessage={formState?.errors?.['content']?.message}
-            register={register('content')}
-          />
-        </div>
-        <div className="mt-2 space-y-4 pl-0 ">
-          <p className="text-black">
-            Link URL<span className="ml-1 font-bold text-red-500 ">*</span>
-          </p>
-          <TextArea
-            placeholder="Write a message..."
-            rows={2}
-            containerClassName=""
-            className="border-gray border-1  overflow-y-scroll focus:border-none"
-            errorMessage={formState?.errors?.['content']?.message}
-            register={register('content')}
-          />
-        </div>
-      </Modal.Description>
-      <Button
-        className="ml-auto mt-4 flex max-w-xs items-center justify-center align-middle "
-        type="button"
-        variant="fill"
-        value="Submit"
-        onClick={onAttach}
-      >
-        Add Link
-      </Button>
-    </form>
+    </div>
   );
 };
 
-export default ApplyStep4;
+export default AddLink;
