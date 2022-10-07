@@ -33,7 +33,6 @@ function OrganizationTopCard({
   const {identities} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);
   const {ProjectContext, setProjectContext} = useProjectContext();
-  console.log(ProjectContext.formStep);
 
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;

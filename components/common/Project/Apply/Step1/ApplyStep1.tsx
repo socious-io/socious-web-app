@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {StepProps} from '@models/stepProps';
 import {useForm} from 'react-hook-form';
 import TextArea from '@components/common/TextArea/TextArea';
@@ -38,6 +38,14 @@ export const ApplyStep1 = ({onSubmit, title}: ApplyStep) => {
   } = useForm({
     resolver: joiResolver(schemaApplyProject),
   });
+
+  useEffect(() => {
+    if (ProjectContext) {
+      setValue('cover_letter', ProjectContext.cover_letter, {
+        shouldValidate: true,
+      });
+    }
+  }, []);
 
   const handleChange = (field: string, input: string | boolean) => {
     setValue(field, input, {

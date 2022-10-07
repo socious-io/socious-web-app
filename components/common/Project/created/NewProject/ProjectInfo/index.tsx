@@ -29,6 +29,24 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
   });
   const {items} = useGetData();
 
+  useEffect(() => {
+    if (
+      ProjectContext.title &&
+      ProjectContext.description &&
+      ProjectContext.remote_preference
+    ) {
+      setValue('title', ProjectContext.title, {
+        shouldValidate: true,
+      });
+      setValue('description', ProjectContext.description, {
+        shouldValidate: true,
+      });
+      setValue('remote_preference', ProjectContext.remote_preference, {
+        shouldValidate: true,
+      });
+    }
+  }, []);
+
   const handleChange = (field: string, input: string) => {
     setValue(field, input, {
       shouldDirty: true,

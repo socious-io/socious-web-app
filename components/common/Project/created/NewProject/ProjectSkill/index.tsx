@@ -19,13 +19,23 @@ interface ProjectSkillType extends TOnSubmit {
 }
 
 const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
+  const {ProjectContext, setProjectContext} = useProjectContext();
   const {
     handleSubmit,
-    formState: {isValid},
+    formState: {isValid, isDirty},
     setValue,
+    reset,
   } = useForm({
     resolver: joiResolver(schemaCreateProjectStep2),
   });
+
+  useEffect(() => {
+    if (ProjectContext) {
+      setValue('skills', ProjectContext.skills, {
+        shouldValidate: true,
+      });
+    }
+  }, []);
 
   const skills = useMemo(() => {
     const sorted: {id: string; name: string}[] = [];
@@ -39,7 +49,6 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
     // todo: language
     rawSkills,
   ]);
-  const {ProjectContext, setProjectContext} = useProjectContext();
 
   const maxSkills = 10;
   const [filteredItems, filterWith] = useFilter(skills);
