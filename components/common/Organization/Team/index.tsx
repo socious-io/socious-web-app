@@ -42,8 +42,9 @@ const TeamComponent = () => {
         <div>
           {members?.items?.map((item, index) => (
             <MemberItem
-              key={`${item.first_name}-${index}`}
-              name={item.first_name}
+              key={item.id}
+              name={`${item.first_name} ${item.last_name}`}
+              avatar={item.avatar}
               detail={item.location}
               Extra={
                 <div>

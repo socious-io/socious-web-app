@@ -5,7 +5,7 @@ export interface IOrganizationUserType {
   location: string;
   username?: string;
   email?: string;
-  img: string;
+  avatar: string | undefined;
   requested: boolean;
 }
 
@@ -15,7 +15,7 @@ declare type TIdentity = 'organizations' | 'users';
 export interface IOrganizationFollowerType {
   identity_type: TIdentity;
   identity_meta: {
-    avatar: string | null;
+    avatar: string | undefined;
     email: string;
     id: string;
     name: string;

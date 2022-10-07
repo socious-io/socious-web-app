@@ -4,10 +4,11 @@ import {FC, ReactNode} from 'react';
 interface IProp {
   name: string;
   detail: string;
-  avatar: string | null;
+  avatar: string | undefined;
   Extra: ReactNode;
 }
 const MemberItem: FC<IProp> = ({name, detail, avatar, Extra}) => {
+  avatar = undefined; // FIXME
   return (
     <div className="flex items-center  border-b py-2 px-4">
       <Avatar size="l" src={avatar} />

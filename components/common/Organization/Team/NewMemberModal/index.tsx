@@ -39,10 +39,10 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
     (initialSize: number, previousData: any) => {
       if (previousData && previousData?.items?.length < 10) return null;
       if (searchTerm.trim().length)
-        return `/follows/followers?page=${
+        return `/follows/followers?type=users&page=${
           initialSize + 1
         }&name=${searchTerm.trim()}`;
-      return `/follows/followers?page=${initialSize + 1}`;
+      return `/follows/followers?type=users&page=${initialSize + 1}`;
     },
     [searchTerm],
   );
@@ -238,32 +238,28 @@ const AddMember: FC<IAddMemberProps> = ({
           <div className="overflow-y-auto">
             <div className="flex h-full h-80 flex-col">
               {users?.map((page) =>
-                page.items.map(
-                  (item, index) =>
-                    // temp hack until BE adds the filter
-                    item.identity_type === 'users' && (
-                      <MemberItem
-                        key={`m-${item.identity_meta.id}-${index}`}
-                        name={item.identity_meta.name}
-                        avatar={item.identity_meta.avatar}
-                        detail={item.identity_meta.email}
-                        Extra={
-                          false ? (
-                            <Button variant="outline" size="sm">
-                              request sent
-                            </Button>
-                          ) : (
-                            <span
-                              className="cursor-pointer"
-                              onClick={() => onAddMember(item)}
-                            >
-                              <UserPlusIcon className="w-6" />
-                            </span>
-                          )
-                        }
-                      />
-                    ),
-                ),
+                page.items.map((item, index) => (
+                  <MemberItem
+                    key={`m-${item.identity_meta.id}-${index}`}
+                    name={item.identity_meta.name}
+                    avatar={item.identity_meta.avatar}
+                    detail={item.identity_meta.email}
+                    Extra={
+                      false ? (
+                        <Button variant="outline" size="sm">
+                          request sent
+                        </Button>
+                      ) : (
+                        <span
+                          className="cursor-pointer"
+                          onClick={() => onAddMember(item)}
+                        >
+                          <UserPlusIcon className="w-6" />
+                        </span>
+                      )
+                    }
+                  />
+                )),
               )}
               <div></div>
             </div>
