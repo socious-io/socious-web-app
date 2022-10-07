@@ -297,7 +297,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         {needsBanner && (
           <div
             className={twMerge(
-              `mt-[54px] h-full w-full bg-cover bg-center px-4 pt-9 md:mt-16 md:hidden`,
+              `mt-[54px] h-full w-full bg-cover bg-center px-4 pt-9 md:mt-12 md:hidden`,
               needsBanner === 'feed' && `bg-home-image`,
               needsBanner === 'network' && 'bg-home-image',
               needsBanner === 'project' && `bg-home-image`,
@@ -325,7 +325,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         </div>
       )}
       <div
-        className={`m-auto mb-[70px] flex lg:mb-0 lg:mt-16 ${
+        className={`m-auto mb-[70px] flex lg:mb-0 lg:mt-12 ${
           needsBanner ? 'mt-10 px-4' : 'sm:mt-10'
         } sm:px-0 ${styles.layoutBase}`}
         style={style}
