@@ -5,7 +5,6 @@ import TitleViewBoxWithCard from '@components/common/TitleViewBoxWithAvatar/Titl
 import TwoCloumnTwoRowBox from '@components/common/TwoColumnTwoRow/TwoColumnTwoRow';
 import {useToggle, useUser} from '@hooks';
 
-import BodyCard from '../component/BodyCard';
 import HeaderBox from '../component/HeaderBox';
 import HiredCard from '../component/HiredCard';
 

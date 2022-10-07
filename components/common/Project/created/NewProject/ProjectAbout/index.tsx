@@ -28,6 +28,35 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
   const maxCauses = 5;
   const [filteredItems, filterWith] = useFilter(items?.passionDataItems);
 
+  const handleChange = (field: string, item: {id: string; name: string}) => {
+    const causesTags = ProjectContext.causes_tags;
+    if (causesTags?.includes(item?.id)) {
+      setValue(
+        field,
+        causesTags?.filter((i) => i !== item.id),
+        {
+          shouldValidate: true,
+        },
+      );
+      setProjectContext({
+        ...ProjectContext,
+        causes_tags: causesTags?.filter((i) => i !== item?.id),
+      });
+    } else {
+      if (causesTags?.length < maxCauses) {
+        setValue(field, [...causesTags, item.id], {
+          shouldValidate: true,
+        });
+        setProjectContext({
+          ...ProjectContext,
+          causes_tags: [...causesTags, item?.id],
+        });
+      } else {
+        toast.success('You selected 5 passions');
+      }
+    }
+  };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -49,44 +78,7 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
             {filteredItems.map((item) => {
               return (
                 <Chip
-                  onSelected={() => {
-                    if (ProjectContext.causes_tags?.includes(item?.id)) {
-                      setValue(
-                        'causes_tags',
-                        ProjectContext.causes_tags?.filter(
-                          (i) => i !== item.id,
-                        ),
-                        {
-                          shouldValidate: true,
-                        },
-                      );
-                      setProjectContext({
-                        ...ProjectContext,
-                        causes_tags: ProjectContext.causes_tags?.filter(
-                          (i) => i !== item?.id,
-                        ),
-                      });
-                    } else {
-                      if (ProjectContext.causes_tags?.length < maxCauses) {
-                        setValue(
-                          'causes_tags',
-                          [...ProjectContext.causes_tags, item.id],
-                          {
-                            shouldValidate: true,
-                          },
-                        );
-                        setProjectContext({
-                          ...ProjectContext,
-                          causes_tags: [
-                            ...ProjectContext.causes_tags,
-                            item?.id,
-                          ],
-                        });
-                      } else {
-                        toast.success('You selected 5 passions');
-                      }
-                    }
-                  }}
+                  onSelected={() => handleChange('causes_tags', item)}
                   selected={ProjectContext.causes_tags?.includes(item?.id)}
                   value={item.id}
                   key={item.id}
@@ -101,11 +93,11 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
       </FromLayout>
       <div className=" flex items-end justify-end  border-t p-4">
         <Button
-          disabled={!isValid}
+          disabled={ProjectContext.isEditModalOpen ? false : !isValid}
           type="submit"
           className="flex h-11 w-52 items-center justify-center"
         >
-          Continue
+          {ProjectContext.isEditModalOpen ? 'Save Changes' : ' Continue'}
         </Button>
       </div>
     </form>

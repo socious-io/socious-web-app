@@ -7,10 +7,11 @@ import TextArea from '@components/common/TextArea/TextArea';
 import {useImperativeHandle} from 'react';
 import {useRef} from 'react';
 
+import {IdentityType} from '@models/identity';
 interface CommentFieldProps {
   src?: string;
   avatarSize?: 's' | 'm' | 'l' | 'xl' | 'xxl';
-  type?: 0 | 1;
+  type?: IdentityType;
   onSend: (data?: any) => void;
   placeholder?: string;
   className?: string;
@@ -23,7 +24,7 @@ const CommentField = forwardRef<FocusComment, CommentFieldProps>(
     {
       src,
       avatarSize,
-      type,
+      type = 'users',
       onSend,
       placeholder = 'Write a comment.......',
       className,

@@ -1,3 +1,4 @@
+import {UpdateProfileBodyType} from '@models/profile';
 import {get, post, put} from 'utils/request';
 
 export function signup(
@@ -43,7 +44,7 @@ export function changePassword(currentPassword: string, newPassword: string) {
   });
 }
 
-export function updateProfile(userBody: any) {
+export function updateProfile(userBody: UpdateProfileBodyType) {
   return post('/user/update/profile', userBody);
 }
 

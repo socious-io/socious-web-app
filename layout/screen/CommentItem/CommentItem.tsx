@@ -68,7 +68,7 @@ export function CommentItem({
         <div className="p-b flex items-center space-x-2">
           <Avatar
             size="s"
-            type={identity?.identity_type === 'users' ? 0 : 1}
+            type={identity?.identity_type}
             src={
               identity?.identity_type === 'users'
                 ? identity?.avatar

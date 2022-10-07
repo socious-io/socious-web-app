@@ -79,6 +79,7 @@ const SideBarToBe = (
               ? user?.avatar?.url
               : user?.image?.url
           }
+          type={currentIdentity?.type}
           className="block sm:hidden"
         />
       </div>

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import Title from '@components/common/CreateOrganization/components/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
@@ -13,12 +13,20 @@ import {TOnSubmit} from '../sharedType';
 import {Button} from '@components/common';
 
 const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
+  const {setProjectContext, ProjectContext} = useProjectContext();
+  const disableIcon =
+    !ProjectContext.title ||
+    !ProjectContext.description ||
+    !ProjectContext.remote_preference;
   const {
     setValue,
     handleSubmit,
     formState: {errors, isValid},
-  } = useForm({resolver: joiResolver(schemaCreateProjectStep3)});
-  const {setProjectContext, ProjectContext} = useProjectContext();
+  } = useForm({
+    resolver: ProjectContext.isEditModalOpen
+      ? undefined
+      : joiResolver(schemaCreateProjectStep3),
+  });
   const {items} = useGetData();
 
   const handleChange = (field: string, input: string) => {
@@ -71,6 +79,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               items={items.projectRemotePreferenceItems}
               placeholder="Remote Preference"
               className="mt-6"
+              selected={items.projectRemotePreferenceItems?.find(
+                (x) => x?.id === ProjectContext.remote_preference,
+              )}
             />
             <Combobox
               label="Payment Type"
@@ -79,6 +90,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               placeholder="Payment Type"
               className="mt-6"
               onSelected={(e) => handleChange('payment_type', e?.id)}
+              selected={items.projectPaymentTypeItems?.find(
+                (x) => x?.id === ProjectContext.payment_type,
+              )}
             />
             <Combobox
               label="Payment Scheme"
@@ -87,6 +101,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               placeholder="Payment Scheme"
               className="mt-6"
               onSelected={(e) => handleChange('payment_scheme', e?.id)}
+              selected={items.projectPaymentSchemeItems?.find(
+                (x) => x?.id === ProjectContext.payment_scheme,
+              )}
             />
             <Combobox
               label="Status"
@@ -95,6 +112,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               placeholder="Status"
               className="mt-6"
               onSelected={(e) => handleChange('status', e?.id)}
+              selected={items.projectStatusItems?.find(
+                (x) => x?.id === ProjectContext.status,
+              )}
             />
             <Combobox
               label="Project Type"
@@ -103,6 +123,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               placeholder="Project Type"
               className="mt-6"
               onSelected={(e) => handleChange('project_type', e?.id)}
+              selected={items.projectItems?.find(
+                (x) => x?.id === ProjectContext.project_type,
+              )}
             />
             <Combobox
               label="Project Length"
@@ -111,6 +134,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               placeholder="Project Length"
               className="mt-6"
               onSelected={(e) => handleChange('project_length', e?.id)}
+              selected={items.projectLengthItems?.find(
+                (x) => x?.id === ProjectContext.project_length,
+              )}
             />
             <InputFiled
               label="Payment Currency"
@@ -166,11 +192,11 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
       </FromLayout>
       <div className=" flex items-end justify-end  border-t p-4">
         <Button
-          disabled={!isValid}
+          disabled={ProjectContext.isEditModalOpen ? disableIcon : !isValid}
           type="submit"
           className="flex h-11 w-52 items-center justify-center"
         >
-          Continue
+          {ProjectContext.isEditModalOpen ? 'Save Changes' : ' Continue'}
         </Button>
       </div>
     </form>

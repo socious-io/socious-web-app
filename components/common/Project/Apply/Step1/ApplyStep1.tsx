@@ -36,7 +36,7 @@ const ApplyStep1 = ({onSubmit, onAttach}: Props) => {
         <div className="mt-2 space-y-4 pl-0 ">
           <p className="font-bold text-black">project title</p>
           <div className="flex flex-row space-x-2">
-            <Avatar size="s" type={1} />
+            <Avatar size="s" type="organizations" />
 
             <p className="text-black">Organization</p>
           </div>

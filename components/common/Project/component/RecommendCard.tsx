@@ -23,7 +23,7 @@ const RecommendCard: FC<RecommendCardType> = ({title, index}) => {
       <div className="h-full w-full rounded-2xl border  border-grayLineBased bg-white p-4">
         <div className="flex flex-row items-center justify-between ">
           <div className="flex flex-row space-x-2">
-            <Avatar size="xl" type={1} />
+            <Avatar size="xl" type={'organizations'} />
             <div className="flex flex-col">
               <p className="text-black">Organization</p>
               <p className="text-graySubtitle">Location</p>
