@@ -5,12 +5,7 @@ import NewMemberModal from './NewMemberModal';
 import {UserPlusIcon} from '@heroicons/react/24/outline';
 import useSWR from 'swr';
 import {get} from 'utils/request';
-import {
-  GlobalResponseType,
-  IOrganizationFollowerType,
-  IOrganizationUserType,
-} from '@models/organization';
-const more = require('../../../../asset/icons/more.svg');
+import {GlobalResponseType, IOrganizationUserType} from '@models/organization';
 
 const TeamComponent = () => {
   const {currentIdentity} = useUser();
@@ -47,14 +42,8 @@ const TeamComponent = () => {
               avatar={item.avatar}
               detail={item.location}
               Extra={
-                <div>
-                  <Image
-                    src={more}
-                    alt="add-new-member-icon"
-                    width={24}
-                    height={24}
-                  />
-                </div>
+                // TODO popup menu
+                <></>
               }
             />
           ))}
