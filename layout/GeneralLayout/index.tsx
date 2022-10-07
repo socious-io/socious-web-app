@@ -6,7 +6,12 @@ import {Avatar} from '../../components/common/Avatar/Avatar';
 import {TextInput} from '../../components/common/TextInput/TextInput';
 import {FC, PropsWithChildren, CSSProperties} from 'react';
 const imgSrc = require('../../asset/icons/logo.svg');
-const imgLikeSrc = require('../../asset/icons/likes.svg');
+const chatIcon = require('../../asset/icons/chat_light.svg');
+// const chatIcon = require('../../asset/icons/likes.svg');
+const networkIcon = require('../../asset/icons/network_light.svg');
+const projectIcon = require('../../asset/icons/project_light.svg');
+const feedsIcon = require('../../asset/icons/feeds.svg');
+const notifyIcon = require('../../asset/icons/notifications.svg');
 import Image from 'next/image';
 import {Dropdown} from '@components/common';
 import {useUser} from '@hooks';
@@ -27,11 +32,23 @@ type TLayoutType = {
 type TNavbarItem = {
   label: string;
   route: string;
+  imgSrc: any;
 };
-export const NavbarItem: FC<TNavbarItem> = ({label, route}) => {
+export const NavbarItem: FC<TNavbarItem> = ({label, route, imgSrc}) => {
   return (
     <Link href={route} passHref>
-      <span className="cursor-pointer text-sm text-white">{label}</span>
+      <a className="flex flex-col items-center">
+        <div className="h-6 w-6">
+          <Image
+            src={imgSrc}
+            className="fill-warning hover:fill-slate-200"
+            alt="socious logo"
+            width={100}
+            height={100}
+          />
+        </div>
+        <span className="cursor-pointer text-sm text-white">{label}</span>
+      </a>
     </Link>
   );
 };
@@ -81,10 +98,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
           <div className="container mx-6 w-full max-w-5xl sm:mx-2 md:mx-auto">
             <div className="flex w-full items-center justify-center gap-x-4 sm:gap-0">
               <div
-                className={`flex-row-2 flex items-center justify-items-center sm:mx-4 md:ml-0 ${
-                  // placeHolder ? 'flex' : 'hidden'
-                  ''
-                } w-full gap-x-4 sm:gap-0
+                className={`flex-row-2 flex w-full items-center justify-items-center gap-x-4 sm:mx-4 sm:gap-0 md:ml-0 md:w-auto
                 `}
               >
                 <div className="flex flex-wrap content-around">
@@ -105,25 +119,40 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     </div>
                   </div>
                 </div>
-                <div className="space-between flex grow items-center sm:mx-2">
+                <div className="space-between flex grow items-center sm:mx-2 md:min-w-[18rem] md:grow-0">
                   <TextInput
-                    className="h-8 w-full max-w-[18rem] rounded-full py-1.5"
-                    containerClassName="w-full"
+                    className="h-8 w-full rounded-full py-1.5"
+                    containerClassName="w-full max-w-[18rem]"
                     height={'32px'}
                   />
                 </div>
               </div>
 
-              <div className="flex w-auto items-center justify-center md:w-4/6 md:space-x-6">
-                <div className="hidden space-x-4 md:flex">
-                  <NavbarItem label="Home" route="/app" />
-                  <NavbarItem label="Network" route="/app/network" />
-                  <NavbarItem label="Chats" route="/app/chat" />
+              <div className="flex w-auto items-center justify-center md:w-4/6 md:grow">
+                <div className="hidden grow justify-evenly space-x-4 md:relative md:flex">
+                  {/* Acting as a spacer div */}
+                  <div></div>
+                  <NavbarItem
+                    label="projects"
+                    route="/app/projects"
+                    imgSrc={projectIcon}
+                  />
+                  <NavbarItem
+                    label="Network"
+                    route="/app/network"
+                    imgSrc={networkIcon}
+                  />
+                  <NavbarItem label="Feeds" route="/app" imgSrc={feedsIcon} />
+                  <NavbarItem
+                    label="Chat"
+                    route="/app/chat"
+                    imgSrc={chatIcon}
+                  />
                   <NavbarItem
                     label="Notifications"
                     route="/app/notifications"
+                    imgSrc={notifyIcon}
                   />
-                  <NavbarItem label="Projects" route="/app/projects" />
                 </div>
                 <div className="space-between flex items-center space-x-3">
                   <Dropdown
