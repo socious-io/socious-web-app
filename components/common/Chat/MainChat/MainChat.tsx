@@ -165,6 +165,7 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
           onSend={onSendMessage}
           placeholder="Write a message"
           className="border-offsetcolor rounded-none rounded-b-2xl border-0 border-t-[1px]"
+          row={1}
         />
       </div>
     </>

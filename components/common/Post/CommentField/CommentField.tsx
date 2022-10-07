@@ -14,6 +14,7 @@ interface CommentFieldProps {
   onSend: (data?: any) => void;
   placeholder?: string;
   className?: string;
+  row?: number;
 }
 import {FocusComment} from 'pages/app/post/[pid]';
 
@@ -26,6 +27,7 @@ const CommentField = forwardRef<FocusComment, CommentFieldProps>(
       onSend,
       placeholder = 'Write a comment.......',
       className,
+      row = 2,
     },
     ref,
   ) => {
@@ -72,7 +74,7 @@ const CommentField = forwardRef<FocusComment, CommentFieldProps>(
           containerClassName="w-9/12 md:w-11/12 md:mx-2"
           placeholder={placeholder}
           value={comment}
-          rows={2}
+          rows={row}
           ref={inputField}
           onChange={(e) => setComment(e.currentTarget.value)}
         />
