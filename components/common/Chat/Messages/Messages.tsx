@@ -112,15 +112,21 @@ const Messages = ({
           <div>
             <Avatar
               size="xxl"
-              type={activeChat?.participants?.[0]?.identity_type}
+              type={
+                activeChat?.type === 'CHAT'
+                  ? otherParticipants?.[0]?.identity_type
+                  : 'users'
+              }
               src={
-                activeChat?.participants?.[0]?.identity_type === 'users'
-                  ? activeChat?.participants?.[0]?.identity_meta?.avatar
-                  : activeChat?.participants?.[0]?.identity_meta?.image
+                activeChat?.type === 'CHAT'
+                  ? otherParticipants?.[0]?.identity_type === 'users'
+                    ? otherParticipants?.[0]?.identity_meta?.avatar
+                    : otherParticipants?.[0]?.identity_meta?.image
+                  : ''
               }
             />
             <div className="mt-2 space-y-2">
-              <h2 className="text-2xl text-primary">Start charting with</h2>
+              <h2 className="text-2xl text-primary">Start chating with</h2>
               <h2 className="text-2xl">
                 {activeChat?.type === 'CHAT'
                   ? otherParticipants?.[0]?.identity_meta?.name
