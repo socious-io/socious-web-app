@@ -39,7 +39,7 @@ const TeamComponent = () => {
             <MemberItem
               key={item.id}
               name={`${item.first_name} ${item.last_name}`}
-              avatar={item.avatar}
+              avatar={item.avatar?.url}
               detail={item.location}
               Extra={
                 // TODO popup menu

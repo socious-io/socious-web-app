@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Modal from '@components/common/Modal/Modal';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import {XMarkIcon} from '@heroicons/react/24/solid';
-import {ChangeEventHandler, FC, useCallback, useState} from 'react';
+import {ChangeEventHandler, FC, useCallback, useRef, useState} from 'react';
 import useSWRInfinite from 'swr/infinite';
 import Button from '@components/common/Button/Button';
 import MemberItem from '../MemberItem';
@@ -34,6 +34,7 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
   const [role, setRole] = useState<UserRole>('admin');
   const [selectedUser, setSelectedUser] = useState<IOrganizationFollowerType>();
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const usersBoxRef = useRef<HTMLDivElement>(null);
 
   const getKey = useCallback(
     (initialSize: number, previousData: any) => {
@@ -47,12 +48,26 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
     [searchTerm],
   );
 
-  const {data: users, size} = useSWRInfinite<
-    GlobalResponseType<IOrganizationFollowerType>
-  >(getKey, get, {
-    shouldRetryOnError: false,
-  });
+  const {
+    data: users,
+    size,
+    setSize,
+  } = useSWRInfinite<GlobalResponseType<IOrganizationFollowerType>>(
+    getKey,
+    get,
+    {
+      shouldRetryOnError: false,
+    },
+  );
   const hasMore = size * 10 < (users?.[0]?.total_count ?? 0);
+
+  const onScroll = useCallback(() => {
+    if (!usersBoxRef?.current || !hasMore) return;
+    const {scrollTop, scrollHeight, clientHeight} = usersBoxRef.current;
+    if (Math.floor(scrollTop) === scrollHeight - clientHeight) {
+      setSize((old) => old + 1);
+    }
+  }, [setSize, hasMore]);
 
   const changeRole = (newRole: UserRole) => {
     setRole(newRole);
@@ -95,12 +110,63 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
       className="-m-4 h-screen w-screen rounded-none p-0 sm:m-0 sm:h-auto sm:rounded-2xl"
     >
       {step === 1 && (
-        <AddMember
-          users={users}
-          onClose={onClose}
-          onAddMember={onAddMember}
-          onSetSearch={setSearchTerm}
-        />
+        <>
+          <div className="p-3">
+            <span
+              className="absolute right-3 cursor-pointer "
+              onClick={onClose}
+            >
+              <XMarkIcon className="w-6" />
+            </span>
+          </div>
+          <Modal.Title>
+            <p className="min-h-[30px] text-center text-xl">Add members</p>
+          </Modal.Title>
+          <div>
+            <Modal.Description>
+              <div className="mt-3 border-t border-b bg-zinc-100 p-3">
+                <SearchBar
+                  type="text"
+                  placeholder="Search"
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div
+                className="overflow-y-auto"
+                ref={usersBoxRef}
+                onScroll={onScroll}
+              >
+                <div className="flex h-80 flex-col">
+                  {users?.map((page) =>
+                    page.items.map((item, index) => (
+                      <MemberItem
+                        key={`m-${item.identity_meta.id}-${index}`}
+                        name={item.identity_meta.name}
+                        avatar={item.identity_meta.avatar}
+                        detail={item.identity_meta.email}
+                        Extra={
+                          false ? (
+                            <Button variant="outline" size="sm">
+                              request sent
+                            </Button>
+                          ) : (
+                            <span
+                              className="cursor-pointer"
+                              onClick={() => onAddMember(item)}
+                            >
+                              <UserPlusIcon className="w-6" />
+                            </span>
+                          )
+                        }
+                      />
+                    )),
+                  )}
+                  <div></div>
+                </div>
+              </div>
+            </Modal.Description>
+          </div>
+        </>
       )}
       {step === 2 && (
         <ConfirmUserRole
@@ -200,72 +266,6 @@ const ConfirmUserRole: FC<IConfirmUserRole> = ({
           </div>
         </div>
       </Modal.Description>
-    </>
-  );
-};
-
-interface IAddMemberProps {
-  users: Array<GlobalResponseType<IOrganizationFollowerType>> | undefined;
-  onClose: () => void;
-  onAddMember: (member: IOrganizationFollowerType) => void;
-  onSetSearch: (search: string) => void;
-}
-const AddMember: FC<IAddMemberProps> = ({
-  users,
-  onAddMember,
-  onClose,
-  onSetSearch,
-}) => {
-  return (
-    <>
-      <div className="p-3">
-        <span className="absolute right-3 cursor-pointer " onClick={onClose}>
-          <XMarkIcon className="w-6" />
-        </span>
-      </div>
-      <Modal.Title>
-        <p className="min-h-[30px] text-center text-xl">Add members</p>
-      </Modal.Title>
-      <div>
-        <Modal.Description>
-          <div className="mt-3 border-t border-b bg-zinc-100 p-3">
-            <SearchBar
-              type="text"
-              placeholder="Search"
-              onChange={(e) => onSetSearch(e.target.value)}
-            />
-          </div>
-          <div className="overflow-y-auto">
-            <div className="flex h-full h-80 flex-col">
-              {users?.map((page) =>
-                page.items.map((item, index) => (
-                  <MemberItem
-                    key={`m-${item.identity_meta.id}-${index}`}
-                    name={item.identity_meta.name}
-                    avatar={item.identity_meta.avatar}
-                    detail={item.identity_meta.email}
-                    Extra={
-                      false ? (
-                        <Button variant="outline" size="sm">
-                          request sent
-                        </Button>
-                      ) : (
-                        <span
-                          className="cursor-pointer"
-                          onClick={() => onAddMember(item)}
-                        >
-                          <UserPlusIcon className="w-6" />
-                        </span>
-                      )
-                    }
-                  />
-                )),
-              )}
-              <div></div>
-            </div>
-          </div>
-        </Modal.Description>
-      </div>
     </>
   );
 };

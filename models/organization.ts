@@ -5,8 +5,12 @@ export interface IOrganizationUserType {
   location: string;
   username?: string;
   email?: string;
-  avatar: string | undefined;
+  avatar: IAvatarInfo | null;
   requested: boolean;
+}
+
+interface IAvatarInfo {
+  url: string;
 }
 
 // FIXME should come from socious-data
