@@ -12,7 +12,7 @@ import useSWR from 'swr';
 //components
 
 import {get} from 'utils/request';
-import SideBar from '@components/common/Home/SideBar';
+import SideBar from '@components/common/Feed/SideBar';
 import HiredProjectsBoxes from '@components/common/Project/HiredProjects';
 
 const ProjectHired: NextPage = () => {

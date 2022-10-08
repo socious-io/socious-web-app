@@ -2,19 +2,19 @@ import React, {useState, memo} from 'react';
 import {useRouter} from 'next/router';
 
 // components
-import Carousel from '../../components/common/CreateOrganization/components/Carousel';
+import Carousel from '../../../components/common/CreateOrganization/components/Carousel';
 import {Modal, Button} from '@components/common';
 
 // steps of create organization
-import SocialCauses from '../../components/common/CreateOrganization/steps/SocialCauses';
-import OrganizationType from '../../components/common/CreateOrganization/steps/OrganizationType';
-import BasicInfo from '../../components/common/CreateOrganization/steps/BasicInfo';
-import Culture from '../../components/common/CreateOrganization/steps/Culture';
-import SocialImpact from '../../components/common/CreateOrganization/steps/SocialImpact';
-import CreateSuccessfully from '../../components/common/CreateOrganization/steps/CreateSuccessfully';
-import VerifyOrganization from '../../components/common/CreateOrganization/steps/VerifyOrganization';
-import Starter from '../../components/common/CreateOrganization/steps/Starter';
-import Mission from '../../components/common/CreateOrganization/steps/Mission';
+import SocialCauses from '../../../components/common/CreateOrganization/steps/SocialCauses';
+import OrganizationType from '../../../components/common/CreateOrganization/steps/OrganizationType';
+import BasicInfo from '../../../components/common/CreateOrganization/steps/BasicInfo';
+import Culture from '../../../components/common/CreateOrganization/steps/Culture';
+import SocialImpact from '../../../components/common/CreateOrganization/steps/SocialImpact';
+import CreateSuccessfully from '../../../components/common/CreateOrganization/steps/CreateSuccessfully';
+import VerifyOrganization from '../../../components/common/CreateOrganization/steps/VerifyOrganization';
+import Starter from '../../../components/common/CreateOrganization/steps/Starter';
+import Mission from '../../../components/common/CreateOrganization/steps/Mission';
 
 // validation Schema
 import {schemaCreateOrganization} from '@api/createorganization/validation';

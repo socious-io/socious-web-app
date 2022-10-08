@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Logo from 'asset/icons/logo-color.svg';
 import TypoCompany from 'asset/icons/typo-company.svg';
 
-const IdealScreen = () => {
+const SplashScreen = () => {
   return (
     <div className="-my-10 flex h-screen items-center justify-center bg-offWhite">
       <div>
@@ -18,4 +18,4 @@ const IdealScreen = () => {
   );
 };
 
-export default IdealScreen;
+export default SplashScreen;

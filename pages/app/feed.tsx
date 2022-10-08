@@ -1,7 +1,7 @@
 import type {NextPage} from 'next';
 
 import SideBar from '@components/common/Feed/SideBar';
-import MainContent from '@components/common/Project/MainContent';
+import MainContent from '@components/common/Feed/MainContent';
 import {useToggle} from '@hooks';
 import {GeneralLayout, DetailLayout} from 'layout';
 const Project: NextPage = () => {
@@ -9,9 +9,9 @@ const Project: NextPage = () => {
 
   return (
     <GeneralLayout hasNavbar>
-      <SideBar selectBar={showSide ? 'PROJECT_BACKBAR' : ''} />
+      <SideBar />
       <DetailLayout>
-        <MainContent onClickShow={SeeSide.on} />
+        <MainContent />
       </DetailLayout>
     </GeneralLayout>
   );

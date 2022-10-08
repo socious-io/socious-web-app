@@ -1,12 +1,17 @@
 import {Cog8ToothIcon as CogIcon} from '@heroicons/react/24/outline';
 import {ReactComponent as Logo} from '../../asset/icons/logo.svg';
-import {useContext} from 'react';
+import {useContext, useMemo} from 'react';
 import Link from 'next/link';
 import {Avatar} from '../../components/common/Avatar/Avatar';
 import {TextInput} from '../../components/common/TextInput/TextInput';
 import {FC, PropsWithChildren, CSSProperties} from 'react';
-const imgSrc = require('../../asset/icons/Base.svg');
-const imgLikeSrc = require('../../asset/icons/likes.svg');
+import imgSrc from '../../asset/icons/logo.svg';
+import chatIcon from '../../asset/icons/chat_light.svg';
+// const chatIcon = require('../../asset/icons/likes.svg');
+import networkIcon from '../../asset/icons/network_light.svg';
+import projectIcon from '../../asset/icons/project_light.svg';
+import feedsIcon from '../../asset/icons/feeds.svg';
+import notifyIcon from '../../asset/icons/notifications.svg';
 import Image from 'next/image';
 import {Dropdown} from '@components/common';
 import {useUser} from '@hooks';
@@ -18,20 +23,62 @@ import Router from 'next/router';
 import styles from './index.module.scss';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import {useRouter} from 'next/router';
+import {twMerge} from 'tailwind-merge';
+
+const bannerType = {
+  feed: {
+    title: 'Your Feed',
+    subTitle: 'See what is happening in your network',
+    img: 'home-image',
+  },
+  project: {
+    title: 'Your Projects',
+    subTitle: 'Manage and create projects',
+    img: 'home-image',
+  },
+  network: {
+    title: 'Network',
+    subTitle: 'Connect with skilled professionals',
+    img: 'home-image',
+  },
+};
+
 type TLayoutType = {
   hasNavbar?: boolean;
   style?: CSSProperties;
   hasDetailNavbar?: boolean;
   detailNavbarTitle?: string;
 };
+
 type TNavbarItem = {
   label: string;
   route: string;
+  imgSrc: any;
 };
-export const NavbarItem: FC<TNavbarItem> = ({label, route}) => {
+export const NavbarItem: FC<TNavbarItem> = ({label, route, imgSrc}) => {
+  const router = useRouter();
   return (
     <Link href={route} passHref>
-      <span className="cursor-pointer text-sm text-white">{label}</span>
+      <a className="flex flex-col items-center">
+        <div className="h-6 w-6">
+          <Image
+            src={imgSrc}
+            className="fill-warning hover:fill-slate-200"
+            alt={`${label} icon`}
+            width={100}
+            height={100}
+          />
+        </div>
+        <span
+          className={twMerge(
+            'cursor-pointer text-xs text-grayDisableButton hover:text-primary md:text-sm md:hover:text-white',
+            router.pathname == route &&
+              'font-semibold text-primary md:text-white',
+          )}
+        >
+          {label}
+        </span>
+      </a>
     </Link>
   );
 };
@@ -51,6 +98,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
     try {
       await changeIdentity(identity.id);
       mutateIdentities();
+      mutateUser();
       if (identity.type === 'organizations') {
         await getOrganization(identity.id);
       }
@@ -59,6 +107,8 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
     }
   };
 
+  const userLoggedOut = useMemo(() => identities === null, [identities]);
+
   const onLogout = async () => {
     const res = await logout();
     mutateIdentities();
@@ -66,27 +116,39 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
     if (res) Router.push('/app');
   };
 
+  // Check if they need banner
+  const needsBanner = useMemo<'feed' | 'network' | 'project' | null>(() => {
+    switch (route?.pathname) {
+      case '/app/feed':
+        return 'feed';
+      case '/app/network':
+        return 'network';
+      case '/app/projects':
+        return 'project';
+      default:
+        return null;
+    }
+  }, [route?.pathname]);
+
   return (
     <div className="flex w-full flex-col">
       <div
-        className={`flex  w-full items-center rounded-b-sm   bg-cover bg-center sm:bg-primary md:flex md:h-16 md:bg-none lg:h-16 ${
-          hasNavbar
-            ? `h-52 bg-[url('/images/socious_feed.png')]`
-            : 'h-0 bg-none'
+        className={`flex w-full items-center rounded-b-sm bg-primary md:flex md:h-16 lg:h-16 ${
+          // ? `h-52 bg-[url('/images/socious_feed.png')]`
+          needsBanner ? `h-44 flex-col` : 'h-16 bg-none'
         }`}
       >
-        <nav className="h-full w-full items-center bg-black  bg-opacity-25  sm:bg-opacity-0 md:flex  md:h-16 md:bg-none lg:h-16 ">
-          <div className="container mx-auto max-w-5xl">
-            <div className="flex flex-col items-center justify-center sm:flex-row">
+        <nav className="fixed top-0 z-10 flex h-14 min-h-[54px] w-full items-center justify-center bg-primary md:h-16 md:justify-start lg:h-16 ">
+          <div className="container mx-6 w-full max-w-5xl sm:mx-2 md:mx-auto">
+            <div className="flex w-full items-center justify-center gap-x-4 sm:gap-0">
               <div
-                className={`flex-row-2 ml-4 mr-4 mt-14  items-center justify-items-center sm:flex md:ml-0 md:mt-0 ${
-                  hasNavbar ? 'flex' : 'hidden'
-                }`}
+                className={`flex-row-2 flex w-full items-center justify-items-center gap-x-4 sm:mx-4 sm:gap-0 md:ml-0 md:w-auto
+                `}
               >
                 <div className="flex flex-wrap content-around">
                   <div className="items-center rounded-full ">
-                    <div className="relative  h-8 w-8  ">
-                      <Link href="/">
+                    <div className="relative  h-8 w-8 ">
+                      <Link href="/app">
                         <a>
                           <Image
                             src={imgSrc}
@@ -101,46 +163,54 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     </div>
                   </div>
                 </div>
-                <div className="space-between ml-2 mr-2 flex items-center ">
-                  <TextInput className="w-72 rounded-full py-1.5" />
-                </div>
-                <div className="items-center ">
-                  <div className="relative h-6 w-6 md:hidden">
-                    <Link href="/app/chat">
-                      <a>
-                        <Image
-                          src={imgLikeSrc}
-                          className="fill-warning"
-                          alt="likes"
-                          layout="fill" // required
-                        />
-                      </a>
-                    </Link>
-                  </div>
+                <div className="space-between flex grow items-center sm:mx-2 md:min-w-[18rem] md:grow-0">
+                  {/* Uncomment for SearchBar */}
+                  {/* <TextInput
+                    className="h-8 w-full rounded-full py-1.5"
+                    containerClassName="w-full max-w-[18rem]"
+                    height={'32px'}
+                  /> */}
                 </div>
               </div>
 
-              {hasNavbar && (
-                <div className="mt-6 w-full px-4 sm:hidden">
-                  <h1 className="text-4xl text-white">Your Feed</h1>
-                  <p className="mt-2 text-base font-normal text-neutralGray ">
-                    See what is happening in your network
-                  </p>
-                </div>
-              )}
-              <div className="hidden w-4/6 items-center justify-end space-x-6 md:flex">
-                <div className="space-x-4 ">
-                  <NavbarItem label="Home" route="/app" />
-                  <NavbarItem label="Network" route="/app/network" />
-                  <NavbarItem label="Chats" route="/app/chat" />
+              <div className="flex w-auto items-center justify-center md:w-4/6 md:grow">
+                <div className="fixed left-0 bottom-0 flex w-full grow justify-evenly space-x-4 border-t border-[#B2B2B2] bg-white py-2 md:relative md:w-auto md:border-t-0 md:bg-transparent md:py-0">
+                  {/* Acting as a spacer div */}
+                  <div className="hidden md:block"></div>
                   <NavbarItem
-                    label="Notifications"
-                    route="/app/notifications"
+                    label="Projects"
+                    route="/app/projects"
+                    imgSrc={projectIcon}
                   />
-                  <NavbarItem label="Projects" route="/app/projects" />
+                  {/* TODO: Uncomment for Network */}
+                  {/* <NavbarItem
+                    label="Network"
+                    route="/app/network"
+                    imgSrc={networkIcon}
+                  /> */}
+                  <NavbarItem
+                    label="Feeds"
+                    route="/app/feed"
+                    imgSrc={feedsIcon}
+                  />
+                  {!userLoggedOut && (
+                    <>
+                      <NavbarItem
+                        label="Chat"
+                        route="/app/chat"
+                        imgSrc={chatIcon}
+                      />
+                      <NavbarItem
+                        label="Notifications"
+                        route="/app/notifications"
+                        imgSrc={notifyIcon}
+                      />
+                    </>
+                  )}
                 </div>
-                <div className="space-between flex items-center space-x-3">
+                <div className="space-between flex items-center space-x-3 sm:ml-4 md:ml-0">
                   <Dropdown
+                    displayClass="w-8 h-8"
                     display={
                       <Avatar
                         size="m"
@@ -153,43 +223,94 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                       />
                     }
                   >
-                    {identities &&
-                      identities.length > 0 &&
-                      identities.map(
-                        (identity: LoginIdentity) =>
-                          !identity.current && (
-                            <div
-                              key={identity?.meta?.id}
-                              className="my-4 flex w-52 cursor-pointer flex-row items-center p-4 hover:bg-primary hover:text-offWhite"
-                              onClick={() => onSwitchIdentity(identity)}
-                            >
-                              <div className="w-1/4">
-                                <Avatar
-                                  size="m"
-                                  type={identity.type}
-                                  src={
-                                    identity.type === 'users'
-                                      ? identity?.meta?.avatar
-                                      : identity?.meta?.image
-                                  }
-                                />
+                    {identities && identities.length > 0 && (
+                      <>
+                        {identities.map(
+                          (identity: LoginIdentity) =>
+                            !identity.current && (
+                              <div
+                                key={identity?.meta?.id}
+                                className="my-4 flex w-52 cursor-pointer flex-row items-center p-4 hover:bg-primary hover:text-offWhite"
+                                onClick={() => onSwitchIdentity(identity)}
+                              >
+                                <div className="w-1/4">
+                                  <Avatar
+                                    size="m"
+                                    type={identity.type}
+                                    src={
+                                      identity.type === 'users'
+                                        ? identity?.meta?.avatar
+                                        : identity?.meta?.image
+                                    }
+                                  />
+                                </div>
+                                <div className="w-3/4">
+                                  {identity?.meta?.name}
+                                </div>
                               </div>
-                              <div className="w-3/4">
-                                {identity?.meta?.name}
-                              </div>
-                            </div>
-                          ),
-                      )}
-                    <div className="cursor-pointer p-4" onClick={onLogout}>
-                      <b>LOGOUT</b>
-                    </div>
+                            ),
+                        )}
+                        <Link href="/app/organization/+new">
+                          <div className="cursor-pointer p-4 text-left text-sm hover:bg-primary hover:text-offWhite">
+                            Create Organization
+                          </div>
+                        </Link>
+                      </>
+                    )}
+
+                    {!userLoggedOut ? (
+                      <>
+                        <Link href="/app/auth/changepassword">
+                          <div className="cursor-pointer p-4 text-left text-sm hover:bg-primary hover:text-offWhite">
+                            Change Password
+                          </div>
+                        </Link>
+                        <div
+                          className="cursor-pointer p-4 text-left hover:bg-primary hover:text-offWhite"
+                          onClick={onLogout}
+                        >
+                          <span className="w-full text-sm">Log out</span>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div
+                          className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
+                          onClick={() => route.push('/app/auth/signup')}
+                        >
+                          Sign up
+                        </div>
+                        <div
+                          className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
+                          onClick={() => route.push('/app/auth/login')}
+                        >
+                          Login
+                        </div>
+                      </>
+                    )}
                   </Dropdown>
-                  <CogIcon className="h-6  text-white" />
                 </div>
               </div>
             </div>
           </div>
         </nav>
+        {needsBanner && (
+          <div
+            className={twMerge(
+              `mt-[54px] h-full w-full bg-cover bg-center px-4 pt-9 md:mt-12 md:hidden`,
+              needsBanner === 'feed' && `bg-home-image`,
+              needsBanner === 'network' && 'bg-home-image',
+              needsBanner === 'project' && `bg-home-image`,
+            )}
+          >
+            <h1 className="text-4xl text-white">
+              {bannerType[needsBanner].title}
+            </h1>
+            <p className="mt-2 text-base font-normal text-neutralGray ">
+              {bannerType[needsBanner].subTitle}
+            </p>
+          </div>
+        )}
       </div>
       {hasDetailNavbar && (
         <div className="flex w-full flex-col pt-14 sm:hidden">
@@ -204,8 +325,8 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         </div>
       )}
       <div
-        className={`m-auto flex ${
-          hasNavbar ? 'mt-10 px-4' : 'sm:mt-10'
+        className={`m-auto mb-[70px] flex lg:mb-0 lg:mt-12 ${
+          needsBanner ? 'mt-10 px-4' : 'sm:mt-10'
         } sm:px-0 ${styles.layoutBase}`}
         style={style}
       >

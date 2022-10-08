@@ -13,7 +13,7 @@ import useSWR from 'swr';
 
 import {get} from 'utils/request';
 import MyApplicationBoxes from '@components/common/Project/MyApplication';
-import SideBar from '@components/common/Home/SideBar';
+import SideBar from '@components/common/Feed/SideBar';
 
 const ProjectApplications: NextPage = () => {
   // get id from route

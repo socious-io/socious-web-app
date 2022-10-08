@@ -10,7 +10,10 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
-        'hero-pattern': "url('../../asset/images/socious_feed.png')",
+        'home-image':
+          "linear-gradient(0deg, rgba(0, 0, 0, 0.36), rgba(0, 0, 0, 0.36)), url('/images/socious_feed.png')",
+        'network-image':
+          "linear-gradient(0deg, rgba(0, 0, 0, 0.36), rgba(0, 0, 0, 0.36)), url('/images/socious_network.png')",
       },
       colors: {
         primary: '#2F4786',
@@ -45,7 +48,7 @@ module.exports = {
         errorSub: '#F5BABA',
         neutralGray: '#D4D2D0',
         offsetColor: '#C3C8D9',
-        Gray03:'#BEC0C7'
+        Gray03: '#BEC0C7',
       },
       strokeWidth: {
         1.5: '1.5px',
