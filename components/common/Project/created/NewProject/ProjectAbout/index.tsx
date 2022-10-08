@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useMemo} from 'react';
+import React, {FC, useEffect} from 'react';
 import Chip from '@components/common/Chip/Chip';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import {useForm} from 'react-hook-form';
@@ -27,6 +27,13 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
 
   const maxCauses = 5;
   const [filteredItems, filterWith] = useFilter(items?.passionDataItems);
+  useEffect(() => {
+    if (ProjectContext) {
+      setValue('causes_tags', ProjectContext.causes_tags, {
+        shouldValidate: true,
+      });
+    }
+  }, []);
 
   const handleChange = (field: string, item: {id: string; name: string}) => {
     const causesTags = ProjectContext.causes_tags;
@@ -52,7 +59,7 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
           causes_tags: [...causesTags, item?.id],
         });
       } else {
-        toast.success('You selected 5 passions');
+        // toast.success('You selected 5 passions');
       }
     }
   };

@@ -1,9 +1,8 @@
-import {Passion} from './passion';
+import {string} from 'joi';
 import {Question} from './question';
-import {TopSkills} from './topSkills';
 
 export interface Project {
-  id?: number;
+  id?: string;
   page_id?: number;
   title: string;
   description: string;
@@ -43,4 +42,11 @@ export interface CreateProjectType {
   project_length?: string;
   project_type?: string;
   skills?: Array<string>;
+}
+
+export interface ApplyProjectType {
+  cover_letter: string;
+  share_contact_info?: boolean;
+  cv_link?: string;
+  cv_name?: string;
 }

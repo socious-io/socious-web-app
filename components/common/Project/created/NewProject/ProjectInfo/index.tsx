@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import Title from '@components/common/CreateOrganization/components/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
@@ -29,6 +29,24 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
   });
   const {items} = useGetData();
 
+  useEffect(() => {
+    if (
+      ProjectContext.title &&
+      ProjectContext.description &&
+      ProjectContext.remote_preference
+    ) {
+      setValue('title', ProjectContext.title, {
+        shouldValidate: true,
+      });
+      setValue('description', ProjectContext.description, {
+        shouldValidate: true,
+      });
+      setValue('remote_preference', ProjectContext.remote_preference, {
+        shouldValidate: true,
+      });
+    }
+  }, []);
+
   const handleChange = (field: string, input: string) => {
     setValue(field, input, {
       shouldDirty: true,
@@ -50,7 +68,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
           <Title description="Describe your project in detail." border>
             Tell us more about your project.
           </Title>
-          <div className="mx-4 ">
+          <div className="mx-4 my-5">
             <InputFiled
               label="Title"
               type="text"
@@ -138,54 +156,67 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 (x) => x?.id === ProjectContext.project_length,
               )}
             />
-            <InputFiled
+            <Combobox
               label="Payment Currency"
-              type="text"
+              name="payment_currency"
+              items={items.allCurrencies}
               placeholder="Payment Currency"
-              value={ProjectContext.payment_currency}
-              errorMessage={errors?.['payment_currency']?.message}
-              className="my-3"
-              onChange={(e) => handleChange('payment_currency', e.target.value)}
+              className="mt-6"
+              onSelected={(e) => handleChange('payment_currency', e?.id)}
+              selected={items.allCurrencies?.find(
+                (x) => x?.id === ProjectContext.payment_currency,
+              )}
             />
+
             <InputFiled
+              min={0}
               label="Payment Range Lower"
-              type="text"
+              type="number"
               placeholder="Payment Range Lower"
               value={ProjectContext.payment_range_lower}
               errorMessage={errors?.['payment_range_lower']?.message}
               className="my-3"
-              onChange={(e) =>
-                handleChange('payment_range_lower', e.target.value)
-              }
+              onChange={(e) => {
+                if (e.target.value)
+                  handleChange('payment_range_lower', e.target.value);
+              }}
             />
             <InputFiled
+              min={0}
               label="Payment Range Higher"
-              type="text"
+              type="number"
               placeholder="Payment Range Higher"
               value={ProjectContext.payment_range_higher}
               errorMessage={errors?.['payment_range_higher']?.message}
               className="my-3"
-              onChange={(e) =>
-                handleChange('payment_range_higher', e.target.value)
-              }
+              onChange={(e) => {
+                if (e.target.value)
+                  handleChange('payment_range_higher', e.target.value);
+              }}
             />
             <InputFiled
+              min={0}
               label="Experience Level"
               type="number"
               placeholder="Experience Level"
               value={ProjectContext.experience_level}
               errorMessage={errors?.['experience_level']?.message}
               className="my-3"
-              onChange={(e) => handleChange('experience_level', e.target.value)}
+              onChange={(e) => {
+                if (e.target.value)
+                  handleChange('experience_level', e.target.value);
+              }}
             />
-            <InputFiled
+            <Combobox
               label="Country"
-              type="text"
-              value={ProjectContext.country}
+              name="country"
+              items={items.countries}
               placeholder="Country"
-              errorMessage={errors?.['country']?.message}
               className="my-3"
-              onChange={(e) => handleChange('country', e.target.value)}
+              onSelected={(e) => handleChange('Country', e?.id)}
+              selected={items.countries?.find(
+                (x) => x?.id === ProjectContext.country,
+              )}
             />
           </div>
         </div>

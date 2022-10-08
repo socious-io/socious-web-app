@@ -35,12 +35,12 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
   const {data} = useSWR<any>(`/projects/${id}`, get);
-  const {data: projectQuestion} = useSWR<any>(`/projects/${id}/questions`, get);
+  // const {data: projectQuestion} = useSWR<any>(`/projects/${id}/questions`, get);
 
-  if (!data && !projectQuestion) return <p>loading</p>;
-  const questionTitle = projectQuestion?.questions?.map(
-    (q: Question) => q?.question,
-  );
+  // if (!data && !projectQuestion) return <p>loading</p>;
+  // const questionTitle = projectQuestion?.questions?.map(
+  //   (q: Question) => q?.question,
+  // );
   const onSubmit = async () => {
     const postBody: CreateProjectType = {
       title: ProjectContext.title,
@@ -111,6 +111,7 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
       ) : (
         <div className="divide-y rounded-2xl border border-grayLineBased bg-white ">
           <OrganizationTopCard
+            id={data?.id}
             title={data?.title}
             description={data?.description}
             country_id={data?.country}
@@ -133,13 +134,13 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
           {data?.skills?.length > 0 && (
             <ProjectItem title="Skills" items={data?.skills} />
           )}
-          {projectQuestion?.questions?.length > 0 && (
+          {/* {projectQuestion?.questions?.length > 0 && (
             <ProjectItem
               title="Screening questions"
               items={questionTitle}
               isRow
             />
-          )}
+          )} */}
           <BodyBox
             title={'About the organization'}
             description={data?.description} // need to ask

@@ -70,7 +70,7 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
     }
   }, [ProjectContext]);
 
-  const PageDisplay = () => {
+  const pageDisplay = () => {
     if (isStep0) {
       return <ProjectAbout onSubmit={onSubmit} />;
     } else if (isStep1) {
@@ -86,7 +86,7 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
 
   return (
     <CreateProjectLayout title={isStep4 ? '' : 'Create Project'}>
-      {PageDisplay()}
+      {pageDisplay()}
     </CreateProjectLayout>
   );
 };
