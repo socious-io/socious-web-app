@@ -289,10 +289,10 @@ const EditMainMenu = ({
                 </div>
               </div>
 
-              {/* Social Causes */}
+              {/* Social causes */}
               <div className="mb-4 mt-12 flex justify-between">
                 <h3 className=" text-xl font-semibold text-grayDisableButton">
-                  Social Causes
+                  Social causes
                 </h3>
                 <PencilSquareIcon
                   className="m-2 w-5 text-primary"
