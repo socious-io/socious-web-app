@@ -8,7 +8,6 @@ import {
   Combobox,
   TextArea,
 } from '@components/common';
-import {PencilSquareIcon} from '@heroicons/react/24/outline';
 import profile_img_icon from 'asset/images/user.png';
 import {useFormContext} from 'react-hook-form';
 import {getText} from '@socious/data';
@@ -16,6 +15,7 @@ import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 import {getPhoneCode} from 'services/getPhoneCode';
 import {ExclamationCircleIcon} from '@heroicons/react/24/solid';
 import Image from 'next/future/image';
+import editIcon from 'asset/icons/edit.svg';
 
 // types
 interface EditMainMenuProps {
@@ -294,10 +294,17 @@ const EditMainMenu = ({
                 <h3 className=" text-xl font-semibold text-grayDisableButton">
                   Social causes
                 </h3>
-                <PencilSquareIcon
-                  className="m-2 w-5 text-primary"
+                <div
+                  className="m-2 h-5 w-5 cursor-pointer"
                   onClick={() => goTo('CAUSES')}
-                />
+                >
+                  <Image
+                    src={editIcon}
+                    alt={`edit icon`}
+                    width={100}
+                    height={100}
+                  />
+                </div>
               </div>
               <div className="min-h-[144px] rounded-lg border border-grayLineBased p-3">
                 <div className="flex flex-wrap gap-2">
@@ -406,10 +413,17 @@ const EditMainMenu = ({
                   <h3 className=" text-xl font-semibold text-grayDisableButton">
                     Skills
                   </h3>
-                  <PencilSquareIcon
-                    className="m-2 w-5 text-primary"
+                  <div
+                    className="m-2 h-5 w-5 cursor-pointer"
                     onClick={() => goTo('SKILLS')}
-                  />
+                  >
+                    <Image
+                      src={editIcon}
+                      alt={`edit icon`}
+                      width={100}
+                      height={100}
+                    />
+                  </div>
                 </div>
                 <div className="min-h-[144px] rounded-lg border border-grayLineBased p-3">
                   <div className="flex flex-wrap gap-2">
