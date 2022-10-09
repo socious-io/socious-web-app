@@ -13,6 +13,7 @@ import Skills from './Skills';
 import ProjectItem from './ProjectItem';
 import Description from './Description';
 import Contact from './Contact';
+import Recommendations from './Recommendations';
 import RightPaneContainer from '../RightPane/RightPaneContainer';
 import ProjectList from '../RightPane/ProjectList';
 
@@ -67,9 +68,15 @@ const MainContent: React.FC<Props> = ({
     router.push(`/app/organization/${data.shortname}/projects`);
   };
 
+  const own_user = status === 'users' && user?.username === data?.username
+    ? true
+    : status === 'organizations' && user?.name === data?.name
+      ? true
+      : false
+
   return (
     <div className="mb-8 flex w-full flex-col items-start gap-6 md:flex-row">
-      <div className="border-1 rounded-xl border border-grayLineBased bg-white md:w-4/6">
+      <div className="border-1 rounded-xl border border-grayLineBased bg-white w-full md:w-4/6">
         <Header
           avatar={status === 'users' ? data?.avatar : data?.image}
           cover_image={data?.cover_image}
@@ -79,13 +86,7 @@ const MainContent: React.FC<Props> = ({
           identities_mutate={identities_mutate}
           profile_mutate={profile_mutate}
           loggedIn={user ? true : false}
-          own_user={
-            status === 'users' && user?.username === data?.username
-              ? true
-              : status === 'organizations' && user?.name === data?.name
-              ? true
-              : false
-          }
+          own_user={own_user}
           editProfile={editProfile}
         />
         <ProfileInfo
@@ -122,6 +123,9 @@ const MainContent: React.FC<Props> = ({
             status={status}
           />
         )}
+
+        <Recommendations own_user={own_user} />
+
         <Description
           paragraph={data?.mission}
           title={status === 'users' ? 'About' : 'Mission'}
