@@ -3,37 +3,28 @@ import Image from 'next/image';
 import MemberItem from './MemberItem';
 import NewMemberModal from './NewMemberModal';
 import {UserPlusIcon} from '@heroicons/react/24/outline';
-import useSWR, {useSWRConfig} from 'swr';
+import useSWR from 'swr';
 import {get} from 'utils/request';
-import {
-  GlobalResponseType,
-  IOrganizationFollowerType,
-  IOrganizationUserType,
-} from '@models/organization';
-const more = require('../../../../asset/icons/more.svg');
+import {GlobalResponseType, IOrganizationUserType} from '@models/organization';
 
 const TeamComponent = () => {
-  const {mutate} = useSWRConfig();
-  const {currentIdentity} = useUser({
-    redirect: false,
-  });
+  const {currentIdentity} = useUser();
   const {state: addState, handlers: addHandlers} = useToggle();
-  const {data: members} = useSWR<GlobalResponseType<IOrganizationUserType>>(
-    currentIdentity ? `/orgs/${currentIdentity?.id}/members` : null,
+  const {data: members, mutate} = useSWR<
+    GlobalResponseType<IOrganizationUserType>
+  >(
+    // FIXME hardcoded limit
+    currentIdentity ? `/orgs/${currentIdentity?.id}/members?limit=500` : null,
     get,
   );
 
-  const {data: followers} = useSWR<
-    GlobalResponseType<IOrganizationFollowerType>
-  >(`/follows/followers`, get);
-
-  const onAddNewMember = async () => {
-    try {
-      await mutate(`/orgs/${currentIdentity?.id}/members`);
-    } catch (error) {
-      // Handle error
-    }
+  const onAddNewMember = () => {
+    mutate();
   };
+
+  const memberIds = members?.items
+    ? members.items.map((member) => member.id)
+    : [];
 
   return (
     <div className="w-full rounded-2xl border border-grayLineBased bg-white ">
@@ -48,24 +39,19 @@ const TeamComponent = () => {
         </div>
       </div>
       <div>
-        <div className="border-b p-4">
+        {/* <div className="border-b p-4">
           <h3 className="text-xl font-semibold">Admin</h3>
-        </div>
+        </div> */}
         <div>
           {members?.items?.map((item, index) => (
             <MemberItem
-              key={`${item.first_name}-${index}`}
-              name={item.first_name}
+              key={item.id}
+              name={`${item.first_name} ${item.last_name}`}
+              avatar={item.avatar?.url}
               detail={item.location}
               Extra={
-                <div>
-                  <Image
-                    src={more}
-                    alt="add-new-member-icon"
-                    width={24}
-                    height={24}
-                  />
-                </div>
+                // TODO popup menu
+                <></>
               }
             />
           ))}
@@ -75,9 +61,9 @@ const TeamComponent = () => {
       {currentIdentity && (
         <NewMemberModal
           onAddNewMember={onAddNewMember}
+          memberIds={memberIds}
           open={addState}
           onClose={addHandlers.off}
-          users={followers?.items}
           orgId={currentIdentity.id}
         />
       )}
