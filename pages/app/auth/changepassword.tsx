@@ -63,7 +63,7 @@ const ChangePassword: NextPage = () => {
         if (error.response?.data?.error === 'Not matched')
           msg = {
             title: 'Invalid Password',
-            message: 'Password is incorrect.',
+            message: 'Current password is incorrect.',
           };
       }
       setError(msg);
