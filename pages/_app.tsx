@@ -8,6 +8,7 @@ import {get} from 'utils/request';
 import PushNotification from '@components/common/PushNotification/PushNotification';
 import '../asset/css/global.css';
 import '../styles/index.css';
+import '../styles/bottom-sheet.css';
 import '../styles/App.css';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,7 +28,7 @@ function MyApp({Component, pageProps}: AppProps) {
             if (
               error?.response?.status === 400 ||
               (500 &&
-                error?.response?.data?.error.startsWith(
+                error?.response?.data?.error?.startsWith(
                   'invalid input syntax for type uuid',
                 ))
             )

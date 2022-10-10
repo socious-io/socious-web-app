@@ -22,7 +22,7 @@
       "@components/*": ["components/*"],
       "@hooks": ["hooks/index.ts"],
       "@models/*": ["models/*"],
-      "@api/*": ["api/*"]
+      "@api/*": ["api/*"],
     }
   },
   "include": ["index.d.ts", "**/*.ts", "**/*.tsx"],

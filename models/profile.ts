@@ -102,3 +102,7 @@ export interface UpdateProfileBodyType {
   cover_image?: string;
   avatar?: string;
 }
+
+export interface SimplifiedUserProfile extends UpdateProfileBodyType {
+  id: string;
+}

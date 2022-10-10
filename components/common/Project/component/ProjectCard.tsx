@@ -18,7 +18,7 @@ export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
           <div key={`${ct}`} className="mt-1">
             <Chip
               content={`${getText('en', `PASSION.${ct}`)}`}
-              contentClassName="text-secondary text-sm"
+              contentClassName="text-secondary text-sm whitespace-nowrap"
             />
           </div>
         );

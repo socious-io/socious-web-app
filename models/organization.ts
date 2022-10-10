@@ -48,6 +48,37 @@ export interface IOrganizationFollowerType {
   identity_meta: IdentityMeta;
 }
 
+export interface IOrganization {
+  address: string;
+  bio: string;
+  city: string;
+  country: string;
+  cover_image: string;
+  created_at: string;
+  created_by: string;
+  culture: string;
+  description: string;
+  email: string;
+  followers: number;
+  followings: number;
+  id: string;
+  image: string;
+  impact_score: 0;
+  mission: string;
+  mobile_country_code: string;
+  name: string;
+  old_id: string;
+  phone: string;
+  search_tsv: string;
+  shortname: string;
+  social_causes: string[];
+  status: string;
+  type: string;
+  updated_at: string;
+  wallet_address: string;
+  website: string;
+}
+
 export interface GlobalResponseType<T> {
   items: T[];
   limit: number;

@@ -87,7 +87,7 @@ const PostContainer = forwardRef<InsertNewPost>((props, ref) => {
         <GridLoader color="#36d7b7" />
       </div>
     );
-
+  console.log(infinitePosts);
   return (
     <div className="sm:space-y-2">
       {/* Passing infintePosts to render on mutation */}
