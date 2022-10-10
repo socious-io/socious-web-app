@@ -26,11 +26,11 @@ const ProjectApplications: NextPage<ProjectApplicationsProps> = ({skills}) => {
 
 export default ProjectApplications;
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   const skills = await getGlobalData();
-//   return {props: {skills}};
-// };
+export const getStaticProps: GetStaticProps = async () => {
+  const skills = await getGlobalData();
+  return {props: {skills}};
+};
 
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   return {paths: [], fallback: true};
-// };
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {paths: [], fallback: true};
+};
