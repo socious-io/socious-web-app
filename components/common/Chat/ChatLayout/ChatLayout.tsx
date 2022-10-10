@@ -48,7 +48,7 @@ const ChatLayout = ({children, page}: ChatLayoutProps) => {
       />
       {children(handleRefresh)}
 
-      {/* Modal */}
+      {/* Add Chat Modal */}
       <Modal
         isOpen={addState}
         onClose={addHandlers.off}
@@ -88,7 +88,11 @@ const ChatLayout = ({children, page}: ChatLayoutProps) => {
                         )
                       }
                     >
-                      <Avatar src={connection.identity_meta.avatar} size="l" />
+                      <Avatar
+                        src={connection.identity_meta.avatar}
+                        type={connection.identity_type}
+                        size="l"
+                      />
                       <div>
                         <p>{connection.identity_meta.name}</p>
                         {connection.identity_meta?.location && (
