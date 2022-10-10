@@ -35,7 +35,7 @@ const OnboardingStep9 = ({onSubmit}: StepProps) => {
         >
           Allow notifications
         </Button>
-        <Link href={'/app'} passHref>
+        <Link href="/app" passHref>
           <a className="block">
             <Button
               className="mt-4 flex  w-full max-w-xs items-center justify-center py-0 align-middle text-white"

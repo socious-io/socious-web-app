@@ -35,8 +35,12 @@ const Login: NextPage = () => {
     if (user) {
       if (!user.skills?.length && !user.social_causes?.length)
         router.push('/app/auth/onboarding');
-      else if (redirect_to) router.push(redirect_to as string);
-      else router.push('/app');
+      else {
+        if (Notification.permission === 'default')
+          Notification.requestPermission();
+        if (redirect_to) router.push(redirect_to as string);
+        else router.push('/app');
+      }
     }
   }, [user, redirect_to, router]);
 
