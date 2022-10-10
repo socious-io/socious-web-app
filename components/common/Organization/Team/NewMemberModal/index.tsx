@@ -147,7 +147,7 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
                             key={`m-${item.identity_meta.id}-${index}`}
                             name={item.identity_meta.name}
                             avatar={item.identity_meta.avatar}
-                            detail={item.identity_meta.email}
+                            detail={item.identity_meta.email!}
                             Extra={
                               false ? (
                                 <Button variant="outline" size="sm">

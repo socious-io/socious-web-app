@@ -1,9 +1,8 @@
-import {string} from 'joi';
+import {IdentityMeta, IdentityType} from './identity';
 import {Question} from './question';
 
 export interface Project {
-  id?: string;
-  page_id?: number;
+  id: string;
   title: string;
   description: string;
   country_id: number;
@@ -14,15 +13,16 @@ export interface Project {
   payment_range_lower: string;
   payment_range_higher: string;
   experience_level: number;
-  causes_tags?: Array<string>;
-  skills?: Array<string>;
+  causes_tags: Array<string>;
+  skills: Array<string>;
   payment_currency?: string;
   questions?: Array<Question>;
-  project_status?: number;
   remote_preference: string;
-  identity_id?: number;
-  status?: string;
-  created_at?: number;
+  identity_id: string;
+  identity_type: IdentityType;
+  identity_meta: IdentityMeta;
+  status: string;
+  created_at: number;
   expires_at?: number;
 }
 
@@ -50,3 +50,14 @@ export interface ApplyProjectType {
   cv_link?: string;
   cv_name?: string;
 }
+
+export interface ProjectProps {
+  project: Project;
+}
+
+export const defaultProject = {
+  payment_currency: '',
+  status: '',
+  causes_tags: [],
+  skills: [],
+} as unknown as Project;

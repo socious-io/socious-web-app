@@ -1,9 +1,10 @@
 export type IdentityMeta = {
   id: string;
-  name?: string;
+  name: string;
   email?: string;
   avatar?: string;
   username?: string;
+  shortname?: string;
   image?: string;
 };
 

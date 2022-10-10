@@ -6,26 +6,28 @@ import OverviewProjectCard from '../../component/OverviewProjectCard';
 import {useToggle} from 'hooks';
 import AlertCard from '@components/common/AlertCard/AlertCard';
 import EditProjectModal from '../../component/EditProjectModal';
-import {Project} from 'models/project';
+import {defaultProject, Project, ProjectProps} from 'models/project';
 import {useProjectContext} from '@components/common/Project/created/NewProject/context';
 
 function Detail({
-  title,
-  country_id,
-  project_type,
-  payment_range_higher,
-  payment_range_lower,
-  remote_preference,
-  project_length,
-  experience_level,
-  description,
-  payment_type,
-  payment_scheme,
-  payment_currency = '',
-  status = '',
-  causes_tags = [],
-  skills = [],
-}: Project) {
+  project: {
+    title,
+    country_id,
+    project_type,
+    payment_range_higher,
+    payment_range_lower,
+    remote_preference,
+    project_length,
+    experience_level,
+    description,
+    payment_type,
+    payment_scheme,
+    payment_currency,
+    status,
+    causes_tags,
+    skills,
+  } = defaultProject,
+}: ProjectProps) {
   const {state: closeProject, handlers: closeProjectHandlers} = useToggle();
   const {state: avoidClose, handlers: avoidCloseHandlers} = useToggle();
   const {ProjectContext, setProjectContext} = useProjectContext();
@@ -40,7 +42,7 @@ function Detail({
       description,
       payment_type,
       experience_level,
-      payment_currency,
+      payment_currency: payment_currency || '',
       payment_range_higher,
       payment_range_lower,
       payment_scheme,
@@ -48,7 +50,7 @@ function Detail({
       project_type,
       remote_preference,
       status,
-      causes_tags,
+      causes_tags: causes_tags || [],
       skills,
       formStep,
     });
