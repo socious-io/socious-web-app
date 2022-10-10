@@ -46,13 +46,13 @@ const schemaStep = {
 };
 
 type OnBoardingProps = {
-  // skills: any[];
+  skills: any[];
 };
 
 // IMP: This needs to be constant.
 const libraries: Libraries = ['places'];
 
-const Onboarding = async () => {
+const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   //Loading Map
   const {isLoaded, loadError} = useGoogleMapsScript({
     googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
@@ -288,7 +288,9 @@ const Onboarding = async () => {
           {step === 2 && <OnboardingStep2 onSubmit={handleSubmit} />}
         </FormProvider>
         <FormProvider {...formMethodsStep3}>
-          {step === 3 && <OnboardingStep3 onSubmit={handleSubmit} />}
+          {step === 3 && (
+            <OnboardingStep3 onSubmit={handleSubmit} rawSkills={skills} />
+          )}
         </FormProvider>
         <FormProvider {...formMethodsStep4}>
           {step === 4 && <OnboardingStep4 onSubmit={handleSubmit} />}
