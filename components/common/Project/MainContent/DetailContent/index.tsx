@@ -21,6 +21,7 @@ import {FC} from 'react';
 import {updateProjectById} from '@api/projects/actions';
 import {CreateProjectType, Project} from '@models/project';
 import {toast} from 'react-toastify';
+import SplashScreen from 'layout/Splash';
 
 type CreateProjectMainType = {
   skills: any[];
@@ -38,7 +39,8 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
 
   // const {data: projectQuestion} = useSWR<any>(`/projects/${id}/questions`, get);
 
-  // if (!data && !projectQuestion) return <p>loading</p>;
+  if (!data) return <SplashScreen />;
+
   // const questionTitle = projectQuestion?.questions?.map(
   //   (q: Question) => q?.question,
   // );
@@ -96,7 +98,7 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
       ) : (
         <div className="divide-y rounded-2xl border border-grayLineBased bg-white ">
           <OrganizationTopCard project={data} />
-          {data?.causes_tags?.length > 0 && (
+          {data?.causes_tags.length > 0 && (
             <ProjectItem items={data?.causes_tags} title="Social causes" />
           )}
           <BodyBox

@@ -42,7 +42,7 @@ function Detail({
       description,
       payment_type,
       experience_level,
-      payment_currency,
+      payment_currency: payment_currency || '',
       payment_range_higher,
       payment_range_lower,
       payment_scheme,
@@ -50,7 +50,7 @@ function Detail({
       project_type,
       remote_preference,
       status,
-      causes_tags,
+      causes_tags: causes_tags || [],
       skills,
       formStep,
     });

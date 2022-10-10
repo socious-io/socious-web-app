@@ -13,7 +13,7 @@ export interface Project {
   payment_range_lower: string;
   payment_range_higher: string;
   experience_level: number;
-  causes_tags?: Array<string>;
+  causes_tags: Array<string>;
   skills: Array<string>;
   payment_currency?: string;
   questions?: Array<Question>;

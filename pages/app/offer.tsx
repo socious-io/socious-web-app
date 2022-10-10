@@ -24,6 +24,7 @@ import NotificationCard from 'layout/screen/NotificationCard/NotificationCard';
 
 import CommentItem from 'layout/screen/CommentItem/CommentItem';
 import ProjectCard from '@components/common/Project/component/ProjectCard';
+import {defaultProject} from '@models/project';
 
 const override = {
   display: 'block',
@@ -130,19 +131,7 @@ const Offer = () => {
             action="liked your post"
           />
         </div>
-        <ProjectCard
-          remote_preference={''}
-          title={''}
-          description={''}
-          country_id={0}
-          project_type={''}
-          project_length={''}
-          payment_type={''}
-          payment_scheme={''}
-          payment_range_lower={''}
-          payment_range_higher={''}
-          experience_level={0}
-        />
+        <ProjectCard project={defaultProject} />
       </div>
     </GeneralLayout>
   );
