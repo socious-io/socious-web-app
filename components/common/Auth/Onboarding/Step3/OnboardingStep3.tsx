@@ -17,7 +17,7 @@ const OnboardingStep3 = ({onSubmit}: StepProps) => {
 
   const skills = useMemo(() => {
     const sorted: {id: string; name: string}[] = [];
-    rawSkills?.forEach((skill) => {
+    rawSkills?.forEach((skill: any) => {
       const name = getText('en', `SKILL.${skill.name}`);
       if (name) sorted.push({id: skill.name, name});
     });
