@@ -29,28 +29,22 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
         title: ProjectContext.title,
         description: ProjectContext.description,
         remote_preference: ProjectContext.remote_preference,
+        country: ProjectContext.country,
+        project_type: ProjectContext.project_type,
+        project_length: ProjectContext.project_length,
+        payment_type: ProjectContext.payment_type,
+        payment_range_lower: `${ProjectContext.payment_range_lower}`,
+        payment_range_higher: `${ProjectContext.payment_range_higher}`,
+        experience_level: ProjectContext.experience_level,
       };
 
-      if (ProjectContext.experience_level)
-        postBody.experience_level = ProjectContext.experience_level;
       if (ProjectContext.payment_currency)
         postBody.payment_currency = ProjectContext.payment_currency;
-      if (ProjectContext.payment_range_higher)
-        postBody.payment_range_higher = ProjectContext.payment_range_higher;
-      if (ProjectContext.payment_range_lower)
-        postBody.payment_range_lower = ProjectContext.payment_range_lower;
       if (ProjectContext.payment_scheme)
         postBody.payment_scheme = ProjectContext.payment_scheme;
-      if (ProjectContext.payment_type)
-        postBody.payment_type = ProjectContext.payment_type;
       if (ProjectContext.status) postBody.status = ProjectContext.status;
-      if (ProjectContext.country) postBody.country = ProjectContext.country;
-      if (ProjectContext.project_length)
-        postBody.project_length = ProjectContext.project_length;
       if (ProjectContext.causes_tags)
         postBody.causes_tags = ProjectContext.causes_tags;
-      if (ProjectContext.project_type)
-        postBody.project_type = ProjectContext.project_type;
       if (ProjectContext.skills) postBody.skills = ProjectContext.skills;
 
       try {
@@ -68,7 +62,7 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
     if (!ProjectContext.isModalOpen) {
       setProjectContext(initContext);
     }
-  }, [ProjectContext]);
+  }, [ProjectContext, setProjectContext]);
 
   const pageDisplay = () => {
     if (isStep0) {
