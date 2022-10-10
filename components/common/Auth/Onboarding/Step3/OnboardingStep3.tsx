@@ -5,17 +5,15 @@ import {useFormContext} from 'react-hook-form';
 import useFilter from 'hooks/auth/useFilter';
 import useHandleSelected from 'hooks/auth/useHandleSelected';
 import {getText} from '@socious/data';
+import useSWR from 'swr';
 
-interface StepPropsWithSkills extends StepProps {
-  rawSkills: any[];
-}
-
-const OnboardingStep3 = ({onSubmit, rawSkills}: StepPropsWithSkills) => {
+const OnboardingStep3 = ({onSubmit}: StepProps) => {
   const maxSkills = 10;
   const [selecteds, onSelect] = useHandleSelected('skills', maxSkills);
 
   const formMethods = useFormContext();
   const {watch, handleSubmit} = formMethods;
+  const {data: rawSkills} = useSWR(`/skills?limit=500`);
 
   const skills = useMemo(() => {
     const sorted: {id: string; name: string}[] = [];
