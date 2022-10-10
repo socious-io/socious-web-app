@@ -11,8 +11,10 @@ interface Props {
   selectBar?: string;
 }
 const SideBar = ({selectBar = ''}: Props) => {
-  const {user, currentIdentity} = useUser();
+  const {user, currentIdentity} = useUser({redirect: false});
   const isUser = currentIdentity?.type === 'users' ? true : false;
+
+  if (!currentIdentity) return <></>;
 
   return (
     <div className="hidden w-80 md:flex" aria-label="Sidebar">

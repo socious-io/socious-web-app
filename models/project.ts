@@ -1,4 +1,5 @@
 import {string} from 'joi';
+import {IdentityMeta, IdentityType} from './identity';
 import {Question} from './question';
 
 export interface Project {
@@ -21,6 +22,8 @@ export interface Project {
   project_status?: number;
   remote_preference: string;
   identity_id?: number;
+  identity_type: IdentityType;
+  identity_meta?: IdentityMeta;
   status?: string;
   created_at?: number;
   expires_at?: number;
