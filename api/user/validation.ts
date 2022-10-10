@@ -30,7 +30,7 @@ export const schemaProfileUpdate = Joi.object({
     .regex(usernamePattern)
     .messages({
       'string.empty': `Please enter a username.`,
-      'string.pattern.base': `Pattern doesn't match.`,
+      'string.pattern.base': `Username is not valid.`,
       'any.required': `Please enter a username.`,
     }),
   address: Joi.string().allow(null, '').label('Address').messages({
@@ -73,7 +73,9 @@ export const schemaProfileUpdate = Joi.object({
     .messages({
       'string.pattern.base': `Phone number must be within 3-15 digits.`,
     }),
-  bio: Joi.string().max(160).required().label('Bio').messages({
-    'any.required': `cannot be an empty field`,
+  bio: Joi.string().trim().max(160).required().label('Bio').messages({
+    'any.required': `Please enter a bio.`,
+    'string.base': `Please enter a bio.`,
+    'string.empty': `Please enter a bio.`,
   }),
 });
