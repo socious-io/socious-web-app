@@ -102,6 +102,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               )}
             />
             <Combobox
+              required
               label="Payment Type"
               name="payment_type"
               items={items.projectPaymentTypeItems}
@@ -124,6 +125,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               )}
             />
             <Combobox
+              required
               label="Project Type"
               name="project_type"
               items={items.projectItems}
@@ -135,6 +137,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               )}
             />
             <Combobox
+              required
               label="Project Length"
               name="project_length"
               items={items.projectLengthItems}
@@ -158,6 +161,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
             />
 
             <InputFiled
+              required
               min={0}
               label="Payment Range Lower"
               type="number"
@@ -171,6 +175,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               }}
             />
             <InputFiled
+              required
               min={0}
               label="Payment Range Higher"
               type="number"
@@ -184,6 +189,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               }}
             />
             <InputFiled
+              required
               min={0}
               label="Experience Level"
               type="number"
@@ -197,6 +203,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               }}
             />
             <Combobox
+              required
               label="Country"
               name="country"
               items={items.countries}

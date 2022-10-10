@@ -28,17 +28,25 @@ export const schemaCreateProjectStep3 = Joi.object({
       'string.empty': `Remote Preference is required for Project.`,
       'string.base': `Remote Preference is required.`,
     }),
-  payment_type: Joi.string().allow(...Object.values(enums.ProjectPaymentType)),
+  payment_type: Joi.string()
+    .required()
+    .allow(...Object.values(enums.ProjectPaymentType)),
   payment_scheme: Joi.string().allow(
     ...Object.values(enums.ProjectPaymentSchemeType),
   ),
   payment_currency: Joi.string().allow('', null),
-  payment_range_lower: Joi.string().alphanum().allow('', null),
-  payment_range_higher: Joi.string().allow('', null),
-  experience_level: Joi.number(),
-  project_type: Joi.string().allow(...Object.values(enums.ProjectType)),
-  project_length: Joi.string().allow(...Object.values(enums.ProjectLengthType)),
-  country: Joi.string().min(2).max(3),
+  payment_range_lower: Joi.number()
+    .required()
+    .less(Joi.ref('payment_range_higher')),
+  payment_range_higher: Joi.number().required(),
+  experience_level: Joi.number().required(),
+  project_type: Joi.string()
+    .required()
+    .allow(...Object.values(enums.ProjectType)),
+  project_length: Joi.string()
+    .required()
+    .allow(...Object.values(enums.ProjectLengthType)),
+  country: Joi.string().required().min(2).max(3),
 });
 
 export const schemaCreateProjectQuestion = Joi.object({

@@ -9,7 +9,7 @@ import Chip from 'components/common/UserProfile/MainContent/Chip';
 
 type TPreviewItem = {
   label: string;
-  text?: string;
+  text?: string | number;
 };
 
 export const PreviewItem: FC<TPreviewItem> = ({label, text}) => {
@@ -84,6 +84,18 @@ const ProjectPreview: FC<TOnSubmit> = ({onSubmit}) => {
               <PreviewItem
                 label="Payment range higher"
                 text={ProjectContext.payment_range_higher}
+              />
+            )}
+            {ProjectContext.payment_currency && (
+              <PreviewItem
+                label="Payment currency"
+                text={ProjectContext.payment_currency}
+              />
+            )}
+            {ProjectContext.experience_level && (
+              <PreviewItem
+                label="Experience Level"
+                text={ProjectContext.experience_level}
               />
             )}
             {ProjectContext?.causes_tags?.length > 0 && (
