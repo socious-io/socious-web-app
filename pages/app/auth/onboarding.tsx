@@ -316,7 +316,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 
 export default Onboarding;
 
-export const getStaticProps: GetStaticProps = async () => {
-  const skills = await getGlobalData();
-  return {props: {skills}, revalidate: 60 * 60 * 24};
-};
+// export const getStaticProps: GetStaticProps = async () => {
+//   const skills = await getGlobalData();
+//   return {props: {skills}, revalidate: 60 * 60 * 24};
+// };
