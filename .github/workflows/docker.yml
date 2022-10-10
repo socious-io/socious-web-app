@@ -59,7 +59,7 @@ jobs:
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image (dev)
-        if: ${{ github.ref != '/refs/heads/production' }}
+        if: github.ref != '/refs/heads/production'
         id: build-and-push-dev
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
@@ -75,7 +75,7 @@ jobs:
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image (prod)
-        if: ${{ github.ref == '/refs/heads/production' }}
+        if: github.ref == '/refs/heads/production'
         id: build-and-push-prod
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
