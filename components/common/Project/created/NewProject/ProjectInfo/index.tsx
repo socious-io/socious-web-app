@@ -164,7 +164,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               className="mt-6"
               onSelected={(e) => handleChange('payment_currency', e?.id)}
               selected={items.allCurrencies?.find(
-                (x: any) => x?.id === ProjectContext.payment_currency,
+                (x) => x?.id === ProjectContext.payment_currency,
               )}
             />
 
@@ -215,7 +215,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               className="my-3"
               onSelected={(e) => handleChange('Country', e?.id)}
               selected={items.countries?.find(
-                (x: any) => x?.id === ProjectContext.country,
+                (x) => x?.id === ProjectContext.country,
               )}
             />
           </div>
