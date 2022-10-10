@@ -48,7 +48,15 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
       <Modal.Description>
         <div className="-mr-6 -ml-6 border-y-[.5px] p-4">
           <div className="flex items-center space-x-3">
-            <Avatar src={user?.avatar?.url} size="m" />
+            <Avatar
+              src={
+                isUser
+                  ? currentIdentity?.meta?.avatar
+                  : currentIdentity?.meta?.image
+              }
+              type={currentIdentity?.type}
+              size="m"
+            />
             <span>{isUser ? user?.username : user?.shortname}</span>
           </div>
           <Chip

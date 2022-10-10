@@ -1,15 +1,11 @@
-import {Avatar, Chip} from '@components/common';
+import {Avatar} from '@components/common';
 import {Project} from 'models/project';
-import Link from 'next/link';
-import Image from 'next/image';
-import PostData from '@components/common/Project/PostData/PostData';
-import {Modal, Button} from '@components/common';
-import {useToggle} from '@hooks';
-import {FormProvider, useForm} from 'react-hook-form';
-import ApplyStep1 from '../Apply/Step1/ApplyStep1';
-import {useState, useMemo} from 'react';
+import {Button} from '@components/common';
+import {ApplyStep1} from '../Apply/Step1/ApplyStep1';
 import ApplyStep2 from '../Apply/Step2/ApplyStep2';
+import ApplyStep3 from '../Apply/Step3/ApplyStep3';
 import ApplyStep4 from '../Apply/Step4/ApplyStep4';
+
 import useUser from 'hooks/useUser/useUser';
 import {getText} from '@socious/data';
 import {
@@ -18,26 +14,68 @@ import {
   CurrencyDollarIcon,
   ClockIcon,
 } from '@heroicons/react/24/outline';
-const dislikeSrc = require('../../../../asset/icons/thumbs-dislike.svg');
-const bookmarkSrc = require('../../../../asset/icons/bookmark.svg');
+import {ApplyLayout} from '../MyApplication/ApplyProject';
+import {useProjectContext} from '../created/NewProject/context';
+import {applyProject} from '@api/projects/actions';
+import {ApplyProjectType} from '@models/project';
+import {toast} from 'react-toastify';
 
 function OrganizationTopCard({
   title,
   country_id,
   project_type,
-  experience_level,
   payment_range_higher,
   payment_range_lower,
   remote_preference,
   project_length,
+  id,
 }: Project) {
-  const {state: showApply, handlers: setShowApply} = useToggle();
-
-  const [step, setStep] = useState<number>(1);
-  const formMethodsStep1 = useForm({});
-  const {getValues, setValue} = formMethodsStep1;
   const {identities} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);
+  const {ProjectContext, setProjectContext} = useProjectContext();
+
+  const isStep0 = ProjectContext.formStep === 0;
+  const isStep1 = ProjectContext.formStep === 1;
+  const isStep2 = ProjectContext.formStep === 2;
+  const isStep3 = ProjectContext.formStep === 3;
+
+  const onSubmit = async () => {
+    if (isStep1) {
+      const postBody: ApplyProjectType = {
+        cover_letter: ProjectContext.cover_letter,
+      };
+      if (ProjectContext.cv_link) postBody.cv_link = ProjectContext.cv_link;
+      if (ProjectContext.cv_name) postBody.cv_name = ProjectContext.cv_name;
+      if (ProjectContext.share_contact_info)
+        postBody.share_contact_info = ProjectContext.share_contact_info;
+
+      try {
+        await applyProject(id || '', postBody);
+        setProjectContext({
+          ...ProjectContext,
+          formStep: ProjectContext.formStep + 1,
+        });
+      } catch (error) {
+        toast.error(`${error}`);
+      }
+    } else {
+      setProjectContext({
+        ...ProjectContext,
+        formStep: ProjectContext.formStep + 1,
+      });
+    }
+  };
+  const pageDisplay = () => {
+    if (isStep0) {
+      return <ApplyStep1 onSubmit={onSubmit} title={title} />;
+    } else if (isStep1) {
+      return <ApplyStep2 onSubmit={onSubmit} title={title} />;
+    } else if (isStep2) {
+      return <ApplyStep3 />;
+    } else if (isStep3) {
+      return <ApplyStep4 />;
+    }
+  };
 
   return (
     <div className="space-y-6 p-4">
@@ -48,36 +86,6 @@ function OrganizationTopCard({
             <p className="text-black">{projectType || ''}</p>
             <p className="text-graySubtitle">{country_id || ''}</p>
           </div>
-        </div>
-        <div className="flex flex-col">
-          {/* <div className="flex flex-row items-center ">
-            <div className="relative  h-5 w-5 ">
-              <Link href="/">
-                <a>
-                  <Image
-                    src={dislikeSrc}
-                    className="fill-warning"
-                    alt="dislike"
-                    layout="fill" // required
-                  />
-                </a>
-              </Link>
-            </div>
-            <div className="relative ml-8 h-6 w-6 ">
-              <Link href="/">
-                <a>
-                  <Image
-                    src={bookmarkSrc}
-                    className="fill-warning"
-                    alt="bookmark"
-                    layout="fill" // required
-                    width={24}
-                    height={24}
-                  />
-                </a>
-              </Link>
-            </div>
-          </div> */}
         </div>
       </div>
       <div className="">
@@ -113,7 +121,7 @@ function OrganizationTopCard({
         {/* <p className="pl-2 text-sm text-graySubtitle ">{experience_level}</p> */}
         {remote_preference && (
           <p className="pl-2 text-sm text-graySubtitle ">
-            {getText('en', `.${remote_preference}`)}
+            {getText('en', `PROJECT.${remote_preference}`)}
           </p>
         )}
         {project_length && (
@@ -126,7 +134,6 @@ function OrganizationTopCard({
         )}
       </div>
 
-      {/* <PostData /> */}
       <div className="mt-4 flex justify-between">
         {identities !== null && (
           <Button
@@ -135,53 +142,22 @@ function OrganizationTopCard({
             size="lg"
             variant="fill"
             value="Submit"
-            onClick={() => setShowApply.on()}
+            onClick={() =>
+              setProjectContext({
+                ...ProjectContext,
+                isApplyModalOpen: true,
+                formStep: 0,
+              })
+            }
           >
             Apply now
           </Button>
         )}
-        {/* <Button
-          className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
-          type="submit"
-          size="lg"
-          variant="outline"
-          value="Submit"
-          onClick={() => setShowApply.off()}
-        >
-          Save project
-        </Button> */}
       </div>
-      {/* Add Post Modal */}
-      <Modal isOpen={showApply} onClose={() => setShowApply.off()}>
-        <FormProvider {...formMethodsStep1}>
-          {step == 1 ? (
-            <ApplyStep1
-              onSubmit={() => {
-                setStep(4);
-              }}
-              onAttach={() => {
-                setStep(2);
-              }}
-            />
-          ) : step == 2 ? (
-            <ApplyStep2
-              onSubmit={() => {}}
-              onAttach={() => {
-                setShowApply.off();
-                setStep(1);
-              }}
-            />
-          ) : (
-            <ApplyStep4
-              onSubmit={() => {}}
-              onAttach={() => {
-                setShowApply.off();
-                setStep(1);
-              }}
-            />
-          )}
-        </FormProvider>
-      </Modal>
+
+      <ApplyLayout title={isStep3 ? 'Attach a link' : 'Review application'}>
+        {pageDisplay()}
+      </ApplyLayout>
     </div>
   );
 }

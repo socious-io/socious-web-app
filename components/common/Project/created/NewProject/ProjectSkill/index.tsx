@@ -19,13 +19,23 @@ interface ProjectSkillType extends TOnSubmit {
 }
 
 const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
+  const {ProjectContext, setProjectContext} = useProjectContext();
   const {
     handleSubmit,
-    formState: {isValid},
+    formState: {isValid, isDirty},
     setValue,
+    reset,
   } = useForm({
     resolver: joiResolver(schemaCreateProjectStep2),
   });
+
+  useEffect(() => {
+    if (ProjectContext) {
+      setValue('skills', ProjectContext.skills, {
+        shouldValidate: true,
+      });
+    }
+  }, []);
 
   const skills = useMemo(() => {
     const sorted: {id: string; name: string}[] = [];
@@ -39,10 +49,38 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
     // todo: language
     rawSkills,
   ]);
-  const {ProjectContext, setProjectContext} = useProjectContext();
 
   const maxSkills = 10;
   const [filteredItems, filterWith] = useFilter(skills);
+
+  const handleChange = (field: string, item: {id: string; name: string}) => {
+    const skills = ProjectContext.skills;
+    if (skills?.includes(item?.id)) {
+      setValue(
+        field,
+        skills?.filter((i) => i !== item.id),
+        {
+          shouldValidate: true,
+        },
+      );
+      setProjectContext({
+        ...ProjectContext,
+        skills: skills?.filter((i) => i !== item?.id),
+      });
+    } else {
+      if (skills?.length < maxSkills) {
+        setValue(field, [...skills, item.id], {
+          shouldValidate: true,
+        });
+        setProjectContext({
+          ...ProjectContext,
+          skills: [...skills, item?.id],
+        });
+      } else {
+        // toast.success('You selected 10 skills');
+      }
+    }
+  };
 
   return (
     <form
@@ -51,8 +89,7 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
     >
       <FromLayout>
         <Title description="What skills do you have?" border={false}>
-          Showcase up to 10 skills you can contribute to help social impact
-          initiatives and organizations
+          Select up to 10 relevant skills
         </Title>
         <SearchBar
           type="text"
@@ -66,39 +103,7 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
             {filteredItems.map((item) => {
               return (
                 <Chip
-                  onSelected={() => {
-                    if (ProjectContext.skills.includes(item?.id)) {
-                      setValue(
-                        'skills',
-                        ProjectContext.skills?.filter((i) => i !== item.id),
-                        {
-                          shouldValidate: true,
-                        },
-                      );
-                      setProjectContext({
-                        ...ProjectContext,
-                        skills: ProjectContext.skills?.filter(
-                          (i) => i !== item?.id,
-                        ),
-                      });
-                    } else {
-                      if (ProjectContext.skills?.length < maxSkills) {
-                        setValue(
-                          'skills',
-                          [...ProjectContext.skills, item.id],
-                          {
-                            shouldValidate: true,
-                          },
-                        );
-                        setProjectContext({
-                          ...ProjectContext,
-                          skills: [...ProjectContext.skills, item?.id],
-                        });
-                      } else {
-                        toast.success('You selected 10 skills');
-                      }
-                    }
-                  }}
+                  onSelected={() => handleChange('skills', item)}
                   selected={ProjectContext.skills?.includes(item?.id)}
                   value={item.id}
                   key={item.id}
@@ -113,11 +118,11 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
       </FromLayout>
       <div className=" flex items-end justify-end  border-t p-4">
         <Button
-          disabled={!isValid}
+          disabled={ProjectContext.isEditModalOpen ? false : !isValid}
           type="submit"
           className="flex h-11 w-52 items-center justify-center"
         >
-          Continue
+          {ProjectContext.isEditModalOpen ? 'Save Changes' : ' Continue'}
         </Button>
       </div>
     </form>

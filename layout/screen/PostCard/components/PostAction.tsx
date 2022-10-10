@@ -13,7 +13,7 @@ export interface PostActionProps {
   likes?: number;
   shared?: number;
   id: string;
-  onLike: (liked: boolean) => void;
+  onLike: (id: string, liked: boolean) => void;
   onShare?: () => void;
   onCommentClicked?: () => void;
 }
@@ -35,8 +35,13 @@ const PostAction = ({
     setlikesCount(() => (isLiked ? likesCount - 1 : likesCount + 1));
     setIsLiked(() => !isLiked);
     try {
-      isLiked ? await unlikePost(id) : await likePost(id);
-      onLike(!isLiked);
+      if (isLiked) {
+        await unlikePost(id);
+        onLike(id, false);
+      } else {
+        await likePost(id);
+        onLike(id, true);
+      }
     } catch (error) {
       console.error(error);
     }

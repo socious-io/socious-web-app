@@ -40,7 +40,7 @@ const OrganizationProfile: NextPage = () => {
       <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">
         <MainContent
           data={data}
-          status="organization"
+          status="organizations"
           profile_mutate={mutate}
         />
       </div>

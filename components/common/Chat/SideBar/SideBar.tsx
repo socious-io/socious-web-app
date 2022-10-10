@@ -14,10 +14,11 @@ import useSWR from 'swr';
 import {get} from 'utils/request';
 import {useUser} from '@hooks';
 import {twMerge} from 'tailwind-merge';
+import {useRef} from 'react';
 
 type ChatSideBarProps = {
   onChatOpen?: (data: any) => void;
-  page: string;
+  page: 'index' | 'show';
   toggleAddChat: () => void;
 };
 
@@ -43,6 +44,11 @@ const SideBarToBe = (
       mutateChats();
     },
   }));
+
+  // Mutate SideBar everytime user changes between a/c.
+  useEffect(() => {
+    if (currentIdentity) mutateChats();
+  }, [currentIdentity, mutateChats]);
 
   useEffect(() => {
     if (chatResponse?.items) setFilteredChats(chatResponse.items);
@@ -79,6 +85,7 @@ const SideBarToBe = (
               ? user?.avatar?.url
               : user?.image?.url
           }
+          type={currentIdentity?.type}
           className="block sm:hidden"
         />
       </div>

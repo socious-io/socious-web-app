@@ -26,6 +26,12 @@ export type TProjectContext = {
   project_length: string;
   country: string;
   skills: string[];
+  isEditModalOpen: boolean;
+  isApplyModalOpen: boolean;
+  cover_letter: string;
+  share_contact_info: boolean;
+  cv_link: string;
+  cv_name: string;
 };
 
 export const initContext: TProjectContext = {
@@ -38,14 +44,20 @@ export const initContext: TProjectContext = {
   payment_type: '',
   payment_scheme: '',
   payment_currency: '',
-  payment_range_lower: '',
-  payment_range_higher: '',
+  payment_range_lower: '0',
+  payment_range_higher: '0',
   experience_level: 0,
   status: '',
   project_type: '',
   project_length: '',
   country: '',
   skills: [],
+  isEditModalOpen: false,
+  isApplyModalOpen: false,
+  cover_letter: '',
+  share_contact_info: false,
+  cv_link: '',
+  cv_name: '',
 };
 
 const ProjectContext = createContext<{

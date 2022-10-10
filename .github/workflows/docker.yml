@@ -58,27 +58,35 @@ jobs:
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
-      - name: Build and push Docker image
-        id: build-and-push
+      - name: Build and push Docker image (dev)
+        if: ${{ !endsWith(github.ref, '/production') }}
+        id: build-and-push-dev
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
           context: .
+          build-args: |
+            API_BASE=https://dev.socious.io/api/v2
+            GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}
+            FIREBASE_PUSH_CERT=${{ secrets.FIREBASE_PUSH_CERT }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      # Sign the resulting Docker image digest except on PRs.
-      # This will only write to the public Rekor transparency log when the Docker
-      # repository is public to avoid leaking data.  If you would like to publish
-      # transparency data even for private images, pass --force to cosign below.
-      # https://github.com/sigstore/cosign
-      - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
-        env:
-          COSIGN_EXPERIMENTAL: 'true'
-        # This step uses the identity token to provision an ephemeral certificate
-        # against the sigstore community Fulcio instance.
-        run: cosign sign ${{ steps.meta.outputs.tags }}@${{ steps.build-and-push.outputs.digest }}
+      # Build and push Docker image with Buildx (don't push on PR)
+      # https://github.com/docker/build-push-action
+      - name: Build and push Docker image (prod)
+        if: ${{ endsWith(github.ref, '/production') }}
+        id: build-and-push-prod
+        uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
+        with:
+          context: .
+          build-args: |
+            API_BASE=https://socious.io/api/v2
+            GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}
+            FIREBASE_PUSH_CERT=${{ secrets.FIREBASE_PUSH_CERT }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
   deploy-dev:
     needs: build
@@ -110,8 +118,6 @@ jobs:
           docker pull ${{ steps.meta.outputs.tags }}
           docker ps -qa --filter "name=socious-web-app" | grep -q . && docker stop socious-web-app && docker rm -fv socious-web-app
           docker run -d --restart always \
-            -e NEXT_PUBLIC_GOOGLE_API_KEY='${{ secrets.GOOGLE_API_KEY }}' \
-            -e NEXT_PUBLIC_FIREBASE_PUSH_CERT='${{ secrets.FIREBASE_PUSH_CERT }}' \
             -p 3000:3000 -h socious-web-app --name socious-web-app ${{ steps.meta.outputs.tags }}
 
   deploy-prod:
@@ -143,7 +149,5 @@ jobs:
         run: |
           docker pull ${{ steps.meta.outputs.tags }}
           docker ps -qa --filter "name=socious-web-app" | grep -q . && docker stop socious-web-app && docker rm -fv socious-web-app
-          docker run -d --restart always -e NEXT_PUBLIC_API_BASE='https://socious.io/api/v2' \
-            -e NEXT_PUBLIC_GOOGLE_API_KEY='${{ secrets.GOOGLE_API_KEY }}' \
-            -e NEXT_PUBLIC_FIREBASE_PUSH_CERT='${{ secrets.FIREBASE_PUSH_CERT }}' \
+          docker run -d --restart always \
             -p 3000:3000 -h socious-web-app --name socious-web-app ${{ steps.meta.outputs.tags }}

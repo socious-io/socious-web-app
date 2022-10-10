@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import Title from '@components/common/CreateOrganization/components/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
@@ -13,13 +13,39 @@ import {TOnSubmit} from '../sharedType';
 import {Button} from '@components/common';
 
 const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
+  const {setProjectContext, ProjectContext} = useProjectContext();
+  const disableIcon =
+    !ProjectContext.title ||
+    !ProjectContext.description ||
+    !ProjectContext.remote_preference;
   const {
     setValue,
     handleSubmit,
     formState: {errors, isValid},
-  } = useForm({resolver: joiResolver(schemaCreateProjectStep3)});
-  const {setProjectContext, ProjectContext} = useProjectContext();
+  } = useForm({
+    resolver: ProjectContext.isEditModalOpen
+      ? undefined
+      : joiResolver(schemaCreateProjectStep3),
+  });
   const {items} = useGetData();
+
+  useEffect(() => {
+    if (
+      ProjectContext.title &&
+      ProjectContext.description &&
+      ProjectContext.remote_preference
+    ) {
+      setValue('title', ProjectContext.title, {
+        shouldValidate: true,
+      });
+      setValue('description', ProjectContext.description, {
+        shouldValidate: true,
+      });
+      setValue('remote_preference', ProjectContext.remote_preference, {
+        shouldValidate: true,
+      });
+    }
+  }, []);
 
   const handleChange = (field: string, input: string) => {
     setValue(field, input, {
@@ -42,7 +68,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
           <Title description="Describe your project in detail." border>
             Tell us more about your project.
           </Title>
-          <div className="mx-4 ">
+          <div className="mx-4 my-5">
             <InputFiled
               label="Title"
               type="text"
@@ -71,6 +97,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               items={items.projectRemotePreferenceItems}
               placeholder="Remote Preference"
               className="mt-6"
+              selected={items.projectRemotePreferenceItems?.find(
+                (x) => x?.id === ProjectContext.remote_preference,
+              )}
             />
             <Combobox
               label="Payment Type"
@@ -79,6 +108,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               placeholder="Payment Type"
               className="mt-6"
               onSelected={(e) => handleChange('payment_type', e?.id)}
+              selected={items.projectPaymentTypeItems?.find(
+                (x) => x?.id === ProjectContext.payment_type,
+              )}
             />
             <Combobox
               label="Payment Scheme"
@@ -87,6 +119,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               placeholder="Payment Scheme"
               className="mt-6"
               onSelected={(e) => handleChange('payment_scheme', e?.id)}
+              selected={items.projectPaymentSchemeItems?.find(
+                (x) => x?.id === ProjectContext.payment_scheme,
+              )}
             />
             <Combobox
               label="Status"
@@ -95,6 +130,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               placeholder="Status"
               className="mt-6"
               onSelected={(e) => handleChange('status', e?.id)}
+              selected={items.projectStatusItems?.find(
+                (x) => x?.id === ProjectContext.status,
+              )}
             />
             <Combobox
               label="Project Type"
@@ -103,6 +141,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               placeholder="Project Type"
               className="mt-6"
               onSelected={(e) => handleChange('project_type', e?.id)}
+              selected={items.projectItems?.find(
+                (x) => x?.id === ProjectContext.project_type,
+              )}
             />
             <Combobox
               label="Project Length"
@@ -111,66 +152,82 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               placeholder="Project Length"
               className="mt-6"
               onSelected={(e) => handleChange('project_length', e?.id)}
+              selected={items.projectLengthItems?.find(
+                (x) => x?.id === ProjectContext.project_length,
+              )}
             />
-            <InputFiled
+            <Combobox
               label="Payment Currency"
-              type="text"
+              name="payment_currency"
+              items={items.allCurrencies}
               placeholder="Payment Currency"
-              value={ProjectContext.payment_currency}
-              errorMessage={errors?.['payment_currency']?.message}
-              className="my-3"
-              onChange={(e) => handleChange('payment_currency', e.target.value)}
+              className="mt-6"
+              onSelected={(e) => handleChange('payment_currency', e?.id)}
+              selected={items.allCurrencies?.find(
+                (x) => x?.id === ProjectContext.payment_currency,
+              )}
             />
+
             <InputFiled
+              min={0}
               label="Payment Range Lower"
-              type="text"
+              type="number"
               placeholder="Payment Range Lower"
               value={ProjectContext.payment_range_lower}
               errorMessage={errors?.['payment_range_lower']?.message}
               className="my-3"
-              onChange={(e) =>
-                handleChange('payment_range_lower', e.target.value)
-              }
+              onChange={(e) => {
+                if (e.target.value)
+                  handleChange('payment_range_lower', e.target.value);
+              }}
             />
             <InputFiled
+              min={0}
               label="Payment Range Higher"
-              type="text"
+              type="number"
               placeholder="Payment Range Higher"
               value={ProjectContext.payment_range_higher}
               errorMessage={errors?.['payment_range_higher']?.message}
               className="my-3"
-              onChange={(e) =>
-                handleChange('payment_range_higher', e.target.value)
-              }
+              onChange={(e) => {
+                if (e.target.value)
+                  handleChange('payment_range_higher', e.target.value);
+              }}
             />
             <InputFiled
+              min={0}
               label="Experience Level"
               type="number"
               placeholder="Experience Level"
               value={ProjectContext.experience_level}
               errorMessage={errors?.['experience_level']?.message}
               className="my-3"
-              onChange={(e) => handleChange('experience_level', e.target.value)}
+              onChange={(e) => {
+                if (e.target.value)
+                  handleChange('experience_level', e.target.value);
+              }}
             />
-            <InputFiled
+            <Combobox
               label="Country"
-              type="text"
-              value={ProjectContext.country}
+              name="country"
+              items={items.countries}
               placeholder="Country"
-              errorMessage={errors?.['country']?.message}
               className="my-3"
-              onChange={(e) => handleChange('country', e.target.value)}
+              onSelected={(e) => handleChange('Country', e?.id)}
+              selected={items.countries?.find(
+                (x) => x?.id === ProjectContext.country,
+              )}
             />
           </div>
         </div>
       </FromLayout>
       <div className=" flex items-end justify-end  border-t p-4">
         <Button
-          disabled={!isValid}
+          disabled={ProjectContext.isEditModalOpen ? disableIcon : !isValid}
           type="submit"
           className="flex h-11 w-52 items-center justify-center"
         >
-          Continue
+          {ProjectContext.isEditModalOpen ? 'Save Changes' : ' Continue'}
         </Button>
       </div>
     </form>

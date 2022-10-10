@@ -4,13 +4,13 @@ import SideBar from '@components/common/Notification/Sidebar';
 import NotificationContainer from '@components/common/Notification/NotificationContainer';
 import StartScreen from '@components/common/StartScreen/StartScreen';
 import useUser from 'hooks/useUser/useUser';
-import IdealScreen from 'layout/IdealScreen/IdealScreen';
+import SplashScreen from 'layout/Splash';
 import {GeneralLayout} from 'layout';
 const Index: NextPage = () => {
   const {user, userError} = useUser();
 
   if (!userError && !user) {
-    return <IdealScreen />;
+    return <SplashScreen />;
   }
 
   if (userError?.response?.status === 401) {

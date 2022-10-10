@@ -1,13 +1,18 @@
 import {NextPage} from 'next';
-import React from 'react';
-import SideBar from '@components/common/Home/SideBar';
-import MainContent from '@components/common/Home/MainContent';
+import React, {useEffect} from 'react';
+import SideBar from '@components/common/Feed/SideBar';
+import MainContent from '@components/common/Feed/MainContent';
 import StartScreen from '@components/common/StartScreen/StartScreen';
 import useUser from 'hooks/useUser/useUser';
-import IdealScreen from 'layout/IdealScreen/IdealScreen';
+import SplashScreen from 'layout/Splash';
 import {GeneralLayout, PreAuthLayout, DetailLayout} from '../../layout';
+import Router from 'next/router';
 const HomePage: NextPage = () => {
   const {identities, identitiesError} = useUser({redirect: false});
+
+  useEffect(() => {
+    if (identities) Router.push('/app/projects');
+  });
 
   if (identities === null) {
     return (
@@ -17,21 +22,10 @@ const HomePage: NextPage = () => {
     );
   }
 
-  if (!identitiesError && !identities) {
-    return (
-      <PreAuthLayout>
-        <IdealScreen />
-      </PreAuthLayout>
-    );
-  }
-
   return (
-    <GeneralLayout hasNavbar>
-      <SideBar />
-      <DetailLayout>
-        <MainContent />
-      </DetailLayout>
-    </GeneralLayout>
+    <PreAuthLayout>
+      <SplashScreen />
+    </PreAuthLayout>
   );
 };
 

@@ -135,10 +135,10 @@ const Offer = () => {
           title={''}
           description={''}
           country_id={0}
-          project_type={0}
+          project_type={''}
           project_length={''}
-          payment_type={0}
-          payment_scheme={0}
+          payment_type={''}
+          payment_scheme={''}
           payment_range_lower={''}
           payment_range_higher={''}
           experience_level={0}

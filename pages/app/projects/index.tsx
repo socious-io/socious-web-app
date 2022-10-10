@@ -1,6 +1,6 @@
 import type {NextPage} from 'next';
 
-import SideBar from '@components/common/Home/SideBar';
+import SideBar from '@components/common/Feed/SideBar';
 import MainContent from '@components/common/Project/MainContent';
 import {useToggle} from '@hooks';
 import {GeneralLayout, DetailLayout} from 'layout';

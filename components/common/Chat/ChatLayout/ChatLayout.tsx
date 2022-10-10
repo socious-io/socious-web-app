@@ -12,7 +12,7 @@ import {SideBar} from '../SideBar/SideBar';
 // type
 interface ChatLayoutProps {
   children: (handleRefresh?: any) => React.ReactNode;
-  page: string;
+  page: 'index' | 'show';
 }
 const ChatLayout = ({children, page}: ChatLayoutProps) => {
   const router = useRouter();
@@ -40,7 +40,7 @@ const ChatLayout = ({children, page}: ChatLayoutProps) => {
   }, [connectionsData]);
 
   return (
-    <div className="h-full sm:mt-10 sm:flex sm:space-x-4 sm:px-4">
+    <div className="h-full w-full sm:flex sm:space-x-4 sm:px-4">
       <SideBar
         ref={sideBarRefresh}
         page={page}
@@ -48,7 +48,7 @@ const ChatLayout = ({children, page}: ChatLayoutProps) => {
       />
       {children(handleRefresh)}
 
-      {/* Modal */}
+      {/* Add Chat Modal */}
       <Modal
         isOpen={addState}
         onClose={addHandlers.off}
@@ -88,7 +88,11 @@ const ChatLayout = ({children, page}: ChatLayoutProps) => {
                         )
                       }
                     >
-                      <Avatar src={connection.identity_meta.avatar} size="l" />
+                      <Avatar
+                        src={connection.identity_meta.avatar}
+                        type={connection.identity_type}
+                        size="l"
+                      />
                       <div>
                         <p>{connection.identity_meta.name}</p>
                         {connection.identity_meta?.location && (

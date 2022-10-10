@@ -44,12 +44,12 @@ function HiredProjectsBoxes() {
         isExpandable={true}
         isRound={true}
       />
-      {data.map((item) => (
+      {/* {data.map((item) => (
         <BodyCard
           key={item.id}
           refixAddress={`/app/projects/hired/section/${item.projectId}`}
         />
-      ))}
+      ))} */}
       <HeaderBox
         title={'Awaiting review 3'}
         isExpand={showAwaiting}
@@ -57,13 +57,13 @@ function HiredProjectsBoxes() {
         isExpandable={true}
         isRound={true}
       />
-      {showAwaiting &&
+      {/* {showAwaiting &&
         data2.map((item) => (
           <BodyCard
             key={item.id}
             refixAddress={`/app/projects/hired/section/${item.projectId}`}
           />
-        ))}
+        ))} */}
       <HeaderBox
         title={'Declined'}
         isExpand={showDecline}

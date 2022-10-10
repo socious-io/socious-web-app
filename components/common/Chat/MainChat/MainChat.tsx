@@ -117,7 +117,7 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
   return (
     <>
       {/* ON CHAT SELECTED */}
-      <div className="mb-10 flex h-screen w-full flex-col border-grayLineBased bg-background sm:h-[48rem] sm:min-h-full sm:rounded-2xl sm:border">
+      <div className="flex h-screen w-full flex-col border-grayLineBased bg-background sm:mb-10 sm:h-[48rem] sm:rounded-2xl sm:border">
         {/* ON CONVERSATION ALREADY STARTED */}
         <div className="border-offsetcolor flex items-center space-x-2 border-b-[1px] px-4 pt-12 pb-2.5 sm:pt-6">
           <span
@@ -133,7 +133,7 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
                 ? otherParticipants?.[0]?.identity_meta?.avatar
                 : otherParticipants?.[0]?.identity_meta?.image
             }
-            type={otherParticipants?.[0]?.identity_type === 'users' ? 0 : 1}
+            type={otherParticipants?.[0]?.identity_type}
           />
           <div className="grow">
             <p className="cursor-pointer text-base">
@@ -160,11 +160,12 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
               ? user?.avatar?.url
               : user?.image?.url
           }
-          type={currentIdentity?.type === 'users' ? 0 : 1}
+          type={currentIdentity?.type}
           avatarSize="m"
           onSend={onSendMessage}
           placeholder="Write a message"
           className="border-offsetcolor rounded-none rounded-b-2xl border-0 border-t-[1px]"
+          row={1}
         />
       </div>
     </>

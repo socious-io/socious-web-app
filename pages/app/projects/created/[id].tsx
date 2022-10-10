@@ -1,7 +1,7 @@
 import React from 'react';
 import type {NextPage} from 'next';
 import {GeneralLayout} from 'layout';
-import SideBar from '@components/common/Home/SideBar';
+import SideBar from '@components/common/Feed/SideBar';
 import MyApplicationBoxes from '@components/common/Project/created';
 import CreateProjectMain from '@components/common/Project/created/NewProject';
 import {ProjectContextProvider} from 'components/common/Project/created/NewProject/context';

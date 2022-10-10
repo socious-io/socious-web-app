@@ -7,13 +7,15 @@ import TextArea from '@components/common/TextArea/TextArea';
 import {useImperativeHandle} from 'react';
 import {useRef} from 'react';
 
+import {IdentityType} from '@models/identity';
 interface CommentFieldProps {
   src?: string;
   avatarSize?: 's' | 'm' | 'l' | 'xl' | 'xxl';
-  type?: 0 | 1;
+  type?: IdentityType;
   onSend: (data?: any) => void;
   placeholder?: string;
   className?: string;
+  row?: number;
 }
 import {FocusComment} from 'pages/app/post/[pid]';
 
@@ -22,10 +24,11 @@ const CommentField = forwardRef<FocusComment, CommentFieldProps>(
     {
       src,
       avatarSize,
-      type,
+      type = 'users',
       onSend,
       placeholder = 'Write a comment.......',
       className,
+      row = 2,
     },
     ref,
   ) => {
@@ -72,7 +75,7 @@ const CommentField = forwardRef<FocusComment, CommentFieldProps>(
           containerClassName="w-9/12 md:w-11/12 md:mx-2"
           placeholder={placeholder}
           value={comment}
-          rows={2}
+          rows={row}
           ref={inputField}
           onChange={(e) => setComment(e.currentTarget.value)}
         />
@@ -82,7 +85,7 @@ const CommentField = forwardRef<FocusComment, CommentFieldProps>(
           disabled={comment.length === 0}
           onClick={() => onClickSend()}
         >
-          <PaperAirplaneIcon className="w-5 rotate-45 cursor-pointer text-grayDisableButton hover:text-grayInputField" />
+          <PaperAirplaneIcon className="w-5 -rotate-45 cursor-pointer text-grayDisableButton hover:text-grayInputField" />
         </Button>
       </form>
     );

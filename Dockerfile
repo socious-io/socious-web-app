@@ -13,6 +13,13 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
+ARG API_BASE=/api/v2
+ARG GOOGLE_API_KEY
+ARG FIREBASE_PUSH_CERT
+ENV NEXT_PUBLIC_API_BASE=${API_BASE}
+ENV NEXT_PUBLIC_GOOGLE_API_KEY=${GOOGLE_API_KEY}
+ENV NEXT_PUBLIC_FIREBASE_PUSH_CERT=${FIREBASE_PUSH_CERT}
+
 RUN npm run build
 # next standalone tree-shakes the json file out of socious-data for some reason
 RUN cp -r node_modules/@socious/data/src/translations .next/standalone/node_modules/@socious/data/src

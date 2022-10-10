@@ -1,4 +1,4 @@
-import SideBar from '@components/common/Home/SideBar';
+import SideBar from '@components/common/Feed/SideBar';
 import DetailContent from '@components/common/Project/HiredProjects/DetailContent';
 
 const HiredProject = () => {
