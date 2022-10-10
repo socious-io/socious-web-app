@@ -124,17 +124,6 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               )}
             />
             <Combobox
-              label="Status"
-              name="status"
-              items={items.projectStatusItems}
-              placeholder="Status"
-              className="mt-6"
-              onSelected={(e) => handleChange('status', e?.id)}
-              selected={items.projectStatusItems?.find(
-                (x) => x?.id === ProjectContext.status,
-              )}
-            />
-            <Combobox
               label="Project Type"
               name="project_type"
               items={items.projectItems}
@@ -213,7 +202,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               items={items.countries}
               placeholder="Country"
               className="my-3"
-              onSelected={(e) => handleChange('Country', e?.id)}
+              onSelected={(e) => handleChange('country', e?.id)}
               selected={items.countries?.find(
                 (x) => x?.id === ProjectContext.country,
               )}

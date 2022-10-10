@@ -68,7 +68,7 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
     if (!ProjectContext.isModalOpen) {
       setProjectContext(initContext);
     }
-  }, [ProjectContext]);
+  }, [ProjectContext, setProjectContext]);
 
   const pageDisplay = () => {
     if (isStep0) {

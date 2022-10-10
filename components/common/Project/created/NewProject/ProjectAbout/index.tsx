@@ -33,7 +33,7 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
         shouldValidate: true,
       });
     }
-  }, []);
+  }, [ProjectContext, setValue]);
 
   const handleChange = (field: string, item: {id: string; name: string}) => {
     const causesTags = ProjectContext.causes_tags;
