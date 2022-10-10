@@ -26,8 +26,6 @@ export function Notification({page, onFull}: NotificationProps) {
     },
   );
 
-  console.log('NOTIFICATIONS :---: ', notifications);
-
   if (
     notifications &&
     notifications.total_count &&
@@ -44,7 +42,18 @@ export function Notification({page, onFull}: NotificationProps) {
             `/app/user/${notification?.data?.identity?.meta?.username}`,
           );
         break;
-      //TODO: REDIRECT for comment/like/share for post.
+      case 'COMMENT':
+      case 'COMMENT_LIKE':
+      case 'POST_LIKE':
+      case 'SHARE_POST':
+        if (notification.data.parentId)
+          Router.push(`/app/post/${notification.data.parentId}`);
+        break;
+      case 'APPLICATION':
+      case 'SHARE_PROJECT':
+        if (notification.data.parentId)
+          Router.push(`/app/project/${notification.data.parentId}`);
+        break;
       default:
         null;
         break;
