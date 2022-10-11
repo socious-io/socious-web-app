@@ -1,0 +1,1 @@
+put components here that implement simple composite logic but independent of business logic (that is, no reference to models).
