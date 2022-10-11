@@ -19,38 +19,17 @@ export async function get<T>(url: string) {
   return response.data;
 }
 
-export async function deleteRequest<T>(
-  url: string,
-  headers?: AxiosRequestHeaders,
-) {
-  const response = await request.delete<T>(url, headers);
-  return response.data;
-}
-
 export async function post<T>(
   url: string,
   data: any = {},
   headers?: AxiosRequestHeaders,
 ) {
-  const response = await request.post<T>(url, data, headers);
-  return response.data;
-}
-
-export async function patch<T>(
-  url: string,
-  data: any,
-  headers?: AxiosRequestHeaders,
-) {
-  const response = await request.patch<T>(url, data, headers);
-  return response.data;
-}
-
-export async function put<T>(
-  url: string,
-  data: any,
-  headers?: AxiosRequestHeaders,
-) {
-  const response = await request.put<T>(url, data, headers);
+  const response = await request.post<T>(url, data, {
+    headers: {
+      'content-type': 'application/json',
+      ...headers,
+    },
+  });
   return response.data;
 }
 

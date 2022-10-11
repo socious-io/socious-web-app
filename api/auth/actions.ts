@@ -1,5 +1,5 @@
 import {UpdateProfileBodyType} from '@models/profile';
-import {get, post, put} from 'utils/request';
+import {get, post} from 'utils/request';
 
 export function signup(
   firstName: string,

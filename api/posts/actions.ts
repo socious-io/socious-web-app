@@ -3,7 +3,7 @@ import {
   EditPostBodyType,
   SharePostBodyType,
 } from '@models/post';
-import {deleteRequest, post, put} from 'utils/request';
+import {post} from 'utils/request';
 
 export function createPost(postBody: CreatePostBodyType) {
   return post('/posts', postBody);
