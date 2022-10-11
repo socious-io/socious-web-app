@@ -40,15 +40,12 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
     [onSubmit],
   );
 
-  console.log('USER name', user);
-  console.log('currentIdentity name', currentIdentity);
-
   return (
-    <div>
+    <div className="flex grow flex-col sm:grow-0">
       <Modal.Title>
         <h2 className="font-worksans mb-4 text-center">Review post</h2>
       </Modal.Title>
-      <Modal.Description>
+      <div className="flex h-auto grow flex-col sm:block">
         <div className="-mr-6 -ml-6 border-y-[.5px] p-4">
           <div className="flex items-center space-x-3">
             <Avatar
@@ -65,7 +62,9 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
           <Chip
             containerClassName="bg-secondarySLight inline-block mt-4 mb-6"
             contentClassName="text-secondary font-normal text-sm"
-            content={getText('en', `PASSION.${social_causes}`)}
+            content={
+              getText('en', `PASSION.${social_causes}`) ?? 'Hello People'
+            }
           />
           <p className={file ? 'min-h-[4rem]' : 'min-h-[8rem]'}>
             {content ||
@@ -86,17 +85,19 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
             </div>
           )}
         </div>
-      </Modal.Description>
-      <Button
-        className="ml-auto mt-4 flex max-w-xs items-center justify-center align-middle "
-        type="submit"
-        // size="lg"
-        variant="fill"
-        value="Submit"
-        onClick={(e) => onPreviewDone(e)}
-      >
-        Post
-      </Button>
+      </div>
+
+      <div className="mt-4 hidden md:block">
+        <Button
+          className="float-right max-w-xs px-12"
+          type="submit"
+          size="md"
+          variant="fill"
+          onClick={(e) => onPreviewDone(e)}
+        >
+          Post
+        </Button>
+      </div>
     </div>
   );
 };

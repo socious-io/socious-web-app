@@ -27,7 +27,7 @@ const MainContent = () => {
   const [file, setFile] = useState<any>(null);
   const formMethodsStep1 = useForm({resolver: joiResolver(schemaCreatePost)});
   const {getValues, setValue} = formMethodsStep1;
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(2);
   const addPost = useRef<InsertNewPost>(null);
 
   const resetCreatePostForm = useCallback(() => {
@@ -109,7 +109,11 @@ const MainContent = () => {
       </Modal>
 
       {/* Add Post Modal */}
-      <Modal isOpen={addPostState} onClose={addPostHandlers.off}>
+      <Modal
+        isOpen={addPostState}
+        onClose={addPostHandlers.off}
+        className="-m-4 flex h-screen w-screen max-w-2xl flex-col rounded-none sm:m-0 sm:m-0 sm:mx-0 sm:mt-0 sm:block sm:h-auto sm:max-h-[45rem] sm:w-full sm:max-w-md sm:rounded-2xl"
+      >
         <span
           className="absolute right-3 cursor-pointer "
           onClick={resetCreatePostForm}
