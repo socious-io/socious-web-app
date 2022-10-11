@@ -87,10 +87,9 @@ export function Notification({page, onFull}: NotificationProps) {
                     <Avatar
                       size="l"
                       type={
-                        notification?.data?.consolidate_number < 2 &&
-                        notification?.data?.identity?.type == 'organizations'
-                          ? 1
-                          : 0
+                        notification?.data?.consolidate_number < 2
+                          ? notification?.data?.identity?.type
+                          : 'users'
                       }
                       src={
                         (notification?.data?.consolidate_number < 2 &&
