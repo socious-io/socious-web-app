@@ -23,7 +23,7 @@ import {toast} from 'react-toastify';
 function OrganizationTopCard({
   project: {
     title,
-    country_id,
+    country,
     identity_meta,
     payment_range_higher,
     payment_range_lower,
@@ -87,7 +87,7 @@ function OrganizationTopCard({
           <Avatar size="l" src={identity_meta?.image} />
           <div className="flex flex-col justify-center">
             <p className="text-black">{identity_meta?.name || ''}</p>
-            <p className="text-graySubtitle">{country_id || ''}</p>
+            <p className="text-graySubtitle">{country || ''}</p>
           </div>
         </div>
       </div>
@@ -95,10 +95,10 @@ function OrganizationTopCard({
         <p className="font-semibold">{title}</p>
       </div>
       <div className="mt-4 flex space-x-5">
-        {country_id && (
+        {country && (
           <div className="flex flex-row">
             <MapPinIcon width={20} height={20} className="text-primary" />
-            <p className="ml-2 text-sm text-graySubtitle">{country_id}</p>
+            <p className="ml-2 text-sm text-graySubtitle">{country}</p>
           </div>
         )}
         {projectType && (

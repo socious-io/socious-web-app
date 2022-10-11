@@ -9,7 +9,7 @@ const editSrc = require('../../../../asset/icons/edit.svg');
 interface TInput {
   title: string;
   description: string;
-  country_id: number;
+  country: number;
   project_type: string;
   project_length: string;
   payment_type: string;
@@ -24,7 +24,7 @@ interface TInput {
 }
 function OverviewProjectCard({
   title,
-  country_id,
+  country,
   project_type,
   payment_range_higher,
   payment_range_lower,
@@ -39,7 +39,7 @@ function OverviewProjectCard({
   return (
     <div className="space-y-6 p-4">
       <div className="flex flex-row items-center justify-between ">
-        <Title>{title}</Title>
+        <Title>Project details</Title>
         <div className="relative  h-5 w-5 ">
           <div className="cursor-pointer" onClick={onclick}>
             <Image
@@ -59,9 +59,7 @@ function OverviewProjectCard({
           label="Remote Preference"
           text={getText('en', `PROJECT.${remote_preference}`)}
         />
-        {country_id && (
-          <PreviewItem label="Location" text={String(country_id)} />
-        )}
+        {country && <PreviewItem label="Location" text={String(country)} />}
       </div>
       <div className="flex flex-row">
         {project_type && (

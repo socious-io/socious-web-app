@@ -12,7 +12,6 @@ import {useProjectContext} from '@components/common/Project/created/NewProject/c
 function Detail({
   project: {
     title,
-    country_id,
     project_type,
     payment_range_higher,
     payment_range_lower,
@@ -26,19 +25,19 @@ function Detail({
     status,
     causes_tags,
     skills,
+    country,
   } = defaultProject,
 }: ProjectProps) {
   const {state: closeProject, handlers: closeProjectHandlers} = useToggle();
   const {state: avoidClose, handlers: avoidCloseHandlers} = useToggle();
   const {ProjectContext, setProjectContext} = useProjectContext();
 
-  console.log(causes_tags);
   const clickEditIcon = (formStep: number) => {
     setProjectContext({
       ...ProjectContext,
       isEditModalOpen: !ProjectContext.isEditModalOpen,
       title,
-      country: String(country_id),
+      country: String(country),
       description,
       payment_type,
       experience_level,
@@ -49,7 +48,6 @@ function Detail({
       project_length,
       project_type,
       remote_preference,
-      status,
       causes_tags: causes_tags || [],
       skills,
       formStep,
@@ -59,13 +57,13 @@ function Detail({
   return (
     <div className="mb-10 w-full ">
       <div className="divide-y rounded-2xl border border-grayLineBased bg-white ">
-        <div className="flex flex-row items-center justify-between px-4 ">
+        <div className="flex flex-row items-center justify-center px-4 ">
           <Title>{title}</Title>
         </div>
         <OverviewProjectCard
           title={title}
           description={description}
-          country_id={country_id}
+          country={country}
           project_type={project_type}
           project_length={project_length}
           payment_type={payment_type}

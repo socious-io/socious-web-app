@@ -28,7 +28,7 @@ function ProjectCard({project}: {project: Project}) {
     description,
     project_type,
     payment_type,
-    country_id,
+    country,
     causes_tags,
     identity_meta,
     id,
@@ -47,9 +47,7 @@ function ProjectCard({project}: {project: Project}) {
               />
               <div className="flex flex-col justify-center">
                 <p className="text-black">{identity_meta?.name}</p>
-                {country_id && (
-                  <p className="text-graySubtitle">{country_id}</p>
-                )}
+                {country && <p className="text-graySubtitle">{country}</p>}
               </div>
             </div>
           </div>
