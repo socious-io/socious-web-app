@@ -70,7 +70,7 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
       className="flex h-full w-full flex-col"
     >
       <FromLayout>
-        <Title description="Select up to 5 passions." border={false}>
+        <Title description="Select up to 5 social causes" border={false}>
           What is your project about?
         </Title>
         <SearchBar

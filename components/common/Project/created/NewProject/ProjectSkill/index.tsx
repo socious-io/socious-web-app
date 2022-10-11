@@ -88,7 +88,7 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
       className="flex h-full w-full flex-col"
     >
       <FromLayout>
-        <Title description="What skills do you have?" border={false}>
+        <Title description="Skills used in this project" border={false}>
           Select up to 10 relevant skills
         </Title>
         <SearchBar
