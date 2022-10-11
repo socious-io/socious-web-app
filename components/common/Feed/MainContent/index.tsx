@@ -27,7 +27,7 @@ const MainContent = () => {
   const [file, setFile] = useState<any>(null);
   const formMethodsStep1 = useForm({resolver: joiResolver(schemaCreatePost)});
   const {getValues, setValue} = formMethodsStep1;
-  const [step, setStep] = useState<number>(2);
+  const [step, setStep] = useState<number>(1);
   const addPost = useRef<InsertNewPost>(null);
 
   const resetCreatePostForm = useCallback(() => {
@@ -114,18 +114,43 @@ const MainContent = () => {
         onClose={addPostHandlers.off}
         className="-m-4 flex h-screen w-screen max-w-2xl flex-col rounded-none sm:m-0 sm:m-0 sm:mx-0 sm:mt-0 sm:block sm:h-auto sm:max-h-[45rem] sm:w-full sm:max-w-md sm:rounded-2xl"
       >
+        {/* X-Mark Left and Right */}
         <span
-          className="absolute right-3 cursor-pointer "
+          className="absolute right-3 hidden cursor-pointer sm:block "
           onClick={resetCreatePostForm}
         >
           <XMarkIcon className="w-6" />
         </span>
+        <span
+          className="absolute left-3 cursor-pointer sm:hidden "
+          onClick={resetCreatePostForm}
+        >
+          <XMarkIcon className="w-6" />
+        </span>
+        {/* Back Arrow for Desktop */}
         {step === 2 && (
           <span
-            className="absolute left-3 cursor-pointer"
+            className="absolute left-3 hidden cursor-pointer sm:block"
             onClick={() => setStep(step - 1)}
           >
             <ChevronLeftIcon className="w-6" />
+          </span>
+        )}
+        {/* Next(1) & Post(2) for Mobile */}
+        {step === 1 && (
+          <span
+            className="absolute right-3 cursor-pointer text-base text-primary sm:block sm:hidden"
+            onClick={formMethodsStep1.handleSubmit(handleSubmit)}
+          >
+            Next
+          </span>
+        )}
+        {step === 2 && (
+          <span
+            className="absolute right-3 cursor-pointer text-base text-primary sm:block sm:hidden"
+            onClick={handleSubmit}
+          >
+            Post
           </span>
         )}
         <FormProvider {...formMethodsStep1}>
