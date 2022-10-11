@@ -98,7 +98,7 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
       ) : (
         <div className="divide-y rounded-2xl border border-grayLineBased bg-white ">
           <OrganizationTopCard project={data} />
-          {data?.causes_tags.length > 0 && (
+          {(data?.causes_tags || []).length > 0 && (
             <ProjectItem items={data?.causes_tags} title="Social causes" />
           )}
           <BodyBox
