@@ -40,6 +40,9 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
     [onSubmit],
   );
 
+  console.log('USER name', user);
+  console.log('currentIdentity name', currentIdentity);
+
   return (
     <div>
       <Modal.Title>
@@ -57,7 +60,7 @@ const PostCreateStep2 = ({onSubmit, file}: PostCreateStep2Props) => {
               type={currentIdentity?.type}
               size="m"
             />
-            <span>{isUser ? user?.username : user?.shortname}</span>
+            <span>{currentIdentity?.meta?.name}</span>
           </div>
           <Chip
             containerClassName="bg-secondarySLight inline-block mt-4 mb-6"
