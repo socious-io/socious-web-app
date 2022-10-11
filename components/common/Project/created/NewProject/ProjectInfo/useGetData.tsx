@@ -9,7 +9,7 @@ const projectPaymentSchemeType = Object.keys(Data.ProjectPaymentSchemeType);
 const projectPaymentType = Object.keys(Data.ProjectPaymentType);
 const projectStatusType = Object.keys(Data.ProjectStatusType);
 const projectType = Object.keys(Data.ProjectType);
-const projectLengthType = Object.keys(Data.ProjectLengthType);
+const projectLengthType = Object.entries(Data.ProjectLengthType);
 const passionData = Object.keys(Data.SocialCauses);
 
 const useGetData = () => {
@@ -37,8 +37,8 @@ const useGetData = () => {
       name: getText('en', `PROJECT.${id}`),
     }));
     const projectLengthItems = projectLengthType.map((id) => ({
-      id,
-      name: getText('en', `PROJECT.${id}`),
+      id: id?.[1],
+      name: getText('en', `PROJECT.${id?.[0]}`),
     }));
     const passionDataItems = passionData.map((id) => ({
       id,
