@@ -24,12 +24,14 @@ const PostContent = ({
       )}
     >
       {media && media.length > 0 && (
-        <div className="relative h-40 w-full overflow-hidden rounded-lg bg-offWhite">
+        <div className="relative h-auto max-h-96 w-full overflow-hidden rounded-lg bg-offWhite">
           <Image
             alt={passion ?? 'post media'}
             src={media[0]?.url}
-            className="object-cover"
-            fill
+            className="object-scale-down"
+            width="100"
+            height="100"
+            style={{width: '100%', height: 'auto', maxHeight: '24rem'}}
           />
         </div>
       )}
