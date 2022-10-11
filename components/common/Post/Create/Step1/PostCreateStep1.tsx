@@ -23,12 +23,15 @@ const PostCreateStep1 = ({onSubmit, setFile, file}: PostCreateStepProps) => {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex grow flex-col sm:grow-0"
+    >
       <Modal.Title>
         <h2 className="font-worksans text-center">Create post</h2>
       </Modal.Title>
-      <Modal.Description>
-        <div className="mt-2 space-y-8">
+      <div className="flex h-auto grow flex-col sm:block">
+        <div className="mt-2 grow space-y-8 sm:grow-0">
           <CausesTagBar
             type={currentIdentity?.type}
             src={
@@ -53,16 +56,18 @@ const PostCreateStep1 = ({onSubmit, setFile, file}: PostCreateStepProps) => {
           errorMessage={formState?.errors?.['link']?.message}
           setFile={setFile}
         />
-      </Modal.Description>
-      <Button
-        className="ml-auto mt-4 flex max-w-xs items-center justify-center align-middle "
-        type="submit"
-        // size="lg"
-        variant="fill"
-        value="Submit"
-      >
-        Next
-      </Button>
+      </div>
+      <div className="mt-4 hidden md:block">
+        <Button
+          className="float-right max-w-xs px-12"
+          type="submit"
+          size="md"
+          variant="fill"
+          value="Submit"
+        >
+          Next
+        </Button>
+      </div>
     </form>
   );
 };
