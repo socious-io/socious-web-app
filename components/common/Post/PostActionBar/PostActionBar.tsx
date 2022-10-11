@@ -18,70 +18,102 @@ export const PostActionBar = ({
   setFile,
   fileExist,
 }: PostActionBarProps) => {
-  const {state: showLinkBox, handlers: linkHandler} = useToggle();
-  // const { state: cameraState, handlers: cameraHandler } = useToggle();
+  // const stream = useRef<MediaStream | null>(null);
+  // const {state: showLinkBox, handlers: linkHandler} = useToggle();
+  // const {state: cameraState, handlers: cameraHandler} = useToggle();
 
   // const videoRef = useRef<HTMLVideoElement>(null);
   // const canvaRef = useRef<HTMLCanvasElement>(null);
 
-  // const showCamera = useCallback(async () => {
-  //   cameraHandler.on();
-  //   let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-  //   if (videoRef?.current) videoRef.current.srcObject = stream;
-  // }, [cameraHandler]);
+  // const toggleCamera = useCallback(async () => {
+  //   cameraHandler.toggle();
+  //   if (cameraState || stream.current) {
+  //     cameraHandler.off();
+  //     stream.current = null;
+  //   } else {
+  //     stream.current = await navigator.mediaDevices.getUserMedia({
+  //       video: true,
+  //       audio: false,
+  //     });
+  //     if (videoRef?.current) videoRef.current.srcObject = stream.current;
+  //   }
+  // }, [cameraHandler, cameraState]);
 
-  // const clickPhoto = useCallback(async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-  //   e.preventDefault();
-  //   if ((videoRef?.current) && (canvaRef?.current !== null)) {
-  //     (canvaRef.current.getContext('2d')?.drawImage(videoRef.current, 0, 0, canvaRef.current.width, canvaRef.current.height));
-  //     let file: any = null;
-  //     canvaRef.current.toBlob(function(blob) {
-  //       if (blob) file = new File([blob], 'test.png', { type: 'image/png' }, );
-  //       setFile(() => file);
-  //     }, 'image/png');
-  //   };
-  // }, [setFile]);
+  // const clickPhoto = useCallback(
+  //   async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  //     e.preventDefault();
+  //     if (videoRef?.current && canvaRef?.current !== null) {
+  //       canvaRef.current
+  //         .getContext('2d')
+  //         ?.drawImage(
+  //           videoRef.current,
+  //           0,
+  //           0,
+  //           canvaRef.current.width,
+  //           canvaRef.current.height,
+  //         );
+  //       let file: any = null;
+  //       canvaRef.current.toBlob(function (blob) {
+  //         if (blob) file = new File([blob], 'test.png', {type: 'image/png'});
+  //         setFile(() => file);
+  //       }, 'image/png');
+  //     }
+  //     cameraHandler.off();
+  //   },
+  //   [cameraHandler, setFile],
+  // );
 
   return (
-    <>
-      {/* {cameraState &&
-            <div>
-              <div className='flex '>
-                <video className="basis-1" id="video" ref={videoRef} autoPlay></video>
-                <canvas className="basis-1" id="canvas" ref={canvaRef}></canvas>
-              </div>
-              <button id="click-photo" onClick={clickPhoto}>Click Photo</button>
-            </div>
-          } */}
-      <div className="-mr-6 -ml-6 mt-3 flex items-center justify-between border-y-2 border-grayLineBased bg-offWhite py-2">
-        {/* Link Button */}
-        {/* <div className='p-2 relative'>
+    <div className="sm:-ml-6 sm:-mr-6">
+      {/* {cameraState && (
+        <div className="absolute bottom-0 left-0 mb-48 max-h-20 sm:relative">
+          <div className="relative z-10 flex">
+            <video
+              className="basis-1"
+              id="video"
+              ref={videoRef}
+              autoPlay
+            ></video>
+            <canvas className="basis-1" id="canvas" ref={canvaRef}></canvas>
+          </div>
           <Button
-            className='bg-transparent p-2'
+            id="click-photo"
+            className="absolute top-0 z-10 m-4"
+            onClick={clickPhoto}
+          >
+            Click Photo
+          </Button>
+        </div>
+      )} */}
+      <div className="fixed bottom-0 left-0 mt-3 flex w-full items-center justify-between border-y-2 border-grayLineBased bg-offWhite py-2 sm:static">
+        {/* Link Button */}
+        {/* <div className="relative p-2">
+          <Button
+            className="bg-transparent p-2"
             variant="ghost"
             onClick={linkHandler.toggle}
-            >
-            <LinkIcon className='w-5' />
+          >
+            <LinkIcon className="w-5" />
           </Button>
-          { showLinkBox &&
+          {showLinkBox && (
             <TextInput
-            containerClassName='absolute bottom-full '
-            className='w-30 min-w-20 rounded-none px-1 py-0 border-grayLinedBased focus:border-grayLinedBased'
-            register={register}
-            errorMessage={errorMessage}
+              containerClassName="absolute bottom-full "
+              className="w-30 min-w-20 border-grayLinedBased focus:border-grayLinedBased rounded-none px-1 py-0"
+              register={register}
+              errorMessage={errorMessage}
             />
-          }
+          )}
         </div> */}
         <span></span>
         <div className="flex items-center">
           {/* Camera Button */}
           {/* <Button
-            className="max-w-xs mr-auto flex items-center justify-center align-middle bg-transparent p-2"
+            className="mr-auto flex max-w-xs items-center justify-center bg-transparent p-2 align-middle"
             size="lg"
             variant="ghost"
-            onClick={() => showCamera()}
-            >
-              <CameraIcon className="w-5"/>
+            onClick={() => toggleCamera()}
+          >
+            <CameraIcon className="w-5" />
           </Button> */}
           <span></span>
           <ImageUploader onChange={setFile} withPreview={false}>
@@ -106,7 +138,7 @@ export const PostActionBar = ({
           </ImageUploader>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
