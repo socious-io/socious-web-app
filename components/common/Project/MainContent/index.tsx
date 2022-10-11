@@ -49,23 +49,7 @@ const MainContent = ({onClickShow}: Props) => {
       <div className="space-y-6 px-4">
         {showMore && <RecommendCheck />}
         {flatProjectArray?.map((item: Project) => (
-          <ProjectCard
-            key={item?.id}
-            title={item?.title}
-            description={item?.description}
-            country_id={item?.country_id}
-            project_type={item?.project_type}
-            project_length={item?.project_length}
-            payment_type={item?.payment_type}
-            payment_scheme={item?.payment_scheme}
-            payment_range_lower={item?.payment_range_lower}
-            payment_range_higher={item?.payment_range_higher}
-            experience_level={item?.experience_level}
-            remote_preference={item?.remote_preference}
-            causes_tags={item?.causes_tags}
-            identity_id={item?.identity_id}
-            id={item?.id}
-          />
+          <ProjectCard key={item?.id} project={item} />
         ))}
       </div>
       {!noMoreMessage && (

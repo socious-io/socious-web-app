@@ -1,5 +1,5 @@
 import {Avatar} from '@components/common';
-import {Project} from 'models/project';
+import {defaultProject, Project, ProjectProps} from 'models/project';
 import {Button} from '@components/common';
 import {ApplyStep1} from '../Apply/Step1/ApplyStep1';
 import ApplyStep2 from '../Apply/Step2/ApplyStep2';
@@ -21,15 +21,18 @@ import {ApplyProjectType} from '@models/project';
 import {toast} from 'react-toastify';
 
 function OrganizationTopCard({
-  title,
-  country_id,
-  project_type,
-  payment_range_higher,
-  payment_range_lower,
-  remote_preference,
-  project_length,
-  id,
-}: Project) {
+  project: {
+    title,
+    country_id,
+    identity_meta,
+    payment_range_higher,
+    payment_range_lower,
+    remote_preference,
+    project_length,
+    project_type,
+    id,
+  } = defaultProject,
+}: ProjectProps) {
   const {identities} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);
   const {ProjectContext, setProjectContext} = useProjectContext();
@@ -81,9 +84,9 @@ function OrganizationTopCard({
     <div className="space-y-6 p-4">
       <div className="flex flex-row items-center justify-between ">
         <div className="flex flex-row space-x-2">
-          <Avatar size="l" />
+          <Avatar size="l" src={identity_meta?.image} />
           <div className="flex flex-col justify-center">
-            <p className="text-black">{projectType || ''}</p>
+            <p className="text-black">{identity_meta?.name || ''}</p>
             <p className="text-graySubtitle">{country_id || ''}</p>
           </div>
         </div>

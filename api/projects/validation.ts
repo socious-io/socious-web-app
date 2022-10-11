@@ -10,14 +10,14 @@ export const schemaCreateProjectStep1 = Joi.object({
 });
 
 export const schemaCreateProjectStep2 = Joi.object({
-  skills: Joi.array().required().items(Joi.string()).length(10),
+  skills: Joi.array().required().items(Joi.string()).min(1).max(10),
 });
 export const schemaCreateProjectStep3 = Joi.object({
-  title: Joi.string().required().messages({
+  title: Joi.string().trim().required().messages({
     'string.empty': `Title is required for Project.`,
     'string.base': `Title is required.`,
   }),
-  description: Joi.string().alphanum().required().messages({
+  description: Joi.string().trim().required().messages({
     'string.empty': `Description is required for Project.`,
     'string.base': `Description is required.`,
   }),
@@ -28,18 +28,25 @@ export const schemaCreateProjectStep3 = Joi.object({
       'string.empty': `Remote Preference is required for Project.`,
       'string.base': `Remote Preference is required.`,
     }),
-  payment_type: Joi.string().allow(...Object.values(enums.ProjectPaymentType)),
+  payment_type: Joi.string()
+    .required()
+    .allow(...Object.values(enums.ProjectPaymentType)),
   payment_scheme: Joi.string().allow(
     ...Object.values(enums.ProjectPaymentSchemeType),
   ),
   payment_currency: Joi.string().allow('', null),
-  payment_range_lower: Joi.string().alphanum().allow('', null),
-  payment_range_higher: Joi.string().allow('', null),
-  experience_level: Joi.number(),
-  status: Joi.string().allow(...Object.values(enums.ProjectStatusType)),
-  project_type: Joi.string().allow(...Object.values(enums.ProjectType)),
-  project_length: Joi.string().allow(...Object.values(enums.ProjectLengthType)),
-  country: Joi.string().min(2).max(3),
+  payment_range_lower: Joi.number()
+    .required()
+    .less(Joi.ref('payment_range_higher')),
+  payment_range_higher: Joi.number().required(),
+  experience_level: Joi.number().required(),
+  project_type: Joi.string()
+    .required()
+    .allow(...Object.values(enums.ProjectType)),
+  project_length: Joi.string()
+    .required()
+    .allow(...Object.values(enums.ProjectLengthType)),
+  country: Joi.string().required().min(2).max(3),
 });
 
 export const schemaCreateProjectQuestion = Joi.object({

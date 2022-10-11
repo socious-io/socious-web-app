@@ -1,5 +1,5 @@
 import {CreateCommentType} from '@models/comment';
-import {deleteRequest, post, put} from 'utils/request';
+import {post} from 'utils/request';
 
 export function createComment(commentBody: CreateCommentType, postId: string) {
   return post(`/posts/${postId}/comments`, commentBody);

@@ -22,17 +22,17 @@ export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
     </div>
   );
 };
-function ProjectCard({
-  title,
-  description,
-  project_type,
-  payment_type,
-  country_id,
-  causes_tags,
-  identity_id,
-  id,
-}: Project) {
-  const {data: orgData} = useSWR<any>(`/orgs/${identity_id}`, get);
+function ProjectCard({project}: {project: Project}) {
+  const {
+    title,
+    description,
+    project_type,
+    payment_type,
+    country_id,
+    causes_tags,
+    identity_meta,
+    id,
+  } = project;
 
   return (
     <div className="cursor-pointer rounded-2xl border border-grayLineBased bg-white p-4">
@@ -40,9 +40,13 @@ function ProjectCard({
         <div className="space-y-6">
           <div className="flex flex-row items-center justify-between ">
             <div className="flex flex-row space-x-2">
-              <Avatar size="l" type={'organizations'} src={orgData?.image} />
+              <Avatar
+                size="l"
+                type={'organizations'}
+                src={identity_meta?.image}
+              />
               <div className="flex flex-col justify-center">
-                <p className="text-black">{orgData?.name}</p>
+                <p className="text-black">{identity_meta?.name}</p>
                 {country_id && (
                   <p className="text-graySubtitle">{country_id}</p>
                 )}

@@ -3,9 +3,23 @@ import Image from 'next/image';
 import Title from '@components/common/UserProfile/MainContent/Title';
 import {PreviewItem} from 'components/common/Project/created/NewProject/ProjectReview';
 import {getText} from '@socious/data';
+import {Question} from '@models/question';
 
 const editSrc = require('../../../../asset/icons/edit.svg');
-interface TInput extends Project {
+interface TInput {
+  title: string;
+  description: string;
+  country_id: number;
+  project_type: string;
+  project_length: string;
+  payment_type: string;
+  payment_scheme: string;
+  payment_range_lower: string;
+  payment_range_higher: string;
+  experience_level: number;
+  payment_currency?: string;
+  remote_preference: string;
+  status: string;
   onclick: () => void;
 }
 function OverviewProjectCard({
