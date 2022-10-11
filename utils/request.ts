@@ -24,6 +24,7 @@ export async function post<T>(
   data: any = {},
   headers?: AxiosRequestHeaders,
 ) {
+  debugger;
   const response = await request.post<T>(url, data, {
     headers: {
       'content-type': 'application/json',
