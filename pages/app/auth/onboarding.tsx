@@ -35,6 +35,7 @@ import getGlobalData from 'services/cacheSkills';
 import {uploadMedia} from '@api/media/actions';
 import {AxiosError} from 'axios';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
+import Router from 'next/router';
 
 const schemaStep = {
   2: schemaOnboardingStep2,
@@ -117,7 +118,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
       console.log('STEP 8');
       handleImageUpload(data);
     } else if (step === 9) {
-      handleToggleModal();
+      requestNotificationPermission();
     } else {
       setStep(step + 1);
     }
@@ -156,12 +157,20 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
         };
         console.log('PROFILE BODY :2 ', profileBody);
         profileBody.avatar = media_id;
-        updateProfile(profileBody).then((response) => {
-          setStep(step + 1);
-        });
+        await updateProfile(profileBody);
       } catch (error) {
         setError(DefaultErrorMessage);
         handleToggleModal();
+        return;
+      }
+      try {
+        if (Notification.permission !== 'default') Router.push('/app/projects');
+        else {
+          setStep(step + 1);
+        }
+      } catch (error) {
+        // Notification interface not available
+        Router.push('/app/projects');
       }
     },
     [handleToggleModal, step, user],
@@ -194,7 +203,6 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
         setStep(step + 1);
       })
       .catch((e) => {
-        // TODO: REMOVE THIS AFTER CHECK COMPLETE
         console.log('error: 1st update', e);
         setError(DefaultErrorMessage);
         handleToggleModal();
@@ -217,6 +225,11 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
       setStep(step + 1);
     }
   }, [handleUpdateProfileRequest, step]);
+
+  const requestNotificationPermission = async () => {
+    await Notification.requestPermission();
+    Router.push('/app/projects');
+  };
 
   return (
     <PreAuthLayout>

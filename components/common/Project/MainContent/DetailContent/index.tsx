@@ -3,8 +3,8 @@ import ProjectItem from '@components/common/UserProfile/MainContent/ProjectItem'
 import OrganizationTopCard from '../../component/OrganizationTopCard';
 import useSWR from 'swr';
 import {useRouter} from 'next/router';
-import {get} from 'utils/request';
 import {Question} from 'models/question';
+import {IOrganizationType} from 'models/organization';
 import {useUser} from '@hooks';
 import DetailContent from '@components/common/Project/created/DetailContent';
 import {
@@ -19,8 +19,9 @@ import {
 } from '@components/common/Project/created/NewProject/context';
 import {FC} from 'react';
 import {updateProjectById} from '@api/projects/actions';
-import {CreateProjectType} from '@models/project';
+import {CreateProjectType, Project} from '@models/project';
 import {toast} from 'react-toastify';
+import SplashScreen from 'layout/Splash';
 
 type CreateProjectMainType = {
   skills: any[];
@@ -29,15 +30,17 @@ type CreateProjectMainType = {
 const Detail: FC<CreateProjectMainType> = ({skills}) => {
   const router = useRouter();
   const {id} = router.query;
-  const {currentIdentity} = useUser();
+  const {currentIdentity} = useUser({redirect: false});
   const {ProjectContext, setProjectContext} = useProjectContext();
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
-  const {data} = useSWR<any>(`/projects/${id}`, get);
+  const {data} = useSWR<Project>(`/projects/${id}`);
+
   // const {data: projectQuestion} = useSWR<any>(`/projects/${id}/questions`, get);
 
-  // if (!data && !projectQuestion) return <p>loading</p>;
+  if (!data) return <SplashScreen />;
+
   // const questionTitle = projectQuestion?.questions?.map(
   //   (q: Question) => q?.question,
   // );
@@ -71,7 +74,7 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
     if (ProjectContext.skills) postBody.skills = ProjectContext.skills;
 
     try {
-      await updateProjectById(data?.id, postBody);
+      await updateProjectById(data!.id, postBody);
       setProjectContext(initContext);
     } catch (error) {
       toast.error(`${error}`);
@@ -91,40 +94,11 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
   return (
     <div className="mb-10 w-full ">
       {currentIdentity?.id === data?.identity_id ? (
-        <DetailContent
-          title={data?.title}
-          description={data?.description}
-          country_id={data?.country}
-          project_type={data?.project_type}
-          project_length={data?.project_length}
-          payment_type={data?.payment_type}
-          payment_scheme={data?.payment_scheme}
-          payment_range_lower={data?.payment_range_lower}
-          payment_range_higher={data?.payment_range_higher}
-          experience_level={data?.experience_level}
-          remote_preference={data?.remote_preference}
-          payment_currency={data?.payment_currency}
-          status={data?.status}
-          causes_tags={data?.causes_tags}
-          skills={data?.skills}
-        />
+        <DetailContent project={data} />
       ) : (
         <div className="divide-y rounded-2xl border border-grayLineBased bg-white ">
-          <OrganizationTopCard
-            id={data?.id}
-            title={data?.title}
-            description={data?.description}
-            country_id={data?.country}
-            project_type={data?.project_type}
-            project_length={data?.project_length}
-            payment_type={data?.payment_type}
-            payment_scheme={data?.payment_scheme}
-            payment_range_lower={data?.payment_range_lower}
-            payment_range_higher={data?.payment_range_higher}
-            experience_level={data?.experience_level}
-            remote_preference={data?.remote_preference}
-          />
-          {data?.causes_tags?.length > 0 && (
+          <OrganizationTopCard project={data} />
+          {data?.causes_tags.length > 0 && (
             <ProjectItem items={data?.causes_tags} title="Social causes" />
           )}
           <BodyBox
@@ -141,10 +115,9 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
               isRow
             />
           )} */}
-          <BodyBox
-            title={'About the organization'}
-            description={data?.description} // need to ask
-          />
+          {data?.identity_id && (
+            <OrganizationAbout organizationId={data.identity_id} />
+          )}
         </div>
       )}
       <CreateProjectLayout isEdit title="Edit Project">
@@ -154,4 +127,12 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
   );
 };
 
+function OrganizationAbout({organizationId}: {organizationId: string}) {
+  const {data} = useSWR<IOrganizationType>(`/orgs/${organizationId}`);
+  if (!data?.description) return <></>;
+
+  return (
+    <BodyBox title={'About the organization'} description={data.description} />
+  );
+}
 export default Detail;
