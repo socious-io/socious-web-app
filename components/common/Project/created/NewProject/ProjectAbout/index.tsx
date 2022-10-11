@@ -4,7 +4,7 @@ import SearchBar from '@components/common/SearchBar/SearchBar';
 import {useForm} from 'react-hook-form';
 import useFilter from 'hooks/auth/useFilter';
 import Title from '@components/common/CreateOrganization/components/Title';
-import useGetData from '../ProjectInfo/useGetData';
+import useGetData from '../../../../../../hooks/useGetData';
 import {useProjectContext} from '../context';
 import {toast} from 'react-toastify';
 import {joiResolver} from '@hookform/resolvers/joi';

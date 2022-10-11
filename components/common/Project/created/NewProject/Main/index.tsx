@@ -36,16 +36,14 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
         payment_range_lower: `${ProjectContext.payment_range_lower}`,
         payment_range_higher: `${ProjectContext.payment_range_higher}`,
         experience_level: ProjectContext.experience_level,
+        causes_tags: ProjectContext.causes_tags,
+        skills: ProjectContext.skills,
       };
 
       if (ProjectContext.payment_currency)
         postBody.payment_currency = ProjectContext.payment_currency;
       if (ProjectContext.payment_scheme)
         postBody.payment_scheme = ProjectContext.payment_scheme;
-      if (ProjectContext.status) postBody.status = ProjectContext.status;
-      if (ProjectContext.causes_tags)
-        postBody.causes_tags = ProjectContext.causes_tags;
-      if (ProjectContext.skills) postBody.skills = ProjectContext.skills;
 
       try {
         await createProject(postBody);

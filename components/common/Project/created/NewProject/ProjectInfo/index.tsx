@@ -4,7 +4,7 @@ import Title from '@components/common/CreateOrganization/components/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
 import TextArea from '@components/common/TextArea/TextArea';
 import {Combobox} from '@components/common';
-import useGetData from './useGetData';
+import useGetData from '../../../../../../hooks/useGetData';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {schemaCreateProjectStep3} from '@api/projects/validation';
 import {useProjectContext} from '../context';

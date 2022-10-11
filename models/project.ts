@@ -5,7 +5,7 @@ export interface Project {
   id: string;
   title: string;
   description: string;
-  country_id: number;
+  country: number;
   project_type: string;
   project_length: string;
   payment_type: string;
@@ -29,19 +29,18 @@ export interface Project {
 export interface CreateProjectType {
   title: string;
   description: string;
-  status?: string;
-  payment_type?: string;
+  payment_type: string;
   payment_scheme?: string;
   remote_preference: string;
   payment_currency?: string;
-  payment_range_lower?: string;
-  payment_range_higher?: string;
-  experience_level?: number;
-  causes_tags?: Array<string>;
-  country?: string;
-  project_length?: string;
+  payment_range_lower: string;
+  payment_range_higher: string;
+  experience_level: number;
+  causes_tags: Array<string>;
+  country: string;
+  project_length: string;
   project_type?: string;
-  skills?: Array<string>;
+  skills: Array<string>;
 }
 
 export interface ApplyProjectType {

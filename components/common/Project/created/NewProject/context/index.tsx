@@ -21,7 +21,6 @@ export type TProjectContext = {
   payment_range_lower: string;
   payment_range_higher: string;
   experience_level: number;
-  status: string;
   project_type: string;
   project_length: string;
   country: string;
@@ -47,7 +46,6 @@ export const initContext: TProjectContext = {
   payment_range_lower: '0',
   payment_range_higher: '0',
   experience_level: 0,
-  status: '',
   project_type: '',
   project_length: '',
   country: '',
