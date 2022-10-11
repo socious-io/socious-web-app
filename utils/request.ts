@@ -8,9 +8,6 @@ export const request = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE,
   withCredentials: true,
   timeout: 40000,
-  headers: {
-    'content-type': 'application/json',
-  },
 });
 
 export async function get<T>(url: string) {
@@ -24,13 +21,7 @@ export async function post<T>(
   data: any = {},
   headers?: AxiosRequestHeaders,
 ) {
-  debugger;
-  const response = await request.post<T>(url, data, {
-    headers: {
-      'content-type': 'application/json',
-      ...headers,
-    },
-  });
+  const response = await request.post<T>(url, data, {headers});
   return response.data;
 }
 
