@@ -79,7 +79,7 @@ export function Button({
       )}
       disabled={disabled}
     >
-      <div className="mr-2">{leftIcon && leftIcon(iconSize, iconSize)}</div>
+      {leftIcon && <div className="mr-2">{leftIcon(iconSize, iconSize)}</div>}
       {children}
     </button>
   );
