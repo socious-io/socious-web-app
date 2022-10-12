@@ -6,6 +6,7 @@ import {FC, PropsWithChildren, CSSProperties} from 'react';
 import imgSrc from '../../asset/icons/logo.svg';
 import {Dropdown} from '@components/common';
 import {useUser} from '@hooks';
+import Image from 'next/image';
 import {changeIdentity} from '@api/identity/actions';
 import {LoginIdentity} from '@models/identity';
 import {getOrganization} from '@api/organizations/actions';
@@ -17,7 +18,6 @@ import {useRouter} from 'next/router';
 import {twMerge} from 'tailwind-merge';
 import feedImg from 'asset/images/socious_feed.png';
 import networkImg from 'asset/images/socious_network.png';
-// import Network from '@components/common/Icons/Network';
 import {useMediaQuery} from 'react-responsive';
 import ProjectIcon from '@components/common/Icons/ProjectIcon';
 import FeedIcon from '@components/common/Icons/FeedIcon';
@@ -206,7 +206,11 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                           undefined
                         }
                         strokeColor={
-                          isActiveTab('Projects') ? 'transparent' : undefined
+                          isActiveTab('Projects')
+                            ? isBottomNav
+                              ? 'white'
+                              : '#2F4786'
+                            : undefined
                         }
                       />
                     }
@@ -219,9 +223,11 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     icon={
                       <NetworkIcon
                         className={
-                          (isActiveTab('Network') &&
-                            'fill-primary md:fill-white') ||
-                          undefined
+                          isActiveTab('Network')
+                            ? isBottomNav
+                              ? 'white'
+                              : '#2F4786'
+                            : undefined
                         }
                         strokeColor={
                               isActiveTab('Network')
@@ -243,7 +249,11 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                           undefined
                         }
                         strokeColor={
-                          isActiveTab('Feeds') ? 'transparent' : undefined
+                          isActiveTab('Feeds')
+                            ? isBottomNav
+                              ? 'white'
+                              : '#2F4786'
+                            : undefined
                         }
                       />
                     }
@@ -262,7 +272,11 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                               undefined
                             }
                             strokeColor={
-                              isActiveTab('Chat') ? 'transparent' : undefined
+                              isActiveTab('Chat')
+                                ? isBottomNav
+                                  ? 'white'
+                                  : '#2F4786'
+                                : undefined
                             }
                           />
                         }
@@ -280,7 +294,9 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                             }
                             strokeColor={
                               isActiveTab('Notifications')
-                                ? 'transparent'
+                                ? isBottomNav
+                                  ? 'white'
+                                  : '#2F4786'
                                 : undefined
                             }
                           />
@@ -393,7 +409,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
       {hasDetailNavbar && (
         <div className="flex w-full flex-col pt-14 sm:hidden">
           <div className=" flex items-center justify-between px-4 pb-3.5">
-            <span className="flex " onClick={() => route.back()}>
+            <span className="flex " onClick={() => router.back()}>
               <ChevronLeftIcon className="w-5" />
             </span>
             <h3 className="mr-5 w-full text-center font-sans text-xl font-semibold">
