@@ -39,7 +39,9 @@ export function Notification({page, onFull}: NotificationProps) {
       case 'FOLLOWED':
         if (notification?.data?.consolidate_number < 2)
           Router.push(
-            `/app/user/${notification?.data?.identity?.meta?.username}`,
+            notification?.data?.identity?.type === 'organizations'
+              ? `/app/organization/${notification?.data?.identity?.meta?.shortname}`
+              : `/app/user/${notification?.data?.identity?.meta?.username}`,
           );
         break;
       case 'COMMENT':
@@ -75,6 +77,7 @@ export function Notification({page, onFull}: NotificationProps) {
             <div
               key={notification?.id}
               onClick={() => redirectIfPossible(notification)}
+              className="cursor-pointer"
             >
               <div
                 className={twMerge(
@@ -94,11 +97,12 @@ export function Notification({page, onFull}: NotificationProps) {
                       src={
                         (notification?.data?.consolidate_number < 2 &&
                           notification?.data?.identity?.meta?.avatar) ||
+                        notification?.data?.identity?.meta?.image ||
                         ''
                       }
                     />
                   </div>
-                  <div className="space-y-.5 w-9/12 sm:w-10/12 ">
+                  <div className="space-y-.5 w-9/12 sm:w-10/12">
                     <p className="font-sm">{notification?.data.body.body}</p>
                     <p className="font-sm text-graySubtitle">
                       {isoToHumanTime(notification?.created_at ?? '')}
