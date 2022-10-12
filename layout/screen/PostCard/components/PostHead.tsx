@@ -43,7 +43,7 @@ const PostHead = ({
           </div>
         </Link>
         <Link href={`/app/post/${id}`} passHref>
-          <p className="text-sm text-grayInputField">
+          <p className="text-sm text-grayInputField" title={time}>
             {time ? isoToHumanTime(time) : '00 minutes ago'}
           </p>
         </Link>

@@ -22,8 +22,8 @@ export interface Project {
   identity_type: IdentityType;
   identity_meta: IdentityMeta;
   status: string;
-  created_at: number;
-  expires_at?: number;
+  created_at: string;
+  expires_at?: string;
 }
 
 export interface CreateProjectType {
