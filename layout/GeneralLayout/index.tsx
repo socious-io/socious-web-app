@@ -24,22 +24,24 @@ import styles from './index.module.scss';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import {useRouter} from 'next/router';
 import {twMerge} from 'tailwind-merge';
+import feedImg from 'asset/images/socious_feed.png';
+import networkImg from 'asset/images/socious_network.png';
 
 const bannerType = {
   feed: {
     title: 'Your Feed',
     subTitle: 'See what is happening in your network',
-    img: 'home-image',
+    img: feedImg,
   },
   project: {
     title: 'Your Projects',
     subTitle: 'Manage and create projects',
-    img: 'home-image',
+    img: networkImg,
   },
   network: {
     title: 'Network',
     subTitle: 'Connect with skilled professionals',
-    img: 'home-image',
+    img: networkImg,
   },
 };
 
@@ -296,12 +298,8 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         </nav>
         {needsBanner && (
           <div
-            className={twMerge(
-              `mt-[54px] h-full w-full bg-cover bg-center px-4 pt-9 md:mt-12 md:hidden`,
-              needsBanner === 'feed' && `bg-home-image`,
-              needsBanner === 'network' && 'bg-home-image',
-              needsBanner === 'project' && `bg-home-image`,
-            )}
+            className="mt-[54px] h-full w-full bg-cover bg-center px-4 pt-9 bg-blend-overlay md:mt-12 md:hidden"
+            style={{backgroundImage: `url(${bannerType[needsBanner].img})`}}
           >
             <h1 className="text-4xl text-white">
               {bannerType[needsBanner].title}
