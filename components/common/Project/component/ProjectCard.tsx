@@ -88,7 +88,7 @@ function ProjectCard({project}: {project: Project}) {
           </div>
           <div className="mt-4 flex justify-between">
             <dt
-              className="flex font-medium text-gray-900"
+              className="flex text-sm font-normal text-gray-400"
               title={project.created_at}
             >
               {isoToHumanTime(project.created_at)}
