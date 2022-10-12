@@ -65,7 +65,7 @@ function ProjectCard({project}: {project: Project}) {
             )}
           </div>
           <div className="flex flex-row">
-            <p className="my-4 text-sm">
+            <p className="my-1 text-sm">
               {project.description?.length > 200
                 ? `${project.description?.slice(0, 200)}...`
                 : project.description}
