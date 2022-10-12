@@ -1,11 +1,30 @@
 import {useToggle, useUser} from '@hooks';
 import Image from 'next/image';
-import MemberItem from './MemberItem';
 import NewMemberModal from './NewMemberModal';
 import {UserPlusIcon} from '@heroicons/react/24/outline';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {GlobalResponseType, IOrganizationUserType} from '@models/organization';
+import {FC, PropsWithChildren} from 'react';
+import {Avatar} from '@components/common';
+
+interface IMemberItemProps extends PropsWithChildren {
+  name: string;
+  detail: string;
+  avatar: string | undefined;
+}
+const MemberItem: FC<IMemberItemProps> = ({name, detail, avatar, children}) => {
+  return (
+    <div className="flex items-center  border-b py-2 px-4">
+      <Avatar size="l" src={avatar} />
+      <div className="flex grow flex-col p-1 px-3">
+        <p>{name}</p>
+        <p className="text-sm text-gray-500">{detail}</p>
+      </div>
+      <div>{children}</div>
+    </div>
+  );
+};
 
 const TeamComponent = () => {
   const {currentIdentity} = useUser();
@@ -49,11 +68,10 @@ const TeamComponent = () => {
               name={`${item.first_name} ${item.last_name}`}
               avatar={item.avatar?.url}
               detail={item.location}
-              Extra={
-                // TODO popup menu
-                <></>
-              }
-            />
+            >
+              {/* // TODO popup menu */}
+              <></>
+            </MemberItem>
           ))}
         </div>
       </div>

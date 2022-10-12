@@ -2,10 +2,17 @@ import Image from 'next/image';
 import Modal from '@components/common/Modal/Modal';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import {XMarkIcon} from '@heroicons/react/24/solid';
-import {ChangeEventHandler, FC, useCallback, useRef, useState} from 'react';
+import {
+  ChangeEventHandler,
+  FC,
+  PropsWithChildren,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import useSWRInfinite from 'swr/infinite';
 import Button from '@components/common/Button/Button';
-import MemberItem from '../MemberItem';
 import {
   ChevronLeftIcon,
   CheckCircleIcon,
@@ -17,6 +24,37 @@ import {
 } from '@models/organization';
 import {addMember} from '@api/organizations/team/actions';
 import {get} from 'utils/request';
+import {Avatar} from '@components/common';
+import useSWR from 'swr';
+import {UserProfile} from '@models/profile';
+import {getAllInfoByISO} from 'iso-country-currency';
+
+interface IFollowerItemProps extends PropsWithChildren {
+  follower: IOrganizationFollowerType;
+}
+const FollowerItem: FC<IFollowerItemProps> = ({follower, children}) => {
+  const {data} = useSWR<UserProfile>(
+    `/user/${follower.identity_meta.id}/profile`,
+  );
+  const location = useMemo(() => {
+    if (!data) return '';
+    const countryInfo = data.country ? getAllInfoByISO(data.country) : null;
+    if (data.city && countryInfo)
+      return `${data.city}, ${countryInfo.countryName}`;
+    return countryInfo?.countryName || '';
+  }, [data]);
+  return (
+    <div className="flex items-center  border-b py-2 px-4">
+      <Avatar size="l" src={follower.identity_meta.avatar} />
+      <div className="flex grow flex-col p-1 px-3">
+        <p>{follower.identity_meta.name}</p>
+        <p className="text-sm text-gray-500">{location}</p>
+      </div>
+      <div>{children}</div>
+    </div>
+  );
+};
+
 interface INewMemberModalProps {
   open: boolean;
   orgId: string;
@@ -143,26 +181,17 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
                     page.items.map(
                       (item, index) =>
                         !memberIds.includes(item.identity_meta.id) && (
-                          <MemberItem
+                          <FollowerItem
                             key={`m-${item.identity_meta.id}-${index}`}
-                            name={item.identity_meta.name}
-                            avatar={item.identity_meta.avatar}
-                            detail={item.identity_meta.email!}
-                            Extra={
-                              false ? (
-                                <Button variant="outline" size="sm">
-                                  request sent
-                                </Button>
-                              ) : (
-                                <span
-                                  className="cursor-pointer"
-                                  onClick={() => onAddMember(item)}
-                                >
-                                  <UserPlusIcon className="w-6" />
-                                </span>
-                              )
-                            }
-                          />
+                            follower={item}
+                          >
+                            <span
+                              className="cursor-pointer"
+                              onClick={() => onAddMember(item)}
+                            >
+                              <UserPlusIcon className="w-6" />
+                            </span>
+                          </FollowerItem>
                         ),
                     ),
                   )}
