@@ -17,7 +17,7 @@ import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import {useRouter} from 'next/router';
 import {twMerge} from 'tailwind-merge';
 import feedImg from 'asset/images/socious_feed.png';
-import networkImg from 'asset/images/socious_network.png';
+import projectImg from 'asset/images/socious_project.png';
 import {useMediaQuery} from 'react-responsive';
 import ProjectIcon from '@components/common/Icons/ProjectIcon';
 import FeedIcon from '@components/common/Icons/FeedIcon';
@@ -34,12 +34,12 @@ const bannerType = {
   project: {
     title: 'Your Projects',
     subTitle: 'Manage and create projects',
-    img: networkImg,
+    img: projectImg,
   },
   network: {
     title: 'Network',
     subTitle: 'Connect with skilled professionals',
-    img: networkImg,
+    img: projectImg,
   },
 };
 
