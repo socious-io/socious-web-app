@@ -5,7 +5,7 @@ export interface Project {
   id: string;
   title: string;
   description: string;
-  country: number;
+  country: string;
   project_type: string;
   project_length: string;
   payment_type: string;

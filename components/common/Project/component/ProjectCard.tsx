@@ -7,6 +7,7 @@ import {FC} from 'react';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {isoToHumanTime} from 'services/toHumanTime';
+import {getAllInfoByISO} from 'iso-country-currency';
 
 export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
   return (
@@ -25,6 +26,8 @@ export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
   );
 };
 function ProjectCard({project}: {project: Project}) {
+  const countryInfo = project.country ? getAllInfoByISO(project.country) : null;
+
   return (
     <div className="cursor-pointer rounded-2xl border border-grayLineBased bg-white p-4">
       <Link href={`/app/projects/${project.id}`}>
@@ -39,7 +42,9 @@ function ProjectCard({project}: {project: Project}) {
               <div className="flex flex-col justify-center">
                 <p className="text-black">{project.identity_meta?.name}</p>
                 {project.country && (
-                  <p className="text-graySubtitle">{project.country}</p>
+                  <p className="text-graySubtitle">
+                    {countryInfo?.countryName || ''}
+                  </p>
                 )}
               </div>
             </div>
