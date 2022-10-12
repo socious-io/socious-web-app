@@ -59,6 +59,21 @@ type TNavbarItem = {
 };
 export const NavbarItem: FC<TNavbarItem> = ({label, route, imgSrc}) => {
   const router = useRouter();
+  const isActiveTab: boolean = useMemo(() => {
+    switch (label) {
+      case 'Projects':
+      case 'Notifications':
+      case 'Network':
+      case 'Chat':
+        return router.pathname.startsWith(route);
+      case 'Feeds':
+        return (
+          router.pathname === route || router.pathname.startsWith('/app/post')
+        );
+      default:
+        return false;
+    }
+  }, [label, route, router]);
   return (
     <Link href={route} passHref>
       <a className="flex flex-col items-center">
@@ -74,8 +89,7 @@ export const NavbarItem: FC<TNavbarItem> = ({label, route, imgSrc}) => {
         <span
           className={twMerge(
             'cursor-pointer text-xs text-grayDisableButton hover:text-primary md:text-sm md:hover:text-white',
-            router.pathname == route &&
-              'font-semibold text-primary md:text-white',
+            isActiveTab && 'font-semibold text-primary md:text-white',
           )}
         >
           {label}
