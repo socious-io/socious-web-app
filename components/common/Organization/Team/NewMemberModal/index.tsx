@@ -167,7 +167,7 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
               <div className="mt-3 border-t border-b bg-zinc-100 p-3">
                 <SearchBar
                   type="text"
-                  placeholder="Search"
+                  placeholder="Search connections"
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
