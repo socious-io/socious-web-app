@@ -37,8 +37,10 @@ export interface NotificationItem {
         id: string;
         name: string;
         email: string;
-        avatar: string | null;
-        username: string;
+        avatar?: string | null;
+        username?: string;
+        shortname?: string;
+        image?: string | null;
       };
       type: IdentityType;
       follower: boolean;
