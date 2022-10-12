@@ -33,21 +33,23 @@ function ProjectCard({project}: {project: Project}) {
       <Link href={`/app/projects/${project.id}`}>
         <div className="space-y-6">
           <div className="flex flex-row items-center justify-between ">
-            <div className="flex flex-row space-x-2">
-              <Avatar
-                size="l"
-                type={'organizations'}
-                src={project.identity_meta?.image}
-              />
-              <div className="flex flex-col justify-center">
-                <p className="text-black">{project.identity_meta?.name}</p>
-                {project.country && (
-                  <p className="text-graySubtitle">
-                    {countryInfo?.countryName || ''}
-                  </p>
-                )}
+            <Link href={`/app/organization/${project.identity_meta.shortname}`}>
+              <div className="flex flex-row space-x-2">
+                <Avatar
+                  size="l"
+                  type={'organizations'}
+                  src={project.identity_meta?.image}
+                />
+                <div className="flex flex-col justify-center">
+                  <p className="text-black">{project.identity_meta?.name}</p>
+                  {project.country && (
+                    <p className="text-graySubtitle">
+                      {countryInfo?.countryName || ''}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
           <div className="">
             <p className="font-semibold">{project.title}</p>
@@ -69,9 +71,10 @@ function ProjectCard({project}: {project: Project}) {
               {project.description?.length > 200
                 ? `${project.description?.slice(0, 200)}...`
                 : project.description}
-              <span className="text-secondary">
-                {project.description?.length > 200 && ' See more'}
-              </span>
+
+              {project.description?.length > 200 && (
+                <span className="text-secondary"> See more</span>
+              )}
             </p>
           </div>
 
