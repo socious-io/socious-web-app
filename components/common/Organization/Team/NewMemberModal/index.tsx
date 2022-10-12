@@ -28,6 +28,7 @@ import {Avatar} from '@components/common';
 import useSWR from 'swr';
 import {UserProfile} from '@models/profile';
 import {getAllInfoByISO} from 'iso-country-currency';
+import Link from 'next/link';
 
 interface IFollowerItemProps extends PropsWithChildren {
   follower: IOrganizationFollowerType;
@@ -43,12 +44,21 @@ const FollowerItem: FC<IFollowerItemProps> = ({follower, children}) => {
       return `${data.city}, ${countryInfo.countryName}`;
     return countryInfo?.countryName || '';
   }, [data]);
+
   return (
     <div className="flex items-center  border-b py-2 px-4">
-      <Avatar size="l" src={follower.identity_meta.avatar} />
+      <Link href={`/app/user/${follower.identity_meta.username}`}>
+        <a>
+          <Avatar size="l" src={follower.identity_meta.avatar} />
+        </a>
+      </Link>
       <div className="flex grow flex-col p-1 px-3">
-        <p>{follower.identity_meta.name}</p>
-        <p className="text-sm text-gray-500">{location}</p>
+        <Link href={`/app/user/${follower.identity_meta.username}`}>
+          <a>
+            <p>{follower.identity_meta.name}</p>
+            <p className="text-sm text-gray-500">{location}</p>
+          </a>
+        </Link>
       </div>
       <div>{children}</div>
     </div>

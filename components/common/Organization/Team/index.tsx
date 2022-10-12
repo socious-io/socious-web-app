@@ -7,19 +7,25 @@ import {get} from 'utils/request';
 import {GlobalResponseType, IOrganizationUserType} from '@models/organization';
 import {FC, PropsWithChildren} from 'react';
 import {Avatar} from '@components/common';
+import Link from 'next/link';
 
 interface IMemberItemProps extends PropsWithChildren {
-  name: string;
-  detail: string;
-  avatar: string | undefined;
+  member: IOrganizationUserType;
 }
-const MemberItem: FC<IMemberItemProps> = ({name, detail, avatar, children}) => {
+const MemberItem: FC<IMemberItemProps> = ({member, children}) => {
   return (
     <div className="flex items-center  border-b py-2 px-4">
-      <Avatar size="l" src={avatar} />
+      <Link href={`/app/user/${member.username}`}>
+        <a>
+          <Avatar size="l" src={member.avatar?.url} />
+        </a>
+      </Link>
       <div className="flex grow flex-col p-1 px-3">
-        <p>{name}</p>
-        <p className="text-sm text-gray-500">{detail}</p>
+        <Link href={`/app/user/${member.username}`}>
+          <a>
+            {member.first_name} {member.last_name}
+          </a>
+        </Link>
       </div>
       <div>{children}</div>
     </div>
@@ -63,12 +69,7 @@ const TeamComponent = () => {
         </div> */}
         <div>
           {members?.items?.map((item, index) => (
-            <MemberItem
-              key={item.id}
-              name={`${item.first_name} ${item.last_name}`}
-              avatar={item.avatar?.url}
-              detail={item.location}
-            >
+            <MemberItem key={item.id} member={item}>
               {/* // TODO popup menu */}
               <></>
             </MemberItem>
