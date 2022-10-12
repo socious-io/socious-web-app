@@ -325,7 +325,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         </div>
       )}
       <div
-        className={`m-auto mb-[70px] flex lg:mb-0 lg:mt-12 ${
+        className={`m-auto mb-14 flex md:mb-0 lg:mb-0 lg:mt-12 ${
           needsBanner ? 'mt-10 px-4' : 'sm:mt-10'
         } sm:px-0 ${styles.layoutBase}`}
         style={style}
