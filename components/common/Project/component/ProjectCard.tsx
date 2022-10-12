@@ -33,7 +33,9 @@ function ProjectCard({project}: {project: Project}) {
       <Link href={`/app/projects/${project.id}`}>
         <div className="space-y-6">
           <div className="flex flex-row items-center justify-between ">
-            <Link href={`/app/organization/${project.identity_meta.shortname}`}>
+            <Link
+              href={`/app/organization/${project.identity_meta?.shortname}`}
+            >
               <div className="flex flex-row space-x-2">
                 <Avatar
                   size="l"
