@@ -1,18 +1,9 @@
-import {Cog8ToothIcon as CogIcon} from '@heroicons/react/24/outline';
-import {ReactComponent as Logo} from '../../asset/icons/logo.svg';
-import {useContext, useMemo} from 'react';
+import {useCallback, useMemo} from 'react';
 import Link from 'next/link';
 import {Avatar} from '../../components/common/Avatar/Avatar';
 import {TextInput} from '../../components/common/TextInput/TextInput';
 import {FC, PropsWithChildren, CSSProperties} from 'react';
 import imgSrc from '../../asset/icons/logo.svg';
-import chatIcon from '../../asset/icons/chat_light.svg';
-// const chatIcon = require('../../asset/icons/likes.svg');
-import networkIcon from '../../asset/icons/network_light.svg';
-import projectIcon from '../../asset/icons/project_light.svg';
-import feedsIcon from '../../asset/icons/feeds.svg';
-import notifyIcon from '../../asset/icons/notifications.svg';
-import Image from 'next/image';
 import {Dropdown} from '@components/common';
 import {useUser} from '@hooks';
 import {changeIdentity} from '@api/identity/actions';
@@ -26,6 +17,13 @@ import {useRouter} from 'next/router';
 import {twMerge} from 'tailwind-merge';
 import feedImg from 'asset/images/socious_feed.png';
 import networkImg from 'asset/images/socious_network.png';
+// import Network from '@components/common/Icons/Network';
+import {useMediaQuery} from 'react-responsive';
+import ProjectIcon from '@components/common/Icons/ProjectIcon';
+import FeedIcon from '@components/common/Icons/FeedIcon';
+import NetworkIcon from '@components/common/Icons/NetworkIcon';
+import NotificationIcon from '@components/common/Icons/NotificationIcon';
+import ChatIcon from '@components/common/Icons/ChatIcon';
 
 const bannerType = {
   feed: {
@@ -55,41 +53,18 @@ type TLayoutType = {
 type TNavbarItem = {
   label: string;
   route: string;
-  imgSrc: any;
+  icon: React.ReactElement;
+  isActive: boolean;
 };
-export const NavbarItem: FC<TNavbarItem> = ({label, route, imgSrc}) => {
-  const router = useRouter();
-  const isActiveTab: boolean = useMemo(() => {
-    switch (label) {
-      case 'Projects':
-      case 'Notifications':
-      case 'Network':
-      case 'Chat':
-        return router.pathname.startsWith(route);
-      case 'Feeds':
-        return (
-          router.pathname === route || router.pathname.startsWith('/app/post')
-        );
-      default:
-        return false;
-    }
-  }, [label, route, router]);
+export const NavbarItem: FC<TNavbarItem> = ({label, route, icon, isActive}) => {
   return (
     <Link href={route} passHref>
       <a className="flex flex-col items-center">
-        <div className="h-6 w-6">
-          <Image
-            src={imgSrc}
-            className="fill-warning hover:fill-slate-200"
-            alt={`${label} icon`}
-            width={100}
-            height={100}
-          />
-        </div>
+        <div className="h-6 w-6">{icon}</div>
         <span
           className={twMerge(
             'cursor-pointer text-xs text-grayDisableButton hover:text-primary md:text-sm md:hover:text-white',
-            isActiveTab && 'font-semibold text-primary md:text-white',
+            isActive && 'font-semibold text-primary md:text-white',
           )}
         >
           {label}
@@ -105,10 +80,37 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   hasDetailNavbar,
   detailNavbarTitle,
 }) => {
-  const route = useRouter();
+  const router = useRouter();
   const {currentIdentity, identities, mutateIdentities, mutateUser} = useUser({
     redirect: false,
   });
+
+  const isBottomNav = useMediaQuery({
+    query: '(max-width: 768px)',
+  });
+
+  const isActiveTab = useCallback(
+    (label: string) => {
+      switch (label) {
+        case 'Projects':
+          return router.pathname.startsWith('/app/projects');
+        case 'Notifications':
+          return router.pathname.startsWith('/app/notifications');
+        case 'Network':
+          return router.pathname.startsWith('/app/network');
+        case 'Chat':
+          return router.pathname.startsWith('/app/chat');
+        case 'Feeds':
+          return (
+            router.pathname === '/app/feed' ||
+            router.pathname.startsWith('/app/post')
+          );
+        default:
+          return false;
+      }
+    },
+    [router],
+  );
 
   const onSwitchIdentity = async (identity: LoginIdentity) => {
     try {
@@ -134,7 +136,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
 
   // Check if they need banner
   const needsBanner = useMemo<'feed' | 'network' | 'project' | null>(() => {
-    switch (route?.pathname) {
+    switch (router?.pathname) {
       case '/app/feed':
         return 'feed';
       case '/app/network':
@@ -144,7 +146,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
       default:
         return null;
     }
-  }, [route?.pathname]);
+  }, [router?.pathname]);
 
   return (
     <div className="flex w-full flex-col">
@@ -196,30 +198,94 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                   <NavbarItem
                     label="Projects"
                     route="/app/projects"
-                    imgSrc={projectIcon}
+                    icon={
+                      <ProjectIcon
+                        className={
+                          (isActiveTab('Projects') &&
+                            'fill-primary md:fill-white') ||
+                          undefined
+                        }
+                        strokeColor={
+                          isActiveTab('Projects') ? 'transparent' : undefined
+                        }
+                      />
+                    }
+                    isActive={isActiveTab('Projects')}
                   />
                   {/* TODO: Uncomment for Network */}
                   {/* <NavbarItem
                     label="Network"
                     route="/app/network"
-                    imgSrc={networkIcon}
+                    icon={
+                      <NetworkIcon
+                        className={
+                          (isActiveTab('Network') &&
+                            'fill-primary md:fill-white') ||
+                          undefined
+                        }
+                        strokeColor={
+                              isActiveTab('Network')
+                                ? 'transparent'
+                                : undefined
+                            }
+                      />
+                    }
+                    isActive={isActiveTab('Network')}
                   /> */}
                   <NavbarItem
                     label="Feeds"
                     route="/app/feed"
-                    imgSrc={feedsIcon}
+                    icon={
+                      <FeedIcon
+                        className={
+                          (isActiveTab('Feeds') &&
+                            'fill-primary md:fill-white') ||
+                          undefined
+                        }
+                        strokeColor={
+                          isActiveTab('Feeds') ? 'transparent' : undefined
+                        }
+                      />
+                    }
+                    isActive={isActiveTab('Feeds')}
                   />
                   {!userLoggedOut && (
                     <>
                       <NavbarItem
                         label="Chat"
                         route="/app/chat"
-                        imgSrc={chatIcon}
+                        icon={
+                          <ChatIcon
+                            className={
+                              (isActiveTab('Chat') &&
+                                'fill-primary md:fill-white') ||
+                              undefined
+                            }
+                            strokeColor={
+                              isActiveTab('Chat') ? 'transparent' : undefined
+                            }
+                          />
+                        }
+                        isActive={isActiveTab('Chat')}
                       />
                       <NavbarItem
                         label="Notifications"
                         route="/app/notifications"
-                        imgSrc={notifyIcon}
+                        icon={
+                          <NotificationIcon
+                            className={
+                              (isActiveTab('Notifications') &&
+                                'fill-primary md:fill-white') ||
+                              undefined
+                            }
+                            strokeColor={
+                              isActiveTab('Notifications')
+                                ? 'transparent'
+                                : undefined
+                            }
+                          />
+                        }
+                        isActive={isActiveTab('Notifications')}
                       />
                     </>
                   )}
@@ -292,13 +358,13 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                       <>
                         <div
                           className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
-                          onClick={() => route.push('/app/auth/signup')}
+                          onClick={() => router.push('/app/auth/signup')}
                         >
                           Sign up
                         </div>
                         <div
                           className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
-                          onClick={() => route.push('/app/auth/login')}
+                          onClick={() => router.push('/app/auth/login')}
                         >
                           Login
                         </div>
