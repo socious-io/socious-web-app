@@ -28,9 +28,5 @@ export default ProjectApplications;
 
 export const getStaticProps: GetStaticProps = async () => {
   const skills = await getGlobalData();
-  return {props: {skills}};
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {paths: [], fallback: true};
+  return {props: {skills}, revalidate: 60 * 60};
 };
