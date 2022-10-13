@@ -12,6 +12,7 @@ import ProjectItem from '@components/common/UserProfile/RightPane/ProjectItem';
 import dayjs from 'dayjs';
 import {Project} from '@models/project';
 import Link from 'next/link';
+import {twMerge} from 'tailwind-merge';
 
 var data = [
   {
@@ -58,7 +59,7 @@ var data3 = [
 const MyApplicationBoxes: FC = () => {
   const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
   const {state: showDrafts, handlers: showDraftsHandler} = useToggle();
-  const {user, currentIdentity} = useUser();
+  const {currentIdentity} = useUser();
   const {ProjectContext, setProjectContext} = useProjectContext();
   const getKey = (initialSize: number, previousData: any) => {
     if (previousData && !previousData?.items?.length) return null;
@@ -123,44 +124,59 @@ const MyApplicationBoxes: FC = () => {
         <HeaderBox
           isRound={true}
           title={`On-going (${projectObject?.['ACTIVE'].length})`}
-          isExpand={true}
+          isExpand={showOnGoing}
           expandToggle={showOnGoingHandler.toggle}
-          isExpandable={false}
+          isExpandable={!!projectObject?.['ACTIVE']?.length}
         />
-        {projectObject?.['ACTIVE']?.map((item) => (
-          <Link key={item.id} href={`/app/projects/${item.id}`} passHref>
-            <a>
-              <ProjectItem
-                title={item.title}
-                border
-                applicants={item.applicants}
-                hired={2}
-                dateRange={dayjs(item?.updated_at)?.format('MMM d')}
-              />
-            </a>
-          </Link>
-        ))}
+        <div
+          className={twMerge(
+            'hidden h-0 ease-in-out',
+            showOnGoing && 'block h-auto',
+          )}
+        >
+          {projectObject?.['ACTIVE']?.map((item) => (
+            <Link key={item.id} href={`/app/projects/${item.id}`} passHref>
+              <a>
+                <ProjectItem
+                  title={item.title}
+                  border
+                  applicants={item.applicants}
+                  hired={2}
+                  dateRange={dayjs(item?.updated_at)?.format('MMM d')}
+                />
+              </a>
+            </Link>
+          ))}
+        </div>
         <HeaderBox
           isRound={false}
           title={`Draft (${projectObject?.['DRAFT'].length})`}
-          isExpand={true}
-          expandToggle={showOnGoingHandler.toggle}
-          isExpandable={false}
+          isExpand={showDrafts}
+          expandToggle={showDraftsHandler.toggle}
+          // isExpandable={false}
+          isExpandable={!!projectObject?.['DRAFT']?.length}
         />
-        {projectObject?.['DRAFT']?.map((item: Project) => (
-          <Link key={item.id} href={`/app/projects/${item.id}`} passHref>
-            <a>
-              <ProjectItem
-                key={item.id}
-                title={item.title}
-                border
-                applicants={item.applicants}
-                hired={2}
-                dateRange={dayjs(item?.updated_at)?.format('MMM d')}
-              />
-            </a>
-          </Link>
-        ))}
+        <div
+          className={twMerge(
+            'hidden h-0 ease-in-out',
+            showDrafts && 'block h-auto',
+          )}
+        >
+          {projectObject?.['DRAFT']?.map((item: Project) => (
+            <Link key={item.id} href={`/app/projects/${item.id}`} passHref>
+              <a>
+                <ProjectItem
+                  key={item.id}
+                  title={item.title}
+                  border
+                  applicants={item.applicants}
+                  hired={2}
+                  dateRange={dayjs(item?.updated_at)?.format('MMM d')}
+                />
+              </a>
+            </Link>
+          ))}
+        </div>
         {!noMoreMessage && (
           <div className="flex justify-center">
             <Button

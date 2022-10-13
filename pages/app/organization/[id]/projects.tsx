@@ -21,6 +21,7 @@ import {IOrganizationType} from 'models/organization';
 
 const OrganizationProjects: NextPage = () => {
   const {query} = useRouter();
+
   const {data: organization} = useSWR<IOrganizationType>(
     `/orgs/by-shortname/${query.id}`,
     get,
@@ -33,9 +34,7 @@ const OrganizationProjects: NextPage = () => {
 
   const flattenActiveProjects: Project[] = useMemo(() => {
     return projects
-      ? projects.items
-          // .map((projectList: any) => projectList.items)
-          .filter((project: Project) => project.status === 'ACTIVE')
+      ? projects.items.filter((project: Project) => project.status === 'ACTIVE')
       : [];
   }, [projects]);
 
