@@ -19,11 +19,12 @@ import {useProjectContext} from '../created/NewProject/context';
 import {applyProject} from '@api/projects/actions';
 import {ApplyProjectType} from '@models/project';
 import {toast} from 'react-toastify';
+import useSWR from 'swr';
+import {useFormattedLocation} from 'services/formatLocation';
 
 const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   const {
     title,
-    country,
     identity_meta,
     payment_range_higher,
     payment_range_lower,
@@ -34,9 +35,14 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
     applied,
   } = project;
 
+  // FIXME let's add this to identity_meta instead
+  const {data: org} = useSWR(`/orgs/${identity_meta.id}`);
+  const orgLocation = useFormattedLocation(org);
+
   const {identities, currentIdentity} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);
   const {ProjectContext, setProjectContext} = useProjectContext();
+  const location = useFormattedLocation(project);
 
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;
@@ -103,7 +109,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
           <Avatar size="l" src={identity_meta?.image} />
           <div className="flex flex-col justify-center">
             <p className="text-black">{identity_meta?.name || ''}</p>
-            <p className="text-graySubtitle">{country || ''}</p>
+            <p className="text-graySubtitle">{orgLocation || ''}</p>
           </div>
         </div>
       </div>
@@ -111,10 +117,10 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
         <p className="font-semibold">{title}</p>
       </div>
       <div className="mt-4 flex space-x-5">
-        {country && (
+        {location && (
           <div className="flex flex-row">
             <MapPinIcon width={20} height={20} className="text-primary" />
-            <p className="ml-2 text-sm text-graySubtitle">{country}</p>
+            <p className="ml-2 text-sm text-graySubtitle">{location}</p>
           </div>
         )}
         {projectType && (

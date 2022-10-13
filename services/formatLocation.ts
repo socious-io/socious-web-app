@@ -9,6 +9,7 @@ export interface DataWithLocation {
 // Format profile or project location as City, Country or just Country
 export function formattedLocation(data?: DataWithLocation) {
   if (!data) return '';
+  if (data.country === 'XW') return 'Worldwide';
   const countryInfo = data.country ? getAllInfoByISO(data.country) : null;
   if (data.city && countryInfo)
     return `${data.city}, ${countryInfo.countryName}`;
