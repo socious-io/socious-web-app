@@ -9,7 +9,7 @@ const editSrc = require('../../../../asset/icons/edit.svg');
 interface TInput {
   title: string;
   description: string;
-  country: number;
+  country: string;
   project_type: string;
   project_length: string;
   payment_type: string;
