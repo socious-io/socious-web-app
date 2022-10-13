@@ -47,7 +47,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           <label
             htmlFor={id || name}
             className={twMerge(
-              'block text-base font-semibold sm:text-sm',
+              'mb-1 block text-base font-semibold sm:text-sm',
               errorMessage ? 'text-error' : 'text-black',
               labelFloat ? 'absolute left-3 -top-2 bg-white px-1 text-sm' : '',
               disabled && 'text-opacity-40 ',

@@ -61,6 +61,6 @@ export const schemaApplyProject = Joi.object({
 });
 
 export const schemaLink = Joi.object({
-  cv_link: Joi.string().uri().allow('', null),
-  cv_name: Joi.string().allow('', null),
+  cv_link: Joi.string().uri().required(),
+  cv_name: Joi.string().required(),
 });

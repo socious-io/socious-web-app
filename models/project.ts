@@ -25,6 +25,7 @@ export interface Project {
   status: string;
   created_at: string;
   expires_at?: string;
+  applied: boolean;
   updated_at: string;
 }
 
