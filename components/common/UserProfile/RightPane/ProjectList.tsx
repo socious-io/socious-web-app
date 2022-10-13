@@ -1,21 +1,34 @@
 import React from 'react';
+import dayjs from 'dayjs';
+import Link from 'next/link';
 
+// Components
 import ProjectItem from './ProjectItem';
 
+// Types
+import {Project} from '@models/project';
 interface Props {
   list: any;
 }
 
 const ProjectList: React.FC<Props> = ({list}) => {
-  return list.map((item: any) => (
+  return list.map((project: Project) => (
     <>
-      <ProjectItem
-        key={item.id}
-        title={item.title}
-        applicants={item.applicants}
-        hired={2}
-        dateRange="Mar 1 - Mar 10"
-      />
+      <Link href={`/app/projects/${project.id}`} passHref>
+        <a>
+          <ProjectItem
+            key={project.id}
+            title={project.title}
+            applicants={project.applicants}
+            hired={2}
+            dateRange={`${dayjs(project?.created_at)?.format('MMM d')} ${
+              project?.expires_at
+                ? `- ${dayjs(project?.expires_at)?.format('MMM d')}`
+                : ''
+            }`}
+          />
+        </a>
+      </Link>
       <hr className="border-grayLineBased" />
     </>
   ));
