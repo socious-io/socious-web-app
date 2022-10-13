@@ -12,11 +12,10 @@ import {StepProps} from '@models/stepProps';
 const OnboardingStep4 = ({onSubmit}: StepProps) => {
   const formMethods = useFormContext();
   const {handleSubmit, formState, setValue, watch} = formMethods;
+  const [countryName, setCountryName] = useState<any>('');
 
   const selectedCountryCode = watch('country');
   const selectedCity = watch('city');
-
-  const [countryName, setCountryName] = useState<any>('');
 
   //use-places-autocomplete: Method to get countries.
   const {
@@ -40,10 +39,10 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
     requestOptions: {
       language: 'en',
       types: ['locality', 'administrative_area_level_3'],
-      componentRestrictions: {country: selectedCountryCode},
+      componentRestrictions: {country: selectedCountryCode?.code},
     },
     debounce: 300,
-    cacheKey: `${selectedCountryCode}-restricted`,
+    cacheKey: `${selectedCountryCode?.code}-restricted`,
   });
 
   //Creating [] of countries for Combobox
@@ -92,21 +91,23 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
   // Method to get Country-Code('jp') on countrySelected and calls 'handleSetCountry'.
   const onCountrySelected = useCallback(
     (data: any) => {
-      setCountryName(data.name);
       getGeocode({placeId: data.id})
         .then((result: any) => {
           const countryCode =
             result?.[0]?.address_components[0]?.short_name?.toLowerCase();
-          handleSetCountry(countryCode);
+          if (selectedCountryCode?.code) handleSetCity('');
+          handleSetCountry({code: countryCode, name: data.name});
         })
         .catch((error: any) => console.error(error));
     },
-    [handleSetCountry],
+    [handleSetCity, handleSetCountry, selectedCountryCode],
   );
+
+  console.log('SELECTED COUNTRY :--: ', selectedCountryCode);
 
   return (
     <form
-      onSubmit={handleSubmit(() => onSubmit(selectedCountryCode))}
+      onSubmit={handleSubmit(() => onSubmit(selectedCountryCode?.code))}
       className="flex grow flex-col justify-between pl-0 pr-10 sm:pl-10"
     >
       <div className="flex flex-col">
@@ -118,6 +119,10 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
         </p>
         <Combobox
           label="Country"
+          selected={{
+            id: selectedCountryCode?.code ?? 123,
+            name: selectedCountryCode?.name,
+          }}
           onSelected={onCountrySelected}
           onChange={(e) => setCountryValue(e.currentTarget.value || '')}
           required
@@ -127,9 +132,9 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
           errorMessage={formState?.errors?.['country']?.message}
           className="my-6"
         />
-        {countryName}
         <Combobox
           label="City"
+          selected={{id: selectedCountryCode?.code ?? 123, name: selectedCity}}
           onSelected={handleSetCity}
           onChange={(e) => setCitiesValue(e.currentTarget.value || '')}
           required

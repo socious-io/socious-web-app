@@ -195,9 +195,8 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 
     if (bio) profileBody.bio = bio;
     if (city) profileBody.city = city;
-    if (country) profileBody.country = country;
+    if (country?.code) profileBody.country = country.code;
 
-    console.log('USER PROFILE 1: ', profileBody);
     updateProfile(profileBody)
       .then(() => {
         setStep(step + 1);
