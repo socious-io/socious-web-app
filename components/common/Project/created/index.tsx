@@ -8,6 +8,10 @@ import {useProjectContext} from '../created/NewProject/context';
 import {useMemo} from 'react';
 import useSWRInfinite from 'swr/infinite';
 import {get} from 'utils/request';
+import ProjectItem from '@components/common/UserProfile/RightPane/ProjectItem';
+import dayjs from 'dayjs';
+import {Project} from '@models/project';
+import Link from 'next/link';
 
 var data = [
   {
@@ -70,10 +74,22 @@ const MyApplicationBoxes: FC = () => {
     revalidateFirstPage: false,
   });
 
-  const flatProjectArray = useMemo(() => {
-    if (!isNaN(infiniteProject as any)) return [];
-    return infiniteProject?.map((page) => page?.items)?.flat(1);
-  }, [infiniteProject]);
+  const projectObject: {ACTIVE: any[]; DRAFT: any[]; EXPIRE: any[]} =
+    useMemo(() => {
+      if (!isNaN(infiniteProject as any)) return [];
+      const flatProjects = infiniteProject?.map((page) => page?.items)?.flat(1);
+
+      return flatProjects?.reduce(
+        (obj, currentValue) => {
+          if (!obj[currentValue['status'] ?? 'ERROR']) {
+            obj[currentValue['status'] ?? 'ERROR'] = [];
+          }
+          obj[currentValue['status'] ?? 'ERROR'].push(currentValue);
+          return obj;
+        },
+        {EXPIRE: [], DRAFT: [], ACTIVE: []},
+      );
+    }, [infiniteProject]);
 
   const noMoreMessage = useMemo(
     () => size * 10 >= infiniteProject?.[0]?.['total_count'],
@@ -106,18 +122,44 @@ const MyApplicationBoxes: FC = () => {
       <div className="w-full space-y-4 rounded-t-2xl border border-grayLineBased ">
         <HeaderBox
           isRound={true}
-          title={`On-going (${flatProjectArray?.length})`}
+          title={`On-going (${projectObject?.['ACTIVE'].length})`}
           isExpand={true}
           expandToggle={showOnGoingHandler.toggle}
           isExpandable={false}
         />
-        {flatProjectArray?.map((item) => (
-          <BodyCard
-            key={item.id}
-            item={item}
-            name={currentIdentity?.meta?.name}
-            image={currentIdentity?.meta?.image}
-          />
+        {projectObject?.['ACTIVE']?.map((item) => (
+          <Link key={item.id} href={`/app/projects/${item.id}`} passHref>
+            <a>
+              <ProjectItem
+                title={item.title}
+                border
+                applicants={item.applicants}
+                hired={2}
+                dateRange={dayjs(item?.updated_at)?.format('MMM d')}
+              />
+            </a>
+          </Link>
+        ))}
+        <HeaderBox
+          isRound={false}
+          title={`Draft (${projectObject?.['DRAFT'].length})`}
+          isExpand={true}
+          expandToggle={showOnGoingHandler.toggle}
+          isExpandable={false}
+        />
+        {projectObject?.['DRAFT']?.map((item: Project) => (
+          <Link key={item.id} href={`/app/projects/${item.id}`} passHref>
+            <a>
+              <ProjectItem
+                key={item.id}
+                title={item.title}
+                border
+                applicants={item.applicants}
+                hired={2}
+                dateRange={dayjs(item?.updated_at)?.format('MMM d')}
+              />
+            </a>
+          </Link>
         ))}
         {!noMoreMessage && (
           <div className="flex justify-center">

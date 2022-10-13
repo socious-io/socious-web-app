@@ -6,6 +6,7 @@ export interface Project {
   title: string;
   description: string;
   country: number;
+  applicants: number;
   project_type: string;
   project_length: string;
   payment_type: string;
@@ -24,6 +25,7 @@ export interface Project {
   status: string;
   created_at: number;
   expires_at?: number;
+  updated_at: string;
 }
 
 export interface CreateProjectType {
