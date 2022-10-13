@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {useRouter} from 'next/router';
+import Link from 'next/link';
 
 //libraries
+import dayjs from 'dayjs';
 import useSWR from 'swr';
 
 //components
@@ -9,21 +11,33 @@ import {GeneralLayout} from 'layout';
 import {Avatar} from '@components/common';
 import ProjectItem from '@components/common/UserProfile/RightPane/ProjectItem';
 
+// Utils/Services
+import {get} from 'utils/request';
+
 //types
 import type {NextPage} from 'next';
-
-import {get} from 'utils/request';
+import {IProjectsResponse, Project} from '@models/project';
+import {IOrganizationType} from 'models/organization';
 
 const OrganizationProjects: NextPage = () => {
   const {query} = useRouter();
-  const {data: organization} = useSWR<any>(
+  const {data: organization} = useSWR<IOrganizationType>(
     `/orgs/by-shortname/${query.id}`,
     get,
   );
-  const {data: projects} = useSWR<any>(
-    `/projects?identity=${organization?.id}`,
+
+  const {data: projects} = useSWR<IProjectsResponse>(
+    organization ? `/projects?identity=${organization.id}` : null,
     get,
   );
+
+  const flattenActiveProjects: Project[] = useMemo(() => {
+    return projects
+      ? projects.items
+          // .map((projectList: any) => projectList.items)
+          .filter((project: Project) => project.status === 'ACTIVE')
+      : [];
+  }, [projects]);
 
   return (
     <GeneralLayout style={{marginBottom: '1.5rem'}}>
@@ -43,17 +57,24 @@ const OrganizationProjects: NextPage = () => {
           </div>
         </div>
         <div className="md:w-4/6">
-          {projects?.items?.map((project: any, index: number) => (
-            <ProjectItem
+          {flattenActiveProjects?.map((project: Project, index: number) => (
+            <Link
               key={project.id}
-              title={project.title}
-              applicants={project.applicants}
-              hired={3}
-              dateRange="Mar 12 - Mar 1"
-              border
-              first={index === 0}
-              last={projects.items.length - 1 === index}
-            />
+              href={`/app/projects/${project.id}`}
+              passHref
+            >
+              <a>
+                <ProjectItem
+                  title={project.title}
+                  applicants={project.applicants}
+                  hired={3}
+                  dateRange={dayjs(project?.updated_at)?.format('MMM d')}
+                  border
+                  first={index === 0}
+                  last={flattenActiveProjects.length - 1 === index}
+                />
+              </a>
+            </Link>
           ))}
         </div>
       </div>
