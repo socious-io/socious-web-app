@@ -19,6 +19,9 @@ const OnboardingStep6 = ({onSubmit, defaultCountry}: OnboardingStep6Props) => {
   const formMethods = useFormContext();
   const {handleSubmit, formState, register, getValues, setValue, watch} =
     formMethods;
+
+  const countryNumber = watch('countryNumber');
+  const phoneNumber = watch('phoneNumber');
   const [countryKey, setCountryKey] = useState<string>(defaultCountry);
 
   //use-places-autocomplete: Method to get countries.
@@ -65,30 +68,39 @@ const OnboardingStep6 = ({onSubmit, defaultCountry}: OnboardingStep6Props) => {
     [setValue],
   );
 
+  // Request Number from Country Code and set it.
+  const requestAndSetNumber = useCallback(
+    (countryCode: string) => {
+      getPhoneCode(countryCode)
+        .then((number) => {
+          handleSetCountryNumber(number);
+        })
+        .catch((error) => console.error(error));
+    },
+    [handleSetCountryNumber],
+  );
+
   // Method to get Country-Code('jp') on countrySelected so we call call another API for 'countryNumber' for that country
-  const onCountrySelected = useCallback((data: any) => {
-    getGeocode({placeId: data.id})
-      .then((data: any) => {
-        setCountryKey(
-          data?.[0]?.address_components[0]?.short_name?.toLowerCase(),
-        );
-      })
-      .catch((error) => console.error(error));
-  }, []);
+  const onCountrySelected = useCallback(
+    (data: any) => {
+      getGeocode({placeId: data.id})
+        .then((data: any) => {
+          const countryCode: string =
+            data?.[0]?.address_components[0]?.short_name?.toLowerCase();
+          setCountryKey(countryCode);
+          requestAndSetNumber(countryCode);
+        })
+        .catch((error) => console.error(error));
+    },
+    [requestAndSetNumber],
+  );
 
   // Get 'countryNumber' for default and each 'countryKey' change. i.e. after each 'onCountrySelected'.
   useEffect(() => {
-    if (!countryKey) return;
-    getPhoneCode(countryKey)
-      .then((number) => {
-        handleSetCountryNumber(number);
-      })
-      .catch((error) => console.error(error));
-  }, [countryKey, handleSetCountryNumber]);
-
-  const countryNumber = watch('countryNumber');
-  const phoneNumber = watch('phoneNumber');
-  console.log('PHONE NUMBER :---: ', phoneNumber);
+    if (!countryKey || countryNumber) return;
+    requestAndSetNumber(countryKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <form
