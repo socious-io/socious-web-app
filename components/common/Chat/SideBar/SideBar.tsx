@@ -30,7 +30,6 @@ const SideBarToBe = (
   const [query, setQuery] = useState<string>('');
   const [filteredChats, setFilteredChats] = useState<any[]>([]);
 
-  const goBack = useCallback(() => router.back(), [router]);
   const {user, currentIdentity} = useUser();
 
   const {
@@ -71,23 +70,10 @@ const SideBarToBe = (
       </div>
 
       {/* HEADER */}
-      <div className="mt-14 flex items-center justify-between pb-3.5 pr-3 pl-6 sm:mt-7 sm:justify-center">
-        <span className="block sm:hidden" onClick={goBack}>
-          <ChevronLeftIcon className="w-5" />
-        </span>
+      <div className="mt-14 flex items-center justify-center pb-3.5 sm:mt-7 sm:justify-center">
         <h3 className="font-worksans text-center text-xl font-semibold">
           Chats
         </h3>
-        <Avatar
-          size="m"
-          src={
-            currentIdentity?.type === 'users'
-              ? user?.avatar?.url
-              : user?.image?.url
-          }
-          type={currentIdentity?.type}
-          className="block sm:hidden"
-        />
       </div>
       {/* SEARCHBAR */}
       <div className="border-y-[0.5px] border-offsetColor bg-offWhite px-4 py-2.5 ">
