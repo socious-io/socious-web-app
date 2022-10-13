@@ -64,14 +64,18 @@ const Contact: React.FC<Props> = ({
               <div className="mb-4 flex">
                 <PhoneIcon className="h-6 w-6 stroke-1.5 text-secondary " />
                 <p className="w-3/6 pl-4 text-sm text-black">
-                  {mobile_country_code} {phone}
+                  <a href={`tel:${mobile_country_code}${phone}`}>
+                    {mobile_country_code} {phone}
+                  </a>
                 </p>
               </div>
             )}
             {email && (
               <div className="mb-4 flex">
                 <AtSymbolIcon className="h-6 w-6 stroke-1.5 text-secondary" />
-                <p className="w-3/6 pl-4 text-sm text-black">{email}</p>
+                <p className="w-3/6 pl-4 text-sm text-black">
+                  <a href={`mailto:${email}`}>{email}</a>
+                </p>
               </div>
             )}
             {website && (
