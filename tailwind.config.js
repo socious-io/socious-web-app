@@ -9,12 +9,6 @@ module.exports = {
       center: true,
     },
     extend: {
-      backgroundImage: {
-        'home-image':
-          "linear-gradient(0deg, rgba(0, 0, 0, 0.36), rgba(0, 0, 0, 0.36)), url('/images/socious_feed.png')",
-        'network-image':
-          "linear-gradient(0deg, rgba(0, 0, 0, 0.36), rgba(0, 0, 0, 0.36)), url('/images/socious_network.png')",
-      },
       colors: {
         primary: '#2F4786',
         primaryDark: '#1F2F59',

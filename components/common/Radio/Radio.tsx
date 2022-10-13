@@ -28,7 +28,7 @@ export function Radio({
           <input
             {...props}
             type="radio"
-            className="h-4 w-4  rounded-full text-orange-500 accent-primary focus:ring-transparent"
+            className="h-4 w-4 rounded-full text-white accent-primary checked:border-graySubtitle focus:ring-transparent"
             id={id}
             {...register}
           />

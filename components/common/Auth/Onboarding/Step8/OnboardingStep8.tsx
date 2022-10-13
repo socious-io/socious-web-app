@@ -20,14 +20,14 @@ const OnboardingStep8 = ({onSubmit}: StepProps) => {
         <div className="flex flex-col">
           {' '}
           <h1 className="font-helmet my-6 text-center">Add a profile photo</h1>
-          <div className="flex flex-col items-center">
+          <div className="-mx-16 flex flex-col items-center">
             <ImageUploader
+              className="h-32 w-32 border border-grayLineBased"
               onChange={(file: any) => setFile(file)}
-              src={profile_img_icon}
             >
               {(setOpen: any) => (
                 <Button
-                  className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+                  className="mx-auto mt-14 flex  w-full max-w-xs items-center justify-center align-middle font-semibold "
                   size="lg"
                   variant="outline"
                   onClick={setOpen}

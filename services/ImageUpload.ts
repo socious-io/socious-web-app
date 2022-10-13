@@ -15,9 +15,7 @@ export const checkAndUploadMedia = async (
       const mediaRes: any = await uploadMedia(formData);
       returnId = mediaRes?.id;
     } catch (error: any) {
-      console.error(error);
-      if (error?.code === 'ERR_NETWORK')
-        throw new Error('File size limit exceeded.');
+      throw error;
     }
   }
   return returnId;
