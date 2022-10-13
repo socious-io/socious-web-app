@@ -1,11 +1,3 @@
-import {MobileCountry} from 'models/mobileCountry';
-
-export const defaultMobileCode: MobileCountry = {
-  id: 127,
-  country: 'Japan',
-  calling_code: '+81',
-};
-
 const AppConfig = {
   TOKEN: 'TOKEN',
   APP_MODE: 'APP_MODE',

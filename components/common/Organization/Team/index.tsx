@@ -1,11 +1,36 @@
 import {useToggle, useUser} from '@hooks';
 import Image from 'next/image';
-import MemberItem from './MemberItem';
 import NewMemberModal from './NewMemberModal';
 import {UserPlusIcon} from '@heroicons/react/24/outline';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {GlobalResponseType, IOrganizationUserType} from '@models/organization';
+import {FC, PropsWithChildren} from 'react';
+import {Avatar} from '@components/common';
+import Link from 'next/link';
+
+interface IMemberItemProps extends PropsWithChildren {
+  member: IOrganizationUserType;
+}
+const MemberItem: FC<IMemberItemProps> = ({member, children}) => {
+  return (
+    <div className="flex items-center  border-b py-2 px-4">
+      <Link href={`/app/user/${member.username}`}>
+        <a>
+          <Avatar size="l" src={member.avatar?.url} />
+        </a>
+      </Link>
+      <div className="flex grow flex-col p-1 px-3">
+        <Link href={`/app/user/${member.username}`}>
+          <a>
+            {member.first_name} {member.last_name}
+          </a>
+        </Link>
+      </div>
+      <div>{children}</div>
+    </div>
+  );
+};
 
 const TeamComponent = () => {
   const {currentIdentity} = useUser();
@@ -44,16 +69,10 @@ const TeamComponent = () => {
         </div> */}
         <div>
           {members?.items?.map((item, index) => (
-            <MemberItem
-              key={item.id}
-              name={`${item.first_name} ${item.last_name}`}
-              avatar={item.avatar?.url}
-              detail={item.location}
-              Extra={
-                // TODO popup menu
-                <></>
-              }
-            />
+            <MemberItem key={item.id} member={item}>
+              {/* // TODO popup menu */}
+              <></>
+            </MemberItem>
           ))}
         </div>
       </div>
