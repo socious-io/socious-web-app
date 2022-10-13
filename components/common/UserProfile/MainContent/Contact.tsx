@@ -47,44 +47,38 @@ const Contact: React.FC<Props> = ({
 
       {status === 'organizations' ? (
         <>
-          <div className="mb-4 flex">
-            <MapPinIcon className="h-6 w-6 stroke-1.5 text-secondary" />
-            <p className="w-3/6 pl-4 text-sm text-black">
-              {address ? (
-                address
-              ) : (
-                <p className="text-graySubtitle">Location</p>
-              )}
-            </p>
-          </div>
-          <div className="mb-4 flex">
-            <PhoneIcon className="h-6 w-6 stroke-1.5 text-secondary " />
-            <p className="w-3/6 pl-4 text-sm text-black">
-              {mobile_country_code && phone ? (
-                mobile_country_code + phone
-              ) : (
-                <p className="text-graySubtitle">Phone Number</p>
-              )}
-            </p>
-          </div>
-          <div className="mb-4 flex">
-            <AtSymbolIcon className="h-6 w-6 stroke-1.5 text-secondary" />
-            <p className="w-3/6 pl-4 text-sm text-black">
-              {email ? email : <p className="text-graySubtitle">Email</p>}
-            </p>
-          </div>
-          <div className="mb-4 flex">
-            <GlobeAltIcon className="h-6 w-6 stroke-1.5 text-secondary " />
-            <p className="w-3/6 break-all pl-4 text-sm text-black">
-              {website ? (
+          {(address || location) && (
+            <div className="mb-4 flex">
+              <MapPinIcon className="h-6 w-6 stroke-1.5 text-secondary" />
+              <p className="w-3/6 pl-4 text-sm text-black">
+                {address || location}
+              </p>
+            </div>
+          )}
+          {mobile_country_code && phone && (
+            <div className="mb-4 flex">
+              <PhoneIcon className="h-6 w-6 stroke-1.5 text-secondary " />
+              <p className="w-3/6 pl-4 text-sm text-black">
+                {mobile_country_code} {phone}
+              </p>
+            </div>
+          )}
+          {email && (
+            <div className="mb-4 flex">
+              <AtSymbolIcon className="h-6 w-6 stroke-1.5 text-secondary" />
+              <p className="w-3/6 pl-4 text-sm text-black">{email}</p>
+            </div>
+          )}
+          {website && (
+            <div className="mb-4 flex">
+              <GlobeAltIcon className="h-6 w-6 stroke-1.5 text-secondary " />
+              <p className="w-3/6 break-all pl-4 text-sm text-black">
                 <a href={website} target="_blank" rel="noreferrer">
                   {website}
                 </a>
-              ) : (
-                'Website'
-              )}
-            </p>
-          </div>
+              </p>
+            </div>
+          )}
         </>
       ) : (
         location && (
