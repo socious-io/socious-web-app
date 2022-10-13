@@ -23,6 +23,12 @@
   }
 }
 
+@layer components {
+  [type="radio"]:checked {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='darkblue' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='4'/%3e%3c/svg%3e");
+  }
+}
+
 body {
   font-family: 'Work Sans', sans-serif;
   /* rest css code also here */
