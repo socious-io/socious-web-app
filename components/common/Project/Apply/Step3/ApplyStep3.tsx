@@ -19,13 +19,7 @@ const Congrats: FC = () => {
       </div>
       <div className="flex h-28 w-full items-center justify-center border-t">
         <Button
-          onClick={() => {
-            setProjectContext({
-              ...ProjectContext,
-              isApplyModalOpen: !ProjectContext.isApplyModalOpen,
-            });
-            router.push('/app/projects');
-          }}
+          onClick={() => router.push('/app/projects')}
           className="m-4 flex w-8/12 items-center justify-center"
         >
           Back to projects
