@@ -103,8 +103,6 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
     [handleSetCity, handleSetCountry, selectedCountryCode],
   );
 
-  console.log('SELECTED COUNTRY :--: ', selectedCountryCode);
-
   return (
     <form
       onSubmit={handleSubmit(() => onSubmit(selectedCountryCode?.code))}
