@@ -23,7 +23,7 @@ const ProjectsCard: FC<ProjectsCardProps> = ({
       <ul className="list-none space-y-4">
         {isOrganization ? (
           <>
-            <Link href={`/app/projects/created/${username}`} passHref>
+            <Link href={`/app/projects/created`} passHref>
               <li className="flex cursor-pointer items-center space-x-4">
                 <UserCircleIcon className="h-4" />
                 <p>Created</p>
