@@ -16,6 +16,7 @@ import {
 
 //interfaces
 import {IdentityType} from '@models/identity';
+import {useFormattedLocation} from 'services/formatLocation';
 interface Props {
   address?: string;
   country?: string;
@@ -27,6 +28,7 @@ interface Props {
   status: IdentityType;
 }
 
+// TODO: not sure it makes sense for this component to be shared
 const Contact: React.FC<Props> = ({
   address,
   country,
@@ -37,6 +39,8 @@ const Contact: React.FC<Props> = ({
   website,
   status,
 }) => {
+  const location = useFormattedLocation({country, city});
+
   return (
     <div className="border-t  border-grayLineBased px-4">
       <Title>Contact</Title>
@@ -83,13 +87,12 @@ const Contact: React.FC<Props> = ({
           </div>
         </>
       ) : (
-        <div className="mb-4 flex">
-          <MapPinIcon className="h-6 w-6 stroke-1.5 text-secondary" />
-          <p className="w-3/6 pl-4 text-sm text-black">
-            {city && city + ' ,'} {country}{' '}
-            {!city && !country && <p className="text-graySubtitle">Location</p>}
-          </p>
-        </div>
+        location && (
+          <div className="mb-4 flex">
+            <MapPinIcon className="h-6 w-6 stroke-1.5 text-secondary" />
+            <p className="w-3/6 pl-4 text-sm text-black">{location}</p>
+          </div>
+        )
       )}
     </div>
   );

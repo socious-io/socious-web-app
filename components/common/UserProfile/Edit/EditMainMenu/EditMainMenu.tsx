@@ -42,6 +42,7 @@ const EditMainMenu = ({
   const [countryName, setCountryName] = useState<any>('');
 
   const bio = watch('bio');
+  const mission = watch('mission');
   const skills = watch('skills');
   const passions = watch('passions');
   const countryCode = watch('country');
@@ -286,6 +287,19 @@ const EditMainMenu = ({
                   <p className="text-sm text-graySubtitle">
                     {bio?.length ?? 0} / 160
                   </p>
+                </div>
+                <div>
+                  <TextArea
+                    label="Mission"
+                    placeholder="Tell us about your mission"
+                    register={register('mission')}
+                    errorMessage={formState?.errors?.['mission']?.message}
+                    className="my-2 border-2 border-grayLineBased"
+                    rows={5}
+                  />
+                  {/* <p className="text-sm text-graySubtitle">
+                    {mission?.length ?? 0} / 160
+                  </p> */}
                 </div>
               </div>
 
