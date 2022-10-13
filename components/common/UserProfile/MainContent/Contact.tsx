@@ -58,7 +58,7 @@ const Contact: React.FC<Props> = ({
             </p>
           </div>
           <div className="mb-4 flex">
-            <AtSymbolIcon className="h-6 w-6 stroke-1.5 text-secondary " />
+            <PhoneIcon className="h-6 w-6 stroke-1.5 text-secondary " />
             <p className="w-3/6 pl-4 text-sm text-black">
               {mobile_country_code && phone ? (
                 mobile_country_code + phone
@@ -68,7 +68,7 @@ const Contact: React.FC<Props> = ({
             </p>
           </div>
           <div className="mb-4 flex">
-            <PhoneIcon className="h-6 w-6 stroke-1.5 text-secondary" />
+            <AtSymbolIcon className="h-6 w-6 stroke-1.5 text-secondary" />
             <p className="w-3/6 pl-4 text-sm text-black">
               {email ? email : <p className="text-graySubtitle">Email</p>}
             </p>
