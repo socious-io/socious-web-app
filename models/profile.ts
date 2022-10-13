@@ -91,6 +91,7 @@ export interface UpdateProfileBodyType {
   username: string;
   email?: string;
   bio: string;
+  mission?: string;
   social_causes: string[];
   skills: string[];
   country: string;

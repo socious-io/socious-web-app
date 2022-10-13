@@ -16,7 +16,7 @@ const Description: React.FC<Props> = ({title, paragraph}) => {
   return (
     <div className="border-t border-grayLineBased px-4 ">
       <Title>{title}</Title>
-      <p className="mb-4 w-4/6 whitespace-pre-line break-all text-base text-graySubtitle ">
+      <p className="mb-4 w-4/6 whitespace-pre-line text-base text-graySubtitle ">
         {paragraph ? paragraph : 'No information'}
       </p>
     </div>
