@@ -62,3 +62,10 @@ export const defaultProject = {
   causes_tags: [],
   skills: [],
 } as unknown as Project;
+
+export interface IProjectsResponse {
+  items: Project[];
+  limit: number;
+  page: number;
+  total_count: number;
+}
