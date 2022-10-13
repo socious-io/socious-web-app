@@ -24,6 +24,7 @@ export interface Project {
   status: string;
   created_at: string;
   expires_at?: string;
+  applied: boolean;
 }
 
 export interface CreateProjectType {
