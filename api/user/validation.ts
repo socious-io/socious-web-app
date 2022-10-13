@@ -78,4 +78,9 @@ export const schemaProfileUpdate = Joi.object({
     'string.base': `Please enter a bio.`,
     'string.empty': `Please enter a bio.`,
   }),
+  mission: Joi.string().trim().label('Mission').messages({
+    'any.required': `Please tell us about your mission.`,
+    'string.base': `Please tell us about your mission.`,
+    'string.empty': `Please tell us about your mission.`,
+  }),
 });

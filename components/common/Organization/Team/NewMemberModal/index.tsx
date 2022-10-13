@@ -27,8 +27,8 @@ import {get} from 'utils/request';
 import {Avatar} from '@components/common';
 import useSWR from 'swr';
 import {UserProfile} from '@models/profile';
-import {getAllInfoByISO} from 'iso-country-currency';
 import Link from 'next/link';
+import {useFormattedLocation} from 'services/formatLocation';
 
 interface IFollowerItemProps extends PropsWithChildren {
   follower: IOrganizationFollowerType;
@@ -37,13 +37,7 @@ const FollowerItem: FC<IFollowerItemProps> = ({follower, children}) => {
   const {data} = useSWR<UserProfile>(
     `/user/${follower.identity_meta.id}/profile`,
   );
-  const location = useMemo(() => {
-    if (!data) return '';
-    const countryInfo = data.country ? getAllInfoByISO(data.country) : null;
-    if (data.city && countryInfo)
-      return `${data.city}, ${countryInfo.countryName}`;
-    return countryInfo?.countryName || '';
-  }, [data]);
+  const location = useFormattedLocation(data);
 
   return (
     <div className="flex items-center  border-b py-2 px-4">

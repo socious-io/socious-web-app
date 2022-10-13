@@ -106,6 +106,7 @@ const EditProfileModal = ({
       userName: user?.username ?? '',
       email: user?.email,
       bio: user?.bio,
+      mission: user?.mission,
       passions: user?.social_causes ?? [],
       skills: user?.skills ?? [],
       country: user?.country,
@@ -141,6 +142,7 @@ const EditProfileModal = ({
     const username: string = formMethods.getValues('userName');
     // const email: string = formMethods.getValues('email');
     const bio: string = formMethods.getValues('bio').trim();
+    const mission: string = formMethods.getValues('mission').trim();
     const social_causes: string[] = formMethods.getValues('passions');
     const skills: string[] = formMethods.getValues('skills');
     const country: string = formMethods.getValues('country');
@@ -167,6 +169,7 @@ const EditProfileModal = ({
     if (phone) updateProfileBody.phone = phone;
     if (avatarId) updateProfileBody.avatar = avatarId;
     if (coverId) updateProfileBody.cover_image = coverId;
+    if (mission) updateProfileBody.mission = mission;
 
     //Making a API call
     try {
@@ -191,7 +194,7 @@ const EditProfileModal = ({
         editState !== 'MAIN' && 'h-screen',
       )}
     >
-      <div className="relative sticky top-0">
+      <div className="sticky top-0">
         <Modal.Title>
           <h3 className="font-worksans border-b-2 pt-6 pb-2 text-center text-xl font-semibold">
             {editState === 'MAIN' && 'Edit profile'}

@@ -44,7 +44,11 @@ const ProjectItem: React.FC<Props> = ({
             height="100%"
           />
         </div>
-        <p className="text-sm">{`${applicants} applicants, ${hired} hired`}</p>
+        <p className="text-sm">
+          {applicants === 0
+            ? 'No applicants'
+            : `${applicants} applicants, ${hired} hired`}
+        </p>
       </div>
       <label className="text-sm text-graySubtitle">{dateRange}</label>
     </div>

@@ -5,6 +5,7 @@ export interface Project {
   id: string;
   title: string;
   description: string;
+  applicants: number;
   country: string;
   project_type: string;
   project_length: string;
@@ -25,6 +26,7 @@ export interface Project {
   created_at: string;
   expires_at?: string;
   applied: boolean;
+  updated_at: string;
 }
 
 export interface CreateProjectType {
@@ -61,3 +63,10 @@ export const defaultProject = {
   causes_tags: [],
   skills: [],
 } as unknown as Project;
+
+export interface IProjectsResponse {
+  items: Project[];
+  limit: number;
+  page: number;
+  total_count: number;
+}

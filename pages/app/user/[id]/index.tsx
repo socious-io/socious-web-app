@@ -31,7 +31,6 @@ const UserProfile: NextPage = () => {
   const {user} = useUser();
 
   // Loading The Map
-  //Loading Map
   const {isLoaded, loadError} = useGoogleMapsScript({
     googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
     libraries,
