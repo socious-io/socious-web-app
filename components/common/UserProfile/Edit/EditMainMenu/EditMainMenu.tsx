@@ -347,7 +347,7 @@ const EditMainMenu = ({
                   onChange={(e) => setCountryValue(e.currentTarget.value || '')}
                   required
                   name="country"
-                  items={filterCountries}
+                  items={filterCountries ?? []}
                   placeholder="Country"
                   errorMessage={formState?.errors?.['country']?.message}
                   className="my-6"
@@ -359,7 +359,7 @@ const EditMainMenu = ({
                   onChange={(e) => setCitiesValue(e.currentTarget.value || '')}
                   required
                   name="city"
-                  items={filterCities}
+                  items={filterCities ?? []}
                   placeholder="City"
                   errorMessage={formState?.errors?.['city']?.message}
                   className="my-6"
