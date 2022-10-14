@@ -7,7 +7,7 @@ import {useRouter} from 'next/router';
 import {GridLoader} from 'react-spinners';
 import useSWR from 'swr';
 import {get} from 'utils/request';
-const Applicant = () => {
+const Applicants = () => {
   const router = useRouter();
   const {projectId} = router.query;
   const {data: applicantsData, error: applicantsError} =
@@ -41,10 +41,10 @@ const Applicant = () => {
 
   return (
     <GeneralLayout hasNavbar>
-      <SideBar selectBar={'APPLICANT'} />
+      <SideBar selectBar={'APPLICANT'} projectId={projectId as string} />
       <ApplicantsContent applicant={applicantsData?.items?.[0]} />
     </GeneralLayout>
   );
 };
 
-export default Applicant;
+export default Applicants;
