@@ -7,3 +7,7 @@ export function offerApplicant(
 ) {
   return post(`/applicants/${applicantId}/offer`, offerBody);
 }
+
+export function rejectApplicant(applicantId: string) {
+  return post(`/applicants/${applicantId}/reject`, {});
+}

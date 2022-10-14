@@ -10,7 +10,7 @@ import ConfirmApplicantActionModal from './ConfirmApplicantActionModal/ConfirmAp
 import HireApplicantModal from './HireApplicantModal/HireApplicantModal';
 
 // Services/Utils
-import {offerApplicant} from '@api/applicants/actions';
+import {offerApplicant, rejectApplicant} from '@api/applicants/actions';
 import {useToggle} from '@hooks';
 import {get} from 'utils/request';
 
@@ -47,8 +47,10 @@ function MyApplicationBoxes({
 }: MyApplicationBoxesProps) {
   const {state: showOfferForm, handlers: showOfferFormHandlers} = useToggle();
   const {state: confirmOffer, handlers: confirmOfferHandlers} = useToggle();
+  const {state: confirmReject, handlers: confirmRejectHandlers} = useToggle();
   // const Success = () => toast('Wow so easy!');
 
+  console.log('Applicant :---: ', applicant);
   const offerApplicantFormData = useForm({
     resolver: joiResolver(schemaOfferApplicant),
   });
@@ -74,7 +76,7 @@ function MyApplicationBoxes({
     const assignment_total =
       offerApplicantFormData.getValues('assignment_total');
 
-    const requestBody: Omit<TOfferApplicant, 'offer_rate'> = {
+    const offerBody: Omit<TOfferApplicant, 'offer_rate'> = {
       // payment_scheme,
       // payment_type,
       due_date,
@@ -82,7 +84,7 @@ function MyApplicationBoxes({
       assignment_total,
     };
 
-    offerApplicant(applicant.id, requestBody)
+    offerApplicant(applicant.id, offerBody)
       .then((response: any) => {
         confirmOfferHandlers.off();
         toast.success('&#10003; Offer was sent just now', {
@@ -105,6 +107,16 @@ function MyApplicationBoxes({
     offerApplicantFormData,
   ]);
 
+  const rejectConfirm = useCallback(() => {
+    rejectApplicant(applicant.id)
+      .then((response) => {
+        console.log('response');
+        confirmRejectHandlers.off();
+        mutateApplicant();
+      })
+      .catch((error) => console.log('ERROR: ', error));
+  }, [applicant, confirmRejectHandlers, mutateApplicant]);
+
   return (
     <div className="w-full pb-4 ">
       <div className="w-full pb-4 ">
@@ -117,6 +129,7 @@ function MyApplicationBoxes({
           username={applicant?.user?.username}
           status={applicant?.status}
           showOfferForm={() => showOfferFormHandlers.on()}
+          rejectApplicant={() => confirmRejectHandlers.on()}
         />
         <div className=" divide-y rounded-2xl border border-grayLineBased bg-white ">
           <div className=" divide-y p-4 ">
@@ -169,6 +182,15 @@ function MyApplicationBoxes({
         continueText="Send offer"
         nextStep={offerConfirm}
         cancel={() => confirmOfferHandlers.off()}
+      />
+      {/* Reject */}
+      <ConfirmApplicantActionModal
+        state={confirmReject}
+        title="Reject applicant"
+        description={`Are you sure you want to reject ${applicant?.user?.name} for this project?`}
+        continueText="Reject"
+        nextStep={rejectConfirm}
+        cancel={() => confirmRejectHandlers.off()}
       />
     </div>
   );

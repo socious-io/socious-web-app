@@ -1,5 +1,6 @@
 import Button from '@components/common/Button/Button';
 import Modal from '@components/common/Modal/Modal';
+import {twMerge} from 'tailwind-merge';
 
 // Types
 type ConfirmApplicantActionModalProps = {
@@ -34,7 +35,10 @@ const ConfirmApplicantActionModal = ({
         <Modal.Description>{description}</Modal.Description>
         <div className="space-y-2 pb-4 pt-10">
           <Button
-            className="mx-auto flex w-full items-center justify-center align-middle"
+            className={twMerge(
+              'mx-auto flex w-full items-center justify-center align-middle',
+              continueText === 'Reject' && 'bg-error hover:bg-red-500',
+            )}
             type="submit"
             variant="fill"
             value="Submit"

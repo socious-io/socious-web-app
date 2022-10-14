@@ -48,8 +48,8 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
 
   const flattenApplicantsObj: {
     PENDING: TApplicant[];
-    DECLINED: TApplicant[];
-    SAVED: TApplicant[];
+    REJECTED: TApplicant[];
+    OFFERED: TApplicant[];
   } = useMemo(() => {
     const flattenApplicants = applicantsData?.items ?? [];
 
@@ -63,8 +63,8 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
       },
       {
         PENDING: [],
-        DECLINED: [],
-        SAVED: [],
+        REJECTED: [],
+        OFFERED: [],
       },
     );
   }, [applicantsData]);
@@ -105,13 +105,13 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
 
         <HeaderBox
           isRound={false}
-          title={`saved (${flattenApplicantsObj?.['SAVED']?.length})`}
+          title={`saved (${flattenApplicantsObj?.['OFFERED']?.length})`}
           isExpand={showSaved}
           expandToggle={showSavedHandler.toggle}
           isExpandable={true}
         />
         {showSaved &&
-          flattenApplicantsObj?.['SAVED'].map((applicant) => (
+          flattenApplicantsObj?.['OFFERED'].map((applicant) => (
             <Link
               key={applicant.id}
               href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
@@ -132,13 +132,13 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
           ))}
         <HeaderBox
           isRound={false}
-          title={`saved (${flattenApplicantsObj?.['DECLINED']?.length})`}
+          title={`saved (${flattenApplicantsObj?.['REJECTED']?.length})`}
           isExpand={showDeclined}
           expandToggle={showDeclinedHandler.toggle}
           isExpandable={true}
         />
         {showDeclined &&
-          flattenApplicantsObj?.['DECLINED'].map((applicant) => (
+          flattenApplicantsObj?.['REJECTED'].map((applicant) => (
             <Link
               key={applicant.id}
               href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}

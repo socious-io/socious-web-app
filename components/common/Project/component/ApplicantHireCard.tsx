@@ -1,5 +1,6 @@
 import {Avatar} from '@components/common';
 import {Button} from '@components/common';
+import {reject} from 'lodash';
 import Image from 'next/image';
 import Link from 'next/link';
 import Router from 'next/router';
@@ -18,6 +19,7 @@ type ApplicantHireCardProps = {
   applicantId: string;
   avatar?: string;
   showOfferForm: () => void;
+  rejectApplicant: () => void;
 };
 function ApplicantHiredCard({
   name,
@@ -28,6 +30,7 @@ function ApplicantHiredCard({
   applicantId,
   avatar,
   showOfferForm,
+  rejectApplicant,
 }: ApplicantHireCardProps) {
   return (
     <div className="my-4 space-y-6 rounded-2xl border border-grayLineBased bg-white p-4">
@@ -49,24 +52,26 @@ function ApplicantHiredCard({
       </div>
 
       <div className="mt-4 flex justify-between space-x-2">
-        <Button
-          className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
-          type="submit"
-          size="lg"
-          variant="outline"
-          value="Submit"
-          onClick={() => status === 'PENDING' && showOfferForm()}
-        >
-          <div className="relative mx-2 h-5 w-5 ">
-            <Image
-              src={endhireSrc}
-              className="fill-warning"
-              alt="dislike"
-              layout="fill" // required
-            />
-          </div>
-          {status === 'PENDING' ? 'Hire' : 'End hire'}
-        </Button>
+        {status !== 'REJECTED' && (
+          <Button
+            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+            type="submit"
+            size="lg"
+            variant="outline"
+            value="Submit"
+            onClick={() => status === 'PENDING' && showOfferForm()}
+          >
+            <div className="relative mx-2 h-5 w-5 ">
+              <Image
+                src={endhireSrc}
+                className="fill-warning"
+                alt="dislike"
+                layout="fill" // required
+              />
+            </div>
+            {status === 'PENDING' ? 'Hire' : 'End hire'}
+          </Button>
+        )}
         {status === 'PENDING' && (
           <Button
             className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
@@ -74,6 +79,7 @@ function ApplicantHiredCard({
             size="lg"
             variant="outline"
             value="Submit"
+            onClick={rejectApplicant}
           >
             <div className="relative mx-2 h-5 w-5 ">
               <a>
