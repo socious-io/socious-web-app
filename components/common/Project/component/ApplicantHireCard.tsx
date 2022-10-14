@@ -17,6 +17,7 @@ type ApplicantHireCardProps = {
   userId: string;
   applicantId: string;
   avatar?: string;
+  showOfferForm: () => void;
 };
 function ApplicantHiredCard({
   name,
@@ -26,6 +27,7 @@ function ApplicantHiredCard({
   userId,
   applicantId,
   avatar,
+  showOfferForm,
 }: ApplicantHireCardProps) {
   return (
     <div className="my-4 space-y-6 rounded-2xl border border-grayLineBased bg-white p-4">
@@ -53,6 +55,7 @@ function ApplicantHiredCard({
           size="lg"
           variant="outline"
           value="Submit"
+          onClick={() => status === 'PENDING' && showOfferForm()}
         >
           <div className="relative mx-2 h-5 w-5 ">
             <Image
