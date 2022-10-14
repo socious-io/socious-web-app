@@ -21,7 +21,7 @@ const Applicants = () => {
     error: applicantsError,
     mutate: mutateApplicant,
   } = useSWR<TApplicantsResponse>(
-    projectId ? `/projects/${projectId}/applicants?limit=1` : null,
+    projectId ? `/projects/${projectId}/applicants` : null,
     get,
   );
 
@@ -53,7 +53,10 @@ const Applicants = () => {
       <GeneralLayout hasNavbar>
         <SideBar selectBar={'APPLICANT'} projectId={projectId as string} />
         <ApplicantsContent
-          applicant={applicantsData?.items?.[0]}
+          applicant={
+            applicantsData?.items?.find((x) => x.status === 'PENDING') ??
+            applicantsData?.items?.[0]
+          }
           mutateApplicant={() => mutateApplicant()}
         />
       </GeneralLayout>

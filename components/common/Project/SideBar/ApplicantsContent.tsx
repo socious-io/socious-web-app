@@ -38,7 +38,6 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
   const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
   const {state: showSaved, handlers: showSavedHandler} = useToggle();
   const {state: showDeclined, handlers: showDeclinedHandler} = useToggle();
-  const {user} = useUser();
 
   const {data: applicantsData, error: applicantsError} =
     useSWR<TApplicantsResponse>(
@@ -68,8 +67,6 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
       },
     );
   }, [applicantsData]);
-
-  console.log('FLATTEN applicants', flattenApplicantsObj);
 
   return (
     <div className="py-4">
@@ -132,7 +129,7 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
           ))}
         <HeaderBox
           isRound={false}
-          title={`saved (${flattenApplicantsObj?.['REJECTED']?.length})`}
+          title={`Declined (${flattenApplicantsObj?.['REJECTED']?.length})`}
           isExpand={showDeclined}
           expandToggle={showDeclinedHandler.toggle}
           isExpandable={true}

@@ -24,14 +24,15 @@ const SideBar = ({selectBar, projectId}: Props) => {
             <p className=" font-semibold ">Projects</p>
           </span>
         </div>
-
-        <div className="cursor-pointer space-y-4 overflow-y-auto bg-gray-50">
-          <ProjectCard
-            isOrganization={currentIdentity?.type === 'organizations'}
-            username={user?.username}
-          />{' '}
-        </div>
-
+        {projectId && (
+          <div className="cursor-pointer space-y-4 overflow-y-auto bg-gray-50">
+            <ProjectCard
+              isOrganization={currentIdentity?.type === 'organizations'}
+              username={user?.username}
+              projectId={projectId}
+            />
+          </div>
+        )}
         {selectBar == 'APPLICANT' && projectId && (
           <ApplicantsContent projectId={projectId} />
         )}
