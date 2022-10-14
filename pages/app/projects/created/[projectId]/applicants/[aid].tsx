@@ -16,10 +16,11 @@ import {TApplicant} from '@models/applicant';
 const Applicant = () => {
   const router = useRouter();
   const {projectId, aid} = router.query;
-  const {data: applicantData, error: applicantError} = useSWR<TApplicant>(
-    projectId && aid ? `/applicants/${aid}` : null,
-    get,
-  );
+  const {
+    data: applicantData,
+    error: applicantError,
+    mutate: mutateApplicant,
+  } = useSWR<TApplicant>(projectId && aid ? `/applicants/${aid}` : null, get);
 
   if (!applicantData && !applicantError)
     return (
@@ -48,8 +49,11 @@ const Applicant = () => {
 
   return (
     <GeneralLayout hasNavbar>
-      <SideBar selectBar={'APPLICANT'} projectId={projectId} />
-      <ApplicantsContent applicant={applicantData} />
+      <SideBar selectBar={'APPLICANT'} projectId={projectId as string} />
+      <ApplicantsContent
+        applicant={applicantData}
+        mutateApplicant={mutateApplicant}
+      />
     </GeneralLayout>
   );
 };
