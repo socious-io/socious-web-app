@@ -26,11 +26,12 @@ export const SearchTypeOptions: FC<FilterOptionListProps> = (props) => {
   return <FilterOptionList {...props} items={options} />;
 };
 
-interface SearchTypeOptionsProps {
+interface SearchTypeDropdownProps {
+  seletedType?: string;
   onChange?: (type: string) => void;
 }
 
-export const SearchTypesDropdown: FC<SearchTypesDropdownProps> = ({
+export const SearchTypesDropdown: FC<SearchTypeDropdownProps> = ({
   seletedType,
   onChange,
 }) => {
