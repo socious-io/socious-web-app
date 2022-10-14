@@ -7,8 +7,9 @@ import ProjectCard from './ProjectCard';
 
 interface Props {
   selectBar: string;
+  projectId?: string;
 }
-const SideBar = ({selectBar}: Props) => {
+const SideBar = ({selectBar, projectId}: Props) => {
   const {user, currentIdentity} = useUser();
 
   return (
@@ -31,7 +32,9 @@ const SideBar = ({selectBar}: Props) => {
           />{' '}
         </div>
 
-        {selectBar == 'APPLICANT' && <ApplicantsContent />}
+        {selectBar == 'APPLICANT' && projectId && (
+          <ApplicantsContent projectId={projectId} />
+        )}
         {selectBar == 'HIRE' && <HiredContent />}
       </div>
     </div>

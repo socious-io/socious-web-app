@@ -4,6 +4,12 @@ import TextBoxGray from '@components/common/TextBoxGray/TextBoxGray';
 import TitleViewBoxWithCard from '@components/common/TitleViewBoxWithAvatar/TitleViewBoxWithAvatar';
 import TwoCloumnTwoRowBox from '@components/common/TwoColumnTwoRow/TwoColumnTwoRow';
 import {useToggle, useUser} from '@hooks';
+import {TApplicant, TApplicantsResponse} from '@models/applicant';
+import dayjs from 'dayjs';
+import Link from 'next/link';
+import {useMemo} from 'react';
+import useSWR from 'swr';
+import {get} from 'utils/request';
 
 import HeaderBox from '../component/HeaderBox';
 
@@ -23,52 +29,135 @@ var data2 = [
     projectId: '1',
   },
 ];
-function ApplicantsContent() {
+
+type ApplicantsContentProps = {
+  projectId: string;
+};
+
+function ApplicantsContent({projectId}: ApplicantsContentProps) {
   const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
-  const {state: showDrafts, handlers: showDraftsHandler} = useToggle();
+  const {state: showSaved, handlers: showSavedHandler} = useToggle();
+  const {state: showDeclined, handlers: showDeclinedHandler} = useToggle();
   const {user} = useUser();
 
+  const {data: applicantsData, error: applicantsError} =
+    useSWR<TApplicantsResponse>(
+      projectId ? `/projects/${projectId}/applicants` : null,
+      get,
+    );
+
+  const flattenApplicantsObj: {
+    PENDING: TApplicant[];
+    DECLINED: TApplicant[];
+    SAVED: TApplicant[];
+  } = useMemo(() => {
+    const flattenApplicants = applicantsData?.items ?? [];
+
+    return flattenApplicants?.reduce(
+      (obj, currentValue) => {
+        if (!obj[currentValue['status'] ?? 'ERROR']) {
+          obj[currentValue['status'] ?? 'ERROR'] = [];
+        }
+        obj[currentValue['status'] ?? 'ERROR'].push(currentValue);
+        return obj;
+      },
+      {
+        PENDING: [],
+        DECLINED: [],
+        SAVED: [],
+      },
+    );
+  }, [applicantsData]);
+
+  console.log('FLATTEN applicants', flattenApplicantsObj);
+
   return (
-    <div className="w-full bg-white py-4">
-      <div className=" rounded-2xl border border-grayLineBased ">
+    <div className="py-4">
+      <div className="my-4 rounded-2xl border border-grayLineBased bg-white ">
         <HeaderBox
-          title={'to review'}
+          title={`to review (${flattenApplicantsObj?.['PENDING']?.length})`}
           isExpand={showOnGoing}
           expandToggle={showOnGoingHandler.toggle}
           isExpandable={true}
-          isRound={false}
+          isRound={true}
         />
-        {data.map((item) => (
-          <CardBoxComplete
-            key={item.id}
-            bodyTitle={'Apply date'}
-            description={
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
-            }
-            bodyTitleColor={'text-graySubtitle'}
-          />
-        ))}
+        {showOnGoing &&
+          flattenApplicantsObj?.['PENDING'].map((applicant) => (
+            <Link
+              key={applicant.id}
+              href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
+            >
+              <a>
+                <CardBoxComplete
+                  name={applicant?.user?.name}
+                  username={applicant?.user?.username ?? ''}
+                  applicationDate={dayjs(applicant?.created_at)?.format(
+                    'MMM d',
+                  )}
+                  key={applicant.id}
+                  message={
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+                  }
+                />
+              </a>
+            </Link>
+          ))}
 
-        <div className="w-full rounded-2xl border border-grayLineBased bg-white ">
-          <HeaderBox
-            isRound={false}
-            title={'saved'}
-            isExpand={showOnGoing}
-            expandToggle={showOnGoingHandler.toggle}
-            isExpandable={true}
-          />
-          {showOnGoing &&
-            data2.map((item) => (
-              <CardBoxComplete
-                key={item.id}
-                bodyTitle={'Apply date'}
-                description={
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
-                }
-                bodyTitleColor={'text-graySubtitle'}
-              />
-            ))}
-        </div>
+        <HeaderBox
+          isRound={false}
+          title={`saved (${flattenApplicantsObj?.['SAVED']?.length})`}
+          isExpand={showSaved}
+          expandToggle={showSavedHandler.toggle}
+          isExpandable={true}
+        />
+        {showSaved &&
+          flattenApplicantsObj?.['SAVED'].map((applicant) => (
+            <Link
+              key={applicant.id}
+              href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
+            >
+              <a>
+                <CardBoxComplete
+                  name={applicant?.user?.name}
+                  username={applicant?.user?.username ?? ''}
+                  applicationDate={dayjs(applicant?.created_at)?.format(
+                    'MMM d',
+                  )}
+                  message={
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+                  }
+                />
+              </a>
+            </Link>
+          ))}
+        <HeaderBox
+          isRound={false}
+          title={`saved (${flattenApplicantsObj?.['DECLINED']?.length})`}
+          isExpand={showDeclined}
+          expandToggle={showDeclinedHandler.toggle}
+          isExpandable={true}
+        />
+        {showDeclined &&
+          flattenApplicantsObj?.['DECLINED'].map((applicant) => (
+            <Link
+              key={applicant.id}
+              href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
+            >
+              <a>
+                <CardBoxComplete
+                  name={applicant?.user?.name}
+                  username={applicant?.user?.username ?? ''}
+                  applicationDate={dayjs(applicant?.created_at)?.format(
+                    'MMM d',
+                  )}
+                  key={applicant.id}
+                  message={
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+                  }
+                />
+              </a>
+            </Link>
+          ))}
       </div>
     </div>
   );
