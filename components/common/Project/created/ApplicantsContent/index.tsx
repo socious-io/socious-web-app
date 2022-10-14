@@ -69,8 +69,6 @@ function MyApplicationBoxes({
     [confirmOfferHandlers, showOfferFormHandlers],
   );
   const offerConfirm = useCallback(async () => {
-    // const payment_type = offerApplicantFormData.getValues('payment_type');
-    // const payment_scheme = offerApplicantFormData.getValues('payment_scheme');
     const due_date = offerApplicantFormData.getValues('due_date');
     const offer_message = offerApplicantFormData.getValues('offer_message');
     const assignment_total =
@@ -159,8 +157,24 @@ function MyApplicationBoxes({
 
             <div>
               <p className=" flex py-4 font-medium text-gray-900">
-                Your contact information (email, phone & address) will be shared
-                with Organization.
+                {applicant?.share_contact_info ? (
+                  <>
+                    <ul>
+                      <li>{applicant.user.email}</li>
+                      {applicantInfo?.phone_number && (
+                        <li>{applicant.user.email}</li>
+                      )}
+                      {applicantInfo?.address && (
+                        <li>
+                          {applicantInfo.address ??
+                            applicantInfo?.city + ', ' + applicantInfo?.country}
+                        </li>
+                      )}
+                    </ul>
+                  </>
+                ) : (
+                  'Contact information is private.'
+                )}
               </p>
             </div>
           </div>
