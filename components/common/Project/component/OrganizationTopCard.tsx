@@ -79,7 +79,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
     if (isStep0) {
       return <ApplyStep1 onSubmit={onSubmit} project={project} />;
     } else if (isStep1) {
-      return <ApplyStep2 onSubmit={onSubmit} title={title} />;
+      return <ApplyStep2 onSubmit={onSubmit} project={project} />;
     } else if (isStep2) {
       return <ApplyStep3 />;
     } else if (isStep3) {
