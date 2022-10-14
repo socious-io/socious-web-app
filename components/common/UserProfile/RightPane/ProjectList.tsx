@@ -21,11 +21,7 @@ const ProjectList: React.FC<Props> = ({list}) => {
             title={project.title}
             applicants={project.applicants}
             hired={2}
-            dateRange={`${dayjs(project?.created_at)?.format('MMM d')} ${
-              project?.expires_at
-                ? `- ${dayjs(project?.expires_at)?.format('MMM d')}`
-                : ''
-            }`}
+            date={dayjs(project?.updated_at)?.format('MMM d')}
           />
         </a>
       </Link>
