@@ -71,21 +71,29 @@ function MyApplicationBoxes({
   const offerConfirm = useCallback(async () => {
     const due_date = offerApplicantFormData.getValues('due_date');
     const offer_message = offerApplicantFormData.getValues('offer_message');
+    const hourly_rate = offerApplicantFormData.getValues('hourly_rate');
+    const weekly_limit = offerApplicantFormData.getValues('weekly_limit');
+    const total_hours = offerApplicantFormData.getValues('total_hours');
+    const weekly_commitment =
+      offerApplicantFormData.getValues('weekly_commitment');
     const assignment_total =
       offerApplicantFormData.getValues('assignment_total');
 
-    const offerBody: Omit<TOfferApplicant, 'offer_rate'> = {
-      // payment_scheme,
-      // payment_type,
-      due_date,
+    const offerBody: any = {
       offer_message,
-      assignment_total,
     };
+    if (due_date) offerBody.due_date = due_date;
+    if (hourly_rate) offerBody.offer_rate = hourly_rate;
+    if (weekly_limit) offerBody.weekly_limit = weekly_limit;
+    if (total_hours) offerBody.total_hours = total_hours;
+    if (weekly_commitment) offerBody.weekly_commitment = weekly_commitment;
+    if (assignment_total) offerBody.assignment_total = assignment_total;
 
     offerApplicant(applicant.id, offerBody)
       .then((response: any) => {
+        console.log('OFFER RESPONSE :---: ', response);
         confirmOfferHandlers.off();
-        toast.success('&#10003; Offer was sent just now', {
+        toast.success('Offer was sent just now.', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,

@@ -68,6 +68,8 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
     );
   }, [applicantsData]);
 
+  console.log('FLATTEN PROJECT :---:', flattenApplicantsObj);
+
   return (
     <div className="py-4">
       <div className="my-4 rounded-2xl border border-grayLineBased bg-white ">

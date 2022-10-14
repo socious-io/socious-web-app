@@ -138,7 +138,7 @@ const HireApplicantModal = ({
                   <>
                     <InputFiled
                       label="Weekly limit"
-                      type="text"
+                      type="number"
                       placeholder="hrs / week"
                       register={register('weekly_limit')}
                       errorMessage={
@@ -149,7 +149,7 @@ const HireApplicantModal = ({
                     />
                     <InputFiled
                       label="Hourly rate"
-                      type="text"
+                      type="number"
                       placeholder="$ /hr"
                       register={register('hourly_rate')}
                       errorMessage={formState?.errors?.['hourly_rate']?.message}

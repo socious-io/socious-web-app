@@ -58,30 +58,30 @@ export const schemaOfferApplicant = Joi.object({
       otherwise: Joi.allow(null, 0, ''),
     },
   ]),
-  weekly_limit: Joi.string().when('payment_schema', [
+  weekly_limit: Joi.number().when('payment_schema', [
     {
       is: 'HOURLY',
-      then: Joi.string().when('payment_type', {
+      then: Joi.number().when('payment_type', {
         is: 'PAID',
-        then: Joi.string().required().messages({
+        then: Joi.number().required().messages({
           'any.required': `Weekly limit is required.`,
-          'string.base': `Weekly limit is required.`,
-          'string.empty': `Weekly limit is required.`,
+          'number.base': `Weekly limit should be number.`,
+          'number.empty': `Weekly limit is required.`,
         }),
         otherwise: Joi.allow(null, 0, ''),
       }),
       otherwise: Joi.allow(null, 0, ''),
     },
   ]),
-  hourly_rate: Joi.string().when('payment_schema', [
+  hourly_rate: Joi.number().when('payment_schema', [
     {
       is: 'HOURLY',
-      then: Joi.string().when('payment_type', {
+      then: Joi.number().when('payment_type', {
         is: 'PAID',
-        then: Joi.string().required().messages({
+        then: Joi.number().required().messages({
           'any.required': `Hourly rate is required.`,
-          'string.base': `Hourly rate is required.`,
-          'string.empty': `Hourly rate is required.`,
+          'number.base': `Hourly rate must be a number.`,
+          'number.empty': `Hourly rate is required.`,
         }),
         otherwise: Joi.allow(null, 0, ''),
       }),
