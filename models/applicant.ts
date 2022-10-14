@@ -33,3 +33,10 @@ export type TApplicant = {
   attachment: string | null;
   user: IdentityMeta;
 };
+
+export type TOfferApplicant = {
+  offer_rate: string;
+  offer_message: string;
+  assignment_total: number;
+  due_date: Date;
+};
