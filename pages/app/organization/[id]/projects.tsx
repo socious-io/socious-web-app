@@ -67,7 +67,7 @@ const OrganizationProjects: NextPage = () => {
                   title={project.title}
                   applicants={project.applicants}
                   hired={3}
-                  dateRange={dayjs(project?.updated_at)?.format('MMM d')}
+                  date={dayjs(project?.updated_at)?.format('MMM d')}
                   border
                   first={index === 0}
                   last={flattenActiveProjects.length - 1 === index}
