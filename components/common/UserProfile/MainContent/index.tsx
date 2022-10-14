@@ -27,6 +27,7 @@ import {useUser} from '@hooks';
 
 // interfaces
 import {IdentityType} from '@models/identity';
+import {IProjectsResponse} from '@models/project';
 interface Props {
   data: any;
   status: IdentityType;
@@ -49,7 +50,9 @@ const MainContent: React.FC<Props> = ({
     error,
   } = useSWR<any>(`/identities/${data.id}`, get);
 
-  const {data: projects} = useSWR<any>(`/projects?identity=${data.id}&limit=3`);
+  const {data: projects} = useSWR<IProjectsResponse>(
+    `/projects?identity=${data.id}&limit=3`,
+  );
 
   if (!identities && !error) return <p>loading</p>;
   if (
