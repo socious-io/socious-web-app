@@ -30,7 +30,11 @@ const HireApplicantModal = ({
   onSubmit,
   onClose,
 }: HireApplicantModalProps) => {
-  const {handleSubmit, register, formState, control} = useFormContext();
+  const {handleSubmit, register, formState, control, watch} = useFormContext();
+
+  const paymentScheme = watch('payment_schema');
+  const paymentType = watch('payment_type');
+  console.table({paymentScheme, paymentType});
 
   const paymentTypeItemsController = useController<FieldValues, string>({
     control: control,
@@ -39,7 +43,7 @@ const HireApplicantModal = ({
 
   const paymentSchemaController = useController<FieldValues, string>({
     control: control,
-    name: 'payment_scheme',
+    name: 'payment_schema',
   });
 
   const projectPaymentTypeItems = useMemo(() => {
@@ -103,38 +107,84 @@ const HireApplicantModal = ({
                   name="paymentType"
                   items={projectPaymentSchemeTypeItems ?? []}
                   placeholder="Payment mode"
-                  errorMessage={formState?.errors?.['payment_scheme']?.message}
+                  errorMessage={formState?.errors?.['payment_schema']?.message}
                   className="my-6"
                 />
-                <InputFiled
-                  label="Due date"
-                  type="date"
-                  placeholder="DD/MM/YYYY"
-                  register={register('due_date')}
-                  errorMessage={formState?.errors?.['due_date']?.message}
-                  className="my-2"
-                  required
-                />
-                <InputFiled
-                  label="Estimated total hours"
-                  type="number"
-                  placeholder="hrs"
-                  register={register('total_hours')}
-                  errorMessage={formState?.errors?.['total_hours']?.message}
-                  className="my-2"
-                  required
-                />
-                <InputFiled
-                  label="Assignment Total"
-                  type="text"
-                  placeholder="$"
-                  register={register('assignment_total')}
-                  errorMessage={
-                    formState?.errors?.['assignment_total']?.message
-                  }
-                  required
-                  className="my-2"
-                />
+                {paymentType === 'PAID' && paymentScheme === 'FIXED' && (
+                  <InputFiled
+                    label="Due date"
+                    type="date"
+                    placeholder="DD/MM/YYYY"
+                    register={register('due_date')}
+                    errorMessage={formState?.errors?.['due_date']?.message}
+                    className="my-2"
+                    required
+                  />
+                )}
+                {(paymentScheme === 'FIXED' ||
+                  (!paymentScheme && !paymentType)) && (
+                  <InputFiled
+                    label="Estimated total hours"
+                    type="text"
+                    placeholder="hrs"
+                    register={register('total_hours')}
+                    errorMessage={formState?.errors?.['total_hours']?.message}
+                    className="my-2"
+                    required
+                  />
+                )}
+                {/*  */}
+                {paymentType === 'PAID' && paymentScheme === 'HOURLY' && (
+                  <>
+                    <InputFiled
+                      label="Weekly limit"
+                      type="text"
+                      placeholder="hrs / week"
+                      register={register('weekly_limit')}
+                      errorMessage={
+                        formState?.errors?.['weekly_limit']?.message
+                      }
+                      className="my-2"
+                      required
+                    />
+                    <InputFiled
+                      label="Hourly rate"
+                      type="text"
+                      placeholder="$ /hr"
+                      register={register('hourly_rate')}
+                      errorMessage={formState?.errors?.['hourly_rate']?.message}
+                      className="my-2"
+                      required
+                    />
+                  </>
+                )}
+                {paymentType === 'VOLUNTEER' && paymentScheme === 'HOURLY' && (
+                  <InputFiled
+                    label="Weekly commitment"
+                    type="text"
+                    placeholder="hrs / week"
+                    register={register('weekly_commitment')}
+                    errorMessage={
+                      formState?.errors?.['weekly_commitment']?.message
+                    }
+                    className="my-2"
+                    required
+                  />
+                )}
+                {/*  */}
+                {paymentType === 'PAID' && paymentScheme === 'FIXED' && (
+                  <InputFiled
+                    label="Assignment Total"
+                    type="text"
+                    placeholder="$"
+                    register={register('assignment_total')}
+                    errorMessage={
+                      formState?.errors?.['assignment_total']?.message
+                    }
+                    required
+                    className="my-2"
+                  />
+                )}
                 <p className="text-graySubtitle">
                   Prices will be shown in USD ($)
                 </p>
