@@ -1,5 +1,4 @@
 import {IdentityMeta} from './identity';
-import {TApplicantStatus} from '@socious/data';
 
 export type TApplicantsResponse = {
   items: any[];

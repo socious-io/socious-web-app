@@ -1,15 +1,8 @@
-import Button from '@components/common/Button/Button';
 import CardBoxComplete from '@components/common/CardBoxComplete/CardBoxComplete';
-import TextBoxGray from '@components/common/TextBoxGray/TextBoxGray';
-import TitleViewBoxWithCard from '@components/common/TitleViewBoxWithAvatar/TitleViewBoxWithAvatar';
-import TwoCloumnTwoRowBox from '@components/common/TwoColumnTwoRow/TwoColumnTwoRow';
-import {useToggle, useUser} from '@hooks';
-import {TApplicant, TApplicantsResponse} from '@models/applicant';
+import {useToggle} from '@hooks';
+import {TApplicantsByStatus, TApplicantsResponse} from '@models/applicant';
 import dayjs from 'dayjs';
 import Link from 'next/link';
-import {useMemo} from 'react';
-import useSWR from 'swr';
-import {get} from 'utils/request';
 
 import HeaderBox from '../component/HeaderBox';
 
@@ -31,44 +24,14 @@ var data2 = [
 ];
 
 type ApplicantsContentProps = {
-  projectId: string;
+  // projectId: string;
+  flattenApplicantsObj: TApplicantsByStatus;
 };
 
-function ApplicantsContent({projectId}: ApplicantsContentProps) {
+function ApplicantsContent({flattenApplicantsObj}: ApplicantsContentProps) {
   const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
   const {state: showSaved, handlers: showSavedHandler} = useToggle();
   const {state: showDeclined, handlers: showDeclinedHandler} = useToggle();
-
-  const {data: applicantsData, error: applicantsError} =
-    useSWR<TApplicantsResponse>(
-      projectId ? `/projects/${projectId}/applicants` : null,
-      get,
-    );
-
-  const flattenApplicantsObj: {
-    PENDING: TApplicant[];
-    REJECTED: TApplicant[];
-    OFFERED: TApplicant[];
-  } = useMemo(() => {
-    const flattenApplicants = applicantsData?.items ?? [];
-
-    return flattenApplicants?.reduce(
-      (obj, currentValue) => {
-        if (!obj[currentValue['status'] ?? 'ERROR']) {
-          obj[currentValue['status'] ?? 'ERROR'] = [];
-        }
-        obj[currentValue['status'] ?? 'ERROR'].push(currentValue);
-        return obj;
-      },
-      {
-        PENDING: [],
-        REJECTED: [],
-        OFFERED: [],
-      },
-    );
-  }, [applicantsData]);
-
-  console.log('FLATTEN PROJECT :---:', flattenApplicantsObj);
 
   return (
     <div className="py-4">
@@ -93,9 +56,12 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
                   applicationDate={dayjs(applicant?.created_at)?.format(
                     'MMM d',
                   )}
-                  key={applicant.id}
                   message={
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+                    applicant.offer_message
+                      ? applicant.offer_message.length > 200
+                        ? `${applicant.offer_message?.slice(0, 50)}...}`
+                        : applicant.offer_message
+                      : 'No message'
                   }
                 />
               </a>
@@ -123,7 +89,11 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
                     'MMM d',
                   )}
                   message={
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+                    applicant.offer_message
+                      ? applicant.offer_message.length > 200
+                        ? `${applicant.offer_message?.slice(0, 50)}...}`
+                        : applicant.offer_message
+                      : 'No message'
                   }
                 />
               </a>
@@ -149,9 +119,12 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
                   applicationDate={dayjs(applicant?.created_at)?.format(
                     'MMM d',
                   )}
-                  key={applicant.id}
                   message={
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+                    applicant.offer_message
+                      ? applicant.offer_message.length > 200
+                        ? `${applicant.offer_message?.slice(0, 50)}...}`
+                        : applicant.offer_message
+                      : 'No message'
                   }
                 />
               </a>

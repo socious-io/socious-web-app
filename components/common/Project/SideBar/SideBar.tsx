@@ -1,6 +1,10 @@
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
+import {TApplicantsByStatus, TApplicantsResponse} from '@models/applicant';
 import useUser from 'hooks/useUser/useUser';
 import router from 'next/router';
+import {useMemo} from 'react';
+import useSWR from 'swr';
+import {get} from 'utils/request';
 import ApplicantsContent from './ApplicantsContent';
 import HiredContent from './HireContent';
 import ProjectCard from './ProjectCard';
@@ -11,6 +15,33 @@ interface Props {
 }
 const SideBar = ({selectBar, projectId}: Props) => {
   const {user, currentIdentity} = useUser();
+
+  const {data: applicantsData, error: applicantsError} =
+    useSWR<TApplicantsResponse>(
+      projectId ? `/projects/${projectId}/applicants` : null,
+      get,
+    );
+
+  const flattenApplicantsObj: TApplicantsByStatus = useMemo(() => {
+    const flattenApplicants = applicantsData?.items ?? [];
+
+    return flattenApplicants?.reduce(
+      (obj, currentValue) => {
+        if (!obj[currentValue['status'] ?? 'ERROR']) {
+          obj[currentValue['status'] ?? 'ERROR'] = [];
+        }
+        obj[currentValue['status'] ?? 'ERROR'].push(currentValue);
+        return obj;
+      },
+      {
+        PENDING: [],
+        REJECTED: [],
+        OFFERED: [],
+      },
+    );
+  }, [applicantsData]);
+
+  console.log('FLATTEN PROJECT :---:', flattenApplicantsObj);
 
   return (
     <div className="hidden w-80 md:flex" aria-label="Sidebar">
@@ -33,10 +64,16 @@ const SideBar = ({selectBar, projectId}: Props) => {
             />
           </div>
         )}
-        {selectBar == 'APPLICANT' && projectId && (
-          <ApplicantsContent projectId={projectId} />
+        {selectBar == 'APPLICANT' && (
+          <ApplicantsContent
+            flattenApplicantsObj={flattenApplicantsObj ?? []}
+          />
         )}
-        {selectBar == 'HIRE' && <HiredContent />}
+        {selectBar == 'HIRE' && (
+          <HiredContent
+            hiredApplicants={flattenApplicantsObj?.['HIRED'] ?? []}
+          />
+        )}
       </div>
     </div>
   );
