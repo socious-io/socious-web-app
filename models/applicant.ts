@@ -1,4 +1,5 @@
 import {IdentityMeta} from './identity';
+import {TApplicantStatus} from '@socious/data';
 
 export type TApplicantsResponse = {
   items: any[];
@@ -6,6 +7,14 @@ export type TApplicantsResponse = {
   page: number;
   total_count: number;
 };
+
+export type TApplicantStatus =
+  | 'PENDING'
+  | 'OFFERED'
+  | 'REJECTED'
+  | 'WITHRAWN'
+  | 'APPROVED'
+  | 'HIRED';
 
 export type TApplicant = {
   id: string;
@@ -21,8 +30,7 @@ export type TApplicant = {
   assignment_total: number;
   due_date: string | null;
   feedback: string | null;
-  // status: 'PENDING';
-  status: string;
+  status: TApplicantStatus;
   payment_type: string | null;
   old_id: string | null;
   weekly_limit: string | null;
@@ -40,3 +48,8 @@ export type TOfferApplicant = {
   assignment_total: number;
   due_date: Date;
 };
+
+export type TApplicantsByStatus = Record<
+  'PENDING' | 'OFFERED' | 'REJECTED' | 'WITHRAWN' | 'APPROVED' | 'HIRED',
+  TApplicant[]
+>;
