@@ -41,8 +41,6 @@ const SideBar = ({selectBar, projectId}: Props) => {
     );
   }, [applicantsData]);
 
-  console.log('FLATTEN PROJECT :---:', flattenApplicantsObj);
-
   return (
     <div className="hidden w-80 md:flex" aria-label="Sidebar">
       <div className="w-full space-y-4 overflow-y-auto bg-gray-50">

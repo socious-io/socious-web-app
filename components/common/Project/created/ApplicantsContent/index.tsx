@@ -19,6 +19,7 @@ import {schemaOfferApplicant} from '@api/applicants/validation';
 
 // Types
 import {TApplicant, TOfferApplicant} from '@models/applicant';
+import dayjs from 'dayjs';
 
 var data = [
   {
@@ -48,9 +49,7 @@ function MyApplicationBoxes({
   const {state: showOfferForm, handlers: showOfferFormHandlers} = useToggle();
   const {state: confirmOffer, handlers: confirmOfferHandlers} = useToggle();
   const {state: confirmReject, handlers: confirmRejectHandlers} = useToggle();
-  // const Success = () => toast('Wow so easy!');
 
-  console.log('Applicant :---: ', applicant);
   const offerApplicantFormData = useForm({
     resolver: joiResolver(schemaOfferApplicant),
   });

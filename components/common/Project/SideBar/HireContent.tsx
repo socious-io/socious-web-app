@@ -62,7 +62,7 @@ function HiredContent({hiredApplicants}: HireContentProps) {
                     name={applicant?.user?.name}
                     username={applicant?.user?.username ?? ''}
                     applicationDate={dayjs(applicant?.created_at)?.format(
-                      'MMM d',
+                      'MMM D',
                     )}
                     message={
                       applicant.offer_message

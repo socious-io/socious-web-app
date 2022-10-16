@@ -6,23 +6,6 @@ import Link from 'next/link';
 
 import HeaderBox from '../component/HeaderBox';
 
-var data = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-  {
-    id: 2,
-    projectId: '2',
-  },
-];
-var data2 = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-];
-
 type ApplicantsContentProps = {
   // projectId: string;
   flattenApplicantsObj: TApplicantsByStatus;
@@ -54,11 +37,11 @@ function ApplicantsContent({flattenApplicantsObj}: ApplicantsContentProps) {
                   name={applicant?.user?.name}
                   username={applicant?.user?.username ?? ''}
                   applicationDate={dayjs(applicant?.created_at)?.format(
-                    'MMM d',
+                    'MMM D',
                   )}
                   message={
                     applicant.offer_message
-                      ? applicant.offer_message.length > 200
+                      ? applicant.offer_message.length > 50
                         ? `${applicant.offer_message?.slice(0, 50)}...}`
                         : applicant.offer_message
                       : 'No message'
@@ -86,11 +69,11 @@ function ApplicantsContent({flattenApplicantsObj}: ApplicantsContentProps) {
                   name={applicant?.user?.name}
                   username={applicant?.user?.username ?? ''}
                   applicationDate={dayjs(applicant?.created_at)?.format(
-                    'MMM d',
+                    'MMM D',
                   )}
                   message={
                     applicant.offer_message
-                      ? applicant.offer_message.length > 200
+                      ? applicant.offer_message.length > 50
                         ? `${applicant.offer_message?.slice(0, 50)}...}`
                         : applicant.offer_message
                       : 'No message'
@@ -117,11 +100,11 @@ function ApplicantsContent({flattenApplicantsObj}: ApplicantsContentProps) {
                   name={applicant?.user?.name}
                   username={applicant?.user?.username ?? ''}
                   applicationDate={dayjs(applicant?.created_at)?.format(
-                    'MMM d',
+                    'MMM D',
                   )}
                   message={
                     applicant.offer_message
-                      ? applicant.offer_message.length > 200
+                      ? applicant.offer_message.length > 50
                         ? `${applicant.offer_message?.slice(0, 50)}...}`
                         : applicant.offer_message
                       : 'No message'
