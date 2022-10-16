@@ -1,20 +1,56 @@
 import CardBoxComplete from '@components/common/CardBoxComplete/CardBoxComplete';
 import {useToggle} from '@hooks';
-import {TApplicantsByStatus, TApplicantsResponse} from '@models/applicant';
+import {
+  TApplicant,
+  TApplicantsByStatus,
+  TApplicantsResponse,
+} from '@models/applicant';
 import dayjs from 'dayjs';
 import Link from 'next/link';
+import {useMemo} from 'react';
+import useSWR from 'swr';
+import {get} from 'utils/request';
 
 import HeaderBox from '../component/HeaderBox';
 
 type ApplicantsContentProps = {
-  // projectId: string;
-  flattenApplicantsObj: TApplicantsByStatus;
+  projectId: string;
 };
 
-function ApplicantsContent({flattenApplicantsObj}: ApplicantsContentProps) {
+function ApplicantsContent({projectId}: ApplicantsContentProps) {
   const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
   const {state: showSaved, handlers: showSavedHandler} = useToggle();
   const {state: showDeclined, handlers: showDeclinedHandler} = useToggle();
+
+  const {data: applicantsData, error: applicantsError} =
+    useSWR<TApplicantsResponse>(
+      projectId ? `/projects/${projectId}/applicants` : null,
+      get,
+    );
+
+  const flattenApplicantsObj: TApplicantsByStatus = useMemo(() => {
+    const flattenApplicants = applicantsData?.items ?? [];
+
+    return flattenApplicants?.reduce(
+      (obj: TApplicantsByStatus, currentValue: TApplicant) => {
+        if (obj) {
+          if (!obj[currentValue['status'] ?? 'ERROR']) {
+            obj[currentValue['status'] ?? 'ERROR'] = [];
+          }
+          obj[currentValue['status'] ?? 'ERROR'].push(currentValue);
+        }
+        return obj;
+      },
+      {
+        PENDING: [],
+        REJECTED: [],
+        OFFERED: [],
+        APPROVED: [],
+        HIRED: [],
+        WITHRAWN: [],
+      },
+    );
+  }, [applicantsData]);
 
   return (
     <div className="py-4">

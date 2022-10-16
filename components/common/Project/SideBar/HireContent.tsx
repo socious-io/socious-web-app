@@ -4,9 +4,16 @@ import TextBoxGray from '@components/common/TextBoxGray/TextBoxGray';
 import TitleViewBoxWithCard from '@components/common/TitleViewBoxWithAvatar/TitleViewBoxWithAvatar';
 import TwoCloumnTwoRowBox from '@components/common/TwoColumnTwoRow/TwoColumnTwoRow';
 import {useToggle, useUser} from '@hooks';
-import {TApplicant} from '@models/applicant';
+import {
+  TApplicant,
+  TApplicantsByStatus,
+  TApplicantsResponse,
+} from '@models/applicant';
 import dayjs from 'dayjs';
 import Link from 'next/link';
+import {useMemo} from 'react';
+import useSWR from 'swr';
+import {get} from 'utils/request';
 
 import HeaderBox from '../component/HeaderBox';
 import HiredCard from '../component/HiredCard';
@@ -23,11 +30,26 @@ var data = [
 ];
 
 type HireContentProps = {
-  hiredApplicants: TApplicant[];
+  // hiredApplicants: TApplicant[];
+  projectId: string;
 };
 
-function HiredContent({hiredApplicants}: HireContentProps) {
+function HiredContent({projectId}: HireContentProps) {
   const {state: showHired, handlers: showHiredHandler} = useToggle();
+
+  const {data: applicantsData, error: applicantsError} =
+    useSWR<TApplicantsResponse>(
+      projectId ? `/projects/${projectId}/applicants` : null,
+      get,
+    );
+
+  const hiredApplicants: TApplicant[] = useMemo(() => {
+    return (
+      applicantsData?.items.filter(
+        (applicant) => applicant.status === 'HIRED',
+      ) ?? []
+    );
+  }, [applicantsData]);
 
   return (
     <div className="w-full py-4">

@@ -1,7 +1,7 @@
 import {IdentityMeta} from './identity';
 
 export type TApplicantsResponse = {
-  items: any[];
+  items: TApplicant[];
   limit: number;
   page: number;
   total_count: number;
