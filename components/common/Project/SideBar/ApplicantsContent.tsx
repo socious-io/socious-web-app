@@ -76,10 +76,10 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
                     'MMM D',
                   )}
                   message={
-                    applicant.offer_message
-                      ? applicant.offer_message.length > 50
-                        ? `${applicant.offer_message?.slice(0, 50)}...}`
-                        : applicant.offer_message
+                    applicant.cover_letter
+                      ? applicant.cover_letter.length > 50
+                        ? `${applicant.cover_letter?.slice(0, 50)}...}`
+                        : applicant.cover_letter
                       : 'No message'
                   }
                 />
@@ -108,10 +108,10 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
                     'MMM D',
                   )}
                   message={
-                    applicant.offer_message
-                      ? applicant.offer_message.length > 50
-                        ? `${applicant.offer_message?.slice(0, 50)}...}`
-                        : applicant.offer_message
+                    applicant.cover_letter
+                      ? applicant.cover_letter.length > 50
+                        ? `${applicant.cover_letter?.slice(0, 50)}...}`
+                        : applicant.cover_letter
                       : 'No message'
                   }
                 />
@@ -139,10 +139,10 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
                     'MMM D',
                   )}
                   message={
-                    applicant.offer_message
-                      ? applicant.offer_message.length > 50
-                        ? `${applicant.offer_message?.slice(0, 50)}...}`
-                        : applicant.offer_message
+                    applicant.cover_letter
+                      ? applicant.cover_letter?.length > 50
+                        ? `${applicant.cover_letter?.slice(0, 50)}...}`
+                        : applicant.cover_letter
                       : 'No message'
                   }
                 />

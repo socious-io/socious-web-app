@@ -87,10 +87,10 @@ function HiredContent({projectId}: HireContentProps) {
                       'MMM D',
                     )}
                     message={
-                      applicant.offer_message
-                        ? applicant.offer_message.length > 200
-                          ? `${applicant.offer_message?.slice(0, 50)}...}`
-                          : applicant.offer_message
+                      applicant.cover_letter
+                        ? applicant.cover_letter.length > 200
+                          ? `${applicant.cover_letter?.slice(0, 50)}...}`
+                          : applicant.cover_letter
                         : 'No message'
                     }
                   />
