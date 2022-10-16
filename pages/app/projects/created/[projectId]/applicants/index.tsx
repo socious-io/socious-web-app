@@ -52,13 +52,19 @@ const Applicants = () => {
     <>
       <GeneralLayout hasNavbar>
         <SideBar selectBar={'APPLICANT'} projectId={projectId as string} />
-        <ApplicantsContent
-          applicant={
-            applicantsData?.items?.find((x) => x.status === 'PENDING') ??
-            applicantsData?.items?.[0]
-          }
-          mutateApplicant={() => mutateApplicant()}
-        />
+        {applicantsData && applicantsData.items?.length > 0 ? (
+          <ApplicantsContent
+            applicant={
+              applicantsData?.items?.find((x) => x.status === 'PENDING') ??
+              applicantsData?.items?.[0]
+            }
+            mutateApplicant={() => mutateApplicant()}
+          />
+        ) : (
+          <h2 className="h-20 w-full rounded-2xl border bg-white p-4 text-center">
+            No applicants
+          </h2>
+        )}
       </GeneralLayout>
     </>
   );
