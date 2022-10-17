@@ -39,6 +39,8 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
       [field]: input,
     });
   };
+  console.log(ProjectContext.country);
+  console.log(items.countries?.filter((x) => x?.name.includes('Om')));
 
   const {
     value: countryValue,
@@ -299,7 +301,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               label="Country"
               onSelected={(e) => onCountrySelected(e)}
               selected={items.countries?.find(
-                (x) => x?.id === ProjectContext.country,
+                (x) => x?.id.toLowerCase() === ProjectContext.country,
               )}
               onChange={(e) => setCountryValue(e.target.value)}
               required
@@ -315,7 +317,11 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
             {countryCode !== 'XW' && (
               <Combobox
                 label="City"
-                selected={ProjectContext.city}
+                selected={
+                  ProjectContext.isEditModalOpen
+                    ? {id: 1, name: ProjectContext.city}
+                    : ProjectContext.city
+                }
                 onSelected={(e) => handleSetCity(e)}
                 onChange={(e) => setCitiesValue(e.currentTarget.value || '')}
                 required

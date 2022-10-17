@@ -40,17 +40,14 @@ const ProjectInfoOverview: FC<TProject> = ({project}) => {
   return (
     <>
       <PreviewItem label="Project Title" text={project.title} />
-      <div className="flex flex-row">
-        <PreviewItem label="Project description" text={project.description} />
+      <PreviewItem label="Project description" text={project.description} />
 
+      <div className="flex flex-row">
         <PreviewItem
           label="Remote Preference"
           text={getText('en', `PROJECT.${project.remote_preference}`)}
         />
-      </div>
-      <div className="flex flex-row">
         {project.country && <PreviewItem label="Location" text={location} />}
-        {project.city && <PreviewItem label="City" text={project.city} />}
       </div>
       <div className="flex flex-row">
         {project.project_type && (

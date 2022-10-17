@@ -21,6 +21,7 @@ import {updateProjectById} from '@api/projects/actions';
 import {CreateProjectType, Project} from '@models/project';
 import {toast} from 'react-toastify';
 import SplashScreen from 'layout/Splash';
+import {get} from 'utils/request';
 
 type CreateProjectMainType = {
   skills: any[];
@@ -34,7 +35,11 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
-  const {data, mutate} = useSWR<Project>(`/projects/${id}`);
+  const {data, mutate} = useSWR<Project>(`/projects/${id}`, get);
+  const {mutate: getProject} = useSWR<any>(
+    `/projects?identity=${currentIdentity?.id}`,
+    get,
+  );
 
   if (!data) return <SplashScreen />;
 
@@ -71,6 +76,7 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
     try {
       await updateProjectById(data!.id, postBody);
       mutate();
+      getProject();
       setProjectContext(initContext);
     } catch (error) {
       toast.error(`${error}`);
