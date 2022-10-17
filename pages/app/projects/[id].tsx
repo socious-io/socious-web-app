@@ -6,16 +6,20 @@ import {GetStaticProps, GetStaticPaths} from 'next';
 import getGlobalData from 'services/cacheSkills';
 import type {NextPage} from 'next';
 import React from 'react';
+import {useRouter} from 'next/router';
 
 type ProjectProps = {
   skills: any[];
 };
 
 const Detail: NextPage<ProjectProps> = ({skills}) => {
+  const router = useRouter();
+  const {id} = router.query;
+
   return (
     <ProjectContextProvider>
       <GeneralLayout hasDetailNavbar detailNavbarTitle="Project details">
-        <SideBar selectBar={'PROJECT_DETAIL'} />
+        <SideBar selectBar={'PROJECT_DETAIL'} projectId={id as string} />
         <DetailLayout>
           <DetailContent skills={skills} />
         </DetailLayout>

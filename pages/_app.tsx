@@ -27,7 +27,7 @@ function MyApp({Component, pageProps}: AppProps) {
             if (
               error?.response?.status === 400 ||
               (500 &&
-                error?.response?.data?.error.startsWith(
+                error?.response?.data?.error?.startsWith(
                   'invalid input syntax for type uuid',
                 ))
             )

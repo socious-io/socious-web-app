@@ -21,9 +21,9 @@ function BodyCard({item, name, image}: Props) {
         </div>
         <div>
           <p className="my-4 text-sm">
-            {`${dayjs(item?.created_at)?.format('MMM d')} ${
+            {`${dayjs(item?.created_at)?.format('MMM D')} ${
               item?.expires_at
-                ? `- ${dayjs(item?.expires_at)?.format('MMM d')}`
+                ? `- ${dayjs(item?.expires_at)?.format('MMM D')}`
                 : ''
             }`}
           </p>

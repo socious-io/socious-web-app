@@ -9,11 +9,13 @@ import Link from 'next/link';
 interface ProjectsCardProps {
   isOrganization?: boolean;
   username: string;
+  projectId: string;
 }
 
 const ProjectCard: FC<ProjectsCardProps> = ({
   isOrganization = false,
   username,
+  projectId,
 }) => {
   return (
     <div className="space-y-4 rounded-2xl border border-grayLineBased bg-background p-4">
@@ -28,7 +30,7 @@ const ProjectCard: FC<ProjectsCardProps> = ({
               <p>Overview</p>
             </li>
           </Link>
-          <Link href={`/app/projects/created/applicants/${username}`} passHref>
+          <Link href={`/app/projects/created/${projectId}/applicants`} passHref>
             <li className="flex items-center space-x-4">
               <FolderIcon className="h-4" />
               <p>Applicants</p>

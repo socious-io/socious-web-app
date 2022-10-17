@@ -1,74 +1,154 @@
-import Button from '@components/common/Button/Button';
 import CardBoxComplete from '@components/common/CardBoxComplete/CardBoxComplete';
-import TextBoxGray from '@components/common/TextBoxGray/TextBoxGray';
-import TitleViewBoxWithCard from '@components/common/TitleViewBoxWithAvatar/TitleViewBoxWithAvatar';
-import TwoCloumnTwoRowBox from '@components/common/TwoColumnTwoRow/TwoColumnTwoRow';
-import {useToggle, useUser} from '@hooks';
+import {useToggle} from '@hooks';
+import {
+  TApplicant,
+  TApplicantsByStatus,
+  TApplicantsResponse,
+} from '@models/applicant';
+import dayjs from 'dayjs';
+import Link from 'next/link';
+import {useMemo} from 'react';
+import useSWR from 'swr';
+import {get} from 'utils/request';
 
 import HeaderBox from '../component/HeaderBox';
 
-var data = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-  {
-    id: 2,
-    projectId: '2',
-  },
-];
-var data2 = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-];
-function ApplicantsContent() {
+type ApplicantsContentProps = {
+  projectId: string;
+};
+
+function ApplicantsContent({projectId}: ApplicantsContentProps) {
   const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
-  const {state: showDrafts, handlers: showDraftsHandler} = useToggle();
-  const {user} = useUser();
+  const {state: showSaved, handlers: showSavedHandler} = useToggle();
+  const {state: showDeclined, handlers: showDeclinedHandler} = useToggle();
+
+  const {data: applicantsData, error: applicantsError} =
+    useSWR<TApplicantsResponse>(
+      projectId ? `/projects/${projectId}/applicants` : null,
+      get,
+    );
+
+  const flattenApplicantsObj: TApplicantsByStatus = useMemo(() => {
+    const flattenApplicants = applicantsData?.items ?? [];
+
+    return flattenApplicants?.reduce(
+      (obj: TApplicantsByStatus, currentValue: TApplicant) => {
+        if (obj) {
+          if (!obj[currentValue['status'] ?? 'ERROR']) {
+            obj[currentValue['status'] ?? 'ERROR'] = [];
+          }
+          obj[currentValue['status'] ?? 'ERROR'].push(currentValue);
+        }
+        return obj;
+      },
+      {
+        PENDING: [],
+        REJECTED: [],
+        OFFERED: [],
+        APPROVED: [],
+        HIRED: [],
+        WITHRAWN: [],
+      },
+    );
+  }, [applicantsData]);
 
   return (
-    <div className="w-full bg-white py-4">
-      <div className=" rounded-2xl border border-grayLineBased ">
+    <div className="py-4">
+      <div className="my-4 rounded-2xl border border-grayLineBased bg-white ">
         <HeaderBox
-          title={'to review'}
+          title={`to review (${flattenApplicantsObj?.['PENDING']?.length})`}
           isExpand={showOnGoing}
           expandToggle={showOnGoingHandler.toggle}
           isExpandable={true}
-          isRound={false}
+          isRound={true}
         />
-        {data.map((item) => (
-          <CardBoxComplete
-            key={item.id}
-            bodyTitle={'Apply date'}
-            description={
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
-            }
-            bodyTitleColor={'text-graySubtitle'}
-          />
-        ))}
+        {showOnGoing &&
+          flattenApplicantsObj?.['PENDING'].map((applicant) => (
+            <Link
+              key={applicant.id}
+              href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
+            >
+              <a>
+                <CardBoxComplete
+                  name={applicant?.user?.name}
+                  username={applicant?.user?.username ?? ''}
+                  applicationDate={dayjs(applicant?.created_at)?.format(
+                    'MMM D',
+                  )}
+                  message={
+                    applicant.cover_letter
+                      ? applicant.cover_letter.length > 50
+                        ? `${applicant.cover_letter?.slice(0, 50)}...}`
+                        : applicant.cover_letter
+                      : 'No message'
+                  }
+                />
+              </a>
+            </Link>
+          ))}
 
-        <div className="w-full rounded-2xl border border-grayLineBased bg-white ">
-          <HeaderBox
-            isRound={false}
-            title={'saved'}
-            isExpand={showOnGoing}
-            expandToggle={showOnGoingHandler.toggle}
-            isExpandable={true}
-          />
-          {showOnGoing &&
-            data2.map((item) => (
-              <CardBoxComplete
-                key={item.id}
-                bodyTitle={'Apply date'}
-                description={
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
-                }
-                bodyTitleColor={'text-graySubtitle'}
-              />
-            ))}
-        </div>
+        <HeaderBox
+          isRound={false}
+          title={`saved (${flattenApplicantsObj?.['OFFERED']?.length})`}
+          isExpand={showSaved}
+          expandToggle={showSavedHandler.toggle}
+          isExpandable={true}
+        />
+        {showSaved &&
+          flattenApplicantsObj?.['OFFERED'].map((applicant) => (
+            <Link
+              key={applicant.id}
+              href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
+            >
+              <a>
+                <CardBoxComplete
+                  name={applicant?.user?.name}
+                  username={applicant?.user?.username ?? ''}
+                  applicationDate={dayjs(applicant?.created_at)?.format(
+                    'MMM D',
+                  )}
+                  message={
+                    applicant.cover_letter
+                      ? applicant.cover_letter.length > 50
+                        ? `${applicant.cover_letter?.slice(0, 50)}...}`
+                        : applicant.cover_letter
+                      : 'No message'
+                  }
+                />
+              </a>
+            </Link>
+          ))}
+        <HeaderBox
+          isRound={false}
+          title={`Declined (${flattenApplicantsObj?.['REJECTED']?.length})`}
+          isExpand={showDeclined}
+          expandToggle={showDeclinedHandler.toggle}
+          isExpandable={true}
+        />
+        {showDeclined &&
+          flattenApplicantsObj?.['REJECTED'].map((applicant) => (
+            <Link
+              key={applicant.id}
+              href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
+            >
+              <a>
+                <CardBoxComplete
+                  name={applicant?.user?.name}
+                  username={applicant?.user?.username ?? ''}
+                  applicationDate={dayjs(applicant?.created_at)?.format(
+                    'MMM D',
+                  )}
+                  message={
+                    applicant.cover_letter
+                      ? applicant.cover_letter?.length > 50
+                        ? `${applicant.cover_letter?.slice(0, 50)}...}`
+                        : applicant.cover_letter
+                      : 'No message'
+                  }
+                />
+              </a>
+            </Link>
+          ))}
       </div>
     </div>
   );
