@@ -1,6 +1,5 @@
-import Avatar from '@components/common/Avatar/Avatar';
 import SearchBar from '@components/common/SearchBar/SearchBar';
-import {ChevronLeftIcon, PlusIcon} from '@heroicons/react/24/outline';
+import {PlusIcon} from '@heroicons/react/24/outline';
 import React, {
   forwardRef,
   useCallback,
@@ -14,8 +13,6 @@ import useSWR from 'swr';
 import {get} from 'utils/request';
 import {useUser} from '@hooks';
 import {twMerge} from 'tailwind-merge';
-import {useRef} from 'react';
-import {some} from 'lodash';
 
 type ChatSideBarProps = {
   onChatOpen?: (data: any) => void;
