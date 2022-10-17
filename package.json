@@ -65,7 +65,7 @@
     "@types/lodash": "^4.14.185",
     "@types/luxon": "^3.0.1",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.7.18",
+    "@types/node": "^18.11.0",
     "@types/react": "^18.0.21",
     "autoprefixer": "^10.4.12",
     "chai": "^4.3.6",
