@@ -186,9 +186,24 @@ const EditProfileModal = ({
       console.log('ERROR :---: ', error);
       const data: any = (error as AxiosError).response?.data;
       if (data) {
-        toast.error(`Couldn't save data: ${data.error || 'error'}`, {
-          autoClose: false,
-        });
+        if (
+          /^duplicate key value violates unique constraint.*phone/.exec(
+            data.error,
+          )
+        ) {
+          formMethods.setError(
+            'phoneNumber',
+            {
+              type: 'value',
+              message:
+                'This phone number is already associated with another user',
+            },
+            {shouldFocus: true},
+          );
+        } else
+          toast.error(`Couldn't save data: ${data.error || 'error'}`, {
+            autoClose: false,
+          });
       }
     }
   }, [avatar, closeModal, coverImage, formMethods, mutateUser, user?.username]);
