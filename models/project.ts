@@ -70,3 +70,7 @@ export interface IProjectsResponse {
   page: number;
   total_count: number;
 }
+
+export interface IUserProjects extends Project {
+  cover_letter: string;
+}
