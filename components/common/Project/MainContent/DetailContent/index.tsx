@@ -3,7 +3,6 @@ import ProjectItem from '@components/common/UserProfile/MainContent/ProjectItem'
 import OrganizationTopCard from '../../component/OrganizationTopCard';
 import useSWR from 'swr';
 import {useRouter} from 'next/router';
-import {Question} from 'models/question';
 import {IOrganizationType} from 'models/organization';
 import {useUser} from '@hooks';
 import DetailContent from '@components/common/Project/created/DetailContent';
@@ -35,16 +34,11 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
-  const {data} = useSWR<Project>(`/projects/${id}`);
-
-  // const {data: projectQuestion} = useSWR<any>(`/projects/${id}/questions`, get);
+  const {data, mutate} = useSWR<Project>(`/projects/${id}`);
 
   if (!data) return <SplashScreen />;
 
-  // const questionTitle = projectQuestion?.questions?.map(
-  //   (q: Question) => q?.question,
-  // );
-  const onSubmit = async () => {
+  const onSubmit = async (s?: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => {
     const postBody: CreateProjectType = {
       title: ProjectContext.title,
       description: ProjectContext.description,
@@ -53,12 +47,21 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
       project_type: ProjectContext.project_type,
       project_length: ProjectContext.project_length,
       payment_type: ProjectContext.payment_type,
-      payment_range_lower: `${ProjectContext.payment_range_lower}`,
-      payment_range_higher: `${ProjectContext.payment_range_higher}`,
-      experience_level: ProjectContext.experience_level,
       causes_tags: ProjectContext.causes_tags,
       skills: ProjectContext.skills,
+      status: s ? s : ProjectContext.status,
     };
+
+    if (ProjectContext.city) postBody.city = ProjectContext.city;
+    if (ProjectContext.payment_range_lower)
+      postBody.payment_range_lower = ProjectContext.payment_range_lower;
+    if (ProjectContext.payment_range_higher)
+      postBody.payment_range_higher = ProjectContext.payment_range_higher;
+
+    if (ProjectContext.commitment_hours_higher)
+      postBody.commitment_hours_higher = ProjectContext.commitment_hours_higher;
+    if (ProjectContext.commitment_hours_lower)
+      postBody.commitment_hours_lower = ProjectContext.commitment_hours_lower;
 
     if (ProjectContext.payment_currency)
       postBody.payment_currency = ProjectContext.payment_currency;
@@ -67,6 +70,7 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
 
     try {
       await updateProjectById(data!.id, postBody);
+      mutate();
       setProjectContext(initContext);
     } catch (error) {
       toast.error(`${error}`);
@@ -100,13 +104,7 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
           {data?.skills?.length > 0 && (
             <ProjectItem title="Skills" items={data?.skills} />
           )}
-          {/* {projectQuestion?.questions?.length > 0 && (
-            <ProjectItem
-              title="Screening questions"
-              items={questionTitle}
-              isRow
-            />
-          )} */}
+
           {data?.identity_id && (
             <OrganizationAbout organizationId={data.identity_id} />
           )}

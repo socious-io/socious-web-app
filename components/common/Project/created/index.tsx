@@ -105,6 +105,7 @@ const MyApplicationBoxes: FC = () => {
         <p className="text-xl font-semibold">Created Project</p>
       </div>
       <Button
+        disabled={currentIdentity?.type === 'users'}
         className="my-6 flex w-52 items-center justify-center align-middle "
         type="submit"
         size="md"

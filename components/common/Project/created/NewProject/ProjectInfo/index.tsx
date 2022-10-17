@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useCallback, useState, useMemo} from 'react';
 import {useForm} from 'react-hook-form';
 import Title from '@components/common/CreateOrganization/components/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
@@ -11,41 +11,23 @@ import {useProjectContext} from '../context';
 import {FromLayout} from '../Layout';
 import {TOnSubmit} from '../sharedType';
 import {Button} from '@components/common';
+import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 
 const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
   const {setProjectContext, ProjectContext} = useProjectContext();
-  const disableIcon =
-    !ProjectContext.title ||
-    !ProjectContext.description ||
-    !ProjectContext.remote_preference;
   const {
     setValue,
     handleSubmit,
+    watch,
     formState: {errors, isValid},
   } = useForm({
-    resolver: ProjectContext.isEditModalOpen
-      ? undefined
-      : joiResolver(schemaCreateProjectStep3),
+    resolver: joiResolver(schemaCreateProjectStep3),
   });
   const {items} = useGetData();
-
-  useEffect(() => {
-    if (
-      ProjectContext.title &&
-      ProjectContext.description &&
-      ProjectContext.remote_preference
-    ) {
-      setValue('title', ProjectContext.title, {
-        shouldValidate: true,
-      });
-      setValue('description', ProjectContext.description, {
-        shouldValidate: true,
-      });
-      setValue('remote_preference', ProjectContext.remote_preference, {
-        shouldValidate: true,
-      });
-    }
-  }, []);
+  const paymentType = watch('payment_type');
+  const paymentScheme = watch('payment_scheme');
+  const countryCode = watch('country');
+  const selectedCity = watch('city');
 
   const handleChange = (field: string, input: string) => {
     setValue(field, input, {
@@ -58,11 +40,100 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
     });
   };
 
+  const {
+    value: countryValue,
+    suggestions: {data: countries},
+    setValue: setCountryValue,
+  } = usePlacesAutocomplete({
+    requestOptions: {language: 'en', types: ['country']},
+    debounce: 300,
+    cacheKey: 'country-restricted',
+  });
+  const {
+    value: cityValue,
+    suggestions: {data: cities},
+    setValue: setCitiesValue,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      language: 'en',
+      types: ['locality', 'administrative_area_level_3'],
+      componentRestrictions: {country: countryCode},
+    },
+    debounce: 300,
+    cacheKey: `${countryCode}-restricted`,
+  });
+
+  // const getDisabled = () => {
+  //   console.log(paymentType);
+  //   console.log(paymentScheme);
+
+  //   let isDisable = true;
+  //   if (countryCode === 'X') isDisable = false;
+  //   if (cityValue.length) isDisable = false;
+
+  //   isDisable = !isValid;
+  //   console.log(!isValid);
+  //   console.log(isDisable);
+
+  //   return isDisable;
+  // };
+
+  const filterCountries = useMemo(
+    () =>
+      countries.map(({place_id, description}) => ({
+        id: place_id,
+        name: description,
+      })) || [{id: '1', name: 'Japan'}],
+    [countries],
+  );
+  const filterCities = useMemo(
+    () =>
+      cities.map(({place_id, description, structured_formatting}) => ({
+        id: place_id,
+        name: structured_formatting.main_text || description,
+      })) || [{id: 1, name: 'Tokyo'}],
+    [cities],
+  );
+
+  const handleSetCity = (data: any) => {
+    setValue('city', data?.name, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+    setProjectContext({
+      ...ProjectContext,
+      city: data?.name,
+    });
+  };
+
+  const onCountrySelected = async (data: any) => {
+    console.log(data);
+
+    let countryCode = '';
+    try {
+      if (data.name !== 'Worldwide') {
+        const res = await getGeocode({placeId: data.id});
+
+        countryCode =
+          res?.[0]?.address_components?.[0]?.short_name?.toLowerCase();
+      } else {
+        countryCode = 'XW';
+      }
+      setValue('country', countryCode, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      setProjectContext({
+        ...ProjectContext,
+        country: countryCode,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex h-full w-full flex-col"
-    >
+    <form className="flex h-full w-full flex-col">
       <FromLayout>
         <div className="overflow-y-scroll">
           <Title description="Describe your project in detail." border>
@@ -103,29 +174,6 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
             />
             <Combobox
               required
-              label="Payment Type"
-              name="payment_type"
-              items={items.projectPaymentTypeItems}
-              placeholder="Payment Type"
-              className="mt-6"
-              onSelected={(e) => handleChange('payment_type', e?.id)}
-              selected={items.projectPaymentTypeItems?.find(
-                (x) => x?.id === ProjectContext.payment_type,
-              )}
-            />
-            <Combobox
-              label="Payment Scheme"
-              name="payment_scheme"
-              items={items.projectPaymentSchemeItems}
-              placeholder="Payment Scheme"
-              className="mt-6"
-              onSelected={(e) => handleChange('payment_scheme', e?.id)}
-              selected={items.projectPaymentSchemeItems?.find(
-                (x) => x?.id === ProjectContext.payment_scheme,
-              )}
-            />
-            <Combobox
-              required
               label="Project Type"
               name="project_type"
               items={items.projectItems}
@@ -159,72 +207,156 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 (x) => x?.id === ProjectContext.payment_currency,
               )}
             />
-
-            <InputFiled
-              required
-              min={0}
-              label="Payment Range Lower"
-              type="number"
-              placeholder="Payment Range Lower"
-              value={ProjectContext.payment_range_lower}
-              errorMessage={errors?.['payment_range_lower']?.message}
-              className="my-3"
-              onChange={(e) => {
-                if (e.target.value)
-                  handleChange('payment_range_lower', e.target.value);
-              }}
-            />
-            <InputFiled
-              required
-              min={0}
-              label="Payment Range Higher"
-              type="number"
-              placeholder="Payment Range Higher"
-              value={ProjectContext.payment_range_higher}
-              errorMessage={errors?.['payment_range_higher']?.message}
-              className="my-3"
-              onChange={(e) => {
-                if (e.target.value)
-                  handleChange('payment_range_higher', e.target.value);
-              }}
-            />
-            <InputFiled
-              required
-              min={0}
-              label="Experience Level"
-              type="number"
-              placeholder="Experience Level"
-              value={ProjectContext.experience_level}
-              errorMessage={errors?.['experience_level']?.message}
-              className="my-3"
-              onChange={(e) => {
-                if (e.target.value)
-                  handleChange('experience_level', e.target.value);
-              }}
-            />
             <Combobox
               required
+              label="Payment Type"
+              name="payment_type"
+              items={items.projectPaymentTypeItems}
+              placeholder="Payment Type"
+              className="mt-6"
+              onSelected={(e) => handleChange('payment_type', e?.id)}
+              selected={items.projectPaymentTypeItems?.find(
+                (x) => x?.id === ProjectContext.payment_type,
+              )}
+            />
+            <Combobox
+              label="Payment Scheme"
+              name="payment_scheme"
+              items={items.projectPaymentSchemeItems}
+              placeholder="Payment Scheme"
+              className="mt-6"
+              onSelected={(e) => handleChange('payment_scheme', e?.id)}
+              selected={items.projectPaymentSchemeItems?.find(
+                (x) => x?.id === ProjectContext.payment_scheme,
+              )}
+            />
+
+            {paymentType === 'PAID' && (
+              <InputFiled
+                required
+                min={0}
+                label="Payment Range Lower"
+                type="number"
+                placeholder="Payment Range Lower"
+                value={ProjectContext.payment_range_lower}
+                errorMessage={errors?.['payment_range_lower']?.message}
+                className="my-3"
+                onChange={(e) => {
+                  if (e.target.value)
+                    handleChange('payment_range_lower', e.target.value);
+                }}
+              />
+            )}
+            {paymentType === 'PAID' && (
+              <InputFiled
+                required
+                min={0}
+                label="Payment Range Higher"
+                type="number"
+                placeholder="Payment Range Higher"
+                value={ProjectContext.payment_range_higher}
+                errorMessage={errors?.['payment_range_higher']?.message}
+                className="my-3"
+                onChange={(e) => {
+                  if (e.target.value)
+                    handleChange('payment_range_higher', e.target.value);
+                }}
+              />
+            )}
+            {paymentScheme === 'HOURLY' && (
+              <InputFiled
+                required
+                min={0}
+                label="Total commitment Lower"
+                type="number"
+                placeholder="Total commitment Lower"
+                value={ProjectContext.commitment_hours_lower}
+                errorMessage={errors?.['commitment_hours_lower']?.message}
+                className="my-3"
+                onChange={(e) => {
+                  if (e.target.value)
+                    handleChange('commitment_hours_lower', e.target.value);
+                }}
+              />
+            )}
+            {paymentScheme === 'HOURLY' && (
+              <InputFiled
+                required
+                min={0}
+                label="Total commitment higher"
+                type="number"
+                placeholder="Total commitment Higher"
+                value={ProjectContext.commitment_hours_higher}
+                errorMessage={errors?.['commitment_hours_higher']?.message}
+                className="my-3"
+                onChange={(e) => {
+                  if (e.target.value)
+                    handleChange('commitment_hours_higher', e.target.value);
+                }}
+              />
+            )}
+            <Combobox
               label="Country"
-              name="country"
-              items={items.countries}
-              placeholder="Country"
-              className="my-3"
-              onSelected={(e) => handleChange('country', e?.id)}
+              onSelected={(e) => onCountrySelected(e)}
               selected={items.countries?.find(
                 (x) => x?.id === ProjectContext.country,
               )}
+              onChange={(e) => setCountryValue(e.target.value)}
+              required
+              name="country"
+              items={
+                countryValue.toLowerCase().includes?.('wo')
+                  ? [{id: 'XW', name: 'Worldwide'}]
+                  : filterCountries
+              }
+              placeholder="Country"
+              className="my-6"
             />
+            {countryCode !== 'XW' && (
+              <Combobox
+                label="City"
+                selected={ProjectContext.city}
+                onSelected={(e) => handleSetCity(e)}
+                onChange={(e) => setCitiesValue(e.currentTarget.value || '')}
+                required
+                name="city"
+                items={filterCities}
+                placeholder="City"
+                className="my-6"
+              />
+            )}
           </div>
         </div>
       </FromLayout>
       <div className=" flex items-end justify-end  border-t p-4">
-        <Button
-          disabled={ProjectContext.isEditModalOpen ? disableIcon : !isValid}
-          type="submit"
-          className="flex h-11 w-52 items-center justify-center"
-        >
-          {ProjectContext.isEditModalOpen ? 'Save Changes' : ' Continue'}
-        </Button>
+        {ProjectContext.isEditModalOpen ? (
+          <>
+            <Button
+              type="button"
+              onClick={() => onSubmit('ACTIVE')}
+              className="'flex h-11 w-44 items-center justify-center"
+            >
+              Save and publish
+            </Button>
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => onSubmit('DRAFT')}
+              className="ml-2 flex h-11 w-36 items-center justify-center"
+            >
+              Save draft
+            </Button>
+          </>
+        ) : (
+          <Button
+            // disabled={getDisabled()}
+            type="button"
+            onClick={() => onSubmit()}
+            className="flex h-11 w-52 items-center justify-center"
+          >
+            Continue
+          </Button>
+        )}
       </div>
     </form>
   );

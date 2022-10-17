@@ -11,6 +11,20 @@ const projectStatusType = Object.keys(Data.ProjectStatusType);
 const projectType = Object.keys(Data.ProjectType);
 const projectLengthType = Object.entries(Data.ProjectLengthType);
 const passionData = Object.keys(Data.SocialCauses);
+const getProjectLength = (k: string) => {
+  switch (k) {
+    case 'LESS_THAN_A_DAY':
+      return 'Less than a day';
+    case 'LESS_THAN_A_MONTH':
+      return 'Less than a month';
+    case '1_3_MONTHS':
+      return '1-3 months';
+    case '3_6_MONTHS':
+      return '3-6 months';
+    case '6_MONTHS_OR_MORE':
+      return 'More than 6 months';
+  }
+};
 
 const useGetData = () => {
   const items = useMemo(() => {
@@ -38,8 +52,10 @@ const useGetData = () => {
     }));
     const projectLengthItems = projectLengthType.map((id) => ({
       id: id?.[1],
-      name: getText('en', `PROJECT.${id?.[0]}`),
+      name: getProjectLength(id?.[1] as string),
+      //  getText('en', `PROJECT.${id?.[0]}`),
     }));
+
     const passionDataItems = passionData.map((id) => ({
       id,
       name: getText('en', `PASSION.${id}`),

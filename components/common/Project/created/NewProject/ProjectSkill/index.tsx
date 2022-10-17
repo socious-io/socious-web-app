@@ -83,10 +83,7 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex h-full w-full flex-col"
-    >
+    <form className="flex h-full w-full flex-col">
       <FromLayout>
         <Title description="Skills used in this project" border={false}>
           Select up to 10 relevant skills
@@ -119,7 +116,8 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
       <div className=" flex items-end justify-end  border-t p-4">
         <Button
           disabled={ProjectContext.isEditModalOpen ? false : !isValid}
-          type="submit"
+          type="button"
+          onClick={() => onSubmit()}
           className="flex h-11 w-52 items-center justify-center"
         >
           {ProjectContext.isEditModalOpen ? 'Save Changes' : ' Continue'}
