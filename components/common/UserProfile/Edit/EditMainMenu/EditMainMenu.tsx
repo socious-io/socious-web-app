@@ -200,9 +200,8 @@ const EditMainMenu = ({
         className="hide-scrollbar flex flex-1 flex-col overflow-y-scroll"
         onSubmit={handleSubmit(editProfile)}
       >
-        {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-        <Modal.Description>
-          <div className="grow overflow-y-auto">
+        <div className="grow overflow-y-auto">
+          <div>
             {/* Images Upload */}
             <div className="border-b-2 border-grayLineBased bg-offWhite pb-4">
               <ImageUploader
@@ -460,7 +459,7 @@ const EditMainMenu = ({
               </div>
             </div>
           </div>
-        </Modal.Description>
+        </div>
         <div className=" bottom-0 divide-x border-t-2 border-grayLineBased bg-white p-4 pb-12 sm:sticky sm:pb-4">
           <Button
             className="ml-auto flex w-full items-center justify-center align-middle sm:w-auto sm:max-w-xs "

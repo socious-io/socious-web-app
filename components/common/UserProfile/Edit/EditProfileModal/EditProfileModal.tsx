@@ -104,7 +104,7 @@ const EditProfileModal = ({
       firstName: user?.first_name ?? '',
       lastName: user?.last_name ?? '',
       userName: user?.username ?? '',
-      email: user?.email,
+      // email: user?.email,
       bio: user?.bio,
       mission: user?.mission,
       passions: user?.social_causes ?? [],
