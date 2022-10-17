@@ -84,7 +84,7 @@ const useGetData = () => {
       projectItems,
       projectLengthItems,
       passionDataItems,
-      countries,
+      countries: [{name: 'Worldwide', id: 'XW'}, ...countries],
       allCurrencies,
     };
   }, []);

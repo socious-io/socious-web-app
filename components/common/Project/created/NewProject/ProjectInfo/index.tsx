@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useCallback, useState, useMemo} from 'react';
+import React, {FC, useEffect, useMemo} from 'react';
 import {useForm} from 'react-hook-form';
 import Title from '@components/common/CreateOrganization/components/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
@@ -15,21 +15,47 @@ import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 
 const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
   const {setProjectContext, ProjectContext} = useProjectContext();
+
   const {
     setValue,
-    handleSubmit,
     watch,
-    formState: {errors, isValid},
+    formState: {errors, isValid, isDirty},
   } = useForm({
     resolver: joiResolver(schemaCreateProjectStep3),
   });
+
   const {items} = useGetData();
+
   const paymentType = watch('payment_type');
   const paymentScheme = watch('payment_scheme');
   const countryCode = watch('country');
-  const selectedCity = watch('city');
 
-  const handleChange = (field: string, input: string) => {
+  useEffect(() => {
+    const project = {
+      title: ProjectContext.title,
+      description: ProjectContext.description,
+      remote_preference: ProjectContext.remote_preference,
+      payment_type: ProjectContext.payment_type,
+      payment_scheme: ProjectContext.payment_scheme,
+      payment_currency: ProjectContext.payment_currency,
+      payment_range_lower: ProjectContext.payment_range_lower,
+      payment_range_higher: ProjectContext.payment_range_higher,
+      commitment_hours_higher: ProjectContext.commitment_hours_higher,
+      commitment_hours_lower: ProjectContext.commitment_hours_lower,
+      project_type: ProjectContext.project_type,
+      project_length: ProjectContext.project_length,
+      country: ProjectContext.country,
+    };
+    Object.entries(project).forEach((key) => {
+      console.log(key);
+      setValue(key?.[0], key?.[1], {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    });
+  }, [ProjectContext]);
+
+  const handleChange = (field: any, input: string) => {
     setValue(field, input, {
       shouldDirty: true,
       shouldValidate: true,
@@ -39,8 +65,6 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
       [field]: input,
     });
   };
-  console.log(ProjectContext.country);
-  console.log(items.countries?.filter((x) => x?.name.includes('Om')));
 
   const {
     value: countryValue,
@@ -64,21 +88,6 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
     debounce: 300,
     cacheKey: `${countryCode}-restricted`,
   });
-
-  // const getDisabled = () => {
-  //   console.log(paymentType);
-  //   console.log(paymentScheme);
-
-  //   let isDisable = true;
-  //   if (countryCode === 'X') isDisable = false;
-  //   if (cityValue.length) isDisable = false;
-
-  //   isDisable = !isValid;
-  //   console.log(!isValid);
-  //   console.log(isDisable);
-
-  //   return isDisable;
-  // };
 
   const filterCountries = useMemo(
     () =>
@@ -109,8 +118,6 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
   };
 
   const onCountrySelected = async (data: any) => {
-    console.log(data);
-
     let countryCode = '';
     try {
       if (data.name !== 'Worldwide') {
@@ -222,6 +229,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               )}
             />
             <Combobox
+              required
               label="Payment Scheme"
               name="payment_scheme"
               items={items.projectPaymentSchemeItems}
@@ -301,11 +309,13 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               label="Country"
               onSelected={(e) => onCountrySelected(e)}
               selected={items.countries?.find(
-                (x) => x?.id.toLowerCase() === ProjectContext.country,
+                (x) =>
+                  x?.id.toLowerCase() === ProjectContext.country.toLowerCase(),
               )}
               onChange={(e) => setCountryValue(e.target.value)}
               required
               name="country"
+              errorMessage={errors?.['country']?.message}
               items={
                 countryValue.toLowerCase().includes?.('wo')
                   ? [{id: 'XW', name: 'Worldwide'}]
@@ -314,16 +324,17 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               placeholder="Country"
               className="my-6"
             />
-            {countryCode !== 'XW' && (
+            {ProjectContext.country !== 'XW' && (
               <Combobox
                 label="City"
                 selected={
                   ProjectContext.isEditModalOpen
-                    ? {id: 1, name: ProjectContext.city}
-                    : ProjectContext.city
+                    ? {id: ProjectContext.city, name: ProjectContext.city}
+                    : {id: ProjectContext.city, name: ProjectContext.city}
                 }
+                errorMessage={errors?.['city']?.message}
                 onSelected={(e) => handleSetCity(e)}
-                onChange={(e) => setCitiesValue(e.currentTarget.value || '')}
+                onChange={(e) => setCitiesValue(e.currentTarget.value)}
                 required
                 name="city"
                 items={filterCities}
@@ -338,6 +349,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
         {ProjectContext.isEditModalOpen ? (
           <>
             <Button
+              disabled={!isValid}
               type="button"
               onClick={() => onSubmit('ACTIVE')}
               className="'flex h-11 w-44 items-center justify-center"
@@ -345,6 +357,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               Save and publish
             </Button>
             <Button
+              disabled={!isDirty}
               variant="outline"
               type="button"
               onClick={() => onSubmit('DRAFT')}
@@ -355,7 +368,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
           </>
         ) : (
           <Button
-            // disabled={getDisabled()}
+            disabled={!isValid}
             type="button"
             onClick={() => onSubmit()}
             className="flex h-11 w-52 items-center justify-center"
