@@ -16,7 +16,6 @@ type ProjectApplicationsProps = {
 
 const ProjectApplications: NextPage<ProjectApplicationsProps> = ({skills}) => {
   const {currentIdentity} = useUser({redirect: false});
-  console.log(currentIdentity);
   useEffect(() => {
     if (currentIdentity?.type === 'users') Router.push('/app/projects');
   }, [currentIdentity?.type]);
