@@ -21,7 +21,7 @@ const ProjectList: React.FC<Props> = ({list}) => {
             title={project.title}
             applicants={project.applicants}
             hired={2}
-            date={dayjs(project?.updated_at)?.format('MMM d')}
+            date={dayjs(project?.updated_at)?.format('MMM D')}
           />
         </a>
       </Link>

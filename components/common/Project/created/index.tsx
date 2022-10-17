@@ -142,7 +142,7 @@ const MyApplicationBoxes: FC = () => {
                   border
                   applicants={item.applicants}
                   hired={2}
-                  date={dayjs(item?.updated_at)?.format('MMM d')}
+                  date={dayjs(item?.updated_at)?.format('MMM D')}
                 />
               </a>
             </Link>
@@ -171,7 +171,7 @@ const MyApplicationBoxes: FC = () => {
                   border
                   applicants={item.applicants}
                   hired={2}
-                  date={dayjs(item?.updated_at)?.format('MMM d')}
+                  date={dayjs(item?.updated_at)?.format('MMM D')}
                 />
               </a>
             </Link>
