@@ -65,9 +65,11 @@ function ProjectCard({project}: {project: Project}) {
           </div>
           <div className="flex flex-row">
             <p className="my-1 text-sm">
-              <Markdown options={{wrapper: 'article'}}>
-                {project.description?.slice(0, 200)}
-              </Markdown>
+              {project?.description && (
+                <Markdown options={{wrapper: 'article'}}>
+                  {project?.description?.slice?.(0, 200)}
+                </Markdown>
+              )}
             </p>
           </div>
 

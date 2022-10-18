@@ -16,7 +16,7 @@ function BodyBox({title, description}: Props) {
         <p>
           {!showMore ? (
             <Markdown options={{wrapper: 'article'}}>
-              {description?.slice(0, 500)}
+              {description?.slice?.(0, 500)}
             </Markdown>
           ) : (
             <Markdown options={{wrapper: 'article'}}>{description}</Markdown>
