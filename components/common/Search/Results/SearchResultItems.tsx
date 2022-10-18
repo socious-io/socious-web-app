@@ -24,13 +24,23 @@ export const SearchResultItems: FC<SearchResultItemsProps> = ({
   const route = useRouter();
 
   const updatePreviewQuery = (id: string) => {
-    route.query.preview_id = id;
-    route.push(route);
+    route.push(
+      {pathname: '/app/search', query: {...route.query, preview_id: id}},
+      undefined,
+      {
+        shallow: true,
+      },
+    );
   };
 
   const updateSortQuery = (sort: string) => {
-    route.query.sort = sort;
-    route.push(route);
+    route.push(
+      {pathname: '/app/search', query: {...route.query, sort: sort}},
+      undefined,
+      {
+        shallow: true,
+      },
+    );
   };
 
   const renderResults = () => {
