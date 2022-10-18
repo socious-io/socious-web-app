@@ -3,6 +3,8 @@ import Avatar from '@components/common/Avatar/Avatar';
 import Chip from '@components/common/Chip/Chip';
 import {useUserProfile} from '@hooks';
 import {getText} from '@socious/data';
+import Link from 'next/link';
+import {useFormattedLocation} from 'services/formatLocation';
 
 interface UserPreviewProps {
   id: string;
@@ -10,20 +12,23 @@ interface UserPreviewProps {
 
 export const UserPreview: FC<UserPreviewProps> = ({id}) => {
   const {data: user} = useUserProfile(id);
+  const location = useFormattedLocation(user);
 
   if (!user) return null;
   return (
     <div className="space-y-4 p-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Avatar size="xl" type="users" src={user.avatar} />
-          <div className="flex flex-1 flex-col justify-center ">
-            <p className="text-black">
-              {user.first_name} {user.last_name}
-            </p>
-            <p className=" text-graySubtitle">location</p>
+        <Link href={`/app/user/${user.username}`}>
+          <div className="flex cursor-pointer items-center space-x-2">
+            <Avatar size="xl" type="users" src={user.avatar?.url} />
+            <div className="flex flex-1 flex-col justify-center ">
+              <p className="text-black">
+                {user.first_name} {user.last_name}
+              </p>
+              {location && <p className=" text-graySubtitle">{location}</p>}
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
 
       {user.bio?.length ? <p className="text-sm">{user.bio}</p> : null}

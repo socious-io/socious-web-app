@@ -3,6 +3,7 @@ import Avatar from '@components/common/Avatar/Avatar';
 import Chip from '@components/common/Chip/Chip';
 import {useOrganization} from '@hooks';
 import {getText} from '@socious/data';
+import Link from 'next/link';
 
 interface OrganizationPreviewProps {
   id: string;
@@ -15,19 +16,21 @@ export const OrganizationPreview: FC<OrganizationPreviewProps> = ({id}) => {
   return (
     <div className="space-y-4 p-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Avatar
-            size="xl"
-            type="organizations"
-            src={typeof org?.image === 'string' ? org.image : org.image?.url}
-          />
-          <div className="flex flex-1 flex-col justify-center ">
-            <p className="max-w-[250px] truncate text-black">{org?.name}</p>
-            <p className="max-w-[250px] truncate  text-graySubtitle">
-              {org?.address}
-            </p>
+        <Link href={`/app/organization/${org.shortname}`}>
+          <div className="flex cursor-pointer items-center space-x-2">
+            <Avatar
+              size="xl"
+              type="organizations"
+              src={typeof org?.image === 'string' ? org.image : org.image?.url}
+            />
+            <div className="flex flex-1 flex-col justify-center ">
+              <p className="max-w-[250px] truncate text-black">{org?.name}</p>
+              <p className="max-w-[250px] truncate  text-graySubtitle">
+                {org?.address}
+              </p>
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
 
       {org.social_causes?.length ? (
