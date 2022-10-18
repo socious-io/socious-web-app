@@ -1,8 +1,10 @@
 // import {BusinessProfile} from './business';
 // import {NewsFeed} from './newsFeed';
 
+import {TMediaType} from './organization';
+
 export interface UserProfile {
-  id: number;
+  id: string;
   first_name?: string;
   last_name?: string;
   followers: number;
@@ -14,7 +16,7 @@ export interface UserProfile {
   city?: string;
   country?: string;
   mobile_country_code?: string;
-  avatar?: string;
+  avatar?: TMediaType | null | string;
   cover_image?: string;
   mission?: string;
   social_causes: Array<string>;
