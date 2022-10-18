@@ -4,6 +4,8 @@ import {XCircleIcon, XMarkIcon} from '@heroicons/react/24/solid';
 import {useToggle} from '@hooks';
 import {useCallback, useRef} from 'react';
 import {UseFormRegisterReturn} from 'react-hook-form';
+import photoIcon from 'asset/icons/image.svg';
+import Image from 'next/future/image';
 
 interface PostActionBarProps {
   register: UseFormRegisterReturn;
@@ -131,7 +133,15 @@ export const PostActionBar = ({
                   variant="ghost"
                   onClick={setOpen}
                 >
-                  <PhotoIcon className="w-5" />
+                  <div className="h-5 w-5">
+                    <Image
+                      src={photoIcon}
+                      alt="Photo Button"
+                      width={100}
+                      height={100}
+                    />
+                  </div>
+                  {/* <PhotoIcon className="w-5" /> */}
                 </Button>
               </div>
             )}

@@ -29,6 +29,7 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
   useEffect(() => {
     setImagePreviewUrl(src);
   }, [src]);
+  console.log('Image Preview url :---: ', src);
 
   const OnChange = (e: any) => {
     e.preventDefault();
@@ -65,10 +66,14 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
               'h-56 w-56 rounded-full border-[6px] border-offWhite',
               'ui-component-img-uploader-preview',
               className && className,
+              !imagePreviewUrl && 'p-4',
             )}
             onClick={() => !children && handleChooseMedia()}
           >
-            <img src={imagePreviewUrl} onError={onImageError} />
+            <img
+              src={imagePreviewUrl ?? profile_img_icon}
+              onError={onImageError}
+            />
           </div>
         )}
       </div>

@@ -2,10 +2,17 @@ import Image from 'next/image';
 import Modal from '@components/common/Modal/Modal';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import {XMarkIcon} from '@heroicons/react/24/solid';
-import {ChangeEventHandler, FC, useCallback, useRef, useState} from 'react';
+import {
+  ChangeEventHandler,
+  FC,
+  PropsWithChildren,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import useSWRInfinite from 'swr/infinite';
 import Button from '@components/common/Button/Button';
-import MemberItem from '../MemberItem';
 import {
   ChevronLeftIcon,
   CheckCircleIcon,
@@ -17,6 +24,41 @@ import {
 } from '@models/organization';
 import {addMember} from '@api/organizations/team/actions';
 import {get} from 'utils/request';
+import {Avatar} from '@components/common';
+import useSWR from 'swr';
+import {UserProfile} from '@models/profile';
+import Link from 'next/link';
+import {useFormattedLocation} from 'services/formatLocation';
+
+interface IFollowerItemProps extends PropsWithChildren {
+  follower: IOrganizationFollowerType;
+}
+const FollowerItem: FC<IFollowerItemProps> = ({follower, children}) => {
+  const {data} = useSWR<UserProfile>(
+    `/user/${follower.identity_meta.id}/profile`,
+  );
+  const location = useFormattedLocation(data);
+
+  return (
+    <div className="flex items-center  border-b py-2 px-4">
+      <Link href={`/app/user/${follower.identity_meta.username}`}>
+        <a>
+          <Avatar size="l" src={follower.identity_meta.avatar} />
+        </a>
+      </Link>
+      <div className="flex grow flex-col p-1 px-3">
+        <Link href={`/app/user/${follower.identity_meta.username}`}>
+          <a>
+            <p>{follower.identity_meta.name}</p>
+            <p className="text-sm text-gray-500">{location}</p>
+          </a>
+        </Link>
+      </div>
+      <div>{children}</div>
+    </div>
+  );
+};
+
 interface INewMemberModalProps {
   open: boolean;
   orgId: string;
@@ -129,7 +171,7 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
               <div className="mt-3 border-t border-b bg-zinc-100 p-3">
                 <SearchBar
                   type="text"
-                  placeholder="Search"
+                  placeholder="Search connections"
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
@@ -143,26 +185,17 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
                     page.items.map(
                       (item, index) =>
                         !memberIds.includes(item.identity_meta.id) && (
-                          <MemberItem
+                          <FollowerItem
                             key={`m-${item.identity_meta.id}-${index}`}
-                            name={item.identity_meta.name}
-                            avatar={item.identity_meta.avatar}
-                            detail={item.identity_meta.email!}
-                            Extra={
-                              false ? (
-                                <Button variant="outline" size="sm">
-                                  request sent
-                                </Button>
-                              ) : (
-                                <span
-                                  className="cursor-pointer"
-                                  onClick={() => onAddMember(item)}
-                                >
-                                  <UserPlusIcon className="w-6" />
-                                </span>
-                              )
-                            }
-                          />
+                            follower={item}
+                          >
+                            <span
+                              className="cursor-pointer"
+                              onClick={() => onAddMember(item)}
+                            >
+                              <UserPlusIcon className="w-6" />
+                            </span>
+                          </FollowerItem>
                         ),
                     ),
                   )}

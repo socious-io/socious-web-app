@@ -13,9 +13,10 @@ import {LinkIcon} from '@heroicons/react/24/outline';
 import {Switch} from '@components/common';
 import useSWR from 'swr';
 import {get} from 'utils/request';
+import {Project} from 'models/project';
 
 interface ApplyStep extends StepProps {
-  title: string;
+  project: Project;
 }
 export const TitlePart: FC<{
   title: string;
@@ -26,10 +27,9 @@ export const TitlePart: FC<{
     </div>
   );
 };
-export const ApplyStep1 = ({onSubmit, title}: ApplyStep) => {
-  const {currentIdentity} = useUser();
+export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
-  const {data} = useSWR<any>(`/orgs/${currentIdentity?.id}`, get);
+  const {data} = useSWR<any>(`/orgs/${project?.identity_id}`, get);
 
   const {
     handleSubmit,
@@ -65,21 +65,20 @@ export const ApplyStep1 = ({onSubmit, title}: ApplyStep) => {
     >
       <FromLayout>
         <div className="overflow-y-scroll px-4 pt-4">
-          <p className="font-bold text-black">{title}</p>
+          <p className="font-bold text-black">{project?.title}</p>
           <div className="mt-3 flex flex-row space-x-2">
             <Avatar size="s" type="organizations" />
-            <p className="text-black">{currentIdentity?.meta?.name}</p>
+            <p className="text-black">{data?.name}</p>
           </div>
-          <p className="mt-4 text-black">{data?.description}</p>
+          <p className="mt-4 text-black">{project?.description}</p>
           <TitlePart title="Cover letter" />
-          <p className="mt-6 text-black">
-            Message<span className="ml-1 font-bold text-red-500 ">*</span>
-          </p>
           <TextArea
+            required
+            label="Message"
             placeholder="Write a message..."
             rows={5}
             value={ProjectContext.cover_letter}
-            containerClassName=""
+            containerClassName="mt-6"
             className="border-gray border-1  overflow-y-scroll focus:border-none"
             errorMessage={errors?.['content']?.message}
             onChange={(e) => handleChange('cover_letter', e.target.value)}
@@ -117,7 +116,7 @@ export const ApplyStep1 = ({onSubmit, title}: ApplyStep) => {
           variant="fill"
           value="Submit"
         >
-          Submit
+          Review application
         </Button>
       </div>
     </form>

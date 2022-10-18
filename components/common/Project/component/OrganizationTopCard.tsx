@@ -1,11 +1,11 @@
 import {Avatar} from '@components/common';
-import {defaultProject, Project, ProjectProps} from 'models/project';
+import {defaultProject, ProjectProps} from 'models/project';
 import {Button} from '@components/common';
 import {ApplyStep1} from '../Apply/Step1/ApplyStep1';
 import ApplyStep2 from '../Apply/Step2/ApplyStep2';
 import ApplyStep3 from '../Apply/Step3/ApplyStep3';
 import ApplyStep4 from '../Apply/Step4/ApplyStep4';
-
+import {FC} from 'react';
 import useUser from 'hooks/useUser/useUser';
 import {getText} from '@socious/data';
 import {
@@ -19,11 +19,12 @@ import {useProjectContext} from '../created/NewProject/context';
 import {applyProject} from '@api/projects/actions';
 import {ApplyProjectType} from '@models/project';
 import {toast} from 'react-toastify';
+import useSWR from 'swr';
+import {useFormattedLocation} from 'services/formatLocation';
 
-function OrganizationTopCard({
-  project: {
+const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
+  const {
     title,
-    country_id,
     identity_meta,
     payment_range_higher,
     payment_range_lower,
@@ -31,11 +32,17 @@ function OrganizationTopCard({
     project_length,
     project_type,
     id,
-  } = defaultProject,
-}: ProjectProps) {
-  const {identities} = useUser({redirect: false});
+    applied,
+  } = project;
+
+  // FIXME let's add this to identity_meta instead
+  const {data: org} = useSWR(`/orgs/${identity_meta.id}`);
+  const orgLocation = useFormattedLocation(org);
+
+  const {identities, currentIdentity} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);
   const {ProjectContext, setProjectContext} = useProjectContext();
+  const location = useFormattedLocation(project);
 
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;
@@ -53,7 +60,7 @@ function OrganizationTopCard({
         postBody.share_contact_info = ProjectContext.share_contact_info;
 
       try {
-        await applyProject(id || '', postBody);
+        if (id) await applyProject(id, postBody);
         setProjectContext({
           ...ProjectContext,
           formStep: ProjectContext.formStep + 1,
@@ -70,13 +77,28 @@ function OrganizationTopCard({
   };
   const pageDisplay = () => {
     if (isStep0) {
-      return <ApplyStep1 onSubmit={onSubmit} title={title} />;
+      return <ApplyStep1 onSubmit={onSubmit} project={project} />;
     } else if (isStep1) {
-      return <ApplyStep2 onSubmit={onSubmit} title={title} />;
+      return <ApplyStep2 onSubmit={onSubmit} project={project} />;
     } else if (isStep2) {
       return <ApplyStep3 />;
     } else if (isStep3) {
       return <ApplyStep4 />;
+    }
+  };
+
+  const getTitle = () => {
+    switch (ProjectContext.formStep) {
+      case 0:
+        return 'Apply';
+      case 1:
+        return 'Review application';
+      case 2:
+        return '';
+      case 3:
+        return 'Attach a link';
+      default:
+        return '';
     }
   };
 
@@ -87,7 +109,7 @@ function OrganizationTopCard({
           <Avatar size="l" src={identity_meta?.image} />
           <div className="flex flex-col justify-center">
             <p className="text-black">{identity_meta?.name || ''}</p>
-            <p className="text-graySubtitle">{country_id || ''}</p>
+            <p className="text-graySubtitle">{orgLocation || ''}</p>
           </div>
         </div>
       </div>
@@ -95,10 +117,10 @@ function OrganizationTopCard({
         <p className="font-semibold">{title}</p>
       </div>
       <div className="mt-4 flex space-x-5">
-        {country_id && (
+        {location && (
           <div className="flex flex-row">
             <MapPinIcon width={20} height={20} className="text-primary" />
-            <p className="ml-2 text-sm text-graySubtitle">{country_id}</p>
+            <p className="ml-2 text-sm text-graySubtitle">{location}</p>
           </div>
         )}
         {projectType && (
@@ -138,11 +160,12 @@ function OrganizationTopCard({
       </div>
 
       <div className="mt-4 flex justify-between">
-        {identities !== null && (
+        {identities !== null && currentIdentity?.type === 'users' && (
           <Button
             className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
             type="submit"
             size="lg"
+            disabled={applied}
             variant="fill"
             value="Submit"
             onClick={() =>
@@ -153,16 +176,14 @@ function OrganizationTopCard({
               })
             }
           >
-            Apply now
+            {applied ? 'Applied' : 'Apply now'}
           </Button>
         )}
       </div>
 
-      <ApplyLayout title={isStep3 ? 'Attach a link' : 'Review application'}>
-        {pageDisplay()}
-      </ApplyLayout>
+      <ApplyLayout title={getTitle()}>{pageDisplay()}</ApplyLayout>
     </div>
   );
-}
+};
 
 export default OrganizationTopCard;

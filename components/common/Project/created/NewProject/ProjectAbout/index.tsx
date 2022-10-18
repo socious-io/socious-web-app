@@ -4,7 +4,7 @@ import SearchBar from '@components/common/SearchBar/SearchBar';
 import {useForm} from 'react-hook-form';
 import useFilter from 'hooks/auth/useFilter';
 import Title from '@components/common/CreateOrganization/components/Title';
-import useGetData from '../ProjectInfo/useGetData';
+import useGetData from '../../../../../../hooks/useGetData';
 import {useProjectContext} from '../context';
 import {toast} from 'react-toastify';
 import {joiResolver} from '@hookform/resolvers/joi';
@@ -15,7 +15,6 @@ import {TOnSubmit} from '../sharedType';
 
 const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
   const {
-    handleSubmit,
     formState: {isValid},
     setValue,
   } = useForm({
@@ -66,7 +65,7 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      // onSubmit={handleSubmit(onSubmit)}
       className="flex h-full w-full flex-col"
     >
       <FromLayout>
@@ -101,7 +100,8 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
       <div className=" flex items-end justify-end  border-t p-4">
         <Button
           disabled={ProjectContext.isEditModalOpen ? false : !isValid}
-          type="submit"
+          type="button"
+          onClick={() => onSubmit()}
           className="flex h-11 w-52 items-center justify-center"
         >
           {ProjectContext.isEditModalOpen ? 'Save Changes' : ' Continue'}

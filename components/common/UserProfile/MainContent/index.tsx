@@ -27,6 +27,7 @@ import {useUser} from '@hooks';
 
 // interfaces
 import {IdentityType} from '@models/identity';
+import {IProjectsResponse} from '@models/project';
 interface Props {
   data: any;
   status: IdentityType;
@@ -43,16 +44,16 @@ const MainContent: React.FC<Props> = ({
   const {user} = useUser({redirect: false});
   const router = useRouter();
 
-  //getting user identities
   const {
     data: identities,
     mutate: identities_mutate,
     error,
   } = useSWR<any>(`/identities/${data.id}`, get);
 
-  const {data: projects} = useSWR<any>(`/projects?identity=${data.id}&limit=3`);
+  const {data: projects} = useSWR<IProjectsResponse>(
+    `/projects?identity=${data.id}&limit=3`,
+  );
 
-  //handel get identities error
   if (!identities && !error) return <p>loading</p>;
   if (
     error?.response?.status === 400 ||
@@ -122,10 +123,7 @@ const MainContent: React.FC<Props> = ({
             status={status}
           />
         )}
-        <Description
-          paragraph={data?.mission}
-          title={status === 'users' ? 'About' : 'Mission'}
-        />
+        <Description paragraph={data?.mission} title="Mission" />
         {status === 'users' && <Skills skills={data?.skills} />}
         <hr className="mb-20 border-grayLineBased" />
       </div>

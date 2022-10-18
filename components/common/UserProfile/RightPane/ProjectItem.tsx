@@ -7,7 +7,7 @@ interface Props {
   title: string;
   applicants: number;
   hired: number;
-  dateRange: string;
+  date: string;
   border?: boolean;
   first?: boolean;
   last?: boolean;
@@ -17,7 +17,7 @@ const ProjectItem: React.FC<Props> = ({
   title,
   applicants,
   hired,
-  dateRange,
+  date,
   border = false,
   first = false,
   last = false,
@@ -44,9 +44,13 @@ const ProjectItem: React.FC<Props> = ({
             height="100%"
           />
         </div>
-        <p className="text-sm">{`${applicants} applicants, ${hired} hired`}</p>
+        <p className="text-sm">
+          {applicants === 0
+            ? 'No applicants'
+            : `${applicants} applicants, ${hired} hired`}
+        </p>
       </div>
-      <label className="text-sm text-graySubtitle">{dateRange}</label>
+      <label className="text-sm text-graySubtitle">{date}</label>
     </div>
   );
 };

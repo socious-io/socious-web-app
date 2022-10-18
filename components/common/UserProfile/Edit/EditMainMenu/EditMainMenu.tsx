@@ -42,6 +42,7 @@ const EditMainMenu = ({
   const [countryName, setCountryName] = useState<any>('');
 
   const bio = watch('bio');
+  const mission = watch('mission');
   const skills = watch('skills');
   const passions = watch('passions');
   const countryCode = watch('country');
@@ -199,9 +200,8 @@ const EditMainMenu = ({
         className="hide-scrollbar flex flex-1 flex-col overflow-y-scroll"
         onSubmit={handleSubmit(editProfile)}
       >
-        {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-        <Modal.Description>
-          <div className="grow overflow-y-auto">
+        <div className="grow overflow-y-auto">
+          <div>
             {/* Images Upload */}
             <div className="border-b-2 border-grayLineBased bg-offWhite pb-4">
               <ImageUploader
@@ -286,6 +286,19 @@ const EditMainMenu = ({
                   <p className="text-sm text-graySubtitle">
                     {bio?.length ?? 0} / 160
                   </p>
+                </div>
+                <div>
+                  <TextArea
+                    label="Mission"
+                    placeholder="Tell us about your mission"
+                    register={register('mission')}
+                    errorMessage={formState?.errors?.['mission']?.message}
+                    className="my-2 border-2 border-grayLineBased"
+                    rows={5}
+                  />
+                  {/* <p className="text-sm text-graySubtitle">
+                    {mission?.length ?? 0} / 160
+                  </p> */}
                 </div>
               </div>
 
@@ -446,7 +459,7 @@ const EditMainMenu = ({
               </div>
             </div>
           </div>
-        </Modal.Description>
+        </div>
         <div className=" bottom-0 divide-x border-t-2 border-grayLineBased bg-white p-4 pb-12 sm:sticky sm:pb-4">
           <Button
             className="ml-auto flex w-full items-center justify-center align-middle sm:w-auto sm:max-w-xs "

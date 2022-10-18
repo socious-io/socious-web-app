@@ -6,6 +6,7 @@ export type IdentityMeta = {
   username?: string;
   shortname?: string;
   image?: string;
+  status?: string;
 };
 
 export type IdentityType = 'users' | 'organizations';

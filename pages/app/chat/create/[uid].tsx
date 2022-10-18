@@ -11,7 +11,7 @@ const ChatCreate = () => {
   const [status, setStatus] = useState<string>('CHECKING FOR YOUR CHAT...');
 
   useEffect(() => {
-    if (!uid) router.push('/app/chat');
+    if (!uid) router.replace('/app/chat');
 
     (async () => {
       const toFindChat: FindChatBodyType = {
@@ -24,7 +24,7 @@ const ChatCreate = () => {
         // IF CHAT EXISTS
         if (foundChats.items.length !== 0) {
           // REDIRECT TO EXISTING CHAT
-          router.push(`/app/chat/${foundChats.items?.[0].id}`);
+          router.replace(`/app/chat/${foundChats.items?.[0].id}`);
         } else {
           // IF NO CHAT EXISTS
           setStatus('I see. Have a great conversation.');
@@ -36,10 +36,10 @@ const ChatCreate = () => {
 
           // CREATE NEW CHAT
           const chatResponse: any = await createChat(chatBody);
-          router.push(`/app/chat/${chatResponse.id}`);
+          router.replace(`/app/chat/${chatResponse.id}`);
         }
       } catch (error) {
-        router.push('/app/chat');
+        router.replace('/app/chat');
       }
     })();
   }, [name, router, uid]);

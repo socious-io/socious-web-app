@@ -18,18 +18,20 @@ const AddLink = () => {
     resolver: joiResolver(schemaLink),
   });
   const {ProjectContext, setProjectContext} = useProjectContext();
-  const [name, setName] = useState<string>('');
-  const [link, setLink] = useState<string>('');
+  const [name, setName] = useState<string>(' ');
+  const [link, setLink] = useState<string>(' ');
 
   useEffect(() => {
-    if (ProjectContext) {
+    if (ProjectContext?.cv_name) {
       setValue('cv_name', ProjectContext.cv_name, {
         shouldValidate: true,
       });
+      setName(ProjectContext.cv_name);
+    }
+    if (ProjectContext?.cv_link) {
       setValue('cv_link', ProjectContext.cv_link, {
         shouldValidate: true,
       });
-      setName(ProjectContext.cv_name);
       setLink(ProjectContext.cv_link);
     }
   }, []);
@@ -40,9 +42,10 @@ const AddLink = () => {
         <div className="mt-2 flex h-full flex-col space-y-4 px-4">
           <div className="mt-2 space-y-4 pl-0 ">
             <TextArea
+              required
               label="Link name "
               placeholder="Write a message..."
-              rows={2}
+              rows={4}
               value={name}
               containerClassName=""
               className="border-gray border-1  overflow-y-scroll focus:border-none"
@@ -58,9 +61,10 @@ const AddLink = () => {
           </div>
           <div className="mt-2 space-y-4 pl-0 ">
             <TextArea
+              required
               label="Link URL"
               placeholder="Write a message..."
-              rows={2}
+              rows={4}
               value={link}
               containerClassName=""
               className="border-gray border-1  overflow-y-scroll focus:border-none"
@@ -76,10 +80,11 @@ const AddLink = () => {
           </div>
         </div>
       </FromLayout>
-      <div className=" flex items-end justify-end  border-t p-4 px-4">
+      <div className=" flex  items-end justify-end  border-t p-4 px-4">
         <Button
           type="button"
           variant="fill"
+          className="flex w-36 justify-center"
           disabled={!isValid}
           onClick={() =>
             setProjectContext({
@@ -90,7 +95,7 @@ const AddLink = () => {
             })
           }
         >
-          Add Link
+          <div className="text-base font-semibold">Add a link</div>
         </Button>
       </div>
     </div>

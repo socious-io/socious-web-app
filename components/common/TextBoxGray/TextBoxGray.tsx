@@ -16,7 +16,7 @@ function TextBoxGray({backColor, textColor, title}: Props) {
     >
       <p className={twMerge('justify  font-normal text-black', textColor)}>
         {title}
-        <span className="text-success"> See more...</span>
+        {/* <span className="text-success"> See more...</span> */}
       </p>
     </div>
   );

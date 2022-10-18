@@ -61,8 +61,6 @@ const CreateOrganization = () => {
   const handleSubmit = (data: CreateOrganizationType) => {
     if (step === 6) {
       requestHandler(data);
-    } else if (step === 8) {
-      goHome();
     } else {
       nextHandler();
     }
@@ -101,6 +99,8 @@ const CreateOrganization = () => {
   const nextHandler = () => {
     if (step < 8) {
       setStep((step) => step + 1);
+    } else if (step === 8) {
+      goHome();
     }
   };
 

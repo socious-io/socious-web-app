@@ -1,7 +1,3 @@
-# misc
-.DS_Store
-*.pem
-
 # Logs
 logs
 *.log
@@ -71,4 +67,15 @@ artifacts/
 
 # If someone uses yarn, make sure we don't commit the lock file, as it causes bugs
 yarn.lock
+
+# Unsupported ides
 .idea
+
+# PWA
+**/public/workbox-*.js*
+**/public/sw.js*
+**/public/fallback-*.js
+
+# misc
+.DS_Store
+*.pem

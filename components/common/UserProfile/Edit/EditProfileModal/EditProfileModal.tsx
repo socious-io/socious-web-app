@@ -37,6 +37,8 @@ import {mutate} from 'swr';
 import Router from 'next/router';
 import {useUser} from '@hooks';
 import {close} from 'inspector';
+import {AxiosError} from 'axios';
+import {toast} from 'react-toastify';
 interface EditProfileModalProps {
   openState: boolean;
   user: any;
@@ -104,8 +106,9 @@ const EditProfileModal = ({
       firstName: user?.first_name ?? '',
       lastName: user?.last_name ?? '',
       userName: user?.username ?? '',
-      email: user?.email,
+      // email: user?.email,
       bio: user?.bio,
+      mission: user?.mission,
       passions: user?.social_causes ?? [],
       skills: user?.skills ?? [],
       country: user?.country,
@@ -141,6 +144,7 @@ const EditProfileModal = ({
     const username: string = formMethods.getValues('userName');
     // const email: string = formMethods.getValues('email');
     const bio: string = formMethods.getValues('bio').trim();
+    const mission: string = formMethods.getValues('mission').trim();
     const social_causes: string[] = formMethods.getValues('passions');
     const skills: string[] = formMethods.getValues('skills');
     const country: string = formMethods.getValues('country');
@@ -167,6 +171,7 @@ const EditProfileModal = ({
     if (phone) updateProfileBody.phone = phone;
     if (avatarId) updateProfileBody.avatar = avatarId;
     if (coverId) updateProfileBody.cover_image = coverId;
+    if (mission) updateProfileBody.mission = mission;
 
     //Making a API call
     try {
@@ -179,6 +184,27 @@ const EditProfileModal = ({
       forceUpdate();
     } catch (error) {
       console.log('ERROR :---: ', error);
+      const data: any = (error as AxiosError).response?.data;
+      if (data) {
+        if (
+          /^duplicate key value violates unique constraint.*phone/.exec(
+            data.error,
+          )
+        ) {
+          formMethods.setError(
+            'phoneNumber',
+            {
+              type: 'value',
+              message:
+                'This phone number is already associated with another user',
+            },
+            {shouldFocus: true},
+          );
+        } else
+          toast.error(`Couldn't save data: ${data.error || 'error'}`, {
+            autoClose: false,
+          });
+      }
     }
   }, [avatar, closeModal, coverImage, formMethods, mutateUser, user?.username]);
 
@@ -191,7 +217,7 @@ const EditProfileModal = ({
         editState !== 'MAIN' && 'h-screen',
       )}
     >
-      <div className="relative sticky top-0">
+      <div className="sticky top-0">
         <Modal.Title>
           <h3 className="font-worksans border-b-2 pt-6 pb-2 text-center text-xl font-semibold">
             {editState === 'MAIN' && 'Edit profile'}

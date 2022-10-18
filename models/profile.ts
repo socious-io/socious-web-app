@@ -1,57 +1,24 @@
 // import {BusinessProfile} from './business';
-import {City} from './city';
-import {Country} from './country';
-import {MobileCountry} from './mobileCountry';
 // import {NewsFeed} from './newsFeed';
-import {Passion} from './passion';
-import {TopSkills} from './topSkills';
 
 export interface UserProfile {
-  profile: any;
   id: number;
-  active?: boolean;
   first_name?: string;
   last_name?: string;
   followers: number;
   bio?: string;
-  email_text?: string;
-  /**
-   * 0: User
-   * 1: Business
-   */
-  view_as?: 0 | 1;
+  email?: string;
   language?: string;
   phone?: string;
-  my_conversation?: string;
-  location?: string;
-  address_detail?: string;
-  city?: City;
-  city_ja?: City;
-  latitude?: number;
-  longitude?: number;
-  country?: Country;
-  mobile_countries?: MobileCountry;
+  address?: string;
+  city?: string;
+  country?: string;
+  mobile_country_code?: string;
   avatar?: string;
   cover_image?: string;
   mission?: string;
-  profile_id?: string;
-  passions?: Array<Passion>;
-  posts?: Array<any>;
-  experiences?: Array<any>;
-  skills?: Array<TopSkills>;
-  initiatives_followed?: Array<any>;
-  business?: any;
-  /**
-   * other profile follow you or not
-   */
-  check_follower?: boolean;
-
-  /**
-   * you follow other profile or not
-   */
-  check_following?: boolean;
-
-  is_blocker?: boolean;
+  social_causes: Array<string>;
+  skills: Array<string>;
 }
 export interface UserProfileBody {
   first_name?: string;
@@ -65,8 +32,7 @@ export interface UserProfileBody {
   mission?: string;
   passions?: Array<number>;
   mobile_countries_id?: number;
-  city?: City;
-  city_ja?: City;
+  city?: string;
   country_id?: string;
   country_id_ja?: string;
   address_detail?: string;
@@ -125,6 +91,7 @@ export interface UpdateProfileBodyType {
   username: string;
   email?: string;
   bio: string;
+  mission?: string;
   social_causes: string[];
   skills: string[];
   country: string;

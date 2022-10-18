@@ -1,6 +1,5 @@
-import Avatar from '@components/common/Avatar/Avatar';
 import SearchBar from '@components/common/SearchBar/SearchBar';
-import {ChevronLeftIcon, PlusIcon} from '@heroicons/react/24/outline';
+import {PlusIcon} from '@heroicons/react/24/outline';
 import React, {
   forwardRef,
   useCallback,
@@ -14,7 +13,6 @@ import useSWR from 'swr';
 import {get} from 'utils/request';
 import {useUser} from '@hooks';
 import {twMerge} from 'tailwind-merge';
-import {useRef} from 'react';
 
 type ChatSideBarProps = {
   onChatOpen?: (data: any) => void;
@@ -30,7 +28,6 @@ const SideBarToBe = (
   const [query, setQuery] = useState<string>('');
   const [filteredChats, setFilteredChats] = useState<any[]>([]);
 
-  const goBack = useCallback(() => router.back(), [router]);
   const {user, currentIdentity} = useUser();
 
   const {
@@ -51,7 +48,15 @@ const SideBarToBe = (
   }, [currentIdentity, mutateChats]);
 
   useEffect(() => {
-    if (chatResponse?.items) setFilteredChats(chatResponse.items);
+    if (chatResponse?.items)
+      setFilteredChats(
+        chatResponse.items.sort((a: any, b: any) => {
+          const dateDiff =
+            Date.parse(a.updated_at ?? a.created_at) -
+            Date.parse(b.updated_at ?? b.created_at);
+          return dateDiff > 0 ? -1 : dateDiff < 0 ? 1 : 0;
+        }),
+      );
   }, [chatResponse]);
 
   return (
@@ -71,23 +76,10 @@ const SideBarToBe = (
       </div>
 
       {/* HEADER */}
-      <div className="mt-14 flex items-center justify-between pb-3.5 pr-3 pl-6 sm:mt-7 sm:justify-center">
-        <span className="block sm:hidden" onClick={goBack}>
-          <ChevronLeftIcon className="w-5" />
-        </span>
+      <div className="mt-14 flex items-center justify-center pb-3.5 sm:mt-7 sm:justify-center">
         <h3 className="font-worksans text-center text-xl font-semibold">
           Chats
         </h3>
-        <Avatar
-          size="m"
-          src={
-            currentIdentity?.type === 'users'
-              ? user?.avatar?.url
-              : user?.image?.url
-          }
-          type={currentIdentity?.type}
-          className="block sm:hidden"
-        />
       </div>
       {/* SEARCHBAR */}
       <div className="border-y-[0.5px] border-offsetColor bg-offWhite px-4 py-2.5 ">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import type {NextPage} from 'next';
 import {GeneralLayout} from 'layout';
 import SideBar from '@components/common/Feed/SideBar';
@@ -7,12 +7,19 @@ import CreateProjectMain from '@components/common/Project/created/NewProject';
 import {ProjectContextProvider} from 'components/common/Project/created/NewProject/context';
 import {GetStaticProps, GetStaticPaths} from 'next';
 import getGlobalData from 'services/cacheSkills';
+import useUser from 'hooks/useUser/useUser';
+import Router from 'next/router';
 
 type ProjectApplicationsProps = {
   skills: any[];
 };
 
 const ProjectApplications: NextPage<ProjectApplicationsProps> = ({skills}) => {
+  const {currentIdentity} = useUser({redirect: false});
+  useEffect(() => {
+    if (currentIdentity?.type === 'users') Router.push('/app/projects');
+  }, [currentIdentity?.type]);
+
   return (
     <ProjectContextProvider>
       <GeneralLayout hasNavbar>
@@ -28,9 +35,5 @@ export default ProjectApplications;
 
 export const getStaticProps: GetStaticProps = async () => {
   const skills = await getGlobalData();
-  return {props: {skills}};
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {paths: [], fallback: true};
+  return {props: {skills}, revalidate: 60 * 60};
 };

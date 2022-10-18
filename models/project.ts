@@ -5,7 +5,8 @@ export interface Project {
   id: string;
   title: string;
   description: string;
-  country_id: number;
+  applicants: number;
+  country: string;
   project_type: string;
   project_length: string;
   payment_type: string;
@@ -22,26 +23,34 @@ export interface Project {
   identity_type: IdentityType;
   identity_meta: IdentityMeta;
   status: string;
-  created_at: number;
-  expires_at?: number;
+  created_at: string;
+  expires_at?: string;
+  applied: boolean;
+  updated_at: string;
+  commitment_hours_higher: string;
+  commitment_hours_lower: string;
+  city: string;
 }
 
 export interface CreateProjectType {
   title: string;
   description: string;
-  status?: string;
-  payment_type?: string;
+  payment_type: string;
   payment_scheme?: string;
   remote_preference: string;
   payment_currency?: string;
   payment_range_lower?: string;
   payment_range_higher?: string;
-  experience_level?: number;
-  causes_tags?: Array<string>;
-  country?: string;
-  project_length?: string;
+  commitment_hours_higher?: string;
+  commitment_hours_lower?: string;
+  // experience_level: number;
+  causes_tags: Array<string>;
+  country: string;
+  project_length: string;
   project_type?: string;
-  skills?: Array<string>;
+  skills: Array<string>;
+  city?: string;
+  status: string;
 }
 
 export interface ApplyProjectType {
@@ -61,3 +70,10 @@ export const defaultProject = {
   causes_tags: [],
   skills: [],
 } as unknown as Project;
+
+export interface IProjectsResponse {
+  items: Project[];
+  limit: number;
+  page: number;
+  total_count: number;
+}

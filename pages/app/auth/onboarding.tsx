@@ -36,6 +36,7 @@ import {uploadMedia} from '@api/media/actions';
 import {AxiosError} from 'axios';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 import Router from 'next/router';
+import {checkAndUploadMedia} from 'services/ImageUpload';
 
 const schemaStep = {
   2: schemaOnboardingStep2,
@@ -112,10 +113,8 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
       setPlaceId(data);
       setStep(step + 1);
     } else if (step === 7) {
-      console.log('Step 7');
       handleUpdateProfileRequest();
     } else if (step === 8) {
-      console.log('STEP 8');
       handleImageUpload(data);
     } else if (step === 9) {
       requestNotificationPermission();
@@ -126,24 +125,23 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 
   const handleImageUpload = useCallback(
     async (file: any) => {
-      const formData = new FormData();
-      formData.append('file', file);
-      let media_id: string;
-      console.log('FORMDATA :---: ', ...formData);
+      // Move to next step if no file.
+      if (!file?.type) {
+        setStep(step + 1);
+        return;
+      }
+
+      let avatarId: string | null = null;
       try {
-        const response: any = await uploadMedia(formData);
-        media_id = response.id;
+        avatarId = await checkAndUploadMedia(file);
       } catch (e) {
         const error = e as AxiosError<any>;
         let msg = DefaultErrorMessage;
-        console.log('ERROR Media Upload :---:', e);
-        if (error.isAxiosError) {
-          if (error?.code === 'ERR_NETWORK')
-            msg = {
-              title: 'Image size is too large.',
-              message: 'Please, try again with smaller sized image.',
-            };
-        }
+        if (error.isAxiosError && error.code === 'ERR_NETWORK')
+          msg = {
+            title: 'Image size is too large.',
+            message: 'Please, try again with smaller sized image.',
+          };
         setError(msg);
         handleToggleModal();
         return;
@@ -155,8 +153,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
           last_name: user?.last_name,
           username: user?.username,
         };
-        console.log('PROFILE BODY :2 ', profileBody);
-        profileBody.avatar = media_id;
+        profileBody.avatar = avatarId;
         await updateProfile(profileBody);
       } catch (error) {
         setError(DefaultErrorMessage);
@@ -195,9 +192,8 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 
     if (bio) profileBody.bio = bio;
     if (city) profileBody.city = city;
-    if (country) profileBody.country = country;
+    if (country?.code) profileBody.country = country.code;
 
-    console.log('USER PROFILE 1: ', profileBody);
     updateProfile(profileBody)
       .then(() => {
         setStep(step + 1);

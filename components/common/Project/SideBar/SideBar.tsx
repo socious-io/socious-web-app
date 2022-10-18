@@ -1,14 +1,23 @@
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
+import {
+  TApplicant,
+  TApplicantsByStatus,
+  TApplicantsResponse,
+} from '@models/applicant';
 import useUser from 'hooks/useUser/useUser';
 import router from 'next/router';
+import {useMemo} from 'react';
+import useSWR from 'swr';
+import {get} from 'utils/request';
 import ApplicantsContent from './ApplicantsContent';
 import HiredContent from './HireContent';
 import ProjectCard from './ProjectCard';
 
 interface Props {
   selectBar: string;
+  projectId?: string;
 }
-const SideBar = ({selectBar}: Props) => {
+const SideBar = ({selectBar, projectId}: Props) => {
   const {user, currentIdentity} = useUser();
 
   return (
@@ -23,16 +32,21 @@ const SideBar = ({selectBar}: Props) => {
             <p className=" font-semibold ">Projects</p>
           </span>
         </div>
-
-        <div className="cursor-pointer space-y-4 overflow-y-auto bg-gray-50">
-          <ProjectCard
-            isOrganization={currentIdentity?.type === 'organizations'}
-            username={user?.username}
-          />{' '}
-        </div>
-
-        {selectBar == 'APPLICANT' && <ApplicantsContent />}
-        {selectBar == 'HIRE' && <HiredContent />}
+        {projectId && (
+          <div className="cursor-pointer space-y-4 overflow-y-auto bg-gray-50">
+            <ProjectCard
+              isOrganization={currentIdentity?.type === 'organizations'}
+              username={user?.username}
+              projectId={projectId}
+            />
+          </div>
+        )}
+        {selectBar == 'APPLICANT' && projectId && (
+          <ApplicantsContent projectId={projectId} />
+        )}
+        {selectBar == 'HIRE' && projectId && (
+          <HiredContent projectId={projectId} />
+        )}
       </div>
     </div>
   );
