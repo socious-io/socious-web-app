@@ -20,6 +20,15 @@ import {toast} from 'react-toastify';
 function MyApp({Component, pageProps}: AppProps) {
   return (
     <>
+      <Head>
+        <title>Socious</title>
+        <meta charSet="utf-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+        />
+      </Head>
       <SWRConfig
         value={{
           fetcher: get,

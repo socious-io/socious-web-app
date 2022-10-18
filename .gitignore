@@ -71,6 +71,11 @@ yarn.lock
 # Unsupported ides
 .idea
 
+# PWA
+**/public/workbox-*.js*
+**/public/sw.js*
+**/public/fallback-*.js
+
 # misc
 .DS_Store
 *.pem
