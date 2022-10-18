@@ -1,3 +1,4 @@
+import {string} from 'joi';
 import {IdentityMeta, IdentityType} from './identity';
 
 export interface IOrganizationType {
@@ -48,12 +49,20 @@ export interface IOrganizationFollowerType {
   identity_meta: IdentityMeta;
 }
 
+export type TMediaType = {
+  id: string;
+  identity_id: string;
+  filename: string;
+  url: string;
+  created_at: string;
+};
+
 export interface IOrganization {
   address: string;
   bio: string;
   city: string;
   country: string;
-  cover_image: string;
+  cover_image: TMediaType | null;
   created_at: string;
   created_by: string;
   culture: string;
@@ -62,7 +71,7 @@ export interface IOrganization {
   followers: number;
   followings: number;
   id: string;
-  image: string;
+  image: TMediaType | null;
   impact_score: 0;
   mission: string;
   mobile_country_code: string;

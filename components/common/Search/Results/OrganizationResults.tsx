@@ -29,7 +29,7 @@ export const OrganizationResults: FC<UserResultsProps> = ({
           <div className="space-y-6">
             <div className="flex flex-row items-center justify-between">
               <div className="flex flex-row items-center space-x-2">
-                <Avatar size="xl" type="organizations" src={org?.image} />
+                <Avatar size="xl" type="organizations" src={org.image?.url} />
                 <div className="flex flex-1 flex-col justify-center">
                   <p className="text-black">{org?.name}</p>
                   <p className="text-ellipsis text-graySubtitle">
@@ -63,14 +63,15 @@ export const OrganizationResults: FC<UserResultsProps> = ({
                 </span>
               </div>
             ) : null}
-            <div className="flex justify-between text-sm">
+            {/* HIRING BUTTON */}
+            {/* <div className="flex justify-between text-sm">
               <Button
                 size="sm"
                 className="hover:bg--[#F00073] bg-[#F00073]  focus:bg-[#F00073]"
               >
                 Hiring
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       ))}
