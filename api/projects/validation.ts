@@ -35,11 +35,52 @@ export const schemaCreateProjectStep3 = Joi.object({
     ...Object.values(enums.ProjectPaymentSchemeType),
   ),
   payment_currency: Joi.string().allow('', null),
-  payment_range_lower: Joi.number()
-    .required()
-    .less(Joi.ref('payment_range_higher')),
-  payment_range_higher: Joi.number().required(),
-  experience_level: Joi.number().required(),
+  commitment_hours_lower: Joi.when('payment_scheme', {
+    is: 'HOURLY',
+    then: Joi.number().required().positive().integer().messages({
+      'number.base': '`Commitment is required for Project.',
+      'number.empty': '`Commitment is required for Project.',
+      'number.positive': 'Commitment range lower must be a positive number',
+    }),
+  }),
+  commitment_hours_higher: Joi.when('payment_scheme', {
+    is: 'HOURLY',
+    then: Joi.number()
+      .required()
+      .positive()
+      .integer()
+      .greater(Joi.ref('commitment_hours_lower'))
+      .messages({
+        'number.base': '`Commitment is required for Project.',
+        'number.empty': '`Commitment is required for Project.',
+        'number.positive': 'Commitment range higher must be a positive number',
+        'number.greater': 'Commitment range is invalid',
+      }),
+  }),
+
+  payment_range_lower: Joi.when('payment_type', {
+    is: 'PAID',
+    then: Joi.number().positive().integer().required().messages({
+      'number.base': '`Payment is required for Project.',
+      'number.empty': '`Payment is required for Project.',
+      'number.positive': 'Payment range lower must be a positive number',
+    }),
+  }),
+  payment_range_higher: Joi.when('payment_type', {
+    is: 'PAID',
+    then: Joi.number()
+      .positive()
+      .integer()
+      .required()
+      .greater(Joi.ref('payment_range_lower'))
+      .messages({
+        'number.base': '`Payment is required for Project.',
+        'number.empty': '`Payment is required for Project.',
+        'number.positive': 'Payment range lower must be a positive number',
+        'number.greater': 'Payment range is invalid',
+      }),
+  }),
+  experience_level: Joi.number(),
   project_type: Joi.string()
     .required()
     .allow(...Object.values(enums.ProjectType)),
@@ -47,6 +88,11 @@ export const schemaCreateProjectStep3 = Joi.object({
     .required()
     .allow(...Object.values(enums.ProjectLengthType)),
   country: Joi.string().required().min(2).max(3),
+  city: Joi.when('country', {
+    is: 'XW',
+    then: Joi.string(),
+    otherwise: Joi.string().required(),
+  }),
 });
 
 export const schemaCreateProjectQuestion = Joi.object({

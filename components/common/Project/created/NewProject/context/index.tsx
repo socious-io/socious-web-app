@@ -20,6 +20,8 @@ export type TProjectContext = {
   payment_currency: string;
   payment_range_lower: string;
   payment_range_higher: string;
+  commitment_hours_higher: string;
+  commitment_hours_lower: string;
   experience_level: number;
   project_type: string;
   project_length: string;
@@ -31,6 +33,8 @@ export type TProjectContext = {
   share_contact_info: boolean;
   cv_link: string;
   cv_name: string;
+  city: string;
+  status: string;
 };
 
 export const initContext: TProjectContext = {
@@ -43,8 +47,10 @@ export const initContext: TProjectContext = {
   payment_type: '',
   payment_scheme: '',
   payment_currency: '',
-  payment_range_lower: '0',
-  payment_range_higher: '0',
+  payment_range_lower: '',
+  payment_range_higher: '',
+  commitment_hours_higher: '',
+  commitment_hours_lower: '',
   experience_level: 0,
   project_type: '',
   project_length: '',
@@ -56,6 +62,8 @@ export const initContext: TProjectContext = {
   share_contact_info: false,
   cv_link: '',
   cv_name: '',
+  city: '',
+  status: '',
 };
 
 const ProjectContext = createContext<{

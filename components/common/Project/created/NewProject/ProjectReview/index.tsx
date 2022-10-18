@@ -2,102 +2,21 @@ import {FC} from 'react';
 import {Button} from '@components/common';
 import {useProjectContext} from '../context';
 import {TOnSubmit} from '../sharedType';
-import {useForm} from 'react-hook-form';
 import {FromLayout} from '../Layout';
 import {getText} from '@socious/data';
 import Chip from 'components/common/UserProfile/MainContent/Chip';
-
-type TPreviewItem = {
-  label: string;
-  text?: string | number;
-};
-
-export const PreviewItem: FC<TPreviewItem> = ({label, text}) => {
-  return (
-    <div className="mb-6 flex w-full flex-col ">
-      <span className="mb-2 text-base font-normal text-primary">{label}</span>
-      <span>{text}</span>
-    </div>
-  );
-};
+import ProjectInfoOverview from './ProjectInfoOverview';
 
 const ProjectPreview: FC<TOnSubmit> = ({onSubmit}) => {
   const {ProjectContext} = useProjectContext();
-  const {handleSubmit} = useForm();
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex h-full w-full flex-col"
-    >
+    <form className="flex h-full w-full flex-col">
       <FromLayout>
         <div className="mx-4 overflow-y-scroll">
           <h2 className="mb-5">Project description</h2>
-          <PreviewItem label="Project Title" text={ProjectContext.title} />
-          <PreviewItem
-            label="Project description"
-            text={ProjectContext.description}
-          />
-          <PreviewItem
-            label="Remote Preference"
-            text={getText('en', `PROJECT.${ProjectContext.remote_preference}`)}
-          />
-          {ProjectContext.country && (
-            <PreviewItem label="Location" text={ProjectContext.country} />
-          )}
-          <div className="flex flex-row">
-            {ProjectContext.project_type && (
-              <PreviewItem
-                label="Project type"
-                text={getText('en', `PROJECT.${ProjectContext.project_type}`)}
-              />
-            )}
-            {ProjectContext.project_length && (
-              <PreviewItem
-                label="Project length"
-                text={getText('en', `PROJECT.${ProjectContext.project_length}`)}
-              />
-            )}
-          </div>
-          <div className="flex flex-row">
-            {ProjectContext.payment_type && (
-              <PreviewItem
-                label="Payment type"
-                text={getText('en', `PAYMENT.${ProjectContext.payment_type}`)}
-              />
-            )}
-            {ProjectContext.payment_scheme && (
-              <PreviewItem
-                label="Payment rate"
-                text={getText('en', `PAYMENT.${ProjectContext.payment_scheme}`)}
-              />
-            )}
-          </div>
+          <ProjectInfoOverview project={ProjectContext} />
           <div className="flex flex-col">
-            {ProjectContext.payment_range_lower && (
-              <PreviewItem
-                label="Payment range lower"
-                text={ProjectContext.payment_range_lower}
-              />
-            )}
-            {ProjectContext.payment_range_higher && (
-              <PreviewItem
-                label="Payment range higher"
-                text={ProjectContext.payment_range_higher}
-              />
-            )}
-            {ProjectContext.payment_currency && (
-              <PreviewItem
-                label="Payment currency"
-                text={ProjectContext.payment_currency}
-              />
-            )}
-            {ProjectContext.experience_level && (
-              <PreviewItem
-                label="Experience Level"
-                text={ProjectContext.experience_level}
-              />
-            )}
             {ProjectContext?.causes_tags?.length > 0 && (
               <div className="mb-6 flex flex-col ">
                 <span className="mb-2 text-base font-normal text-primary">
@@ -137,17 +56,19 @@ const ProjectPreview: FC<TOnSubmit> = ({onSubmit}) => {
       </FromLayout>
       <div className=" flex items-end justify-end border-t p-4">
         <Button
-          type="submit"
+          type="button"
+          onClick={() => onSubmit('ACTIVE')}
           className="'flex h-11 w-36 items-center justify-center"
         >
           Create
         </Button>
         <Button
           variant="outline"
-          type="submit"
+          type="button"
+          onClick={() => onSubmit('DRAFT')}
           className="ml-2 flex h-11 w-36 items-center justify-center"
         >
-          Save project
+          Save draft
         </Button>
       </div>
     </form>
