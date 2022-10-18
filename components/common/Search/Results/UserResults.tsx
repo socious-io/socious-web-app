@@ -43,7 +43,7 @@ export const UserResults: FC<UserResultsProps> = ({items, onPreviewItem}) => {
                   <p className="text-graySubtitle">{formattedLocation(user)}</p>
                 </div>
               </div>
-              <EllipsisHorizontalIcon className="w-5" />
+              {/* <EllipsisHorizontalIcon className="w-5" /> */}
             </div>
             {user.bio && (
               <div className="flex flex-row">
