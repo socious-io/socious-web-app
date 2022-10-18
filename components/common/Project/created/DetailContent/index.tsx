@@ -27,6 +27,8 @@ const Detail: FC<ProjectProps> = ({project}) => {
     skills,
     status,
     city,
+    commitment_hours_higher,
+    commitment_hours_lower,
   } = project;
   const {state: closeProject, handlers: closeProjectHandlers} = useToggle();
   const {state: avoidClose, handlers: avoidCloseHandlers} = useToggle();
@@ -48,6 +50,8 @@ const Detail: FC<ProjectProps> = ({project}) => {
       project_length,
       project_type,
       remote_preference,
+      commitment_hours_higher,
+      commitment_hours_lower,
       causes_tags: causes_tags || [],
       skills,
       formStep,
