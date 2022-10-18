@@ -4,6 +4,7 @@ import Chip from '@components/common/Chip/Chip';
 import {useOrganization} from '@hooks';
 import {getText} from '@socious/data';
 import Link from 'next/link';
+import {useFormattedLocation} from 'services/formatLocation';
 
 interface OrganizationPreviewProps {
   id: string;
@@ -11,7 +12,7 @@ interface OrganizationPreviewProps {
 
 export const OrganizationPreview: FC<OrganizationPreviewProps> = ({id}) => {
   const {data: org} = useOrganization(id);
-
+  const location = useFormattedLocation(org);
   if (!org) return null;
   return (
     <div className="space-y-4 p-4">
@@ -25,9 +26,11 @@ export const OrganizationPreview: FC<OrganizationPreviewProps> = ({id}) => {
             />
             <div className="flex flex-1 flex-col justify-center ">
               <p className="max-w-[250px] truncate text-black">{org?.name}</p>
-              <p className="max-w-[250px] truncate  text-graySubtitle">
-                {org?.address}
-              </p>
+              {location && (
+                <p className="max-w-[250px] truncate  text-graySubtitle">
+                  {location}
+                </p>
+              )}
             </div>
           </div>
         </Link>
