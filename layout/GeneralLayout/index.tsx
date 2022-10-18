@@ -157,11 +157,15 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
 
   const getSearchType = () => {
     const currentPath = router.pathname.split('/')?.[2];
+    const {type} = router.query;
     switch (currentPath) {
       case 'projects':
         return 'projects';
       case 'feed':
+      case 'post':
         return 'posts';
+      case 'search':
+        if (type) return type;
       default:
         return 'users';
     }
