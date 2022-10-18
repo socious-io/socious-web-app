@@ -1,29 +1,30 @@
-import {useCallback, useMemo} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import {Avatar} from '../../components/common/Avatar/Avatar';
-import {TextInput} from '../../components/common/TextInput/TextInput';
-import {FC, PropsWithChildren, CSSProperties} from 'react';
+import { Avatar } from '../../components/common/Avatar/Avatar';
+import { TextInput } from '../../components/common/TextInput/TextInput';
+import { FC, PropsWithChildren, CSSProperties } from 'react';
 import imgSrc from '../../asset/icons/logo.svg';
-import {Dropdown} from '@components/common';
-import {useUser} from '@hooks';
+import { Dropdown } from '@components/common';
+import { useUser } from '@hooks';
 import Image from 'next/image';
-import {changeIdentity} from '@api/identity/actions';
-import {LoginIdentity} from '@models/identity';
-import {getOrganization} from '@api/organizations/actions';
-import {logout} from '@api/auth/actions';
+import { changeIdentity } from '@api/identity/actions';
+import { LoginIdentity } from '@models/identity';
+import { getOrganization } from '@api/organizations/actions';
+import { logout } from '@api/auth/actions';
 import Router from 'next/router';
 import styles from './index.module.scss';
-import {ChevronLeftIcon} from '@heroicons/react/24/outline';
-import {useRouter} from 'next/router';
-import {twMerge} from 'tailwind-merge';
+import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/router';
+import { twMerge } from 'tailwind-merge';
 import feedImg from 'asset/images/socious_feed.png';
 import projectImg from 'asset/images/socious_project.png';
-import {useMediaQuery} from 'react-responsive';
+import { useMediaQuery } from 'react-responsive';
 import ProjectIcon from '@components/common/Icons/ProjectIcon';
 import FeedIcon from '@components/common/Icons/FeedIcon';
 import NetworkIcon from '@components/common/Icons/NetworkIcon';
 import NotificationIcon from '@components/common/Icons/NotificationIcon';
 import ChatIcon from '@components/common/Icons/ChatIcon';
+import MobileMenuItems from '@components/common/MobileMenuItems/MobileMenuItems';
 
 const bannerType = {
   feed: {
@@ -48,6 +49,7 @@ type TLayoutType = {
   style?: CSSProperties;
   hasDetailNavbar?: boolean;
   detailNavbarTitle?: string;
+  editProfile?: () => void;
 };
 
 type TNavbarItem = {
@@ -56,7 +58,7 @@ type TNavbarItem = {
   icon: React.ReactElement;
   isActive: boolean;
 };
-export const NavbarItem: FC<TNavbarItem> = ({label, route, icon, isActive}) => {
+export const NavbarItem: FC<TNavbarItem> = ({ label, route, icon, isActive }) => {
   return (
     <Link href={route} passHref>
       <a className="flex flex-col items-center">
@@ -73,15 +75,17 @@ export const NavbarItem: FC<TNavbarItem> = ({label, route, icon, isActive}) => {
     </Link>
   );
 };
+
 const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   children,
   hasNavbar = false,
   style,
   hasDetailNavbar,
   detailNavbarTitle,
+  editProfile
 }) => {
   const router = useRouter();
-  const {currentIdentity, identities, mutateIdentities, mutateUser} = useUser({
+  const { currentIdentity, identities, mutateIdentities, mutateUser } = useUser({
     redirect: false,
   });
 
@@ -148,13 +152,23 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
     }
   }, [router?.pathname]);
 
+  const [mobileState, setMobileState] = useState(false);
+
+  const handleResize = () => {
+    if (window.innerWidth < 768) {
+      setMobileState(true);
+    } else {
+      setMobileState(false);
+    }
+  }
+
   return (
     <div className="flex w-full flex-col">
       <div
         className={`flex w-full items-center rounded-b-sm bg-primary md:flex md:h-16 lg:h-16 ${
           // ? `h-52 bg-[url('/images/socious_feed.png')]`
           needsBanner ? `h-44 flex-col` : 'h-16 bg-none'
-        }`}
+          }`}
       >
         <nav className="fixed top-0 z-10 flex h-14 min-h-[54px] w-full items-center justify-center bg-primary md:h-16 md:justify-start lg:h-16 ">
           <div className="container mx-6 w-full max-w-5xl sm:mx-2 md:mx-auto">
@@ -320,72 +334,80 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                         }
                       />
                     }
+                    mobileState={mobileState}
+                    handleResize={handleResize}
                   >
-                    {identities && identities.length > 0 && (
-                      <>
-                        {identities.map(
-                          (identity: LoginIdentity) =>
-                            !identity.current && (
-                              <div
-                                key={identity?.meta?.id}
-                                className="my-4 flex w-52 cursor-pointer flex-row items-center p-4 hover:bg-primary hover:text-offWhite"
-                                onClick={() => onSwitchIdentity(identity)}
-                              >
-                                <div className="w-1/4">
-                                  <Avatar
-                                    size="m"
-                                    type={identity.type}
-                                    src={
-                                      identity.type === 'users'
-                                        ? identity?.meta?.avatar
-                                        : identity?.meta?.image
-                                    }
-                                  />
-                                </div>
-                                <div className="w-3/4">
-                                  {identity?.meta?.name}
-                                </div>
+                    {mobileState ?
+                      <MobileMenuItems editProfile={editProfile} onLogout={onLogout} />
+                      :
+                      <React.Fragment>
+                        {identities && identities.length > 0 && (
+                          <>
+                            {identities.map(
+                              (identity: LoginIdentity) =>
+                                !identity.current && (
+                                  <div
+                                    key={identity?.meta?.id}
+                                    className="my-4 flex w-52 cursor-pointer flex-row items-center p-4 hover:bg-primary hover:text-offWhite"
+                                    onClick={() => onSwitchIdentity(identity)}
+                                  >
+                                    <div className="w-1/4">
+                                      <Avatar
+                                        size="m"
+                                        type={identity.type}
+                                        src={
+                                          identity.type === 'users'
+                                            ? identity?.meta?.avatar
+                                            : identity?.meta?.image
+                                        }
+                                      />
+                                    </div>
+                                    <div className="w-3/4">
+                                      {identity?.meta?.name}
+                                    </div>
+                                  </div>
+                                ),
+                            )}
+                            <Link href="/app/organization/+new">
+                              <div className="cursor-pointer p-4 text-left text-sm hover:bg-primary hover:text-offWhite">
+                                Create Organization
                               </div>
-                            ),
+                            </Link>
+                          </>
                         )}
-                        <Link href="/app/organization/+new">
-                          <div className="cursor-pointer p-4 text-left text-sm hover:bg-primary hover:text-offWhite">
-                            Create Organization
-                          </div>
-                        </Link>
-                      </>
-                    )}
 
-                    {!userLoggedOut ? (
-                      <>
-                        <Link href="/app/auth/changepassword">
-                          <div className="cursor-pointer p-4 text-left text-sm hover:bg-primary hover:text-offWhite">
-                            Change Password
-                          </div>
-                        </Link>
-                        <div
-                          className="cursor-pointer p-4 text-left hover:bg-primary hover:text-offWhite"
-                          onClick={onLogout}
-                        >
-                          <span className="w-full text-sm">Log out</span>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div
-                          className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
-                          onClick={() => router.push('/app/auth/signup')}
-                        >
-                          Sign up
-                        </div>
-                        <div
-                          className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
-                          onClick={() => router.push('/app/auth/login')}
-                        >
-                          Login
-                        </div>
-                      </>
-                    )}
+                        {!userLoggedOut ? (
+                          <>
+                            <Link href="/app/auth/changepassword">
+                              <div className="cursor-pointer p-4 text-left text-sm hover:bg-primary hover:text-offWhite">
+                                Change Password
+                              </div>
+                            </Link>
+                            <div
+                              className="cursor-pointer p-4 text-left hover:bg-primary hover:text-offWhite"
+                              onClick={onLogout}
+                            >
+                              <span className="w-full text-sm">Log out</span>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div
+                              className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
+                              onClick={() => router.push('/app/auth/signup')}
+                            >
+                              Sign up
+                            </div>
+                            <div
+                              className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
+                              onClick={() => router.push('/app/auth/login')}
+                            >
+                              Login
+                            </div>
+                          </>
+                        )}
+                      </React.Fragment>
+                    }
                   </Dropdown>
                 </div>
               </div>
@@ -395,7 +417,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         {needsBanner && (
           <div
             className="mt-[54px] h-full w-full bg-cover bg-center px-4 pt-9 bg-blend-overlay md:mt-12 md:hidden"
-            style={{backgroundImage: `url(${bannerType[needsBanner].img})`}}
+            style={{ backgroundImage: `url(${bannerType[needsBanner].img})` }}
           >
             <h1 className="text-4xl text-white">
               {bannerType[needsBanner].title}
@@ -419,9 +441,8 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         </div>
       )}
       <div
-        className={`m-auto mb-14 flex md:mb-0 lg:mb-0 lg:mt-12 ${
-          needsBanner ? 'mt-10 px-4' : 'sm:mt-10'
-        } sm:px-0 ${styles.layoutBase}`}
+        className={`m-auto mb-14 flex md:mb-0 lg:mb-0 lg:mt-12 ${needsBanner ? 'mt-10 px-4' : 'sm:mt-10'
+          } sm:px-0 ${styles.layoutBase}`}
         style={style}
       >
         <div className="flex w-full md:space-x-6">{children}</div>

@@ -1,13 +1,13 @@
-import {InputFiled, Button} from '@components/common';
-import {useState, useMemo, useCallback} from 'react';
-import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
-import {twMerge} from 'tailwind-merge';
-import {rxHasLowerCase, rxHasNumber, rxHasUpperCase} from 'utils/regex';
-import {StepProps} from '@models/stepProps';
-import {useFormContext} from 'react-hook-form';
-const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
+import { InputFiled, Button } from '@components/common';
+import { useState, useMemo, useCallback } from 'react';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { twMerge } from 'tailwind-merge';
+import { rxHasLowerCase, rxHasNumber, rxHasUpperCase } from 'utils/regex';
+import { StepProps } from '@models/stepProps';
+import { useFormContext } from 'react-hook-form';
+const ForgotPasswordStep3 = ({ onSubmit }: StepProps) => {
   const formMethods = useFormContext();
-  const {handleSubmit, formState, register, watch} = formMethods;
+  const { handleSubmit, formState, register, watch } = formMethods;
 
   const [newPasswordShown, setNewPasswordShown] = useState<boolean>(false);
 
@@ -118,7 +118,7 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
           size="lg"
           variant="fill"
           value="Submit"
-          //disabled={!!formState?.errors}
+        //disabled={!!formState?.errors}
         >
           Change your password
         </Button>

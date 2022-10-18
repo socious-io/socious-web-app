@@ -2,18 +2,18 @@
  * user profile page with dynamik route
  */
 
-import type {NextPage} from 'next';
-import {GeneralLayout} from 'layout';
+import type { NextPage } from 'next';
+import { GeneralLayout } from 'layout';
 
 //libraries
-import {useCallback} from 'react';
+import { useCallback } from 'react';
 import useSWR from 'swr';
-import {useRouter} from 'next/router';
-import {useGoogleMapsScript, Libraries} from 'use-google-maps-script';
+import { useRouter } from 'next/router';
+import { useGoogleMapsScript, Libraries } from 'use-google-maps-script';
 
 // custom hooks/methods
-import {useToggle, useUser} from '@hooks';
-import {get} from 'utils/request';
+import { useToggle, useUser } from '@hooks';
+import { get } from 'utils/request';
 
 //components
 import MainContent from '@components/common/UserProfile/MainContent';
@@ -25,13 +25,13 @@ const libraries: Libraries = ['places'];
 const UserProfile: NextPage = () => {
   // get id from route
   const router = useRouter();
-  const {id} = router.query;
-  const {state: editState, handlers: editHandlers} = useToggle();
+  const { id } = router.query;
+  const { state: editState, handlers: editHandlers } = useToggle();
   // User
-  const {user} = useUser();
+  const { user } = useUser();
 
   // Loading The Map
-  const {isLoaded, loadError} = useGoogleMapsScript({
+  const { isLoaded, loadError } = useGoogleMapsScript({
     googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
     libraries,
   });
@@ -39,7 +39,7 @@ const UserProfile: NextPage = () => {
   const openEditModal = useCallback(() => editHandlers.on(), [editHandlers]);
 
   //get user profile data by user id
-  const {data, mutate, error} = useSWR<any>(
+  const { data, mutate, error } = useSWR<any>(
     `/user/by-username/${id}/profile`,
     get,
   );
@@ -56,7 +56,7 @@ const UserProfile: NextPage = () => {
     return <p>invalid user</p>;
 
   return (
-    <GeneralLayout>
+    <GeneralLayout editProfile={openEditModal}>
       <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">
         <MainContent
           data={data}
