@@ -47,14 +47,7 @@ export const UserResults: FC<UserResultsProps> = ({items, onPreviewItem}) => {
             </div>
             {user.bio && (
               <div className="flex flex-row">
-                <p className="text-sm">
-                  {user.bio?.length > 200
-                    ? `${user.bio?.slice(0, 200)}...`
-                    : user.bio}
-                  <span className="text-secondary">
-                    {user.bio?.length > 200 && ' See more'}
-                  </span>
-                </p>
+                <p className="text-sm">{user.bio}</p>
               </div>
             )}
             <div className="flex flex-row justify-between ">
