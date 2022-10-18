@@ -1,9 +1,7 @@
-import {SimplifiedUserProfile} from '@models/profile';
+import {SimplifiedUserProfile, UserProfile} from '@models/profile';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 
 export const useUserProfile = (id: string) => {
-  return useSWR<SimplifiedUserProfile>(`/user/${id}/profile`, (url) =>
-    get(url),
-  );
+  return useSWR<UserProfile>(`/user/${id}/profile`, (url) => get(url));
 };

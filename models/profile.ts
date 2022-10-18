@@ -7,6 +7,7 @@ export interface UserProfile {
   id: string;
   first_name?: string;
   last_name?: string;
+  username?: string;
   followers: number;
   bio?: string;
   email?: string;
@@ -16,7 +17,7 @@ export interface UserProfile {
   city?: string;
   country?: string;
   mobile_country_code?: string;
-  avatar?: TMediaType | null | string;
+  avatar?: TMediaType;
   cover_image?: string;
   mission?: string;
   social_causes: Array<string>;
