@@ -31,33 +31,33 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
   const countryCode = watch('country');
 
   useEffect(() => {
-    const project = {
-      title: ProjectContext.title,
-      description: ProjectContext.description,
-      remote_preference: ProjectContext.remote_preference,
-      payment_type: ProjectContext.payment_type,
-      payment_scheme: ProjectContext.payment_scheme,
-      payment_currency: ProjectContext.payment_currency,
-      payment_range_lower: ProjectContext.payment_range_lower,
-      payment_range_higher: ProjectContext.payment_range_higher,
-      commitment_hours_higher: ProjectContext.commitment_hours_higher,
-      commitment_hours_lower: ProjectContext.commitment_hours_lower,
-      project_type: ProjectContext.project_type,
-      project_length: ProjectContext.project_length,
-      country: ProjectContext.country,
-    };
-    Object.entries(project).forEach((key) => {
-      console.log(key);
-      setValue(key?.[0], key?.[1], {
-        shouldDirty: true,
-        shouldValidate: true,
+    if (ProjectContext) {
+      const project = {
+        title: ProjectContext.title,
+        description: ProjectContext.description,
+        remote_preference: ProjectContext.remote_preference,
+        payment_type: ProjectContext.payment_type,
+        payment_scheme: ProjectContext.payment_scheme,
+        payment_currency: ProjectContext.payment_currency,
+        payment_range_lower: ProjectContext.payment_range_lower,
+        payment_range_higher: ProjectContext.payment_range_higher,
+        commitment_hours_higher: ProjectContext.commitment_hours_higher,
+        commitment_hours_lower: ProjectContext.commitment_hours_lower,
+        project_type: ProjectContext.project_type,
+        project_length: ProjectContext.project_length,
+        country: ProjectContext.country,
+        city: ProjectContext.city,
+      };
+      Object.entries(project).forEach((key) => {
+        setValue(key?.[0], key?.[1], {
+          shouldValidate: true,
+        });
       });
-    });
-  }, [ProjectContext]);
+    }
+  }, [ProjectContext, setValue]);
 
   const handleChange = (field: any, input: string) => {
     setValue(field, input, {
-      shouldDirty: true,
       shouldValidate: true,
     });
     setProjectContext({
@@ -148,6 +148,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
           <Title description="Describe your project in detail." border>
             Tell us more about your project.
           </Title>
+          <div className="px-4 pt-4 text-xl font-semibold text-neutral-300">
+            {ProjectContext.isEditModalOpen ? 'Project edit' : 'Project info'}
+          </div>
           <div className="mx-4 my-5">
             <InputFiled
               label="Title"
@@ -228,19 +231,6 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 (x) => x?.id === ProjectContext.payment_type,
               )}
             />
-            <Combobox
-              required
-              label="Payment Scheme"
-              name="payment_scheme"
-              items={items.projectPaymentSchemeItems}
-              placeholder="Payment Scheme"
-              className="mt-6"
-              onSelected={(e) => handleChange('payment_scheme', e?.id)}
-              selected={items.projectPaymentSchemeItems?.find(
-                (x) => x?.id === ProjectContext.payment_scheme,
-              )}
-            />
-
             {paymentType === 'PAID' && (
               <InputFiled
                 required
@@ -273,6 +263,18 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 }}
               />
             )}
+            <Combobox
+              required
+              label="Payment Scheme"
+              name="payment_scheme"
+              items={items.projectPaymentSchemeItems}
+              placeholder="Payment Scheme"
+              className="mt-6"
+              onSelected={(e) => handleChange('payment_scheme', e?.id)}
+              selected={items.projectPaymentSchemeItems?.find(
+                (x) => x?.id === ProjectContext.payment_scheme,
+              )}
+            />
             {paymentScheme === 'HOURLY' && (
               <InputFiled
                 required
