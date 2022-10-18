@@ -13,6 +13,7 @@ interface SearchResultItemsProps {
   total: number;
   items: any[];
   onChangeSortType?: () => void;
+  closeFilter?: () => void;
 }
 
 export const SearchResultItems: FC<SearchResultItemsProps> = ({
@@ -20,10 +21,12 @@ export const SearchResultItems: FC<SearchResultItemsProps> = ({
   total,
   items,
   onChangeSortType,
+  closeFilter,
 }) => {
   const route = useRouter();
 
   const updatePreviewQuery = (id: string) => {
+    closeFilter && closeFilter();
     route.push(
       {pathname: '/app/search', query: {...route.query, preview_id: id}},
       undefined,

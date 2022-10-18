@@ -43,9 +43,13 @@ const transformFilterToAPIParam = (
 
 interface SearchResultsProps {
   onChangeSortType?: () => void;
+  closeFilter?: () => void;
 }
 
-export const SearchResults: FC<SearchResultsProps> = ({onChangeSortType}) => {
+export const SearchResults: FC<SearchResultsProps> = ({
+  onChangeSortType,
+  closeFilter,
+}) => {
   const route = useRouter();
   const {type = '', page = 1, keywords = '', ...filter} = route.query;
 
@@ -76,6 +80,7 @@ export const SearchResults: FC<SearchResultsProps> = ({onChangeSortType}) => {
         items={searchResults.items}
         total={searchResults.total_count}
         onChangeSortType={onChangeSortType}
+        closeFilter={closeFilter}
       />
 
       {totalPage > 1 ? (

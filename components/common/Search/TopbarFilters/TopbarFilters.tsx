@@ -15,6 +15,7 @@ import {ProjectTypeDropdown} from './ProjectTypeDropdown';
 import {FieldValues} from 'react-hook-form';
 
 interface TopbarFiltersProps {
+  allFilterOpen: boolean;
   onToggleAllFilters: () => void;
   onResetFilters: () => void;
   onShowSocialCausesModal: () => void;
@@ -23,6 +24,7 @@ interface TopbarFiltersProps {
 }
 
 export const TopbarFilters: FC<TopbarFiltersProps> = ({
+  allFilterOpen,
   onToggleAllFilters,
   onResetFilters,
   onShowSocialCausesModal,
@@ -122,7 +124,7 @@ export const TopbarFilters: FC<TopbarFiltersProps> = ({
           onChange={changeSearchType}
         />
         {renderFilters()}
-        <AllFilters onClick={onToggleAllFilters} />
+        <AllFilters onClick={onToggleAllFilters} selected={allFilterOpen} />
         <ResetFilters onClick={onResetFilters} />
       </div>
     </div>

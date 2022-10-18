@@ -4,13 +4,14 @@ import {FunnelIcon} from '@heroicons/react/24/outline';
 
 interface AllFiltersProps {
   onClick: () => void;
+  selected: boolean;
 }
 
-export const AllFilters: FC<AllFiltersProps> = ({onClick}) => {
+export const AllFilters: FC<AllFiltersProps> = ({onClick, selected}) => {
   return (
     <Button
       size="sm"
-      variant="ghost"
+      variant={selected ? undefined : 'ghost'}
       rightIcon={() => <FunnelIcon className="w-4" />}
       onClick={onClick}
     >

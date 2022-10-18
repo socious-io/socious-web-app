@@ -28,6 +28,7 @@ export const DesktopSearch: FC = () => {
   return (
     <>
       <TopbarFilters
+        allFilterOpen={showSidebarFilters}
         onToggleAllFilters={sidebarHandler.toggle}
         onResetFilters={resetFilters}
         onShowSocialCausesModal={socialCausesHandler.on}
@@ -35,7 +36,7 @@ export const DesktopSearch: FC = () => {
         onShowLocationModal={locationHander.on}
       />
       <DetailLayout>
-        <SearchResults />
+        <SearchResults closeFilter={sidebarHandler.off} />
       </DetailLayout>
       <DesktopSidebar
         showSidebarFilters={showSidebarFilters}
