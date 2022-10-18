@@ -59,8 +59,6 @@ const SideBar = ({selectBar = ''}: Props) => {
               }
               isUser={isUser}
             />
-            {/* TODO: Uncomment after status is fixed */}
-            {/* <StatusCard status={user?.status} /> */}
             {selectBar == '' && (
               <div className="space-y-4 overflow-y-auto">
                 {currentIdentity?.type === 'users' ? (
