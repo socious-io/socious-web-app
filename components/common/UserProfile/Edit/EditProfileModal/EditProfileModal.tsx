@@ -104,7 +104,7 @@ const EditProfileModal = ({
       firstName: user?.first_name ?? '',
       lastName: user?.last_name ?? '',
       userName: user?.username ?? '',
-      email: user?.email,
+      // email: user?.email,
       bio: user?.bio,
       mission: user?.mission,
       passions: user?.social_causes ?? [],
@@ -173,7 +173,9 @@ const EditProfileModal = ({
 
     //Making a API call
     try {
+      console.log('I am making request');
       const response: any = await updateProfile(updateProfileBody);
+      console.log('Got the response :---: ', response);
       mutateUser(response);
       user?.username === response.username
         ? mutate(`/user/by-username/${user?.username}/profile`)

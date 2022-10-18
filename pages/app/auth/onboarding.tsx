@@ -99,9 +99,6 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     resolver: joiResolver(schemaStep[5]),
   });
   const formMethodsStep6 = useForm({
-    defaultValues: {
-      countryNumber: '+81',
-    },
     resolver: joiResolver(schemaStep[6]),
   });
   const formMethodsStep7 = useForm({

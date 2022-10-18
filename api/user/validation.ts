@@ -36,15 +36,15 @@ export const schemaProfileUpdate = Joi.object({
   address: Joi.string().allow(null, '').label('Address').messages({
     'string.base': `Address should be a string.`,
   }),
-  email: Joi.string()
-    .email({tlds: {allow: false}})
-    .required()
-    .messages({
-      'string.base': `Email should be a type of 'text'.`,
-      'string.empty': `Email cannot be an empty field.`,
-      'any.required': `Email is a required field.`,
-      'string.email': `Email address is not valid.`,
-    }),
+  // email: Joi.string()
+  //   .email({tlds: {allow: false}})
+  //   .required()
+  //   .messages({
+  //     'string.base': `Email should be a type of 'text'.`,
+  //     'string.empty': `Email cannot be an empty field.`,
+  //     'any.required': `Email is a required field.`,
+  //     'string.email': `Email address is not valid.`,
+  //   }),
   passions: Joi.array().items(Joi.string()).min(1).max(5).required().messages({
     'array.max': `Please select only {#limit} causes.`,
     'array.min': `Please select {#limit} causes`,
