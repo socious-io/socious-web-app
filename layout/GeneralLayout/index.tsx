@@ -1,10 +1,9 @@
-import {useCallback, useMemo} from 'react';
+import {KeyboardEventHandler, useCallback, useMemo} from 'react';
 import Link from 'next/link';
 import {Avatar} from '../../components/common/Avatar/Avatar';
-import {TextInput} from '../../components/common/TextInput/TextInput';
 import {FC, PropsWithChildren, CSSProperties} from 'react';
 import imgSrc from '../../asset/icons/logo.svg';
-import {Dropdown} from '@components/common';
+import {Dropdown, SearchBar} from '@components/common';
 import {useUser} from '@hooks';
 import Image from 'next/image';
 import {changeIdentity} from '@api/identity/actions';
@@ -148,15 +147,39 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
     }
   }, [router?.pathname]);
 
+  const goToSearchPage: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    const keyword = e.currentTarget.value.trim();
+    if (e.key === 'Enter' && keyword) {
+      const type = getSearchType();
+      router.push(`/app/search/?type=${type}&keywords=${keyword}`);
+    }
+  };
+
+  const getSearchType = () => {
+    const currentPath = router.pathname.split('/')?.[2];
+    const {type} = router.query;
+    switch (currentPath) {
+      case 'projects':
+        return 'projects';
+      case 'feed':
+      case 'post':
+        return 'posts';
+      case 'search':
+        if (type) return type;
+      default:
+        return 'users';
+    }
+  };
+
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex h-full w-full flex-col">
       <div
         className={`flex w-full items-center rounded-b-sm bg-primary md:flex md:h-16 lg:h-16 ${
           // ? `h-52 bg-[url('/images/socious_feed.png')]`
           needsBanner ? `h-44 flex-col` : 'h-16 bg-none'
         }`}
       >
-        <nav className="fixed top-0 z-10 flex h-14 min-h-[54px] w-full items-center justify-center bg-primary md:h-16 md:justify-start lg:h-16 ">
+        <nav className="fixed top-0 z-50 flex h-14 min-h-[54px] w-full items-center justify-center bg-primary md:h-16 md:justify-start lg:h-16 ">
           <div className="container mx-6 w-full max-w-5xl sm:mx-2 md:mx-auto">
             <div className="flex w-full items-center justify-center gap-x-4 sm:gap-0">
               <div
@@ -165,7 +188,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
               >
                 <div className="flex flex-wrap content-around">
                   <div className="items-center rounded-full ">
-                    <div className="relative  h-8 w-8 ">
+                    <div className="relative h-8 w-8 ">
                       <Link href="/app">
                         <a>
                           <Image
@@ -182,12 +205,13 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                   </div>
                 </div>
                 <div className="space-between flex grow items-center sm:mx-2 md:min-w-[18rem] md:grow-0">
-                  {/* Uncomment for SearchBar */}
-                  {/* <TextInput
-                    className="h-8 w-full rounded-full py-1.5"
-                    containerClassName="w-full max-w-[18rem]"
-                    height={'32px'}
-                  /> */}
+                  <SearchBar
+                    type="text"
+                    placeholder="Search"
+                    onKeyDown={goToSearchPage}
+                    className="w-full"
+                    defaultValue={router.query.keywords}
+                  />
                 </div>
               </div>
 
@@ -309,6 +333,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                 <div className="space-between flex items-center space-x-3 sm:ml-4 md:ml-0">
                   <Dropdown
                     displayClass="w-8 h-8"
+                    dropdownClass="transform -translate-x-full whitespace-nowrap"
                     display={
                       <Avatar
                         size="m"
@@ -328,7 +353,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                             !identity.current && (
                               <div
                                 key={identity?.meta?.id}
-                                className="my-4 flex w-52 cursor-pointer flex-row items-center p-4 hover:bg-primary hover:text-offWhite"
+                                className="my-4 flex w-52 cursor-pointer flex-row items-center p-4 hover:bg-primary hover:text-offWhite "
                                 onClick={() => onSwitchIdentity(identity)}
                               >
                                 <div className="w-1/4">
@@ -424,7 +449,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         } sm:px-0 ${styles.layoutBase}`}
         style={style}
       >
-        <div className="flex w-full md:space-x-6">{children}</div>
+        <div className="relative flex w-full md:space-x-6">{children}</div>
       </div>
     </div>
   );

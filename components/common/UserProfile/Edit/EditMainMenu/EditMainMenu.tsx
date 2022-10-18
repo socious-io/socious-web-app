@@ -194,6 +194,7 @@ const EditMainMenu = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  console.log('ERROR :---:', formState?.errors);
   return (
     <>
       <form

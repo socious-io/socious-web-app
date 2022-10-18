@@ -17,8 +17,7 @@ interface OnboardingStep6Props extends StepProps {
 
 const OnboardingStep6 = ({onSubmit, defaultCountry}: OnboardingStep6Props) => {
   const formMethods = useFormContext();
-  const {handleSubmit, formState, register, getValues, setValue, watch} =
-    formMethods;
+  const {handleSubmit, formState, getValues, setValue, watch} = formMethods;
 
   const countryNumber = watch('countryNumber');
   const phoneNumber = watch('phoneNumber');
@@ -97,6 +96,7 @@ const OnboardingStep6 = ({onSubmit, defaultCountry}: OnboardingStep6Props) => {
 
   // Get 'countryNumber' for default and each 'countryKey' change. i.e. after each 'onCountrySelected'.
   useEffect(() => {
+    console.table({countryKey, countryNumber});
     if (!countryKey || countryNumber) return;
     requestAndSetNumber(countryKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps

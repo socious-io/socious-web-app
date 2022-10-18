@@ -1,7 +1,7 @@
 // useFilter
 import {useState, useCallback} from 'react';
 
-type ObjectType = {id: string; name: string};
+export type ObjectType = {id: string; name: string};
 
 const useFilter = (
   defaultValue: ObjectType[],
