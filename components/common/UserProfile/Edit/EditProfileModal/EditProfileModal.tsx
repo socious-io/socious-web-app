@@ -37,6 +37,8 @@ import {mutate} from 'swr';
 import Router from 'next/router';
 import {useUser} from '@hooks';
 import {close} from 'inspector';
+import {AxiosError} from 'axios';
+import {toast} from 'react-toastify';
 interface EditProfileModalProps {
   openState: boolean;
   user: any;
@@ -184,6 +186,27 @@ const EditProfileModal = ({
       forceUpdate();
     } catch (error) {
       console.log('ERROR :---: ', error);
+      const data: any = (error as AxiosError).response?.data;
+      if (data) {
+        if (
+          /^duplicate key value violates unique constraint.*phone/.exec(
+            data.error,
+          )
+        ) {
+          formMethods.setError(
+            'phoneNumber',
+            {
+              type: 'value',
+              message:
+                'This phone number is already associated with another user',
+            },
+            {shouldFocus: true},
+          );
+        } else
+          toast.error(`Couldn't save data: ${data.error || 'error'}`, {
+            autoClose: false,
+          });
+      }
     }
   }, [avatar, closeModal, coverImage, formMethods, mutateUser, user?.username]);
 

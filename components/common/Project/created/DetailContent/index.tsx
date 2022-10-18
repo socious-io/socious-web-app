@@ -6,28 +6,28 @@ import OverviewProjectCard from '../../component/OverviewProjectCard';
 import {useToggle} from 'hooks';
 import AlertCard from '@components/common/AlertCard/AlertCard';
 import EditProjectModal from '../../component/EditProjectModal';
-import {defaultProject, Project, ProjectProps} from 'models/project';
+import {ProjectProps} from 'models/project';
 import {useProjectContext} from '@components/common/Project/created/NewProject/context';
-
-function Detail({
-  project: {
+import {FC} from 'react';
+const Detail: FC<ProjectProps> = ({project}) => {
+  const {
     title,
-    project_type,
     payment_range_higher,
     payment_range_lower,
     remote_preference,
     project_length,
-    experience_level,
+    project_type,
+    country,
     description,
     payment_type,
-    payment_scheme,
+    experience_level,
     payment_currency,
-    status,
+    payment_scheme,
     causes_tags,
     skills,
-    country,
-  } = defaultProject,
-}: ProjectProps) {
+    status,
+    city,
+  } = project;
   const {state: closeProject, handlers: closeProjectHandlers} = useToggle();
   const {state: avoidClose, handlers: avoidCloseHandlers} = useToggle();
   const {ProjectContext, setProjectContext} = useProjectContext();
@@ -37,7 +37,7 @@ function Detail({
       ...ProjectContext,
       isEditModalOpen: !ProjectContext.isEditModalOpen,
       title,
-      country: String(country),
+      country,
       description,
       payment_type,
       experience_level,
@@ -51,6 +51,8 @@ function Detail({
       causes_tags: causes_tags || [],
       skills,
       formStep,
+      status,
+      city,
     });
   };
 
@@ -61,19 +63,7 @@ function Detail({
           <Title>{title}</Title>
         </div>
         <OverviewProjectCard
-          title={title}
-          description={description}
-          country={country}
-          project_type={project_type}
-          project_length={project_length}
-          payment_type={payment_type}
-          payment_scheme={payment_scheme}
-          payment_range_lower={payment_range_lower}
-          payment_range_higher={payment_range_higher}
-          experience_level={experience_level}
-          remote_preference={remote_preference}
-          payment_currency={payment_currency}
-          status={status}
+          project={project}
           onclick={() => clickEditIcon(0)}
         />
         <ProjectItem
@@ -108,6 +98,6 @@ function Detail({
       </Modal>
     </div>
   );
-}
+};
 
 export default Detail;
