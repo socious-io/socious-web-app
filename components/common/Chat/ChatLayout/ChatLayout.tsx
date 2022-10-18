@@ -89,7 +89,11 @@ const ChatLayout = ({children, page}: ChatLayoutProps) => {
                       }
                     >
                       <Avatar
-                        src={connection.identity_meta.avatar}
+                        src={
+                          connection.identity_type === 'users'
+                            ? connection.identity_meta.avatar
+                            : connection.identity_meta.image
+                        }
                         type={connection.identity_type}
                         size="l"
                       />

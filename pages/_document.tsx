@@ -12,6 +12,40 @@ class MyDocument extends Document {
         <Head>
           <title>Socious</title>
           <meta name="description" content="Socious" />
+          {/* ICONS */}
+          <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="https://socious.io/favicons/apple-touch-icon.png"
+          ></link>
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="https://socious.io/favicons/favicon.ico"
+          ></link>
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="https://socious.io/favicons/favicon-16x16.png"
+          ></link>
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="https://socious.io/favicons/favicon-32x32.png"
+          ></link>
+          <link
+            rel="mask-icon"
+            href="https://socious.io/favicons/safari-pinned-tab.svg"
+            color="#5bbad5"
+          ></link>
+          <link
+            rel="manifest"
+            href="https://socious.io/favicons/site.webmanifest"
+          ></link>
+
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
             rel="preconnect"

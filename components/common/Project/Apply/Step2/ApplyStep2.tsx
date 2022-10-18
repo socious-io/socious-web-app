@@ -1,27 +1,21 @@
-import React, {useRef} from 'react';
-import Modal from '@components/common/Modal/Modal';
-import Image from 'next/image';
+import React from 'react';
 import {StepProps} from '@models/stepProps';
 import {useForm} from 'react-hook-form';
-import TextArea from '@components/common/TextArea/TextArea';
 import Button from '@components/common/Button/Button';
-import useUser from 'hooks/useUser/useUser';
 import Avatar from '@components/common/Avatar/Avatar';
-import BodyBox from '../../BodyBox/BodyBox';
-import {LinkIcon} from '@heroicons/react/24/outline';
-import {ChevronLeftIcon} from '@heroicons/react/24/solid';
 import {FromLayout} from '../../created/NewProject/Layout';
 import {useProjectContext} from '../../created/NewProject/context';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {TitlePart} from '../Step1/ApplyStep1';
+import {Project} from 'models/project';
+
 interface ApplyStep extends StepProps {
-  title: string;
+  project: Project;
 }
-const ApplicationReview = ({onSubmit, title}: ApplyStep) => {
-  const {currentIdentity} = useUser();
+const ApplicationReview = ({onSubmit, project}: ApplyStep) => {
   const {ProjectContext} = useProjectContext();
-  const {data} = useSWR<any>(`/orgs/${currentIdentity?.id}`, get);
+  const {data} = useSWR<any>(`/orgs/${project?.identity_id}`, get);
   const {handleSubmit} = useForm();
 
   return (
@@ -31,12 +25,12 @@ const ApplicationReview = ({onSubmit, title}: ApplyStep) => {
     >
       <FromLayout>
         <div className="overflow-y-scroll px-4 pt-4">
-          <p className="font-bold text-black">{title}</p>
+          <p className="font-bold text-black">{project?.title}</p>
           <div className="mt-3 flex flex-row space-x-2">
             <Avatar size="s" type="organizations" />
-            <p className="text-black">{currentIdentity?.meta?.name}</p>
+            <p className="text-black">{data?.name}</p>
           </div>
-          <p className="mt-4 text-black">{data?.description}</p>
+          <p className="mt-4 text-black">{project?.description}</p>
           <TitlePart title="Cover letter" />
           <p className="mt-6 text-black">{ProjectContext.cover_letter}</p>
           {ProjectContext.share_contact_info && (

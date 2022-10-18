@@ -45,7 +45,7 @@ const AddLink = () => {
               required
               label="Link name "
               placeholder="Write a message..."
-              rows={2}
+              rows={4}
               value={name}
               containerClassName=""
               className="border-gray border-1  overflow-y-scroll focus:border-none"
@@ -64,7 +64,7 @@ const AddLink = () => {
               required
               label="Link URL"
               placeholder="Write a message..."
-              rows={2}
+              rows={4}
               value={link}
               containerClassName=""
               className="border-gray border-1  overflow-y-scroll focus:border-none"
@@ -80,10 +80,11 @@ const AddLink = () => {
           </div>
         </div>
       </FromLayout>
-      <div className=" flex items-end justify-end  border-t p-4 px-4">
+      <div className=" flex  items-end justify-end  border-t p-4 px-4">
         <Button
           type="button"
           variant="fill"
+          className="flex w-36 justify-center"
           disabled={!isValid}
           onClick={() =>
             setProjectContext({
@@ -94,7 +95,7 @@ const AddLink = () => {
             })
           }
         >
-          Add a Link
+          <div className="text-base font-semibold">Add a link</div>
         </Button>
       </div>
     </div>

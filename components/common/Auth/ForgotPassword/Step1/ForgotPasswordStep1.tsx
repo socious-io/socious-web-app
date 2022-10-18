@@ -24,10 +24,10 @@ const ForgotPasswordStep1 = ({onSubmit, error}: StepWithError) => {
           type="email"
           placeholder="Email"
           register={register('email')}
-          // errorMessage={errorMessage}
           errorMessage={formState?.errors?.['email']?.message}
           required
           className="my-6"
+          inputType="borderBottom"
         />
       </div>
 
