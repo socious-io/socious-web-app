@@ -4,11 +4,9 @@ import Link from 'next/link';
 import {ChevronRightIcon} from '@heroicons/react/24/outline';
 import {getText} from '@socious/data';
 import {FC} from 'react';
-import useSWR from 'swr';
-import {get} from 'utils/request';
 import {isoToHumanTime} from 'services/toHumanTime';
-import {getAllInfoByISO} from 'iso-country-currency';
 import {useFormattedLocation} from 'services/formatLocation';
+import Markdown from 'markdown-to-jsx';
 
 export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
   return (
@@ -67,13 +65,9 @@ function ProjectCard({project}: {project: Project}) {
           </div>
           <div className="flex flex-row">
             <p className="my-1 text-sm">
-              {project.description?.length > 200
-                ? `${project.description?.slice(0, 200)}...`
-                : project.description}
-
-              {project.description?.length > 200 && (
-                <span className="text-secondary"> See more</span>
-              )}
+              <Markdown options={{wrapper: 'article'}}>
+                {project.description?.slice(0, 200)}
+              </Markdown>
             </p>
           </div>
 
