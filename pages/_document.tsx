@@ -10,8 +10,6 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <title>Socious</title>
-
           {/* PWA */}
           <meta name="description" content="Socious" />
           <meta name="application-name" content="Socious" />
