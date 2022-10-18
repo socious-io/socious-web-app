@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {twMerge} from 'tailwind-merge';
-import {OrganizationPreview} from './OgranizationPreview';
+import {OrganizationPreview} from './OrganizationPreview';
 import {ProjectPreview} from './ProjectPreview';
 import {UserPreview} from './UserPreview';
 

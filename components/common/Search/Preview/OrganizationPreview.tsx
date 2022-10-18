@@ -16,7 +16,11 @@ export const OrganizationPreview: FC<OrganizationPreviewProps> = ({id}) => {
     <div className="space-y-4 p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <Avatar size="xl" type="organizations" src={org?.image} />
+          <Avatar
+            size="xl"
+            type="organizations"
+            src={typeof org?.image === 'string' ? org.image : org.image?.url}
+          />
           <div className="flex flex-1 flex-col justify-center ">
             <p className="max-w-[250px] truncate text-black">{org?.name}</p>
             <p className="max-w-[250px] truncate  text-graySubtitle">
