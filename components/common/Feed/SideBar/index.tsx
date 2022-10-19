@@ -6,18 +6,25 @@ import OrganizationCard from './OrganizationCard';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import useUser from 'hooks/useUser/useUser';
 import router from 'next/router';
+import {twMerge} from 'tailwind-merge';
 
 interface Props {
-  selectBar?: string;
+  selectBar?: 'PROJECT_BACKBAR' | 'DEFAULT' | 'MOBILE' | 'PROJECT_DETAIL';
 }
-const SideBar = ({selectBar = ''}: Props) => {
+const SideBar = ({selectBar = 'DEFAULT'}: Props) => {
   const {user, currentIdentity} = useUser({redirect: false});
   const isUser = currentIdentity?.type === 'users' ? true : false;
 
   if (!currentIdentity) return <></>;
 
   return (
-    <div className="hidden w-80 md:flex" aria-label="Sidebar">
+    <div
+      className={twMerge(
+        'hidden w-80 md:flex',
+        selectBar === 'MOBILE' && 'flex w-full md:hidden',
+      )}
+      aria-label="Sidebar"
+    >
       <div
         className={`${
           selectBar != 'PROJECT_BACKBAR' && 'flex w-full'
@@ -37,8 +44,14 @@ const SideBar = ({selectBar = ''}: Props) => {
         )}
 
         {selectBar != 'PROJECT_BACKBAR' && (
-          <div className="flex w-full flex-col space-y-4 overflow-y-auto bg-gray-50">
+          <div
+            className={twMerge(
+              'flex w-full flex-col space-y-4 bg-gray-50',
+              selectBar === 'MOBILE' && 'space-y-2 divide-y divide-offsetColor',
+            )}
+          >
             <ProfileCard
+              type={selectBar === 'MOBILE' ? 'MOBILE' : 'DEFAULT'}
               content={user?.mission}
               name={
                 currentIdentity?.type === 'users'
@@ -59,14 +72,27 @@ const SideBar = ({selectBar = ''}: Props) => {
               }
               isUser={isUser}
             />
-            {selectBar == '' && (
-              <div className="space-y-4 overflow-y-auto">
+            {selectBar != 'PROJECT_DETAIL' && (
+              <div
+                className={twMerge(
+                  'space-y-4',
+                  selectBar === 'MOBILE' &&
+                    'space-y-2 divide-y divide-offsetColor',
+                )}
+              >
                 {currentIdentity?.type === 'users' ? (
-                  <NetworkCard username={user?.username} />
+                  <NetworkCard
+                    type={selectBar === 'MOBILE' ? 'MOBILE' : 'DEFAULT'}
+                    username={user?.username}
+                  />
                 ) : (
-                  <OrganizationCard username={user?.shortname} />
+                  <OrganizationCard
+                    type={selectBar === 'MOBILE' ? 'MOBILE' : 'DEFAULT'}
+                    username={user?.shortname}
+                  />
                 )}
                 <ProjectsCard
+                  type={selectBar === 'MOBILE' ? 'MOBILE' : 'DEFAULT'}
                   isOrganization={currentIdentity?.type === 'organizations'}
                   username={user?.username}
                 />
