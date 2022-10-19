@@ -80,4 +80,13 @@ export interface IProjectsResponse {
 
 export interface IUserProjects extends Project {
   cover_letter: string;
+  organization: {
+    meta: {
+      image?: string;
+      name: string;
+    };
+  };
+  project: {
+    title: string;
+  };
 }

@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import useSWR from 'swr';
 import BodyCard from '../component/BodyCard';
 import HeaderBox from '../component/HeaderBox';
@@ -25,15 +26,20 @@ function MyApplicationBoxes() {
     }, {});
   };
 
+  useEffect(() => {
+    groupByStatus?.PENDING?.length && showPendingHandler.on();
+  }, [data]);
+
   if (data) {
     fetchUserProjects();
   }
+
   if (!data && !error) return <p>loading</p>;
 
   return (
-    <div className="w-full rounded-2xl border border-grayLineBased pb-4 ">
+    <div className="w-full rounded-2xl border border-grayLineBased pb-4">
       <HeaderBox
-        title={`pending (${groupByStatus?.PENDING?.length ?? 0})`}
+        title={`Pending (${groupByStatus?.PENDING?.length ?? 0})`}
         isExpand={showPending}
         expandToggle={showPendingHandler.toggle}
         isExpandable={true}
@@ -41,7 +47,7 @@ function MyApplicationBoxes() {
       />
       {showPending &&
         groupByStatus?.PENDING?.map((item: IUserProjects) => (
-          <BodyCard key={item.id} name={item.cover_letter} item={item} />
+          <BodyCard key={item.id} item={item} />
         ))}
       <HeaderBox
         title={`Awaiting review (${groupByStatus?.AWAITING?.length ?? 0})`}
@@ -54,7 +60,6 @@ function MyApplicationBoxes() {
         groupByStatus?.AWAITING?.map((item: IUserProjects) => (
           <BodyCard
             key={item.id}
-            name={item.cover_letter}
             item={item}
             // refixAddress={`/app/projects/applications/section/${item.projectId}`}
           />
@@ -68,7 +73,7 @@ function MyApplicationBoxes() {
       />
       {showDecline &&
         groupByStatus?.DECLINE?.map((item: IUserProjects) => (
-          <BodyCard key={item.id} name={item.cover_letter} item={item} />
+          <BodyCard key={item.id} item={item} />
         ))}
     </div>
   );
