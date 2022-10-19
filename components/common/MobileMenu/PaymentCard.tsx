@@ -7,9 +7,7 @@ import {HeartIcon} from '@heroicons/react/24/outline';
 
 const PaymentCard = () => {
   return (
-    <div
-      className={'space-y-4 border-grayLineBased bg-background bg-offWhite p-4'}
-    >
+    <div className={'space-y-4 bg-offWhite p-4'}>
       <label className="text-primary">Payments</label>
       <ul className="list-none space-y-4">
         <li className="flex items-center space-x-4">
