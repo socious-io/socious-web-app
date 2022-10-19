@@ -21,7 +21,8 @@ const SideBar = ({selectBar = 'DEFAULT'}: Props) => {
     <div
       className={twMerge(
         'hidden w-80 md:flex',
-        selectBar === 'MOBILE' && 'flex w-full md:hidden',
+        selectBar === 'MOBILE' &&
+          'flex w-full !border-0 border-offWhite md:hidden',
       )}
       aria-label="Sidebar"
     >
@@ -81,10 +82,11 @@ const SideBar = ({selectBar = 'DEFAULT'}: Props) => {
                 )}
               >
                 {currentIdentity?.type === 'users' ? (
-                  <NetworkCard
-                    type={selectBar === 'MOBILE' ? 'MOBILE' : 'DEFAULT'}
-                    username={user?.username}
-                  />
+                  // <NetworkCard
+                  //   type={selectBar === 'MOBILE' ? 'MOBILE' : 'DEFAULT'}
+                  //   username={user?.username}
+                  // />
+                  <></>
                 ) : (
                   <OrganizationCard
                     type={selectBar === 'MOBILE' ? 'MOBILE' : 'DEFAULT'}
