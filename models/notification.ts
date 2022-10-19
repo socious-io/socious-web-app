@@ -1,16 +1,18 @@
 import {IdentityType} from './identity';
 
+type TNotificationTypes =
+  | 'FOLLOWED'
+  | 'COMMENT_LIKE'
+  | 'POST_LIKE'
+  | 'CHAT'
+  | 'SHARE_POST'
+  | 'SHARE_PROJECT'
+  | 'COMMENT'
+  | 'APPLICATION';
+
 export interface NotificationItem {
   id: string;
-  type:
-    | 'FOLLOWED'
-    | 'COMMENT_LIKE'
-    | 'POST_LIKE'
-    | 'CHAT'
-    | 'SHARE_POST'
-    | 'SHARE_PROJECT'
-    | 'COMMENT'
-    | 'APPLICATION';
+  type: TNotificationTypes;
   ref_id: string;
   user_id: string;
   data: {
@@ -20,15 +22,7 @@ export interface NotificationItem {
     };
     parentId: string;
     consolidate_number: number;
-    type:
-      | 'FOLLOWED'
-      | 'COMMENT_LIKE'
-      | 'POST_LIKE'
-      | 'CHAT'
-      | 'SHARE_POST'
-      | 'SHARE_PROJECT'
-      | 'COMMENT'
-      | 'APPLICATION';
+    type: TNotificationTypes;
 
     refId: string;
     identity: {
@@ -59,4 +53,22 @@ export interface NotificationFeed {
   limit: number;
   total_count: number;
   items: NotificationItem;
+}
+
+export interface PushNotificationBody {
+  data: {
+    identity: string;
+    refId: string;
+    type: TNotificationTypes;
+    parentId?: string;
+  };
+  from: string;
+  priority: string;
+  notification: {
+    title: string;
+    body: string;
+  };
+  fcmMessageId: string;
+  isFirebaseMessaging: boolean;
+  messageType: string;
 }
