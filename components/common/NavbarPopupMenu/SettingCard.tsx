@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import Image from 'next/dist/client/image';
-import {GlobeAsiaAustraliaIcon} from '@heroicons/react/24/outline';
+import {GlobeAsiaAustraliaIcon, KeyIcon} from '@heroicons/react/24/outline';
 import ClipboardIcon from 'asset/icons/clipboard.svg';
 import BlackEditIcon from 'asset/icons/edit-black.svg';
 import DeleteUserIcon from 'asset/icons/delete-user.svg';
@@ -10,11 +10,18 @@ import BlockUserIcon from 'asset/icons/block-user.svg';
 import {useUser} from '@hooks';
 
 const SettingCard = () => {
-  const {currentIdentity} = useUser();
+  const {currentIdentity, identities} = useUser();
   return (
-    <div className={'space-y-4 bg-offWhite p-4'}>
+    <div className="space-y-4 bg-offWhite p-4 md:hidden">
       <label className="text-primary">Settings</label>
       <ul className="list-none space-y-4">
+        {identities && identities.length === 1 && (
+          <li className="flex items-center space-x-4">
+            <Link href="/app/organization/+new">
+              <label className="cursor-pointer">Create Organization</label>
+            </Link>
+          </li>
+        )}
         <li className="flex items-center space-x-4">
           <Link
             href={
@@ -23,44 +30,45 @@ const SettingCard = () => {
                 : `/app/organization/${currentIdentity?.meta?.shortname}`
             }
           >
-            <label className="flex items-center space-x-4">
+            <label className="flex cursor-pointer items-center space-x-4">
               <Image
                 src={BlackEditIcon}
-                alt="Wallet - SVG"
+                alt="edit profile"
                 width="20px"
                 height="20px"
               />
-              <label>Edit profile</label>
+              <p>Edit profile</p>
             </label>
           </Link>
         </li>
         <li className="flex items-center space-x-4">
           <Link href={'https://socious.io/privacy-policy/'} target="_blank">
-            <label className="flex items-center space-x-4">
+            <label className="flex cursor-pointer items-center space-x-4">
               <Image
                 src={ClipboardIcon}
-                alt="Wallet - SVG"
+                alt="Privacy policy"
                 width="20px"
                 height="20px"
               />
-              <label>Privacy policy</label>
+              <p>Privacy policy</p>
             </label>
           </Link>
         </li>
         <li className="flex items-center space-x-4">
           <Link href={'https://socious.io/user-agreement/'} target="_blank">
-            <label className="flex items-center space-x-4">
+            <label className="flex cursor-pointer items-center space-x-4">
               <Image
                 src={ClipboardIcon}
-                alt="Wallet - SVG"
+                alt="user agreement"
                 width="20px"
                 height="20px"
               />
-              <label>Terms & conditions</label>
+              <p>Terms & conditions</p>
             </label>
           </Link>
         </li>
-        <li className="flex items-center space-x-4">
+        {/* FEATURE NOT IMPLEMENTED YET */}
+        {/* <li className="flex items-center space-x-4">
           <label className="flex items-start space-x-4">
             <GlobeAsiaAustraliaIcon className="h-5" />
             <div>
@@ -68,31 +76,40 @@ const SettingCard = () => {
               <div className="cursor-pointer text-primary">English</div>
             </div>
           </label>
-        </li>
-        {/* Blocking account */}
-        <li className="flex items-center space-x-4">
+        </li> */}
+
+        {/* REMOVE AFTER IMPLEMENTING SOMETHING ELSE */}
+        {/* <li className="flex items-center space-x-4">
           <Link href={'https://socious.io/user-agreement/'} target="_blank">
-            <label className="flex items-center space-x-4">
+            <label className="flex cursor-pointer items-center space-x-4">
               <Image
                 src={BlockUserIcon}
-                alt="Wallet - SVG"
+                alt="Block User Icon"
                 width="20px"
                 height="20px"
               />
-              <label>Blocking account</label>
+              <p>Blocking account</p>
             </label>
           </Link>
         </li>
         <li className="flex items-center space-x-4">
           <Link href={'https://socious.io/user-agreement/'} target="_blank">
-            <label className="flex items-center space-x-4">
+            <label className="flex cursor-pointer items-center space-x-4">
               <Image
                 src={DeleteUserIcon}
-                alt="Wallet - SVG"
+                alt="Delete User Icon"
                 width="20px"
                 height="20px"
               />
-              <label>Delete account</label>
+              <p>Delete account</p>
+            </label>
+          </Link>
+        </li> */}
+        <li className="flex items-center space-x-4">
+          <Link href="/app/auth/changepassword">
+            <label className="flex cursor-pointer items-center space-x-4">
+              <KeyIcon className="h-5" />
+              <p>Change password</p>
             </label>
           </Link>
         </li>
