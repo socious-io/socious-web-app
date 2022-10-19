@@ -18,9 +18,20 @@ import useFilter from 'hooks/auth/useFilter';
 
 //get social causes constant data
 import Data, {getText} from '@socious/data';
+
 const passionData = Object.keys(Data.SocialCauses);
 
-const SocialCauses = ({onSubmit}: StepProps) => {
+interface SocialCausesProps extends StepProps {
+  showTitle?: boolean;
+  bodyClassName?: string;
+  renderButton?: () => JSX.Element;
+}
+
+const SocialCauses = ({
+  showTitle = true,
+  renderButton,
+  onSubmit,
+}: SocialCausesProps) => {
   const formMethods = useFormContext();
   const {watch} = formMethods;
   const passion = watch('social_causes');
@@ -47,11 +58,25 @@ const SocialCauses = ({onSubmit}: StepProps) => {
   //search hook
   const [filteredItems, filterWith] = useFilter(passions);
 
+  const renderDefaultButton = () => (
+    <footer className="w-full flex-none justify-center border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">
+      <Button
+        type="submit"
+        disabled={!(passion?.length <= maxCauses)}
+        className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"
+      >
+        continue
+      </Button>
+    </footer>
+  );
+
   return (
     <>
-      <Title description="Select up to 5 social causes." border={false}>
-        What are your social causes?
-      </Title>
+      {showTitle ? (
+        <Title description="Select up to 5 social causes." border={false}>
+          What are your social causes?
+        </Title>
+      ) : null}
       <SearchBar
         type="text"
         bgColor="offWhite"
@@ -71,6 +96,7 @@ const SocialCauses = ({onSubmit}: StepProps) => {
                 <Chip
                   onSelected={onSelect}
                   selected={selecteds?.includes(item.id)}
+                  withCheckIcon={false}
                   value={item.id}
                   key={item.id}
                   content={item.name}
@@ -87,15 +113,7 @@ const SocialCauses = ({onSubmit}: StepProps) => {
             })}
           </div>
         </div>
-        <footer className="w-full flex-none justify-center border-t border-grayLineBased pt-6 pb-28 sm:pb-10 sm:pt-4">
-          <Button
-            type="submit"
-            disabled={!(passion?.length <= maxCauses)}
-            className="mx-auto flex w-8/12 justify-center py-1.5 font-medium"
-          >
-            continue
-          </Button>
-        </footer>
+        {renderButton ? renderButton() : renderDefaultButton()}
       </form>
     </>
   );

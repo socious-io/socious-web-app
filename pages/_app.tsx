@@ -8,6 +8,7 @@ import {get} from 'utils/request';
 import PushNotification from '@components/common/PushNotification/PushNotification';
 import '../asset/css/global.css';
 import '../styles/index.css';
+import '../styles/bottom-sheet.css';
 import '../styles/App.css';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,6 +21,15 @@ import {toast} from 'react-toastify';
 function MyApp({Component, pageProps}: AppProps) {
   return (
     <>
+      <Head>
+        <title>Socious</title>
+        <meta charSet="utf-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+        />
+      </Head>
       <SWRConfig
         value={{
           fetcher: get,

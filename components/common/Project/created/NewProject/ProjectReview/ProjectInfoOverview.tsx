@@ -102,7 +102,7 @@ const ProjectInfoOverview: FC<TProject> = ({project}) => {
           {project.commitment_hours_higher && (
             <PreviewItem
               label="Commitment range higher"
-              text={project.commitment_hours_lower}
+              text={project.commitment_hours_higher}
             />
           )}
         </div>

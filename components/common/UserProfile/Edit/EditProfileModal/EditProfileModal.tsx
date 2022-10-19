@@ -37,6 +37,8 @@ import {mutate} from 'swr';
 import Router from 'next/router';
 import {useUser} from '@hooks';
 import {close} from 'inspector';
+import {AxiosError} from 'axios';
+import {toast} from 'react-toastify';
 interface EditProfileModalProps {
   openState: boolean;
   user: any;
@@ -104,7 +106,7 @@ const EditProfileModal = ({
       firstName: user?.first_name ?? '',
       lastName: user?.last_name ?? '',
       userName: user?.username ?? '',
-      email: user?.email,
+      // email: user?.email,
       bio: user?.bio,
       mission: user?.mission,
       passions: user?.social_causes ?? [],
@@ -173,7 +175,9 @@ const EditProfileModal = ({
 
     //Making a API call
     try {
+      console.log('I am making request');
       const response: any = await updateProfile(updateProfileBody);
+      console.log('Got the response :---: ', response);
       mutateUser(response);
       user?.username === response.username
         ? mutate(`/user/by-username/${user?.username}/profile`)
@@ -182,6 +186,27 @@ const EditProfileModal = ({
       forceUpdate();
     } catch (error) {
       console.log('ERROR :---: ', error);
+      const data: any = (error as AxiosError).response?.data;
+      if (data) {
+        if (
+          /^duplicate key value violates unique constraint.*phone/.exec(
+            data.error,
+          )
+        ) {
+          formMethods.setError(
+            'phoneNumber',
+            {
+              type: 'value',
+              message:
+                'This phone number is already associated with another user',
+            },
+            {shouldFocus: true},
+          );
+        } else
+          toast.error(`Couldn't save data: ${data.error || 'error'}`, {
+            autoClose: false,
+          });
+      }
     }
   }, [avatar, closeModal, coverImage, formMethods, mutateUser, user?.username]);
 

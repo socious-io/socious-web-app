@@ -1,5 +1,5 @@
 import {twMerge} from 'tailwind-merge';
-import {CheckIcon} from '@heroicons/react/24/outline';
+import {CheckIcon, XMarkIcon} from '@heroicons/react/24/outline';
 
 export interface ChipProps {
   size?: 's' | 'm' | 'l';
@@ -8,6 +8,8 @@ export interface ChipProps {
   selected?: boolean;
   containerClassName?: string;
   contentClassName?: string;
+  withCheckIcon?: boolean;
+  onRemove?: (value: string) => void;
   onSelected?: (value: string) => void;
 }
 
@@ -24,6 +26,8 @@ export function Chip({
   selected = false,
   containerClassName,
   contentClassName,
+  withCheckIcon = true,
+  onRemove,
   onSelected,
 }: ChipProps) {
   return (
@@ -32,13 +36,16 @@ export function Chip({
         onSelected && value && onSelected(value as string);
       }}
       className={twMerge(
-        'flex flex-nowrap items-center space-x-2 rounded-full bg-secondarySLight text-secondary',
+        'inline-flex cursor-pointer flex-nowrap items-center space-x-2 rounded-full bg-secondarySLight text-secondary',
         `${PADDING_LIST[size]}`,
         containerClassName && containerClassName,
       )}
     >
-      {selected && <CheckIcon className="h-5 w-5" />}
+      {selected && withCheckIcon && <CheckIcon className="h-5 w-5" />}
       <label className={contentClassName && contentClassName}>{content}</label>
+      {onRemove ? (
+        <XMarkIcon className="w-5" onClick={() => onRemove(value as string)} />
+      ) : null}
     </span>
   );
 }
