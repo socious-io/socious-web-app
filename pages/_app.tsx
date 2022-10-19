@@ -8,6 +8,7 @@ import {get} from 'utils/request';
 import PushNotification from '@components/common/PushNotification/PushNotification';
 import '../asset/css/global.css';
 import '../styles/index.css';
+import '../styles/bottom-sheet.css';
 import '../styles/App.css';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
