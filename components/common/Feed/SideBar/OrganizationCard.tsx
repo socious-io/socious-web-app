@@ -14,7 +14,7 @@ const OrganizationCard = ({username, type = 'DEFAULT'}: OrgCardProps) => {
   return (
     <div
       className={twMerge(
-        'space-y-4 border-grayLineBased bg-background p-4',
+        'space-y-4 border-grayLineBased p-4',
         type === 'MOBILE' ? 'bg-offWhite' : 'rounded-2xl border bg-background',
       )}
     >
@@ -22,23 +22,32 @@ const OrganizationCard = ({username, type = 'DEFAULT'}: OrgCardProps) => {
       <ul className="list-none space-y-4">
         <li className="flex items-center space-x-4">
           <Link href={`/app/organization/${username}`} passHref>
-            <label className="flex items-center space-x-4">
+            <label className="flex cursor-pointer items-center space-x-4">
               <UserCircleIcon className="h-5" />
-              <label>Profile</label>
+              <p>Profile</p>
             </label>
           </Link>
         </li>
         <li className="flex items-center space-x-4">
           <Link href={'/app/team'}>
-            <label className="flex items-center space-x-4">
+            <label className="flex cursor-pointer items-center space-x-4">
               <Image src={Team} alt="Logo - SVG" width="20px" height="20px" />
-              <label>Team</label>
+              <p>Team</p>
             </label>
           </Link>
         </li>
         <li className="flex items-center space-x-4">
-          <Image src={Followers} alt="Logo - SVG" width="20px" height="20px" />
-          <label>Followers</label>
+          <Link href={'/app/followers'}>
+            <label className="flex cursor-pointer items-center space-x-4">
+              <Image
+                src={Followers}
+                alt="followers logo"
+                width="20px"
+                height="20px"
+              />
+              <p>Followers</p>
+            </label>
+          </Link>
         </li>
       </ul>
     </div>

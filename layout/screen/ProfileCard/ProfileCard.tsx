@@ -28,20 +28,20 @@ export function ProfileCard({
   return (
     <div
       className={twMerge(
-        'flex w-full space-y-4 border-grayLineBased p-4',
-        !defaultCard ? 'bg-offWhite' : 'rounded-2xl border bg-background',
+        'flex w-full space-y-4 p-4',
+        !defaultCard
+          ? 'border-0 bg-offWhite'
+          : 'rounded-2xl border border-grayLineBased bg-background',
       )}
     >
       <div className="space-y-4">
         <div className={defaultCard ? 'space-y-4' : 'flex space-x-4'}>
-          <div className="w-2/12">
-            <Avatar
-              src={avatar ?? ''}
-              size={!defaultCard ? 'xl' : 'xxl'}
-              type={isUser ? 'users' : 'organizations'}
-            />
-          </div>
-          <div className="w-10/12">
+          <Avatar
+            src={avatar ?? ''}
+            size={!defaultCard ? 'xl' : 'xxl'}
+            type={isUser ? 'users' : 'organizations'}
+          />
+          <div>
             <p className="text-base font-semibold">
               {name || 'FirstName LastName'}
             </p>
@@ -62,7 +62,9 @@ export function ProfileCard({
         )}
         <div className="flex flex-row space-x-2">
           <div>
-            <p className="text-grayInputField">{following ?? 0} Following</p>
+            <p className="text-grayInputField">
+              {following ?? 0} {isUser ? 'Connections' : 'Followings'}
+            </p>
           </div>
           <div>
             <p className="text-grayInputField">{followers ?? 0} Followers</p>
