@@ -93,13 +93,6 @@ const NavbarPopupMenu = () => {
                 <XMarkIcon className="w-6" />
               </div>
               <SideBar selectBar="MOBILE" />
-              <div className="space-y-4 bg-offWhite p-4 md:hidden">
-                <Link href="/app/notifications">
-                  <label className="cursor-pointer text-primary">
-                    Notifications
-                  </label>
-                </Link>
-              </div>
               {/* <PaymentCard /> */}
               {identities && identities.length > 1 ? (
                 <SwitchToCard
@@ -139,7 +132,7 @@ const NavbarPopupMenu = () => {
                 <div className="flex hidden cursor-pointer items-center gap-4 p-2 md:block">
                   <Link href="/app/auth/changepassword">
                     <label className="flex cursor-pointer items-center space-x-4">
-                      <KeyIcon className="h-5" />
+                      <KeyIcon className="h-6" />
                       <p>Change password</p>
                     </label>
                   </Link>
@@ -150,7 +143,7 @@ const NavbarPopupMenu = () => {
                   className="flex cursor-pointer items-center gap-4 p-4 text-error"
                   onClick={onLogout}
                 >
-                  <ArrowRightOnRectangleIcon className="h-4" />
+                  <ArrowRightOnRectangleIcon className="h-6" />
                   Log out
                 </div>
               )}
