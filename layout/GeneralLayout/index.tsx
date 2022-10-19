@@ -12,7 +12,10 @@ import {getOrganization} from '@api/organizations/actions';
 import {logout} from '@api/auth/actions';
 import Router from 'next/router';
 import styles from './index.module.scss';
-import {ChevronLeftIcon} from '@heroicons/react/24/outline';
+import {
+  ArrowRightOnRectangleIcon,
+  ChevronLeftIcon,
+} from '@heroicons/react/24/outline';
 import {useRouter} from 'next/router';
 import {twMerge} from 'tailwind-merge';
 import feedImg from 'asset/images/socious_feed.png';
@@ -23,6 +26,14 @@ import FeedIcon from '@components/common/Icons/FeedIcon';
 import NetworkIcon from '@components/common/Icons/NetworkIcon';
 import NotificationIcon from '@components/common/Icons/NotificationIcon';
 import ChatIcon from '@components/common/Icons/ChatIcon';
+import {Popover} from '@headlessui/react';
+import NetworkCard from '@components/common/Feed/SideBar/NetworkCard';
+import OrganizationCard from '@components/common/Feed/SideBar/OrganizationCard';
+import ProfileCard from 'layout/screen/ProfileCard/ProfileCard';
+import ProjectsCard from '@components/common/Feed/SideBar/ProjectsCard';
+import SideBar from '@components/common/Feed/SideBar';
+import PaymentCard from '@components/common/MobileMenu/PaymentCard';
+import SettingCard from '@components/common/MobileMenu/SettingCard';
 
 const bannerType = {
   feed: {
@@ -80,9 +91,10 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   detailNavbarTitle,
 }) => {
   const router = useRouter();
-  const {currentIdentity, identities, mutateIdentities, mutateUser} = useUser({
-    redirect: false,
-  });
+  const {user, currentIdentity, identities, mutateIdentities, mutateUser} =
+    useUser({
+      redirect: false,
+    });
 
   const isBottomNav = useMediaQuery({
     query: '(max-width: 768px)',
@@ -170,6 +182,9 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         return 'users';
     }
   };
+
+  //MOBILE MENU
+  const isUser = currentIdentity?.type === 'users' ? true : false;
 
   return (
     <div className="flex h-full w-full flex-col">
@@ -330,7 +345,47 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     </>
                   )}
                 </div>
-                <div className="space-between flex items-center space-x-3 sm:ml-4 md:ml-0">
+                <div
+                  className={twMerge(
+                    'space-between flex items-center space-x-3 sm:ml-4 md:ml-0',
+                    !userLoggedOut ? 'block md:hidden' : 'hidden',
+                  )}
+                >
+                  <Popover className="">
+                    <Popover.Button>
+                      <Avatar
+                        size="m"
+                        type={currentIdentity?.type}
+                        src={
+                          currentIdentity?.type === 'users'
+                            ? currentIdentity?.meta?.avatar
+                            : currentIdentity?.meta?.image
+                        }
+                      />
+                    </Popover.Button>
+
+                    <Popover.Panel
+                      as="div"
+                      className="absolute top-0 left-0 z-10 h-auto min-h-[100vh] w-screen bg-offWhite"
+                    >
+                      <div className=" h-screen space-y-2 divide-y divide-offsetColor overflow-y-scroll pt-12">
+                        <SideBar selectBar="MOBILE" />
+                        <PaymentCard />
+                        <SettingCard />
+                        <div className="flex cursor-pointer items-center gap-4 p-4 text-error">
+                          <ArrowRightOnRectangleIcon className="h-4" />
+                          Log out
+                        </div>
+                      </div>
+                    </Popover.Panel>
+                  </Popover>
+                </div>
+                <div
+                  className={twMerge(
+                    'space-between flex items-center space-x-3 sm:ml-4 md:ml-0',
+                    !userLoggedOut && 'hidden md:block',
+                  )}
+                >
                   <Dropdown
                     displayClass="w-8 h-8"
                     dropdownClass="transform -translate-x-full whitespace-nowrap"
