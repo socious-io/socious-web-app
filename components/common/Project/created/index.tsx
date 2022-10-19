@@ -105,6 +105,7 @@ const MyApplicationBoxes: FC = () => {
         <p className="text-xl font-semibold">Created Project</p>
       </div>
       <Button
+        disabled={currentIdentity?.type === 'users'}
         className="my-6 flex w-52 items-center justify-center align-middle "
         type="submit"
         size="md"
@@ -142,7 +143,7 @@ const MyApplicationBoxes: FC = () => {
                   border
                   applicants={item.applicants}
                   hired={2}
-                  date={dayjs(item?.updated_at)?.format('MMM d')}
+                  date={dayjs(item?.updated_at)?.format('MMM D')}
                 />
               </a>
             </Link>
@@ -171,7 +172,7 @@ const MyApplicationBoxes: FC = () => {
                   border
                   applicants={item.applicants}
                   hired={2}
-                  date={dayjs(item?.updated_at)?.format('MMM d')}
+                  date={dayjs(item?.updated_at)?.format('MMM D')}
                 />
               </a>
             </Link>

@@ -4,6 +4,16 @@ import TextBoxGray from '@components/common/TextBoxGray/TextBoxGray';
 import TitleViewBoxWithCard from '@components/common/TitleViewBoxWithAvatar/TitleViewBoxWithAvatar';
 import TwoCloumnTwoRowBox from '@components/common/TwoColumnTwoRow/TwoColumnTwoRow';
 import {useToggle, useUser} from '@hooks';
+import {
+  TApplicant,
+  TApplicantsByStatus,
+  TApplicantsResponse,
+} from '@models/applicant';
+import dayjs from 'dayjs';
+import Link from 'next/link';
+import {useMemo} from 'react';
+import useSWR from 'swr';
+import {get} from 'utils/request';
 
 import HeaderBox from '../component/HeaderBox';
 import HiredCard from '../component/HiredCard';
@@ -19,18 +29,35 @@ var data = [
   },
 ];
 
-function HiredContent() {
-  const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
-  const {state: showDrafts, handlers: showDraftsHandler} = useToggle();
-  const {user} = useUser();
+type HireContentProps = {
+  // hiredApplicants: TApplicant[];
+  projectId: string;
+};
+
+function HiredContent({projectId}: HireContentProps) {
+  const {state: showHired, handlers: showHiredHandler} = useToggle();
+
+  const {data: applicantsData, error: applicantsError} =
+    useSWR<TApplicantsResponse>(
+      projectId ? `/projects/${projectId}/applicants` : null,
+      get,
+    );
+
+  const hiredApplicants: TApplicant[] = useMemo(() => {
+    return (
+      applicantsData?.items.filter(
+        (applicant) => applicant.status === 'HIRED',
+      ) ?? []
+    );
+  }, [applicantsData]);
 
   return (
     <div className="w-full py-4">
       <div className=" rounded-2xl border border-grayLineBased ">
         <HeaderBox
           title={'Hired'}
-          isExpand={showOnGoing}
-          expandToggle={showOnGoingHandler.toggle}
+          isExpand={showHired}
+          expandToggle={showHiredHandler.toggle}
           isExpandable={false}
           isRound={false}
         />
@@ -42,20 +69,33 @@ function HiredContent() {
           <HeaderBox
             isExpandable={true}
             isRound={false}
-            title={'End hire'}
-            isExpand={showOnGoing}
-            expandToggle={showOnGoingHandler.toggle}
+            title={`End hire (${hiredApplicants.length})`}
+            isExpand={showHired}
+            expandToggle={showHiredHandler.toggle}
           />
-          {showOnGoing &&
-            data.map((item) => (
-              <CardBoxComplete
-                key={item.id}
-                bodyTitle={'Apply date'}
-                description={
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
-                }
-                bodyTitleColor={'text-graySubtitle'}
-              />
+          {showHired &&
+            hiredApplicants.map((applicant) => (
+              <Link
+                key={applicant.id}
+                href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
+              >
+                <a>
+                  <CardBoxComplete
+                    name={applicant?.user?.name}
+                    username={applicant?.user?.username ?? ''}
+                    applicationDate={dayjs(applicant?.created_at)?.format(
+                      'MMM D',
+                    )}
+                    message={
+                      applicant.cover_letter
+                        ? applicant.cover_letter.length > 200
+                          ? `${applicant.cover_letter?.slice(0, 50)}...}`
+                          : applicant.cover_letter
+                        : 'No message'
+                    }
+                  />
+                </a>
+              </Link>
             ))}
         </div>
       </div>

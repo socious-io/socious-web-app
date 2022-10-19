@@ -15,7 +15,11 @@ const ApplyLayout: FC<PropsWithChildren<TLayoutType>> = ({children, title}) => {
       isOpen={ProjectContext.isApplyModalOpen}
       className={`${styles.layoutBase} flex  max-w-xl flex-col p-0`}
     >
-      <div className="flex justify-between border-b p-5 py-5">
+      <div
+        className={`flex justify-between ${
+          ProjectContext.formStep !== 2 && 'border-b'
+        } p-5 py-5`}
+      >
         {!(ProjectContext.formStep === 0 || ProjectContext.formStep === 2) ? (
           <div
             onClick={() =>

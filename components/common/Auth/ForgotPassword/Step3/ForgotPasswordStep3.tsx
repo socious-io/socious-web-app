@@ -63,6 +63,7 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
             )
           }
           autoComplete="on"
+          inputType="borderBottom"
         />
         <InputFiled
           label="Confirm new password"
@@ -73,6 +74,7 @@ const ForgotPasswordStep3 = ({onSubmit}: StepProps) => {
           required
           className="my-6"
           autoComplete="on"
+          inputType="borderBottom"
         />
         <div className="grid w-full grid-cols-4  gap-3 py-5 sm:py-3 md:py-5 2xl:py-3">
           <div

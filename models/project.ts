@@ -27,6 +27,9 @@ export interface Project {
   expires_at?: string;
   applied: boolean;
   updated_at: string;
+  commitment_hours_higher: string;
+  commitment_hours_lower: string;
+  city: string;
 }
 
 export interface CreateProjectType {
@@ -36,14 +39,18 @@ export interface CreateProjectType {
   payment_scheme?: string;
   remote_preference: string;
   payment_currency?: string;
-  payment_range_lower: string;
-  payment_range_higher: string;
-  experience_level: number;
+  payment_range_lower?: string;
+  payment_range_higher?: string;
+  commitment_hours_higher?: string;
+  commitment_hours_lower?: string;
+  // experience_level: number;
   causes_tags: Array<string>;
   country: string;
   project_length: string;
   project_type?: string;
   skills: Array<string>;
+  city?: string;
+  status: string;
 }
 
 export interface ApplyProjectType {

@@ -1,3 +1,3 @@
 export type TOnSubmit = {
-  onSubmit: () => void;
+  onSubmit: (s?: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => void;
 };

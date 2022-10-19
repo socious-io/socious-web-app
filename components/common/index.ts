@@ -15,3 +15,4 @@ export * from './ImageUploader/ImageUploader';
 export * from './Timer/Timer';
 export * from './SocialShareBar/SocialShareBar';
 export * from './Combobox/Combobox';
+export * from './Pagination/Pagination';

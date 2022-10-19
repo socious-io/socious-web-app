@@ -14,14 +14,13 @@ interface Props {
 const ProjectList: React.FC<Props> = ({list}) => {
   return list.map((project: Project) => (
     <>
-      <Link href={`/app/projects/${project.id}`} passHref>
+      <Link href={`/app/projects/${project.id}`} passHref key={project.id}>
         <a>
           <ProjectItem
-            key={project.id}
             title={project.title}
             applicants={project.applicants}
             hired={2}
-            date={dayjs(project?.updated_at)?.format('MMM d')}
+            date={dayjs(project?.updated_at)?.format('MMM D')}
           />
         </a>
       </Link>

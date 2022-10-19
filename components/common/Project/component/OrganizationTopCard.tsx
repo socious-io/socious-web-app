@@ -21,6 +21,7 @@ import {ApplyProjectType} from '@models/project';
 import {toast} from 'react-toastify';
 import useSWR from 'swr';
 import {useFormattedLocation} from 'services/formatLocation';
+import Link from 'next/link';
 
 const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   const {
@@ -79,7 +80,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
     if (isStep0) {
       return <ApplyStep1 onSubmit={onSubmit} project={project} />;
     } else if (isStep1) {
-      return <ApplyStep2 onSubmit={onSubmit} title={title} />;
+      return <ApplyStep2 onSubmit={onSubmit} project={project} />;
     } else if (isStep2) {
       return <ApplyStep3 />;
     } else if (isStep3) {
@@ -105,16 +106,20 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   return (
     <div className="space-y-6 p-4">
       <div className="flex flex-row items-center justify-between ">
-        <div className="flex flex-row space-x-2">
-          <Avatar size="l" src={identity_meta?.image} />
-          <div className="flex flex-col justify-center">
-            <p className="text-black">{identity_meta?.name || ''}</p>
-            <p className="text-graySubtitle">{orgLocation || ''}</p>
+        <Link href={`/app/organization/${org?.shortname}`}>
+          <div className="flex cursor-pointer flex-row space-x-2">
+            <Avatar size="l" src={identity_meta?.image} />
+            <div className="flex flex-col justify-center">
+              <p className="text-black">{identity_meta?.name || ''}</p>
+              <p className="text-graySubtitle">{orgLocation || ''}</p>
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
       <div className="">
-        <p className="font-semibold">{title}</p>
+        <Link href={`/app/projects/${id}`}>
+          <p className="cursor-pointer font-semibold">{title}</p>
+        </Link>
       </div>
       <div className="mt-4 flex space-x-5">
         {location && (

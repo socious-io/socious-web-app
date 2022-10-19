@@ -1,6 +1,5 @@
-import Avatar from '@components/common/Avatar/Avatar';
 import SearchBar from '@components/common/SearchBar/SearchBar';
-import {ChevronLeftIcon, PlusIcon} from '@heroicons/react/24/outline';
+import {PlusIcon} from '@heroicons/react/24/outline';
 import React, {
   forwardRef,
   useCallback,
@@ -14,7 +13,6 @@ import useSWR from 'swr';
 import {get} from 'utils/request';
 import {useUser} from '@hooks';
 import {twMerge} from 'tailwind-merge';
-import {useRef} from 'react';
 
 type ChatSideBarProps = {
   onChatOpen?: (data: any) => void;
@@ -50,7 +48,15 @@ const SideBarToBe = (
   }, [currentIdentity, mutateChats]);
 
   useEffect(() => {
-    if (chatResponse?.items) setFilteredChats(chatResponse.items);
+    if (chatResponse?.items)
+      setFilteredChats(
+        chatResponse.items.sort((a: any, b: any) => {
+          const dateDiff =
+            Date.parse(a.updated_at ?? a.created_at) -
+            Date.parse(b.updated_at ?? b.created_at);
+          return dateDiff > 0 ? -1 : dateDiff < 0 ? 1 : 0;
+        }),
+      );
   }, [chatResponse]);
 
   return (

@@ -10,10 +10,11 @@ export interface ButtonProps
   variant?: 'fill' | 'outline' | 'ghost' | 'link' | 'simple' | 'filter';
   size?: 'lg' | 'md' | 'sm';
   leftIcon?: (width: number, height: number) => JSX.Element;
+  rightIcon?: (width: number, height: number) => JSX.Element;
 }
 
 const defaultBtnClass =
-  'inline-flex items-center font-medium rounded-3xl border text-base';
+  'inline-flex items-center font-medium rounded-3xl border text-base whitespace-nowrap';
 
 const variantClass = {
   fill: 'bg-primary border-transparent text-white hover:bg-primaryDark  focus:bg-primaryDark   focus:shadow-md ',
@@ -63,6 +64,7 @@ export function Button({
   size = 'md',
   className,
   leftIcon,
+  rightIcon,
   ...props
 }: ButtonProps) {
   const iconSize = getIconSize(size);
@@ -81,6 +83,7 @@ export function Button({
     >
       {leftIcon && <div className="mr-2">{leftIcon(iconSize, iconSize)}</div>}
       {children}
+      {rightIcon && <div className="ml-2">{rightIcon(iconSize, iconSize)}</div>}
     </button>
   );
 }

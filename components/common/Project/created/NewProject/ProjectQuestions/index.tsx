@@ -5,17 +5,12 @@ import {PlusCircleIcon} from '@heroicons/react/24/outline';
 import {useProjectContext} from '../context';
 import {TOnSubmit} from '../sharedType';
 import {FromLayout} from '../Layout';
-import {useForm} from 'react-hook-form';
 
 const ProjectQuestion: FC<TOnSubmit> = ({onSubmit}) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
-  const {handleSubmit} = useForm();
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex h-full w-full flex-col"
-    >
+    <form className="flex h-full w-full flex-col">
       <FromLayout>
         <div className="flex h-full w-full flex-col bg-zinc-200">
           <Title

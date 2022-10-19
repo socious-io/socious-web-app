@@ -31,7 +31,6 @@ const MainContent = ({onClickShow}: Props) => {
     if (!isNaN(infiniteProject as any)) return [];
     return infiniteProject?.map((page) => page?.items)?.flat(1);
   }, [infiniteProject]);
-  console.log(flatProjectArray);
 
   const noMoreMessage = useMemo(
     () => size * 10 >= infiniteProject?.[0]?.['total_count'],
