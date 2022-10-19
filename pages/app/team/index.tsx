@@ -11,7 +11,7 @@ const Team: NextPage = () => {
 
   return (
     <GeneralLayout hasNavbar>
-      <SideBar selectBar={showSide ? 'PROJECT_BACKBAR' : ''} />
+      <SideBar selectBar={showSide ? 'PROJECT_BACKBAR' : 'DEFAULT'} />
       <TeamComponent />
     </GeneralLayout>
   );
