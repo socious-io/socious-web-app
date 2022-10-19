@@ -10,6 +10,7 @@ import {getText} from '@socious/data';
 import {FC} from 'react';
 import {isoToHumanTime} from 'services/toHumanTime';
 import {useFormattedLocation} from 'services/formatLocation';
+import Markdown from 'markdown-to-jsx';
 import Router from 'next/router';
 
 type ProjectCardProps = {
@@ -96,6 +97,15 @@ export default function ProjectCard({
 
             {project.description?.length > 200 && (
               <span className="text-secondary"> See more</span>
+            )}
+          </p>
+        </div>
+        <div className="flex flex-row">
+          <p className="my-1 text-sm">
+            {project?.description && (
+              <Markdown options={{wrapper: 'article'}}>
+                {project?.description?.slice?.(0, 200)}
+              </Markdown>
             )}
           </p>
         </div>
