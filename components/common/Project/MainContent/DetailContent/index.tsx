@@ -21,13 +21,16 @@ import {updateProjectById} from '@api/projects/actions';
 import {CreateProjectType, Project} from '@models/project';
 import {toast} from 'react-toastify';
 import SplashScreen from 'layout/Splash';
+import {twMerge} from 'tailwind-merge';
 import {get} from 'utils/request';
 
 type CreateProjectMainType = {
+  projectId?: string;
+  className?: string;
   skills: any[];
 };
 
-const Detail: FC<CreateProjectMainType> = ({skills}) => {
+const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
   const router = useRouter();
   const {id} = router.query;
   const {currentIdentity} = useUser({redirect: false});
@@ -35,7 +38,9 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
-  const {data, mutate} = useSWR<Project>(`/projects/${id}`, get);
+
+  // const {data: projectQuestion} = useSWR<any>(`/projects/${id}/questions`, get);
+  const {data, mutate} = useSWR<Project>(`/projects/${projectId ?? id}`, get);
   const {mutate: getProject} = useSWR<any>(
     `/projects?identity=${currentIdentity?.id}`,
     get,
@@ -98,7 +103,12 @@ const Detail: FC<CreateProjectMainType> = ({skills}) => {
       {currentIdentity?.id === data?.identity_id ? (
         <DetailContent project={data} />
       ) : (
-        <div className="divide-y rounded-2xl border border-grayLineBased bg-white ">
+        <div
+          className={twMerge(
+            'divide-y rounded-2xl border border-grayLineBased bg-white ',
+            className,
+          )}
+        >
           <OrganizationTopCard project={data} />
           {(data?.causes_tags || []).length > 0 && (
             <ProjectItem items={data?.causes_tags} title="Social causes" />

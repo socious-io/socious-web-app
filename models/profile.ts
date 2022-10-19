@@ -1,10 +1,13 @@
 // import {BusinessProfile} from './business';
 // import {NewsFeed} from './newsFeed';
 
+import {TMediaType} from './organization';
+
 export interface UserProfile {
-  id: number;
+  id: string;
   first_name?: string;
   last_name?: string;
+  username?: string;
   followers: number;
   bio?: string;
   email?: string;
@@ -14,7 +17,7 @@ export interface UserProfile {
   city?: string;
   country?: string;
   mobile_country_code?: string;
-  avatar?: string;
+  avatar?: TMediaType;
   cover_image?: string;
   mission?: string;
   social_causes: Array<string>;
@@ -101,4 +104,8 @@ export interface UpdateProfileBodyType {
   phone?: string;
   cover_image?: string;
   avatar?: string;
+}
+
+export interface SimplifiedUserProfile extends UpdateProfileBodyType {
+  id: string;
 }

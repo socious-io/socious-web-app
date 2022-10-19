@@ -1,14 +1,22 @@
 import {Avatar, Chip} from '@components/common';
 import {Project} from 'models/project';
 import Link from 'next/link';
-import {ChevronRightIcon} from '@heroicons/react/24/outline';
+import {
+  BookmarkIcon,
+  ChevronRightIcon,
+  HandThumbDownIcon,
+} from '@heroicons/react/24/outline';
 import {getText} from '@socious/data';
 import {FC} from 'react';
-import useSWR from 'swr';
-import {get} from 'utils/request';
 import {isoToHumanTime} from 'services/toHumanTime';
-import {getAllInfoByISO} from 'iso-country-currency';
 import {useFormattedLocation} from 'services/formatLocation';
+import Router from 'next/router';
+
+type ProjectCardProps = {
+  project: Project;
+  type?: 'NORMAL' | 'SEARCH';
+  previewItem?: () => void;
+};
 
 export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
   return (
@@ -18,7 +26,7 @@ export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
           <div key={`${ct}`} className="mt-1">
             <Chip
               content={`${getText('en', `PASSION.${ct}`)}`}
-              contentClassName="text-secondary text-sm"
+              contentClassName="text-secondary text-sm whitespace-nowrap"
             />
           </div>
         );
@@ -26,80 +34,97 @@ export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
     </div>
   );
 };
-function ProjectCard({project}: {project: Project}) {
+
+export default function ProjectCard({
+  project,
+  type = 'NORMAL',
+  previewItem,
+}: ProjectCardProps) {
   const location = useFormattedLocation(project);
 
   return (
-    <div className="cursor-pointer rounded-2xl border border-grayLineBased bg-white p-4">
-      <Link href={`/app/projects/${project.id}`}>
-        <div className="space-y-6">
-          <div className="flex flex-row items-center justify-between ">
-            <Link
-              href={`/app/organization/${project.identity_meta?.shortname}`}
-            >
-              <div className="flex flex-row space-x-2">
-                <Avatar
-                  size="l"
-                  type={'organizations'}
-                  src={project.identity_meta?.image}
-                />
-                <div className="flex flex-col justify-center">
-                  <p className="text-black">{project.identity_meta?.name}</p>
-                  {location && <p className="text-graySubtitle">{location}</p>}
-                </div>
+    <div
+      className="cursor-pointer rounded-2xl border border-grayLineBased bg-white p-4"
+      onClick={() =>
+        previewItem && type === 'SEARCH'
+          ? previewItem()
+          : Router.push(`/app/projects/${project.id}`)
+      }
+    >
+      <div className="space-y-6">
+        <div className="flex flex-row items-center justify-between ">
+          <Link href={`/app/organization/${project.identity_meta?.shortname}`}>
+            <div className="flex flex-row space-x-2">
+              <Avatar
+                size={type === 'SEARCH' ? 'xl' : 'l'}
+                type={'organizations'}
+                src={project.identity_meta?.image}
+              />
+              <div className="flex flex-col justify-center">
+                <p className="text-black">{project.identity_meta?.name}</p>
+                {location && <p className="text-graySubtitle">{location}</p>}
               </div>
-            </Link>
-          </div>
-          <div className="">
-            <p className="font-semibold">{project.title}</p>
-          </div>
-          <div className="mt-4 flex flex-row space-x-2 divide-x divide-solid divide-graySubtitle">
-            {project.project_type && (
-              <p className="text-sm text-graySubtitle ">
-                {getText('en', `PROJECT.${project.project_type}`)}
-              </p>
-            )}
-            {project.payment_type && (
-              <p className="pl-2 text-sm text-graySubtitle ">
-                {getText('en', `PAYMENT.${project.payment_type}`)}
-              </p>
-            )}
-          </div>
-          <div className="flex flex-row">
-            <p className="my-1 text-sm">
-              {project.description?.length > 200
-                ? `${project.description?.slice(0, 200)}...`
-                : project.description}
-
-              {project.description?.length > 200 && (
-                <span className="text-secondary"> See more</span>
-              )}
-            </p>
-          </div>
-
-          <div className="flex flex-row justify-between ">
-            <div className="hide-scroll-bar whitespace-no-wrap w-7/10 flex  flex-row space-x-2  overflow-auto">
-              <GroupsOfChips causes_tags={project.causes_tags} />
             </div>
-            <span className="ml-2 flex flex-row items-center">
-              <ChevronRightIcon className="w-6" />
-            </span>
-          </div>
-          <div className="mt-4 flex justify-between">
-            <dt
-              className="flex text-sm font-normal text-gray-400"
-              title={project.created_at}
-            >
-              {isoToHumanTime(project.created_at)}
-            </dt>
-            {/* <div className="flex flex-row items-center ">
-              <dd className="ml-2 text-sm text-secondary">connections</dd>
-            </div> */}
-          </div>
+          </Link>
+          {/* {type === 'SEARCH' && (
+            <div className="flex gap-4 text-primary">
+              <HandThumbDownIcon className="w-4" />
+              <BookmarkIcon className="w-4" />
+            </div>
+          )} */}
         </div>
-      </Link>
+        <div className="">
+          <p className="font-semibold">{project.title}</p>
+        </div>
+        <div className="mt-4 flex flex-row space-x-2 divide-x divide-solid divide-graySubtitle">
+          {project.project_type && (
+            <p className="text-sm text-graySubtitle ">
+              {getText('en', `PROJECT.${project.project_type}`)}
+            </p>
+          )}
+          {project.payment_type && (
+            <p className="pl-2 text-sm text-graySubtitle ">
+              {getText('en', `PAYMENT.${project.payment_type}`)}
+            </p>
+          )}
+        </div>
+        <div className="flex flex-row">
+          <p className="my-1 text-sm">
+            {project.description?.length > 200
+              ? `${project.description?.slice(0, 200)}...`
+              : project.description}
+
+            {project.description?.length > 200 && (
+              <span className="text-secondary"> See more</span>
+            )}
+          </p>
+        </div>
+
+        <div className="flex flex-row justify-between ">
+          <div className="hide-scroll-bar whitespace-no-wrap w-7/10 flex  flex-row space-x-2  overflow-auto">
+            <GroupsOfChips causes_tags={project.causes_tags} />
+          </div>
+          <span className="ml-2 flex flex-row items-center">
+            <ChevronRightIcon className="w-6" />
+          </span>
+        </div>
+        <div className="mt-4 flex justify-between">
+          <dt
+            className="flex text-sm font-normal text-gray-400"
+            title={project.created_at}
+          >
+            {isoToHumanTime(project.created_at)}
+          </dt>
+          {/* <div className="flex gap-2 text-primary">
+            <div className="relative">
+              <Avatar />
+              <Avatar className="absolute left-3" />
+              <Avatar />
+            </div>
+            <dd className="text-sm text-secondary">connections</dd>
+          </div> */}
+        </div>
+      </div>
     </div>
   );
 }
-
-export default ProjectCard;
