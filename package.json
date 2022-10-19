@@ -15,7 +15,7 @@
     "@capacitor/ios": "^4.3.0",
     "@hookform/resolvers": "^2.9.8",
     "@socious/data": "^1.0.19",
-    "@svgr/webpack": "^6.3.1",
+    "@svgr/webpack": "^6.5.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
