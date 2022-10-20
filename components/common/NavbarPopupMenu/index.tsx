@@ -115,35 +115,33 @@ const NavbarPopupMenu = () => {
                 )
               )}
 
+              <SettingCard />
+
               {/* Logged Based Info */}
               {userLoggedOut ? (
-                <ul className="!mt-12 list-none divide-y divide-offsetColor !border-0 sm:!mt-0">
+                <ul className="!mt-0 list-none divide-y divide-offsetColor sm:!border-0">
                   <Link href="/app/auth/signup">
-                    <li className="flex items-center space-x-4 whitespace-nowrap p-4 hover:bg-primary hover:text-offWhite">
+                    <li className="flex cursor-pointer items-center space-x-4 whitespace-nowrap p-4 hover:bg-primary hover:text-offWhite">
                       <ArrowRightOnRectangleIcon className="h-5" />
                       <p>Sign up</p>
                     </li>
                   </Link>
                   <Link href="/app/auth/login">
-                    <li className="flex items-center space-x-4 whitespace-nowrap p-4 hover:bg-primary hover:text-offWhite">
+                    <li className="flex cursor-pointer items-center space-x-4 whitespace-nowrap p-4 hover:bg-primary hover:text-offWhite">
                       <UserIcon className="h-5" />
                       <p>Login</p>
                     </li>
                   </Link>
                 </ul>
               ) : (
-                <>
-                  <SettingCard />
-
-                  <div className="flex hidden cursor-pointer items-center gap-4 p-2 md:block">
-                    <Link href="/app/auth/changepassword">
-                      <label className="flex cursor-pointer items-center space-x-4">
-                        <KeyIcon className="h-6" />
-                        <p>Change password</p>
-                      </label>
-                    </Link>
-                  </div>
-                </>
+                <div className="flex hidden cursor-pointer items-center gap-4 p-2 md:block">
+                  <Link href="/app/auth/changepassword">
+                    <label className="flex cursor-pointer items-center space-x-4">
+                      <KeyIcon className="h-6" />
+                      <p>Change password</p>
+                    </label>
+                  </Link>
+                </div>
               )}
               {!userLoggedOut && (
                 <div
