@@ -8,7 +8,7 @@ import useSWR from 'swr';
 
 //components
 import {GeneralLayout} from 'layout';
-import {Avatar} from '@components/common';
+import {Avatar, Button} from '@components/common';
 import ProjectItem from '@components/common/UserProfile/RightPane/ProjectItem';
 
 // Utils/Services
@@ -16,8 +16,9 @@ import {get} from 'utils/request';
 
 //types
 import type {NextPage} from 'next';
-import {IProjectsResponse, Project} from '@models/project';
+import {Project} from '@models/project';
 import {IOrganizationType} from 'models/organization';
+import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 
 const OrganizationProjects: NextPage = () => {
   const {query} = useRouter();
@@ -27,16 +28,10 @@ const OrganizationProjects: NextPage = () => {
     get,
   );
 
-  const {data: projects} = useSWR<IProjectsResponse>(
+  // InfiniteData
+  const {flattenData, seeMore, loadMore} = useInfiniteSWR<Project>(
     organization ? `/projects?identity=${organization.id}` : null,
-    get,
   );
-
-  const flattenActiveProjects: Project[] = useMemo(() => {
-    return projects
-      ? projects.items.filter((project: Project) => project.status === 'ACTIVE')
-      : [];
-  }, [projects]);
 
   return (
     <GeneralLayout style={{marginBottom: '1.5rem'}}>
@@ -56,7 +51,7 @@ const OrganizationProjects: NextPage = () => {
           </div>
         </div>
         <div className="md:w-4/6">
-          {flattenActiveProjects?.map((project: Project, index: number) => (
+          {flattenData?.map((project: Project, index: number) => (
             <Link
               key={project.id}
               href={`/app/projects/${project.id}`}
@@ -70,11 +65,22 @@ const OrganizationProjects: NextPage = () => {
                   date={dayjs(project?.updated_at)?.format('MMM D')}
                   border
                   first={index === 0}
-                  last={flattenActiveProjects.length - 1 === index}
+                  last={flattenData.length - 1 === index}
                 />
               </a>
             </Link>
           ))}
+          {seeMore && (
+            <div className="flex justify-center">
+              <Button
+                variant="link"
+                className="font-semibold text-primary"
+                onClick={loadMore}
+              >
+                Load more
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </GeneralLayout>
