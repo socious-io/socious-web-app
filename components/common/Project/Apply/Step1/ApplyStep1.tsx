@@ -45,7 +45,7 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
         shouldValidate: true,
       });
     }
-  }, []);
+  }, [ProjectContext, setValue]);
 
   const handleChange = (field: string, input: string | boolean) => {
     setValue(field, input, {

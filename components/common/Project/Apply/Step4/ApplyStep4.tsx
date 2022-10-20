@@ -35,7 +35,7 @@ const AddLink = () => {
       });
       setLink(ProjectContext.cv_link);
     }
-  }, []);
+  }, [ProjectContext.cv_link, ProjectContext.cv_name, setValue]);
 
   return (
     <div className="flex h-full w-full flex-col">

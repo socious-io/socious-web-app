@@ -35,7 +35,7 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
         shouldValidate: true,
       });
     }
-  }, []);
+  }, [ProjectContext, setValue]);
 
   const skills = useMemo(() => {
     const sorted: {id: string; name: string}[] = [];
