@@ -49,6 +49,8 @@ function MyApplicationBoxes({
   const {state: showOfferForm, handlers: showOfferFormHandlers} = useToggle();
   const {state: confirmOffer, handlers: confirmOfferHandlers} = useToggle();
   const {state: confirmReject, handlers: confirmRejectHandlers} = useToggle();
+  const {state: seeFullCoverLetter, handlers: coverLetterHandlers} =
+    useToggle();
 
   const offerApplicantFormData = useForm({
     resolver: joiResolver(schemaOfferApplicant),
@@ -140,13 +142,25 @@ function MyApplicationBoxes({
           <div className=" divide-y p-4 ">
             <p className="py-4 font-semibold text-black">Cover Letter</p>
             <div>
-              <p className=" flex py-4 font-medium text-gray-900">
-                {applicant.cover_letter
-                  ? applicant?.cover_letter?.length > 200
-                    ? `${applicant?.cover_letter?.slice(0, 200)}...` +
-                      'See more'
-                    : applicant?.cover_letter
-                  : 'No cover letter provided'}
+              <p className="py-4 font-normal text-gray-900">
+                {applicant.cover_letter ? (
+                  applicant?.cover_letter?.length > 200 &&
+                  !seeFullCoverLetter ? (
+                    <>
+                      {applicant?.cover_letter?.slice(0, 200)}...
+                      <span
+                        className="inline-block cursor-pointer text-primary"
+                        onClick={() => coverLetterHandlers.on()}
+                      >
+                        See more
+                      </span>
+                    </>
+                  ) : (
+                    applicant?.cover_letter
+                  )
+                ) : (
+                  'No cover letter provided'
+                )}
               </p>
               <p className="py-4 font-semibold text-black">
                 Screening questions

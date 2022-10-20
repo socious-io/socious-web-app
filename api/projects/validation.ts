@@ -110,7 +110,7 @@ export const schemaLink = Joi.object({
   cv_link: Joi.string().uri().required().messages({
     'string.empty': `Link URL is required.`,
     'string.base': `Link URL is required.`,
-    'string.uri': `Link must be a valid url.`,
+    'string.uri': `Please enter a valid url.`,
   }),
   cv_name: Joi.string().required().messages({
     'string.empty': `Link name is required.`,
