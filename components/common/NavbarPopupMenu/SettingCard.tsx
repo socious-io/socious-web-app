@@ -30,7 +30,7 @@ const SettingCard = () => {
             </Link>
           </li>
         )}
-        {!userLoggedOut && (
+        {/* {!userLoggedOut && (
           <li className="flex items-center space-x-4">
             <Link
               href={
@@ -50,7 +50,7 @@ const SettingCard = () => {
               </label>
             </Link>
           </li>
-        )}
+        )} */}
         <li className="flex items-center space-x-4">
           <Link href={'https://socious.io/privacy-policy/'} target="_blank">
             <label className="flex cursor-pointer items-center space-x-4">
