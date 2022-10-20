@@ -28,7 +28,7 @@ function MyApplicationBoxes() {
 
   useEffect(() => {
     groupByStatus?.PENDING?.length && showPendingHandler.on();
-  }, [data]);
+  }, [data, showPendingHandler]);
 
   if (data) {
     fetchUserProjects();
