@@ -1,5 +1,8 @@
+import {TApplicantStatus} from './applicant';
 import {IdentityMeta, IdentityType} from './identity';
 import {Question} from './question';
+
+export type TProjectStatus = 'DRAFT' | 'EXPIRE' | 'ACTIVE';
 
 export interface Project {
   id: string;
@@ -22,7 +25,7 @@ export interface Project {
   identity_id: string;
   identity_type: IdentityType;
   identity_meta: IdentityMeta;
-  status: string;
+  status: TProjectStatus;
   created_at: string;
   expires_at?: string;
   applied: boolean;
@@ -76,17 +79,4 @@ export interface IProjectsResponse {
   limit: number;
   page: number;
   total_count: number;
-}
-
-export interface IUserProjects extends Project {
-  cover_letter: string;
-  organization: {
-    meta: {
-      image?: string;
-      name: string;
-    };
-  };
-  project: {
-    title: string;
-  };
 }

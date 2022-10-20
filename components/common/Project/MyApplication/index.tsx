@@ -1,80 +1,97 @@
-import {useEffect} from 'react';
-import useSWR from 'swr';
 import BodyCard from '../component/BodyCard';
 import HeaderBox from '../component/HeaderBox';
 import {useToggle} from '@hooks';
-import {IUserProjects} from '@models/project';
-import {get} from 'utils/request';
-
-// todo : type for groupByStatus
-let groupByStatus: any;
+import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
+import {TApplicant, TApplicantStatus} from '@models/applicant';
+import {useEffect, useMemo} from 'react';
 
 function MyApplicationBoxes() {
   const {state: showPending, handlers: showPendingHandler} = useToggle();
   const {state: showDecline, handlers: showDeclineHandler} = useToggle();
   const {state: showAwaiting, handlers: showAwaitingHandler} = useToggle();
 
-  const {data, error} = useSWR<any>('/user/applicants', get);
+  const {flattenData: data, infiniteError} =
+    useInfiniteSWR<TApplicant>('/user/applicants');
 
-  const fetchUserProjects = () => {
-    const {items} = data;
-    groupByStatus = items.reduce((group: any, item: IUserProjects) => {
-      const {status} = item;
-      group[status] = group[status] ?? [];
-      group[status].push(item);
-      return group;
-    }, {});
-  };
+  // TODO show error message
+  // TODO load more (wait for filter by status)
+
+  const groupByStatus = useMemo(() => {
+    const map: Map<TApplicantStatus, Array<TApplicant>> = new Map();
+    for (const item of data) {
+      if (!map.has(item.status)) map.set(item.status, []);
+      map.get(item.status)!.push(item);
+    }
+    return map;
+  }, [data]);
 
   useEffect(() => {
-    groupByStatus?.PENDING?.length && showPendingHandler.on();
-  }, [data, showPendingHandler]);
-
-  if (data) {
-    fetchUserProjects();
-  }
-
-  if (!data && !error) return <p>loading</p>;
+    if (groupByStatus.get('PENDING')?.length) showPendingHandler.on();
+    else if (groupByStatus.get('OFFERED')?.length) showAwaitingHandler.on();
+    else if (groupByStatus.get('REJECTED')?.length) showDeclineHandler.on();
+  }, [
+    groupByStatus,
+    showAwaitingHandler,
+    showDeclineHandler,
+    showPendingHandler,
+  ]);
 
   return (
     <div className="w-full rounded-2xl border border-grayLineBased pb-4">
       <HeaderBox
-        title={`Pending (${groupByStatus?.PENDING?.length ?? 0})`}
+        title={`Pending (${groupByStatus.get('PENDING')?.length ?? 0})`}
         isExpand={showPending}
         expandToggle={showPendingHandler.toggle}
         isExpandable={true}
         isRound={true}
       />
       {showPending &&
-        groupByStatus?.PENDING?.map((item: IUserProjects) => (
-          <BodyCard key={item.id} item={item} />
-        ))}
+        groupByStatus
+          .get('PENDING')
+          ?.map((item) => (
+            <BodyCard
+              key={item.id}
+              project={item.project}
+              name={item.organization.meta.name}
+              image={item.organization.meta.image}
+            />
+          ))}
       <HeaderBox
-        title={`Awaiting review (${groupByStatus?.AWAITING?.length ?? 0})`}
+        title={`Awaiting review (${groupByStatus.get('OFFERED')?.length ?? 0})`}
         isExpand={showAwaiting}
         expandToggle={showAwaitingHandler.toggle}
         isExpandable={true}
         isRound={true}
       />
       {showAwaiting &&
-        groupByStatus?.AWAITING?.map((item: IUserProjects) => (
-          <BodyCard
-            key={item.id}
-            item={item}
-            // refixAddress={`/app/projects/applications/section/${item.projectId}`}
-          />
-        ))}
+        groupByStatus
+          .get('OFFERED')
+          ?.map((item) => (
+            <BodyCard
+              key={item.id}
+              project={item.project}
+              name={item.organization.meta.name}
+              image={item.organization.meta.image}
+            />
+          ))}
       <HeaderBox
-        title={`Declined (${groupByStatus?.DECLINE?.length ?? 0})`}
+        title={`Declined (${groupByStatus.get('REJECTED')?.length ?? 0})`}
         isExpand={showDecline}
         expandToggle={showDeclineHandler.toggle}
         isExpandable={true}
         isRound={true}
       />
       {showDecline &&
-        groupByStatus?.DECLINE?.map((item: IUserProjects) => (
-          <BodyCard key={item.id} item={item} />
-        ))}
+        groupByStatus
+          .get('REJECTED')
+          ?.map((item) => (
+            <BodyCard
+              key={item.id}
+              project={item.project}
+              name={item.organization.meta.name}
+              image={item.organization.meta.image}
+            />
+          ))}
     </div>
   );
 }
