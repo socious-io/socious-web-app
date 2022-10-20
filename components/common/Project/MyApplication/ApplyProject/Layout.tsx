@@ -13,7 +13,7 @@ const ApplyLayout: FC<PropsWithChildren<TLayoutType>> = ({children, title}) => {
   return (
     <Modal
       isOpen={ProjectContext.isApplyModalOpen}
-      className={`${styles.layoutBase} flex  max-w-xl flex-col p-0`}
+      className={`${styles.layoutBase} -m-4 flex h-screen !w-screen max-w-xl flex-col rounded-none p-0 pt-14 sm:m-0 sm:rounded-2xl sm:pt-0`}
     >
       <div
         className={`flex justify-between ${

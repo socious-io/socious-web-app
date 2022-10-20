@@ -60,10 +60,10 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
 
   return (
     <form
-      className="flex h-full w-full flex-col "
+      className="flex h-full w-full grow flex-col sm:grow-0"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <FromLayout>
+      <FromLayout type="FULL">
         <div className="overflow-y-scroll px-4 pt-4">
           <p className="font-bold text-black">{project?.title}</p>
           <div className="mt-3 flex flex-row space-x-2">
@@ -108,10 +108,10 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
           </div>
         </div>
       </FromLayout>
-      <div className=" flex items-end justify-end  border-t p-4 px-4">
+      <div className=" flex items-end justify-center border-t p-4 pb-12 sm:justify-end sm:pb-4">
         <Button
           disabled={!isValid}
-          className="flex h-11 w-52 items-center justify-center"
+          className="flex h-11 w-full items-center justify-center sm:w-52"
           type="submit"
           variant="fill"
           value="Submit"
