@@ -16,6 +16,7 @@ const SideBar = ({selectBar = 'DEFAULT'}: Props) => {
   const isUser = currentIdentity?.type === 'users' ? true : false;
 
   if (!currentIdentity) return <></>;
+  console.log('USER :---: ', user);
 
   return (
     <div
@@ -64,7 +65,7 @@ const SideBar = ({selectBar = 'DEFAULT'}: Props) => {
                   ? user?.avatar?.url
                   : user?.image?.url
               }
-              following={user?.following}
+              following={user?.followings}
               followers={user?.followers}
               username={
                 currentIdentity?.type === 'users'
