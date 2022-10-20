@@ -22,7 +22,7 @@ export interface IOrganizationType {
   impact_score: number;
   mission?: string;
   culture?: string;
-  image?: string;
+  image?: IAvatarInfo;
   cover_image?: string;
   mobile_country_code?: string;
   created_by?: string;

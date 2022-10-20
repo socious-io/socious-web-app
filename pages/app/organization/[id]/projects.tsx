@@ -44,19 +44,33 @@ const OrganizationProjects: NextPage = () => {
       <div className="flex w-full flex-col gap-4 md:flex-row">
         <div className="md:w-2/6 ">
           <div className="max-h-min border border-grayLineBased bg-white px-4 py-6 md:rounded-xl">
-            <Avatar size="xxl" className="p-2" />
-            <h1 className="font-worksans font-semibold">Organization</h1>
-            <p className="font-worksans cursor-pointer text-sm text-primary">
-              View my profile
-            </p>
+            <Avatar
+              size="xxl"
+              className="p-2"
+              type="organizations"
+              src={organization?.image?.url}
+            />
+            <h1 className="font-worksans font-semibold">
+              {organization?.name}
+            </h1>
+            <Link
+              href={`/app/organization/${organization?.shortname ?? query}`}
+            >
+              <p className="font-worksans cursor-pointer text-sm text-primary">
+                View my profile
+              </p>
+            </Link>
             <p className="py-4 text-sm">{organization?.bio}</p>
             <div className="font-woksans flex text-sm text-grayInputField">
-              <p className="pr-4">{`${organization?.followers} following`}</p>
-              <p>{`${organization?.followings} followers`}</p>
+              <p className="pr-4">{`${organization?.followings} following`}</p>
+              <p>{`${organization?.followers} followers`}</p>
             </div>
           </div>
         </div>
         <div className="md:w-4/6">
+          <div className="mx-2 mb-4 rounded-2xl border border-grayLineBased bg-white p-6 text-xl font-semibold">
+            Projects
+          </div>
           {flattenActiveProjects?.map((project: Project, index: number) => (
             <Link
               key={project.id}
