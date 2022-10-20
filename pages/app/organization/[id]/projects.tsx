@@ -8,7 +8,7 @@ import useSWR from 'swr';
 
 //components
 import {GeneralLayout} from 'layout';
-import {Avatar} from '@components/common';
+import {Avatar, Button} from '@components/common';
 import ProjectItem from '@components/common/UserProfile/RightPane/ProjectItem';
 
 // Utils/Services
@@ -16,8 +16,9 @@ import {get} from 'utils/request';
 
 //types
 import type {NextPage} from 'next';
-import {IProjectsResponse, Project} from '@models/project';
+import {Project} from '@models/project';
 import {IOrganizationType} from 'models/organization';
+import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 
 const OrganizationProjects: NextPage = () => {
   const {query} = useRouter();
@@ -27,16 +28,16 @@ const OrganizationProjects: NextPage = () => {
     get,
   );
 
-  const {data: projects} = useSWR<IProjectsResponse>(
+  // InfiniteData
+  const {flattenData, seeMore, loadMore} = useInfiniteSWR<Project>(
     organization ? `/projects?identity=${organization.id}` : null,
-    get,
   );
 
   const flattenActiveProjects: Project[] = useMemo(() => {
-    return projects
-      ? projects.items.filter((project: Project) => project.status === 'ACTIVE')
+    return flattenData
+      ? flattenData.filter((project: Project) => project.status === 'ACTIVE')
       : [];
-  }, [projects]);
+  }, [flattenData]);
 
   return (
     <GeneralLayout style={{marginBottom: '1.5rem'}}>
@@ -75,6 +76,17 @@ const OrganizationProjects: NextPage = () => {
               </a>
             </Link>
           ))}
+          {seeMore && (
+            <div className="flex justify-center">
+              <Button
+                variant="link"
+                className="font-semibold text-primary"
+                onClick={loadMore}
+              >
+                Load more
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </GeneralLayout>
