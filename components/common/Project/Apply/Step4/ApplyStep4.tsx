@@ -7,6 +7,7 @@ import {FromLayout} from '../../created/NewProject/Layout';
 import {useProjectContext} from '../../created/NewProject/context';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {schemaLink} from '@api/projects/validation';
+import TextInput from '@components/common/TextInput/TextInput';
 
 const AddLink = () => {
   const {user} = useUser();
@@ -34,18 +35,17 @@ const AddLink = () => {
       });
       setLink(ProjectContext.cv_link);
     }
-  }, []);
+  }, [ProjectContext.cv_link, ProjectContext.cv_name, setValue]);
 
   return (
     <div className="flex h-full w-full flex-col">
       <FromLayout>
         <div className="mt-2 flex h-full flex-col space-y-4 px-4">
           <div className="mt-2 space-y-4 pl-0 ">
-            <TextArea
+            <TextInput
               required
               label="Link name "
-              placeholder="Write a message..."
-              rows={4}
+              placeholder="Link name"
               value={name}
               containerClassName=""
               className="border-gray border-1  overflow-y-scroll focus:border-none"
@@ -60,11 +60,10 @@ const AddLink = () => {
             />
           </div>
           <div className="mt-2 space-y-4 pl-0 ">
-            <TextArea
+            <TextInput
               required
               label="Link URL"
-              placeholder="Write a message..."
-              rows={4}
+              placeholder="Link url"
               value={link}
               containerClassName=""
               className="border-gray border-1  overflow-y-scroll focus:border-none"
