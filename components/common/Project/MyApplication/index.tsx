@@ -5,6 +5,41 @@ import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 import {TApplicant, TApplicantStatus} from '@models/applicant';
 import {useEffect, useMemo} from 'react';
 
+interface StatusApplicationsProps {
+  name: any;
+  group: Array<TApplicant> | undefined;
+  expanded: boolean;
+  toggle: () => void;
+}
+
+function StatusApplications({
+  name,
+  group,
+  expanded,
+  toggle,
+}: StatusApplicationsProps) {
+  return (
+    <>
+      <HeaderBox
+        title={`${name} (${group?.length ?? 0})`}
+        isExpand={expanded}
+        expandToggle={toggle}
+        isExpandable={Boolean(group?.length)}
+        isRound={true}
+      />
+      {expanded &&
+        group?.map((item) => (
+          <BodyCard
+            key={item.id}
+            project={item.project}
+            name={item.organization.meta.name}
+            image={item.organization.meta.image}
+          />
+        ))}
+    </>
+  );
+}
+
 function MyApplicationBoxes() {
   const {state: showPending, handlers: showPendingHandler} = useToggle();
   const {state: showDecline, handlers: showDeclineHandler} = useToggle();
@@ -38,60 +73,24 @@ function MyApplicationBoxes() {
 
   return (
     <div className="w-full rounded-2xl border border-grayLineBased pb-4">
-      <HeaderBox
-        title={`Pending (${groupByStatus.get('PENDING')?.length ?? 0})`}
-        isExpand={showPending}
-        expandToggle={showPendingHandler.toggle}
-        isExpandable={true}
-        isRound={true}
+      <StatusApplications
+        group={groupByStatus.get('PENDING')}
+        name="Pending"
+        expanded={showPending}
+        toggle={showPendingHandler.toggle}
       />
-      {showPending &&
-        groupByStatus
-          .get('PENDING')
-          ?.map((item) => (
-            <BodyCard
-              key={item.id}
-              project={item.project}
-              name={item.organization.meta.name}
-              image={item.organization.meta.image}
-            />
-          ))}
-      <HeaderBox
-        title={`Awaiting review (${groupByStatus.get('OFFERED')?.length ?? 0})`}
-        isExpand={showAwaiting}
-        expandToggle={showAwaitingHandler.toggle}
-        isExpandable={true}
-        isRound={true}
+      <StatusApplications
+        group={groupByStatus.get('OFFERED')}
+        name="Awaiting review"
+        expanded={showAwaiting}
+        toggle={showAwaitingHandler.toggle}
       />
-      {showAwaiting &&
-        groupByStatus
-          .get('OFFERED')
-          ?.map((item) => (
-            <BodyCard
-              key={item.id}
-              project={item.project}
-              name={item.organization.meta.name}
-              image={item.organization.meta.image}
-            />
-          ))}
-      <HeaderBox
-        title={`Declined (${groupByStatus.get('REJECTED')?.length ?? 0})`}
-        isExpand={showDecline}
-        expandToggle={showDeclineHandler.toggle}
-        isExpandable={true}
-        isRound={true}
+      <StatusApplications
+        group={groupByStatus.get('REJECTED')}
+        name="Declined"
+        expanded={showDecline}
+        toggle={showDeclineHandler.toggle}
       />
-      {showDecline &&
-        groupByStatus
-          .get('REJECTED')
-          ?.map((item) => (
-            <BodyCard
-              key={item.id}
-              project={item.project}
-              name={item.organization.meta.name}
-              image={item.organization.meta.image}
-            />
-          ))}
     </div>
   );
 }
