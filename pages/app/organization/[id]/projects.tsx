@@ -32,8 +32,6 @@ const OrganizationProjects: NextPage = () => {
     get,
   );
 
-  console.log('PROJECTS :---: ', organization);
-
   const flattenActiveProjects: Project[] = useMemo(() => {
     return projects
       ? projects.items.filter((project: Project) => project.status === 'ACTIVE')
