@@ -69,6 +69,9 @@ const OrganizationProjects: NextPage = () => {
           </div>
         </div>
         <div className="md:w-4/6">
+          <div className="mx-2 mb-4 rounded-2xl border border-grayLineBased bg-white p-6 text-xl font-semibold">
+            Projects
+          </div>
           {flattenActiveProjects?.map((project: Project, index: number) => (
             <Link
               key={project.id}
