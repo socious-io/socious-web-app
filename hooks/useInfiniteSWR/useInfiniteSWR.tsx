@@ -21,16 +21,20 @@ export type TUseInfiniteSWRReturn<R> = {
   mutateInfinite: KeyedMutator<TInfiniteResponse<R>[]>;
   size: number;
   infiniteError: any;
+  loadMore: () => void;
 };
 
 const useInfiniteSWR = <R = any,>(
-  url: string,
+  url: string | null,
   configs: SWRInfiniteConfiguration = {},
 ): TUseInfiniteSWRReturn<R> => {
   const getKey = useCallback(
     (initialSize: number, previousData: TInfiniteResponse<R>) => {
       if (previousData && previousData?.items?.length < 10) return null;
-      return `${url + url.includes('?') ? '&' : '?'}page=${initialSize + 1}`;
+
+      return (
+        url && `${url + (url.includes('?') ? '&' : '?')}page=${initialSize + 1}`
+      );
     },
     [url],
   );
@@ -47,9 +51,14 @@ const useInfiniteSWR = <R = any,>(
     return infiniteData?.map((page) => page?.items)?.flat(1) ?? [];
   }, [infiniteData]);
 
-  const noMoreData = useMemo(
+  const noMoreData: boolean = useMemo(
     () => size * 10 >= (infiniteData?.[0]?.['total_count'] ?? 0),
     [size, infiniteData],
+  );
+
+  const loadMore = useCallback(
+    () => !noMoreData && setSize((size) => size + 1),
+    [noMoreData, setSize],
   );
 
   return {
@@ -60,6 +69,7 @@ const useInfiniteSWR = <R = any,>(
     mutateInfinite,
     size,
     infiniteError,
+    loadMore,
   };
 };
 
