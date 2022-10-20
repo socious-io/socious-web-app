@@ -6,7 +6,11 @@ import {twMerge} from 'tailwind-merge';
 // Ui Packages
 import {Popover} from '@headlessui/react';
 import {XMarkIcon} from '@heroicons/react/24/solid';
-import {ArrowRightOnRectangleIcon, KeyIcon} from '@heroicons/react/24/outline';
+import {
+  ArrowRightOnRectangleIcon,
+  KeyIcon,
+  UserIcon,
+} from '@heroicons/react/24/outline';
 
 // Components
 import Avatar from '../Avatar/Avatar';
@@ -110,33 +114,36 @@ const NavbarPopupMenu = () => {
                   </span>
                 )
               )}
-              <SettingCard />
 
               {/* Logged Based Info */}
               {userLoggedOut ? (
-                <ul className="!mt-0 divide-y divide-offsetColor !border-0">
-                  <li
-                    className="cursor-pointer whitespace-nowrap !border-0 p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
-                    onClick={() => Router.push('/app/auth/signup')}
-                  >
-                    Sign up
-                  </li>
-                  <li
-                    className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
-                    onClick={() => Router.push('/app/auth/login')}
-                  >
-                    Login
-                  </li>
+                <ul className="!mt-12 list-none divide-y divide-offsetColor !border-0 sm:!mt-0">
+                  <Link href="/app/auth/signup">
+                    <li className="flex items-center space-x-4 whitespace-nowrap p-4 hover:bg-primary hover:text-offWhite">
+                      <ArrowRightOnRectangleIcon className="h-5" />
+                      <p>Sign up</p>
+                    </li>
+                  </Link>
+                  <Link href="/app/auth/login">
+                    <li className="flex items-center space-x-4 whitespace-nowrap p-4 hover:bg-primary hover:text-offWhite">
+                      <UserIcon className="h-5" />
+                      <p>Login</p>
+                    </li>
+                  </Link>
                 </ul>
               ) : (
-                <div className="flex hidden cursor-pointer items-center gap-4 p-2 md:block">
-                  <Link href="/app/auth/changepassword">
-                    <label className="flex cursor-pointer items-center space-x-4">
-                      <KeyIcon className="h-6" />
-                      <p>Change password</p>
-                    </label>
-                  </Link>
-                </div>
+                <>
+                  <SettingCard />
+
+                  <div className="flex hidden cursor-pointer items-center gap-4 p-2 md:block">
+                    <Link href="/app/auth/changepassword">
+                      <label className="flex cursor-pointer items-center space-x-4">
+                        <KeyIcon className="h-6" />
+                        <p>Change password</p>
+                      </label>
+                    </Link>
+                  </div>
+                </>
               )}
               {!userLoggedOut && (
                 <div
