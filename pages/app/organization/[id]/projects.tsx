@@ -33,6 +33,12 @@ const OrganizationProjects: NextPage = () => {
     organization ? `/projects?identity=${organization.id}` : null,
   );
 
+  const flattenActiveProjects: Project[] = useMemo(() => {
+    return flattenData
+      ? flattenData.filter((project: Project) => project.status === 'ACTIVE')
+      : [];
+  }, [flattenData]);
+
   return (
     <GeneralLayout style={{marginBottom: '1.5rem'}}>
       <div className="flex w-full flex-col gap-4 md:flex-row">
@@ -51,7 +57,7 @@ const OrganizationProjects: NextPage = () => {
           </div>
         </div>
         <div className="md:w-4/6">
-          {flattenData?.map((project: Project, index: number) => (
+          {flattenActiveProjects?.map((project: Project, index: number) => (
             <Link
               key={project.id}
               href={`/app/projects/${project.id}`}
@@ -65,7 +71,7 @@ const OrganizationProjects: NextPage = () => {
                   date={dayjs(project?.updated_at)?.format('MMM D')}
                   border
                   first={index === 0}
-                  last={flattenData.length - 1 === index}
+                  last={flattenActiveProjects.length - 1 === index}
                 />
               </a>
             </Link>
