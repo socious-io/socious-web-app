@@ -9,10 +9,8 @@ import {joiResolver} from '@hookform/resolvers/joi';
 import {schemaLink} from '@api/projects/validation';
 
 const AddLink = () => {
-  const {user} = useUser();
   const {
     formState: {errors, isValid},
-    register,
     setValue,
   } = useForm({
     resolver: joiResolver(schemaLink),

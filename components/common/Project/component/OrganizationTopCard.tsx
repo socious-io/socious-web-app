@@ -49,6 +49,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
   const isStep3 = ProjectContext.formStep === 3;
+  const isStep4 = ProjectContext.formStep === 4;
 
   const onSubmit = async () => {
     if (isStep1) {
@@ -85,6 +86,8 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       return <ApplyStep3 />;
     } else if (isStep3) {
       return <ApplyStep4 />;
+    } else if (isStep4) {
+      <></>;
     }
   };
 
