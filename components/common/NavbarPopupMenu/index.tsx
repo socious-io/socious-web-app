@@ -9,7 +9,7 @@ import {XMarkIcon} from '@heroicons/react/24/solid';
 import {
   ArrowRightOnRectangleIcon,
   KeyIcon,
-  UserIcon,
+  UserCircleIcon,
 } from '@heroicons/react/24/outline';
 
 // Components
@@ -128,7 +128,7 @@ const NavbarPopupMenu = () => {
                   </Link>
                   <Link href="/app/auth/login">
                     <li className="flex cursor-pointer items-center space-x-4 whitespace-nowrap p-4 hover:bg-primary hover:text-offWhite">
-                      <UserIcon className="h-5" />
+                      <UserCircleIcon className="h-5" />
                       <p>Login</p>
                     </li>
                   </Link>
