@@ -1,29 +1,40 @@
-import {KeyboardEventHandler, useCallback, useMemo} from 'react';
-import Link from 'next/link';
-import {Avatar} from '../../components/common/Avatar/Avatar';
-import {FC, PropsWithChildren, CSSProperties} from 'react';
-import imgSrc from '../../asset/icons/logo.svg';
-import {Dropdown, SearchBar} from '@components/common';
-import {useUser} from '@hooks';
-import Image from 'next/image';
-import {changeIdentity} from '@api/identity/actions';
-import {LoginIdentity} from '@models/identity';
-import {getOrganization} from '@api/organizations/actions';
-import {logout} from '@api/auth/actions';
-import Router from 'next/router';
-import styles from './index.module.scss';
-import {ChevronLeftIcon} from '@heroicons/react/24/outline';
+import {
+  FC,
+  PropsWithChildren,
+  CSSProperties,
+  KeyboardEventHandler,
+  useCallback,
+  useMemo,
+} from 'react';
 import {useRouter} from 'next/router';
+import Image from 'next/image';
+import Link from 'next/link';
 import {twMerge} from 'tailwind-merge';
-import feedImg from 'asset/images/socious_feed.png';
-import projectImg from 'asset/images/socious_project.png';
 import {useMediaQuery} from 'react-responsive';
+
+// Icons
+import {ChevronLeftIcon} from '@heroicons/react/24/outline';
+import ChatIcon from '@components/common/Icons/ChatIcon';
 import ProjectIcon from '@components/common/Icons/ProjectIcon';
 import FeedIcon from '@components/common/Icons/FeedIcon';
-import NetworkIcon from '@components/common/Icons/NetworkIcon';
 import NotificationIcon from '@components/common/Icons/NotificationIcon';
-import ChatIcon from '@components/common/Icons/ChatIcon';
 
+// Components
+import NavbarPopupMenu from '@components/common/NavbarPopupMenu';
+import {SearchBar} from '@components/common';
+
+// Imgs
+import imgSrc from '../../asset/icons/logo.svg';
+import feedImg from 'asset/images/socious_feed.png';
+import projectImg from 'asset/images/socious_project.png';
+
+// Hook
+import {useUser} from '@hooks';
+
+// Style
+import styles from './index.module.scss';
+
+// BannerType
 const bannerType = {
   feed: {
     title: 'Your Feed',
@@ -42,6 +53,7 @@ const bannerType = {
   },
 };
 
+// Types
 type TLayoutType = {
   hasNavbar?: boolean;
   style?: CSSProperties;
@@ -55,6 +67,7 @@ type TNavbarItem = {
   icon: React.ReactElement;
   isActive: boolean;
 };
+
 export const NavbarItem: FC<TNavbarItem> = ({label, route, icon, isActive}) => {
   return (
     <Link href={route} passHref>
@@ -72,6 +85,8 @@ export const NavbarItem: FC<TNavbarItem> = ({label, route, icon, isActive}) => {
     </Link>
   );
 };
+
+// Main Default Layout
 const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   children,
   hasNavbar = false,
@@ -80,7 +95,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   detailNavbarTitle,
 }) => {
   const router = useRouter();
-  const {currentIdentity, identities, mutateIdentities, mutateUser} = useUser({
+  const {identities} = useUser({
     redirect: false,
   });
 
@@ -111,27 +126,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
     [router],
   );
 
-  const onSwitchIdentity = async (identity: LoginIdentity) => {
-    try {
-      await changeIdentity(identity.id);
-      mutateIdentities();
-      mutateUser();
-      if (identity.type === 'organizations') {
-        await getOrganization(identity.id);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const userLoggedOut = useMemo(() => identities === null, [identities]);
-
-  const onLogout = async () => {
-    const res = await logout();
-    mutateIdentities();
-    mutateUser();
-    if (res) Router.push('/app');
-  };
 
   // Check if they need banner
   const needsBanner = useMemo<'feed' | 'network' | 'project' | null>(() => {
@@ -330,89 +325,8 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     </>
                   )}
                 </div>
-                <div className="space-between flex items-center space-x-3 sm:ml-4 md:ml-0">
-                  <Dropdown
-                    displayClass="w-8 h-8"
-                    dropdownClass="transform -translate-x-full whitespace-nowrap"
-                    display={
-                      <Avatar
-                        size="m"
-                        type={currentIdentity?.type}
-                        src={
-                          currentIdentity?.type === 'users'
-                            ? currentIdentity?.meta?.avatar
-                            : currentIdentity?.meta?.image
-                        }
-                      />
-                    }
-                  >
-                    {identities && identities.length > 0 && (
-                      <>
-                        {identities.map(
-                          (identity: LoginIdentity) =>
-                            !identity.current && (
-                              <div
-                                key={identity?.meta?.id}
-                                className="my-4 flex w-52 cursor-pointer flex-row items-center p-4 hover:bg-primary hover:text-offWhite "
-                                onClick={() => onSwitchIdentity(identity)}
-                              >
-                                <div className="w-1/4">
-                                  <Avatar
-                                    size="m"
-                                    type={identity.type}
-                                    src={
-                                      identity.type === 'users'
-                                        ? identity?.meta?.avatar
-                                        : identity?.meta?.image
-                                    }
-                                  />
-                                </div>
-                                <div className="w-3/4">
-                                  {identity?.meta?.name}
-                                </div>
-                              </div>
-                            ),
-                        )}
-                        <Link href="/app/organization/+new">
-                          <div className="cursor-pointer p-4 text-left text-sm hover:bg-primary hover:text-offWhite">
-                            Create Organization
-                          </div>
-                        </Link>
-                      </>
-                    )}
-
-                    {!userLoggedOut ? (
-                      <>
-                        <Link href="/app/auth/changepassword">
-                          <div className="cursor-pointer p-4 text-left text-sm hover:bg-primary hover:text-offWhite">
-                            Change Password
-                          </div>
-                        </Link>
-                        <div
-                          className="cursor-pointer p-4 text-left hover:bg-primary hover:text-offWhite"
-                          onClick={onLogout}
-                        >
-                          <span className="w-full text-sm">Log out</span>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div
-                          className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
-                          onClick={() => router.push('/app/auth/signup')}
-                        >
-                          Sign up
-                        </div>
-                        <div
-                          className="cursor-pointer whitespace-nowrap p-4 text-center text-sm hover:bg-primary hover:text-offWhite"
-                          onClick={() => router.push('/app/auth/login')}
-                        >
-                          Login
-                        </div>
-                      </>
-                    )}
-                  </Dropdown>
-                </div>
+                {/* DROP */}
+                <NavbarPopupMenu />
               </div>
             </div>
           </div>
