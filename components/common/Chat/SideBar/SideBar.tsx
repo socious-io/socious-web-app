@@ -5,14 +5,14 @@ import React, {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useRef,
   useState,
 } from 'react';
 import ChatCard from '../ChatCard/ChatCard';
-import {useRouter} from 'next/router';
-import useSWR from 'swr';
-import {get} from 'utils/request';
 import {useUser} from '@hooks';
 import {twMerge} from 'tailwind-merge';
+import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
+import {ChatSummaryChat} from '@models/chat';
 
 type ChatSideBarProps = {
   onChatOpen?: (data: any) => void;
@@ -24,17 +24,19 @@ const SideBarToBe = (
   {onChatOpen, page, toggleAddChat}: ChatSideBarProps,
   ref: any,
 ) => {
-  const router = useRouter();
   const [query, setQuery] = useState<string>('');
-  const [filteredChats, setFilteredChats] = useState<any[]>([]);
+  const chatListRef = useRef<HTMLDivElement>(null);
 
-  const {user, currentIdentity} = useUser();
+  const {currentIdentity} = useUser();
 
   const {
-    data: chatResponse,
-    error: chatError,
-    mutate: mutateChats,
-  } = useSWR<any>(`/chats/summary?page=1&filter=${query}`, get);
+    flattenData: chats,
+    infiniteError: chatsError,
+    mutateInfinite: mutateChats,
+    seeMore,
+    loadMore,
+    isLoading,
+  } = useInfiniteSWR<ChatSummaryChat>(`/chats/summary?filter=${query}`);
 
   useImperativeHandle(ref, () => ({
     refresh: () => {
@@ -47,17 +49,14 @@ const SideBarToBe = (
     if (currentIdentity) mutateChats();
   }, [currentIdentity, mutateChats]);
 
-  useEffect(() => {
-    if (chatResponse?.items)
-      setFilteredChats(
-        chatResponse.items.sort((a: any, b: any) => {
-          const dateDiff =
-            Date.parse(a.updated_at ?? a.created_at) -
-            Date.parse(b.updated_at ?? b.created_at);
-          return dateDiff > 0 ? -1 : dateDiff < 0 ? 1 : 0;
-        }),
-      );
-  }, [chatResponse]);
+  const onScroll = useCallback(() => {
+    if (!(chatListRef?.current && seeMore)) return;
+    const {scrollTop, scrollHeight, clientHeight} = chatListRef.current;
+    console.log(Math.floor(scrollTop), scrollHeight - clientHeight);
+    if (Math.floor(scrollTop) >= scrollHeight - clientHeight - 80) {
+      loadMore();
+    }
+  }, [loadMore, seeMore]);
 
   return (
     <div
@@ -89,11 +88,15 @@ const SideBarToBe = (
         />
       </div>
       {/* USER-CARD BOX */}
-      {query || (!query && chatResponse?.items?.length > 0) ? (
-        filteredChats?.length > 0 ? (
-          <div className="hide-scrollbar grow overflow-y-auto sm:w-80">
+      {query || (!query && chats?.length > 0) ? (
+        chats?.length > 0 ? (
+          <div
+            className="grow overflow-y-auto sm:w-80"
+            ref={chatListRef}
+            onScroll={onScroll}
+          >
             {/* USER-CARD */}
-            {filteredChats?.map((chat: any) => (
+            {chats?.map((chat: any) => (
               <ChatCard
                 key={chat.id}
                 chat={chat}
@@ -105,21 +108,27 @@ const SideBarToBe = (
           <div className="flex h-auto w-full grow items-center justify-center bg-background px-4 sm:w-80">
             {/* SEARCH NOT FOUND */}
             <div className="font-worksans max-w-[32rem] text-center">
-              <h2>Sorry, no chat found.</h2>{' '}
-              <p className="text-grayInputField">
-                Maybe, you want start a new chat.
-              </p>
+              {isLoading ? (
+                <h2>Loading…</h2>
+              ) : (
+                <>
+                  <h2>Sorry, no chat found.</h2>{' '}
+                  <p className="text-grayInputField">
+                    Maybe you want start a new chat.
+                  </p>
+                </>
+              )}
             </div>
           </div>
         )
       ) : (
-        <div className="mb-10 flex w-full grow grow items-center justify-center bg-background sm:hidden">
+        <div className="mb-10 flex w-full grow items-center justify-center bg-background sm:hidden">
           {/* NO PARTICIPANT BOX */}
           <div className="font-worksans max-w-[32rem] text-center text-grayInputField">
             <h2>Message your friends</h2>{' '}
             <p>
-              Let’s make a great conversation with your trustworthy friends,
-              partners
+              Let&apos;s make a great conversation with your trustworthy
+              friends, partners
             </p>
           </div>
         </div>
