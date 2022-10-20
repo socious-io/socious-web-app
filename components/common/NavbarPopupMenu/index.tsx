@@ -122,13 +122,13 @@ const NavbarPopupMenu = () => {
                 <ul className="!mt-0 list-none divide-y divide-offsetColor sm:!border-0">
                   <Link href="/app/auth/signup">
                     <li className="flex cursor-pointer items-center space-x-4 whitespace-nowrap p-4 hover:bg-primary hover:text-offWhite">
-                      <ArrowRightOnRectangleIcon className="h-5" />
+                      <UserCircleIcon className="h-5" />
                       <p>Sign up</p>
                     </li>
                   </Link>
                   <Link href="/app/auth/login">
                     <li className="flex cursor-pointer items-center space-x-4 whitespace-nowrap p-4 hover:bg-primary hover:text-offWhite">
-                      <UserCircleIcon className="h-5" />
+                      <ArrowRightOnRectangleIcon className="h-5" />
                       <p>Login</p>
                     </li>
                   </Link>
