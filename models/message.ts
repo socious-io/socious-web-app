@@ -1,5 +1,6 @@
 export type messageBodyType = {
   text: string;
+  media?: null | string | any[];
 };
 
 export interface CreateMessageResponseType {

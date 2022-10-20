@@ -1,9 +1,10 @@
-import {MessageType} from '@models/message';
-import {useUser} from '@hooks';
-import {useCallback, useEffect, useMemo, useRef} from 'react';
-import {isoToHumanTime} from 'services/toHumanTime';
+import { MessageType } from '@models/message';
+import { useUser } from '@hooks';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { isoToHumanTime } from 'services/toHumanTime';
 import Bubble from '../Bubble/Bubble';
 import Avatar from '@components/common/Avatar/Avatar';
+import { downloadMedia } from '@api/media/actions';
 
 interface MessagesProps {
   infiniteMessage: any[];
@@ -20,21 +21,21 @@ const Messages = ({
   activeChat,
   otherParticipants,
 }: MessagesProps) => {
-  const {currentIdentity} = useUser();
+  const { currentIdentity } = useUser();
   const chatBoxRef = useRef<HTMLDivElement>(null);
   let previousMessage = useRef<MessageType | null>(null);
 
   const oldestMessage = useMemo(
     () =>
       infiniteMessage?.[infiniteMessage.length - 1]?.items?.[
-        infiniteMessage[infiniteMessage.length - 1].items?.length - 1
+      infiniteMessage[infiniteMessage.length - 1].items?.length - 1
       ],
     [infiniteMessage],
   );
 
   const onScroll = useCallback(() => {
     if (!chatBoxRef?.current || noMoreMessage) return;
-    const {scrollTop, scrollHeight, clientHeight} = chatBoxRef.current;
+    const { scrollTop, scrollHeight, clientHeight } = chatBoxRef.current;
     if (Math.floor(scrollTop) === clientHeight - scrollHeight) {
       loadMore();
     }
@@ -60,6 +61,24 @@ const Messages = ({
     [oldestMessage],
   );
 
+  const download = useCallback(
+    (media_url: string) => {
+      try {
+        const res: any = downloadMedia(media_url);
+        const url = window.URL.createObjectURL(new Blob([res?.url]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", res.filename);
+        document.body.appendChild(link);
+        link.click();
+      } catch (error) {
+        console.error(error);
+        return;
+      }
+    },
+    [],
+  );
+
   return (
     <>
       {infiniteMessage?.[0]?.items.length > 0 ? (
@@ -82,14 +101,17 @@ const Messages = ({
                     userInfo={
                       message.identity_id === currentIdentity?.id
                         ? {
-                            identity_meta: currentIdentity.meta,
-                            identity_type: currentIdentity.type,
-                          }
+                          identity_meta: currentIdentity.meta,
+                          identity_type: currentIdentity.type,
+                        }
                         : otherParticipants.find(
-                            (x: any) =>
-                              x.identity_meta.id === message.identity_id,
-                          )
+                          (x: any) =>
+                            x.identity_meta.id === message.identity_id,
+                        )
                     }
+                    media_id={message?.media}
+                    media_url={message?.media_url}
+                    downloadMedia={download}
                   />
                   {/* OLDEST MESSAGE */}
                   {oldestMessage === message && (

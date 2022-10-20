@@ -1,19 +1,20 @@
-import {readMessage, sendMessage} from '@api/chat/message/actions';
+import { readMessage, sendMessage } from '@api/chat/message/actions';
 import Avatar from '@components/common/Avatar/Avatar';
 import CommentField from '@components/common/Post/CommentField/CommentField';
 import {
   ChevronLeftIcon,
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/outline';
-import {CreateMessageResponseType} from '@models/message';
-import {useCallback, useEffect, useMemo, useRef} from 'react';
+import { CreateMessageResponseType, MessageType } from '@models/message';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import useSWRInfinite from 'swr/infinite';
 import Messages from '../Messages/Messages';
-import {useUser} from '@hooks';
-import {get} from 'utils/request';
+import { useUser } from '@hooks';
+import { get } from 'utils/request';
 import Router from 'next/router';
 import useSWR from 'swr';
-import {isoToHumanTime} from 'services/toHumanTime';
+import { isoToHumanTime } from 'services/toHumanTime';
+import { uploadMedia } from '@api/media/actions';
 
 const INVALID_UUID = 'invalid input syntax for type uuid:';
 
@@ -22,7 +23,7 @@ type MainChatProps = {
   refreshSideBar: () => void;
 };
 
-const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
+const MainChat = ({ activeChat, refreshSideBar }: MainChatProps) => {
   const getKey = useCallback(
     (initialSize: number, previousData: any) => {
       if (!activeChat?.id || (previousData && previousData?.items?.length < 10))
@@ -32,7 +33,7 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
     [activeChat],
   );
 
-  const {user, currentIdentity} = useUser();
+  const { user, currentIdentity } = useUser();
 
   const {
     data: infiniteMessage,
@@ -47,7 +48,7 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
   if (infiniteError?.response?.data?.error?.startsWith(INVALID_UUID))
     Router.push('/app/chat');
 
-  const {data: participants, error: participantsError} = useSWR<any>(
+  const { data: participants, error: participantsError } = useSWR<any>(
     activeChat?.id ? `/chats/${activeChat.id}/participants` : null,
     get,
   );
@@ -76,17 +77,57 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
         // READING NEW SEND MESSAGE
         await readMessage(activeChat.id, response.id);
         // MUTATING MESSAGES
-        const newMessage = {...response, media_url: null};
+        const newMessage = { ...response, media_url: null };
         mutateInfinite(
           (old) => {
             old?.[0]?.items.unshift(newMessage);
             return old;
           },
-          {revalidate: false},
+          { revalidate: false },
         );
       } catch (error) {
         console.error(error);
       }
+    },
+    [mutateInfinite, activeChat],
+  );
+
+  const onAttachment = useCallback(
+    async (data: any) => {
+      let media = null;
+      const formData = new FormData();
+      formData.append('file', data);
+      try {
+        const res: any = await uploadMedia(formData);
+        media = [res.id];
+      } catch (error) {
+        console.error(error);
+        return;
+      }
+      // SENDING NEW MESSAGE
+      try {
+        const response: CreateMessageResponseType = await sendMessage(
+          activeChat.id,
+          {
+            text: "", ///////
+            media: media[0],
+          },
+        );
+        // READING NEW SEND MESSAGE
+        await readMessage(activeChat.id, response.id);
+        // MUTATING MESSAGES
+        const newMessage = { ...response, media_url: response.media };
+        mutateInfinite(
+          (old) => {
+            old?.[0]?.items.unshift(newMessage);
+            return old;
+          },
+          { revalidate: false },
+        );
+      } catch (error) {
+        console.error(error);
+      }
+
     },
     [mutateInfinite, activeChat],
   );
@@ -163,6 +204,8 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
           type={currentIdentity?.type}
           avatarSize="m"
           onSend={onSendMessage}
+          hasAttachment={true}
+          onAttach={onAttachment}
           placeholder="Write a message"
           className="border-offsetcolor rounded-none rounded-b-2xl border-0 border-t-[1px]"
           row={1}
