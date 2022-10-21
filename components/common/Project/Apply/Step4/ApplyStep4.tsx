@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import TextArea from '@components/common/TextArea/TextArea';
 import Button from '@components/common/Button/Button';
-import useUser from 'hooks/useUser/useUser';
 import {FromLayout} from '../../created/NewProject/Layout';
 import {useProjectContext} from '../../created/NewProject/context';
 import {joiResolver} from '@hookform/resolvers/joi';
@@ -10,10 +9,8 @@ import {schemaLink} from '@api/projects/validation';
 import TextInput from '@components/common/TextInput/TextInput';
 
 const AddLink = () => {
-  const {user} = useUser();
   const {
     formState: {errors, isValid},
-    register,
     setValue,
   } = useForm({
     resolver: joiResolver(schemaLink),
@@ -39,7 +36,7 @@ const AddLink = () => {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <FromLayout>
+      <FromLayout type="FULL">
         <div className="mt-2 flex h-full flex-col space-y-4 px-4">
           <div className="mt-2 space-y-4 pl-0 ">
             <TextInput
@@ -79,11 +76,11 @@ const AddLink = () => {
           </div>
         </div>
       </FromLayout>
-      <div className=" flex  items-end justify-end  border-t p-4 px-4">
+      <div className="flex items-end justify-center border-t p-4 px-4 pb-12 sm:justify-end sm:pb-4">
         <Button
           type="button"
           variant="fill"
-          className="flex w-36 justify-center"
+          className="flex w-full justify-center sm:w-36"
           disabled={!isValid}
           onClick={() =>
             setProjectContext({

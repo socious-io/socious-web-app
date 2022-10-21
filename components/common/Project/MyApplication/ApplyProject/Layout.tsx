@@ -3,6 +3,7 @@ import styles from '../../created/NewProject/Layout/index.module.scss';
 import {Modal} from '@components/common';
 import {XMarkIcon, ChevronLeftIcon} from '@heroicons/react/24/solid';
 import {useProjectContext, initContext} from '../../created/NewProject/context';
+import {twMerge} from 'tailwind-merge';
 
 type TLayoutType = {
   title: string;
@@ -13,7 +14,11 @@ const ApplyLayout: FC<PropsWithChildren<TLayoutType>> = ({children, title}) => {
   return (
     <Modal
       isOpen={ProjectContext.isApplyModalOpen}
-      className={`${styles.layoutBase} flex  max-w-xl flex-col p-0`}
+      className={twMerge(
+        `${styles.layoutBase} -m-4 flex h-screen !w-screen max-w-xl flex-col rounded-none p-0 pt-14 sm:m-0 sm:rounded-2xl sm:pt-0`,
+        ProjectContext.formStep === 4 &&
+          `mt-[5rem] h-[calc(100vh-5rem)] rounded-t-3xl pt-0`,
+      )}
     >
       <div
         className={`flex justify-between ${
@@ -25,10 +30,9 @@ const ApplyLayout: FC<PropsWithChildren<TLayoutType>> = ({children, title}) => {
             onClick={() =>
               setProjectContext({
                 ...ProjectContext,
-                formStep:
-                  ProjectContext.formStep === 3
-                    ? 0
-                    : ProjectContext.formStep - 1,
+                formStep: [3, 4].includes(ProjectContext.formStep)
+                  ? 0
+                  : ProjectContext.formStep - 1,
               })
             }
             className="cursor-pointer"
@@ -43,7 +47,11 @@ const ApplyLayout: FC<PropsWithChildren<TLayoutType>> = ({children, title}) => {
           onClick={() => setProjectContext(initContext)}
           className="cursor-pointer"
         >
-          <XMarkIcon width={30} height={30} />
+          {ProjectContext.formStep === 4 ? (
+            'cancel'
+          ) : (
+            <XMarkIcon width={30} height={30} />
+          )}
         </div>
       </div>
       <div className={`flex h-full w-full`}>

@@ -14,6 +14,7 @@ import {get} from 'utils/request';
 import Router from 'next/router';
 import useSWR from 'swr';
 import {isoToHumanTime} from 'services/toHumanTime';
+import Link from 'next/link';
 
 const INVALID_UUID = 'invalid input syntax for type uuid:';
 
@@ -114,6 +115,17 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
   )
     return <p>Loading....</p>;
 
+  const interlocutor = otherParticipants?.[0];
+  const link = interlocutor
+    ? `/app/${
+        interlocutor.identity_type === 'users' ? 'user' : 'organization'
+      }/${
+        interlocutor.identity_type === 'users'
+          ? interlocutor.identity_meta.username
+          : interlocutor.identity_meta.shortname
+      }`
+    : '';
+
   return (
     <>
       {/* ON CHAT SELECTED */}
@@ -126,26 +138,32 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
           >
             <ChevronLeftIcon className="w-5" />
           </span>
-          <Avatar
-            size="l"
-            src={
-              otherParticipants?.[0]?.identity_type === 'users'
-                ? otherParticipants?.[0]?.identity_meta?.avatar
-                : otherParticipants?.[0]?.identity_meta?.image
-            }
-            type={otherParticipants?.[0]?.identity_type}
-          />
-          <div className="grow">
-            <p className="cursor-pointer text-base">
-              {activeChat?.type === 'CHAT'
-                ? otherParticipants?.[0]?.identity_meta?.name
-                : activeChat?.name}
-            </p>
-            <p className="text-sm text-graySubtitle">
-              {isoToHumanTime(otherParticipants?.[0]?.last_read_at)}
-            </p>
-          </div>
-          <EllipsisHorizontalIcon className="w-7 rounded-full p-1" />
+          {interlocutor ? (
+            <Link href={link}>
+              <a href={link} className="flex items-center space-x-2">
+                <Avatar
+                  size="l"
+                  src={
+                    interlocutor.identity_type === 'users'
+                      ? interlocutor.identity_meta?.avatar
+                      : interlocutor.identity_meta?.image
+                  }
+                  type={interlocutor.identity_type}
+                />
+                <div className="grow">
+                  <p className="cursor-pointer text-base">
+                    {activeChat?.type === 'CHAT'
+                      ? interlocutor.identity_meta?.name
+                      : activeChat?.name}
+                  </p>
+                  <p className="text-sm text-graySubtitle">
+                    {isoToHumanTime(interlocutor.last_read_at)}
+                  </p>
+                </div>
+              </a>
+            </Link>
+          ) : null}
+          {/* <EllipsisHorizontalIcon className="w-7 rounded-full p-1" /> */}
         </div>
         <Messages
           infiniteMessage={infiniteMessage ?? []}
