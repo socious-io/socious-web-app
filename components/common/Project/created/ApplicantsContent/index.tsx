@@ -19,22 +19,8 @@ import {schemaOfferApplicant} from '@api/applicants/validation';
 
 // Types
 import {TApplicant, TOfferApplicant} from '@models/applicant';
-import dayjs from 'dayjs';
-
-var data = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-  {
-    id: 2,
-    projectId: '2',
-  },
-  {
-    id: 3,
-    projectId: '3',
-  },
-];
+import ApplicationInfo from '../Shared/ApplicationInfo';
+import {TUserByUsername} from '@models/profile';
 
 // Type
 type MyApplicationBoxesProps = {
@@ -49,18 +35,17 @@ function MyApplicationBoxes({
   const {state: showOfferForm, handlers: showOfferFormHandlers} = useToggle();
   const {state: confirmOffer, handlers: confirmOfferHandlers} = useToggle();
   const {state: confirmReject, handlers: confirmRejectHandlers} = useToggle();
-  const {state: seeFullCoverLetter, handlers: coverLetterHandlers} =
-    useToggle();
 
   const offerApplicantFormData = useForm({
     resolver: joiResolver(schemaOfferApplicant),
   });
-  const {data: applicantInfo, error: applicantInfoError} = useSWR<any>(
-    applicant?.user?.username
-      ? `/user/by-username/${applicant.user.username}/profile`
-      : null,
-    get,
-  );
+  const {data: applicantInfo, error: applicantInfoError} =
+    useSWR<TUserByUsername>(
+      applicant?.user?.username
+        ? `/user/by-username/${applicant.user.username}/profile`
+        : null,
+      get,
+    );
 
   const onOfferFormSubmitted = useCallback(
     (data: TOfferApplicant) => {
@@ -138,69 +123,10 @@ function MyApplicationBoxes({
           showOfferForm={() => showOfferFormHandlers.on()}
           rejectApplicant={() => confirmRejectHandlers.on()}
         />
-        <div className=" divide-y rounded-2xl border border-grayLineBased bg-white ">
-          <div className=" divide-y p-4 ">
-            <p className="py-4 font-semibold text-black">Cover Letter</p>
-            <div>
-              <p className="py-4 font-normal text-gray-900">
-                {applicant.cover_letter ? (
-                  applicant?.cover_letter?.length > 200 &&
-                  !seeFullCoverLetter ? (
-                    <>
-                      {applicant?.cover_letter?.slice(0, 200)}...
-                      <span
-                        className="inline-block cursor-pointer text-primary"
-                        onClick={() => coverLetterHandlers.on()}
-                      >
-                        See more
-                      </span>
-                    </>
-                  ) : (
-                    applicant?.cover_letter
-                  )
-                ) : (
-                  'No cover letter provided'
-                )}
-              </p>
-              <p className="py-4 font-semibold text-black">
-                Screening questions
-              </p>
-            </div>
-            <div>
-              {data.map((e) => (
-                <div key={e.id} className="my-4 flex flex-col">
-                  <p className="text-black">Question1</p>
-                  <p className="text-graySubtitle">Question</p>
-                </div>
-              ))}
-              <p className="py-4 font-semibold text-black">Contact Info</p>
-            </div>
-
-            <div>
-              <p className=" flex py-4 font-medium text-gray-900">
-                {applicant?.share_contact_info ? (
-                  <>
-                    <ul>
-                      <li>{applicant.user.email}</li>
-                      {applicantInfo?.phone_number && (
-                        <li>{applicant.user.email}</li>
-                      )}
-                      {applicantInfo?.address && (
-                        <li>
-                          {applicantInfo.address ??
-                            applicantInfo?.city + ', ' + applicantInfo?.country}
-                        </li>
-                      )}
-                    </ul>
-                  </>
-                ) : (
-                  'Contact information is private.'
-                )}
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
+      {applicantInfo && (
+        <ApplicationInfo applicant={applicant} applicantInfo={applicantInfo} />
+      )}
 
       {/* Offer */}
       <FormProvider {...offerApplicantFormData}>
