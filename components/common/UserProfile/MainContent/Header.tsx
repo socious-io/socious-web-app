@@ -19,6 +19,7 @@ import {followUser, unfollowUser} from '@api/network/action';
 
 // interfaces
 import {KeyedMutator} from 'swr';
+import {useUser} from '@hooks';
 interface Props {
   cover_image: null | {
     created_at: string;
@@ -60,6 +61,8 @@ const Header: React.FC<Props> = ({
 }) => {
   const [disabled, setDisabled] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const {currentIdentity} = useUser();
 
   // backgground image not exist svg
   const bg_icon = require('../../../../asset/icons/bg-image.svg');
@@ -115,8 +118,8 @@ const Header: React.FC<Props> = ({
         {/* Chat Icon */}
         {loggedIn &&
           !own_user &&
-          (status === 'organizations' ||
-            (status === 'users' && mutualConnection)) && (
+          (currentIdentity?.type === 'organizations' ||
+            (currentIdentity?.type === 'users' && mutualConnection)) && (
             <Link href={`/app/chat/create/${id}`}>
               <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-grayLineBased">
                 <Image
