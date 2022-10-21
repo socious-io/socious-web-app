@@ -1,4 +1,6 @@
 import {IdentityMeta} from './identity';
+import {IOrganization} from './organization';
+import {Project} from './project';
 
 export type TApplicantsResponse = {
   items: TApplicant[];
@@ -39,6 +41,12 @@ export type TApplicant = {
   share_contact_info: string | null;
   attachment: string | null;
   user: IdentityMeta;
+  project: Project;
+  organization: {
+    id: string;
+    created_at: string;
+    meta: IdentityMeta;
+  };
 };
 
 export type TOfferApplicant = {

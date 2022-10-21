@@ -75,8 +75,7 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
       });
       setLink(ProjectContext.cv_link);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ProjectContext, setValue]);
 
   const handleChange = (field: string, input: string | boolean) => {
     setValue(field, input, {
