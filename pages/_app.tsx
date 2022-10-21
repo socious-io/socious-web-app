@@ -42,10 +42,6 @@ function MyApp({Component, pageProps}: AppProps) {
       });
 
       PushNotifications.addListener('registration', (token: Token) => {
-        console.log('Mozhde');
-
-        console.log(token.value);
-
         alert('Push registration success, token: ' + token.value);
       });
 
