@@ -85,17 +85,12 @@ const MainContent: React.FC<Props> = ({
           cover_image={data?.cover_image}
           status={status}
           following={identities?.following}
+          mutualConnection={identities?.follower && identities?.following}
           id={data?.id}
           identities_mutate={identities_mutate}
           profile_mutate={profile_mutate}
           loggedIn={user ? true : false}
-          own_user={
-            status === 'users' && user?.username === data?.username
-              ? true
-              : status === 'organizations' && user?.name === data?.name
-              ? true
-              : false
-          }
+          own_user={user?.id === data?.id}
           editProfile={editProfile}
         />
         <ProfileInfo
@@ -107,11 +102,9 @@ const MainContent: React.FC<Props> = ({
         />
 
         {/* if user/organization is current user/organization show 'You' */}
-        {status === 'users' && user?.username === data?.username ? (
+        {user?.id === data?.id && (
           <p className="mt-3 px-4 text-sm text-secondary">You </p>
-        ) : status === 'organizations' && user?.name === data?.name ? (
-          <p className="mt-3 px-4 text-sm text-secondary">You </p>
-        ) : null}
+        )}
         <ProjectItem title="Social Causes" items={data?.social_causes} />
         {status === 'users' ? (
           <Contact
