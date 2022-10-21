@@ -118,7 +118,8 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
             errorMessage={errors?.['content']?.message}
             onChange={(e) => handleChange('cover_letter', e.target.value)}
           />
-          {/* Mobile Section */}
+
+          {/* Attachment & Link Section */}
           <TitlePart title="Attach CV" className="border-y-0 sm:hidden" />
           <div className="hidden sm:block">
             <TitlePart title="Resume" className="border-y-0" />

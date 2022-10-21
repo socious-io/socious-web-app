@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import TextArea from '@components/common/TextArea/TextArea';
 import Button from '@components/common/Button/Button';
-import useUser from 'hooks/useUser/useUser';
 import {FromLayout} from '../../created/NewProject/Layout';
 import {useProjectContext} from '../../created/NewProject/context';
 import {joiResolver} from '@hookform/resolvers/joi';
