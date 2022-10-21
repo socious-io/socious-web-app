@@ -3,7 +3,7 @@
  * The type of profile is determined by status
  */
 
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useRouter} from 'next/router';
 
 // components
@@ -41,7 +41,7 @@ const MainContent: React.FC<Props> = ({
   profile_mutate,
   editProfile,
 }) => {
-  const {user} = useUser({redirect: false});
+  const {user, currentIdentity} = useUser({redirect: false});
   const router = useRouter();
 
   const {
@@ -49,6 +49,12 @@ const MainContent: React.FC<Props> = ({
     mutate: identities_mutate,
     error,
   } = useSWR<any>(`/identities/${data.id}`, get);
+
+  // Call everytime identity change.
+  useEffect(() => {
+    identities_mutate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIdentity?.id]);
 
   // TODO: Filter with status.
   const {data: projects} = useSWR<IProjectsResponse>(
