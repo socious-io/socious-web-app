@@ -24,7 +24,6 @@ import {useFormattedLocation} from 'services/formatLocation';
 import Link from 'next/link';
 import RecentGallery from '../Apply/Step5/ApplyStep5';
 import {checkAndUploadMedia} from 'services/ImageUpload';
-import {post} from 'utils/request';
 
 const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   const {
@@ -38,11 +37,10 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
     id,
     applied,
   } = project;
-
   // FIXME let's add this to identity_meta instead
   const {data: org} = useSWR(`/orgs/${identity_meta.id}`);
   const orgLocation = useFormattedLocation(org);
-
+  console.log('PROJECT :---: ', project);
   const {identities, currentIdentity} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);
   const {ProjectContext, setProjectContext} = useProjectContext();
@@ -66,16 +64,14 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
 
       // Attachment Check
       if (ProjectContext.attachment) {
-        console.log('FILE', ProjectContext.attachment);
         // return;
         try {
           const attachment = await checkAndUploadMedia(
             ProjectContext.attachment,
           );
-          console.log('Attachment :---: ', attachment);
           if (attachment) postBody.attachment = attachment;
         } catch (e) {
-          console.log('Error in attachment', e);
+          console.error(e);
         }
       }
 
@@ -91,8 +87,6 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       } catch (error) {
         toast.error(`${error}`);
       }
-    } else if (isStep1) {
-      setProjectContext(initContext);
     } else {
       setProjectContext({
         ...ProjectContext,
@@ -193,25 +187,31 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       </div>
 
       <div className="mt-4 flex justify-between">
-        {identities !== null && currentIdentity?.type === 'users' && (
-          <Button
-            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
-            type="submit"
-            size="lg"
-            disabled={applied}
-            variant="fill"
-            value="Submit"
-            onClick={() =>
-              setProjectContext({
-                ...ProjectContext,
-                isApplyModalOpen: true,
-                formStep: 0,
-              })
-            }
-          >
-            {applied ? 'Applied' : 'Apply now'}
-          </Button>
-        )}
+        {identities !== null &&
+          currentIdentity?.type === 'users' &&
+          (applied ? (
+            <div className="w-full rounded-2xl bg-offWhite p-4">
+              Application submitted
+            </div>
+          ) : (
+            <Button
+              className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+              type="submit"
+              size="lg"
+              disabled={applied}
+              variant="fill"
+              value="Submit"
+              onClick={() =>
+                setProjectContext({
+                  ...ProjectContext,
+                  isApplyModalOpen: true,
+                  formStep: 0,
+                })
+              }
+            >
+              Apply now
+            </Button>
+          ))}
       </div>
 
       <ApplyLayout title={getTitle()}>{pageDisplay()}</ApplyLayout>
