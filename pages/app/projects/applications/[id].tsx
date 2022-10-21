@@ -36,7 +36,7 @@ const ProjectApplications: NextPage = () => {
 
   return (
     <GeneralLayout hasNavbar>
-      <div className="mx-6 mt-10 flex md:space-x-6 ">
+      <div className="mx-6 mt-10 flex w-full md:space-x-6">
         <SideBar />
         <MyApplicationBoxes />
       </div>

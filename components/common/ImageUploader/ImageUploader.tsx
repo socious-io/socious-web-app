@@ -11,6 +11,7 @@ interface ImageUploaderProps {
   children?: any;
   className?: string;
   withPreview?: boolean;
+  acceptType?: string;
 }
 
 const onImageError = (ev: any) => {
@@ -21,6 +22,7 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
   onChange,
   children,
   className,
+  acceptType = '.png, .jpg, .jpeg',
   withPreview = true,
 }: ImageUploaderProps) => {
   const inputRef: any = useRef(null);
@@ -56,7 +58,7 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
             onChange={OnChange}
             type="file"
             id="imageUpload"
-            accept=".png, .jpg, .jpeg"
+            accept={acceptType}
             ref={inputRef}
           />
         </div>

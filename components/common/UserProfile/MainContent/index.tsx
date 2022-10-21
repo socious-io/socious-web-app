@@ -3,7 +3,7 @@
  * The type of profile is determined by status
  */
 
-import React from 'react';
+import React, {useMemo} from 'react';
 import {useRouter} from 'next/router';
 
 // components
@@ -27,7 +27,7 @@ import {useUser} from '@hooks';
 
 // interfaces
 import {IdentityType} from '@models/identity';
-import {IProjectsResponse} from '@models/project';
+import {IProjectsResponse, Project} from '@models/project';
 interface Props {
   data: any;
   status: IdentityType;
@@ -50,9 +50,18 @@ const MainContent: React.FC<Props> = ({
     error,
   } = useSWR<any>(`/identities/${data.id}`, get);
 
+  // TODO: Filter with status.
   const {data: projects} = useSWR<IProjectsResponse>(
-    `/projects?identity=${data.id}&limit=3`,
+    `/projects?identity=${data.id}`,
   );
+
+  const activeProjects: Project[] = useMemo(() => {
+    const filteredProjects =
+      projects?.items.filter((project) => project.status === 'ACTIVE') ?? [];
+    return filteredProjects.length > 3
+      ? filteredProjects.slice(2)
+      : filteredProjects;
+  }, [projects]);
 
   if (!identities && !error) return <p>loading</p>;
   if (
@@ -142,7 +151,7 @@ const MainContent: React.FC<Props> = ({
           footer="See all projects"
           onClickFooter={handleProjectsFooterClick}
         >
-          <ProjectList list={projects?.items || []} />
+          <ProjectList list={activeProjects} />
         </RightPaneContainer>
       </div>
     </div>

@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import {Modal} from '@components/common';
 import {XMarkIcon, ChevronLeftIcon} from '@heroicons/react/24/solid';
 import {useProjectContext} from '../context';
+import {twMerge} from 'tailwind-merge';
 type TLayoutType = {
   title: string;
   isEdit?: boolean;
@@ -59,9 +60,17 @@ export const CreateProjectLayout: FC<PropsWithChildren<TLayoutType>> = ({
   );
 };
 
-export const FromLayout: FC<PropsWithChildren> = ({children}) => {
+export const FromLayout: FC<PropsWithChildren<{type?: 'FULL'}>> = ({
+  children,
+  type,
+}) => {
   return (
-    <div className={` ${styles.contentBase} flex w-full flex-col`}>
+    <div
+      className={twMerge(
+        ` ${styles.contentBase} flex w-full flex-col`,
+        type === 'FULL' && 'grow sm:grow-0',
+      )}
+    >
       {children}
     </div>
   );
