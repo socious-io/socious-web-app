@@ -6,7 +6,7 @@ import {FromLayout} from '../../created/NewProject/Layout';
 import {schemaApplyProject, schemaLink} from '@api/projects/validation';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {useProjectContext} from '../../created/NewProject/context';
-import {LinkIcon} from '@heroicons/react/24/outline';
+import {LinkIcon, PaperClipIcon, TrashIcon} from '@heroicons/react/24/outline';
 import {Switch} from '@components/common';
 import useSWR from 'swr';
 import {get} from 'utils/request';
@@ -75,6 +75,7 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
       });
       setLink(ProjectContext.cv_link);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (field: string, input: string | boolean) => {
@@ -119,22 +120,34 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
           />
           {/* Mobile Section */}
           <TitlePart title="Attach CV" className="border-y-0 sm:hidden" />
-          <div className=" sm:block">
+          <div className="hidden sm:block">
             <TitlePart title="Resume" className="border-y-0" />
-            <p className="text-black">Upload your resume</p>
-            <p className="mb-4 text-graySubtitle">DOC, DOCX, PDF (10MB)</p>
+            {!ProjectContext.attachment?.type && (
+              <>
+                <p className="text-black">Upload your resume</p>
+                <p className="mb-4 text-graySubtitle">DOC, DOCX, PDF (10MB)</p>
+              </>
+            )}
           </div>
+
           <div className="flex space-x-4 sm:-mt-2">
-            {/* Upload Media */}
-            <Button
-              onClick={() => console.log('Should Show a popup')}
-              className="flex h-9 w-36 items-center justify-center p-0"
-              type="button"
-              variant="outline"
-              leftIcon={() => <LinkIcon width={20} height={20} />}
-            >
-              Upload File
-            </Button>
+            {/* Upload Media IF FILE NOT SELECTED */}
+            {!ProjectContext.attachment?.type && (
+              <Button
+                onClick={() =>
+                  setProjectContext({
+                    ...ProjectContext,
+                    formStep: 4,
+                  })
+                }
+                className="flex h-9 w-36 items-center justify-center p-0"
+                type="button"
+                variant="outline"
+                leftIcon={() => <LinkIcon width={20} height={20} />}
+              >
+                Upload File
+              </Button>
+            )}
 
             {/* Attach Link. Only for MOBILE */}
             <Button
@@ -152,6 +165,23 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
               Attach Link
             </Button>
           </div>
+          {ProjectContext.attachment?.type && (
+            <div className="flex items-center space-x-2">
+              <PaperClipIcon className="w-5" />
+              <span>{ProjectContext.attachment.name}</span>
+              <div
+                className="rounded-full border p-2 text-primary"
+                onClick={() =>
+                  setProjectContext({
+                    ...ProjectContext,
+                    attachment: null,
+                  })
+                }
+              >
+                <TrashIcon className="w-5" />
+              </div>
+            </div>
+          )}
 
           <div className="hidden sm:block">
             <TitlePart title="Link" className="-mb-2 border-y-0" />
