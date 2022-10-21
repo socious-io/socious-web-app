@@ -1,7 +1,7 @@
 // import {BusinessProfile} from './business';
 // import {NewsFeed} from './newsFeed';
 
-import {TMediaType} from './organization';
+import {TMediaType} from './media';
 
 export interface UserProfile {
   id: string;
@@ -23,6 +23,24 @@ export interface UserProfile {
   social_causes: Array<string>;
   skills: Array<string>;
 }
+
+export type TUserByUsername = {
+  avatar: TMediaType | null;
+  bio: string | null;
+  cover_image: null;
+  created_at: string;
+  first_name: string;
+  followers: number;
+  followings: number;
+  id: string;
+  impact_score: number;
+  last_name: number;
+  mission?: string;
+  skills: Array<string>;
+  social_causes: Array<string>;
+  username: string;
+};
+
 export interface UserProfileBody {
   first_name?: string;
   last_name?: string;
