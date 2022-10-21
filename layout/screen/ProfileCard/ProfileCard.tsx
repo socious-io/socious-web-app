@@ -1,7 +1,10 @@
 import {Avatar} from '@components/common';
 import Link from 'next/link';
+import {useMemo} from 'react';
+import {twMerge} from 'tailwind-merge';
 
 export interface ProfileCardProps {
+  type?: 'DEFAULT' | 'MOBILE';
   content: string;
   name: string;
   username?: string;
@@ -12,6 +15,7 @@ export interface ProfileCardProps {
 }
 
 export function ProfileCard({
+  type = 'DEFAULT',
   content,
   name,
   username,
@@ -20,33 +24,47 @@ export function ProfileCard({
   followers,
   isUser,
 }: ProfileCardProps) {
+  const defaultCard = useMemo(() => type === 'DEFAULT', [type]);
   return (
-    <div className="flex w-full space-y-4 rounded-2xl border border-grayLineBased bg-background p-4">
+    <div
+      className={twMerge(
+        'flex w-full space-y-4 p-4',
+        !defaultCard
+          ? 'border-0 bg-offWhite'
+          : 'rounded-2xl border border-grayLineBased bg-background',
+      )}
+    >
       <div className="space-y-4">
-        <Avatar
-          src={avatar ?? ''}
-          size="xxl"
-          type={isUser ? 'users' : 'organizations'}
-        />
-        <div>
-          <p className="text-base font-semibold">
-            {name || 'FirstName LastName'}
-          </p>
-          <Link
-            href={`/app/${isUser ? 'user' : 'organization'}/${username}`}
-            passHref
-          >
-            <label className="cursor-pointer text-primary">
-              View my profile
-            </label>
-          </Link>
+        <div className={defaultCard ? 'space-y-4' : 'flex space-x-4'}>
+          <Avatar
+            src={avatar ?? ''}
+            size={!defaultCard ? 'xl' : 'xxl'}
+            type={isUser ? 'users' : 'organizations'}
+          />
+          <div>
+            <p className="text-base font-semibold">
+              {name || 'FirstName LastName'}
+            </p>
+            <Link
+              href={`/app/${isUser ? 'user' : 'organization'}/${username}`}
+              passHref
+            >
+              <label className="cursor-pointer text-primary">
+                View my profile
+              </label>
+            </Link>
+          </div>
         </div>
-        <div>
-          <p className="text-sm">{content}</p>
-        </div>
+        {defaultCard && (
+          <div>
+            <p className="text-sm">{content}</p>
+          </div>
+        )}
         <div className="flex flex-row space-x-2">
           <div>
-            <p className="text-grayInputField">{following ?? 0} Following</p>
+            <p className="text-grayInputField">
+              {following ?? 0} {isUser ? 'Connections' : 'Followings'}
+            </p>
           </div>
           <div>
             <p className="text-grayInputField">{followers ?? 0} Followers</p>

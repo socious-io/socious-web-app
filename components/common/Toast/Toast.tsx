@@ -4,7 +4,7 @@ import {
   LinkIcon,
 } from '@heroicons/react/24/outline';
 import {CheckCircleIcon} from '@heroicons/react/24/solid';
-import {string} from 'joi';
+import Router from 'next/router';
 import {twMerge} from 'tailwind-merge';
 
 interface VariantSubValues {
@@ -54,6 +54,7 @@ export interface ToastProps {
   text: string;
   body?: string;
   isOpen?: boolean;
+  link?: string;
   onClose?: () => void;
   variant?: 'error' | 'success' | 'copySuccess';
 }
@@ -61,6 +62,7 @@ export interface ToastProps {
 export function Toast({
   text,
   body,
+  link,
   onClose,
   isOpen = false,
   variant = 'error',
@@ -75,6 +77,10 @@ export function Toast({
         `fixed left-0 right-0 z-10`,
         VARIANT[variant].position,
       )}
+      onClick={() => {
+        link && Router.push(link);
+        onClose && onClose();
+      }}
     >
       <div className="container mx-auto px-3">
         <div

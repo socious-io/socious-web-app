@@ -35,6 +35,7 @@ export type TProjectContext = {
   cv_name: string;
   city: string;
   status: string;
+  attachment: any;
 };
 
 export const initContext: TProjectContext = {
@@ -64,6 +65,7 @@ export const initContext: TProjectContext = {
   cv_name: '',
   city: '',
   status: '',
+  attachment: '',
 };
 
 const ProjectContext = createContext<{

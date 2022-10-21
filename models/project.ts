@@ -1,5 +1,8 @@
+import {TApplicantStatus} from './applicant';
 import {IdentityMeta, IdentityType} from './identity';
 import {Question} from './question';
+
+export type TProjectStatus = 'DRAFT' | 'EXPIRE' | 'ACTIVE';
 
 export interface Project {
   id: string;
@@ -22,7 +25,7 @@ export interface Project {
   identity_id: string;
   identity_type: IdentityType;
   identity_meta: IdentityMeta;
-  status: string;
+  status: TProjectStatus;
   created_at: string;
   expires_at?: string;
   applied: boolean;
@@ -58,6 +61,7 @@ export interface ApplyProjectType {
   share_contact_info?: boolean;
   cv_link?: string;
   cv_name?: string;
+  attachment?: string;
 }
 
 export interface ProjectProps {
