@@ -1,10 +1,8 @@
 import {Button} from '@components/common';
 import {FC} from 'react';
-import {useProjectContext} from '../../created/NewProject/context';
-import {useRouter} from 'next/router';
+import {initContext, useProjectContext} from '../../created/NewProject/context';
 const Congrats: FC = () => {
-  const {ProjectContext, setProjectContext} = useProjectContext();
-  const router = useRouter();
+  const {setProjectContext} = useProjectContext();
 
   return (
     <div className="flex h-full w-full flex-col">
@@ -19,10 +17,10 @@ const Congrats: FC = () => {
       </div>
       <div className="flex h-28 w-full items-center justify-center border-t">
         <Button
-          onClick={() => router.push('/app/projects')}
+          onClick={() => setProjectContext(initContext)}
           className="m-4 flex w-8/12 items-center justify-center"
         >
-          Back to projects
+          Back to project
         </Button>
       </div>
     </div>

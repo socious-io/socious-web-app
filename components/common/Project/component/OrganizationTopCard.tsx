@@ -15,13 +15,15 @@ import {
   ClockIcon,
 } from '@heroicons/react/24/outline';
 import {ApplyLayout} from '../MyApplication/ApplyProject';
-import {useProjectContext} from '../created/NewProject/context';
+import {initContext, useProjectContext} from '../created/NewProject/context';
 import {applyProject} from '@api/projects/actions';
 import {ApplyProjectType} from '@models/project';
 import {toast} from 'react-toastify';
 import useSWR from 'swr';
 import {useFormattedLocation} from 'services/formatLocation';
 import Link from 'next/link';
+import RecentGallery from '../Apply/Step5/ApplyStep5';
+import {checkAndUploadMedia} from 'services/ImageUpload';
 
 const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   const {
@@ -35,11 +37,10 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
     id,
     applied,
   } = project;
-
   // FIXME let's add this to identity_meta instead
   const {data: org} = useSWR(`/orgs/${identity_meta.id}`);
   const orgLocation = useFormattedLocation(org);
-
+  console.log('PROJECT :---: ', project);
   const {identities, currentIdentity} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);
   const {ProjectContext, setProjectContext} = useProjectContext();
@@ -49,6 +50,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
   const isStep3 = ProjectContext.formStep === 3;
+  const isStep4 = ProjectContext.formStep === 4;
 
   const onSubmit = async () => {
     if (isStep1) {
@@ -60,7 +62,23 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       if (ProjectContext.share_contact_info)
         postBody.share_contact_info = ProjectContext.share_contact_info;
 
+      // Attachment Check
+      if (ProjectContext.attachment) {
+        // return;
+        try {
+          const attachment = await checkAndUploadMedia(
+            ProjectContext.attachment,
+          );
+          if (attachment) postBody.attachment = attachment;
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // Applying
       try {
+        console.log('Applying with this body');
+        console.table(postBody);
         if (id) await applyProject(id, postBody);
         setProjectContext({
           ...ProjectContext,
@@ -85,6 +103,8 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       return <ApplyStep3 />;
     } else if (isStep3) {
       return <ApplyStep4 />;
+    } else if (isStep4) {
+      return <RecentGallery />;
     }
   };
 
@@ -98,6 +118,8 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
         return '';
       case 3:
         return 'Attach a link';
+      case 4:
+        return 'Recents';
       default:
         return '';
     }
@@ -165,25 +187,31 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       </div>
 
       <div className="mt-4 flex justify-between">
-        {identities !== null && currentIdentity?.type === 'users' && (
-          <Button
-            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
-            type="submit"
-            size="lg"
-            disabled={applied}
-            variant="fill"
-            value="Submit"
-            onClick={() =>
-              setProjectContext({
-                ...ProjectContext,
-                isApplyModalOpen: true,
-                formStep: 0,
-              })
-            }
-          >
-            {applied ? 'Applied' : 'Apply now'}
-          </Button>
-        )}
+        {identities !== null &&
+          currentIdentity?.type === 'users' &&
+          (applied ? (
+            <div className="w-full rounded-2xl bg-offWhite p-4">
+              Application submitted
+            </div>
+          ) : (
+            <Button
+              className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+              type="submit"
+              size="lg"
+              disabled={applied}
+              variant="fill"
+              value="Submit"
+              onClick={() =>
+                setProjectContext({
+                  ...ProjectContext,
+                  isApplyModalOpen: true,
+                  formStep: 0,
+                })
+              }
+            >
+              Apply now
+            </Button>
+          ))}
       </div>
 
       <ApplyLayout title={getTitle()}>{pageDisplay()}</ApplyLayout>

@@ -61,6 +61,7 @@ export interface ApplyProjectType {
   share_contact_info?: boolean;
   cv_link?: string;
   cv_name?: string;
+  attachment?: string;
 }
 
 export interface ProjectProps {
