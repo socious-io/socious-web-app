@@ -15,13 +15,16 @@ import {
   ClockIcon,
 } from '@heroicons/react/24/outline';
 import {ApplyLayout} from '../MyApplication/ApplyProject';
-import {useProjectContext} from '../created/NewProject/context';
+import {initContext, useProjectContext} from '../created/NewProject/context';
 import {applyProject} from '@api/projects/actions';
 import {ApplyProjectType} from '@models/project';
 import {toast} from 'react-toastify';
 import useSWR from 'swr';
 import {useFormattedLocation} from 'services/formatLocation';
 import Link from 'next/link';
+import RecentGallery from '../Apply/Step5/ApplyStep5';
+import {checkAndUploadMedia} from 'services/ImageUpload';
+import {post} from 'utils/request';
 
 const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   const {
@@ -61,7 +64,25 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       if (ProjectContext.share_contact_info)
         postBody.share_contact_info = ProjectContext.share_contact_info;
 
+      // Attachment Check
+      if (ProjectContext.attachment) {
+        console.log('FILE', ProjectContext.attachment);
+        // return;
+        try {
+          const attachment = await checkAndUploadMedia(
+            ProjectContext.attachment,
+          );
+          console.log('Attachment :---: ', attachment);
+          if (attachment) postBody.attachment = attachment;
+        } catch (e) {
+          console.log('Error in attachment', e);
+        }
+      }
+
+      // Applying
       try {
+        console.log('Applying with this body');
+        console.table(postBody);
         if (id) await applyProject(id, postBody);
         setProjectContext({
           ...ProjectContext,
@@ -70,6 +91,8 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       } catch (error) {
         toast.error(`${error}`);
       }
+    } else if (isStep1) {
+      setProjectContext(initContext);
     } else {
       setProjectContext({
         ...ProjectContext,
@@ -87,7 +110,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
     } else if (isStep3) {
       return <ApplyStep4 />;
     } else if (isStep4) {
-      <></>;
+      return <RecentGallery />;
     }
   };
 
@@ -101,6 +124,8 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
         return '';
       case 3:
         return 'Attach a link';
+      case 4:
+        return 'Recents';
       default:
         return '';
     }
