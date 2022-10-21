@@ -75,7 +75,7 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
       });
       setLink(ProjectContext.cv_link);
     }
-  }, [ProjectContext, setValue]);
+  }, [ProjectContext, linkSetValue, setValue]);
 
   const handleChange = (field: string, input: string | boolean) => {
     setValue(field, input, {
