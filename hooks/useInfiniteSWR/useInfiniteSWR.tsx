@@ -15,6 +15,7 @@ export type TUseInfiniteSWRReturn<R> = {
   rawResponse: TInfiniteResponse<R>[] | undefined;
   flattenData: R[];
   seeMore: boolean;
+  isLoading: boolean;
   setSize: (
     size: number | ((_size: number) => number),
   ) => Promise<TInfiniteResponse<R>[] | undefined>;
@@ -65,6 +66,7 @@ const useInfiniteSWR = <R = any,>(
     rawResponse: infiniteData,
     flattenData,
     seeMore: !noMoreData,
+    isLoading: !infiniteData && !infiniteError,
     setSize,
     mutateInfinite,
     size,
