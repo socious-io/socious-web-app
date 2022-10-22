@@ -187,8 +187,8 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       </div>
 
       <div className="mt-4 flex justify-between">
-        {identities !== null &&
-          currentIdentity?.type === 'users' &&
+        {((identities !== null && currentIdentity?.type === 'users') ||
+          identities == null) &&
           (applied ? (
             <div className="w-full rounded-2xl bg-offWhite p-4">
               Application submitted
@@ -201,12 +201,15 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
               disabled={applied}
               variant="fill"
               value="Submit"
-              onClick={() =>
-                setProjectContext({
-                  ...ProjectContext,
-                  isApplyModalOpen: true,
-                  formStep: 0,
-                })
+              onClick={
+                identities == null
+                  ? undefined
+                  : () =>
+                      setProjectContext({
+                        ...ProjectContext,
+                        isApplyModalOpen: true,
+                        formStep: 0,
+                      })
               }
             >
               Apply now
