@@ -25,9 +25,38 @@ import {get} from 'utils/request';
 // hooks
 import {useUser} from '@hooks';
 
+const ORGANIZATIONS = [
+  {
+    id: 1,
+    img: 'img1',
+    organization: 'Organization',
+    role: 'Role',
+    date: 'date - date',
+    location: 'Location',
+  },
+  {
+    id: 2,
+    img: 'img2',
+    organization: 'Organization',
+    role: 'Role',
+    date: 'date - date',
+    location: 'Location',
+  },
+  {
+    id: 3,
+    img: 'img3',
+    organization: 'Organization',
+    role: 'Role',
+    date: 'date - date',
+    location: 'Location',
+  },
+];
+
 // interfaces
 import {IdentityType} from '@models/identity';
 import {IProjectsResponse, Project} from '@models/project';
+import {Experiences} from './Experiences';
+
 interface Props {
   data: any;
   status: IdentityType;
@@ -131,6 +160,7 @@ const MainContent: React.FC<Props> = ({
             status={status}
           />
         )}
+        {ORGANIZATIONS.length && <Experiences list={ORGANIZATIONS} />}
         <Description paragraph={data?.mission} title="Mission" />
         {status === 'users' && <Skills skills={data?.skills} />}
         <hr className="mb-20 border-grayLineBased" />
