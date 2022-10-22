@@ -124,9 +124,7 @@ function MyApplicationBoxes({
           rejectApplicant={() => confirmRejectHandlers.on()}
         />
       </div>
-      {applicantInfo && (
-        <ApplicationInfo applicant={applicant} applicantInfo={applicantInfo} />
-      )}
+      <ApplicationInfo applicant={applicant} />
 
       {/* Offer */}
       <FormProvider {...offerApplicantFormData}>

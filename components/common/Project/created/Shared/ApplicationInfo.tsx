@@ -23,7 +23,7 @@ const ApplicationInfo = ({
   applicantInfo,
   applicant,
 }: {
-  applicantInfo: TUserByUsername;
+  applicantInfo?: TUserByUsername;
   applicant: TApplicant;
 }) => {
   const {state: seeFullCoverLetter, handlers: coverLetterHandlers} =
