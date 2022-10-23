@@ -5,7 +5,7 @@ import {ApplyStep1} from '../Apply/Step1/ApplyStep1';
 import ApplyStep2 from '../Apply/Step2/ApplyStep2';
 import ApplyStep3 from '../Apply/Step3/ApplyStep3';
 import ApplyStep4 from '../Apply/Step4/ApplyStep4';
-import {FC} from 'react';
+import {FC, useEffect, useState} from 'react';
 import useUser from 'hooks/useUser/useUser';
 import {getText} from '@socious/data';
 import {
@@ -24,6 +24,8 @@ import {useFormattedLocation} from 'services/formatLocation';
 import Link from 'next/link';
 import RecentGallery from '../Apply/Step5/ApplyStep5';
 import {checkAndUploadMedia} from 'services/ImageUpload';
+import SignInToContinueModal from '@components/common/SignInToContinueModal/SignInToContinueModal';
+import {useRouter} from 'next/router';
 
 const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   const {
@@ -45,6 +47,25 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   const projectType = getText('en', `PROJECT.${project_type}`);
   const {ProjectContext, setProjectContext} = useProjectContext();
   const location = useFormattedLocation(project);
+
+  const router = useRouter();
+  const isApply = router.query.apply;
+
+  const [isSignInToContinue, setIsSignInToContinue] = useState(false);
+
+  useEffect(() => {
+    if (
+      isApply === 'new' &&
+      identities !== null &&
+      currentIdentity?.type === 'users'
+    ) {
+      setProjectContext({
+        ...ProjectContext,
+        isApplyModalOpen: true,
+        formStep: 0,
+      });
+    }
+  }, [isApply]);
 
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;
@@ -203,7 +224,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
               value="Submit"
               onClick={
                 identities == null
-                  ? undefined
+                  ? () => setIsSignInToContinue(true)
                   : () =>
                       setProjectContext({
                         ...ProjectContext,
@@ -218,6 +239,13 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       </div>
 
       <ApplyLayout title={getTitle()}>{pageDisplay()}</ApplyLayout>
+
+      {isSignInToContinue && (
+        <SignInToContinueModal
+          isOpen={isSignInToContinue}
+          onClose={() => setIsSignInToContinue(false)}
+        />
+      )}
     </div>
   );
 };

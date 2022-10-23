@@ -24,6 +24,7 @@ import {signup, checkEmailExist} from '@api/auth/actions';
 
 const Signup: NextPage = () => {
   const router = useRouter();
+  const {redirect_to} = router.query;
 
   const [step, setStep] = useState<number>(1);
 
@@ -74,7 +75,12 @@ const Signup: NextPage = () => {
   }, [step]);
 
   const handleSuccessToggle = useCallback(() => {
-    if (showSuccess) router.replace('/app/auth/login');
+    if (showSuccess) {
+      router.replace({
+        pathname: '/app/auth/login',
+        query: {redirect_to: redirect_to},
+      });
+    }
     setShowSuccess(!showSuccess);
   }, [router, showSuccess]);
 

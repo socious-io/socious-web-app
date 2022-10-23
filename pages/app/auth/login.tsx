@@ -38,7 +38,7 @@ const Login: NextPage = () => {
       else {
         if (Notification.permission === 'default')
           Notification.requestPermission();
-        if (redirect_to) router.push(redirect_to as string);
+        if (redirect_to) router.replace(redirect_to as string);
         else router.push('/app');
       }
     }
