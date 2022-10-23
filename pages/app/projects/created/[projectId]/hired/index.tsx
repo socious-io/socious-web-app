@@ -47,7 +47,7 @@ const Hired = () => {
     <GeneralLayout>
       <SideBar selectBar={'HIRE'} projectId={projectId as string} />
       <HiredContent
-        applicant={applicantsData?.items?.find((x) => x.status === 'APPROVED')}
+        applicant={applicantsData?.items?.find((x) => x.status === 'HIRED')}
         mutateApplicant={mutateApplicant}
       />
     </GeneralLayout>

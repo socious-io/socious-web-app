@@ -1,5 +1,4 @@
 import {IdentityMeta} from './identity';
-import {IOrganization} from './organization';
 import {Project} from './project';
 
 export type TApplicantsResponse = {

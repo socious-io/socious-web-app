@@ -9,13 +9,14 @@ import {get} from 'utils/request';
 
 const Hire = () => {
   const router = useRouter();
-  const {projectId, aid} = router.query;
+  const {projectId, id} = router.query;
   const {
     data: applicantData,
     error: applicantError,
     mutate: mutateApplicant,
-  } = useSWR<TApplicant>(projectId && aid ? `/applicants/${aid}` : null, get);
+  } = useSWR<TApplicant>(projectId && id ? `/applicants/${id}` : null, get);
 
+  console.log('ApplicantData: : ', applicantError);
   if (!applicantData && !applicantError)
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center">
@@ -43,10 +44,10 @@ const Hire = () => {
 
   return (
     <GeneralLayout>
-      <SideBar selectBar={'HIRE'} />
+      <SideBar selectBar={'HIRE'} projectId={projectId as string} />
       <HiredContent
         applicant={
-          applicantData?.status === 'APPROVED' ? applicantData : undefined
+          applicantData?.status === 'HIRED' ? applicantData : undefined
         }
         mutateApplicant={mutateApplicant}
       />

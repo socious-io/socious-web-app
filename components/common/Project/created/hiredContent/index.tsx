@@ -23,10 +23,12 @@ function MyApplicationBoxes({
         No hire.
       </div>
     );
+
   return (
     <div className="w-full pb-4 ">
       <HiredCard
         hasButtons={true}
+        userId={applicant?.user?.id}
         name={applicant?.user?.name}
         applicantId={applicant?.id}
         avatar={applicant?.user?.avatar}
