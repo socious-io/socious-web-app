@@ -4,17 +4,22 @@
 
 import React, {useState} from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 // components
 import Button from '@components/common/Button/Button';
 import Avatar from '@components/common/Avatar/Avatar';
 import {Modal} from '@components/common';
 
+// Icon
+import MessageIcon from 'asset/icons/message.svg';
+
 // actions
 import {followUser, unfollowUser} from '@api/network/action';
 
 // interfaces
 import {KeyedMutator} from 'swr';
+import {useUser} from '@hooks';
 interface Props {
   cover_image: null | {
     created_at: string;
@@ -30,6 +35,7 @@ interface Props {
     identity_id: string;
     url: string;
   };
+  mutualConnection: boolean;
   status: 'users' | 'organizations';
   own_user?: boolean;
   following: boolean;
@@ -45,6 +51,7 @@ const Header: React.FC<Props> = ({
   avatar,
   status,
   own_user = false,
+  mutualConnection = false,
   following,
   id,
   identities_mutate,
@@ -54,6 +61,8 @@ const Header: React.FC<Props> = ({
 }) => {
   const [disabled, setDisabled] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const {currentIdentity} = useUser();
 
   // backgground image not exist svg
   const bg_icon = require('../../../../asset/icons/bg-image.svg');
@@ -105,7 +114,25 @@ const Header: React.FC<Props> = ({
           type={status}
         />
       </div>
-      <div className="mt-6 flex h-12 flex-row justify-end gap-4 pr-4">
+      <div className="mt-6 flex h-12 flex-row items-center justify-end gap-4 pr-4">
+        {/* Chat Icon */}
+        {loggedIn &&
+          !own_user &&
+          (currentIdentity?.type === 'organizations' ||
+            (currentIdentity?.type === 'users' && mutualConnection)) && (
+            <Link href={`/app/chat/create/${id}`}>
+              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-grayLineBased">
+                <Image
+                  src={MessageIcon}
+                  alt="Logo - SVG"
+                  width="20px"
+                  height="20px"
+                  className="p-2"
+                />
+              </div>
+            </Link>
+          )}
+
         {/* show connect or following button */}
         {loggedIn && !own_user && following ? (
           <Button

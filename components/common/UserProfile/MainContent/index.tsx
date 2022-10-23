@@ -3,7 +3,7 @@
  * The type of profile is determined by status
  */
 
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useRouter} from 'next/router';
 
 // components
@@ -41,7 +41,7 @@ const MainContent: React.FC<Props> = ({
   profile_mutate,
   editProfile,
 }) => {
-  const {user} = useUser({redirect: false});
+  const {user, currentIdentity} = useUser({redirect: false});
   const router = useRouter();
 
   const {
@@ -49,6 +49,12 @@ const MainContent: React.FC<Props> = ({
     mutate: identities_mutate,
     error,
   } = useSWR<any>(`/identities/${data.id}`, get);
+
+  // Call everytime identity change.
+  useEffect(() => {
+    identities_mutate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIdentity?.id]);
 
   // TODO: Filter with status.
   const {data: projects} = useSWR<IProjectsResponse>(
@@ -85,17 +91,12 @@ const MainContent: React.FC<Props> = ({
           cover_image={data?.cover_image}
           status={status}
           following={identities?.following}
+          mutualConnection={identities?.follower && identities?.following}
           id={data?.id}
           identities_mutate={identities_mutate}
           profile_mutate={profile_mutate}
           loggedIn={user ? true : false}
-          own_user={
-            status === 'users' && user?.username === data?.username
-              ? true
-              : status === 'organizations' && user?.name === data?.name
-              ? true
-              : false
-          }
+          own_user={user?.id === data?.id}
           editProfile={editProfile}
         />
         <ProfileInfo
@@ -107,11 +108,9 @@ const MainContent: React.FC<Props> = ({
         />
 
         {/* if user/organization is current user/organization show 'You' */}
-        {status === 'users' && user?.username === data?.username ? (
+        {user?.id === data?.id && (
           <p className="mt-3 px-4 text-sm text-secondary">You </p>
-        ) : status === 'organizations' && user?.name === data?.name ? (
-          <p className="mt-3 px-4 text-sm text-secondary">You </p>
-        ) : null}
+        )}
         <ProjectItem title="Social Causes" items={data?.social_causes} />
         {status === 'users' ? (
           <Contact
