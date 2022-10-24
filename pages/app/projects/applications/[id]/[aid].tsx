@@ -13,6 +13,7 @@ import useSWR from 'swr';
 import {GridLoader} from 'react-spinners';
 import {TApplicant} from '@models/applicant';
 import {get} from 'utils/request';
+import useApplication from 'hooks/useApplication/useApplication';
 
 const Applicant = () => {
   const router = useRouter();
@@ -24,20 +25,18 @@ const Applicant = () => {
     if (currentIdentity?.type === 'organizations') router.back();
   }, [currentIdentity, router]);
 
-  const {
-    data: applicantData,
-    error: applicantError,
-    mutate: mutateApplicant,
-  } = useSWR<TApplicant>(id && aid ? `/applicants/${aid}` : null, get);
+  const {data, error, mutate, isLoading} = useApplication(
+    aid ? (aid as string) : null,
+  );
 
-  if (!applicantData && !applicantError)
+  if (isLoading)
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center">
         <GridLoader color="#36d7b7" />
       </div>
     );
 
-  if (!applicantData) return <div>ERROR</div>;
+  if (!data) return <div>ERROR</div>;
 
   return (
     <GeneralLayout hasNavbar>
@@ -51,7 +50,7 @@ const Applicant = () => {
           }
           url={`/app/projects/applications/${id}`}
         />
-        <MyApplication applicant={applicantData} />
+        <MyApplication applicant={data} />
       </div>
     </GeneralLayout>
   );
