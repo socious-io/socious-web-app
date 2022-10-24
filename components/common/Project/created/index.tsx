@@ -1,6 +1,5 @@
 import Button from '@components/common/Button/Button';
 import {useToggle, useUser} from '@hooks';
-import BodyCard from '../component/BodyCard';
 import HeaderBox from '../component/HeaderBox';
 import {PlusIcon} from '@heroicons/react/24/solid';
 import {FC} from 'react';
@@ -14,48 +13,6 @@ import {Project} from '@models/project';
 import Link from 'next/link';
 import {twMerge} from 'tailwind-merge';
 
-var data = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-  {
-    id: 2,
-    projectId: '2',
-  },
-  {
-    id: 3,
-    projectId: '3',
-  },
-];
-var data2 = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-  {
-    id: 2,
-    projectId: '2',
-  },
-  {
-    id: 3,
-    projectId: '3',
-  },
-];
-var data3 = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-  {
-    id: 2,
-    projectId: '2',
-  },
-  {
-    id: 3,
-    projectId: '3',
-  },
-];
 const MyApplicationBoxes: FC = () => {
   const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
   const {state: showDrafts, handlers: showDraftsHandler} = useToggle();
