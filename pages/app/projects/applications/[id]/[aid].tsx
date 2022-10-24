@@ -1,19 +1,20 @@
 /*
  * Individual application page for user_type="user"
  */
+import {useRouter} from 'next/router';
+import {GridLoader} from 'react-spinners';
+import {useEffect} from 'react';
 
+// Icons
+import {ChevronLeftIcon} from '@heroicons/react/24/solid';
+
+// hooks
+import {useUser, useApplication} from '@hooks';
+
+// Components
+import MyApplication from '@components/common/Applications/MyApplications/MyApplication';
 import SideBar from '@components/common/SimpleSideBar/Sidebar';
 import {GeneralLayout} from 'layout';
-import {ChevronLeftIcon} from '@heroicons/react/24/solid';
-import {useRouter} from 'next/router';
-import {useUser} from '@hooks';
-import {useEffect} from 'react';
-import MyApplication from '@components/common/Applications/MyApplications/MyApplication';
-import useSWR from 'swr';
-import {GridLoader} from 'react-spinners';
-import {TApplicant} from '@models/applicant';
-import {get} from 'utils/request';
-import useApplication from 'hooks/useApplication/useApplication';
 
 const Applicant = () => {
   const router = useRouter();
@@ -50,7 +51,7 @@ const Applicant = () => {
           }
           url={`/app/projects/applications/${id}`}
         />
-        <MyApplication applicant={data} />
+        <MyApplication applicant={data} mutateApplication={mutate} />
       </div>
     </GeneralLayout>
   );
