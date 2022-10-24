@@ -9,7 +9,7 @@ export type TUseApplicationReturn = {
   isLoading: boolean;
 };
 
-const useApplication = (
+export const useApplication = (
   aid: string | null,
   configs: SWRConfiguration = {},
 ): TUseApplicationReturn => {
@@ -26,5 +26,3 @@ const useApplication = (
     mutate,
   };
 };
-
-export default useApplication;
