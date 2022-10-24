@@ -3,7 +3,7 @@
  * The type of profile is determined by status
  */
 
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useRouter} from 'next/router';
 
 // components
@@ -25,37 +25,11 @@ import {get} from 'utils/request';
 // hooks
 import {useUser} from '@hooks';
 
-const ORGANIZATIONS = [
-  {
-    id: 1,
-    img: 'img1',
-    organization: 'Organization',
-    role: 'Role',
-    date: 'date - date',
-    location: 'Location',
-  },
-  {
-    id: 2,
-    img: 'img2',
-    organization: 'Organization',
-    role: 'Role',
-    date: 'date - date',
-    location: 'Location',
-  },
-  {
-    id: 3,
-    img: 'img3',
-    organization: 'Organization',
-    role: 'Role',
-    date: 'date - date',
-    location: 'Location',
-  },
-];
-
 // interfaces
 import {IdentityType} from '@models/identity';
 import {IProjectsResponse, Project} from '@models/project';
-import {Experiences} from './Experiences';
+import {Experiences} from './Experiences/Experiences';
+import {ExperiencePayload} from './Experiences/Experiences.types';
 
 interface Props {
   data: any;
@@ -71,7 +45,21 @@ const MainContent: React.FC<Props> = ({
   editProfile,
 }) => {
   const {user, currentIdentity} = useUser({redirect: false});
+
   const router = useRouter();
+  const [experiences, setExperiences] = useState(user?.experience || []);
+
+  const addExperience = (experience: ExperiencePayload) => {
+    const cloneExperiences = [...experiences, experience];
+    setExperiences(cloneExperiences);
+  };
+
+  const updateExperience = (experience: ExperiencePayload) => {
+    const clone = [...experiences];
+    const i = clone.findIndex((item) => item.org_id === experience.org_id);
+    clone[i] = experience;
+    setExperiences(clone);
+  };
 
   const {
     data: identities,
@@ -106,7 +94,7 @@ const MainContent: React.FC<Props> = ({
         'invalid input syntax for type uuid',
       ))
   )
-    return <p>invalid user identitiy</p>;
+    return <p>invalid user identity</p>;
 
   const handleProjectsFooterClick = () => {
     router.push(`/app/organization/${data.shortname}/projects`);
@@ -160,7 +148,12 @@ const MainContent: React.FC<Props> = ({
             status={status}
           />
         )}
-        {ORGANIZATIONS.length && <Experiences list={ORGANIZATIONS} />}
+        <Experiences
+          orgId={currentIdentity?.id as string}
+          list={experiences}
+          add={addExperience}
+          update={updateExperience}
+        />
         <Description paragraph={data?.mission} title="Mission" />
         {status === 'users' && <Skills skills={data?.skills} />}
         <hr className="mb-20 border-grayLineBased" />
