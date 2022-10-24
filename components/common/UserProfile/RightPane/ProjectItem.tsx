@@ -1,7 +1,6 @@
 import React from 'react';
-import Image from 'next/image';
 
-import User from '@icons/userGroup.svg';
+import {UserCircleIcon} from '@heroicons/react/24/outline';
 
 interface Props {
   title: string;
@@ -35,14 +34,8 @@ const ProjectItem: React.FC<Props> = ({
         {title}
       </h2>
       <div className="flex items-center ">
-        <div className="mr-2 w-12">
-          <Image
-            src={User}
-            alt="user group"
-            layout="responsive"
-            width="100%"
-            height="100%"
-          />
+        <div className="mr-2 flex">
+          <UserCircleIcon width={24} stroke="#BEC0C7" />
         </div>
         <p className="text-sm">
           {applicants === 0

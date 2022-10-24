@@ -14,48 +14,6 @@ import {Project} from '@models/project';
 import Link from 'next/link';
 import {twMerge} from 'tailwind-merge';
 
-var data = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-  {
-    id: 2,
-    projectId: '2',
-  },
-  {
-    id: 3,
-    projectId: '3',
-  },
-];
-var data2 = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-  {
-    id: 2,
-    projectId: '2',
-  },
-  {
-    id: 3,
-    projectId: '3',
-  },
-];
-var data3 = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-  {
-    id: 2,
-    projectId: '2',
-  },
-  {
-    id: 3,
-    projectId: '3',
-  },
-];
 const MyApplicationBoxes: FC = () => {
   const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
   const {state: showDrafts, handlers: showDraftsHandler} = useToggle();
@@ -102,7 +60,7 @@ const MyApplicationBoxes: FC = () => {
   return (
     <div className="w-full pb-4 sm:w-2/3">
       <div className="flex items-center rounded-2xl border border-grayLineBased bg-white p-6">
-        <p className="text-xl font-semibold">Created Project</p>
+        <p className="text-xl font-semibold">Created Projects</p>
       </div>
       <Button
         disabled={currentIdentity?.type === 'users'}
@@ -142,7 +100,7 @@ const MyApplicationBoxes: FC = () => {
                   title={item.title}
                   border
                   applicants={item.applicants}
-                  hired={2}
+                  hired={item.engagements || 0}
                   date={dayjs(item?.updated_at)?.format('MMM D')}
                 />
               </a>
