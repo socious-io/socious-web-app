@@ -8,11 +8,10 @@ type Props = {
   project: Project;
   image?: string;
   name?: string;
-  username: string;
 };
-function BodyCard({project, name, image, username, applicationId}: Props) {
+function BodyCard({project, name, image, applicationId}: Props) {
   return (
-    <Link href={`/app/projects/applications/${username}/${applicationId}`}>
+    <Link href={`/app/applications/${applicationId}`}>
       <div className="m-4 cursor-pointer space-y-6 rounded-2xl border  border-grayLineBased bg-white p-4">
         <Link href={`/app/projects/${project?.id}`}>
           <p className="inline-block font-semibold">{project?.title}</p>

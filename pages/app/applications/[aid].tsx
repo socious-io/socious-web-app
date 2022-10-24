@@ -15,15 +15,16 @@ import {useUser, useApplication} from '@hooks';
 import MyApplication from '@components/common/Applications/MyApplications/MyApplication';
 import SideBar from '@components/common/SimpleSideBar/Sidebar';
 import {GeneralLayout} from 'layout';
+import type {NextPage} from 'next';
 
-const Applicant = () => {
+const Applicant: NextPage = () => {
   const router = useRouter();
-  const {id, aid} = router.query;
+  const {aid} = router.query;
   const {currentIdentity} = useUser();
 
   // Go back if it is ORG.
   useEffect(() => {
-    if (currentIdentity?.type === 'organizations') router.back();
+    if (currentIdentity?.type === 'organizations') router.push('/app/projects');
   }, [currentIdentity, router]);
 
   const {data, error, mutate, isLoading} = useApplication(
@@ -49,7 +50,7 @@ const Applicant = () => {
               <span className="whitespace-nowrap">Back to my applications</span>
             </p>
           }
-          url={`/app/projects/applications/${id}`}
+          url={`/app/applications`}
         />
         <MyApplication applicant={data} mutateApplication={mutate} />
       </div>
