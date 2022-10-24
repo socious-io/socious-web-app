@@ -17,6 +17,7 @@ import {TApplicant} from '@models/applicant';
 import {Project} from '@models/project';
 import Link from 'next/link';
 import {update} from 'lodash';
+import {toast} from 'react-toastify';
 type MyApplicationProps = {
   applicant: TApplicant;
   mutateApplication: KeyedMutator<TApplicant>;
@@ -58,6 +59,16 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
       const updatedApplicant = await approveOffer(applicant.id);
       mutateApplication(updatedApplicant, {revalidate: false});
       approveOfferHandlers.off();
+      toast.success('Offer was approved just now.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
     } catch (err) {
       console.error(err);
     }
@@ -65,10 +76,19 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
 
   const onWithdraw = useCallback(async () => {
     try {
-      const updatedApplicant = await withdrawApplication(applicant.id);
-      console.log('WITHDRAW :--: ', updatedApplicant);
+      await withdrawApplication(applicant.id);
       mutateApplication();
       rejectOfferHandlers.off();
+      toast.info('Application was withdrawn just now.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
     } catch (err) {
       console.error(err);
     }
