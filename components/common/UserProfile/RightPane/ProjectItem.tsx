@@ -1,6 +1,5 @@
+import UserCircles from '@components/molecules/indicators/UserCircles';
 import React from 'react';
-
-import {UserCircleIcon} from '@heroicons/react/24/outline';
 
 interface Props {
   title: string;
@@ -34,9 +33,7 @@ const ProjectItem: React.FC<Props> = ({
         {title}
       </h2>
       <div className="flex items-center ">
-        <div className="mr-2 flex">
-          <UserCircleIcon width={24} stroke="#BEC0C7" />
-        </div>
+        <UserCircles number={applicants + hired} />
         <p className="text-sm">
           {applicants === 0
             ? 'No applicants'
