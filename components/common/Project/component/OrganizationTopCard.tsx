@@ -100,7 +100,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
     } else if (isStep1) {
       return <ApplyStep2 onSubmit={onSubmit} project={project} />;
     } else if (isStep2) {
-      return <ApplyStep3 />;
+      return <ApplyStep3 orgName={project.identity_meta?.name} />;
     } else if (isStep3) {
       return <ApplyStep4 />;
     } else if (isStep4) {
