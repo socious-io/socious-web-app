@@ -9,8 +9,10 @@ import EditProjectModal from '../../component/EditProjectModal';
 import {ProjectProps} from 'models/project';
 import {useProjectContext} from '@components/common/Project/created/NewProject/context';
 import {FC} from 'react';
+import {Question} from '@models/question';
 
-const Detail: FC<ProjectProps> = ({project}) => {
+export type DetailProps = ProjectProps & {questions?: Question[]};
+const Detail: FC<DetailProps> = ({project, questions}) => {
   const {
     title,
     payment_range_higher,
@@ -58,6 +60,7 @@ const Detail: FC<ProjectProps> = ({project}) => {
       formStep,
       status,
       city,
+      questions: questions ?? null,
     });
   };
 
@@ -83,6 +86,7 @@ const Detail: FC<ProjectProps> = ({project}) => {
           isEdit
           onclick={() => clickEditIcon(2)}
         />
+        <div onClick={() => clickEditIcon(3)}>Questions</div>
       </div>
       <Modal isOpen={closeProject} onClose={closeProjectHandlers.off}>
         <EditProjectModal onSubmit={() => {}} />
