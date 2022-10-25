@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {getText} from '@socious/data';
 import {useFormattedLocation} from 'services/formatLocation';
+// import {EXPERIENCE_LEVEL_OPTIONS} from '@components/common/Search/filterOptions';
 
 type TProject = {
   project: {
@@ -18,6 +19,7 @@ type TProject = {
     commitment_hours_higher: string;
     payment_currency?: string;
     city: string;
+    experience_level: number;
   };
 };
 type TPreviewItem = {
@@ -112,6 +114,16 @@ const ProjectInfoOverview: FC<TProject> = ({project}) => {
             text={project.payment_currency}
           />
         )}
+        {/* {project.experience_level !== null && (
+          <PreviewItem
+            label="Experience level"
+            text={
+              EXPERIENCE_LEVEL_OPTIONS.find(
+                (item, index) => index === project.experience_level,
+              )?.label
+            }
+          />
+        )} */}
       </div>
     </>
   );

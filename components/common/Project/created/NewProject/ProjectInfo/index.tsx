@@ -46,6 +46,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
         commitment_hours_lower: ProjectContext.commitment_hours_lower,
         commitment_hours_higher: ProjectContext.commitment_hours_higher,
         country: ProjectContext.country,
+        experience_level: ProjectContext.experience_level,
         city: ProjectContext.city,
       };
       Object.entries(project).forEach((key) => {
@@ -277,6 +278,18 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                   (x) => x?.id === ProjectContext.payment_type,
                 )}
               />
+              <Combobox
+                required
+                label="Payment Scheme"
+                name="payment_scheme"
+                items={items.projectPaymentSchemeItems}
+                placeholder="Payment Scheme"
+                className="mt-6"
+                onSelected={(e) => handleChange('payment_scheme', e?.id)}
+                selected={items.projectPaymentSchemeItems?.find(
+                  (x) => x?.id === ProjectContext.payment_scheme,
+                )}
+              />
               {paymentType === 'PAID' && (
                 <InputFiled
                   required
@@ -309,18 +322,6 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                   }}
                 />
               )}
-              <Combobox
-                required
-                label="Payment Scheme"
-                name="payment_scheme"
-                items={items.projectPaymentSchemeItems}
-                placeholder="Payment Scheme"
-                className="mt-6"
-                onSelected={(e) => handleChange('payment_scheme', e?.id)}
-                selected={items.projectPaymentSchemeItems?.find(
-                  (x) => x?.id === ProjectContext.payment_scheme,
-                )}
-              />
               {paymentScheme === 'HOURLY' && (
                 <InputFiled
                   required
@@ -353,6 +354,23 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                   }}
                 />
               )}
+            </div>
+            <div className="p-4">
+              <h1 className="pt-4 text-xl font-semibold text-neutral-300">
+                Experience & skills
+              </h1>
+              <Combobox
+                required
+                label="Experience level"
+                name="experience_level"
+                items={items.experienceLevelOptions}
+                placeholder="Experience level"
+                className="mt-6"
+                onSelected={(e) => handleChange('experience_level', e?.id)}
+                selected={items.experienceLevelOptions?.find(
+                  (x) => x?.id === ProjectContext.experience_level,
+                )}
+              />
             </div>
           </div>
         </div>
