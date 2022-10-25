@@ -1,3 +1,4 @@
+import {TProjectStatus} from '@models/project';
 import {
   FC,
   createContext,
@@ -34,7 +35,7 @@ export type TProjectContext = {
   cv_link: string;
   cv_name: string;
   city: string;
-  status: string;
+  status: TProjectStatus;
   attachment: any;
 };
 
@@ -64,7 +65,7 @@ export const initContext: TProjectContext = {
   cv_link: '',
   cv_name: '',
   city: '',
-  status: '',
+  status: 'DRAFT',
   attachment: '',
 };
 

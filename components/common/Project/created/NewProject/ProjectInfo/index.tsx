@@ -22,6 +22,22 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
     formState: {errors, isValid, isDirty},
   } = useForm({
     resolver: joiResolver(schemaCreateProjectStep3),
+    defaultValues: {
+      title: ProjectContext.title,
+      description: ProjectContext.description,
+      remote_preference: ProjectContext.remote_preference,
+      payment_type: ProjectContext.payment_type,
+      payment_scheme: ProjectContext.payment_scheme,
+      payment_currency: ProjectContext.payment_currency,
+      payment_range_lower: ProjectContext.payment_range_lower,
+      payment_range_higher: ProjectContext.payment_range_higher,
+      commitment_hours_higher: ProjectContext.commitment_hours_higher,
+      commitment_hours_lower: ProjectContext.commitment_hours_lower,
+      project_type: ProjectContext.project_type,
+      project_length: ProjectContext.project_length,
+      country: ProjectContext.country,
+      city: ProjectContext.city,
+    },
   });
 
   const {items} = useGetData();
@@ -30,35 +46,10 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
   const paymentScheme = watch('payment_scheme');
   const countryCode = watch('country');
 
-  useEffect(() => {
-    if (ProjectContext) {
-      const project = {
-        title: ProjectContext.title,
-        description: ProjectContext.description,
-        remote_preference: ProjectContext.remote_preference,
-        payment_type: ProjectContext.payment_type,
-        payment_scheme: ProjectContext.payment_scheme,
-        payment_currency: ProjectContext.payment_currency,
-        payment_range_lower: ProjectContext.payment_range_lower,
-        payment_range_higher: ProjectContext.payment_range_higher,
-        commitment_hours_higher: ProjectContext.commitment_hours_higher,
-        commitment_hours_lower: ProjectContext.commitment_hours_lower,
-        project_type: ProjectContext.project_type,
-        project_length: ProjectContext.project_length,
-        country: ProjectContext.country,
-        city: ProjectContext.city,
-      };
-      Object.entries(project).forEach((key) => {
-        setValue(key?.[0], key?.[1], {
-          shouldValidate: true,
-        });
-      });
-    }
-  }, [ProjectContext, setValue]);
-
   const handleChange = (field: any, input: string) => {
     setValue(field, input, {
       shouldValidate: true,
+      shouldDirty: true,
     });
     setProjectContext({
       ...ProjectContext,
@@ -359,7 +350,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               Save and publish
             </Button>
             <Button
-              disabled={!isDirty}
+              disabled={!isDirty || ProjectContext.status !== 'DRAFT'}
               variant="outline"
               type="button"
               onClick={() => onSubmit('DRAFT')}
