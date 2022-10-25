@@ -23,6 +23,7 @@ import {toast} from 'react-toastify';
 import SplashScreen from 'layout/Splash';
 import {twMerge} from 'tailwind-merge';
 import {get} from 'utils/request';
+import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
 
 type CreateProjectMainType = {
   projectId?: string;
@@ -30,7 +31,14 @@ type CreateProjectMainType = {
   skills: any[];
 };
 
+const libraries: Libraries = ['places'];
+
 const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
+  const {isLoaded} = useGoogleMapsScript({
+    googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
+    libraries,
+  });
+
   const router = useRouter();
   const {id} = router.query;
   const {currentIdentity} = useUser({redirect: false});
@@ -89,7 +97,7 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
   };
 
   const PageDisplay = () => {
-    if (isStep0) {
+    if (isStep0 && isLoaded) {
       return <ProjectInfo onSubmit={onSubmit} />;
     } else if (isStep1) {
       return <ProjectAbout onSubmit={onSubmit} />;
