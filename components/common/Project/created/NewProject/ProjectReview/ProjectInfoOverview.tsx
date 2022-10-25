@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {getText} from '@socious/data';
 import {useFormattedLocation} from 'services/formatLocation';
-// import {EXPERIENCE_LEVEL_OPTIONS} from '@components/common/Search/filterOptions';
+import {EXPERIENCE_LEVEL_OPTIONS} from '@components/common/Search/filterOptions';
 
 type TProject = {
   project: {
@@ -114,7 +114,7 @@ const ProjectInfoOverview: FC<TProject> = ({project}) => {
             text={project.payment_currency}
           />
         )}
-        {/* {project.experience_level !== null && (
+        {project.experience_level !== null && (
           <PreviewItem
             label="Experience level"
             text={
@@ -123,7 +123,7 @@ const ProjectInfoOverview: FC<TProject> = ({project}) => {
               )?.label
             }
           />
-        )} */}
+        )}
       </div>
     </>
   );
