@@ -7,8 +7,9 @@ import {joiResolver} from '@hookform/resolvers/joi';
 import {schemaCreateProjectQuestion} from '@api/projects/validation';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {TrashIcon} from '@heroicons/react/24/solid';
-import {addQuestion} from '@api/projects/actions';
+import {addQuestion, updateQuestion} from '@api/projects/actions';
 import {AddQuestionType} from '@models/project';
+import {Question} from '@models/question';
 
 type OptionType = {
   id: number;
@@ -18,8 +19,9 @@ type OptionType = {
 type QuestionAddProps = {projectId: string};
 
 const QuestionDetail = ({projectId}: QuestionAddProps) => {
-  const lastInputRef = useRef<HTMLInputElement | null>(null);
   const {setProjectContext, ProjectContext} = useProjectContext();
+  const lastInputRef = useRef<HTMLInputElement | null>(null);
+  const {editQuestion} = ProjectContext;
 
   const {
     register,
@@ -27,42 +29,58 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
     setValue,
     getValues,
     watch,
-    formState: {errors},
+    formState: {errors, isDirty},
   } = useForm({
     resolver: joiResolver(schemaCreateProjectQuestion),
     defaultValues: {
-      question: '',
-      options: null,
-      required: false,
+      question: editQuestion?.question ?? '',
+      options: editQuestion?.options?.map((option, index) => ({
+        id: index + 1,
+        option,
+      })),
+      required: editQuestion?.required ?? false,
     } as AddQuestionType<OptionType>,
   });
 
   const options = watch('options');
 
+  console.log('ERROR :---: ', errors);
   const handleAdd = useCallback(async () => {
     try {
       const question = getValues('question');
       const required = getValues('required');
       const rawOptions = getValues('options');
-      const options: string[] =
+      const options: string[] | null =
         rawOptions
           ?.filter((item) => !!item.option)
-          .map((item: OptionType) => item.option) ?? [];
+          .map((item: OptionType) => item.option) ?? null;
       const questionBody: AddQuestionType = {
         question,
         required,
       };
-      if (!!options.length) questionBody.options = options;
-      const response = await addQuestion(projectId, questionBody);
-      console.log('RESPONSE :---: ', response);
+      if (!!options?.length) questionBody.options = options;
+      let response: Question | null = null;
+      if (editQuestion?.id) {
+        response = await updateQuestion(
+          editQuestion.project_id,
+          editQuestion.id,
+          questionBody,
+        );
+      } else {
+        response = await addQuestion(projectId, questionBody);
+      }
       setProjectContext({
         ...ProjectContext,
+        editQuestion: null,
+        questions: response
+          ? [...(ProjectContext.questions ?? []), response]
+          : ProjectContext.questions,
         formStep: 3,
       });
     } catch (error) {
       console.log('ERROR :---: ', error);
     }
-  }, [ProjectContext, getValues, projectId, setProjectContext]);
+  }, [ProjectContext, editQuestion, getValues, projectId, setProjectContext]);
 
   const removeItem = useCallback(
     (id: number) => {
@@ -140,9 +158,10 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
       <div className="flex h-full w-full flex-col bg-zinc-200">
         {!!options?.length &&
           options.map((option: OptionType, index) => (
-            <div key={option.id} className="flex items-center">
+            <div key={option.id} className="flex items-center px-4">
               <InputFiled
                 className="grow py-2 px-4"
+                defaultValue={option.option}
                 ref={options.length === index + 1 ? lastInputRef : undefined}
                 placeholder={`Choice ${index + 1}`}
                 onChange={(e) =>
@@ -171,10 +190,11 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
       <div className="flex h-20 items-end justify-end p-4">
         <Button
           onClick={handleSubmit(handleAdd)}
+          disabled={!isDirty}
           type="button"
           className="'flex h-11 w-36 items-center justify-center"
         >
-          Add
+          {editQuestion ? 'Update' : 'Add'}
         </Button>
 
         <Button
