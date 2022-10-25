@@ -38,14 +38,15 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
         remote_preference: ProjectContext.remote_preference,
         payment_type: ProjectContext.payment_type,
         payment_scheme: ProjectContext.payment_scheme,
+        project_type: ProjectContext.project_type,
+        project_length: ProjectContext.project_length,
         payment_currency: ProjectContext.payment_currency,
         payment_range_lower: ProjectContext.payment_range_lower,
         payment_range_higher: ProjectContext.payment_range_higher,
-        commitment_hours_higher: ProjectContext.commitment_hours_higher,
         commitment_hours_lower: ProjectContext.commitment_hours_lower,
-        project_type: ProjectContext.project_type,
-        project_length: ProjectContext.project_length,
+        commitment_hours_higher: ProjectContext.commitment_hours_higher,
         country: ProjectContext.country,
+        experience_level: ProjectContext.experience_level,
         city: ProjectContext.city,
       };
       Object.entries(project).forEach((key) => {
@@ -148,202 +149,229 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
           <Title description="Describe your project in detail." border>
             Tell us more about your project.
           </Title>
-          <div className="px-4 pt-4 text-xl font-semibold text-neutral-300">
-            {ProjectContext.isEditModalOpen ? 'Project edit' : 'Project info'}
-          </div>
-          <div className="mx-4 my-5">
-            <InputFiled
-              label="Title"
-              type="text"
-              value={ProjectContext.title}
-              placeholder="Title"
-              onChange={(e) => handleChange('title', e.target.value)}
-              errorMessage={errors?.['title']?.message}
-              className="my-3"
-              required
-            />
-            <TextArea
-              label="Description"
-              placeholder="Description"
-              value={ProjectContext.description}
-              onChange={(e) => handleChange('description', e.target.value)}
-              errorMessage={errors?.['description']?.message}
-              className="my-3"
-              required
-              rows={4}
-            />
-            <Combobox
-              label="Remote Preference"
-              required
-              name="remote_preference"
-              onSelected={(e) => handleChange('remote_preference', e?.id)}
-              items={items.projectRemotePreferenceItems}
-              placeholder="Remote Preference"
-              className="mt-6"
-              selected={items.projectRemotePreferenceItems?.find(
-                (x) => x?.id === ProjectContext.remote_preference,
-              )}
-            />
-            <Combobox
-              required
-              label="Project Type"
-              name="project_type"
-              items={items.projectItems}
-              placeholder="Project Type"
-              className="mt-6"
-              onSelected={(e) => handleChange('project_type', e?.id)}
-              selected={items.projectItems?.find(
-                (x) => x?.id === ProjectContext.project_type,
-              )}
-            />
-            <Combobox
-              required
-              label="Project Length"
-              name="project_length"
-              items={items.projectLengthItems}
-              placeholder="Project Length"
-              className="mt-6"
-              onSelected={(e) => handleChange('project_length', e?.id)}
-              selected={items.projectLengthItems?.find(
-                (x) => x?.id === ProjectContext.project_length,
-              )}
-            />
-            <Combobox
-              label="Payment Currency"
-              name="payment_currency"
-              items={items.allCurrencies}
-              placeholder="Payment Currency"
-              className="mt-6"
-              onSelected={(e) => handleChange('payment_currency', e?.id)}
-              selected={items.allCurrencies?.find(
-                (x) => x?.id === ProjectContext.payment_currency,
-              )}
-            />
-            <Combobox
-              required
-              label="Payment Type"
-              name="payment_type"
-              items={items.projectPaymentTypeItems}
-              placeholder="Payment Type"
-              className="mt-6"
-              onSelected={(e) => handleChange('payment_type', e?.id)}
-              selected={items.projectPaymentTypeItems?.find(
-                (x) => x?.id === ProjectContext.payment_type,
-              )}
-            />
-            {paymentType === 'PAID' && (
+          <div className="space-y-5 divide-y">
+            <div className="p-4">
+              <h1 className="pt-4 text-xl font-semibold text-neutral-300">
+                {ProjectContext.isEditModalOpen
+                  ? 'Project edit'
+                  : 'Project info'}
+              </h1>
               <InputFiled
-                required
-                min={0}
-                label="Payment Range Lower"
-                type="number"
-                placeholder="Payment Range Lower"
-                value={ProjectContext.payment_range_lower}
-                errorMessage={errors?.['payment_range_lower']?.message}
+                label="Title"
+                type="text"
+                value={ProjectContext.title}
+                placeholder="Title"
+                onChange={(e) => handleChange('title', e.target.value)}
+                errorMessage={errors?.['title']?.message}
                 className="my-3"
-                onChange={(e) => {
-                  if (e.target.value)
-                    handleChange('payment_range_lower', e.target.value);
-                }}
-              />
-            )}
-            {paymentType === 'PAID' && (
-              <InputFiled
                 required
-                min={0}
-                label="Payment Range Higher"
-                type="number"
-                placeholder="Payment Range Higher"
-                value={ProjectContext.payment_range_higher}
-                errorMessage={errors?.['payment_range_higher']?.message}
-                className="my-3"
-                onChange={(e) => {
-                  if (e.target.value)
-                    handleChange('payment_range_higher', e.target.value);
-                }}
               />
-            )}
-            <Combobox
-              required
-              label="Payment Scheme"
-              name="payment_scheme"
-              items={items.projectPaymentSchemeItems}
-              placeholder="Payment Scheme"
-              className="mt-6"
-              onSelected={(e) => handleChange('payment_scheme', e?.id)}
-              selected={items.projectPaymentSchemeItems?.find(
-                (x) => x?.id === ProjectContext.payment_scheme,
-              )}
-            />
-            {paymentScheme === 'HOURLY' && (
-              <InputFiled
+              <TextArea
+                label="Description"
+                placeholder="Description"
+                value={ProjectContext.description}
+                onChange={(e) => handleChange('description', e.target.value)}
+                errorMessage={errors?.['description']?.message}
+                className="my-3"
                 required
-                min={0}
-                label="Total commitment Lower"
-                type="number"
-                placeholder="Total commitment Lower"
-                value={ProjectContext.commitment_hours_lower}
-                errorMessage={errors?.['commitment_hours_lower']?.message}
-                className="my-3"
-                onChange={(e) => {
-                  if (e.target.value)
-                    handleChange('commitment_hours_lower', e.target.value);
-                }}
+                rows={4}
               />
-            )}
-            {paymentScheme === 'HOURLY' && (
-              <InputFiled
-                required
-                min={0}
-                label="Total commitment higher"
-                type="number"
-                placeholder="Total commitment Higher"
-                value={ProjectContext.commitment_hours_higher}
-                errorMessage={errors?.['commitment_hours_higher']?.message}
-                className="my-3"
-                onChange={(e) => {
-                  if (e.target.value)
-                    handleChange('commitment_hours_higher', e.target.value);
-                }}
-              />
-            )}
-            <Combobox
-              label="Country"
-              onSelected={(e) => onCountrySelected(e)}
-              selected={items.countries?.find(
-                (x) =>
-                  x?.id.toLowerCase() === ProjectContext.country.toLowerCase(),
-              )}
-              onChange={(e) => setCountryValue(e.target.value)}
-              required
-              name="country"
-              errorMessage={errors?.['country']?.message}
-              items={
-                countryValue.toLowerCase().includes?.('wo')
-                  ? [{id: 'XW', name: 'Worldwide'}]
-                  : filterCountries
-              }
-              placeholder="Country"
-              className="my-6"
-            />
-            {ProjectContext.country !== 'XW' && (
               <Combobox
-                label="City"
-                selected={
-                  ProjectContext.isEditModalOpen
-                    ? {id: ProjectContext.city, name: ProjectContext.city}
-                    : {id: ProjectContext.city, name: ProjectContext.city}
-                }
-                errorMessage={errors?.['city']?.message}
-                onSelected={(e) => handleSetCity(e)}
-                onChange={(e) => setCitiesValue(e.currentTarget.value)}
+                label="Country"
+                onSelected={(e) => onCountrySelected(e)}
+                selected={items.countries?.find(
+                  (x) =>
+                    x?.id.toLowerCase() ===
+                    ProjectContext.country.toLowerCase(),
+                )}
+                onChange={(e) => setCountryValue(e.target.value)}
                 required
-                name="city"
-                items={filterCities}
-                placeholder="City"
+                name="country"
+                errorMessage={errors?.['country']?.message}
+                items={
+                  countryValue.toLowerCase().includes?.('wo')
+                    ? [{id: 'XW', name: 'Worldwide'}]
+                    : filterCountries
+                }
+                placeholder="Country"
                 className="my-6"
               />
-            )}
+              {ProjectContext.country !== 'XW' && (
+                <Combobox
+                  label="City"
+                  selected={
+                    ProjectContext.isEditModalOpen
+                      ? {id: ProjectContext.city, name: ProjectContext.city}
+                      : {id: ProjectContext.city, name: ProjectContext.city}
+                  }
+                  errorMessage={errors?.['city']?.message}
+                  onSelected={(e) => handleSetCity(e)}
+                  onChange={(e) => setCitiesValue(e.currentTarget.value)}
+                  required
+                  name="city"
+                  items={filterCities}
+                  placeholder="City"
+                  className="my-6"
+                />
+              )}
+              <Combobox
+                label="Remote Preference"
+                required
+                name="remote_preference"
+                onSelected={(e) => handleChange('remote_preference', e?.id)}
+                items={items.projectRemotePreferenceItems}
+                placeholder="Remote Preference"
+                className="mt-6"
+                selected={items.projectRemotePreferenceItems?.find(
+                  (x) => x?.id === ProjectContext.remote_preference,
+                )}
+              />
+              <Combobox
+                required
+                label="Project Type"
+                name="project_type"
+                items={items.projectItems}
+                placeholder="Project Type"
+                className="mt-6"
+                onSelected={(e) => handleChange('project_type', e?.id)}
+                selected={items.projectItems?.find(
+                  (x) => x?.id === ProjectContext.project_type,
+                )}
+              />
+              <Combobox
+                required
+                label="Project Length"
+                name="project_length"
+                items={items.projectLengthItems}
+                placeholder="Project Length"
+                className="mt-6"
+                onSelected={(e) => handleChange('project_length', e?.id)}
+                selected={items.projectLengthItems?.find(
+                  (x) => x?.id === ProjectContext.project_length,
+                )}
+              />
+            </div>
+            <div className="p-4">
+              <h1 className="pt-4 text-xl font-semibold text-neutral-300">
+                Payment
+              </h1>
+              <Combobox
+                label="Payment Currency"
+                name="payment_currency"
+                items={items.allCurrencies}
+                placeholder="Payment Currency"
+                className="mt-6"
+                onSelected={(e) => handleChange('payment_currency', e?.id)}
+                selected={items.allCurrencies?.find(
+                  (x) => x?.id === ProjectContext.payment_currency,
+                )}
+              />
+              <Combobox
+                required
+                label="Payment Type"
+                name="payment_type"
+                items={items.projectPaymentTypeItems}
+                placeholder="Payment Type"
+                className="mt-6"
+                onSelected={(e) => handleChange('payment_type', e?.id)}
+                selected={items.projectPaymentTypeItems?.find(
+                  (x) => x?.id === ProjectContext.payment_type,
+                )}
+              />
+              <Combobox
+                required
+                label="Payment Scheme"
+                name="payment_scheme"
+                items={items.projectPaymentSchemeItems}
+                placeholder="Payment Scheme"
+                className="mt-6"
+                onSelected={(e) => handleChange('payment_scheme', e?.id)}
+                selected={items.projectPaymentSchemeItems?.find(
+                  (x) => x?.id === ProjectContext.payment_scheme,
+                )}
+              />
+              {paymentType === 'PAID' && (
+                <InputFiled
+                  required
+                  min={0}
+                  label="Payment Range Lower"
+                  type="number"
+                  placeholder="Payment Range Lower"
+                  value={ProjectContext.payment_range_lower}
+                  errorMessage={errors?.['payment_range_lower']?.message}
+                  className="my-3"
+                  onChange={(e) => {
+                    if (e.target.value)
+                      handleChange('payment_range_lower', e.target.value);
+                  }}
+                />
+              )}
+              {paymentType === 'PAID' && (
+                <InputFiled
+                  required
+                  min={0}
+                  label="Payment Range Higher"
+                  type="number"
+                  placeholder="Payment Range Higher"
+                  value={ProjectContext.payment_range_higher}
+                  errorMessage={errors?.['payment_range_higher']?.message}
+                  className="my-3"
+                  onChange={(e) => {
+                    if (e.target.value)
+                      handleChange('payment_range_higher', e.target.value);
+                  }}
+                />
+              )}
+              {paymentScheme === 'HOURLY' && (
+                <InputFiled
+                  required
+                  min={0}
+                  label="Total commitment Lower"
+                  type="number"
+                  placeholder="Total commitment Lower"
+                  value={ProjectContext.commitment_hours_lower}
+                  errorMessage={errors?.['commitment_hours_lower']?.message}
+                  className="my-3"
+                  onChange={(e) => {
+                    if (e.target.value)
+                      handleChange('commitment_hours_lower', e.target.value);
+                  }}
+                />
+              )}
+              {paymentScheme === 'HOURLY' && (
+                <InputFiled
+                  required
+                  min={0}
+                  label="Total commitment higher"
+                  type="number"
+                  placeholder="Total commitment Higher"
+                  value={ProjectContext.commitment_hours_higher}
+                  errorMessage={errors?.['commitment_hours_higher']?.message}
+                  className="my-3"
+                  onChange={(e) => {
+                    if (e.target.value)
+                      handleChange('commitment_hours_higher', e.target.value);
+                  }}
+                />
+              )}
+            </div>
+            <div className="p-4">
+              <h1 className="pt-4 text-xl font-semibold text-neutral-300">
+                Experience & skills
+              </h1>
+              <Combobox
+                required
+                label="Experience level"
+                name="experience_level"
+                items={items.experienceLevelOptions}
+                placeholder="Experience level"
+                className="mt-6"
+                onSelected={(e) => handleChange('experience_level', e?.id)}
+                selected={items.experienceLevelOptions?.find(
+                  (x) => x?.id === ProjectContext.experience_level,
+                )}
+              />
+            </div>
           </div>
         </div>
       </FromLayout>

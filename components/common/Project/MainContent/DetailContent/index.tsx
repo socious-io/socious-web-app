@@ -60,6 +60,7 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
       causes_tags: ProjectContext.causes_tags,
       skills: ProjectContext.skills,
       status: s ? s : ProjectContext.status,
+      experience_level: ProjectContext.experience_level,
     };
 
     if (ProjectContext.city) postBody.city = ProjectContext.city;

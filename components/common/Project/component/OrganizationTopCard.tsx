@@ -40,7 +40,6 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   // FIXME let's add this to identity_meta instead
   const {data: org} = useSWR(`/orgs/${identity_meta.id}`);
   const orgLocation = useFormattedLocation(org);
-  console.log('PROJECT :---: ', project);
   const {identities, currentIdentity} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);
   const {ProjectContext, setProjectContext} = useProjectContext();
