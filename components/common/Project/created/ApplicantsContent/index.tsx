@@ -71,6 +71,8 @@ function MyApplicationBoxes({
   );
   const offerConfirm = useCallback(async () => {
     const due_date = offerApplicantFormData.getValues('due_date');
+    const payment_type = offerApplicantFormData.getValues('payment_type');
+    const payment_schema = offerApplicantFormData.getValues('payment_schema');
     const offer_message = offerApplicantFormData.getValues('offer_message');
     const hourly_rate = offerApplicantFormData.getValues('hourly_rate');
     const weekly_limit = offerApplicantFormData.getValues('weekly_limit');
@@ -83,12 +85,19 @@ function MyApplicationBoxes({
     const offerBody: any = {
       offer_message,
     };
-    if (due_date) offerBody.due_date = due_date;
-    if (hourly_rate) offerBody.offer_rate = hourly_rate;
-    if (weekly_limit) offerBody.weekly_limit = weekly_limit;
-    if (total_hours) offerBody.total_hours = total_hours;
-    if (weekly_commitment) offerBody.weekly_commitment = weekly_commitment;
-    if (assignment_total) offerBody.assignment_total = assignment_total;
+    //Conditional req.Body
+    if (payment_type === 'VOLUNTEER' && payment_schema === 'HOURLY') {
+      if (weekly_commitment) offerBody.weekly_commitment = weekly_commitment;
+    } else if (payment_type === 'VOLUNTEER' && payment_schema === 'FIXED') {
+      if (total_hours) offerBody.total_hours = total_hours;
+    } else if (payment_type === 'PAID' && payment_schema === 'FIXED') {
+      if (due_date) offerBody.due_date = due_date;
+      if (total_hours) offerBody.total_hours = total_hours;
+      if (assignment_total) offerBody.assignment_total = assignment_total;
+    } else if (payment_type === 'PAID' && payment_schema === 'HOURLY') {
+      if (hourly_rate) offerBody.offer_rate = hourly_rate;
+      if (weekly_limit) offerBody.weekly_limit = weekly_limit;
+    }
 
     offerApplicant(applicant.id, offerBody)
       .then((response: any) => {
