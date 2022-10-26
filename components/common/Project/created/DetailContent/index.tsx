@@ -9,6 +9,7 @@ import EditProjectModal from '../../component/EditProjectModal';
 import {ProjectProps} from 'models/project';
 import {useProjectContext} from '@components/common/Project/created/NewProject/context';
 import {FC} from 'react';
+
 const Detail: FC<ProjectProps> = ({project}) => {
   const {
     title,

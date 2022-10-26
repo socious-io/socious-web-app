@@ -44,12 +44,10 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
   const {
     formState: {errors: linkErrors},
     setValue: linkSetValue,
-    watch,
   } = useForm({
     resolver: joiResolver(schemaLink),
   });
-  const cvLink = watch('cv_link');
-  console.log('CV Link', cvLink);
+
   const {
     handleSubmit,
     formState: {isValid, errors},
@@ -88,10 +86,6 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
     });
   };
 
-  console.log('LINK ERROR :---: ', {
-    cv_name: linkErrors?.cv_name?.message,
-    cv_link: linkErrors?.cv_link?.message,
-  });
   return (
     <form
       className="flex h-full w-full grow flex-col sm:grow-0"
