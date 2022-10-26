@@ -13,11 +13,11 @@ import {get} from 'utils/request';
 
 import HeaderBox from '../component/HeaderBox';
 
-type ApplicantsContentProps = {
+type ApplicantsListProps = {
   projectId: string;
 };
 
-function ApplicantsContent({projectId}: ApplicantsContentProps) {
+function ApplicantsList({projectId}: ApplicantsListProps) {
   const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
   const {state: showSaved, handlers: showSavedHandler} = useToggle();
   const {state: showDeclined, handlers: showDeclinedHandler} = useToggle();
@@ -59,7 +59,7 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
           title={`to review (${flattenApplicantsObj?.['PENDING']?.length})`}
           isExpand={showOnGoing}
           expandToggle={showOnGoingHandler.toggle}
-          isExpandable={true}
+          isExpandable={flattenApplicantsObj?.['PENDING']?.length > 0}
           isRound={true}
         />
         {showOnGoing &&
@@ -92,7 +92,7 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
           title={`saved (${flattenApplicantsObj?.['OFFERED']?.length})`}
           isExpand={showSaved}
           expandToggle={showSavedHandler.toggle}
-          isExpandable={true}
+          isExpandable={flattenApplicantsObj?.['OFFERED']?.length > 0}
         />
         {showSaved &&
           flattenApplicantsObj?.['OFFERED'].map((applicant) => (
@@ -123,7 +123,7 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
           title={`Declined (${flattenApplicantsObj?.['REJECTED']?.length})`}
           isExpand={showDeclined}
           expandToggle={showDeclinedHandler.toggle}
-          isExpandable={true}
+          isExpandable={flattenApplicantsObj?.['REJECTED']?.length > 0}
         />
         {showDeclined &&
           flattenApplicantsObj?.['REJECTED'].map((applicant) => (
@@ -154,4 +154,4 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
   );
 }
 
-export default ApplicantsContent;
+export default ApplicantsList;

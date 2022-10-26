@@ -1,15 +1,8 @@
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
-import {
-  TApplicant,
-  TApplicantsByStatus,
-  TApplicantsResponse,
-} from '@models/applicant';
+
 import useUser from 'hooks/useUser/useUser';
 import router from 'next/router';
-import {useMemo} from 'react';
-import useSWR from 'swr';
-import {get} from 'utils/request';
-import ApplicantsContent from './ApplicantsContent';
+import ApplicantsList from './ApplicantsContent';
 import HiredContent from './HireContent';
 import ProjectCard from './ProjectCard';
 
@@ -42,7 +35,7 @@ const SideBar = ({selectBar, projectId}: Props) => {
           </div>
         )}
         {selectBar == 'APPLICANT' && projectId && (
-          <ApplicantsContent projectId={projectId} />
+          <ApplicantsList projectId={projectId} />
         )}
         {selectBar == 'HIRE' && projectId && (
           <HiredContent projectId={projectId} />

@@ -12,6 +12,8 @@ import {get} from 'utils/request';
 
 // Types
 import {TApplicantsResponse} from '@models/applicant';
+import ProjectMobileTop from '@components/common/Project/ProjectMobileTop/ProjectMobileTop';
+import ApplicantsList from '@components/common/Project/SideBar/ApplicantsContent';
 
 const Applicants = () => {
   const router = useRouter();
@@ -52,19 +54,39 @@ const Applicants = () => {
     <>
       <GeneralLayout hasNavbar>
         <SideBar selectBar={'APPLICANT'} projectId={projectId as string} />
-        {applicantsData && applicantsData.items?.length > 0 ? (
-          <ApplicantsContent
-            applicant={
-              applicantsData?.items?.find((x) => x.status === 'PENDING') ??
-              applicantsData?.items?.[0]
+        {/* MOBILE LIST */}
+        <div className="w-full pb-4 md:hidden">
+          <ProjectMobileTop
+            selectedTab="APPLICANTS"
+            projectId={
+              applicantsData?.items?.[0]?.project_id ?? (projectId as string)
             }
-            mutateApplicant={() => mutateApplicant()}
           />
-        ) : (
-          <h2 className="h-20 w-full rounded-2xl border bg-white p-4 text-center">
-            No applicants
-          </h2>
-        )}
+          <div className="w-full pb-4 md:hidden">
+            <ApplicantsList
+              projectId={
+                applicantsData?.items?.[0]?.project_id ?? (projectId as string)
+              }
+            />
+          </div>
+        </div>
+
+        {/* DESKTOP VIEW */}
+        <div className="hidden w-full md:block">
+          {applicantsData && applicantsData.items?.length > 0 ? (
+            <ApplicantsContent
+              applicant={
+                applicantsData?.items?.find((x) => x.status === 'PENDING') ??
+                applicantsData?.items?.[0]
+              }
+              mutateApplicant={() => mutateApplicant()}
+            />
+          ) : (
+            <h2 className="h-20 w-full rounded-2xl border bg-white p-4 text-center">
+              No applicants
+            </h2>
+          )}
+        </div>
       </GeneralLayout>
     </>
   );

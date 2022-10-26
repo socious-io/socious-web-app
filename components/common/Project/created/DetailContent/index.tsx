@@ -1,4 +1,3 @@
-import BodyBox from '@components/common/Project/BodyBox/BodyBox';
 import ProjectItem from '@components/common/UserProfile/MainContent/ProjectItem';
 import Title from '@components/common/UserProfile/MainContent/Title';
 
@@ -13,6 +12,7 @@ import {FC} from 'react';
 import {Question} from '@models/question';
 import editSrc from 'asset/icons/edit.svg';
 import Image from 'next/image';
+import ProjectMobileTop from '../../ProjectMobileTop/ProjectMobileTop';
 
 const QuestionsCard: FC<{questions?: Question[]; goToEdit: () => void}> = ({
   questions,
@@ -104,7 +104,9 @@ const Detail: FC<DetailProps> = ({project, questions}) => {
 
   return (
     <div className="mb-10 w-full ">
-      <div className="divide-y rounded-2xl border border-grayLineBased bg-white ">
+      {/* <ProjectNav selectedTab="OVERVIEW" projectId={project.id} /> */}
+      <ProjectMobileTop selectedTab="OVERVIEW" projectId={project.id} />
+      <div className="divide-y border border-grayLineBased bg-white sm:rounded-2xl ">
         <div className="flex flex-row items-center justify-center px-4 ">
           <Title>{title}</Title>
         </div>
