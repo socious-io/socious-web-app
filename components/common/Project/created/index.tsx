@@ -3,7 +3,7 @@ import {useUser} from '@hooks';
 import {PlusIcon} from '@heroicons/react/24/solid';
 import {FC} from 'react';
 import {useProjectContext} from '../created/NewProject/context';
-import ProjectsByStatus from '@components/molecules/ProjectsByStatus/ProjectByStatus';
+import ProjectsByStatus from '../ProjectsByStatus/ProjectByStatus';
 
 const MyApplicationBoxes: FC = () => {
   const {currentIdentity} = useUser();
