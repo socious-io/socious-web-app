@@ -96,9 +96,31 @@ export const schemaCreateProjectStep3 = Joi.object({
 });
 
 export const schemaCreateProjectQuestion = Joi.object({
-  question: Joi.string().required(),
+  question: Joi.string().required().messages({
+    'any.required': 'Question cannot be empty.',
+    'string.base': 'Question cannot be empty.',
+  }),
   required: Joi.boolean(),
-  options: Joi.array().min(2).max(5).items(Joi.string()),
+  options: Joi.array()
+    .allow(null, '')
+    .min(2)
+    .max(5)
+    .items({
+      id: Joi.number(),
+      option: Joi.string().trim().required().messages({
+        'string.base': 'Option can be empty.',
+        'string.empty': 'Option can be empty.',
+        'any.required': 'Option cannot be empty.',
+      }),
+    })
+    .messages({
+      'array.min': 'Mininum of 2 choices required.',
+      'array.max': 'Maximum of 5 choices allowed.',
+    }),
+});
+
+export const schemaCreateProjectQuestionBody = Joi.object({
+  questions: Joi.array().items(schemaCreateProjectQuestion),
 });
 
 export const schemaApplyProject = Joi.object({

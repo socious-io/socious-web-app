@@ -1,19 +1,154 @@
-import TextArea from '@components/common/TextArea/TextArea';
+import {useCallback, useRef} from 'react';
+import {mutate} from 'swr';
+
 import {useForm} from 'react-hook-form';
-import {Button} from '@components/common';
-import {PlusCircleIcon} from '@heroicons/react/24/outline';
-import {useProjectContext} from '../context';
 import {joiResolver} from '@hookform/resolvers/joi';
+// Validations
 import {schemaCreateProjectQuestion} from '@api/projects/validation';
 
-const QuestionDetail = () => {
+// Components/Icons
+import {Button, Checkbox, InputFiled, TextArea} from '@components/common';
+import {PlusCircleIcon} from '@heroicons/react/24/outline';
+import {ExclamationCircleIcon, TrashIcon} from '@heroicons/react/24/solid';
+
+// Context/Actions
+import {useProjectContext} from '../context';
+import {addQuestion, updateQuestion} from '@api/projects/actions';
+
+// Types
+import {AddQuestionType} from '@models/project';
+import {Question} from '@models/question';
+type OptionType = {
+  id: number;
+  option: string;
+};
+type QuestionAddProps = {projectId: string};
+
+const QuestionDetail = ({projectId}: QuestionAddProps) => {
+  const {setProjectContext, ProjectContext} = useProjectContext();
+  const lastInputRef = useRef<HTMLInputElement | null>(null);
+  const {editQuestion} = ProjectContext;
+
   const {
     register,
+    handleSubmit,
     setValue,
-    formState: {errors},
-  } = useForm({resolver: joiResolver(schemaCreateProjectQuestion)});
+    getValues,
+    watch,
+    formState: {errors, isDirty},
+  } = useForm({
+    resolver: joiResolver(schemaCreateProjectQuestion),
+    defaultValues: {
+      question: editQuestion?.question ?? '',
+      options: editQuestion?.options?.map((option, index) => ({
+        id: index + 1,
+        option,
+      })),
+      required: editQuestion?.required ?? false,
+    } as AddQuestionType<OptionType>,
+  });
 
-  const {setProjectContext, ProjectContext} = useProjectContext();
+  const options = watch('options');
+
+  const handleAddUpdate = useCallback(async () => {
+    try {
+      const question = getValues('question');
+      const required = getValues('required');
+      const rawOptions = getValues('options');
+      const options: string[] | null =
+        rawOptions
+          ?.filter((item) => !!item.option)
+          .map((item: OptionType) => item.option) ?? null;
+      const questionBody: AddQuestionType = {
+        question,
+        required,
+      };
+      if (!!options?.length) questionBody.options = options;
+      let questions: Question[] | null = ProjectContext.questions;
+      if (editQuestion?.id) {
+        const response = await updateQuestion(
+          editQuestion.project_id,
+          editQuestion.id,
+          questionBody,
+        );
+        questions?.forEach((question, index) => {
+          if (questions)
+            questions[index] =
+              question.id === response.id ? response : question;
+        });
+      } else {
+        const response = await addQuestion(projectId, questionBody);
+        questions = [...(questions ?? []), response];
+      }
+      // Mutation for questionss
+      if (questions?.[0])
+        mutate(`/projects/${questions[0].project_id}/questions`, questions, {
+          populateCache(result, _currentData) {
+            return result;
+          },
+          revalidate: false,
+        });
+      setProjectContext({
+        ...ProjectContext,
+        editQuestion: null,
+        questions: questions,
+        formStep: 3,
+      });
+    } catch (error) {
+      console.log('ERROR :---: ', error);
+    }
+  }, [ProjectContext, editQuestion, getValues, projectId, setProjectContext]);
+
+  const removeItem = useCallback(
+    (id: number) => {
+      const newOptions =
+        options?.filter((option: OptionType, i) => option.id != id) ?? [];
+      setValue('options', !!newOptions.length ? newOptions : null, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    },
+    [options, setValue],
+  );
+
+  // Change Text
+  const changeAt = useCallback(
+    (index: number, value: string) => {
+      const newOptions = getValues('options')?.map((item: OptionType) => {
+        return item.id == index
+          ? {
+              ...item,
+              option: value,
+            }
+          : item;
+      });
+      setValue('options', newOptions, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    },
+    [getValues, setValue],
+  );
+
+  // Increase InputField
+  const increaseCount = useCallback(() => {
+    if (lastInputRef.current && lastInputRef.current.value === '') return;
+    if (!options || options.length < 5)
+      setValue(
+        'options',
+        [
+          ...(options ?? []),
+          {
+            id: Date.now(),
+            option: '',
+          },
+        ],
+        {
+          shouldValidate: true,
+          shouldDirty: true,
+        },
+      );
+  }, [options, setValue]);
 
   return (
     <div className="flex h-full w-full flex-col">
@@ -25,17 +160,47 @@ const QuestionDetail = () => {
             required: 'This field is required',
             maxLength: 3,
           })}
-          errorMessage={errors?.['title']?.message}
+          errorMessage={errors?.['question']?.message}
           className="my-3"
           required
           rows={4}
         />
-        <div>Require this question to be answered</div>
+        <Checkbox
+          checked={watch('required')}
+          className="items-center"
+          register={register('required')}
+          label="Require this question to be answered"
+        />
       </div>
       <div className="flex h-full w-full flex-col bg-zinc-200">
+        {!!options?.length &&
+          options.map((option: OptionType, index) => (
+            <div key={option.id} className="flex items-center px-4">
+              <InputFiled
+                className="grow py-2 px-4"
+                defaultValue={option.option}
+                ref={options.length === index + 1 ? lastInputRef : undefined}
+                placeholder={`Choice ${index + 1}`}
+                onChange={(e) =>
+                  changeAt(option.id, e.currentTarget.value ?? e.target?.value)
+                }
+                errorMessage={errors?.options?.[index]?.option?.message}
+              />
+              <div onClick={() => removeItem(option.id)}>
+                <TrashIcon className="w-5 text-error" />
+              </div>
+            </div>
+          ))}
+        {errors?.options?.message && (
+          <div className="flex items-center py-2 px-6 text-error">
+            {' '}
+            <ExclamationCircleIcon className="mr-1 h-5 w-5" />
+            {errors?.options?.message}
+          </div>
+        )}
         <div className="flex items-center justify-center">
           <Button
-            // onClick={}
+            onClick={increaseCount}
             variant="outline"
             size="lg"
             className="my-4 flex w-11/12 items-center justify-start bg-white font-semibold"
@@ -49,23 +214,19 @@ const QuestionDetail = () => {
       </div>
       <div className="flex h-20 items-end justify-end p-4">
         <Button
-          onClick={() =>
-            setProjectContext({
-              ...ProjectContext,
-              formStep: 2,
-            })
-          }
+          onClick={handleSubmit(handleAddUpdate)}
+          disabled={!isDirty}
           type="button"
           className="'flex h-11 w-36 items-center justify-center"
         >
-          Add
+          {editQuestion ? 'Update' : 'Add'}
         </Button>
 
         <Button
           onClick={() =>
             setProjectContext({
               ...ProjectContext,
-              formStep: 2,
+              formStep: 3,
             })
           }
           variant="outline"

@@ -1,5 +1,5 @@
 export interface Question {
-  id: number;
+  id: string;
   project_id: string;
   question: string;
   required: boolean;
@@ -8,3 +8,5 @@ export interface Question {
   updated_at: number;
   old_id: number | null;
 }
+
+export type TQuestionsResponse = {questions: Question[]};

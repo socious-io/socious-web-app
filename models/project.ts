@@ -64,6 +64,12 @@ export interface ApplyProjectType {
   attachment?: string;
 }
 
+export interface AddQuestionType<T = string> {
+  question: string;
+  required: boolean;
+  options?: T[] | null;
+}
+
 export interface ProjectProps {
   project: Project;
 }
