@@ -185,7 +185,7 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
                 <div className="mt-2 space-y-4 pl-0 ">
                   <TextInput
                     label="Link name"
-                    placeholder="Link Url"
+                    placeholder="Link name"
                     value={watch('cv_name')}
                     containerClassName=""
                     className="border-gray border-1  overflow-y-scroll focus:border-none"
