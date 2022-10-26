@@ -1,24 +1,17 @@
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
-import {
-  TApplicant,
-  TApplicantsByStatus,
-  TApplicantsResponse,
-} from '@models/applicant';
+import {Project} from '@models/project';
 import useUser from 'hooks/useUser/useUser';
 import router from 'next/router';
-import {useMemo} from 'react';
-import useSWR from 'swr';
-import {get} from 'utils/request';
 import ApplicantsContent from './ApplicantsContent';
 import HiredContent from './HireContent';
 import ProjectCard from './ProjectCard';
 
 interface Props {
   selectBar: string;
-  projectId?: string;
+  projectDetail: Project;
 }
-const SideBar = ({selectBar, projectId}: Props) => {
-  const {user, currentIdentity} = useUser();
+const SideBar = ({selectBar, projectDetail}: Props) => {
+  const {user} = useUser();
 
   return (
     <div className="hidden w-80 md:flex" aria-label="Sidebar">
@@ -32,21 +25,16 @@ const SideBar = ({selectBar, projectId}: Props) => {
             <p className=" font-semibold ">Projects</p>
           </span>
         </div>
-        {projectId && (
-          <div className="cursor-pointer space-y-4 overflow-y-auto bg-gray-50">
-            <ProjectCard
-              isOrganization={currentIdentity?.type === 'organizations'}
-              username={user?.username}
-              projectId={projectId}
-            />
-          </div>
+        <div className="cursor-pointer space-y-4 overflow-y-auto bg-gray-50">
+          <ProjectCard
+            username={user?.username}
+            projectDetail={projectDetail}
+          />
+        </div>
+        {selectBar == 'APPLICANT' && (
+          <ApplicantsContent projectId={projectDetail.id} />
         )}
-        {selectBar == 'APPLICANT' && projectId && (
-          <ApplicantsContent projectId={projectId} />
-        )}
-        {selectBar == 'HIRE' && projectId && (
-          <HiredContent projectId={projectId} />
-        )}
+        {selectBar == 'HIRE' && <HiredContent projectId={projectDetail.id} />}
       </div>
     </div>
   );

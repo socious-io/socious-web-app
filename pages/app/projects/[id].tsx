@@ -7,6 +7,9 @@ import getGlobalData from 'services/cacheSkills';
 import type {NextPage} from 'next';
 import React from 'react';
 import {useRouter} from 'next/router';
+import useSWR from 'swr';
+import {get} from 'utils/request';
+import {Project} from '@models/project';
 
 type ProjectProps = {
   skills: any[];
@@ -16,12 +19,18 @@ const Detail: NextPage<ProjectProps> = ({skills}) => {
   const router = useRouter();
   const {id} = router.query;
 
+  const {data, mutate} = useSWR<Project>(`/projects/${id}`, get);
+
+  if (!data) {
+    return <></>;
+  }
+
   return (
     <ProjectContextProvider>
       <GeneralLayout hasDetailNavbar detailNavbarTitle="Project details">
-        <SideBar selectBar={'PROJECT_DETAIL'} projectId={id as string} />
+        <SideBar selectBar="PROJECT_DETAIL" projectDetail={data} />
         <DetailLayout>
-          <DetailContent skills={skills} />
+          <DetailContent mutate={mutate} data={data} skills={skills} />
         </DetailLayout>
       </GeneralLayout>
     </ProjectContextProvider>
