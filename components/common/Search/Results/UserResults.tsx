@@ -3,12 +3,12 @@ import Avatar from '@components/common/Avatar/Avatar';
 import {GroupsOfChips} from '@components/common/Project/component/ProjectCard';
 import {
   ChevronRightIcon,
-  CurrencyDollarIcon,
-  EllipsisHorizontalIcon,
-  HeartIcon,
+  // CurrencyDollarIcon,
+  // EllipsisHorizontalIcon,
+  // HeartIcon,
 } from '@heroicons/react/24/outline';
 import {UserProfile} from '@models/profile';
-import {formattedLocation, useFormattedLocation} from 'services/formatLocation';
+import {formattedLocation} from 'services/formatLocation';
 
 interface UserResultsProps {
   items: UserProfile[];
