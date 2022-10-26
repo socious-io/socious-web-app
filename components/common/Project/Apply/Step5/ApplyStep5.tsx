@@ -33,7 +33,7 @@ const RecentGallery = () => {
             <div className="h-auto w-48">
               <DocumentIcon className="w-12" />
               <p>{file.name}</p>
-              {error && <p>File limit exceeded.</p>}
+              {error && <p className="text-error">File limit exceeded.</p>}
             </div>
           )}
         </div>

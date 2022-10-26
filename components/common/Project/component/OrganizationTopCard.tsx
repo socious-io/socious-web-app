@@ -1,10 +1,8 @@
 import {Avatar} from '@components/common';
-import {defaultProject, ProjectProps} from 'models/project';
+import {ProjectProps} from 'models/project';
 import {Button} from '@components/common';
 import {ApplyStep1} from '../Apply/Step1/ApplyStep1';
-import ApplyStep2 from '../Apply/Step2/ApplyStep2';
 import ApplyStep3 from '../Apply/Step3/ApplyStep3';
-import ApplyStep4 from '../Apply/Step4/ApplyStep4';
 import {FC} from 'react';
 import useUser from 'hooks/useUser/useUser';
 import {getText} from '@socious/data';
@@ -15,7 +13,7 @@ import {
   ClockIcon,
 } from '@heroicons/react/24/outline';
 import {ApplyLayout} from '../MyApplication/ApplyProject';
-import {initContext, useProjectContext} from '../created/NewProject/context';
+import {useProjectContext} from '../created/NewProject/context';
 import {applyProject} from '@api/projects/actions';
 import {ApplyProjectType} from '@models/project';
 import {toast} from 'react-toastify';
@@ -48,11 +46,9 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
-  const isStep3 = ProjectContext.formStep === 3;
-  const isStep4 = ProjectContext.formStep === 4;
 
   const onSubmit = async () => {
-    if (isStep1) {
+    if (isStep0) {
       const postBody: ApplyProjectType = {
         cover_letter: ProjectContext.cover_letter,
       };
@@ -96,12 +92,13 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
     if (isStep0) {
       return <ApplyStep1 onSubmit={onSubmit} project={project} />;
     } else if (isStep1) {
-      return <ApplyStep2 onSubmit={onSubmit} project={project} />;
+      return (
+        <ApplyStep3
+          orgName={project.identity_meta?.name}
+          projectId={project.id}
+        />
+      );
     } else if (isStep2) {
-      return <ApplyStep3 orgName={project.identity_meta?.name} />;
-    } else if (isStep3) {
-      return <ApplyStep4 />;
-    } else if (isStep4) {
       return <RecentGallery />;
     }
   };
@@ -111,12 +108,8 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       case 0:
         return 'Apply';
       case 1:
-        return 'Review application';
-      case 2:
         return '';
-      case 3:
-        return 'Attach a link';
-      case 4:
+      case 2:
         return 'Recents';
       default:
         return '';
