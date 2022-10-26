@@ -28,9 +28,10 @@ const OrganizationProjects: NextPage = () => {
     get,
   );
 
-  // InfiniteData
   const {flattenData, seeMore, loadMore} = useInfiniteSWR<Project>(
-    organization ? `/projects?identity=${organization.id}` : null,
+    organization?.id
+      ? `/projects?identity_id=${organization.id}&status=ACTIVE`
+      : null,
   );
 
   const flattenActiveProjects: Project[] = useMemo(() => {

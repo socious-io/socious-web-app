@@ -26,7 +26,7 @@ import {get} from 'utils/request';
 import {useUser} from '@hooks';
 
 // interfaces
-import {IdentityType} from '@models/identity';
+import {IdentityType, OtherIdentityMeta} from '@models/identity';
 import {IProjectsResponse, Project} from '@models/project';
 interface Props {
   data: any;
@@ -48,7 +48,7 @@ const MainContent: React.FC<Props> = ({
     data: identities,
     mutate: identities_mutate,
     error,
-  } = useSWR<any>(`/identities/${data.id}`, get);
+  } = useSWR<OtherIdentityMeta>(`/identities/${data.id}`, get);
 
   // Call everytime identity change.
   useEffect(() => {
@@ -58,16 +58,10 @@ const MainContent: React.FC<Props> = ({
 
   // TODO: Filter with status.
   const {data: projects} = useSWR<IProjectsResponse>(
-    `/projects?identity=${data.id}`,
+    data?.id && identities?.type === 'organizations'
+      ? `/projects?identity_id=${data.id}&status=ACTIVE`
+      : null,
   );
-
-  const activeProjects: Project[] = useMemo(() => {
-    const filteredProjects =
-      projects?.items.filter((project) => project.status === 'ACTIVE') ?? [];
-    return filteredProjects.length > 3
-      ? filteredProjects.slice(2)
-      : filteredProjects;
-  }, [projects]);
 
   if (!identities && !error) return <p>loading</p>;
   if (
@@ -90,8 +84,10 @@ const MainContent: React.FC<Props> = ({
           avatar={status === 'users' ? data?.avatar : data?.image}
           cover_image={data?.cover_image}
           status={status}
-          following={identities?.following}
-          mutualConnection={identities?.follower && identities?.following}
+          following={identities?.following ?? false}
+          mutualConnection={
+            (identities?.follower && identities?.following) ?? false
+          }
           id={data?.id}
           identities_mutate={identities_mutate}
           profile_mutate={profile_mutate}
@@ -150,7 +146,7 @@ const MainContent: React.FC<Props> = ({
           footer="See all projects"
           onClickFooter={handleProjectsFooterClick}
         >
-          <ProjectList list={activeProjects} />
+          <ProjectList list={projects?.items ?? []} />
         </RightPaneContainer>
       </div>
     </div>

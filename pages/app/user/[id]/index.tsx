@@ -18,11 +18,13 @@ import {get} from 'utils/request';
 //components
 import MainContent from '@components/common/UserProfile/MainContent';
 import EditProfileModal from '@components/common/UserProfile/Edit/EditProfileModal/EditProfileModal';
+import SplashScreen from 'layout/Splash';
+import {UserProfile} from '@models/profile';
 
 // Libraries
 const libraries: Libraries = ['places'];
 
-const UserProfile: NextPage = () => {
+const ProfilePage: NextPage = () => {
   // get id from route
   const router = useRouter();
   const {id} = router.query;
@@ -39,7 +41,7 @@ const UserProfile: NextPage = () => {
   const openEditModal = useCallback(() => editHandlers.on(), [editHandlers]);
 
   //get user profile data by user id
-  const {data, mutate, error} = useSWR<any>(
+  const {data, mutate, error} = useSWR<UserProfile>(
     `/user/by-username/${id}/profile`,
     get,
   );
@@ -55,6 +57,8 @@ const UserProfile: NextPage = () => {
   )
     return <p>invalid user</p>;
 
+  if (!data) return <SplashScreen />;
+
   return (
     <GeneralLayout>
       <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">
@@ -67,7 +71,7 @@ const UserProfile: NextPage = () => {
       </div>
 
       {/* EDIT PROFILE */}
-      {isLoaded && user && (
+      {isLoaded && user && user.id === data?.id && (
         <EditProfileModal
           openState={editState}
           user={user}
@@ -78,4 +82,4 @@ const UserProfile: NextPage = () => {
   );
 };
 
-export default UserProfile;
+export default ProfilePage;

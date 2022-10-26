@@ -1,4 +1,3 @@
-import {string} from 'joi';
 import {IdentityMeta, IdentityType} from './identity';
 
 export interface IOrganizationType {
