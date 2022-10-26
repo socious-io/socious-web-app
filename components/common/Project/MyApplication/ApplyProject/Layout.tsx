@@ -22,7 +22,9 @@ const ApplyLayout: FC<PropsWithChildren<TLayoutType>> = ({children, title}) => {
     >
       <div
         className={`flex justify-between ${
-          ProjectContext.formStep !== 2 && 'border-b'
+          ProjectContext.formStep !== 2 &&
+          ProjectContext.formStep != 4 &&
+          'border-b'
         } p-5 py-5`}
       >
         {!(ProjectContext.formStep === 0 || ProjectContext.formStep === 2) ? (
@@ -48,7 +50,7 @@ const ApplyLayout: FC<PropsWithChildren<TLayoutType>> = ({children, title}) => {
           className="cursor-pointer"
         >
           {ProjectContext.formStep === 4 ? (
-            'cancel'
+            'Cancel'
           ) : (
             <XMarkIcon width={30} height={30} />
           )}

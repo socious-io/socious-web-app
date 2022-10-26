@@ -71,13 +71,12 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
           if (attachment) postBody.attachment = attachment;
         } catch (e) {
           console.error(e);
+          return;
         }
       }
 
       // Applying
       try {
-        console.log('Applying with this body');
-        console.table(postBody);
         if (id) await applyProject(id, postBody);
         setProjectContext({
           ...ProjectContext,
