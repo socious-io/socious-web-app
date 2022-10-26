@@ -6,7 +6,7 @@ import {useProjectContext} from '../context';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {schemaCreateProjectQuestion} from '@api/projects/validation';
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {TrashIcon} from '@heroicons/react/24/solid';
+import {ExclamationCircleIcon, TrashIcon} from '@heroicons/react/24/solid';
 import {addQuestion, updateQuestion} from '@api/projects/actions';
 import {AddQuestionType} from '@models/project';
 import {Question} from '@models/question';
@@ -59,22 +59,26 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
         required,
       };
       if (!!options?.length) questionBody.options = options;
-      let response: Question | null = null;
+      let questions: Question[] | null = ProjectContext.questions;
       if (editQuestion?.id) {
-        response = await updateQuestion(
+        const response = await updateQuestion(
           editQuestion.project_id,
           editQuestion.id,
           questionBody,
         );
+        questions?.forEach((question, index) => {
+          if (questions)
+            questions[index] =
+              question.id === response.id ? response : question;
+        });
       } else {
-        response = await addQuestion(projectId, questionBody);
+        const response = await addQuestion(projectId, questionBody);
+        questions = [...(questions ?? []), response];
       }
       setProjectContext({
         ...ProjectContext,
         editQuestion: null,
-        questions: response
-          ? [...(ProjectContext.questions ?? []), response]
-          : ProjectContext.questions,
+        questions: questions,
         formStep: 3,
       });
     } catch (error) {
@@ -167,12 +171,20 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
                 onChange={(e) =>
                   changeAt(option.id, e.currentTarget.value ?? e.target?.value)
                 }
+                errorMessage={errors?.options?.[index]?.option?.message}
               />
               <div onClick={() => removeItem(option.id)}>
                 <TrashIcon className="w-5 text-error" />
               </div>
             </div>
           ))}
+        {errors?.options?.message && (
+          <div className="flex items-center py-2 px-6 text-error">
+            {' '}
+            <ExclamationCircleIcon className="mr-1 h-5 w-5" />
+            {errors?.options?.message}
+          </div>
+        )}
         <div className="flex items-center justify-center">
           <Button
             onClick={increaseCount}

@@ -105,7 +105,18 @@ export const schemaCreateProjectQuestion = Joi.object({
     .allow(null, '')
     .min(2)
     .max(5)
-    .items({id: Joi.number().required(), option: Joi.string().required()}),
+    .items({
+      id: Joi.number(),
+      option: Joi.string().trim().required().messages({
+        'string.base': 'Option can be empty.',
+        'string.empty': 'Option can be empty.',
+        'any.required': 'Option cannot be empty.',
+      }),
+    })
+    .messages({
+      'array.min': 'Mininum of 2 choices required.',
+      'array.max': 'Maximum of 5 choices allowed.',
+    }),
 });
 
 export const schemaCreateProjectQuestionBody = Joi.object({

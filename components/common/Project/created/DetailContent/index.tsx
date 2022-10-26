@@ -1,6 +1,7 @@
 import BodyBox from '@components/common/Project/BodyBox/BodyBox';
 import ProjectItem from '@components/common/UserProfile/MainContent/ProjectItem';
 import Title from '@components/common/UserProfile/MainContent/Title';
+
 import {Modal} from '@components/common';
 import OverviewProjectCard from '../../component/OverviewProjectCard';
 import {useToggle} from 'hooks';
@@ -10,6 +11,43 @@ import {ProjectProps} from 'models/project';
 import {useProjectContext} from '@components/common/Project/created/NewProject/context';
 import {FC} from 'react';
 import {Question} from '@models/question';
+import editSrc from 'asset/icons/edit.svg';
+import Image from 'next/image';
+
+const QuestionsCard: FC<{questions?: Question[]; goToEdit: () => void}> = ({
+  questions,
+  goToEdit,
+}) => {
+  return (
+    <div className="space-y-6 p-4">
+      <div className="flex items-center justify-between ">
+        <Title>Screening questions</Title>
+        <div className="relative  h-5 w-5 ">
+          <div className="cursor-pointer" onClick={goToEdit}>
+            <Image
+              src={editSrc}
+              className="fill-warning"
+              alt="dislike"
+              layout="fill"
+            />
+          </div>
+        </div>
+      </div>
+      {questions && (
+        <div className="space-y-4">
+          {questions.map((question, index) => (
+            <div key={question.id}>
+              <p>{'Question ' + (index + 1)}</p>
+              <span className="font-worksans block  text-base text-graySubtitle sm:text-sm">
+                {question.question}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export type DetailProps = ProjectProps & {questions?: Question[]};
 const Detail: FC<DetailProps> = ({project, questions}) => {
@@ -86,7 +124,10 @@ const Detail: FC<DetailProps> = ({project, questions}) => {
           isEdit
           onclick={() => clickEditIcon(2)}
         />
-        <div onClick={() => clickEditIcon(3)}>Questions</div>
+        <QuestionsCard
+          questions={questions}
+          goToEdit={() => clickEditIcon(3)}
+        />
       </div>
       <Modal isOpen={closeProject} onClose={closeProjectHandlers.off}>
         <EditProjectModal onSubmit={() => {}} />
