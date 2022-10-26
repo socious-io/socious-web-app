@@ -1,21 +1,27 @@
-import TextArea from '@components/common/TextArea/TextArea';
+import {useCallback, useRef} from 'react';
+import {mutate} from 'swr';
+
 import {useForm} from 'react-hook-form';
-import {Button, Checkbox, InputFiled} from '@components/common';
-import {PlusCircleIcon} from '@heroicons/react/24/outline';
-import {useProjectContext} from '../context';
 import {joiResolver} from '@hookform/resolvers/joi';
+// Validations
 import {schemaCreateProjectQuestion} from '@api/projects/validation';
-import {useCallback, useEffect, useRef, useState} from 'react';
+
+// Components/Icons
+import {Button, Checkbox, InputFiled, TextArea} from '@components/common';
+import {PlusCircleIcon} from '@heroicons/react/24/outline';
 import {ExclamationCircleIcon, TrashIcon} from '@heroicons/react/24/solid';
+
+// Context/Actions
+import {useProjectContext} from '../context';
 import {addQuestion, updateQuestion} from '@api/projects/actions';
+
+// Types
 import {AddQuestionType} from '@models/project';
 import {Question} from '@models/question';
-
 type OptionType = {
   id: number;
   option: string;
 };
-
 type QuestionAddProps = {projectId: string};
 
 const QuestionDetail = ({projectId}: QuestionAddProps) => {
@@ -44,8 +50,7 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
 
   const options = watch('options');
 
-  console.log('ERROR :---: ', errors);
-  const handleAdd = useCallback(async () => {
+  const handleAddUpdate = useCallback(async () => {
     try {
       const question = getValues('question');
       const required = getValues('required');
@@ -75,6 +80,14 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
         const response = await addQuestion(projectId, questionBody);
         questions = [...(questions ?? []), response];
       }
+      // Mutation for questionss
+      if (questions?.[0])
+        mutate(`/projects/${questions[0].project_id}/questions`, questions, {
+          populateCache(result, _currentData) {
+            return result;
+          },
+          revalidate: false,
+        });
       setProjectContext({
         ...ProjectContext,
         editQuestion: null,
@@ -201,7 +214,7 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
       </div>
       <div className="flex h-20 items-end justify-end p-4">
         <Button
-          onClick={handleSubmit(handleAdd)}
+          onClick={handleSubmit(handleAddUpdate)}
           disabled={!isDirty}
           type="button"
           className="'flex h-11 w-36 items-center justify-center"
