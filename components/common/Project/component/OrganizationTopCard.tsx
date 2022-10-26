@@ -40,7 +40,6 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   // FIXME let's add this to identity_meta instead
   const {data: org} = useSWR(`/orgs/${identity_meta.id}`);
   const orgLocation = useFormattedLocation(org);
-  console.log('PROJECT :---: ', project);
   const {identities, currentIdentity} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);
   const {ProjectContext, setProjectContext} = useProjectContext();
@@ -100,7 +99,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
     } else if (isStep1) {
       return <ApplyStep2 onSubmit={onSubmit} project={project} />;
     } else if (isStep2) {
-      return <ApplyStep3 />;
+      return <ApplyStep3 orgName={project.identity_meta?.name} />;
     } else if (isStep3) {
       return <ApplyStep4 />;
     } else if (isStep4) {

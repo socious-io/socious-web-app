@@ -46,7 +46,7 @@ export interface CreateProjectType {
   payment_range_higher?: string;
   commitment_hours_higher?: string;
   commitment_hours_lower?: string;
-  // experience_level: number;
+  experience_level: number;
   causes_tags: Array<string>;
   country: string;
   project_length: string;
