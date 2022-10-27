@@ -1,11 +1,7 @@
 import {Avatar, Chip} from '@components/common';
 import {Project} from 'models/project';
 import Link from 'next/link';
-import {
-  BookmarkIcon,
-  ChevronRightIcon,
-  HandThumbDownIcon,
-} from '@heroicons/react/24/outline';
+import {ChevronRightIcon} from '@heroicons/react/24/outline';
 import {getText} from '@socious/data';
 import {FC} from 'react';
 import {isoToHumanTime} from 'services/toHumanTime';
@@ -91,9 +87,15 @@ export default function ProjectCard({
         </div>
         <div className="flex flex-row">
           <p className="my-1 text-sm">
-            {project.description?.length > 200
-              ? `${project.description?.slice(0, 200)}...`
-              : project.description}
+            {project.description?.length > 200 ? (
+              <Markdown options={{wrapper: 'article'}}>
+                {project.description?.slice(0, 200) + '...'}
+              </Markdown>
+            ) : (
+              <Markdown options={{wrapper: 'article'}}>
+                {project.description}
+              </Markdown>
+            )}
 
             {project.description?.length > 200 && (
               <span className="text-secondary"> See more</span>
