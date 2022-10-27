@@ -36,8 +36,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
     applied,
   } = project;
   // FIXME let's add this to identity_meta instead
-  const {data: org} = useSWR(`/orgs/${identity_meta.id}`);
-  const orgLocation = useFormattedLocation(org);
+  const orgLocation = useFormattedLocation(identity_meta);
   const {identities, currentIdentity} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);
   const {ProjectContext, setProjectContext} = useProjectContext();
@@ -119,7 +118,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   return (
     <div className="space-y-6 p-4">
       <div className="flex flex-row items-center justify-between ">
-        <Link href={`/app/organization/${org?.shortname}`}>
+        <Link href={`/app/organization/${identity_meta.shortname}`}>
           <div className="flex cursor-pointer flex-row space-x-2">
             <Avatar size="l" src={identity_meta?.image} />
             <div className="flex flex-col justify-center">
@@ -147,18 +146,19 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
             <p className="ml-2 text-sm text-graySubtitle">{projectType}</p>
           </div>
         )}
-        {(payment_range_lower || payment_range_higher) && (
-          <div className="flex flex-row">
-            <CurrencyDollarIcon
-              width={20}
-              height={20}
-              className="text-primary"
-            />
-            <p className="pl-2 text-sm text-graySubtitle ">{`$${
-              payment_range_lower || ''
-            }-$${payment_range_higher || ''}`}</p>
-          </div>
-        )}
+        {projectType === 'PAID' &&
+          (payment_range_lower || payment_range_higher) && (
+            <div className="flex flex-row">
+              <CurrencyDollarIcon
+                width={20}
+                height={20}
+                className="text-primary"
+              />
+              <p className="pl-2 text-sm text-graySubtitle ">{`$${
+                payment_range_lower || ''
+              }-$${payment_range_higher || ''}`}</p>
+            </div>
+          )}
       </div>
       <div className="mt-4 flex space-x-5">
         {/* <p className="pl-2 text-sm text-graySubtitle ">{experience_level}</p> */}
