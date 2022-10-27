@@ -21,6 +21,7 @@ import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/24/outline';
 import EndAssignmentModal from '../Modals/EndAssignmentModal/EndAssignmentModal';
 import StopAssignmentModal from '../Modals/StopAssignmentModal/StopAssignmentModal';
 import {completeAssignment, stopAssignment} from '@api/employed/actions';
+import ApplicationStatusBanner from '../ApplicationStatusBanner/ApplicationStatusBanner';
 type MyApplicationProps = {
   applicant: TApplicant;
   mutateApplication: KeyedMutator<TApplicant>;
@@ -86,12 +87,11 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
       rejectOfferHandlers.off();
       toast.info('Application was withdrawn just now.');
     } catch (err) {
-      console.error(err);
       toast.error('Application withdrawal failed.');
     }
   }, [applicant, mutateApplication, rejectOfferHandlers]);
 
-  // Change with "EMPLOYED_ID"
+  // TODO:// Change with "EMPLOYED_ID"
   const onAssignmentCompleted = useCallback(async () => {
     try {
       await completeAssignment(applicant.id);
@@ -99,7 +99,6 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
       mutateApplication();
       // toast.success('Assignment completed information send to organization.');
     } catch (err) {
-      console.log('COMPLETED :---: ', err);
       toast.error('Assigment completion failed. Please try again later.');
     }
   }, [applicant.id, mutateApplication]);
@@ -111,7 +110,6 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
       mutateApplication();
       // toast.success('Assignment stopped information send to organization.');
     } catch (err) {
-      console.log('STOPPED :---: ', err);
       toast.error('Assignment stop failed. Please try again later.');
     }
   }, [applicant.id, mutateApplication]);
@@ -120,6 +118,13 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
       {/* TODO:// UNCOMMENT based on logic and usability */}
       {/* {status !== 'PENDING' && status !== 'REJECTED' && ( */}
       {/* {['PENDING', 'REJECTED'].includes(status)} && */}
+      {true && (
+        <ApplicationStatusBanner
+          status="COMPLETED"
+          title={'You marked this assignement completed.'}
+          description={`You will get your payment once ${project?.identity_meta.name} confirms on their side.`}
+        />
+      )}
       <WrapperWithHead title="Offer">
         <div className="space-y-4 p-4">
           <div className="text-sm">
