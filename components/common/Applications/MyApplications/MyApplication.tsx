@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren, useCallback} from 'react';
+import React, {FC, PropsWithChildren, useCallback, useState} from 'react';
 import useSWR, {KeyedMutator} from 'swr';
 
 // Components
@@ -8,7 +8,6 @@ import ConfirmApplicantActionModal from '@components/common/Project/created/Appl
 
 // Hooks/services/utils
 import {get} from 'utils/request';
-import {useFormattedLocation} from 'services/formatLocation';
 import {useToggle, useUser} from '@hooks';
 import {approveOffer, withdrawApplication} from '@api/applicants/actions';
 
@@ -16,23 +15,36 @@ import {approveOffer, withdrawApplication} from '@api/applicants/actions';
 import {TApplicant} from '@models/applicant';
 import {Project} from '@models/project';
 import Link from 'next/link';
-import {update} from 'lodash';
 import {toast} from 'react-toastify';
 import ApplicationInfo from '@components/common/Project/created/Shared/ApplicationInfo';
+import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/24/outline';
+import EndAssignmentModal from '../Modals/EndAssignmentModal/EndAssignmentModal';
+import StopAssignmentModal from '../Modals/StopAssignmentModal/StopAssignmentModal';
+import {completeAssignment, stopAssignment} from '@api/employed/actions';
 type MyApplicationProps = {
   applicant: TApplicant;
   mutateApplication: KeyedMutator<TApplicant>;
 };
 
 // Wrapper for Head.
-const WrapperWithHead: FC<PropsWithChildren<{title: string}>> = ({
+export const WrapperWithHead: FC<PropsWithChildren<{title: string}>> = ({
   title,
   children,
 }) => {
+  const {state: show, handlers: showHandlers} = useToggle(true);
   return (
-    <div className="sm:border-grayLinedBased w-full divide-y divide-grayLineBased border bg-white sm:rounded-2xl">
-      <h1 className="py-5 px-4 text-base font-semibold">{title}</h1>
-      {children}
+    <div className="md:border-grayLinedBased w-full divide-y divide-grayLineBased border bg-white md:rounded-2xl">
+      <h1 className="flex justify-between py-5 px-4 text-base font-semibold">
+        {title}
+        <div className="md:hidden" onClick={showHandlers.toggle}>
+          {show ? (
+            <ChevronUpIcon className="w-5" />
+          ) : (
+            <ChevronDownIcon className="w-5" />
+          )}
+        </div>
+      </h1>
+      {show && children}
     </div>
   );
 };
@@ -42,6 +54,9 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
   const {offer_message, payment_type, payment_rate, status} = applicant;
   const {state: confirmApprove, handlers: approveOfferHandlers} = useToggle();
   const {state: confirmReject, handlers: rejectOfferHandlers} = useToggle();
+  const [endingState, setAssignmentEndState] = useState<
+    'OPEN' | 'COMPLETED' | 'STOP' | null
+  >(null);
 
   // Fetch Project
   const {data: project, error: projectError} = useSWR<Project>(
@@ -57,18 +72,10 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
       const updatedApplicant = await approveOffer(applicant.id);
       mutateApplication(updatedApplicant, {revalidate: false});
       approveOfferHandlers.off();
-      toast.success('Offer was approved just now.', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-      });
+      toast.success('Offer was approved just now.');
     } catch (err) {
       console.error(err);
+      toast.error('Offer approval failed.');
     }
   }, [applicant, approveOfferHandlers, mutateApplication]);
 
@@ -77,24 +84,42 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
       await withdrawApplication(applicant.id);
       mutateApplication();
       rejectOfferHandlers.off();
-      toast.info('Application was withdrawn just now.', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-      });
+      toast.info('Application was withdrawn just now.');
     } catch (err) {
       console.error(err);
+      toast.error('Application withdrawal failed.');
     }
   }, [applicant, mutateApplication, rejectOfferHandlers]);
 
+  // Change with "EMPLOYED_ID"
+  const onAssignmentCompleted = useCallback(async () => {
+    try {
+      await completeAssignment(applicant.id);
+      setAssignmentEndState(null);
+      mutateApplication();
+      // toast.success('Assignment completed information send to organization.');
+    } catch (err) {
+      console.log('COMPLETED :---: ', err);
+      toast.error('Assigment completion failed. Please try again later.');
+    }
+  }, [applicant.id, mutateApplication]);
+
+  const onAssignmentStopped = useCallback(async () => {
+    try {
+      await stopAssignment(applicant.id);
+      setAssignmentEndState(null);
+      mutateApplication();
+      // toast.success('Assignment stopped information send to organization.');
+    } catch (err) {
+      console.log('STOPPED :---: ', err);
+      toast.error('Assignment stop failed. Please try again later.');
+    }
+  }, [applicant.id, mutateApplication]);
   return (
-    <div className="w-full space-y-4 rounded-2xl pb-4">
+    <div className="max-w-screen -mx-6 rounded-2xl md:mx-0 md:w-full md:space-y-4 md:bg-offWhite md:pb-4">
+      {/* TODO:// UNCOMMENT based on logic and usability */}
       {/* {status !== 'PENDING' && status !== 'REJECTED' && ( */}
+      {/* {['PENDING', 'REJECTED'].includes(status)} && */}
       <WrapperWithHead title="Offer">
         <div className="space-y-4 p-4">
           <div className="text-sm">
@@ -115,7 +140,6 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
             </div>
           </div>
         </div>
-        {/* If OFFERED */}
         {status === 'OFFERED' ? (
           <div className="grid grid-cols-2 items-center space-x-2 p-4">
             <Button
@@ -153,6 +177,7 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
         )}
       </WrapperWithHead>
       {/* )} */}
+
       {project && (
         <WrapperWithHead title="Project Info">
           <div className="space-y-3 p-4">
@@ -177,16 +202,28 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
           </div>
         </WrapperWithHead>
       )}
+
       {/* TODO: Refactor with ApplicationInfo component once merged */}
       <WrapperWithHead title="My application">
-        {/* <div className=" divide-y bg-white "> */}
         <ApplicationInfo
           applicant={applicant}
           applicantInfo={user}
-          className="rounded-0 border-0"
+          className="rounded-t-none border-0"
         />
       </WrapperWithHead>
-      {/* Modals */}
+      {/* END ASSIGMENT BUTTON */}
+      <div className="mt-12 w-full border bg-white p-4 pb-12 md:mt-0 md:rounded-2xl md:pb-4">
+        <Button
+          className="flex w-full justify-center"
+          variant="outline"
+          onClick={() => setAssignmentEndState('OPEN')}
+        >
+          End assignment
+        </Button>
+      </div>
+
+      {/* ----- Modals ---- */}
+      {/* APPLY & REJECT */}
       <ConfirmApplicantActionModal
         state={confirmApprove}
         title="Send offer"
@@ -195,7 +232,6 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
         nextStep={onApprove}
         cancel={() => approveOfferHandlers.off()}
       />
-      {/* Reject */}
       <ConfirmApplicantActionModal
         state={confirmReject}
         title="Reject applicant"
@@ -203,6 +239,37 @@ const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
         continueText="Withdraw"
         nextStep={onWithdraw}
         cancel={() => rejectOfferHandlers.off()}
+      />
+      {/* SUBMIT for REVIEW */}
+      <EndAssignmentModal
+        state={endingState === 'OPEN'}
+        setAction={setAssignmentEndState}
+      />
+      <ConfirmApplicantActionModal
+        state={endingState === 'COMPLETED'}
+        title="Mark as completed"
+        description={`Once the ${project?.identity_meta?.name} confirms the assignement completion, you will receive your payment.`}
+        continueText="Confirm"
+        nextStep={
+          // onAssignmentCompleted
+          () =>
+            console.log(
+              '--------------------------COMPLETED----------------------------------',
+            )
+        }
+        cancel={() => setAssignmentEndState(null)}
+      />
+      <StopAssignmentModal
+        projectName={project?.title ?? ''}
+        state={endingState === 'STOP'}
+        cancel={() => setAssignmentEndState(null)}
+        nextStep={
+          // onAssignmentStopped
+          () =>
+            console.log(
+              '--------------------------STOPPED----------------------------------',
+            )
+        }
       />
     </div>
   );

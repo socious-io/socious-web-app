@@ -346,7 +346,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
         )}
       </div>
       {hasDetailNavbar && (
-        <div className="flex w-full flex-col pt-14 sm:hidden">
+        <div className="flex w-full flex-col pt-14 md:hidden">
           <div className=" flex items-center justify-between px-4 pb-3.5">
             <span className="flex " onClick={() => router.back()}>
               <ChevronLeftIcon className="w-5" />
