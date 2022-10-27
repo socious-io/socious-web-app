@@ -41,7 +41,11 @@ const Applicant: NextPage = () => {
   if (!data) return <div>ERROR</div>;
 
   return (
-    <GeneralLayout hasNavbar>
+    <GeneralLayout
+      hasNavbar
+      hasDetailNavbar
+      detailNavbarTitle="Application Detail"
+    >
       <div className="mx-6 flex w-full md:space-x-6">
         <SideBar
           title={

@@ -4,6 +4,7 @@ import {useToggle} from '@hooks';
 import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 import {TApplicant, TApplicantStatus} from '@models/applicant';
 import {useEffect, useMemo} from 'react';
+import Applicant from 'pages/app/applications/[aid]';
 
 interface StatusApplicationsProps {
   name: any;
