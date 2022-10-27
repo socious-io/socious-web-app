@@ -29,20 +29,23 @@ const ProjectsByStatus: FC<ProjectByStatusProps> = ({
 }) => {
   const {state: expandState, handlers: expandHandler} = useToggle();
 
-  const {flattenData, loadMore, seeMore} = useInfiniteSWR(
+  const {flattenData, loadMore, seeMore, rawResponse} = useInfiniteSWR(
     identityId && status
       ? `/projects?identity_id=${identityId}&status=${status}`
       : null,
   );
 
+  const size =
+    rawResponse && rawResponse.length ? rawResponse[0].total_count : 0;
+
   return (
     <>
       <HeaderBox
         isRound={rounded}
-        title={`${title} (${flattenData.length})`}
+        title={`${title} (${size})`}
         isExpand={expandState}
         expandToggle={expandHandler.toggle}
-        isExpandable={!!flattenData?.length}
+        isExpandable={size > 0}
       />
       <div
         className={twMerge(
