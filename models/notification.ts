@@ -8,7 +8,15 @@ type TNotificationTypes =
   | 'SHARE_POST'
   | 'SHARE_PROJECT'
   | 'COMMENT'
-  | 'APPLICATION';
+  | 'APPLICATION'
+  | 'OFFER'
+  | 'REJECT'
+  | 'APPROVED'
+  | 'HIRED'
+  | 'PROJECT_COMPLETE'
+  | 'EMPLOYEE_CANCELED'
+  | 'EMPLOYER_CANCELED'
+  | 'EMPLOYER_CONFIRMED';
 
 export interface NotificationItem {
   id: string;
