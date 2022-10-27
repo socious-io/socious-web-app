@@ -17,7 +17,7 @@ import {useProjectContext} from '../created/NewProject/context';
 import {applyProject} from '@api/projects/actions';
 import {ApplyProjectType} from '@models/project';
 import {toast} from 'react-toastify';
-import useSWR from 'swr';
+import useSWR, {mutate} from 'swr';
 import {useFormattedLocation} from 'services/formatLocation';
 import Link from 'next/link';
 import RecentGallery from '../Apply/Step5/ApplyStep5';
@@ -73,6 +73,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       // Applying
       try {
         if (id) await applyProject(id, postBody);
+        mutate(`/projects/${id}`);
         setProjectContext({
           ...ProjectContext,
           formStep: ProjectContext.formStep + 1,

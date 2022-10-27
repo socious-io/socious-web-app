@@ -40,16 +40,8 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
   const {state: showLinkFields, handlers: linkFieldsHandlers} = useToggle();
 
   const {
-    formState: {errors: linkErrors},
-    setValue: linkSetValue,
-    watch,
-  } = useForm({
-    resolver: joiResolver(schemaLink),
-  });
-
-  const {
     handleSubmit,
-    formState: {isValid, errors},
+    formState: {isValid, errors, isSubmitting},
     setValue,
   } = useForm({
     resolver: joiResolver(schemaApplyProject),
@@ -61,16 +53,16 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
         shouldValidate: true,
       });
     } else if (ProjectContext?.cv_name) {
-      linkSetValue('cv_name', ProjectContext.cv_name, {
+      setValue('cv_name', ProjectContext.cv_name, {
         shouldValidate: true,
       });
     }
     if (ProjectContext?.cv_link) {
-      linkSetValue('cv_link', ProjectContext.cv_link, {
+      setValue('cv_link', ProjectContext.cv_link, {
         shouldValidate: true,
       });
     }
-  }, [ProjectContext, linkSetValue, setValue]);
+  }, [ProjectContext, setValue]);
 
   const handleChange = (field: string, input: string | boolean) => {
     setValue(field, input, {
@@ -108,13 +100,10 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
             value={ProjectContext.cover_letter}
             containerClassName="mt-6"
             className="border-gray border-1  overflow-y-scroll focus:border-none"
-            errorMessage={errors?.['content']?.message}
+            errorMessage={errors?.['cover_letter']?.message}
             onChange={(e) => handleChange('cover_letter', e.target.value)}
           />
 
-          {/* Attachment & Link Section */}
-          {/* <TitlePart title="Attach CV" className="border-y-0 sm:hidden text-xl" /> */}
-          {/* <div className="hidden sm:block"> */}
           <div>
             <TitlePart
               title="Resume"
@@ -186,40 +175,18 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
                   <TextInput
                     label="Link name"
                     placeholder="Link name"
-                    value={watch('cv_name')}
-                    containerClassName=""
                     className="border-gray border-1  overflow-y-scroll focus:border-none"
-                    errorMessage={linkErrors?.['cv_name']?.message}
-                    onChange={(e) => {
-                      linkSetValue('cv_name', e.target.value, {
-                        shouldDirty: true,
-                        shouldValidate: true,
-                      });
-                      setProjectContext({
-                        ...ProjectContext,
-                        ['cv_name']: e.target.value,
-                      });
-                    }}
+                    errorMessage={errors?.['cv_name']?.message}
+                    onChange={(e) => handleChange('cv_name', e.target.value)}
                   />
                 </div>
                 <div className="mt-2 space-y-4 pl-0 ">
                   <TextInput
                     label="Link URL"
                     placeholder="Link url"
-                    value={watch('cv_link')}
-                    containerClassName=""
                     className="border-gray border-1  overflow-y-scroll focus:border-none"
-                    errorMessage={linkErrors?.['cv_link']?.message}
-                    onChange={(e) => {
-                      linkSetValue('cv_link', e.target.value, {
-                        shouldDirty: true,
-                        shouldValidate: true,
-                      });
-                      setProjectContext({
-                        ...ProjectContext,
-                        ['cv_link']: e.target.value,
-                      });
-                    }}
+                    errorMessage={errors?.['cv_link']?.message}
+                    onChange={(e) => handleChange('cv_link', e.target.value)}
                   />
                 </div>
               </>
@@ -239,11 +206,7 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
           </div>
           <div className="-mx-4 flex items-end justify-center border-t p-4 pb-12">
             <Button
-              disabled={
-                !isValid ||
-                !!linkErrors?.['cv_link']?.message ||
-                !!linkErrors['cv_name']?.message
-              }
+              disabled={!isValid || isSubmitting}
               className="flex h-11 w-full items-center justify-center"
               type="submit"
               variant="fill"

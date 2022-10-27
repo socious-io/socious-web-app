@@ -3,6 +3,7 @@ import {mutate} from 'swr';
 
 import {Button} from '@components/common';
 import {initContext, useProjectContext} from '../../created/NewProject/context';
+import Router from 'next/router';
 
 type CongratsProps = {orgName: string; projectId: string};
 
@@ -12,6 +13,7 @@ const Congrats: FC<CongratsProps> = ({orgName, projectId}) => {
   const onClick = useCallback(() => {
     mutate(`/projects/${projectId}`);
     setProjectContext(initContext);
+    Router.push('/app/projects');
   }, [projectId, setProjectContext]);
 
   return (
