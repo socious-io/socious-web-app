@@ -3,7 +3,7 @@ import {StepProps} from '@models/stepProps';
 import {useForm} from 'react-hook-form';
 import {TextInput, TextArea, Button, Avatar} from '@components/common';
 import {FromLayout} from '../../created/NewProject/Layout';
-import {schemaApplyProject, schemaLink} from '@api/projects/validation';
+import {schemaApplyProject} from '@api/projects/validation';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {useProjectContext} from '../../created/NewProject/context';
 import {LinkIcon, PaperClipIcon, TrashIcon} from '@heroicons/react/24/outline';
