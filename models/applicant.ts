@@ -17,6 +17,11 @@ export type TApplicantStatus =
   | 'APPROVED'
   | 'HIRED';
 
+export type TApplicantIdentity = IdentityMeta & {
+  country: string;
+  city: string;
+};
+
 export type TApplicant = {
   id: string;
   project_id: string;
@@ -40,7 +45,7 @@ export type TApplicant = {
   cv_name: string | null;
   share_contact_info: string | null;
   attachment: string | null;
-  user: IdentityMeta;
+  user: TApplicantIdentity;
   project: Project;
   organization: {
     id: string;
