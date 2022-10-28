@@ -99,6 +99,7 @@ export const schemaCreateProjectQuestion = Joi.object({
   question: Joi.string().required().messages({
     'any.required': 'Question cannot be empty.',
     'string.base': 'Question cannot be empty.',
+    'string.empty': 'Question cannot be empty.',
   }),
   required: Joi.boolean(),
   options: Joi.array()
@@ -108,13 +109,13 @@ export const schemaCreateProjectQuestion = Joi.object({
     .items({
       id: Joi.number(),
       option: Joi.string().trim().required().messages({
-        'string.base': 'Option can be empty.',
-        'string.empty': 'Option can be empty.',
+        'string.base': 'Option cannot be empty.',
+        'string.empty': 'Option cannot be empty.',
         'any.required': 'Option cannot be empty.',
       }),
     })
     .messages({
-      'array.min': 'Mininum of 2 choices required.',
+      'array.min': 'Minimum of 2 choices required.',
       'array.max': 'Maximum of 5 choices allowed.',
     }),
 });
