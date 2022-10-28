@@ -129,7 +129,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       <div className="flex flex-row items-center justify-between ">
         <Link href={`/app/organization/${org?.shortname}`}>
           <div className="flex cursor-pointer flex-row space-x-2">
-            <Avatar size="l" src={identity_meta?.image} />
+            <Avatar size="l" src={identity_meta?.image} type="organizations" />
             <div className="flex flex-col justify-center">
               <p className="text-black">{identity_meta?.name || ''}</p>
               <p className="text-graySubtitle">{orgLocation || ''}</p>
