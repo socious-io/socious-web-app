@@ -6,7 +6,7 @@ import Bubble from '../Bubble/Bubble';
 import Avatar from '@components/common/Avatar/Avatar';
 
 interface MessagesProps {
-  infiniteMessage: any[];
+  infiniteMessage: MessageType[];
   noMoreMessage: boolean;
   loadMore: () => void;
   activeChat: any;
@@ -25,10 +25,7 @@ const Messages = ({
   let previousMessage = useRef<MessageType | null>(null);
 
   const oldestMessage = useMemo(
-    () =>
-      infiniteMessage?.[infiniteMessage.length - 1]?.items?.[
-        infiniteMessage[infiniteMessage.length - 1].items?.length - 1
-      ],
+    () => infiniteMessage?.[infiniteMessage.length - 1],
     [infiniteMessage],
   );
 
@@ -62,7 +59,7 @@ const Messages = ({
 
   return (
     <>
-      {infiniteMessage?.[0]?.items.length > 0 ? (
+      {infiniteMessage.length > 0 ? (
         <div className="flex w-full grow flex-col overflow-y-auto p-4">
           <div
             className="hide-scrollbar mt-auto flex flex-col-reverse overflow-y-auto"
@@ -70,36 +67,33 @@ const Messages = ({
             onScroll={onScroll}
           >
             {/* ORDER IS REVERSED BC OF COL-REVERSE. */}
-            {infiniteMessage?.map((page: any) =>
-              page?.items?.map((message: MessageType) => (
-                <>
-                  {/* CONDITIONALLY SHOW THIS DATE */}
-                  {showDate(message)}
-                  <Bubble
-                    key={message.id}
-                    self={message.identity_id === currentIdentity?.id}
-                    content={message.text}
-                    userInfo={
-                      message.identity_id === currentIdentity?.id
-                        ? {
-                            identity_meta: currentIdentity.meta,
-                            identity_type: currentIdentity.type,
-                          }
-                        : otherParticipants.find(
-                            (x: any) =>
-                              x.identity_meta.id === message.identity_id,
-                          )
-                    }
-                  />
-                  {/* OLDEST MESSAGE */}
-                  {oldestMessage === message && (
-                    <p className="my-1 text-center">
-                      {isoToHumanTime(message.created_at)}
-                    </p>
-                  )}
-                </>
-              )),
-            )}
+            {infiniteMessage?.map((message) => (
+              <>
+                {/* CONDITIONALLY SHOW THIS DATE */}
+                {showDate(message)}
+                <Bubble
+                  key={message.id}
+                  self={message.identity_id === currentIdentity?.id}
+                  content={message.text}
+                  userInfo={
+                    message.identity_id === currentIdentity?.id
+                      ? {
+                          identity_meta: currentIdentity.meta,
+                          identity_type: currentIdentity.type,
+                        }
+                      : otherParticipants.find(
+                          (x: any) => x.identity_id === message.identity_id,
+                        )
+                  }
+                />
+                {/* OLDEST MESSAGE */}
+                {oldestMessage === message && (
+                  <p className="my-1 text-center">
+                    {isoToHumanTime(message.created_at)}
+                  </p>
+                )}
+              </>
+            ))}
             {/* ON NO MORE MESSAGES */}
             {noMoreMessage && (
               <p className="my-1 text-center"> No more Messages!</p>

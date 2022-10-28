@@ -5,9 +5,8 @@ import {
   ChevronLeftIcon,
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/outline';
-import {CreateMessageResponseType} from '@models/message';
+import {CreateMessageResponseType, MessageType} from '@models/message';
 import {useCallback, useEffect, useMemo, useRef} from 'react';
-import useSWRInfinite from 'swr/infinite';
 import Messages from '../Messages/Messages';
 import {useUser} from '@hooks';
 import {get} from 'utils/request';
@@ -15,6 +14,7 @@ import Router from 'next/router';
 import useSWR from 'swr';
 import {isoToHumanTime} from 'services/toHumanTime';
 import Link from 'next/link';
+import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 
 const INVALID_UUID = 'invalid input syntax for type uuid:';
 
@@ -24,44 +24,37 @@ type MainChatProps = {
 };
 
 const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
-  const getKey = useCallback(
-    (initialSize: number, previousData: any) => {
-      if (!activeChat?.id || (previousData && previousData?.items?.length < 10))
-        return null;
-      return `/chats/${activeChat.id}/messages?page=${initialSize + 1}`;
-    },
-    [activeChat],
-  );
-
   const {user, currentIdentity} = useUser();
 
   const {
-    data: infiniteMessage,
-    error: infiniteError,
-    mutate: mutateInfinite,
-    size,
-    setSize,
-  } = useSWRInfinite<any>(getKey, get, {
-    shouldRetryOnError: false,
-  });
+    flattenData: flattenMessages,
+    infiniteError,
+    isLoading,
+    mutateInfinite,
+    seeMore,
+    loadMore,
+  } = useInfiniteSWR<MessageType>(
+    activeChat?.id ? `/chats/${activeChat.id}/messages` : null,
+    {
+      shouldRetryOnError: false,
+    },
+  );
 
   if (infiniteError?.response?.data?.error?.startsWith(INVALID_UUID))
     Router.push('/app/chat');
 
-  const {data: participants, error: participantsError} = useSWR<any>(
+  const {
+    data: participants,
+    error: participantsError,
+    mutate: mutateParticipant,
+  } = useSWR<any>(
     activeChat?.id ? `/chats/${activeChat.id}/participants` : null,
     get,
   );
-  const noMoreMessage = useMemo(
-    () => size * 10 >= infiniteMessage?.[0]?.['total_count'],
-    [size, infiniteMessage],
-  );
-
-  const loadMore = useCallback(() => setSize((old) => old + 1), [setSize]);
 
   const latestMessage = useMemo(
-    () => infiniteMessage?.[0].items[0] || null,
-    [infiniteMessage],
+    () => flattenMessages?.[0] || null,
+    [flattenMessages],
   );
 
   const onSendMessage = useCallback(
@@ -89,11 +82,12 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
         console.error(error);
       }
     },
-    [mutateInfinite, activeChat],
+    [activeChat?.id, mutateInfinite],
   );
 
+  // READ MESSAGE
   useEffect(() => {
-    if (!activeChat || !latestMessage) return;
+    if (!activeChat || !latestMessage?.id) return;
     readMessage(activeChat.id, latestMessage.id)
       .then(() => {
         refreshSideBar();
@@ -109,10 +103,23 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
     [currentIdentity, participants],
   );
 
-  if (
-    (!participants && !participantsError) ||
-    (!infiniteMessage && !infiniteError)
-  )
+  // On IdentityChange Refreshing Sidebar and route back to /app/chat.
+  useEffect(() => {
+    if (!currentIdentity?.id || !participants) return;
+    if (
+      !participants?.items?.find(
+        (participant: any) => participant?.identity_id === currentIdentity?.id,
+      )
+    ) {
+      Router.push('/app/chat');
+    } else {
+      mutateParticipant();
+    }
+    refreshSideBar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIdentity?.id]);
+
+  if ((!participants && !participantsError) || isLoading)
     return <p>Loading....</p>;
 
   const interlocutor = otherParticipants?.[0];
@@ -166,8 +173,8 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
           {/* <EllipsisHorizontalIcon className="w-7 rounded-full p-1" /> */}
         </div>
         <Messages
-          infiniteMessage={infiniteMessage ?? []}
-          noMoreMessage={noMoreMessage}
+          infiniteMessage={flattenMessages ?? []}
+          noMoreMessage={!seeMore}
           loadMore={loadMore}
           activeChat={activeChat}
           otherParticipants={otherParticipants}

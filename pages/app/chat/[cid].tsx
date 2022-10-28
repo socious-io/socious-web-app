@@ -1,4 +1,3 @@
-import React from 'react';
 import ChatLayout from '@components/common/Chat/ChatLayout/ChatLayout';
 import MainChat from '@components/common/Chat/MainChat/MainChat';
 import {useRouter} from 'next/router';
