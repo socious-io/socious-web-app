@@ -8,10 +8,15 @@ import ProjectCard from './ProjectCard';
 
 interface Props {
   selectBar: string;
-  projectDetail: Project;
+  data?: Project;
+  projectId?: string;
 }
-const SideBar = ({selectBar, projectDetail}: Props) => {
+const SideBar = ({selectBar, data}: Props) => {
   const {user} = useUser();
+
+  if (!data) {
+    return <></>;
+  }
 
   return (
     <div className="hidden w-80 md:flex" aria-label="Sidebar">
@@ -26,15 +31,10 @@ const SideBar = ({selectBar, projectDetail}: Props) => {
           </span>
         </div>
         <div className="cursor-pointer space-y-4 overflow-y-auto bg-gray-50">
-          <ProjectCard
-            username={user?.username}
-            projectDetail={projectDetail}
-          />
+          <ProjectCard username={user?.username} projectDetail={data} />
         </div>
-        {selectBar == 'APPLICANT' && (
-          <ApplicantsContent projectId={projectDetail.id} />
-        )}
-        {selectBar == 'HIRE' && <HiredContent projectId={projectDetail.id} />}
+        {selectBar == 'APPLICANT' && <ApplicantsContent projectId={data.id} />}
+        {selectBar == 'HIRE' && <HiredContent projectId={data.id} />}
       </div>
     </div>
   );
