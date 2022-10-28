@@ -28,16 +28,20 @@ import QuestionDetail from '../../created/NewProject/QuestionDetail';
 import {TQuestionsResponse} from '@models/question';
 
 type CreateProjectMainType = {
-  className?: string;
+  projectId: string;
   skills: any[];
-  data: Project;
-  mutate: KeyedMutator<Project>;
+  className?: string;
+  data?: {data: Project; mutate: KeyedMutator<Project>};
 };
 
 const libraries: Libraries = ['places'];
 
 const Detail: FC<CreateProjectMainType> = (props) => {
-  const {data, className, skills, mutate} = props;
+  const {className, skills} = props;
+  /* @desc: data will always be present in this component, so casting is safe */
+  const {data, mutate} = props.data as NonNullable<
+    CreateProjectMainType['data']
+  >;
   const {isLoaded} = useGoogleMapsScript({
     googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
     libraries,
