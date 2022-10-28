@@ -4,8 +4,8 @@ import TextArea from '@components/common/TextArea/TextArea';
 import Button from '@components/common/Button/Button';
 import {FromLayout} from '../../created/NewProject/Layout';
 import {useProjectContext} from '../../created/NewProject/context';
-import {joiResolver} from '@hookform/resolvers/joi';
-import {schemaLink} from '@api/projects/validation';
+// import {joiResolver} from '@hookform/resolvers/joi';
+// import {schemaLink} from '@api/projects/validation';
 import TextInput from '@components/common/TextInput/TextInput';
 
 const AddLink = () => {
@@ -13,7 +13,7 @@ const AddLink = () => {
     formState: {errors, isValid},
     setValue,
   } = useForm({
-    resolver: joiResolver(schemaLink),
+    // resolver: joiResolver(schemaLink),
   });
   const {ProjectContext, setProjectContext} = useProjectContext();
   const [name, setName] = useState<string>(' ');
