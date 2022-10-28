@@ -20,6 +20,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "axios": "^1.1.2",
+    "cypress": "^10.11.0",
     "dayjs": "^1.11.5",
     "eslint-plugin-prettier": "^4.2.1",
     "firebase": "^9.10.0",
@@ -106,13 +107,16 @@
     "export": "next export",
     "start": "next start",
     "lint": "next lint",
+    "test": "npm run lint && npm run cypress:headless",
     "prettier:check": "prettier --check **/*.ts **/*.tsx",
     "prettier:fix": "prettier --write  **/*.ts **/*.tsx",
     "update-all": "ncu -u",
     "build-mobile": "next build && next export && npx cap sync",
     "ios": "npx cap run ios",
     "android": "npx cap run android",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run"
   },
   "lint-staged": {
     "*.js": "next lint",
