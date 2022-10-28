@@ -4,13 +4,14 @@ import {useCallback, useEffect, useMemo, useRef} from 'react';
 import {isoToHumanTime} from 'services/toHumanTime';
 import Bubble from '../Bubble/Bubble';
 import Avatar from '@components/common/Avatar/Avatar';
+import {IChat, IParticipant} from '@models/chat';
 
 interface MessagesProps {
   infiniteMessage: MessageType[];
   noMoreMessage: boolean;
   loadMore: () => void;
-  activeChat: any;
-  otherParticipants: any[];
+  activeChat: IChat;
+  otherParticipants: IParticipant[];
 }
 
 const Messages = ({

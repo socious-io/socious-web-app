@@ -1,10 +1,7 @@
 import {readMessage, sendMessage} from '@api/chat/message/actions';
 import Avatar from '@components/common/Avatar/Avatar';
 import CommentField from '@components/common/Post/CommentField/CommentField';
-import {
-  ChevronLeftIcon,
-  EllipsisHorizontalIcon,
-} from '@heroicons/react/24/outline';
+import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import {CreateMessageResponseType, MessageType} from '@models/message';
 import {useCallback, useEffect, useMemo, useRef} from 'react';
 import Messages from '../Messages/Messages';
@@ -15,11 +12,12 @@ import useSWR from 'swr';
 import {isoToHumanTime} from 'services/toHumanTime';
 import Link from 'next/link';
 import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
+import {IChat, IParticipantsResponse} from '@models/chat';
 
 const INVALID_UUID = 'invalid input syntax for type uuid:';
 
 type MainChatProps = {
-  activeChat: any;
+  activeChat: IChat;
   refreshSideBar: () => void;
 };
 
@@ -47,13 +45,13 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
     data: participants,
     error: participantsError,
     mutate: mutateParticipant,
-  } = useSWR<any>(
+  } = useSWR<IParticipantsResponse>(
     activeChat?.id ? `/chats/${activeChat.id}/participants` : null,
     get,
   );
 
   const latestMessage = useMemo(
-    () => flattenMessages?.[0] || null,
+    () => flattenMessages[0] || null,
     [flattenMessages],
   );
 
@@ -177,7 +175,7 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
           noMoreMessage={!seeMore}
           loadMore={loadMore}
           activeChat={activeChat}
-          otherParticipants={otherParticipants}
+          otherParticipants={otherParticipants ?? []}
         />
         <CommentField
           src={
