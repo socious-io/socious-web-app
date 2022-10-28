@@ -30,7 +30,11 @@ const Detail: NextPage<ProjectProps> = ({skills}) => {
       <GeneralLayout hasDetailNavbar detailNavbarTitle="Project details">
         <SideBar selectBar="PROJECT_DETAIL" projectDetail={data} />
         <DetailLayout>
-          <DetailContent mutate={mutate} data={data} skills={skills} />
+          <DetailContent
+            data={{data, mutate}}
+            skills={skills}
+            projectId={data.id}
+          />
         </DetailLayout>
       </GeneralLayout>
     </ProjectContextProvider>
