@@ -3,7 +3,7 @@ import {StepProps} from '@models/stepProps';
 import {useForm} from 'react-hook-form';
 import {TextInput, TextArea, Button, Avatar} from '@components/common';
 import {FromLayout} from '../../created/NewProject/Layout';
-import {schemaApplyProject, schemaLink} from '@api/projects/validation';
+import {schemaApplyProject} from '@api/projects/validation';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {useProjectContext} from '../../created/NewProject/context';
 import {LinkIcon, PaperClipIcon, TrashIcon} from '@heroicons/react/24/outline';
@@ -36,21 +36,12 @@ export const TitlePart: FC<{
 export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
   const {data} = useSWR<any>(`/orgs/${project?.identity_id}`, get);
-  const [name, setName] = useState<string>(' ');
-  const [link, setLink] = useState<string>(' ');
 
   const {state: showLinkFields, handlers: linkFieldsHandlers} = useToggle();
 
   const {
-    formState: {errors: linkErrors},
-    setValue: linkSetValue,
-  } = useForm({
-    resolver: joiResolver(schemaLink),
-  });
-
-  const {
     handleSubmit,
-    formState: {isValid, errors},
+    formState: {isValid, errors, isSubmitting},
     setValue,
   } = useForm({
     resolver: joiResolver(schemaApplyProject),
@@ -62,18 +53,16 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
         shouldValidate: true,
       });
     } else if (ProjectContext?.cv_name) {
-      linkSetValue('cv_name', ProjectContext.cv_name, {
+      setValue('cv_name', ProjectContext.cv_name, {
         shouldValidate: true,
       });
-      setName(ProjectContext.cv_name);
     }
     if (ProjectContext?.cv_link) {
-      linkSetValue('cv_link', ProjectContext.cv_link, {
+      setValue('cv_link', ProjectContext.cv_link, {
         shouldValidate: true,
       });
-      setLink(ProjectContext.cv_link);
     }
-  }, [ProjectContext, linkSetValue, setValue]);
+  }, [ProjectContext, setValue]);
 
   const handleChange = (field: string, input: string | boolean) => {
     setValue(field, input, {
@@ -91,15 +80,18 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
       className="flex h-full w-full grow flex-col sm:grow-0"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <FromLayout type="FULL">
-        <div className="overflow-y-scroll px-4 pt-4">
+      <FromLayout type="FULL" className="!grow">
+        <div className="hide-scrollbar overflow-y-scroll px-4 pt-4">
           <p className="font-bold text-black">{project?.title}</p>
           <div className="mt-3 flex flex-row space-x-2">
             <Avatar size="s" type="organizations" />
             <p className="text-black">{data?.name}</p>
           </div>
           <p className="mt-4 text-black">{project?.description}</p>
-          <TitlePart title="Cover letter" />
+          <TitlePart
+            title="Cover letter"
+            className="-mx-4 border-b-0 px-4 text-xl"
+          />
           <TextArea
             required
             label="Message"
@@ -108,14 +100,15 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
             value={ProjectContext.cover_letter}
             containerClassName="mt-6"
             className="border-gray border-1  overflow-y-scroll focus:border-none"
-            errorMessage={errors?.['content']?.message}
+            errorMessage={errors?.['cover_letter']?.message}
             onChange={(e) => handleChange('cover_letter', e.target.value)}
           />
 
-          {/* Attachment & Link Section */}
-          <TitlePart title="Attach CV" className="border-y-0 sm:hidden" />
-          <div className="hidden sm:block">
-            <TitlePart title="Resume" className="border-y-0" />
+          <div>
+            <TitlePart
+              title="Resume"
+              className="-mx-4 border-b-0 px-4 text-xl"
+            />
             {!ProjectContext.attachment?.type && (
               <>
                 <p className="text-black">Upload your resume</p>
@@ -131,7 +124,7 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
                 onClick={() =>
                   setProjectContext({
                     ...ProjectContext,
-                    formStep: 4,
+                    formStep: 2,
                   })
                 }
                 className="flex h-9 w-36 items-center justify-center p-0"
@@ -142,22 +135,6 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
                 Upload File
               </Button>
             )}
-
-            {/* Attach Link. Only for MOBILE */}
-            <Button
-              onClick={() =>
-                setProjectContext({
-                  ...ProjectContext,
-                  formStep: 3,
-                })
-              }
-              className="flex h-9 w-36 items-center justify-center p-0 sm:hidden"
-              type="button"
-              variant="outline"
-              leftIcon={() => <LinkIcon width={20} height={20} />}
-            >
-              Attach Link
-            </Button>
           </div>
           {ProjectContext.attachment?.type && (
             <div className="flex items-center space-x-2">
@@ -177,8 +154,11 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
             </div>
           )}
 
-          <div className="hidden sm:block">
-            <TitlePart title="Link" className="-mb-2 border-y-0" />
+          <div className="">
+            <TitlePart
+              title="Link"
+              className="-mx-4 -mb-2 border-b-0 px-4 text-xl"
+            />
             {!showLinkFields ? (
               <Button
                 onClick={() => linkFieldsHandlers.on()}
@@ -193,77 +173,50 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
               <>
                 <div className="mt-2 space-y-4 pl-0 ">
                   <TextInput
-                    required
                     label="Link name"
-                    placeholder="Link Url"
-                    value={name}
-                    containerClassName=""
+                    placeholder="Link name"
                     className="border-gray border-1  overflow-y-scroll focus:border-none"
-                    errorMessage={linkErrors?.['cv_name']?.message}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                      linkSetValue('cv_name', e.target.value, {
-                        shouldDirty: true,
-                        shouldValidate: true,
-                      });
-                      setProjectContext({
-                        ...ProjectContext,
-                        ['cv_name']: e.target.value,
-                      });
-                    }}
+                    errorMessage={errors?.['cv_name']?.message}
+                    onChange={(e) => handleChange('cv_name', e.target.value)}
                   />
                 </div>
                 <div className="mt-2 space-y-4 pl-0 ">
                   <TextInput
-                    required
                     label="Link URL"
                     placeholder="Link url"
-                    value={link}
-                    containerClassName=""
                     className="border-gray border-1  overflow-y-scroll focus:border-none"
-                    errorMessage={linkErrors?.['cv_link']?.message}
-                    onChange={(e) => {
-                      setLink(e.target.value);
-                      linkSetValue('cv_link', e.target.value, {
-                        shouldDirty: true,
-                        shouldValidate: true,
-                      });
-                      setProjectContext({
-                        ...ProjectContext,
-                        ['cv_link']: e.target.value,
-                      });
-                    }}
+                    errorMessage={errors?.['cv_link']?.message}
+                    onChange={(e) => handleChange('cv_link', e.target.value)}
                   />
                 </div>
               </>
             )}
           </div>
-          <TitlePart title="Contact info" />
+          <TitlePart
+            title="Contact info"
+            className="-mx-4 border-b-0 px-4 text-xl"
+          />
 
-          <div className="my-4 flex w-full flex-row  justify-between">
+          <div className="mb-4 flex w-full flex-row  justify-between">
             <div>Share contact information with Organization?</div>
             <Switch
               onChange={(c) => handleChange('share_contact_info', c)}
               value={ProjectContext.share_contact_info}
             />
           </div>
+          <div className="-mx-4 flex items-end justify-center border-t p-4 pb-12">
+            <Button
+              disabled={!isValid || isSubmitting}
+              className="flex h-11 w-full items-center justify-center"
+              type="submit"
+              variant="fill"
+              value="Submit"
+            >
+              Submit application
+            </Button>
+          </div>
         </div>
       </FromLayout>
-      <div className=" flex items-end justify-center border-t p-4 pb-12 sm:justify-end sm:pb-4">
-        <Button
-          disabled={
-            !isValid ||
-            !!linkErrors?.['cv_link']?.message ||
-            !!linkErrors['cv_name']?.message
-          }
-          className="flex h-11 w-full items-center justify-center sm:w-52"
-          type="submit"
-          variant="fill"
-          value="Submit"
-        >
-          Review application
-        </Button>
-      </div>
     </form>
   );
 };
