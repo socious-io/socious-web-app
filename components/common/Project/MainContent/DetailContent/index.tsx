@@ -125,7 +125,7 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
     } else if (isStep2) {
       return <ProjectSkill onSubmit={onSubmit} rawSkills={skills} />;
     } else if (isStep3) {
-      return <ProjectQuestion onSubmit={onSubmit} />;
+      return <ProjectQuestion onSubmit={onSubmit} type="EDIT" />;
     } else if (isStep4) {
       return <QuestionDetail projectId={data.id} />;
     }

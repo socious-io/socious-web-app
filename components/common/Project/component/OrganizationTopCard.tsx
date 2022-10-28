@@ -76,8 +76,6 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
 
       // Applying
       try {
-        console.log('Applying with this body');
-        console.table(postBody);
         if (id) await applyProject(id, postBody);
         setProjectContext({
           ...ProjectContext,
