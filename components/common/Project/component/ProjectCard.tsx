@@ -121,9 +121,9 @@ export default function ProjectCard({
         <div className="mt-4 flex justify-between">
           <dt
             className="flex text-sm font-normal text-gray-400"
-            title={project.created_at}
+            title={project.updated_at}
           >
-            {isoToHumanTime(project.created_at)}
+            {isoToHumanTime(project.updated_at)}
           </dt>
           {/* <div className="flex gap-2 text-primary">
             <div className="relative">

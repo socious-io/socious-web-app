@@ -4,6 +4,14 @@ import {Question} from './question';
 
 export type TProjectStatus = 'DRAFT' | 'EXPIRE' | 'ACTIVE';
 
+export type TProjectIdentityMeta = Required<
+  Omit<IdentityMeta, 'username' | 'avatar'>
+> & {
+  address?: string;
+  city?: string;
+  country?: string;
+};
+
 export interface Project {
   id: string;
   title: string;
@@ -24,7 +32,7 @@ export interface Project {
   remote_preference: string;
   identity_id: string;
   identity_type: IdentityType;
-  identity_meta: IdentityMeta;
+  identity_meta: TProjectIdentityMeta;
   status: TProjectStatus;
   created_at: string;
   expires_at?: string;
