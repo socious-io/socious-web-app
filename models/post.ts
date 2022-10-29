@@ -1,4 +1,11 @@
-import {IdentityType} from './identity';
+import {IdentityMeta, IdentityType, MetaWithAddress} from './identity';
+
+export type TSharedFromIdentity = {
+  id: string;
+  type: IdentityMeta;
+  meta: MetaWithAddress;
+  created_at: string;
+};
 
 interface LoosePostBodyType {
   content?: string;
@@ -22,36 +29,29 @@ export type SharePostBodyType = LoosePostBodyType;
 
 export type EditPostBodyType = LoosePostBodyType;
 
-export interface IPost {
+export type ISharedPost = {
   id: string;
   content: string;
   identity_id: string;
   created_at: string;
   updated_at: string;
-  deleted_at: string;
-  causes_tags: string[] | string;
-  hashtags: string;
-  identity_tags: string;
-  old_id: number;
-  media: {id: string; url: string}[] | null;
+  deleted_at: string | null;
+  causes_tags: string[];
+  hashtags: string | null;
+  identity_tags: string | null;
+  media: [string];
   likes: number;
-  shared: number;
-  shared_id: string;
-  search_tsv: string;
-  identity_type: IdentityType;
-  identity_meta: {
-    id: string;
-    name: string;
-    email: string;
-    avatar: string;
-    status: string;
-    username: string;
-    image: string;
-    shortname: string;
-  };
   liked: boolean;
-  shared_post: any;
-  shared_from_identity: {
-    meta: string;
-  };
+  shared: number;
+  shared_id: string | null;
+  old_id: string | null;
+  search_tsv: string;
+};
+
+export interface IPost extends Omit<ISharedPost, 'media'> {
+  media: {id: string; url: string}[] | null;
+  identity_type: IdentityType;
+  identity_meta: MetaWithAddress;
+  shared_post: ISharedPost;
+  shared_from_identity: TSharedFromIdentity;
 }
