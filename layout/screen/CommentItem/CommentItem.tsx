@@ -14,11 +14,12 @@ import {Avatar, Button} from '@components/common';
 // Icons
 import {EllipsisHorizontalIcon, HeartIcon} from '@heroicons/react/24/outline';
 import {HeartIcon as LikedIcon} from '@heroicons/react/24/solid';
+import {IdentityType, MetaWithAddress} from '@models/identity';
 
 //Type
 export interface CommentItemProps {
   content: string;
-  identity: any;
+  identity: MetaWithAddress & {identity_type: IdentityType};
   time: string;
   passion?: string;
   likes: number;
