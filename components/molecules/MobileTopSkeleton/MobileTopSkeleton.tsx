@@ -2,8 +2,9 @@ import Router from 'next/router';
 import {memo} from 'react';
 import {twMerge} from 'tailwind-merge';
 
+export type TOption = {value: string; url: string; id: string};
 type MobileTopSkeletonProps = {
-  list: {value: string; url: string; id: string}[];
+  list: TOption[];
   selectedTab: string;
 };
 

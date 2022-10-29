@@ -7,27 +7,34 @@ import {GeneralLayout} from 'layout';
 import SideBar from '@components/common/Project/SideBar/SideBar';
 import ApplicantsContent from '@components/common/Project/created/ApplicantsContent';
 
-// Utils/services
+// Utils/hooks
 import {get} from 'utils/request';
+import {useUser} from '@hooks';
 
 // Types
 import {TApplicantsResponse} from '@models/applicant';
 import ProjectMobileTop from '@components/common/Project/ProjectMobileTop/ProjectMobileTop';
 import ApplicantsList from '@components/common/Project/SideBar/ApplicantsContent';
+import {Project} from '@models/project';
 
 const Applicants = () => {
   const router = useRouter();
   const {projectId} = router.query;
+  const {currentIdentity} = useUser();
+  const {data: project, error: projectError} = useSWR<Project>(
+    projectId ? `/projects/${projectId}` : null,
+    get,
+  );
   const {
     data: applicantsData,
     error: applicantsError,
     mutate: mutateApplicant,
   } = useSWR<TApplicantsResponse>(
-    projectId ? `/projects/${projectId}/applicants` : null,
+    project?.id ? `/projects/${project?.id}/applicants` : null,
     get,
   );
 
-  if (!applicantsData && !applicantsError)
+  if ((!applicantsData && !applicantsError) || (!project && !projectError))
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center">
         <GridLoader color="#36d7b7" />
@@ -61,6 +68,7 @@ const Applicants = () => {
             projectId={
               applicantsData?.items?.[0]?.project_id ?? (projectId as string)
             }
+            owner={project?.identity_id === currentIdentity?.id}
           />
           <div className="w-full pb-4 md:hidden">
             <ApplicantsList

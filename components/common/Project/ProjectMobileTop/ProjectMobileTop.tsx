@@ -1,23 +1,37 @@
 import {memo} from 'react';
-import MobileTopSkeleton from '@components/molecules/MobileTopSkeleton/MobileTopSkeleton';
+import MobileTopSkeleton, {
+  TOption,
+} from '@components/molecules/MobileTopSkeleton/MobileTopSkeleton';
 
-type ProjectMobileTopProps = {selectedTab: string; projectId: string};
+type ProjectMobileTopProps = {
+  selectedTab: string;
+  projectId: string;
+  owner: boolean;
+};
 
-const ProjectMobileTop = ({selectedTab, projectId}: ProjectMobileTopProps) => {
+const ProjectMobileTop = ({
+  selectedTab,
+  projectId,
+  owner,
+}: ProjectMobileTopProps) => {
+  const publicList: TOption[] = [
+    {
+      id: 'OVERVIEW',
+      value: 'Overview',
+      url: `/app/projects/${projectId}`,
+    },
+  ];
+  const privateList = [
+    ...publicList,
+    {
+      id: 'APPLICANTS',
+      value: 'Applicants',
+      url: `/app/projects/created/${projectId}/applicants`,
+    },
+  ];
   return (
     <MobileTopSkeleton
-      list={[
-        {
-          id: 'OVERVIEW',
-          value: 'Overview',
-          url: `/app/projects/${projectId}`,
-        },
-        {
-          id: 'APPLICANTS',
-          value: 'Applicants',
-          url: `/app/projects/created/${projectId}/applicants`,
-        },
-      ]}
+      list={owner ? privateList : publicList}
       selectedTab={selectedTab}
     />
   );
