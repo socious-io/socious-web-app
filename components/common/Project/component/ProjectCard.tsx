@@ -6,7 +6,7 @@ import {getText} from '@socious/data';
 import {FC} from 'react';
 import {isoToHumanTime} from 'services/toHumanTime';
 import {useFormattedLocation} from 'services/formatLocation';
-import Markdown from 'markdown-to-jsx';
+import Markdown, {MarkdownToJSX} from 'markdown-to-jsx';
 import Router from 'next/router';
 
 type ProjectCardProps = {
@@ -30,6 +30,13 @@ export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
       })}
     </div>
   );
+};
+
+const convertMarkdownToJSX = (
+  value: string,
+  options?: MarkdownToJSX.Options,
+): JSX.Element => {
+  return value ? <Markdown options={options}>{value}</Markdown> : <></>;
 };
 
 export default function ProjectCard({
@@ -87,15 +94,12 @@ export default function ProjectCard({
         </div>
         <div className="flex flex-row">
           <p className="my-1 text-sm">
-            {project.description?.length > 200 ? (
-              <Markdown options={{wrapper: 'article'}}>
-                {project.description?.slice(0, 200) + '...'}
-              </Markdown>
-            ) : (
-              <Markdown options={{wrapper: 'article'}}>
-                {project.description}
-              </Markdown>
-            )}
+            {project.description?.length > 200
+              ? convertMarkdownToJSX(
+                  project.description?.slice(0, 200) + '...',
+                  {wrapper: 'article'},
+                )
+              : convertMarkdownToJSX(project.description, {wrapper: 'article'})}
 
             {project.description?.length > 200 && (
               <span className="text-secondary"> See more</span>
@@ -104,11 +108,10 @@ export default function ProjectCard({
         </div>
         <div className="flex flex-row">
           <p className="my-1 text-sm">
-            {project?.description && (
-              <Markdown options={{wrapper: 'article'}}>
-                {project?.description?.slice?.(0, 200)}
-              </Markdown>
-            )}
+            {project?.description &&
+              convertMarkdownToJSX(project?.description?.slice?.(0, 200), {
+                wrapper: 'article',
+              })}
           </p>
         </div>
 
