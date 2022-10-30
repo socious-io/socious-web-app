@@ -84,10 +84,10 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
       // Mutation for questionss
       if (questions?.[0])
         mutate(`/projects/${questions[0].project_id}/questions`, questions, {
-          populateCache(result, _currentData) {
+          populateCache: (result, _currentData) => {
             return result;
           },
-          revalidate: false,
+          revalidate: true,
         });
       setProjectContext({
         ...ProjectContext,

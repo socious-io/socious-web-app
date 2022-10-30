@@ -134,7 +134,12 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
   return (
     <div className="mb-10 w-full ">
       {currentIdentity?.id === data?.identity_id ? (
-        <DetailContent project={data} questions={questions?.questions} />
+        <DetailContent
+          project={data}
+          questions={questions?.questions?.sort(
+            (x, y) => Date.parse(x.created_at) - Date.parse(y.created_at),
+          )}
+        />
       ) : (
         <div
           className={twMerge(
