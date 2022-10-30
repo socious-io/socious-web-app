@@ -125,17 +125,18 @@ export const schemaCreateProjectQuestionBody = Joi.object({
 });
 
 export const schemaApplyProject = Joi.object({
-  cover_letter: Joi.string().trim().required(),
+  cover_letter: Joi.string().trim().required().messages({
+    'any.required': 'Cover letter is required.',
+    'string.empty': `Cover letter is required.`,
+    'string.base': `Cover letter is required.`,
+  }),
   share_contact_info: Joi.boolean(),
-});
-
-export const schemaLink = Joi.object({
-  cv_link: Joi.string().uri().required().allow('', null).messages({
+  cv_link: Joi.string().uri().allow('', null).messages({
     'string.empty': `Link URL is required.`,
     'string.base': `Link URL is required.`,
     'string.uri': `Please enter a valid url.`,
   }),
-  cv_name: Joi.string().required().allow('', null).messages({
+  cv_name: Joi.string().allow('', null).messages({
     'string.empty': `Link name is a string.`,
     'string.base': `Link name is required.`,
   }),

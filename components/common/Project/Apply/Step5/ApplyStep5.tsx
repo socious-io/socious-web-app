@@ -24,49 +24,49 @@ const RecentGallery = () => {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <FromLayout type="FULL">
+      <FromLayout type="FULL" className="!grow">
         <div className="border-offSetColor border-b py-2 px-4">
-          <SearchBar />
+          <SearchBar bgColor="offWhite" placeholder="Search" />
         </div>
-        <div className="flex grow flex-wrap gap-4 overflow-y-auto py-2 px-4 sm:grow-0">
+        <div className="grid grow grid-cols-2 gap-4 overflow-y-auto overflow-x-hidden py-2 px-4 md:grid-cols-2">
           {file?.type && (
             <div className="h-auto w-48">
               <DocumentIcon className="w-12" />
               <p>{file.name}</p>
-              {error && <p>File limit exceeded.</p>}
+              {error && <p className="text-error">File limit exceeded.</p>}
             </div>
           )}
         </div>
+        <div className="flex items-end justify-around border-t bg-offWhite p-3 pb-8 sm:pb-4">
+          <Button
+            type="button"
+            variant="link"
+            className="m-0 flex flex-col justify-center p-0"
+          >
+            <ClockIcon className="w-7" />
+            Recents
+          </Button>
+          <ImageUploader
+            withPreview={false}
+            onChange={(file: any) => setFile(file)}
+            acceptType=".pdf, .docx, .doc"
+          >
+            {(setOpen: any, imagePreviewUrl: any) => {
+              return (
+                <Button
+                  type="button"
+                  variant="link"
+                  className="m-0 flex flex-col justify-center p-0 text-primaryLight"
+                  onClick={setOpen}
+                >
+                  <DocumentIcon className="w-7" />
+                  Browse
+                </Button>
+              );
+            }}
+          </ImageUploader>
+        </div>
       </FromLayout>
-      <div className="flex items-end justify-around border-t bg-offWhite  p-4 pb-10">
-        <Button
-          type="button"
-          variant="link"
-          className="flex flex-col justify-center"
-        >
-          <ClockIcon className="w-7" />
-          Recents
-        </Button>
-        <ImageUploader
-          withPreview={false}
-          onChange={(file: any) => setFile(file)}
-          acceptType=".pdf, .docx, .doc"
-        >
-          {(setOpen: any, imagePreviewUrl: any) => {
-            return (
-              <Button
-                type="button"
-                variant="link"
-                className="flex flex-col justify-center text-primaryLight"
-                onClick={setOpen}
-              >
-                <DocumentIcon className="w-7" />
-                Browse
-              </Button>
-            );
-          }}
-        </ImageUploader>
-      </div>
     </div>
   );
 };

@@ -1,10 +1,8 @@
 import {Avatar} from '@components/common';
-import {defaultProject, ProjectProps} from 'models/project';
+import {ProjectProps} from 'models/project';
 import {Button} from '@components/common';
 import {ApplyStep1} from '../Apply/Step1/ApplyStep1';
-import ApplyStep2 from '../Apply/Step2/ApplyStep2';
 import ApplyStep3 from '../Apply/Step3/ApplyStep3';
-import ApplyStep4 from '../Apply/Step4/ApplyStep4';
 import {FC} from 'react';
 import useUser from 'hooks/useUser/useUser';
 import {getText} from '@socious/data';
@@ -15,11 +13,11 @@ import {
   ClockIcon,
 } from '@heroicons/react/24/outline';
 import {ApplyLayout} from '../MyApplication/ApplyProject';
-import {initContext, useProjectContext} from '../created/NewProject/context';
+import {useProjectContext} from '../created/NewProject/context';
 import {applyProject} from '@api/projects/actions';
 import {ApplyProjectType} from '@models/project';
 import {toast} from 'react-toastify';
-import useSWR from 'swr';
+import useSWR, {mutate} from 'swr';
 import {useFormattedLocation} from 'services/formatLocation';
 import Link from 'next/link';
 import RecentGallery from '../Apply/Step5/ApplyStep5';
@@ -38,8 +36,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
     applied,
   } = project;
   // FIXME let's add this to identity_meta instead
-  const {data: org} = useSWR(`/orgs/${identity_meta.id}`);
-  const orgLocation = useFormattedLocation(org);
+  const orgLocation = useFormattedLocation(identity_meta);
   const {identities, currentIdentity} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);
   const {ProjectContext, setProjectContext} = useProjectContext();
@@ -48,11 +45,9 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
-  const isStep3 = ProjectContext.formStep === 3;
-  const isStep4 = ProjectContext.formStep === 4;
 
   const onSubmit = async () => {
-    if (isStep1) {
+    if (isStep0) {
       const postBody: ApplyProjectType = {
         cover_letter: ProjectContext.cover_letter,
       };
@@ -71,12 +66,14 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
           if (attachment) postBody.attachment = attachment;
         } catch (e) {
           console.error(e);
+          return;
         }
       }
 
       // Applying
       try {
         if (id) await applyProject(id, postBody);
+        mutate(`/projects/${id}`);
         setProjectContext({
           ...ProjectContext,
           formStep: ProjectContext.formStep + 1,
@@ -95,12 +92,13 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
     if (isStep0) {
       return <ApplyStep1 onSubmit={onSubmit} project={project} />;
     } else if (isStep1) {
-      return <ApplyStep2 onSubmit={onSubmit} project={project} />;
+      return (
+        <ApplyStep3
+          orgName={project.identity_meta?.name}
+          projectId={project.id}
+        />
+      );
     } else if (isStep2) {
-      return <ApplyStep3 orgName={project.identity_meta?.name} />;
-    } else if (isStep3) {
-      return <ApplyStep4 />;
-    } else if (isStep4) {
       return <RecentGallery />;
     }
   };
@@ -110,12 +108,8 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       case 0:
         return 'Apply';
       case 1:
-        return 'Review application';
-      case 2:
         return '';
-      case 3:
-        return 'Attach a link';
-      case 4:
+      case 2:
         return 'Recents';
       default:
         return '';
@@ -125,9 +119,9 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   return (
     <div className="space-y-6 p-4">
       <div className="flex flex-row items-center justify-between ">
-        <Link href={`/app/organization/${org?.shortname}`}>
+        <Link href={`/app/organization/${identity_meta.shortname}`}>
           <div className="flex cursor-pointer flex-row space-x-2">
-            <Avatar size="l" src={identity_meta?.image} />
+            <Avatar size="l" src={identity_meta?.image} type="organizations" />
             <div className="flex flex-col justify-center">
               <p className="text-black">{identity_meta?.name || ''}</p>
               <p className="text-graySubtitle">{orgLocation || ''}</p>
@@ -153,18 +147,19 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
             <p className="ml-2 text-sm text-graySubtitle">{projectType}</p>
           </div>
         )}
-        {(payment_range_lower || payment_range_higher) && (
-          <div className="flex flex-row">
-            <CurrencyDollarIcon
-              width={20}
-              height={20}
-              className="text-primary"
-            />
-            <p className="pl-2 text-sm text-graySubtitle ">{`$${
-              payment_range_lower || ''
-            }-$${payment_range_higher || ''}`}</p>
-          </div>
-        )}
+        {projectType === 'PAID' &&
+          (payment_range_lower || payment_range_higher) && (
+            <div className="flex flex-row">
+              <CurrencyDollarIcon
+                width={20}
+                height={20}
+                className="text-primary"
+              />
+              <p className="pl-2 text-sm text-graySubtitle ">{`$${
+                payment_range_lower || ''
+              }-$${payment_range_higher || ''}`}</p>
+            </div>
+          )}
       </div>
       <div className="mt-4 flex space-x-5">
         {/* <p className="pl-2 text-sm text-graySubtitle ">{experience_level}</p> */}
