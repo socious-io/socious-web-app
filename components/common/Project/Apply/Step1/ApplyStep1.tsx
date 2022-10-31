@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import {StepProps} from '@models/stepProps';
 import {useForm} from 'react-hook-form';
 import {TextInput, TextArea, Button, Avatar} from '@components/common';
@@ -7,16 +7,33 @@ import {schemaApplyProject} from '@api/projects/validation';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {useProjectContext} from '../../created/NewProject/context';
 import {LinkIcon, PaperClipIcon, TrashIcon} from '@heroicons/react/24/outline';
-import {Switch} from '@components/common';
+import {Switch, Checkbox} from '@components/common';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {Project} from 'models/project';
 import {twMerge} from 'tailwind-merge';
-import {PlusIcon} from '@heroicons/react/24/solid';
+import {ExclamationCircleIcon, PlusIcon} from '@heroicons/react/24/solid';
 import {useToggle} from '@hooks';
+import {Question} from '@models/question';
+
+export type TFormAnswer = {
+  id: string;
+  selected_option: number | null;
+  answer: string | null;
+  required: boolean;
+  checkbox: boolean;
+};
+
+type CheckBoxesProps = {
+  options: string[];
+  errorMessage?: string;
+  setSelectedOption: (id: number) => void;
+  selected: number | null;
+};
 
 interface ApplyStep extends StepProps {
   project: Project;
+  questions?: Question[];
 }
 export const TitlePart: FC<{
   title: string;
@@ -33,7 +50,35 @@ export const TitlePart: FC<{
     </div>
   );
 };
-export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
+
+export const CheckBoxes: FC<CheckBoxesProps> = ({
+  options,
+  errorMessage,
+  setSelectedOption,
+  selected,
+}) => {
+  return (
+    <div className="space-y-4">
+      {options.map((option, i) => (
+        <Checkbox
+          checked={selected === i}
+          key={`option: ${i + 1} - ${option}`}
+          label={option}
+          value={i}
+          onChange={() => setSelectedOption(i)}
+          className="h-5 w-5 appearance-none text-primary"
+        />
+      ))}
+      {errorMessage && (
+        <div className="flex items-center text-error">
+          <ExclamationCircleIcon className="mr-1 h-5 w-5" /> {errorMessage}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const ApplyStep1 = ({onSubmit, project, questions}: ApplyStep) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
   const {data} = useSWR<any>(`/orgs/${project?.identity_id}`, get);
 
@@ -41,10 +86,28 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
 
   const {
     handleSubmit,
-    formState: {isValid, errors, isSubmitting},
+    register,
+    formState: {errors, isSubmitting},
     setValue,
+    watch,
   } = useForm({
     resolver: joiResolver(schemaApplyProject),
+    defaultValues: {
+      cover_letter: '',
+      cv_name: '',
+      cv_link: '',
+      answers:
+        questions?.map(
+          (question) =>
+            ({
+              id: question.id,
+              required: question.required ?? false,
+              checkbox: question.options?.length > 0,
+              selected_option: null as any,
+              answer: null as any,
+            } as TFormAnswer),
+        ) ?? null,
+    },
   });
 
   useEffect(() => {
@@ -64,7 +127,7 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
     }
   }, [ProjectContext, setValue]);
 
-  const handleChange = (field: string, input: string | boolean) => {
+  const handleChange = (field: any, input: string | boolean) => {
     setValue(field, input, {
       shouldDirty: true,
       shouldValidate: true,
@@ -155,10 +218,7 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
           )}
 
           <div className="">
-            <TitlePart
-              title="Link"
-              className="-mx-4 -mb-2 border-b-0 px-4 text-xl"
-            />
+            <TitlePart title="Link" className="-mx-4 border-b-0 px-4 text-xl" />
             {!showLinkFields ? (
               <Button
                 onClick={() => linkFieldsHandlers.on()}
@@ -192,6 +252,46 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
               </>
             )}
           </div>
+          {(questions?.length ?? 0) > 0 && (
+            <div>
+              <TitlePart
+                title="Screening questions"
+                className="-mx-4 border-b-0 px-4 text-xl"
+              />
+              <div className="mt-4 space-y-7">
+                {questions?.map((question, index) => (
+                  <div key={question.id} className="space-y-2">
+                    <p>
+                      {index + 1}. {question.question}{' '}
+                      {question.required && (
+                        <span className="text-error">*</span>
+                      )}
+                    </p>
+                    {question.options?.length > 0 ? (
+                      <CheckBoxes
+                        options={question.options}
+                        errorMessage={
+                          (errors?.answers as any)?.[index]?.selected_option
+                            ?.message
+                        }
+                        selected={watch(`answers.${index}.selected_option`)}
+                        setSelectedOption={(optionId) =>
+                          setValue(`answers.${index}.selected_option`, optionId)
+                        }
+                      />
+                    ) : (
+                      <TextArea
+                        register={register(`answers.${index}.answer`)}
+                        errorMessage={
+                          (errors?.answers as any)?.[index]?.answer?.message
+                        }
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <TitlePart
             title="Contact info"
             className="-mx-4 border-b-0 px-4 text-xl"
@@ -206,7 +306,7 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
           </div>
           <div className="-mx-4 flex items-end justify-center border-t p-4 pb-12">
             <Button
-              disabled={!isValid || isSubmitting}
+              disabled={isSubmitting}
               className="flex h-11 w-full items-center justify-center"
               type="submit"
               variant="fill"
