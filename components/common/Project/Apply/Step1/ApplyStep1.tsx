@@ -61,11 +61,10 @@ export const CheckBoxes: FC<CheckBoxesProps> = ({
     <div className="space-y-4">
       {options.map((option, i) => (
         <Checkbox
-          checked={selected === i}
+          checked={selected === i + 1}
           key={`option: ${i + 1} - ${option}`}
           label={option}
-          value={i}
-          onChange={() => setSelectedOption(i)}
+          onChange={() => setSelectedOption(i + 1)}
           className="h-5 w-5 appearance-none text-primary"
         />
       ))}

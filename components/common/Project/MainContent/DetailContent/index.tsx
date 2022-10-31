@@ -138,7 +138,9 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
         >
           <OrganizationTopCard
             project={data}
-            questions={questions?.questions}
+            questions={questions?.questions?.sort(
+              (x, y) => Date.parse(x.created_at) - Date.parse(y.created_at),
+            )}
           />
           {(data?.causes_tags || []).length > 0 && (
             <ProjectItem items={data?.causes_tags} title="Social causes" />
