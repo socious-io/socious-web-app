@@ -19,7 +19,7 @@ import {schemaOfferApplicant} from '@api/applicants/validation';
 
 // Types
 import {TApplicant, TOfferApplicant} from '@models/applicant';
-import ApplicationInfo from '../Shared/ApplicationInfo';
+import ApplicationInfo from '../../../../organisms/applications/ApplicationInfo';
 import {TUserByUsername} from '@models/profile';
 
 // Type

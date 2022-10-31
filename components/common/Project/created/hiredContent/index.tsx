@@ -1,12 +1,6 @@
-import Button from '@components/common/Button/Button';
-import {useToggle, useUser} from '@hooks';
 import {TApplicant} from '@models/applicant';
-import {TUserByUsername} from '@models/profile';
-import {formattedLocation} from 'services/formatLocation';
-import useSWR from 'swr';
-import {get} from 'utils/request';
 import HiredCard from '../../component/HiredCard';
-import ApplicationInfo from '../Shared/ApplicationInfo';
+import ApplicationInfo from '../../../../organisms/applications/ApplicationInfo';
 
 type MyApplicationBoxesProps = {
   applicant?: TApplicant;
