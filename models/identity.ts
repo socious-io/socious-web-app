@@ -13,11 +13,11 @@ export type IdentityType = 'users' | 'organizations';
 
 export type OtherIdentityMeta = {
   id: string;
-  type?: IdentityType;
-  meta?: IdentityMeta;
-  created_at?: string;
-  following?: boolean;
-  follower?: boolean;
+  type: IdentityType;
+  meta: IdentityMeta;
+  created_at: string;
+  following: boolean;
+  follower: boolean;
 };
 
 export type LoginIdentity = {

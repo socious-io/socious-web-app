@@ -23,6 +23,10 @@ import {toast} from 'react-toastify';
 import SplashScreen from 'layout/Splash';
 import {twMerge} from 'tailwind-merge';
 import {get} from 'utils/request';
+import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
+import ProjectQuestion from '../../created/NewProject/ProjectQuestions';
+import QuestionDetail from '../../created/NewProject/QuestionDetail';
+import {TQuestionsResponse} from '@models/question';
 
 type CreateProjectMainType = {
   projectId?: string;
@@ -30,7 +34,14 @@ type CreateProjectMainType = {
   skills: any[];
 };
 
+const libraries: Libraries = ['places'];
+
 const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
+  const {isLoaded} = useGoogleMapsScript({
+    googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
+    libraries,
+  });
+
   const router = useRouter();
   const {id} = router.query;
   const {currentIdentity} = useUser({redirect: false});
@@ -38,6 +49,8 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
+  const isStep3 = ProjectContext.formStep === 3;
+  const isStep4 = ProjectContext.formStep === 4;
 
   // const {data: projectQuestion} = useSWR<any>(`/projects/${id}/questions`, get);
   const {data, mutate} = useSWR<Project>(`/projects/${projectId ?? id}`, get);
@@ -46,6 +59,14 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
     get,
   );
 
+  const {
+    data: questions,
+    error: questionsError,
+    mutate: mutateQuestions,
+  } = useSWR<TQuestionsResponse>(
+    data?.id ? `/projects/${data.id}/questions` : null,
+    get,
+  );
   if (!data) return <SplashScreen />;
 
   const onSubmit = async (s?: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => {
@@ -60,6 +81,7 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
       causes_tags: ProjectContext.causes_tags,
       skills: ProjectContext.skills,
       status: s ? s : ProjectContext.status,
+      experience_level: ProjectContext.experience_level,
     };
 
     if (ProjectContext.city) postBody.city = ProjectContext.city;
@@ -89,19 +111,23 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
   };
 
   const PageDisplay = () => {
-    if (isStep0) {
+    if (isStep0 && isLoaded) {
       return <ProjectInfo onSubmit={onSubmit} />;
     } else if (isStep1) {
       return <ProjectAbout onSubmit={onSubmit} />;
     } else if (isStep2) {
       return <ProjectSkill onSubmit={onSubmit} rawSkills={skills} />;
+    } else if (isStep3) {
+      return <ProjectQuestion onSubmit={onSubmit} />;
+    } else if (isStep4) {
+      return <QuestionDetail projectId={data.id} />;
     }
   };
 
   return (
     <div className="mb-10 w-full ">
       {currentIdentity?.id === data?.identity_id ? (
-        <DetailContent project={data} />
+        <DetailContent project={data} questions={questions?.questions} />
       ) : (
         <div
           className={twMerge(

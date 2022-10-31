@@ -44,7 +44,7 @@ const ProjectsCard: FC<ProjectsCardProps> = ({
           </>
         ) : (
           <>
-            <Link href={`/app/projects/applications/${username}`} passHref>
+            <Link href={`/app/applications`} passHref>
               <li className="flex cursor-pointer items-center space-x-4">
                 <ClipboardDocumentListIcon className="h-5" />
                 <p>My applications</p>

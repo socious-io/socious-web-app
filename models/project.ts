@@ -4,6 +4,14 @@ import {Question} from './question';
 
 export type TProjectStatus = 'DRAFT' | 'EXPIRE' | 'ACTIVE';
 
+export type TProjectIdentityMeta = Required<
+  Omit<IdentityMeta, 'username' | 'avatar'>
+> & {
+  address?: string;
+  city?: string;
+  country?: string;
+};
+
 export interface Project {
   id: string;
   title: string;
@@ -24,7 +32,7 @@ export interface Project {
   remote_preference: string;
   identity_id: string;
   identity_type: IdentityType;
-  identity_meta: IdentityMeta;
+  identity_meta: TProjectIdentityMeta;
   status: TProjectStatus;
   created_at: string;
   expires_at?: string;
@@ -46,7 +54,7 @@ export interface CreateProjectType {
   payment_range_higher?: string;
   commitment_hours_higher?: string;
   commitment_hours_lower?: string;
-  // experience_level: number;
+  experience_level: number;
   causes_tags: Array<string>;
   country: string;
   project_length: string;
@@ -62,6 +70,12 @@ export interface ApplyProjectType {
   cv_link?: string;
   cv_name?: string;
   attachment?: string;
+}
+
+export interface AddQuestionType<T = string> {
+  question: string;
+  required: boolean;
+  options?: T[] | null;
 }
 
 export interface ProjectProps {

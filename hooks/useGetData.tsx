@@ -1,6 +1,7 @@
 import Data, {getText} from '@socious/data';
 import {useMemo} from 'react';
 import {getAllISOCodes} from 'iso-country-currency';
+import {EXPERIENCE_LEVEL_OPTIONS} from '@components/common/Search/filterOptions';
 
 const projectRemotePreferenceType = Object.keys(
   Data.ProjectRemotePreferenceType,
@@ -76,6 +77,10 @@ const useGetData = () => {
       id: m,
     }));
 
+    const experienceLevelOptions = EXPERIENCE_LEVEL_OPTIONS.map(
+      ({value, label: name}, index) => ({id: index, name}),
+    );
+
     return {
       projectPaymentTypeItems,
       projectStatusItems,
@@ -86,6 +91,7 @@ const useGetData = () => {
       passionDataItems,
       countries: [{name: 'Worldwide', id: 'XW'}, ...countries],
       allCurrencies,
+      experienceLevelOptions,
     };
   }, []);
 

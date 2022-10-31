@@ -16,13 +16,20 @@ import MainContent from '@components/common/UserProfile/MainContent';
 //utils
 import {get} from 'utils/request';
 
+// Type
+import {IOrganizationType} from 'models/organization';
+import SplashScreen from 'layout/Splash';
+
 const OrganizationProfile: NextPage = () => {
   // get id from route
   const router = useRouter();
   const {id} = router.query;
 
   //get user profile data by user id
-  const {data, mutate, error} = useSWR<any>(`/orgs/by-shortname/${id}`, get);
+  const {data, mutate, error} = useSWR<IOrganizationType>(
+    `/orgs/by-shortname/${id}`,
+    get,
+  );
 
   // Show this until the data is fetched
   if (!data && !error) return <p>loading</p>;
@@ -34,6 +41,8 @@ const OrganizationProfile: NextPage = () => {
       ))
   )
     return <p>invalid user</p>;
+
+  if (!data) return <SplashScreen />;
 
   return (
     <GeneralLayout>
