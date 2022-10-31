@@ -70,6 +70,7 @@ function MyApplicationBoxes({
     const offerBody: any = {
       offer_message,
     };
+
     //Conditional req.Body
     if (payment_type === 'VOLUNTEER' && payment_schema === 'HOURLY') {
       if (weekly_commitment) offerBody.weekly_commitment = weekly_commitment;
@@ -86,7 +87,6 @@ function MyApplicationBoxes({
 
     offerApplicant(applicant.id, offerBody)
       .then((response: any) => {
-        console.log('OFFER RESPONSE :---: ', response);
         confirmOfferHandlers.off();
         toast.success('Offer was sent just now.', {
           position: 'top-right',
@@ -111,7 +111,6 @@ function MyApplicationBoxes({
   const rejectConfirm = useCallback(() => {
     rejectApplicant(applicant.id)
       .then((response) => {
-        console.log('response');
         confirmRejectHandlers.off();
         mutateApplicant();
       })
@@ -120,7 +119,7 @@ function MyApplicationBoxes({
 
   return (
     <div className="w-full pb-4 ">
-      <div className="w-full pb-4 ">
+      <div className="w-full pb-4 md:-mt-4">
         <ApplicantHiredCard
           name={applicant?.user?.name}
           userId={applicant?.user_id}
@@ -138,6 +137,7 @@ function MyApplicationBoxes({
       {/* Offer */}
       <FormProvider {...offerApplicantFormData}>
         <HireApplicantModal
+          applicantName={applicant.user.name}
           modalState={showOfferForm}
           onSubmit={onOfferFormSubmitted}
           onClose={() => showOfferFormHandlers.off()}

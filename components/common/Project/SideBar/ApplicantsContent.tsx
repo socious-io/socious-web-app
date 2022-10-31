@@ -1,154 +1,38 @@
-import CardBoxComplete from '@components/common/CardBoxComplete/CardBoxComplete';
-import {useToggle} from '@hooks';
-import {
-  TApplicant,
-  TApplicantsByStatus,
-  TApplicantsResponse,
-} from '@models/applicant';
-import dayjs from 'dayjs';
-import Link from 'next/link';
-import {useMemo} from 'react';
-import useSWR from 'swr';
-import {get} from 'utils/request';
-
-import HeaderBox from '../component/HeaderBox';
+import {twMerge} from 'tailwind-merge';
+import ApplicationByStatus from '../../../organisms/projects/ApplicantsByStatus';
 
 type ApplicantsContentProps = {
   projectId: string;
+  type?: 'FULL';
 };
 
-function ApplicantsContent({projectId}: ApplicantsContentProps) {
-  const {state: showOnGoing, handlers: showOnGoingHandler} = useToggle();
-  const {state: showSaved, handlers: showSavedHandler} = useToggle();
-  const {state: showDeclined, handlers: showDeclinedHandler} = useToggle();
-
-  const {data: applicantsData, error: applicantsError} =
-    useSWR<TApplicantsResponse>(
-      projectId ? `/projects/${projectId}/applicants` : null,
-      get,
-    );
-
-  const flattenApplicantsObj: TApplicantsByStatus = useMemo(() => {
-    const flattenApplicants = applicantsData?.items ?? [];
-
-    return flattenApplicants?.reduce(
-      (obj: TApplicantsByStatus, currentValue: TApplicant) => {
-        if (obj) {
-          if (!obj[currentValue['status'] ?? 'ERROR']) {
-            obj[currentValue['status'] ?? 'ERROR'] = [];
-          }
-          obj[currentValue['status'] ?? 'ERROR'].push(currentValue);
-        }
-        return obj;
-      },
-      {
-        PENDING: [],
-        REJECTED: [],
-        OFFERED: [],
-        APPROVED: [],
-        HIRED: [],
-        WITHRAWN: [],
-      },
-    );
-  }, [applicantsData]);
-
+function ApplicantsContent({projectId, type}: ApplicantsContentProps) {
   return (
-    <div className="py-4">
-      <div className="my-4 rounded-2xl border border-grayLineBased bg-white ">
-        <HeaderBox
-          title={`to review (${flattenApplicantsObj?.['PENDING']?.length})`}
-          isExpand={showOnGoing}
-          expandToggle={showOnGoingHandler.toggle}
-          isExpandable={true}
-          isRound={true}
+    <div className={type === 'FULL' ? 'w-full' : 'py-4'}>
+      {/* TODO :Add Menu if type==="FULL" */}
+      <div
+        className={twMerge(
+          'my-4 rounded-2xl border border-grayLineBased bg-white ',
+          type === 'FULL' && 'my-0 w-full',
+        )}
+      >
+        <ApplicationByStatus
+          projectId={projectId}
+          status={'PENDING'}
+          title={'To review'}
         />
-        {showOnGoing &&
-          flattenApplicantsObj?.['PENDING'].map((applicant) => (
-            <Link
-              key={applicant.id}
-              href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
-            >
-              <a>
-                <CardBoxComplete
-                  name={applicant?.user?.name}
-                  username={applicant?.user?.username ?? ''}
-                  applicationDate={dayjs(applicant?.created_at)?.format(
-                    'MMM D',
-                  )}
-                  message={
-                    applicant.cover_letter
-                      ? applicant.cover_letter.length > 50
-                        ? `${applicant.cover_letter?.slice(0, 50)}...}`
-                        : applicant.cover_letter
-                      : 'No message'
-                  }
-                />
-              </a>
-            </Link>
-          ))}
-
-        <HeaderBox
-          isRound={false}
-          title={`saved (${flattenApplicantsObj?.['OFFERED']?.length})`}
-          isExpand={showSaved}
-          expandToggle={showSavedHandler.toggle}
-          isExpandable={true}
+        <ApplicationByStatus
+          projectId={projectId}
+          status={'OFFERED'}
+          title={`Saved`}
+          rounded={false}
         />
-        {showSaved &&
-          flattenApplicantsObj?.['OFFERED'].map((applicant) => (
-            <Link
-              key={applicant.id}
-              href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
-            >
-              <a>
-                <CardBoxComplete
-                  name={applicant?.user?.name}
-                  username={applicant?.user?.username ?? ''}
-                  applicationDate={dayjs(applicant?.created_at)?.format(
-                    'MMM D',
-                  )}
-                  message={
-                    applicant.cover_letter
-                      ? applicant.cover_letter.length > 50
-                        ? `${applicant.cover_letter?.slice(0, 50)}...}`
-                        : applicant.cover_letter
-                      : 'No message'
-                  }
-                />
-              </a>
-            </Link>
-          ))}
-        <HeaderBox
-          isRound={false}
-          title={`Declined (${flattenApplicantsObj?.['REJECTED']?.length})`}
-          isExpand={showDeclined}
-          expandToggle={showDeclinedHandler.toggle}
-          isExpandable={true}
+        <ApplicationByStatus
+          projectId={projectId}
+          status={'REJECTED'}
+          title={`Declined`}
+          rounded={false}
         />
-        {showDeclined &&
-          flattenApplicantsObj?.['REJECTED'].map((applicant) => (
-            <Link
-              key={applicant.id}
-              href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
-            >
-              <a>
-                <CardBoxComplete
-                  name={applicant?.user?.name}
-                  username={applicant?.user?.username ?? ''}
-                  applicationDate={dayjs(applicant?.created_at)?.format(
-                    'MMM D',
-                  )}
-                  message={
-                    applicant.cover_letter
-                      ? applicant.cover_letter?.length > 50
-                        ? `${applicant.cover_letter?.slice(0, 50)}...}`
-                        : applicant.cover_letter
-                      : 'No message'
-                  }
-                />
-              </a>
-            </Link>
-          ))}
       </div>
     </div>
   );
