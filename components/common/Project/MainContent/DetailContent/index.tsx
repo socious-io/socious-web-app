@@ -52,7 +52,6 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
   const isStep3 = ProjectContext.formStep === 3;
   const isStep4 = ProjectContext.formStep === 4;
 
-  // const {data: projectQuestion} = useSWR<any>(`/projects/${id}/questions`, get);
   const {data, mutate} = useSWR<Project>(`/projects/${projectId ?? id}`, get);
   const {mutate: getProject} = useSWR<any>(
     `/projects?identity=${currentIdentity?.id}`,
