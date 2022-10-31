@@ -2,13 +2,15 @@ import {Combobox, Button} from '@components/common';
 import {FC, useMemo, useCallback} from 'react';
 import {FieldValues, useForm} from 'react-hook-form';
 import {twMerge} from 'tailwind-merge';
-import {useGoogleMapsScript} from 'use-google-maps-script';
+import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
 import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 
 interface LocationFormProps {
   className?: string;
   onSubmit: (data: FieldValues) => void;
 }
+
+const libraries: Libraries = ['places'];
 
 export const LocationForm: FC<LocationFormProps> = ({className, onSubmit}) => {
   const {handleSubmit, formState, watch, setValue} = useForm();
@@ -17,11 +19,12 @@ export const LocationForm: FC<LocationFormProps> = ({className, onSubmit}) => {
 
   const {isLoaded} = useGoogleMapsScript({
     googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
-    libraries: ['places'],
+    libraries,
   });
 
   const {
     suggestions: {data: countries},
+    setValue: setCountryValue,
   } = usePlacesAutocomplete({
     requestOptions: {language: 'en', types: ['country']},
     debounce: 300,
@@ -31,6 +34,7 @@ export const LocationForm: FC<LocationFormProps> = ({className, onSubmit}) => {
   //to get cities filtered by country. Returns Full city address.
   const {
     suggestions: {data: cities},
+    setValue: setCityValue,
   } = usePlacesAutocomplete({
     requestOptions: {
       language: 'en',
@@ -113,7 +117,7 @@ export const LocationForm: FC<LocationFormProps> = ({className, onSubmit}) => {
         <Combobox
           label="Country"
           onSelected={onCountrySelected}
-          onChange={(e) => setValue('country', e.currentTarget.value || '')}
+          onChange={(e) => setCountryValue(e?.currentTarget?.value || '')}
           required
           name="Country"
           items={filterCountries}
@@ -124,7 +128,7 @@ export const LocationForm: FC<LocationFormProps> = ({className, onSubmit}) => {
         <Combobox
           label="City"
           onSelected={handleSetCity}
-          onChange={(e) => setValue('city', e.currentTarget.value || '')}
+          onChange={(e) => setCityValue(e?.currentTarget?.value || '')}
           required
           name="city"
           items={filterCities}
