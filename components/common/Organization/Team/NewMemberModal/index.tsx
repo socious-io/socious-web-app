@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Modal from '@components/common/Modal/Modal';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import {XMarkIcon} from '@heroicons/react/24/solid';
@@ -7,28 +6,23 @@ import {
   FC,
   PropsWithChildren,
   useCallback,
-  useMemo,
   useRef,
   useState,
 } from 'react';
-import useSWRInfinite from 'swr/infinite';
 import Button from '@components/common/Button/Button';
 import {
   ChevronLeftIcon,
   CheckCircleIcon,
   UserPlusIcon,
 } from '@heroicons/react/24/outline';
-import {
-  GlobalResponseType,
-  IOrganizationFollowerType,
-} from '@models/organization';
+import {IOrganizationFollowerType} from '@models/organization';
 import {addMember} from '@api/organizations/team/actions';
-import {get} from 'utils/request';
 import {Avatar} from '@components/common';
 import useSWR from 'swr';
 import {UserProfile} from '@models/profile';
 import Link from 'next/link';
 import {useFormattedLocation} from 'services/formatLocation';
+import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 
 interface IFollowerItemProps extends PropsWithChildren {
   follower: IOrganizationFollowerType;
@@ -80,38 +74,24 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>('');
   const usersBoxRef = useRef<HTMLDivElement>(null);
 
-  const getKey = useCallback(
-    (initialSize: number, previousData: any) => {
-      if (previousData && previousData?.items?.length < 10) return null;
-      if (searchTerm.trim().length)
-        return `/follows/followers?type=users&page=${
-          initialSize + 1
-        }&name=${searchTerm.trim()}`;
-      return `/follows/followers?type=users&page=${initialSize + 1}`;
-    },
-    [searchTerm],
-  );
-
   const {
-    data: users,
-    size,
-    setSize,
-  } = useSWRInfinite<GlobalResponseType<IOrganizationFollowerType>>(
-    getKey,
-    get,
-    {
-      shouldRetryOnError: false,
-    },
+    flattenData: users,
+    seeMore: hasMore,
+    loadMore,
+  } = useInfiniteSWR<IOrganizationFollowerType>(
+    searchTerm.trim().length
+      ? `/follows/followers?type=users&name=${searchTerm.trim()}`
+      : `/follows/followers?type=users`,
+    {shouldRetryOnError: false},
   );
-  const hasMore = size * 10 < (users?.[0]?.total_count ?? 0);
 
   const onScroll = useCallback(() => {
     if (!usersBoxRef?.current || !hasMore) return;
     const {scrollTop, scrollHeight, clientHeight} = usersBoxRef.current;
     if (Math.floor(scrollTop) === scrollHeight - clientHeight) {
-      setSize((old) => old + 1);
+      loadMore();
     }
-  }, [setSize, hasMore]);
+  }, [loadMore, hasMore]);
 
   const changeRole = (newRole: UserRole) => {
     setRole(newRole);
@@ -181,23 +161,21 @@ const NewMemberModal: FC<INewMemberModalProps> = ({
                 onScroll={onScroll}
               >
                 <div className="flex h-80 flex-col">
-                  {users?.map((page) =>
-                    page.items.map(
-                      (item, index) =>
-                        !memberIds.includes(item.identity_meta.id) && (
-                          <FollowerItem
-                            key={`m-${item.identity_meta.id}-${index}`}
-                            follower={item}
+                  {users?.map(
+                    (item, index) =>
+                      !memberIds.includes(item.identity_meta.id) && (
+                        <FollowerItem
+                          key={`m-${item.identity_meta.id}-${index}`}
+                          follower={item}
+                        >
+                          <span
+                            className="cursor-pointer"
+                            onClick={() => onAddMember(item)}
                           >
-                            <span
-                              className="cursor-pointer"
-                              onClick={() => onAddMember(item)}
-                            >
-                              <UserPlusIcon className="w-6" />
-                            </span>
-                          </FollowerItem>
-                        ),
-                    ),
+                            <UserPlusIcon className="w-6" />
+                          </span>
+                        </FollowerItem>
+                      ),
                   )}
                   <div></div>
                 </div>
