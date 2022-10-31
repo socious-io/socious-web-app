@@ -214,6 +214,7 @@ function MyApplicationBoxes({
       {/* Offer */}
       <FormProvider {...offerApplicantFormData}>
         <HireApplicantModal
+          applicantName={applicant.user.name}
           modalState={showOfferForm}
           onSubmit={onOfferFormSubmitted}
           onClose={() => showOfferFormHandlers.off()}

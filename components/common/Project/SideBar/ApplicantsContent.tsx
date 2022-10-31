@@ -56,7 +56,7 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
     <div className="py-4">
       <div className="my-4 rounded-2xl border border-grayLineBased bg-white ">
         <HeaderBox
-          title={`to review (${flattenApplicantsObj?.['PENDING']?.length})`}
+          title={`To review (${flattenApplicantsObj?.['PENDING']?.length})`}
           isExpand={showOnGoing}
           expandToggle={showOnGoingHandler.toggle}
           isExpandable={true}
@@ -89,7 +89,7 @@ function ApplicantsContent({projectId}: ApplicantsContentProps) {
 
         <HeaderBox
           isRound={false}
-          title={`saved (${flattenApplicantsObj?.['OFFERED']?.length})`}
+          title={`Saved (${flattenApplicantsObj?.['OFFERED']?.length})`}
           isExpand={showSaved}
           expandToggle={showSavedHandler.toggle}
           isExpandable={true}
