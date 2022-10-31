@@ -16,7 +16,7 @@ import {
   useProjectContext,
   initContext,
 } from '@components/common/Project/created/NewProject/context';
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {updateProjectById} from '@api/projects/actions';
 import {CreateProjectType, Project} from '@models/project';
 import {toast} from 'react-toastify';
@@ -66,6 +66,7 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
     data?.id ? `/projects/${data.id}/questions` : null,
     get,
   );
+
   if (!data) return <SplashScreen />;
 
   const onSubmit = async (s?: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => {
@@ -146,7 +147,12 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
             className,
           )}
         >
-          <OrganizationTopCard project={data} />
+          <OrganizationTopCard
+            project={data}
+            questions={questions?.questions?.sort(
+              (x, y) => Date.parse(x.created_at) - Date.parse(y.created_at),
+            )}
+          />
           {(data?.causes_tags || []).length > 0 && (
             <ProjectItem items={data?.causes_tags} title="Social causes" />
           )}

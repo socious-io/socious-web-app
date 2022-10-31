@@ -1,7 +1,7 @@
 import {Avatar} from '@components/common';
 import {ProjectProps} from 'models/project';
 import {Button} from '@components/common';
-import {ApplyStep1} from '../Apply/Step1/ApplyStep1';
+import {ApplyStep1, TFormAnswer} from '../Apply/Step1/ApplyStep1';
 import ApplyStep3 from '../Apply/Step3/ApplyStep3';
 import {FC} from 'react';
 import useUser from 'hooks/useUser/useUser';
@@ -17,13 +17,13 @@ import {useProjectContext} from '../created/NewProject/context';
 import {applyProject} from '@api/projects/actions';
 import {ApplyProjectType} from '@models/project';
 import {toast} from 'react-toastify';
-import useSWR, {mutate} from 'swr';
+import {mutate} from 'swr';
 import {useFormattedLocation} from 'services/formatLocation';
 import Link from 'next/link';
 import RecentGallery from '../Apply/Step5/ApplyStep5';
 import {checkAndUploadMedia} from 'services/ImageUpload';
 
-const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
+const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
   const {
     title,
     identity_meta,
@@ -46,7 +46,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
 
-  const onSubmit = async () => {
+  const onSubmit = async (data?: any) => {
     if (isStep0) {
       const postBody: ApplyProjectType = {
         cover_letter: ProjectContext.cover_letter,
@@ -56,6 +56,27 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
       if (ProjectContext.share_contact_info)
         postBody.share_contact_info = ProjectContext.share_contact_info;
 
+      // Create answer for request.
+      if (data.answers) {
+        postBody.answers = data.answers
+          .filter(
+            (answer: TFormAnswer) =>
+              answer.selected_option !== null || answer.answer,
+          )
+          .map((answer: TFormAnswer) => {
+            let initAnswer: any = {
+              id: answer.id,
+            };
+            if (answer.selected_option !== null)
+              initAnswer = {
+                ...initAnswer,
+                selected_option: answer.selected_option,
+              };
+            if (answer.answer?.trim())
+              initAnswer = {...initAnswer, answer: answer.answer};
+            return initAnswer;
+          });
+      }
       // Attachment Check
       if (ProjectContext.attachment) {
         // return;
@@ -79,6 +100,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
           formStep: ProjectContext.formStep + 1,
         });
       } catch (error) {
+        console.log('ERRROR while applying :---: ', error);
         toast.error(`${error}`);
       }
     } else {
@@ -90,7 +112,13 @@ const OrganizationTopCard: FC<ProjectProps> = ({project}) => {
   };
   const pageDisplay = () => {
     if (isStep0) {
-      return <ApplyStep1 onSubmit={onSubmit} project={project} />;
+      return (
+        <ApplyStep1
+          onSubmit={onSubmit}
+          project={project}
+          questions={questions}
+        />
+      );
     } else if (isStep1) {
       return (
         <ApplyStep3
