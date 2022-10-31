@@ -18,6 +18,7 @@ import {addQuestion, updateQuestion} from '@api/projects/actions';
 // Types
 import {AddQuestionType} from '@models/project';
 import {Question} from '@models/question';
+import {FromLayout} from '../Layout';
 type OptionType = {
   id: number;
   option: string;
@@ -35,7 +36,7 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
     setValue,
     getValues,
     watch,
-    formState: {errors, isDirty},
+    formState: {errors, isDirty, isValid},
   } = useForm({
     resolver: joiResolver(schemaCreateProjectQuestion),
     defaultValues: {
@@ -83,10 +84,10 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
       // Mutation for questionss
       if (questions?.[0])
         mutate(`/projects/${questions[0].project_id}/questions`, questions, {
-          populateCache(result, _currentData) {
+          populateCache: (result, _currentData) => {
             return result;
           },
-          revalidate: false,
+          revalidate: true,
         });
       setProjectContext({
         ...ProjectContext,
@@ -152,90 +153,100 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <div className="mx-4 my-4">
-        <TextArea
-          label="Question"
-          placeholder="Question"
-          register={register('question', {
-            required: 'This field is required',
-            maxLength: 3,
-          })}
-          errorMessage={errors?.['question']?.message}
-          className="my-3"
-          required
-          rows={4}
-        />
-        <Checkbox
-          checked={watch('required')}
-          className="items-center"
-          register={register('required')}
-          label="Require this question to be answered"
-        />
-      </div>
-      <div className="flex h-full w-full flex-col bg-zinc-200">
-        {!!options?.length &&
-          options.map((option: OptionType, index) => (
-            <div key={option.id} className="flex items-center px-4">
-              <InputFiled
-                className="grow py-2 px-4"
-                defaultValue={option.option}
-                ref={options.length === index + 1 ? lastInputRef : undefined}
-                placeholder={`Choice ${index + 1}`}
-                onChange={(e) =>
-                  changeAt(option.id, e.currentTarget.value ?? e.target?.value)
-                }
-                errorMessage={errors?.options?.[index]?.option?.message}
-              />
-              <div onClick={() => removeItem(option.id)}>
-                <TrashIcon className="w-5 text-error" />
-              </div>
-            </div>
-          ))}
-        {errors?.options?.message && (
-          <div className="flex items-center py-2 px-6 text-error">
-            {' '}
-            <ExclamationCircleIcon className="mr-1 h-5 w-5" />
-            {errors?.options?.message}
+      <FromLayout type="FULL" className="!grow">
+        <div className="grow overflow-y-scroll">
+          <div className="mx-4 my-4">
+            <TextArea
+              label="Question"
+              placeholder="Question"
+              register={register('question', {
+                required: 'This field is required',
+                maxLength: 3,
+              })}
+              errorMessage={errors?.['question']?.message}
+              className="my-3"
+              required
+              rows={4}
+            />
+            <Checkbox
+              checked={watch('required')}
+              className="items-center"
+              register={register('required')}
+              label="Require this question to be answered"
+            />
           </div>
-        )}
-        <div className="flex items-center justify-center">
-          <Button
-            onClick={increaseCount}
-            variant="outline"
-            size="lg"
-            className="my-4 flex w-11/12 items-center justify-start bg-white font-semibold"
-            leftIcon={() => (
-              <PlusCircleIcon width={20} height={20} color="#000000" />
+          <div className="flex w-full grow flex-col bg-zinc-200">
+            {!!options?.length &&
+              options.map((option: OptionType, index) => (
+                <div key={option.id} className="flex items-center px-4">
+                  <InputFiled
+                    className="grow py-2 px-4"
+                    defaultValue={option.option}
+                    ref={
+                      options.length === index + 1 ? lastInputRef : undefined
+                    }
+                    placeholder={`Choice ${index + 1}`}
+                    onChange={(e) =>
+                      changeAt(
+                        option.id,
+                        e.currentTarget.value ?? e.target?.value,
+                      )
+                    }
+                    errorMessage={errors?.options?.[index]?.option?.message}
+                  />
+                  <div onClick={() => removeItem(option.id)}>
+                    <TrashIcon className="w-5 text-error" />
+                  </div>
+                </div>
+              ))}
+            {errors?.options?.message && (
+              <div className="flex items-center py-2 px-6 text-error">
+                {' '}
+                <ExclamationCircleIcon className="mr-1 h-5 w-5" />
+                {errors?.options?.message}
+              </div>
             )}
+            <div className="flex items-center justify-center">
+              <Button
+                onClick={increaseCount}
+                variant="outline"
+                size="lg"
+                className="my-4 flex w-11/12 items-center justify-center bg-white font-semibold"
+                leftIcon={() => (
+                  <PlusCircleIcon width={20} height={20} color="#000000" />
+                )}
+              >
+                <div>Add choice</div>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex h-20 items-end justify-end border-t p-4">
+          <Button
+            onClick={handleSubmit(handleAddUpdate)}
+            disabled={!isDirty && isValid}
+            type="button"
+            className="'flex h-11 w-36 items-center justify-center"
           >
-            <div>Add choice</div>
+            {editQuestion ? 'Update' : 'Add'}
+          </Button>
+
+          <Button
+            onClick={() =>
+              setProjectContext({
+                ...ProjectContext,
+                formStep: 3,
+              })
+            }
+            variant="outline"
+            type="button"
+            className="ml-2 flex h-11 w-36 items-center justify-center"
+          >
+            Cancel
           </Button>
         </div>
-      </div>
-      <div className="flex h-20 items-end justify-end p-4">
-        <Button
-          onClick={handleSubmit(handleAddUpdate)}
-          disabled={!isDirty}
-          type="button"
-          className="'flex h-11 w-36 items-center justify-center"
-        >
-          {editQuestion ? 'Update' : 'Add'}
-        </Button>
-
-        <Button
-          onClick={() =>
-            setProjectContext({
-              ...ProjectContext,
-              formStep: 3,
-            })
-          }
-          variant="outline"
-          type="button"
-          className="ml-2 flex h-11 w-36 items-center justify-center"
-        >
-          Cancel
-        </Button>
-      </div>
+      </FromLayout>
     </div>
   );
 };
