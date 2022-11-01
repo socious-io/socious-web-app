@@ -59,7 +59,9 @@
     "web3modal": "^1.9.9"
   },
   "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^13.0.3",
     "@capacitor/cli": "^4.3.0",
+    "@cypress/webpack-preprocessor": "^5.15.2",
     "@headlessui/react": "^1.7.3",
     "@heroicons/react": "^2.0.11",
     "@testing-library/react": "^13.4.0",
