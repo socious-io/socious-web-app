@@ -10,7 +10,9 @@ concurrency: fe-e2e-test-main
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node16.17.0-chrome106
+    container:
+      image: cypress/browsers:node16.17.0-chrome106
+      options: --user 1001
     steps:
       - name: Checkout
         uses: actions/checkout@v2
