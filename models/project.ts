@@ -1,4 +1,3 @@
-import {TApplicantStatus} from './applicant';
 import {IdentityMeta, IdentityType} from './identity';
 import {Question} from './question';
 
@@ -64,12 +63,18 @@ export interface CreateProjectType {
   status: string;
 }
 
+export type TAnswer = {
+  id: string;
+  selected_option?: number;
+  answer?: string;
+};
 export interface ApplyProjectType {
   cover_letter: string;
   share_contact_info?: boolean;
   cv_link?: string;
   cv_name?: string;
   attachment?: string;
+  answers?: TAnswer[];
 }
 
 export interface AddQuestionType<T = string> {
@@ -80,6 +85,7 @@ export interface AddQuestionType<T = string> {
 
 export interface ProjectProps {
   project: Project;
+  questions?: Question[];
 }
 
 export const defaultProject = {

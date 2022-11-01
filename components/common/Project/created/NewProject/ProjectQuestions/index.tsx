@@ -15,10 +15,14 @@ import Image from 'next/future/image';
 import editIcon from 'asset/icons/edit.svg';
 import {useToggle} from '@hooks';
 
-const QuestionBox: FC<{question: Question; title: string}> = ({
-  question,
-  title,
-}) => {
+interface ProjectQuestionProps extends TOnSubmit {
+  type?: 'EDIT' | 'NEW';
+}
+
+const QuestionBox: FC<{
+  question: Question;
+  title: string;
+}> = ({question, title}) => {
   const {state: show, handlers: showHandlers} = useToggle();
   const {ProjectContext, setProjectContext} = useProjectContext();
 
@@ -31,9 +35,9 @@ const QuestionBox: FC<{question: Question; title: string}> = ({
         <span>{title}</span>
         <span>
           {show ? (
-            <ChevronDownIcon className="w-5" />
-          ) : (
             <ChevronUpIcon className="w-5" />
+          ) : (
+            <ChevronDownIcon className="w-5" />
           )}
         </span>
       </div>
@@ -66,13 +70,16 @@ const QuestionBox: FC<{question: Question; title: string}> = ({
   );
 };
 
-const ProjectQuestion: FC<TOnSubmit> = ({onSubmit}) => {
+const ProjectQuestion: FC<ProjectQuestionProps> = ({
+  onSubmit,
+  type = 'NEW',
+}) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
 
   return (
     <form className="flex h-full w-full flex-col">
-      <FromLayout>
-        <div className="flex h-full w-full flex-col bg-zinc-200">
+      <FromLayout type="FULL" className="!grow">
+        <div className="flex h-full w-full flex-col overflow-y-scroll bg-zinc-200">
           <Title
             description="Add up to 5 screener questions."
             border
@@ -105,7 +112,7 @@ const ProjectQuestion: FC<TOnSubmit> = ({onSubmit}) => {
                 }
                 variant="outline"
                 size="lg"
-                className="my-4 flex w-11/12 items-center justify-start bg-white font-semibold"
+                className="my-4 flex w-11/12 items-center justify-center bg-white font-semibold"
                 leftIcon={() => (
                   <PlusCircleIcon width={20} height={20} color="#000000" />
                 )}
@@ -115,23 +122,35 @@ const ProjectQuestion: FC<TOnSubmit> = ({onSubmit}) => {
             </div>
           </div>
         </div>
+        <div className="flex items-end justify-end border-t p-4">
+          {type === 'NEW' ? (
+            <>
+              <Button
+                type="submit"
+                className="flex h-11 w-36 items-center justify-center"
+              >
+                Continue
+              </Button>
+              <Button
+                type="submit"
+                variant="outline"
+                className="ml-2 flex h-11 w-36 items-center justify-center"
+                onClick={() => setProjectContext(initContext)}
+              >
+                skip
+              </Button>
+            </>
+          ) : (
+            <Button
+              type="submit"
+              className="ml-2 flex h-11 w-36 items-center justify-center"
+              onClick={() => setProjectContext(initContext)}
+            >
+              Done
+            </Button>
+          )}
+        </div>
       </FromLayout>
-      <div className=" flex items-end justify-end  p-4">
-        <Button
-          type="submit"
-          className="flex h-11 w-36 items-center justify-center"
-        >
-          Continue
-        </Button>
-        <Button
-          type="submit"
-          variant="outline"
-          className="ml-2 flex h-11 w-36 items-center justify-center"
-          onClick={() => setProjectContext(initContext)}
-        >
-          skip
-        </Button>
-      </div>
     </form>
   );
 };

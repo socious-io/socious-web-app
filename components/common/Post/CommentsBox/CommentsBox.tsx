@@ -3,21 +3,20 @@ import {
   useCallback,
   forwardRef,
   useImperativeHandle,
-  useMemo,
   useReducer,
+  memo,
 } from 'react';
-import useSWRInfinite from 'swr/infinite';
-
-// Methods/Services
-import {get} from 'utils/request';
 
 // Components
 import CommentItem from 'layout/screen/CommentItem/CommentItem';
 import Button from '@components/common/Button/Button';
 
+// Hooks
+import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
+
 // Types
 import {InsertNewComment} from 'pages/app/post/[pid]';
-import {memo} from 'react';
+import {IComment} from '@models/comment';
 interface CommentsBoxProps {
   pid: string;
 }
@@ -27,33 +26,20 @@ const CommentsBox = forwardRef<InsertNewComment, CommentsBoxProps>(
     // For Force Update
     const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
-    //Get key to fetch comments.
-    const getKey = useCallback(
-      (initialSize: number, previousData: any) => {
-        if (!pid || (previousData && previousData?.items?.length < 10))
-          return null;
-        return `/posts/${pid}/comments?page=${initialSize + 1}`;
-      },
-      [pid],
-    );
     const {
-      data: infiniteComments,
-      error: infiniteError,
-      mutate: mutateComments,
+      rawResponse: infiniteComments,
+      seeMore,
+      loadMore,
+      isLoading,
       size,
-      setSize,
-    } = useSWRInfinite<any>(getKey, get, {
+      mutateInfinite: mutateComments,
+    } = useInfiniteSWR<IComment>(pid ? `/posts/${pid}/comments` : null, {
       shouldRetryOnError: false,
       revalidateFirstPage: false,
     });
 
-    const noMoreMessage = useMemo(
-      () => size * 10 >= infiniteComments?.[0]?.['total_count'],
-      [size, infiniteComments],
-    );
-
     useImperativeHandle(ref, () => ({
-      setNewComment: (comment: any) => {
+      setNewComment: (comment: IComment) => {
         mutateComments(
           (oldComments) => {
             oldComments?.[0]?.items.unshift(comment);
@@ -98,37 +84,35 @@ const CommentsBox = forwardRef<InsertNewComment, CommentsBoxProps>(
       [mutateComments, size],
     );
 
-    if (!infiniteComments && !infiniteError) <div>Loading....</div>;
+    if (isLoading) <div>Loading....</div>;
 
     return (
       <div>
-        {infiniteComments?.map((comments) => (
-          <div key={comments.page}>
-            {comments?.items?.map((comment: any) => (
-              <CommentItem
-                className=" border-b-[0.5px] border-[#C3C8D9]"
-                id={comment?.id}
-                post_id={comment?.post_id}
-                identity={{
-                  ...comment?.identity_meta,
-                  identity_type: comment?.identity_type,
-                }}
-                content={comment?.content}
-                liked={comment?.liked}
-                likes={comment?.likes}
-                time={comment?.created_at}
-                key={comment.id}
-                onLikeToggle={onCommentLikeToggle}
-              />
-            ))}
-          </div>
-        ))}
-        {!noMoreMessage && (
+        {infiniteComments?.map((comments) =>
+          comments?.items?.map((comment) => (
+            <CommentItem
+              key={comment.id}
+              className=" border-b-[0.5px] border-[#C3C8D9]"
+              id={comment?.id}
+              post_id={comment?.post_id}
+              identity={{
+                ...comment?.identity_meta,
+                identity_type: comment?.identity_type,
+              }}
+              content={comment?.content}
+              liked={comment?.liked}
+              likes={comment?.likes}
+              time={comment?.created_at}
+              onLikeToggle={onCommentLikeToggle}
+            />
+          )),
+        )}
+        {seeMore && (
           <div className="flex justify-center">
             <Button
               variant="link"
               className="font-semibold text-primary"
-              onClick={() => setSize(size + 1)}
+              onClick={loadMore}
             >
               See more
             </Button>

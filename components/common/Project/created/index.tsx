@@ -1,6 +1,5 @@
 import Button from '@components/common/Button/Button';
-import {useToggle, useUser} from '@hooks';
-import HeaderBox from '../component/HeaderBox';
+import {useUser} from '@hooks';
 import {PlusIcon} from '@heroicons/react/24/solid';
 import {FC} from 'react';
 import {useProjectContext} from '../created/NewProject/context';
@@ -35,13 +34,13 @@ const MyApplicationBoxes: FC = () => {
       <div className="w-full space-y-4 rounded-t-2xl border border-grayLineBased ">
         <ProjectsByStatus
           identityId={currentIdentity?.id ?? ''}
-          status={'ACTIVE'}
-          title={'On-going'}
+          status="ACTIVE"
+          title="On-going"
         />
         <ProjectsByStatus
           identityId={currentIdentity?.id ?? ''}
-          status={'DRAFT'}
-          title={`Draft`}
+          status="DRAFT"
+          title="Draft"
           rounded={false}
         />
       </div>

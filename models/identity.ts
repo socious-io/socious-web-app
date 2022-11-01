@@ -9,6 +9,12 @@ export type IdentityMeta = {
   status?: string;
 };
 
+export type MetaWithAddress = IdentityMeta & {
+  address?: string;
+  city?: string;
+  country?: string;
+};
+
 export type IdentityType = 'users' | 'organizations';
 
 export type OtherIdentityMeta = {

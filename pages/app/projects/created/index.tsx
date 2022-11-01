@@ -5,7 +5,7 @@ import SideBar from '@components/common/Feed/SideBar';
 import MyApplicationBoxes from '@components/common/Project/created';
 import CreateProjectMain from '@components/common/Project/created/NewProject';
 import {ProjectContextProvider} from 'components/common/Project/created/NewProject/context';
-import {GetStaticProps, GetStaticPaths} from 'next';
+import {GetStaticProps} from 'next';
 import getGlobalData from 'services/cacheSkills';
 import useUser from 'hooks/useUser/useUser';
 import Router from 'next/router';

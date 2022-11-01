@@ -99,6 +99,7 @@ export const schemaCreateProjectQuestion = Joi.object({
   question: Joi.string().required().messages({
     'any.required': 'Question cannot be empty.',
     'string.base': 'Question cannot be empty.',
+    'string.empty': 'Question cannot be empty.',
   }),
   required: Joi.boolean(),
   options: Joi.array()
@@ -108,13 +109,13 @@ export const schemaCreateProjectQuestion = Joi.object({
     .items({
       id: Joi.number(),
       option: Joi.string().trim().required().messages({
-        'string.base': 'Option can be empty.',
-        'string.empty': 'Option can be empty.',
+        'string.base': 'Option cannot be empty.',
+        'string.empty': 'Option cannot be empty.',
         'any.required': 'Option cannot be empty.',
       }),
     })
     .messages({
-      'array.min': 'Mininum of 2 choices required.',
+      'array.min': 'Minimum of 2 choices required.',
       'array.max': 'Maximum of 5 choices allowed.',
     }),
 });
@@ -129,6 +130,39 @@ export const schemaApplyProject = Joi.object({
     'string.empty': `Cover letter is required.`,
     'string.base': `Cover letter is required.`,
   }),
+  answers: Joi.array()
+    .allow(null, '')
+    .max(5)
+    .items({
+      id: Joi.string(),
+      required: Joi.boolean().required(),
+      checkbox: Joi.boolean().required(),
+      answer: Joi.string().when('required', {
+        is: true,
+        then: Joi.string().when('checkbox', {
+          is: true,
+          then: Joi.string().allow(null, ''),
+          otherwise: Joi.string().trim().required().messages({
+            'any.required': 'Answer is required.',
+            'string.base': 'Answer is required.',
+            'string.empty': 'Answer is required.',
+          }),
+        }),
+        otherwise: Joi.string().allow(null, ''),
+      }),
+      selected_option: Joi.number().when('required', {
+        is: true,
+        then: Joi.number().when('checkbox', {
+          is: true,
+          then: Joi.number().required().messages({
+            'number.base': 'Please select an option.',
+            'any.required': 'Please select an option.',
+          }),
+          otherwise: Joi.number().allow('', null),
+        }),
+        otherwise: Joi.number().allow(null, ''),
+      }),
+    }),
   share_contact_info: Joi.boolean(),
   cv_link: Joi.string().uri().allow('', null).messages({
     'string.empty': `Link URL is required.`,
