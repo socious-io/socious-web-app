@@ -1,5 +1,5 @@
-import {string} from 'joi';
 import {IdentityMeta, IdentityType} from './identity';
+import {TMediaType} from './media';
 
 export interface IOrganizationType {
   id: string;
@@ -48,14 +48,6 @@ export interface IOrganizationFollowerType {
   identity_type: IdentityType;
   identity_meta: IdentityMeta;
 }
-
-export type TMediaType = {
-  id: string;
-  identity_id: string;
-  filename: string;
-  url: string;
-  created_at: string;
-};
 
 export interface IOrganization {
   address: string;

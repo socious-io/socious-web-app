@@ -96,23 +96,80 @@ export const schemaCreateProjectStep3 = Joi.object({
 });
 
 export const schemaCreateProjectQuestion = Joi.object({
-  question: Joi.string().required(),
+  question: Joi.string().required().messages({
+    'any.required': 'Question cannot be empty.',
+    'string.base': 'Question cannot be empty.',
+    'string.empty': 'Question cannot be empty.',
+  }),
   required: Joi.boolean(),
-  options: Joi.array().min(2).max(5).items(Joi.string()),
+  options: Joi.array()
+    .allow(null, '')
+    .min(2)
+    .max(5)
+    .items({
+      id: Joi.number(),
+      option: Joi.string().trim().required().messages({
+        'string.base': 'Option cannot be empty.',
+        'string.empty': 'Option cannot be empty.',
+        'any.required': 'Option cannot be empty.',
+      }),
+    })
+    .messages({
+      'array.min': 'Minimum of 2 choices required.',
+      'array.max': 'Maximum of 5 choices allowed.',
+    }),
+});
+
+export const schemaCreateProjectQuestionBody = Joi.object({
+  questions: Joi.array().items(schemaCreateProjectQuestion),
 });
 
 export const schemaApplyProject = Joi.object({
-  cover_letter: Joi.string().trim().required(),
+  cover_letter: Joi.string().trim().required().messages({
+    'any.required': 'Cover letter is required.',
+    'string.empty': `Cover letter is required.`,
+    'string.base': `Cover letter is required.`,
+  }),
+  answers: Joi.array()
+    .allow(null, '')
+    .max(5)
+    .items({
+      id: Joi.string(),
+      required: Joi.boolean().required(),
+      checkbox: Joi.boolean().required(),
+      answer: Joi.string().when('required', {
+        is: true,
+        then: Joi.string().when('checkbox', {
+          is: true,
+          then: Joi.string().allow(null, ''),
+          otherwise: Joi.string().trim().required().messages({
+            'any.required': 'Answer is required.',
+            'string.base': 'Answer is required.',
+            'string.empty': 'Answer is required.',
+          }),
+        }),
+        otherwise: Joi.string().allow(null, ''),
+      }),
+      selected_option: Joi.number().when('required', {
+        is: true,
+        then: Joi.number().when('checkbox', {
+          is: true,
+          then: Joi.number().required().messages({
+            'number.base': 'Please select an option.',
+            'any.required': 'Please select an option.',
+          }),
+          otherwise: Joi.number().allow('', null),
+        }),
+        otherwise: Joi.number().allow(null, ''),
+      }),
+    }),
   share_contact_info: Joi.boolean(),
-});
-
-export const schemaLink = Joi.object({
-  cv_link: Joi.string().uri().required().allow('', null).messages({
+  cv_link: Joi.string().uri().allow('', null).messages({
     'string.empty': `Link URL is required.`,
     'string.base': `Link URL is required.`,
     'string.uri': `Please enter a valid url.`,
   }),
-  cv_name: Joi.string().required().allow('', null).messages({
+  cv_name: Joi.string().allow('', null).messages({
     'string.empty': `Link name is a string.`,
     'string.base': `Link name is required.`,
   }),

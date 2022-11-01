@@ -27,7 +27,12 @@ const ConfirmApplicantActionModal = ({
       className="mb-0 max-w-xs pb-0 text-center"
     >
       <Modal.Title>
-        <h3 className="font-worksans border-offsetColor py-2 text-xl font-semibold">
+        <h3
+          className={twMerge(
+            'font-worksans border-offsetColor py-2 text-xl font-semibold',
+            continueText === 'Reject' && 'text-error',
+          )}
+        >
           {title}
         </h3>
       </Modal.Title>

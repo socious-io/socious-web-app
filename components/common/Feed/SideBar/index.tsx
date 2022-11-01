@@ -16,7 +16,6 @@ const SideBar = ({selectBar = 'DEFAULT'}: Props) => {
   const isUser = currentIdentity?.type === 'users' ? true : false;
 
   if (!currentIdentity) return <></>;
-  console.log('USER :---: ', user);
 
   return (
     <div

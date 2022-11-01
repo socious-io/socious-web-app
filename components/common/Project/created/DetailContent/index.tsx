@@ -1,15 +1,56 @@
-import BodyBox from '@components/common/Project/BodyBox/BodyBox';
 import ProjectItem from '@components/common/UserProfile/MainContent/ProjectItem';
 import Title from '@components/common/UserProfile/MainContent/Title';
+
 import {Modal} from '@components/common';
 import OverviewProjectCard from '../../component/OverviewProjectCard';
-import {useToggle} from 'hooks';
+import {useToggle, useUser} from 'hooks';
 import AlertCard from '@components/common/AlertCard/AlertCard';
 import EditProjectModal from '../../component/EditProjectModal';
 import {ProjectProps} from 'models/project';
 import {useProjectContext} from '@components/common/Project/created/NewProject/context';
 import {FC} from 'react';
-const Detail: FC<ProjectProps> = ({project}) => {
+import {Question} from '@models/question';
+import editSrc from 'asset/icons/edit.svg';
+import Image from 'next/image';
+import ProjectMobileTop from '../../ProjectMobileTop/ProjectMobileTop';
+
+const QuestionsCard: FC<{questions?: Question[]; goToEdit: () => void}> = ({
+  questions,
+  goToEdit,
+}) => {
+  return (
+    <div className="space-y-6 p-4">
+      <div className="flex items-center justify-between ">
+        <Title>Screening questions</Title>
+        <div className="relative  h-5 w-5 ">
+          <div className="cursor-pointer" onClick={goToEdit}>
+            <Image
+              src={editSrc}
+              className="fill-warning"
+              alt="dislike"
+              layout="fill"
+            />
+          </div>
+        </div>
+      </div>
+      {questions && (
+        <div className="space-y-4">
+          {questions.map((question, index) => (
+            <div key={question.id}>
+              <p>{'Question ' + (index + 1)}</p>
+              <span className="font-worksans block  text-base text-graySubtitle sm:text-sm">
+                {question.question}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export type DetailProps = ProjectProps & {questions?: Question[]};
+const Detail: FC<DetailProps> = ({project, questions}) => {
   const {
     title,
     payment_range_higher,
@@ -33,6 +74,7 @@ const Detail: FC<ProjectProps> = ({project}) => {
   const {state: closeProject, handlers: closeProjectHandlers} = useToggle();
   const {state: avoidClose, handlers: avoidCloseHandlers} = useToggle();
   const {ProjectContext, setProjectContext} = useProjectContext();
+  const {currentIdentity} = useUser();
 
   const clickEditIcon = (formStep: number) => {
     setProjectContext({
@@ -57,12 +99,19 @@ const Detail: FC<ProjectProps> = ({project}) => {
       formStep,
       status,
       city,
+      questions: questions ?? null,
     });
   };
 
   return (
     <div className="mb-10 w-full ">
-      <div className="divide-y rounded-2xl border border-grayLineBased bg-white ">
+      {/* <ProjectNav selectedTab="OVERVIEW" projectId={project.id} /> */}
+      <ProjectMobileTop
+        selectedTab="OVERVIEW"
+        projectId={project.id}
+        owner={project?.identity_id === currentIdentity?.id}
+      />
+      <div className="divide-y border border-grayLineBased bg-white sm:rounded-2xl ">
         <div className="flex flex-row items-center justify-center px-4 ">
           <Title>{title}</Title>
         </div>
@@ -81,6 +130,10 @@ const Detail: FC<ProjectProps> = ({project}) => {
           title="Skills"
           isEdit
           onclick={() => clickEditIcon(2)}
+        />
+        <QuestionsCard
+          questions={questions}
+          goToEdit={() => clickEditIcon(3)}
         />
       </div>
       <Modal isOpen={closeProject} onClose={closeProjectHandlers.off}>

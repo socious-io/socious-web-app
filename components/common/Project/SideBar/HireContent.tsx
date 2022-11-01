@@ -1,16 +1,11 @@
-import Button from '@components/common/Button/Button';
-import CardBoxComplete from '@components/common/CardBoxComplete/CardBoxComplete';
-import TextBoxGray from '@components/common/TextBoxGray/TextBoxGray';
-import TitleViewBoxWithCard from '@components/common/TitleViewBoxWithAvatar/TitleViewBoxWithAvatar';
-import TwoCloumnTwoRowBox from '@components/common/TwoColumnTwoRow/TwoColumnTwoRow';
-import {useToggle, useUser} from '@hooks';
+import {useToggle} from '@hooks';
 import {
   TApplicant,
   TApplicantsByStatus,
   TApplicantsResponse,
 } from '@models/applicant';
-import dayjs from 'dayjs';
 import Link from 'next/link';
+import {useRouter} from 'next/router';
 import {useMemo} from 'react';
 import useSWR from 'swr';
 import {get} from 'utils/request';
@@ -18,24 +13,17 @@ import {get} from 'utils/request';
 import HeaderBox from '../component/HeaderBox';
 import HiredCard from '../component/HiredCard';
 
-var data = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-  {
-    id: 2,
-    projectId: '2',
-  },
-];
-
 type HireContentProps = {
   // hiredApplicants: TApplicant[];
   projectId: string;
 };
 
 function HiredContent({projectId}: HireContentProps) {
+  const router = useRouter();
+  const {id} = router.query;
+
   const {state: showHired, handlers: showHiredHandler} = useToggle();
+  const {state: showEndHired, handlers: showEndHiredHandler} = useToggle();
 
   const {data: applicantsData, error: applicantsError} =
     useSWR<TApplicantsResponse>(
@@ -43,56 +31,94 @@ function HiredContent({projectId}: HireContentProps) {
       get,
     );
 
-  const hiredApplicants: TApplicant[] = useMemo(() => {
-    return (
-      applicantsData?.items.filter(
-        (applicant) => applicant.status === 'HIRED',
-      ) ?? []
+  const flattenApplicantsObj: TApplicantsByStatus = useMemo(() => {
+    const flattenApplicants = applicantsData?.items ?? [];
+
+    return flattenApplicants?.reduce(
+      (obj: TApplicantsByStatus, currentValue: TApplicant) => {
+        if (obj) {
+          if (!obj[currentValue['status'] ?? 'ERROR']) {
+            obj[currentValue['status'] ?? 'ERROR'] = [];
+          }
+          obj[currentValue['status'] ?? 'ERROR'].push(currentValue);
+        }
+        return obj;
+      },
+      {
+        PENDING: [],
+        REJECTED: [],
+        OFFERED: [],
+        APPROVED: [],
+        HIRED: [],
+        WITHRAWN: [],
+      },
     );
   }, [applicantsData]);
 
   return (
-    <div className="w-full py-4">
-      <div className=" rounded-2xl border border-grayLineBased ">
+    <div className="py-4">
+      <div className="my-4 rounded-2xl border border-grayLineBased bg-white">
         <HeaderBox
-          title={'Hired'}
+          title={`Hired (${flattenApplicantsObj['HIRED'].length})`}
           isExpand={showHired}
           expandToggle={showHiredHandler.toggle}
-          isExpandable={false}
-          isRound={false}
+          isExpandable={true}
+          isRound={true}
         />
-        <TitleViewBoxWithCard />
-        <TwoCloumnTwoRowBox />
-        <HiredCard hasButtons={false} />
+        {showHired && (
+          <div className="divide-y divide-grayLineBased">
+            {flattenApplicantsObj?.['HIRED'].map((applicant) => (
+              <Link
+                key={applicant.id}
+                href={`/app/projects/created/${applicant.project_id}/hired/${applicant.id}`}
+              >
+                <a className="block">
+                  <HiredCard
+                    userId={applicant.user.id}
+                    selected={!!id && applicant.id === id}
+                    hasButtons={false}
+                    name={applicant.user.name}
+                    applicantId={applicant.id}
+                    avatar={applicant.user.avatar}
+                    username={applicant.user.username ?? ''}
+                    paymentRate={applicant.payment_rate ?? undefined}
+                    paymentType={applicant.payment_type ?? undefined}
+                    endHire={() => console.log('ENDHIRE')}
+                  />
+                </a>
+              </Link>
+            ))}
+          </div>
+        )}
 
         <div className="w-full rounded-2xl border border-grayLineBased bg-white ">
           <HeaderBox
             isExpandable={true}
             isRound={false}
-            title={`End hire (${hiredApplicants.length})`}
-            isExpand={showHired}
-            expandToggle={showHiredHandler.toggle}
+            // title={`End hire (${flattenApplicantsObj?.['HIRED']?.length ?? 0})`}
+            title={`End hire (0)`}
+            isExpand={showEndHired}
+            expandToggle={showEndHiredHandler.toggle}
           />
-          {showHired &&
-            hiredApplicants.map((applicant) => (
+          {showEndHired &&
+            // flattenApplicantsObj?.['HIRED']?.map((applicant: TApplicant) => (
+            [].map((applicant: TApplicant) => (
               <Link
-                key={applicant.id}
-                href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
+                key={applicant?.id}
+                href={`/app/projects/created/${applicant?.project_id}/hired/${applicant.id}`}
               >
                 <a>
-                  <CardBoxComplete
-                    name={applicant?.user?.name}
-                    username={applicant?.user?.username ?? ''}
-                    applicationDate={dayjs(applicant?.created_at)?.format(
-                      'MMM D',
-                    )}
-                    message={
-                      applicant.cover_letter
-                        ? applicant.cover_letter.length > 200
-                          ? `${applicant.cover_letter?.slice(0, 50)}...}`
-                          : applicant.cover_letter
-                        : 'No message'
-                    }
+                  <HiredCard
+                    selected={!!id && applicant.id === id}
+                    hasButtons={false}
+                    userId={applicant.user.id}
+                    name={applicant.user.name}
+                    applicantId={applicant.id}
+                    avatar={applicant.user.avatar}
+                    username={applicant.user.username ?? ''}
+                    paymentRate={applicant.payment_rate ?? undefined}
+                    paymentType={applicant.payment_type ?? undefined}
+                    endHire={() => console.log('ENDHIRE')}
                   />
                 </a>
               </Link>

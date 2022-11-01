@@ -31,6 +31,7 @@ function StatusApplications({
         group?.map((item) => (
           <BodyCard
             key={item.id}
+            applicationId={item.id}
             project={item.project}
             name={item.organization.meta.name}
             image={item.organization.meta.image}

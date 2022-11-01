@@ -36,12 +36,12 @@ const ProjectCard: FC<ProjectsCardProps> = ({
               <p>Applicants</p>
             </li>
           </Link>
-          {/* <Link href={`/app/projects/created/hired/${username}`} passHref>
+          <Link href={`/app/projects/created/${projectId}/hired`} passHref>
             <li className="flex items-center space-x-4">
               <FolderIcon className="h-4" />
               <p>Hired</p>
             </li>
-          </Link> */}
+          </Link>
         </>
       </ul>
     </div>

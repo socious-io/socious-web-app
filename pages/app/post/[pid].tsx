@@ -188,7 +188,7 @@ const Post = () => {
       {/* Disable sidebar for now, we have some semantics to figure out */}
       {/* <SideBar /> */}
       <div className="mx-4 mb-10 w-full space-y-6 sm:mx-0">
-        {!!post.shared_id ? (
+        {!!post?.shared_id ? (
           <SharedCard
             id={post.id}
             content={post.content}

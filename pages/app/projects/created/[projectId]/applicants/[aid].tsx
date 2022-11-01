@@ -46,6 +46,7 @@ const Applicant = () => {
   }
 
   if (!applicantData) return <></>;
+  console.log('Applicant :----: ', applicantData);
 
   return (
     <GeneralLayout hasNavbar>
