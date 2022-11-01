@@ -20,7 +20,7 @@ export const PostResults: FC<PostResultsProps> = ({items}) => {
             id={post.id}
             content={post.content}
             time={post.created_at}
-            passion={post.causes_tags as string}
+            passion={post.causes_tags?.[0]}
             name={post.identity_meta.name}
             src={
               post.identity_type === 'users'
@@ -50,7 +50,7 @@ export const PostResults: FC<PostResultsProps> = ({items}) => {
             name={post.identity_meta.name}
             content={post.content}
             time={post.created_at}
-            passion={post.causes_tags as string}
+            passion={post.causes_tags?.[0]}
             src={
               post.identity_type === 'users'
                 ? post.identity_meta.avatar

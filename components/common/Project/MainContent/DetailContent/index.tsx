@@ -55,7 +55,7 @@ const Detail: FC<CreateProjectMainType> = (props) => {
   const isStep3 = ProjectContext.formStep === 3;
   const isStep4 = ProjectContext.formStep === 4;
 
-  const {mutate: getProject} = useSWR<any>(
+  const {mutate: getProject} = useSWR<Project>(
     `/projects?identity=${currentIdentity?.id}`,
     get,
   );
@@ -64,6 +64,7 @@ const Detail: FC<CreateProjectMainType> = (props) => {
     data.id ? `/projects/${data.id}/questions` : null,
     get,
   );
+
   if (!data) return <SplashScreen />;
 
   const onSubmit = async (s?: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => {
@@ -81,21 +82,28 @@ const Detail: FC<CreateProjectMainType> = (props) => {
       experience_level: ProjectContext.experience_level,
     };
 
-    if (ProjectContext.city) postBody.city = ProjectContext.city;
-    if (ProjectContext.payment_range_lower)
-      postBody.payment_range_lower = ProjectContext.payment_range_lower;
-    if (ProjectContext.payment_range_higher)
-      postBody.payment_range_higher = ProjectContext.payment_range_higher;
-
-    if (ProjectContext.commitment_hours_higher)
-      postBody.commitment_hours_higher = ProjectContext.commitment_hours_higher;
-    if (ProjectContext.commitment_hours_lower)
-      postBody.commitment_hours_lower = ProjectContext.commitment_hours_lower;
-
     if (ProjectContext.payment_currency)
       postBody.payment_currency = ProjectContext.payment_currency;
-    if (ProjectContext.payment_scheme)
+    if (ProjectContext.city) postBody.city = ProjectContext.city;
+
+    if (ProjectContext.payment_scheme) {
       postBody.payment_scheme = ProjectContext.payment_scheme;
+      if (postBody.payment_scheme === 'HOURLY') {
+        if (ProjectContext.commitment_hours_higher)
+          postBody.commitment_hours_higher =
+            ProjectContext.commitment_hours_higher;
+        if (ProjectContext.commitment_hours_lower)
+          postBody.commitment_hours_lower =
+            ProjectContext.commitment_hours_lower;
+      }
+    }
+
+    if (postBody.payment_type === 'PAID') {
+      if (ProjectContext.payment_range_lower)
+        postBody.payment_range_lower = ProjectContext.payment_range_lower;
+      if (ProjectContext.payment_range_higher)
+        postBody.payment_range_higher = ProjectContext.payment_range_higher;
+    }
 
     try {
       await updateProjectById(data!.id, postBody);
@@ -115,7 +123,7 @@ const Detail: FC<CreateProjectMainType> = (props) => {
     } else if (isStep2) {
       return <ProjectSkill onSubmit={onSubmit} rawSkills={skills} />;
     } else if (isStep3) {
-      return <ProjectQuestion onSubmit={onSubmit} />;
+      return <ProjectQuestion onSubmit={onSubmit} type="EDIT" />;
     } else if (isStep4) {
       return <QuestionDetail projectId={data.id} />;
     }
@@ -124,7 +132,12 @@ const Detail: FC<CreateProjectMainType> = (props) => {
   return (
     <div className="mb-10 w-full ">
       {currentIdentity?.id === data?.identity_id ? (
-        <DetailContent project={data} questions={questions?.questions} />
+        <DetailContent
+          project={data}
+          questions={questions?.questions?.sort(
+            (x, y) => Date.parse(x.created_at) - Date.parse(y.created_at),
+          )}
+        />
       ) : (
         <div
           className={twMerge(
@@ -132,7 +145,12 @@ const Detail: FC<CreateProjectMainType> = (props) => {
             className,
           )}
         >
-          <OrganizationTopCard project={data} />
+          <OrganizationTopCard
+            project={data}
+            questions={questions?.questions?.sort(
+              (x, y) => Date.parse(x.created_at) - Date.parse(y.created_at),
+            )}
+          />
           {(data?.causes_tags || []).length > 0 && (
             <ProjectItem items={data?.causes_tags} title="Social causes" />
           )}

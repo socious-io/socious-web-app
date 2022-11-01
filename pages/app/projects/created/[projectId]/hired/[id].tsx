@@ -1,27 +1,22 @@
-import useSWR from 'swr';
-import {GridLoader} from 'react-spinners';
-import {useRouter} from 'next/router';
-
-// components
-import {GeneralLayout} from 'layout';
+import HiredContent from '@components/common/Project/created/hiredContent';
 import SideBar from '@components/common/Project/SideBar/SideBar';
-import ApplicantsContent from '@components/common/Project/created/ApplicantsContent';
-
-// Utils/services
+import {TApplicant} from '@models/applicant';
+import {GeneralLayout} from 'layout';
+import {useRouter} from 'next/router';
+import {GridLoader} from 'react-spinners';
+import useSWR from 'swr';
 import {get} from 'utils/request';
 
-// Types
-import {TApplicant} from '@models/applicant';
-
-const Applicant = () => {
+const Hire = () => {
   const router = useRouter();
-  const {projectId, aid} = router.query;
+  const {projectId, id} = router.query;
   const {
     data: applicantData,
     error: applicantError,
     mutate: mutateApplicant,
-  } = useSWR<TApplicant>(projectId && aid ? `/applicants/${aid}` : null, get);
+  } = useSWR<TApplicant>(projectId && id ? `/applicants/${id}` : null, get);
 
+  console.log('ApplicantData: : ', applicantError);
   if (!applicantData && !applicantError)
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center">
@@ -46,17 +41,18 @@ const Applicant = () => {
   }
 
   if (!applicantData) return <></>;
-  console.log('Applicant :----: ', applicantData);
 
   return (
-    <GeneralLayout hasNavbar>
-      <SideBar selectBar="APPLICANT" projectId={projectId as string} />
-      <ApplicantsContent
-        applicant={applicantData}
+    <GeneralLayout>
+      <SideBar selectBar={'HIRE'} projectId={projectId as string} />
+      <HiredContent
+        applicant={
+          applicantData?.status === 'HIRED' ? applicantData : undefined
+        }
         mutateApplicant={mutateApplicant}
       />
     </GeneralLayout>
   );
 };
 
-export default Applicant;
+export default Hire;

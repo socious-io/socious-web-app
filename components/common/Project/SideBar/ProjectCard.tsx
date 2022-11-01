@@ -25,9 +25,18 @@ const ProjectCard: FC<ProjectsCardProps> = (props) => {
     </Link>
   );
 
-  /* @desc: this function allow "applicant" link to be shown only when 
-     project belongs to the active organization */
-  const guardAgainstNonEqualOrg = (link: JSX.Element): JSX.Element | null => {
+  const hiredLink = (
+    <Link href={`/app/projects/created/${projectDetail.id}/hired`} passHref>
+      <li className="flex items-center space-x-4">
+        <FolderIcon className="h-4" />
+        <p>Hired</p>
+      </li>
+    </Link>
+  );
+
+  const showIfBelongToOrganization = (
+    link: JSX.Element,
+  ): JSX.Element | null => {
     const projectBelongToSameOrg =
       currentIdentity?.id === projectDetail.identity_id;
     return projectBelongToSameOrg ? link : null;
@@ -46,7 +55,8 @@ const ProjectCard: FC<ProjectsCardProps> = (props) => {
               <p>Overview</p>
             </li>
           </Link>
-          {guardAgainstNonEqualOrg(applicantLink)}
+          {showIfBelongToOrganization(applicantLink)}
+          {showIfBelongToOrganization(hiredLink)}
         </>
       </ul>
     </div>
