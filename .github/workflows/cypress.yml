@@ -23,7 +23,7 @@ jobs:
           browser: chrome
           build: npm run build
           start: npm run ci
-          record: true
+          # record: true
         env:
           # pass GitHub token to detect new build vs re-run build
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
