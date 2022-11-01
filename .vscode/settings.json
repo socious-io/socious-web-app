@@ -27,7 +27,20 @@
     "**/node_modules": true,
     "**/dist": true
   },
-  "cSpell.words": ["datasource", "datetime", "Laravel", "mediumtext", "nestjs", "socious", "typeorm", "Selecteds", "Signup", "Socious", "testid"],
+  "cSpell.words": [
+    "datasource",
+    "datetime",
+    "heroicons",
+    "Laravel",
+    "mediumtext",
+    "nestjs",
+    "Selecteds",
+    "Signup",
+    "socious",
+    "Socious",
+    "testid",
+    "typeorm"
+  ],
   "files.eol": "\n",
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true

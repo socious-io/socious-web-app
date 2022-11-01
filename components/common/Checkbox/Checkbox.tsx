@@ -13,7 +13,7 @@ export interface CheckboxProps
 }
 
 const defaultCheckboxClass =
-  'w-4 h-4 mr-2   focus:ring-transparent text-secondary accent-primary hover:accent-primaryLight cursor-pointer';
+  'w-4 h-4 mr-2 focus:ring-transparent text-secondary accent-primary hover:accent-primaryLight cursor-pointer';
 const disabledClass = 'border-gray-500 bg-gray-400';
 
 export function Checkbox({

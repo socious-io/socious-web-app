@@ -1,16 +1,12 @@
 import {Avatar, Chip} from '@components/common';
 import {Project} from 'models/project';
 import Link from 'next/link';
-import {
-  BookmarkIcon,
-  ChevronRightIcon,
-  HandThumbDownIcon,
-} from '@heroicons/react/24/outline';
+import {ChevronRightIcon} from '@heroicons/react/24/outline';
 import {getText} from '@socious/data';
 import {FC} from 'react';
 import {isoToHumanTime} from 'services/toHumanTime';
 import {useFormattedLocation} from 'services/formatLocation';
-import Markdown from 'markdown-to-jsx';
+import Markdown, {MarkdownToJSX} from 'markdown-to-jsx';
 import Router from 'next/router';
 
 type ProjectCardProps = {
@@ -34,6 +30,13 @@ export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
       })}
     </div>
   );
+};
+
+const convertMarkdownToJSX = (
+  value: string,
+  options?: MarkdownToJSX.Options,
+): JSX.Element => {
+  return value ? <Markdown options={options}>{value}</Markdown> : <></>;
 };
 
 export default function ProjectCard({
@@ -67,12 +70,6 @@ export default function ProjectCard({
               </div>
             </div>
           </Link>
-          {/* {type === 'SEARCH' && (
-            <div className="flex gap-4 text-primary">
-              <HandThumbDownIcon className="w-4" />
-              <BookmarkIcon className="w-4" />
-            </div>
-          )} */}
         </div>
         <div className="">
           <p className="font-semibold">{project.title}</p>
@@ -92,24 +89,17 @@ export default function ProjectCard({
         <div className="flex flex-row">
           <p className="my-1 text-sm">
             {project.description?.length > 200
-              ? `${project.description?.slice(0, 200)}...`
-              : project.description}
+              ? convertMarkdownToJSX(
+                  project.description?.slice(0, 200) + '...',
+                  {wrapper: 'article'},
+                )
+              : convertMarkdownToJSX(project.description, {wrapper: 'article'})}
 
             {project.description?.length > 200 && (
               <span className="text-secondary"> See more</span>
             )}
           </p>
         </div>
-        <div className="flex flex-row">
-          <p className="my-1 text-sm">
-            {project?.description && (
-              <Markdown options={{wrapper: 'article'}}>
-                {project?.description?.slice?.(0, 200)}
-              </Markdown>
-            )}
-          </p>
-        </div>
-
         <div className="flex flex-row justify-between ">
           <div className="hide-scroll-bar whitespace-no-wrap w-7/10 flex  flex-row space-x-2  overflow-auto">
             <GroupsOfChips causes_tags={project.causes_tags} />
@@ -125,14 +115,6 @@ export default function ProjectCard({
           >
             {isoToHumanTime(project.updated_at)}
           </dt>
-          {/* <div className="flex gap-2 text-primary">
-            <div className="relative">
-              <Avatar />
-              <Avatar className="absolute left-3" />
-              <Avatar />
-            </div>
-            <dd className="text-sm text-secondary">connections</dd>
-          </div> */}
         </div>
       </div>
     </div>

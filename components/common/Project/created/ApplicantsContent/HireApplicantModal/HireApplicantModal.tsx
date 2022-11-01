@@ -24,8 +24,10 @@ type HireApplicantModalProps = {
   modalState: boolean;
   onSubmit: (data: any) => void;
   onClose: () => void;
+  applicantName: string;
 };
 const HireApplicantModal = ({
+  applicantName,
   modalState,
   onSubmit,
   onClose,
@@ -86,7 +88,7 @@ const HireApplicantModal = ({
       >
         <Modal.Description>
           <div className="grow overflow-y-auto">
-            <p className="p-4">An offer will be sent to Name.</p>
+            <p className="p-4">An offer will be sent to {applicantName}.</p>
             {/* Main Form */}
             <div className="border-t border-offsetColor px-4 pb-8 pt-4">
               <div className="space-y-6">

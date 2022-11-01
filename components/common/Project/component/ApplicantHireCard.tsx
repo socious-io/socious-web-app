@@ -1,5 +1,6 @@
 import {Avatar} from '@components/common';
 import {Button} from '@components/common';
+import {TApplicantStatus} from '@models/applicant';
 import Image from 'next/image';
 import Link from 'next/link';
 import Router from 'next/router';
@@ -13,7 +14,7 @@ type ApplicantHireCardProps = {
   name: string;
   username?: string;
   bio: string;
-  status: string;
+  status: TApplicantStatus;
   userId: string;
   applicantId: string;
   avatar?: string;
