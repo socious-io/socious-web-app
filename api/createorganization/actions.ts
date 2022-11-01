@@ -3,7 +3,7 @@ import {post} from 'utils/request';
 // interfaces
 import {CreateOrganizationType} from '@models/createOrganization';
 
-export function create_organization(data: any):any {
+export function create_organization(data: any): any {
   //destructure data
   const {
     type,

@@ -16,7 +16,6 @@ import {approveOffer, withdrawApplication} from '@api/applicants/actions';
 import {TApplicant} from '@models/applicant';
 import {Project} from '@models/project';
 import Link from 'next/link';
-import {update} from 'lodash';
 import {toast} from 'react-toastify';
 type MyApplicationProps = {
   applicant: TApplicant;
