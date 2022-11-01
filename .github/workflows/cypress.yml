@@ -1,0 +1,22 @@
+name: Cypress Tests using Cypress Docker Image
+
+on:
+  pull_request:
+    branches: ['main']
+
+concurrency: fe-e2e-test-main
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node16.17.1-chrome106
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v4.x.x
+        with:
+          browser: chrome
+          build: npm run build
+          start: npm run ci
