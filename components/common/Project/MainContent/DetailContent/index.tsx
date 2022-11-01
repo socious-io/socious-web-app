@@ -1,8 +1,7 @@
 import BodyBox from '@components/common/Project/BodyBox/BodyBox';
 import ProjectItem from '@components/common/UserProfile/MainContent/ProjectItem';
 import OrganizationTopCard from '../../component/OrganizationTopCard';
-import useSWR from 'swr';
-import {useRouter} from 'next/router';
+import useSWR, {KeyedMutator} from 'swr';
 import {IOrganizationType} from 'models/organization';
 import {useUser} from '@hooks';
 import DetailContent from '@components/common/Project/created/DetailContent';
@@ -16,7 +15,7 @@ import {
   useProjectContext,
   initContext,
 } from '@components/common/Project/created/NewProject/context';
-import {FC, useEffect} from 'react';
+import {FC} from 'react';
 import {updateProjectById} from '@api/projects/actions';
 import {CreateProjectType, Project} from '@models/project';
 import {toast} from 'react-toastify';
@@ -29,21 +28,25 @@ import QuestionDetail from '../../created/NewProject/QuestionDetail';
 import {TQuestionsResponse} from '@models/question';
 
 type CreateProjectMainType = {
-  projectId?: string;
-  className?: string;
+  projectId: string;
   skills: any[];
+  className?: string;
+  data?: {data: Project; mutate: KeyedMutator<Project>};
 };
 
 const libraries: Libraries = ['places'];
 
-const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
+const Detail: FC<CreateProjectMainType> = (props) => {
+  const {className, skills} = props;
+  /* @desc: data will always be present in this component, so casting is safe */
+  const {data, mutate} = props.data as NonNullable<
+    CreateProjectMainType['data']
+  >;
   const {isLoaded} = useGoogleMapsScript({
     googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
     libraries,
   });
 
-  const router = useRouter();
-  const {id} = router.query;
   const {currentIdentity} = useUser({redirect: false});
   const {ProjectContext, setProjectContext} = useProjectContext();
   const isStep0 = ProjectContext.formStep === 0;
@@ -52,18 +55,13 @@ const Detail: FC<CreateProjectMainType> = ({projectId, className, skills}) => {
   const isStep3 = ProjectContext.formStep === 3;
   const isStep4 = ProjectContext.formStep === 4;
 
-  const {data, mutate} = useSWR<Project>(`/projects/${projectId ?? id}`, get);
-  const {mutate: getProject} = useSWR<any>(
+  const {mutate: getProject} = useSWR<Project>(
     `/projects?identity=${currentIdentity?.id}`,
     get,
   );
 
-  const {
-    data: questions,
-    error: questionsError,
-    mutate: mutateQuestions,
-  } = useSWR<TQuestionsResponse>(
-    data?.id ? `/projects/${data.id}/questions` : null,
+  const {data: questions} = useSWR<TQuestionsResponse>(
+    data.id ? `/projects/${data.id}/questions` : null,
     get,
   );
 
