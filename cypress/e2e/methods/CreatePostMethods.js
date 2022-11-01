@@ -2,7 +2,7 @@
 
 // class CreatePostMethods{
 //     navigateToHome1(){
-//         cy.visit('https://dev.socious.io/app')
+//         cy.visit('/app')
 //     }
 //     clickOnLoginButton(){
 //         CreatePostElements.elements.loginBtn().click()
@@ -23,7 +23,7 @@
 //     //     return this
 //     // }
 //     navigateToFeed(){
-//         cy.visit('https://dev.socious.io/app/feed')
+//         cy.visit('/app/feed')
 //     }
 //     clickOnCreatePostLink(){
 //         CreatePostElements.elements.createPostLink().click();

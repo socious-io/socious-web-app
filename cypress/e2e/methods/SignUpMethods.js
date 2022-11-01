@@ -2,7 +2,7 @@ import SignUpElements from '../elements/SignUpElements';
 
 class SignUpMethods {
   navigateToHome() {
-    cy.visit('https://dev.socious.io/app');
+    cy.visit('/app');
   }
   clickOnSignUpButton() {
     SignUpElements.elements.SignUpBtn().click();

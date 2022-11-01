@@ -1,9 +1,9 @@
 /// <reference types = "cypress"/>
-// import LoginElements from "../elements/LoginElements";
+import LoginElements from '../elements/LoginElements';
 
 class LoginMethods {
   navigateToHome() {
-    cy.visit('https://dev.socious.io/app');
+    cy.visit('/app');
   }
   clickOnLoginButton() {
     LoginElements.elements.loginBtn().click();
@@ -28,8 +28,8 @@ class LoginMethods {
     return this;
   }
   // assertUrlAfterLogin(){
-  //     cy.url().should('equal','https://dev.socious.io/app/projects')
-  //     //cy.url().should('equal','https://dev.socious.io/app/auth/onboarding')
+  //     cy.url().should('equal','/app/projects')
+  //     //cy.url().should('equal','/app/auth/onboarding')
   // // }
 }
 //module.exports = new LoginMethods();

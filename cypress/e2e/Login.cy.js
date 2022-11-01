@@ -1,9 +1,8 @@
 /// <reference types = "cypress"/>
-import LoginElements from '../e2e/elements/LoginElements';
 import LoginMethods from '/cypress/e2e/methods/LoginMethods';
 
 const loginMethods = new LoginMethods();
-describe('Given user is in the Home page and navigates to the Login page', () => {
+describe.skip('Given user is in the Home page and navigates to the Login page', () => {
   beforeEach('Navigate to the home page, then login page', () => {
     loginMethods.navigateToHome();
     // loginMethods.clickOnLoginButton();

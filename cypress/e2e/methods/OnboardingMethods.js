@@ -2,7 +2,7 @@ import OnboardingElements from '../elements/OnboardingElements';
 
 class OnboardingMethods {
   navigateToHome() {
-    cy.visit('https://dev.socious.io/app');
+    cy.visit('/app');
   }
   clickOnLoginButton() {
     OnboardingElements.elements.loginBtn().click();

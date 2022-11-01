@@ -3,7 +3,7 @@ import OnboardingElements from '../e2e/elements/OnboardingElements';
 import OnboardingMethods from '../e2e/methods/OnboardingMethods';
 
 const onboardingMethods = new OnboardingMethods();
-describe('Given user has registered and navigates to the Login page for the first time', () => {
+describe.skip('Given user has registered and navigates to the Login page for the first time', () => {
   beforeEach('Navigate to the home page, then Login page', () => {
     onboardingMethods.navigateToHome();
     onboardingMethods.clickOnLoginButton();
