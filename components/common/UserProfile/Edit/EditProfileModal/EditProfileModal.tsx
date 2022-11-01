@@ -7,7 +7,6 @@ import React, {
   useState,
 } from 'react';
 import {twMerge} from 'tailwind-merge';
-import useSWRInfinite from 'swr/immutable';
 import {FormProvider, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 
@@ -15,7 +14,6 @@ import {joiResolver} from '@hookform/resolvers/joi';
 import {Modal} from '@components/common';
 import EditSubMenu from '../EditSubMenu/EditSubMenu';
 import EditMainMenu from '../EditMainMenu/EditMainMenu';
-import {get} from 'utils/request';
 
 // Icons
 import {ChevronLeftIcon, XMarkIcon} from '@heroicons/react/24/solid';
@@ -36,18 +34,20 @@ import {UpdateProfileBodyType} from '@models/profile';
 import {mutate} from 'swr';
 import Router from 'next/router';
 import {useUser} from '@hooks';
-import {close} from 'inspector';
 import {AxiosError} from 'axios';
 import {toast} from 'react-toastify';
+import {Skill} from '@components/common/Search/Providers/SkillsProvider';
 interface EditProfileModalProps {
   openState: boolean;
   user: any;
   closeModal: () => void;
+  skillsData: Skill[];
 }
 
 const EditProfileModal = ({
   openState,
   user,
+  skillsData,
   closeModal,
 }: EditProfileModalProps) => {
   const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -81,14 +81,9 @@ const EditProfileModal = ({
     ],
   );
 
-  //Skills
-  const {data: skillsData, error} = useSWRInfinite<any>(
-    '/skills?limit=1000',
-    get,
-  );
   const skills = useMemo(() => {
     const sorted: {id: string; name: string}[] = [];
-    skillsData?.items?.forEach((skill: any) => {
+    skillsData?.forEach((skill: any) => {
       const name = getText('en', `SKILL.${skill.name}`);
       if (name) sorted.push({id: skill.name, name});
     });
@@ -175,9 +170,7 @@ const EditProfileModal = ({
 
     //Making a API call
     try {
-      console.log('I am making request');
       const response: any = await updateProfile(updateProfileBody);
-      console.log('Got the response :---: ', response);
       mutateUser(response);
       user?.username === response.username
         ? mutate(`/user/by-username/${user?.username}/profile`)

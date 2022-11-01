@@ -1,32 +1,27 @@
 // Packages
 import {forwardRef, useCallback, useImperativeHandle, useMemo} from 'react';
-import useSWRInfinite from 'swr/infinite';
 import {GridLoader} from 'react-spinners';
 
 // Components
 import Button from '@components/common/Button/Button';
 import Posts from './Posts';
 
-// Services/functions
-import {get} from 'utils/request';
+// Hooks
+import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 
 // Types
 import {InsertNewPost} from '.';
+import {IPost} from '@models/post';
 
 const PostContainer = forwardRef<InsertNewPost>((props, ref) => {
-  //Get key to fetch comments.
-  const getKey = useCallback((initialSize: number, previousData: any) => {
-    if (previousData && previousData?.items?.length < 10) return null;
-    return `/posts?page=${initialSize + 1}`;
-  }, []);
-
   const {
-    data: infinitePosts,
-    error: infiniteError,
-    mutate: mutatePosts,
+    flattenData,
+    isLoading,
+    mutateInfinite: mutatePosts,
+    seeMore,
+    loadMore,
     size,
-    setSize,
-  } = useSWRInfinite<any>(getKey, get, {
+  } = useInfiniteSWR<IPost>('/posts', {
     shouldRetryOnError: false,
     revalidateFirstPage: false,
   });
@@ -43,12 +38,6 @@ const PostContainer = forwardRef<InsertNewPost>((props, ref) => {
       );
     },
   }));
-
-  //Check for available Posts
-  const noMorePosts = useMemo(
-    () => size * 10 >= infinitePosts?.[0]?.['total_count'],
-    [size, infinitePosts],
-  );
 
   //Toggle Like
   const toggleLike = useCallback(
@@ -81,24 +70,23 @@ const PostContainer = forwardRef<InsertNewPost>((props, ref) => {
   );
 
   // If loading.
-  if (!infinitePosts && !infiniteError)
+  if (isLoading)
     return (
       <div className="flex w-full flex-col items-center justify-center">
         <GridLoader color="#36d7b7" />
       </div>
     );
-  console.log(infinitePosts);
   return (
     <div className="sm:space-y-2">
       {/* Passing infintePosts to render on mutation */}
-      <Posts infinitePosts={infinitePosts ?? []} toggleLike={toggleLike} />
-      {!noMorePosts && (
+      <Posts infinitePosts={flattenData ?? []} toggleLike={toggleLike} />
+      {seeMore && (
         <div className="flex justify-center">
           <Button
             variant="link"
             className="font-semibold text-primary"
-            onClick={() => setSize((size) => size + 1)}
-            disabled={noMorePosts}
+            onClick={loadMore}
+            disabled={!seeMore}
           >
             See more
           </Button>

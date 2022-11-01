@@ -2,7 +2,7 @@
  * user profile page with dynamik route
  */
 
-import type {NextPage} from 'next';
+import type {GetStaticPaths, GetStaticProps, NextPage} from 'next';
 import {GeneralLayout} from 'layout';
 
 //libraries
@@ -18,13 +18,19 @@ import {get} from 'utils/request';
 //components
 import MainContent from '@components/common/UserProfile/MainContent';
 import EditProfileModal from '@components/common/UserProfile/Edit/EditProfileModal/EditProfileModal';
-import SplashScreen from 'layout/Splash';
 import {UserProfile} from '@models/profile';
+import getGlobalData from 'services/cacheSkills';
+import {Skill} from '@components/common/Search/Providers/SkillsProvider';
+import {GridLoader} from 'react-spinners';
 
 // Libraries
 const libraries: Libraries = ['places'];
 
-const ProfilePage: NextPage = () => {
+type ProfilePageProps = {
+  skills: Skill[];
+};
+
+const ProfilePage: NextPage<ProfilePageProps> = ({skills}) => {
   // get id from route
   const router = useRouter();
   const {id} = router.query;
@@ -33,7 +39,7 @@ const ProfilePage: NextPage = () => {
   const {user} = useUser();
 
   // Loading The Map
-  const {isLoaded, loadError} = useGoogleMapsScript({
+  const {isLoaded} = useGoogleMapsScript({
     googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
     libraries,
   });
@@ -47,17 +53,28 @@ const ProfilePage: NextPage = () => {
   );
 
   // Show this until the data is fetched
-  if (!data && !error) return <p>loading</p>;
   if (
     error?.response?.status === 400 ||
     (500 &&
       error?.response?.data?.error.startsWith(
         'invalid input syntax for type uuid',
       ))
-  )
-    return <p>invalid user</p>;
+  ) {
+    router.back();
+    return (
+      <div className="flex h-screen flex-col items-center justify-center">
+        <GridLoader color="#36d7b7" />
+        <p>Invalid user. Returning back.</p>
+      </div>
+    );
+  }
 
-  if (!data) return <SplashScreen />;
+  if ((!data && !error) || !data)
+    return (
+      <div className="flex h-screen flex-col items-center justify-center">
+        <GridLoader color="#36d7b7" />
+      </div>
+    );
 
   return (
     <GeneralLayout>
@@ -75,6 +92,7 @@ const ProfilePage: NextPage = () => {
         <EditProfileModal
           openState={editState}
           user={user}
+          skillsData={skills}
           closeModal={editHandlers.off}
         />
       )}
@@ -83,3 +101,15 @@ const ProfilePage: NextPage = () => {
 };
 
 export default ProfilePage;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const skills = await getGlobalData();
+  return {props: {skills}, revalidate: 60};
+};

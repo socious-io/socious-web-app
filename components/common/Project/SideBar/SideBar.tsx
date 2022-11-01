@@ -14,7 +14,7 @@ const SideBar = ({selectBar, projectId}: Props) => {
   const {user, currentIdentity} = useUser();
 
   return (
-    <div className="hidden w-80 md:flex" aria-label="Sidebar">
+    <div className="hidden w-96 md:flex" aria-label="Sidebar">
       <div className="w-full space-y-4 overflow-y-auto bg-gray-50">
         <div
           onClick={() => router.back()}

@@ -4,18 +4,13 @@ import PostHead from './components/PostHead';
 import PostCard from './PostCard';
 import PostAction from './components/PostAction';
 
-// Custom Hook
-import {useToggle} from '@hooks';
-
 // Types
 import {PostCardProps} from './PostCard';
-interface SharedPostType extends PostCardProps {
-  identity_meta: any;
-  created_at: string;
-  causes_tags: string;
-}
+import {MetaWithAddress} from '@models/identity';
+import {ISharedPost} from '@models/post';
+
 interface SharedCardProps extends PostCardProps {
-  sharedPost: SharedPostType;
+  sharedPost: ISharedPost & {identity_meta: MetaWithAddress};
 }
 
 export function SharedCard({
@@ -53,7 +48,7 @@ export function SharedCard({
         id={sharedPost?.id}
         content={sharedPost?.content}
         time={sharedPost?.created_at}
-        passion={sharedPost?.causes_tags}
+        passion={sharedPost?.causes_tags?.[0]}
         name={sharedPost?.identity_meta?.username}
         src={
           sharedPost.identity_meta.avatar ?? sharedPost?.identity_meta?.image
