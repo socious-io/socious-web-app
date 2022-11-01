@@ -2,16 +2,17 @@ import {Avatar, Chip} from '@components/common';
 import {Project} from 'models/project';
 import Link from 'next/link';
 import {
-  BookmarkIcon,
+  // BookmarkIcon,
   ChevronRightIcon,
-  HandThumbDownIcon,
+  // HandThumbDownIcon,
 } from '@heroicons/react/24/outline';
 import {getText} from '@socious/data';
-import {FC} from 'react';
+import {FC, useMemo} from 'react';
 import {isoToHumanTime} from 'services/toHumanTime';
 import {useFormattedLocation} from 'services/formatLocation';
 import Markdown from 'markdown-to-jsx';
 import Router from 'next/router';
+import {useToggle} from '@hooks';
 
 type ProjectCardProps = {
   project: Project;
@@ -42,7 +43,9 @@ export default function ProjectCard({
   previewItem,
 }: ProjectCardProps) {
   const location = useFormattedLocation(project);
+  const {state: seeMore, handlers: seeMoreHandlers} = useToggle();
 
+  const isLong = useMemo(() => project.description?.length > 200, [project]);
   return (
     <div
       className="cursor-pointer rounded-2xl border border-grayLineBased bg-white p-4"
@@ -91,21 +94,30 @@ export default function ProjectCard({
         </div>
         <div className="flex flex-row">
           <p className="my-1 text-sm">
-            {project.description?.length > 200
-              ? `${project.description?.slice(0, 200)}...`
-              : project.description}
-
-            {project.description?.length > 200 && (
-              <span className="text-secondary"> See more</span>
-            )}
-          </p>
-        </div>
-        <div className="flex flex-row">
-          <p className="my-1 text-sm">
             {project?.description && (
-              <Markdown options={{wrapper: 'article'}}>
-                {project?.description?.slice?.(0, 200)}
-              </Markdown>
+              <>
+                <Markdown options={{wrapper: 'article'}}>
+                  {isLong && !seeMore
+                    ? `${project.description?.slice(0, 200)}...`
+                    : project.description}
+                </Markdown>
+                {isLong &&
+                  (seeMore ? (
+                    <span
+                      className="text-secondary"
+                      onClick={seeMoreHandlers.off}
+                    >
+                      See Less
+                    </span>
+                  ) : (
+                    <span
+                      className="text-secondary"
+                      onClick={seeMoreHandlers.on}
+                    >
+                      See More
+                    </span>
+                  ))}
+              </>
             )}
           </p>
         </div>
