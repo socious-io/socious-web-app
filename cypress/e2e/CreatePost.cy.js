@@ -3,7 +3,7 @@
 
 // const createPostMethods= new CreatePostMethods();
 
-// describe('Given user logged in', function() {
+// describe('Create Post', function() {
 
 //     // before(function(){
 //     //     cy.fixture('TestingData').then( function(testdata) {
@@ -14,7 +14,7 @@
 //         createPostMethods.navigateToHome1();
 //         createPostMethods.clickOnLoginButton();
 //       })
-//     it(' login', function(){
+//     specify('User does...', function(){
 
 //     //    createPostMethods.doLogin(TestingData.EmailForLogin,TestingData.PasswordForLogin);
 //        //createPostMethods.navigateToFeed();

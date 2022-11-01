@@ -4,12 +4,12 @@ import OnboardingMethods from '../e2e/methods/OnboardingMethods';
 
 const onboardingMethods = new OnboardingMethods();
 // TODO need email solution
-describe.skip('Given user has registered and navigates to the Login page for the first time', () => {
+describe.skip('User Onboarding', () => {
   beforeEach('Navigate to the home page, then Login page', () => {
     onboardingMethods.navigateToHome();
     onboardingMethods.clickOnLoginButton();
   });
-  it('When user wants to Login for the first time', () => {
+  specify('User logs in for the first time', () => {
     onboardingMethods.setEmail();
     onboardingMethods.setPassword();
     onboardingMethods.clickOnContinueButton();
