@@ -2,7 +2,8 @@ name: Cypress Tests using Cypress Docker Image
 
 on:
   pull_request:
-    branches: ['main']
+    branches:
+      - main
 
 concurrency: fe-e2e-test-main
 
@@ -20,3 +21,7 @@ jobs:
           browser: chrome
           build: npm run build
           start: npm run ci
+          record: true
+        env:
+          # pass GitHub token to detect new build vs re-run build
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
