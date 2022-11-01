@@ -213,7 +213,7 @@ const EditProfileModal = ({
           );
           console.log('ORG RESPONSE :--: ', response);
           mutateUser(response);
-          mutate(`/orgs/by-shortname/${response.id}`);
+          mutate(`/orgs/by-shortname/${response.shortname}`);
         }
         closeModal();
         // forceUpdate();
