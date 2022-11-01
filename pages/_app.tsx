@@ -20,6 +20,7 @@ import {
   Token,
 } from '@capacitor/push-notifications';
 import {useEffect} from 'react';
+import {Capacitor} from '@capacitor/core';
 // function getLibrary(provider: any) {
 //   return new Web3(provider);
 // }
@@ -42,28 +43,29 @@ function MyApp({Component, pageProps}: AppProps) {
       });
 
       PushNotifications.addListener('registration', (token: Token) => {
-        alert('Push registration success, token: ' + token.value);
+        console.log('Push registration success, token: ' + token.value);
       });
 
       PushNotifications.addListener('registrationError', (error: any) => {
-        alert('Error on registration: ' + JSON.stringify(error));
+        console.log('Error on registration: ' + JSON.stringify(error));
       });
 
       PushNotifications.addListener(
         'pushNotificationReceived',
         (notification: PushNotificationSchema) => {
-          alert('Push received: ' + JSON.stringify(notification));
+          console.log('Push received: ' + JSON.stringify(notification));
         },
       );
 
       PushNotifications.addListener(
         'pushNotificationActionPerformed',
         (notification: ActionPerformed) => {
-          alert('Push action performed: ' + JSON.stringify(notification));
+          console.log('Push action performed: ' + JSON.stringify(notification));
         },
       );
     };
-    onInit();
+
+    Capacitor.isNativePlatform() && onInit();
   }, []);
 
   return (

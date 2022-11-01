@@ -17,6 +17,7 @@ import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
 import {DefaultErrorMessage, ErrorMessage, get} from 'utils/request';
 import {useUser} from '@hooks';
+import {Capacitor} from '@capacitor/core';
 
 const Login: NextPage = () => {
   const router = useRouter();
@@ -36,7 +37,10 @@ const Login: NextPage = () => {
       if (!user.skills?.length && !user.social_causes?.length)
         router.push('/app/auth/onboarding');
       else {
-        if (Notification.permission === 'default')
+        if (
+          !Capacitor.isNativePlatform() &&
+          Notification.permission === 'default'
+        )
           Notification.requestPermission();
         if (redirect_to) router.push(redirect_to as string);
         else router.push('/app');
