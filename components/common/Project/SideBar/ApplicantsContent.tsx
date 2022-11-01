@@ -9,7 +9,6 @@ type ApplicantsContentProps = {
 function ApplicantsContent({projectId, type}: ApplicantsContentProps) {
   return (
     <div className={type === 'FULL' ? 'w-full' : 'py-4'}>
-      {/* TODO :Add Menu if type==="FULL" */}
       <div
         className={twMerge(
           'my-4 rounded-2xl border border-grayLineBased bg-white ',

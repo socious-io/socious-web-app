@@ -28,6 +28,11 @@ const ProjectMobileTop = ({
       value: 'Applicants',
       url: `/app/projects/created/${projectId}/applicants`,
     },
+    {
+      id: 'HIRED',
+      value: 'Hired',
+      url: `/app/projects/created/${projectId}/hired`,
+    },
   ];
   return (
     <MobileTopSkeleton
