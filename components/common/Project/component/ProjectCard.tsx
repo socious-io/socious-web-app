@@ -70,12 +70,6 @@ export default function ProjectCard({
               </div>
             </div>
           </Link>
-          {/* {type === 'SEARCH' && (
-            <div className="flex gap-4 text-primary">
-              <HandThumbDownIcon className="w-4" />
-              <BookmarkIcon className="w-4" />
-            </div>
-          )} */}
         </div>
         <div className="">
           <p className="font-semibold">{project.title}</p>
@@ -106,15 +100,6 @@ export default function ProjectCard({
             )}
           </p>
         </div>
-        <div className="flex flex-row">
-          <p className="my-1 text-sm">
-            {project?.description &&
-              convertMarkdownToJSX(project?.description?.slice?.(0, 200), {
-                wrapper: 'article',
-              })}
-          </p>
-        </div>
-
         <div className="flex flex-row justify-between ">
           <div className="hide-scroll-bar whitespace-no-wrap w-7/10 flex  flex-row space-x-2  overflow-auto">
             <GroupsOfChips causes_tags={project.causes_tags} />
@@ -130,14 +115,6 @@ export default function ProjectCard({
           >
             {isoToHumanTime(project.updated_at)}
           </dt>
-          {/* <div className="flex gap-2 text-primary">
-            <div className="relative">
-              <Avatar />
-              <Avatar className="absolute left-3" />
-              <Avatar />
-            </div>
-            <dd className="text-sm text-secondary">connections</dd>
-          </div> */}
         </div>
       </div>
     </div>
