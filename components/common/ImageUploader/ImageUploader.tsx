@@ -31,7 +31,6 @@ export const ImageUploader: FC<ImageUploaderProps> = ({
   useEffect(() => {
     setImagePreviewUrl(src);
   }, [src]);
-  console.log('Image Preview url :---: ', src);
 
   const OnChange = (e: any) => {
     e.preventDefault();

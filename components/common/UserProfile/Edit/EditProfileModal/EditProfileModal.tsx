@@ -30,13 +30,18 @@ import Data, {getText} from '@socious/data';
 const passionData = Object.keys(Data.SocialCauses);
 
 // Types
-import {UpdateProfileBodyType} from '@models/profile';
+import {
+  IUpdateUserBody,
+  IUpdateOrgBody,
+  IUpdateProfileBody,
+} from '@models/profile';
 import {mutate} from 'swr';
 import Router from 'next/router';
 import {useUser} from '@hooks';
 import {AxiosError} from 'axios';
 import {toast} from 'react-toastify';
 import {Skill} from '@components/common/Search/Providers/SkillsProvider';
+import {updateOrganization} from '@api/organizations/actions';
 interface EditProfileModalProps {
   openState: boolean;
   user: any;
@@ -54,6 +59,7 @@ const EditProfileModal = ({
   const [editState, setEditState] = useState<'MAIN' | 'CAUSES' | 'SKILLS'>(
     'MAIN',
   );
+  const {currentIdentity} = useUser();
 
   const {mutateUser} = useUser();
   const [avatar, setAvatar] = useState<any>();
@@ -98,14 +104,22 @@ const EditProfileModal = ({
   const formMethods = useForm({
     resolver: joiResolver(schemaProfileUpdate),
     defaultValues: {
-      firstName: user?.first_name ?? '',
-      lastName: user?.last_name ?? '',
-      userName: user?.username ?? '',
-      // email: user?.email,
+      userType: currentIdentity?.type,
+      // User Only
+      firstName: user?.first_name ?? null,
+      lastName: user?.last_name ?? null,
+      userName: user?.username ?? null,
+      skills: user?.skills ?? null,
+      // Organization Only
+      email: user?.email,
+      name: user?.name ?? null,
+      type: user?.type ?? null,
+      culture: user?.culture ?? null,
+      website: user?.website ?? null,
+      // Both
       bio: user?.bio,
       mission: user?.mission,
       passions: user?.social_causes ?? [],
-      skills: user?.skills ?? [],
       country: user?.country,
       city: user?.city,
       address: user?.address,
@@ -127,81 +141,120 @@ const EditProfileModal = ({
     [editState, onForceClose],
   );
 
-  const onSubmit = useCallback(async () => {
-    //CHECKING IMAGE UPLOAD
-    // TODO: Check if size exceeds limit. Better to wait for UI.( try/catch )
-    let avatarId: string | null = await checkAndUploadMedia(avatar);
-    let coverId: string | null = await checkAndUploadMedia(coverImage);
+  const onSubmit = useCallback(
+    async (data?: any) => {
+      //CHECKING IMAGE UPLOAD
+      // TODO: Check if size exceeds limit. Better to wait for UI.( try/catch )
+      let avatarId: string | null = await checkAndUploadMedia(avatar);
+      let coverId: string | null = await checkAndUploadMedia(coverImage);
 
-    //fetching values from Form
-    const first_name: string = formMethods.getValues('firstName');
-    const last_name: string = formMethods.getValues('lastName');
-    const username: string = formMethods.getValues('userName');
-    // const email: string = formMethods.getValues('email');
-    const bio: string = formMethods.getValues('bio').trim();
-    const mission: string = formMethods.getValues('mission').trim();
-    const social_causes: string[] = formMethods.getValues('passions');
-    const skills: string[] = formMethods.getValues('skills');
-    const country: string = formMethods.getValues('country');
-    const city: string = formMethods.getValues('city');
-    const address: string = formMethods.getValues('address')?.trim();
-    const mobile_country_code: string = formMethods.getValues('countryNumber');
-    const phone: string = formMethods.getValues('phoneNumber');
+      //fetching values from Form
+      const first_name: string = formMethods.getValues('firstName');
+      const last_name: string = formMethods.getValues('lastName');
+      const username: string = formMethods.getValues('userName');
+      const email: string = formMethods.getValues('email') ?? user.email;
+      const name: string = formMethods.getValues('name');
+      const type: string = formMethods.getValues('type');
+      const culture: string = formMethods.getValues('culture');
+      const website: string = formMethods.getValues('website');
+      // const email: string = formMethods.getValues('email');
+      const bio: string = formMethods.getValues('bio')?.trim();
+      const mission: string = formMethods.getValues('mission')?.trim();
+      const social_causes: string[] = formMethods.getValues('passions');
+      const skills: string[] = formMethods.getValues('skills');
+      const country: string = formMethods.getValues('country');
+      const city: string = formMethods.getValues('city');
+      const address: string = formMethods.getValues('address')?.trim();
+      const mobile_country_code: string =
+        formMethods.getValues('countryNumber');
+      const phone: string = formMethods.getValues('phoneNumber');
 
-    // Creating Profile Body
-    const updateProfileBody: UpdateProfileBodyType = {
-      first_name,
-      last_name,
-      username,
-      // email,
-      bio,
-      social_causes,
-      skills,
-      country,
-      city,
-    };
-    if (address) updateProfileBody.address = address;
-    if (mobile_country_code)
-      updateProfileBody.mobile_country_code = mobile_country_code;
-    if (phone) updateProfileBody.phone = phone;
-    if (avatarId) updateProfileBody.avatar = avatarId;
-    if (coverId) updateProfileBody.cover_image = coverId;
-    if (mission) updateProfileBody.mission = mission;
+      // Creating Profile Body
+      const updateProfileBody: IUpdateProfileBody = {
+        bio,
+        social_causes,
+        country,
+        city,
+      };
+      if (address) updateProfileBody.address = address;
+      if (mobile_country_code)
+        updateProfileBody.mobile_country_code = mobile_country_code;
+      if (phone) updateProfileBody.phone = phone;
+      if (avatarId) updateProfileBody.avatar = avatarId;
+      if (coverId) updateProfileBody.cover_image = coverId;
+      if (mission) updateProfileBody.mission = mission;
 
-    //Making a API call
-    try {
-      const response: any = await updateProfile(updateProfileBody);
-      mutateUser(response);
-      user?.username === response.username
-        ? mutate(`/user/by-username/${user?.username}/profile`)
-        : Router.push(`/app/user/${response.username}`);
-      closeModal();
-      forceUpdate();
-    } catch (error) {
-      console.log('ERROR :---: ', error);
-      const data: any = (error as AxiosError).response?.data;
-      if (data) {
-        if (
-          /^duplicate key value violates unique constraint.*phone/.exec(
-            data.error,
-          )
-        ) {
-          formMethods.setError(
-            'phoneNumber',
-            {
-              type: 'value',
-              message:
-                'This phone number is already associated with another user',
-            },
-            {shouldFocus: true},
-          );
-        } else
-          toast.error(`Couldn't save data: ${data.error || 'error'}`, {
-            autoClose: false,
+      //Making a API call
+      try {
+        if (currentIdentity?.type === 'users') {
+          const response = await updateProfile({
+            ...updateProfileBody,
+            first_name,
+            last_name,
+            username,
+            skills,
           });
+          mutateUser(response);
+          user?.username === response.username
+            ? mutate(`/user/by-username/${user?.username}/profile`)
+            : Router.push(`/app/user/${response.username}`);
+        } else if (currentIdentity?.id) {
+          const updateOrgBody: IUpdateOrgBody = {
+            ...updateProfileBody,
+            name,
+            type,
+            email,
+          };
+          if (culture) updateOrgBody.culture = culture;
+          if (website) updateOrgBody.website = website;
+          const response: any = await updateOrganization(
+            user.id,
+            updateOrgBody,
+          );
+          console.log('ORG RESPONSE :--: ', response);
+          mutateUser(response);
+          mutate(`/orgs/by-shortname/${response.id}`);
+        }
+        closeModal();
+        // forceUpdate();
+      } catch (error) {
+        console.log('ERROR :---: ', error);
+        const data: any = (error as AxiosError).response?.data;
+        if (data) {
+          if (
+            /^duplicate key value violates unique constraint.*phone/.exec(
+              data.error,
+            )
+          ) {
+            formMethods.setError(
+              'phoneNumber',
+              {
+                type: 'value',
+                message:
+                  'This phone number is already associated with another user',
+              },
+              {shouldFocus: true},
+            );
+          } else
+            toast.error(`Couldn't save data: ${data.error || 'error'}`, {
+              autoClose: false,
+            });
+        }
       }
-    }
-  }, [avatar, closeModal, coverImage, formMethods, mutateUser, user?.username]);
+      // forceUpdate();
+    },
+    [
+      avatar,
+      closeModal,
+      coverImage,
+      currentIdentity?.id,
+      currentIdentity?.type,
+      formMethods,
+      mutateUser,
+      user?.id,
+      user?.username,
+    ],
+  );
 
   return (
     <Modal
