@@ -28,7 +28,7 @@ const Detail: NextPage<ProjectProps> = ({skills}) => {
   return (
     <ProjectContextProvider>
       <GeneralLayout hasDetailNavbar detailNavbarTitle="Project details">
-        <SideBar selectBar="PROJECT_DETAIL" data={data} projectId={data.id} />
+        <SideBar data={data} projectId={data.id} />
         <DetailLayout>
           <DetailContent
             data={{data, mutate}}

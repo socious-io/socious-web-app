@@ -57,7 +57,11 @@ const Applicants = () => {
       hasDetailNavbar
       detailNavbarTitle={project?.title ?? 'Project Title'}
     >
-      <SideBar selectBar={'APPLICANT'} projectId={projectId as string} />
+      <SideBar
+        selectBar={'APPLICANT'}
+        projectId={projectId as string}
+        data={project}
+      />
       <div className="w-full">
         <div className="pb-4 md:hidden">
           <ProjectMobileTop
