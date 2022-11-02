@@ -37,6 +37,7 @@ import {AxiosError} from 'axios';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 import Router from 'next/router';
 import {checkAndUploadMedia} from 'services/ImageUpload';
+import {Capacitor} from '@capacitor/core';
 
 const schemaStep = {
   2: schemaOnboardingStep2,
@@ -220,7 +221,8 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   }, [handleUpdateProfileRequest, step]);
 
   const requestNotificationPermission = async () => {
-    await Notification.requestPermission();
+    if ('Notification' in window && !Capacitor.isNativePlatform())
+      await Notification.requestPermission();
     Router.push('/app/projects');
   };
 

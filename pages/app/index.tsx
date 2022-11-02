@@ -6,12 +6,13 @@ import StartScreen from '@components/common/StartScreen/StartScreen';
 import useUser from 'hooks/useUser/useUser';
 import SplashScreen from 'layout/Splash';
 import {GeneralLayout, PreAuthLayout, DetailLayout} from '../../layout';
-import Router from 'next/router';
+import {useRouter} from 'next/router';
 const HomePage: NextPage = () => {
   const {identities, identitiesError} = useUser({redirect: false});
+  const router = useRouter();
 
   useEffect(() => {
-    if (identities) Router.push('/app/projects');
+    if (identities) router.push('/app/projects');
   });
 
   if (identities === null) {
