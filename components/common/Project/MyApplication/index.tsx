@@ -4,94 +4,65 @@ import {useToggle} from '@hooks';
 import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 import {TApplicant, TApplicantStatus} from '@models/applicant';
 import {useEffect, useMemo} from 'react';
+import Button from '@components/common/Button/Button';
 
 interface StatusApplicationsProps {
   name: any;
-  group: Array<TApplicant> | undefined;
-  expanded: boolean;
-  toggle: () => void;
+  // group: Array<TApplicant> | undefined;
+  status: TApplicantStatus;
+  position?: 'FIRST' | 'LAST';
 }
 
-function StatusApplications({
-  name,
-  group,
-  expanded,
-  toggle,
-}: StatusApplicationsProps) {
+function StatusApplications({name, status, position}: StatusApplicationsProps) {
+  const {state: expandState, handlers: expandHandler} = useToggle();
+
+  const {flattenData, loadMore, seeMore, totalCount} =
+    useInfiniteSWR<TApplicant>(`/user/applicants?status=${status}`);
+
   return (
     <>
       <HeaderBox
-        title={`${name} (${group?.length ?? 0})`}
-        isExpand={expanded}
-        expandToggle={toggle}
-        isExpandable={Boolean(group?.length)}
-        isRound={true}
+        title={`${name} (${totalCount})`}
+        isExpand={expandState}
+        expandToggle={expandHandler.toggle}
+        isExpandable={Boolean(flattenData?.length)}
+        isRound={position === 'FIRST'}
+        className={`border-0 ${position === 'LAST' ? 'rounded-b-2xl' : ''}`}
       />
-      {expanded &&
-        group?.map((item) => (
-          <BodyCard
-            key={item.id}
-            applicationId={item.id}
-            project={item.project}
-            name={item.organization.meta.name}
-            image={item.organization.meta.image}
-          />
-        ))}
+      {expandState && (
+        <div>
+          {flattenData?.map((item) => (
+            <BodyCard
+              key={item.id}
+              applicationId={item.id}
+              project={item.project}
+              name={item.organization.meta.name}
+              image={item.organization.meta.image}
+            />
+          ))}
+          {seeMore && (
+            <div className="mb-4 flex justify-center">
+              <Button
+                variant="link"
+                className="font-semibold text-primary"
+                onClick={loadMore}
+              >
+                Load more
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }
 
 function MyApplicationBoxes() {
-  const {state: showPending, handlers: showPendingHandler} = useToggle();
-  const {state: showDecline, handlers: showDeclineHandler} = useToggle();
-  const {state: showAwaiting, handlers: showAwaitingHandler} = useToggle();
-
-  const {flattenData: data, infiniteError} =
-    useInfiniteSWR<TApplicant>('/user/applicants');
-
-  // TODO show error message
-  // TODO load more (wait for filter by status)
-
-  const groupByStatus = useMemo(() => {
-    const map: Map<TApplicantStatus, Array<TApplicant>> = new Map();
-    for (const item of data) {
-      if (!map.has(item.status)) map.set(item.status, []);
-      map.get(item.status)!.push(item);
-    }
-    return map;
-  }, [data]);
-
-  useEffect(() => {
-    if (groupByStatus.get('PENDING')?.length) showPendingHandler.on();
-    else if (groupByStatus.get('OFFERED')?.length) showAwaitingHandler.on();
-    else if (groupByStatus.get('REJECTED')?.length) showDeclineHandler.on();
-  }, [
-    groupByStatus,
-    showAwaitingHandler,
-    showDeclineHandler,
-    showPendingHandler,
-  ]);
-
   return (
-    <div className="w-full rounded-2xl border border-grayLineBased pb-4">
-      <StatusApplications
-        group={groupByStatus.get('PENDING')}
-        name="Pending"
-        expanded={showPending}
-        toggle={showPendingHandler.toggle}
-      />
-      <StatusApplications
-        group={groupByStatus.get('OFFERED')}
-        name="Awaiting review"
-        expanded={showAwaiting}
-        toggle={showAwaitingHandler.toggle}
-      />
-      <StatusApplications
-        group={groupByStatus.get('REJECTED')}
-        name="Declined"
-        expanded={showDecline}
-        toggle={showDeclineHandler.toggle}
-      />
+    <div className="divide-graylineBased mb-4 h-fit w-full divide-y rounded-2xl border border-grayLineBased">
+      <StatusApplications name="Pending" status="PENDING" position="FIRST" />
+      <StatusApplications name="Awaiting review" status="OFFERED" />
+      <StatusApplications name="Declined" status="REJECTED" position="LAST" />
     </div>
   );
 }
