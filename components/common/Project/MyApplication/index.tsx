@@ -3,7 +3,6 @@ import HeaderBox from '../component/HeaderBox';
 import {useToggle} from '@hooks';
 import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 import {TApplicant, TApplicantStatus} from '@models/applicant';
-import {useEffect, useMemo} from 'react';
 import Button from '@components/common/Button/Button';
 
 interface StatusApplicationsProps {
@@ -26,8 +25,14 @@ function StatusApplications({name, status, position}: StatusApplicationsProps) {
         isExpand={expandState}
         expandToggle={expandHandler.toggle}
         isExpandable={Boolean(flattenData?.length)}
-        isRound={position === 'FIRST'}
-        className={`border-0 ${position === 'LAST' ? 'rounded-b-2xl' : ''}`}
+        isRound={false}
+        className={`border-0 ${
+          position === 'LAST'
+            ? 'md:rounded-b-2xl'
+            : position == 'FIRST'
+            ? 'rounded-t-0 md:rounded-t-2xl'
+            : ''
+        }`}
       />
       {expandState && (
         <div>
@@ -59,10 +64,15 @@ function StatusApplications({name, status, position}: StatusApplicationsProps) {
 
 function MyApplicationBoxes() {
   return (
-    <div className="divide-graylineBased mb-4 h-fit w-full divide-y rounded-2xl border border-grayLineBased">
-      <StatusApplications name="Pending" status="PENDING" position="FIRST" />
-      <StatusApplications name="Awaiting review" status="OFFERED" />
-      <StatusApplications name="Declined" status="REJECTED" position="LAST" />
+    <div className="w-full space-y-4">
+      <div className="flex hidden items-center rounded-2xl border border-grayLineBased bg-white p-6 sm:block">
+        <p className="text-xl font-semibold">My applications</p>
+      </div>
+      <div className="divide-graylineBased mb-4 h-fit w-full divide-y border border-grayLineBased md:rounded-2xl">
+        <StatusApplications name="Pending" status="PENDING" position="FIRST" />
+        <StatusApplications name="Awaiting review" status="OFFERED" />
+        <StatusApplications name="Declined" status="REJECTED" position="LAST" />
+      </div>
     </div>
   );
 }
