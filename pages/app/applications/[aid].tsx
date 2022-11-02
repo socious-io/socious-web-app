@@ -42,18 +42,16 @@ const Applicant: NextPage = () => {
 
   return (
     <GeneralLayout hasNavbar>
-      <div className="mx-6 flex w-full md:space-x-6">
-        <SideBar
-          title={
-            <p className="flex gap-2">
-              <ChevronLeftIcon className="w-5" />
-              <span className="whitespace-nowrap">Back to my applications</span>
-            </p>
-          }
-          url={`/app/applications`}
-        />
-        <MyApplication applicant={data} mutateApplication={mutate} />
-      </div>
+      <SideBar
+        title={
+          <p className="flex gap-2">
+            <ChevronLeftIcon className="w-5" />
+            <span className="whitespace-nowrap">Back to my applications</span>
+          </p>
+        }
+        url={`/app/applications`}
+      />
+      <MyApplication applicant={data} mutateApplication={mutate} />
     </GeneralLayout>
   );
 };
