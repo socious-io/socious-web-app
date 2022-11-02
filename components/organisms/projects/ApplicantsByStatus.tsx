@@ -5,14 +5,15 @@ import {TApplicant, TApplicantStatus} from '@models/applicant';
 import dayjs from 'dayjs';
 import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 import Link from 'next/link';
-import {FC} from 'react';
+import {FC, useMemo} from 'react';
 import {twMerge} from 'tailwind-merge';
 import HeaderBox from '../../common/Project/component/HeaderBox';
 
 type ApplicantsByStatusProps = {
-  status: TApplicantStatus;
+  status: TApplicantStatus | TApplicantStatus[] | 'MISSION';
   projectId: string;
   title: string;
+  goTo?: 'HIRED';
   rounded?: boolean;
 };
 
@@ -20,21 +21,30 @@ const ApplicantsByStatus: FC<ApplicantsByStatusProps> = ({
   status,
   projectId,
   title,
+  goTo,
   rounded = true,
 }) => {
   const {state: expandState, handlers: expandHandler} = useToggle();
 
-  const {flattenData, loadMore, seeMore} = useInfiniteSWR<TApplicant>(
-    projectId && status
-      ? `/projects/${projectId}/applicants?status=${status}`
-      : null,
+  const {flattenData, loadMore, seeMore, rawResponse} =
+    useInfiniteSWR<TApplicant>(
+      projectId && status
+        ? `/projects/${projectId}/applicants?status=${
+            typeof status === 'string' ? status : status.join(',')
+          }`
+        : null,
+    );
+
+  const size = useMemo(
+    () => (rawResponse && rawResponse.length ? rawResponse[0].total_count : 0),
+    [rawResponse],
   );
 
   return (
     <>
       <HeaderBox
         isRound={rounded}
-        title={`${title} (${flattenData.length})`}
+        title={`${title} (${size})`}
         isExpand={expandState}
         expandToggle={expandHandler.toggle}
         isExpandable={!!flattenData?.length}
@@ -48,7 +58,9 @@ const ApplicantsByStatus: FC<ApplicantsByStatusProps> = ({
         {flattenData.map((applicant) => (
           <Link
             key={applicant.id}
-            href={`/app/projects/created/${applicant.project_id}/applicants/${applicant.id}`}
+            href={`/app/projects/created/${applicant.project_id}/${
+              goTo === 'HIRED' ? 'hired' : 'applicants'
+            }/${applicant.id}`}
           >
             <a>
               <CardBoxComplete

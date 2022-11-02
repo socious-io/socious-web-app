@@ -43,7 +43,7 @@ const Hire = () => {
   if (!applicantData) return <></>;
 
   return (
-    <GeneralLayout>
+    <GeneralLayout hasDetailNavbar detailNavbarTitle={applicantData.user?.name}>
       <SideBar selectBar={'HIRE'} projectId={projectId as string} />
       <HiredContent
         applicant={

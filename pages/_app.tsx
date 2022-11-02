@@ -13,12 +13,55 @@ import '../styles/App.css';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {toast} from 'react-toastify';
-
+import {
+  ActionPerformed,
+  PushNotificationSchema,
+  PushNotifications,
+  Token,
+} from '@capacitor/push-notifications';
+import {useEffect} from 'react';
+import {Capacitor} from '@capacitor/core';
 // function getLibrary(provider: any) {
 //   return new Web3(provider);
 // }
 
 function MyApp({Component, pageProps}: AppProps) {
+  useEffect(() => {
+    const onInit = () => {
+      PushNotifications.requestPermissions().then((result) => {
+        if (result.receive === 'granted') {
+          PushNotifications.register();
+        } else {
+          // Show some error
+        }
+      });
+
+      PushNotifications.addListener('registration', (token: Token) => {
+        console.log('Push registration success, token: ' + token.value);
+      });
+
+      PushNotifications.addListener('registrationError', (error: any) => {
+        console.log('Error on registration: ' + JSON.stringify(error));
+      });
+
+      PushNotifications.addListener(
+        'pushNotificationReceived',
+        (notification: PushNotificationSchema) => {
+          console.log('Push received: ' + JSON.stringify(notification));
+        },
+      );
+
+      PushNotifications.addListener(
+        'pushNotificationActionPerformed',
+        (notification: ActionPerformed) => {
+          console.log('Push action performed: ' + JSON.stringify(notification));
+        },
+      );
+    };
+
+    Capacitor.isNativePlatform() && onInit();
+  }, []);
+
   return (
     <>
       <Head>

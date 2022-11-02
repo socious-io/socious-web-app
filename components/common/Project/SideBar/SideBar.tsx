@@ -1,21 +1,26 @@
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
-
+import {Project} from '@models/project';
 import useUser from 'hooks/useUser/useUser';
 import router from 'next/router';
-import ApplicantsList from './ApplicantsContent';
+import ApplicantsContent from './ApplicantsContent';
 import HiredContent from './HireContent';
 import ProjectCard from './ProjectCard';
 
 interface Props {
-  selectBar: string;
+  selectBar?: 'APPLICANT' | 'HIRE';
+  data?: Project;
   projectId?: string;
 }
-const SideBar = ({selectBar, projectId}: Props) => {
-  const {user, currentIdentity} = useUser();
+const SideBar = ({selectBar, data}: Props) => {
+  const {user} = useUser();
+
+  if (!data) {
+    return <></>;
+  }
 
   return (
     <div className="hidden w-96 md:flex" aria-label="Sidebar">
-      <div className="w-full space-y-4 overflow-y-auto bg-gray-50">
+      <div className="w-full space-y-4 overflow-y-auto">
         <div
           onClick={() => router.back()}
           className="flex cursor-pointer flex-row rounded-2xl border border-grayLineBased bg-white px-2 py-4  "
@@ -25,21 +30,11 @@ const SideBar = ({selectBar, projectId}: Props) => {
             <p className=" font-semibold ">Projects</p>
           </span>
         </div>
-        {projectId && (
-          <div className="cursor-pointer space-y-4 overflow-y-auto bg-gray-50">
-            <ProjectCard
-              isOrganization={currentIdentity?.type === 'organizations'}
-              username={user?.username}
-              projectId={projectId}
-            />
-          </div>
-        )}
-        {selectBar == 'APPLICANT' && projectId && (
-          <ApplicantsList projectId={projectId} />
-        )}
-        {selectBar == 'HIRE' && projectId && (
-          <HiredContent projectId={projectId} />
-        )}
+        <div className="cursor-pointer space-y-4 overflow-y-auto bg-gray-50">
+          <ProjectCard username={user?.username} projectDetail={data} />
+        </div>
+        {selectBar == 'APPLICANT' && <ApplicantsContent projectId={data.id} />}
+        {selectBar == 'HIRE' && <HiredContent projectId={data.id} />}
       </div>
     </div>
   );

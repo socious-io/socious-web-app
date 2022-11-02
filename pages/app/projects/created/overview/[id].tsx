@@ -14,7 +14,7 @@ const Overview = () => {
 
   return (
     <GeneralLayout hasNavbar>
-      <SideBar selectBar={'REVIEW'} />
+      <SideBar data={data} />
       <DetailContent project={data} />
     </GeneralLayout>
   );

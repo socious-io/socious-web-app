@@ -7,6 +7,7 @@ type Props = {
   isExpandable: boolean;
   isRound: boolean;
   expandToggle: () => void;
+  className?: string;
 };
 
 function HeaderBox({
@@ -15,12 +16,14 @@ function HeaderBox({
   isRound,
   expandToggle,
   isExpand,
+  className,
 }: Props) {
   return (
     <div
       className={twMerge(
-        'space-y-6 rounded-tl-2xl rounded-tr-2xl border border-grayLineBased  bg-white p-4',
-        !isRound && 'rounded-none rounded-tr-none',
+        'space-y-6 rounded-t-2xl border border-grayLineBased  bg-white p-4',
+        !isRound && 'rounded-t-none',
+        className && className,
       )}
     >
       <div className="flex flex-row items-center justify-between space-x-2">

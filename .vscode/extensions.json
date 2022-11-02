@@ -1,8 +1,10 @@
 {
   "recommendations": [
-      "hookyqr.beautify",
-      "esbenp.prettier-vscode",
-      "dbaeumer.vscode-eslint",
-      "irongeek.vscode-env",
+    "hookyqr.beautify",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "irongeek.vscode-env",
+    "shelex.vscode-cy-helper",
+    "stevejpurves.cucumber"
   ]
-} 
+}

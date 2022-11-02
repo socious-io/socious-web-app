@@ -50,7 +50,7 @@ const Applicant = () => {
 
   return (
     <GeneralLayout hasNavbar>
-      <SideBar selectBar={'APPLICANT'} projectId={projectId as string} />
+      <SideBar selectBar="APPLICANT" projectId={projectId as string} />
       <ApplicantsContent
         applicant={applicantData}
         mutateApplicant={mutateApplicant}
