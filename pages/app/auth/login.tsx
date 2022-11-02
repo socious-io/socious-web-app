@@ -38,6 +38,7 @@ const Login: NextPage = () => {
         router.push('/app/auth/onboarding');
       else {
         if (
+          'Notification' in window &&
           !Capacitor.isNativePlatform() &&
           Notification.permission === 'default'
         )
