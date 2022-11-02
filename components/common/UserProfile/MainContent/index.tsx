@@ -27,7 +27,7 @@ import {useUser} from '@hooks';
 
 // interfaces
 import {IdentityType, OtherIdentityMeta} from '@models/identity';
-import {IProjectsResponse, Project} from '@models/project';
+import {IProjectsResponse} from '@models/project';
 interface Props {
   data: any;
   status: IdentityType;
@@ -78,8 +78,8 @@ const MainContent: React.FC<Props> = ({
   };
 
   return (
-    <div className="mb-8 flex w-full flex-col items-start gap-6 md:flex-row">
-      <div className="border-1 rounded-xl border border-grayLineBased bg-white md:w-4/6">
+    <div className="mb-8 flex w-full  flex-col items-start gap-6 md:flex-row">
+      <div className="border-1 min-w-full rounded-xl border border-grayLineBased bg-white md:w-4/6">
         <Header
           avatar={status === 'users' ? data?.avatar : data?.image}
           cover_image={data?.cover_image}

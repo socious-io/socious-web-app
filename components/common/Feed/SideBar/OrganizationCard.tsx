@@ -1,6 +1,5 @@
-import {UserCircleIcon, UserGroupIcon} from '@heroicons/react/24/outline';
+import {UserCircleIcon} from '@heroicons/react/24/outline';
 import Team from '../../../../asset/icons/team.svg';
-import Followers from '../../../../asset/icons/followers.svg';
 import Image from 'next/dist/client/image';
 import Link from 'next/link';
 import {twMerge} from 'tailwind-merge';
@@ -33,19 +32,6 @@ const OrganizationCard = ({username, type = 'DEFAULT'}: OrgCardProps) => {
             <label className="flex cursor-pointer items-center space-x-4">
               <Image src={Team} alt="Logo - SVG" width="20px" height="20px" />
               <p>Team</p>
-            </label>
-          </Link>
-        </li>
-        <li className="flex items-center space-x-4">
-          <Link href={'/app/followers'}>
-            <label className="flex cursor-pointer items-center space-x-4">
-              <Image
-                src={Followers}
-                alt="followers logo"
-                width="20px"
-                height="20px"
-              />
-              <p>Followers</p>
             </label>
           </Link>
         </li>

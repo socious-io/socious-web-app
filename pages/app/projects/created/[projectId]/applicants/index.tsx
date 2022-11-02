@@ -6,13 +6,14 @@ import useSWR from 'swr';
 import {GeneralLayout} from 'layout';
 import SideBar from '@components/common/Project/SideBar/SideBar';
 
-// Utils/services
+// Utils/hooks
 import {get} from 'utils/request';
+import {useUser} from '@hooks';
 
 // Types
+import ProjectMobileTop from '@components/common/Project/ProjectMobileTop/ProjectMobileTop';
 import ApplicantsContent from '@components/common/Project/SideBar/ApplicantsContent';
 import {Project} from '@models/project';
-import {useUser} from '@hooks';
 
 const Applicants = () => {
   const router = useRouter();
@@ -57,8 +58,16 @@ const Applicants = () => {
       detailNavbarTitle={project?.title ?? 'Project Title'}
     >
       <SideBar selectBar={'APPLICANT'} projectId={projectId as string} />
-      {/* <Applications projectId={projectId as string} /> */}
-      <ApplicantsContent projectId={projectId as string} type="FULL" />
+      <div className="w-full">
+        <div className="pb-4 md:hidden">
+          <ProjectMobileTop
+            selectedTab="APPLICANTS"
+            projectId={project?.id ?? (projectId as string)}
+            owner={project?.identity_id === currentIdentity?.id}
+          />
+        </div>
+        <ApplicantsContent projectId={projectId as string} type="FULL" />
+      </div>
     </GeneralLayout>
   );
 };

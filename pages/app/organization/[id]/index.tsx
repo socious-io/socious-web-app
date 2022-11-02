@@ -1,12 +1,6 @@
-/*
- * user profile page with dynamic route
- */
-
 import React, {useCallback} from 'react';
 import type {GetStaticPaths, GetStaticProps, NextPage} from 'next';
 import {useRouter} from 'next/router';
-
-//libraries
 import useSWR from 'swr';
 import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
 
@@ -46,37 +40,37 @@ const OrganizationProfile: NextPage<OrganizationProfileProps> = ({skills}) => {
 
   const openEditModal = useCallback(() => editHandlers.on(), [editHandlers]);
 
-  //get user profile data by user id
-  const {data, mutate, error} = useSWR<IOrganizationType>(
-    `/orgs/by-shortname/${id}`,
-    get,
-  );
+  const resp = useSWR<IOrganizationType>(`/orgs/by-shortname/${id}`, get);
 
-  // Show this until the data is fetched
-  if (!data && !error) return <p>loading</p>;
   if (
-    error?.response?.status === 400 ||
+    resp.error?.response?.status === 400 ||
     (500 &&
-      error?.response?.data?.error.startsWith(
+      resp.error?.response?.data?.error.startsWith(
         'invalid input syntax for type uuid',
       ))
   )
     return <p>invalid user</p>;
 
-  if (!data) return <SplashScreen />;
+  const showIfDataLoaded = (child: JSX.Element, data?: IOrganizationType) => {
+    return data ? child : <SplashScreen />;
+  };
+
+  const mainContent = (
+    <MainContent
+      data={resp.data}
+      status="organizations"
+      profile_mutate={resp.mutate}
+      editProfile={openEditModal}
+    />
+  );
 
   return (
     <GeneralLayout>
       <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">
-        <MainContent
-          data={data}
-          status="organizations"
-          profile_mutate={mutate}
-          editProfile={openEditModal}
-        />
+        {showIfDataLoaded(mainContent, resp.data)}
       </div>
       {/* EDIT PROFILE */}
-      {isLoaded && user && user.id === data?.id && (
+      {isLoaded && user && user.id === resp.data?.id && (
         <EditProfileModal
           openState={editState}
           user={user}
