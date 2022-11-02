@@ -4,6 +4,7 @@ import {useToggle} from '@hooks';
 import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 import {TApplicant, TApplicantStatus} from '@models/applicant';
 import Button from '@components/common/Button/Button';
+import ApplicationMobileTop from '@components/organisms/applications/ApplicationMobileTop';
 
 interface StatusApplicationsProps {
   name: any;
@@ -65,6 +66,8 @@ function StatusApplications({name, status, position}: StatusApplicationsProps) {
 function MyApplicationBoxes() {
   return (
     <div className="w-full space-y-4">
+      {/* Uncomment after Hired done */}
+      {/* <ApplicationMobileTop selectedTab="APPLICATION" /> */}
       <div className="flex hidden items-center rounded-2xl border border-grayLineBased bg-white p-6 sm:block">
         <p className="text-xl font-semibold">My applications</p>
       </div>
