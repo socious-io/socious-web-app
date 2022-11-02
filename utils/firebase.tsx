@@ -3,6 +3,7 @@ import {initializeApp} from 'firebase/app';
 import {getDevices, saveDeviceToken} from '@api/devices/actions';
 import {DeviceBody, DeviceToken} from '@models/devices';
 //import localforage from 'localforage';
+import {Capacitor} from '@capacitor/core';
 
 const firebaseCloudMessaging = {
   init: async () => {
@@ -20,31 +21,33 @@ const firebaseCloudMessaging = {
     try {
       const messaging = getMessaging(app);
       //console.log(messaging);
-      const status = await Notification.requestPermission();
-      if (status && status === 'granted') {
-        // Get new token from Firebase
-        const fcm_token = await getToken(messaging, {
-          vapidKey: process.env.NEXT_PUBLIC_FIREBASE_PUSH_CERT,
-        });
-        const tokenInDB = await getDevices();
+      if ('Notification' in window && !Capacitor.isNativePlatform()) {
+        const status = await Notification.requestPermission();
+        if (status && status === 'granted') {
+          // Get new token from Firebase
+          const fcm_token = await getToken(messaging, {
+            vapidKey: process.env.NEXT_PUBLIC_FIREBASE_PUSH_CERT,
+          });
+          const tokenInDB = await getDevices();
 
-        const deviceToken = tokenInDB.find(
-          (token: DeviceToken) =>
-            token.meta?.os === 'WEBAPP' && token.token === fcm_token,
-        );
+          const deviceToken = tokenInDB.find(
+            (token: DeviceToken) =>
+              token.meta?.os === 'WEBAPP' && token.token === fcm_token,
+          );
 
-        if (deviceToken?.token) {
-          return deviceToken.token;
-        } else {
-          const device: DeviceBody = {
-            token: fcm_token,
-            meta: {
-              os: 'WEBAPP',
-            },
-          };
-          const res = await saveDeviceToken(device);
-          if (res.token) {
-            return fcm_token;
+          if (deviceToken?.token) {
+            return deviceToken.token;
+          } else {
+            const device: DeviceBody = {
+              token: fcm_token,
+              meta: {
+                os: 'WEBAPP',
+              },
+            };
+            const res = await saveDeviceToken(device);
+            if (res.token) {
+              return fcm_token;
+            }
           }
         }
       }

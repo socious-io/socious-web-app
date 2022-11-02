@@ -28,14 +28,8 @@ import {Capacitor} from '@capacitor/core';
 function MyApp({Component, pageProps}: AppProps) {
   useEffect(() => {
     const onInit = () => {
-      console.log('Initializing HomePage');
-
-      // Request permission to use push notifications
-      // iOS will prompt user and return if they granted permission or not
-      // Android will just grant without prompting
       PushNotifications.requestPermissions().then((result) => {
         if (result.receive === 'granted') {
-          // Register with Apple / Google to receive push via APNS/FCM
           PushNotifications.register();
         } else {
           // Show some error
