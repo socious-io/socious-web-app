@@ -12,11 +12,6 @@ const HomePage: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(router);
-    const l = router.push('/app/projects');
-    console.log('GGGGGGG');
-    console.log(l);
-
     if (identities) router.push('/app/projects');
   });
 
