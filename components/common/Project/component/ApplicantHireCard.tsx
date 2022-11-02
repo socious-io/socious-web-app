@@ -1,7 +1,6 @@
 import {Avatar} from '@components/common';
 import {Button} from '@components/common';
 import {TApplicantStatus} from '@models/applicant';
-import {reject} from 'lodash';
 import Image from 'next/image';
 import Link from 'next/link';
 import Router from 'next/router';
