@@ -4,7 +4,6 @@ import {
   Chip,
   ImageUploader,
   InputFiled,
-  Modal,
   Combobox,
   TextArea,
 } from '@components/common';
@@ -52,7 +51,6 @@ const EditMainMenu = ({
   const [countryName, setCountryName] = useState<any>('');
 
   const bio = watch('bio');
-  const mission = watch('mission');
   const skills = watch('skills');
   const passions = watch('passions');
   const countryCode = watch('country');
@@ -222,7 +220,6 @@ const EditMainMenu = ({
     control: control,
     name: 'type',
   });
-  console.log('ERROR IN FORM :---:', formState?.errors);
   return (
     <>
       <form
@@ -353,9 +350,6 @@ const EditMainMenu = ({
                       className="my-2 border-2 border-grayLineBased"
                       rows={5}
                     />
-                    {/* <p className="text-sm text-graySubtitle">
-                    {mission?.length ?? 0} / 160
-                  </p> */}
                   </div>
                 )}
               </div>
@@ -401,16 +395,17 @@ const EditMainMenu = ({
                 Contact
               </h3>
               <div className="space-y-8">
-                {/* Commenting out bc BE doesn't like it. Will have different process for changing it. */}
-                {/* <InputFiled
-                  label="Email"
-                  type="email"
-                  placeholder="Email"
-                  register={register('email')}
-                  errorMessage={formState?.errors?.['email']?.message}
-                  required
-                  className="my-6"
-                /> */}
+                {userType === 'organizations' && (
+                  <InputFiled
+                    label="Organization email"
+                    type="email"
+                    placeholder="Email"
+                    register={register('email')}
+                    errorMessage={formState?.errors?.['email']?.message}
+                    required
+                    className="my-6"
+                  />
+                )}
                 <Combobox
                   label="Country"
                   onSelected={onCountrySelected}

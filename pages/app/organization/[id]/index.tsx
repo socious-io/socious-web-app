@@ -65,8 +65,6 @@ const OrganizationProfile: NextPage<OrganizationProfileProps> = ({skills}) => {
 
   if (!data) return <SplashScreen />;
 
-  console.log('User :---: ', user);
-
   return (
     <GeneralLayout>
       <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">

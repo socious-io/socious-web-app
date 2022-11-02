@@ -148,26 +148,25 @@ const EditProfileModal = ({
       let avatarId: string | null = await checkAndUploadMedia(avatar);
       let coverId: string | null = await checkAndUploadMedia(coverImage);
 
-      //fetching values from Form
-      const first_name: string = formMethods.getValues('firstName');
-      const last_name: string = formMethods.getValues('lastName');
-      const username: string = formMethods.getValues('userName');
-      const email: string = formMethods.getValues('email') ?? user.email;
-      const name: string = formMethods.getValues('name');
-      const type: string = formMethods.getValues('type');
-      const culture: string = formMethods.getValues('culture');
-      const website: string = formMethods.getValues('website');
-      // const email: string = formMethods.getValues('email');
-      const bio: string = formMethods.getValues('bio')?.trim();
-      const mission: string = formMethods.getValues('mission')?.trim();
-      const social_causes: string[] = formMethods.getValues('passions');
-      const skills: string[] = formMethods.getValues('skills');
-      const country: string = formMethods.getValues('country');
-      const city: string = formMethods.getValues('city');
-      const address: string = formMethods.getValues('address')?.trim();
-      const mobile_country_code: string =
-        formMethods.getValues('countryNumber');
-      const phone: string = formMethods.getValues('phoneNumber');
+      const {
+        firstName: first_name,
+        lastName: last_name,
+        userName: username,
+        skills,
+        email,
+        name,
+        type,
+        culture,
+        website,
+        bio,
+        mission,
+        passions: social_causes,
+        country,
+        city,
+        address,
+        countryNumber: mobile_country_code,
+        phoneNumber: phone,
+      } = data;
 
       // Creating Profile Body
       const updateProfileBody: IUpdateProfileBody = {
@@ -186,6 +185,7 @@ const EditProfileModal = ({
 
       //Making a API call
       try {
+        // Updating USER
         if (currentIdentity?.type === 'users') {
           const response = await updateProfile({
             ...updateProfileBody,
@@ -199,6 +199,7 @@ const EditProfileModal = ({
             ? mutate(`/user/by-username/${user?.username}/profile`)
             : Router.push(`/app/user/${response.username}`);
         } else if (currentIdentity?.id) {
+          // Updating ORG
           const updateOrgBody: IUpdateOrgBody = {
             ...updateProfileBody,
             name,
@@ -207,18 +208,15 @@ const EditProfileModal = ({
           };
           if (culture) updateOrgBody.culture = culture;
           if (website) updateOrgBody.website = website;
-          const response: any = await updateOrganization(
-            user.id,
-            updateOrgBody,
-          );
-          console.log('ORG RESPONSE :--: ', response);
+          const response = await updateOrganization(user.id, updateOrgBody);
           mutateUser(response);
-          mutate(`/orgs/by-shortname/${response.shortname}`);
+          user?.shortname === response.shortname
+            ? mutate(`/orgs/by-shortname/${user.shortname}`)
+            : Router.push(`/app/organization/${response.shortname}`);
         }
         closeModal();
-        // forceUpdate();
+        forceUpdate();
       } catch (error) {
-        console.log('ERROR :---: ', error);
         const data: any = (error as AxiosError).response?.data;
         if (data) {
           if (
@@ -251,7 +249,8 @@ const EditProfileModal = ({
       currentIdentity?.type,
       formMethods,
       mutateUser,
-      user?.id,
+      user.id,
+      user.shortname,
       user?.username,
     ],
   );
