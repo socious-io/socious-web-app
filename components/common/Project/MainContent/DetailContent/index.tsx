@@ -31,7 +31,7 @@ type CreateProjectMainType = {
   projectId: string;
   skills: any[];
   className?: string;
-  data?: {data: Project; mutate: KeyedMutator<Project>};
+  data: {data: Project; mutate: KeyedMutator<Project>};
 };
 
 const libraries: Libraries = ['places'];
