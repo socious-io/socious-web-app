@@ -10,7 +10,7 @@
     "yarn": "please-use-npm"
   },
   "dependencies": {
-    "@capacitor/android": "^4.3.0",
+    "@capacitor/android": "^4.4.0",
     "@capacitor/assets": "^1.0.14",
     "@capacitor/core": "^4.3.0",
     "@capacitor/ios": "^4.3.0",
