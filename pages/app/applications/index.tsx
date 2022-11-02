@@ -20,9 +20,10 @@ const ProjectApplications: NextPage = () => {
   useEffect(() => {
     if (currentIdentity?.type === 'organizations') router.push('/app/projects');
   }, [currentIdentity, router]);
+
   return (
-    <GeneralLayout hasNavbar>
-      <div className="mx-6 mt-10 flex w-full md:space-x-6">
+    <GeneralLayout hasNavbar hasDetailNavbar detailNavbarTitle="My projects">
+      <div className="flex w-full md:mt-10 md:space-x-6">
         <SideBar />
         <MyApplicationBoxes />
       </div>
