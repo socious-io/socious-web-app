@@ -45,10 +45,7 @@ export function ProfileCard({
             <p className="text-base font-semibold">
               {name || 'FirstName LastName'}
             </p>
-            <Link
-              href={`/app/${isUser ? 'user' : 'organization'}/${username}`}
-              passHref
-            >
+            <Link href={`/app/${isUser ? 'user' : 'organization'}/${username}`}>
               <label className="cursor-pointer text-primary">
                 View my profile
               </label>

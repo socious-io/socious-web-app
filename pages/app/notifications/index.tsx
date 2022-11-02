@@ -1,6 +1,6 @@
 import {NextPage} from 'next';
 import React from 'react';
-import SideBar from '@components/common/Notification/Sidebar';
+import SideBar from '@components/common/SimpleSideBar/Sidebar';
 import NotificationContainer from '@components/common/Notification/NotificationContainer';
 import StartScreen from '@components/common/StartScreen/StartScreen';
 import useUser from 'hooks/useUser/useUser';
@@ -20,7 +20,7 @@ const Index: NextPage = () => {
   return (
     <GeneralLayout>
       <div className="mt-10 flex w-full sm:mt-0 lg:space-x-6">
-        <SideBar />
+        <SideBar title="Notifications" />
         <NotificationContainer />
       </div>
     </GeneralLayout>

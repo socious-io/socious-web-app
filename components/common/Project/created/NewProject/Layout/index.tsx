@@ -60,15 +60,15 @@ export const CreateProjectLayout: FC<PropsWithChildren<TLayoutType>> = ({
   );
 };
 
-export const FromLayout: FC<PropsWithChildren<{type?: 'FULL'}>> = ({
-  children,
-  type,
-}) => {
+export const FromLayout: FC<
+  PropsWithChildren<{type?: 'FULL'; className?: string}>
+> = ({children, type, className}) => {
   return (
     <div
       className={twMerge(
         ` ${styles.contentBase} flex w-full flex-col`,
         type === 'FULL' && 'grow sm:grow-0',
+        className && className,
       )}
     >
       {children}

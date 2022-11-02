@@ -1,3 +1,5 @@
+import {TProjectStatus} from '@models/project';
+import {Question} from '@models/question';
 import {
   FC,
   createContext,
@@ -34,8 +36,10 @@ export type TProjectContext = {
   cv_link: string;
   cv_name: string;
   city: string;
-  status: string;
+  status: TProjectStatus;
   attachment: any;
+  questions: Question[] | null;
+  editQuestion: Question | null;
 };
 
 export const initContext: TProjectContext = {
@@ -64,8 +68,10 @@ export const initContext: TProjectContext = {
   cv_link: '',
   cv_name: '',
   city: '',
-  status: '',
+  status: 'DRAFT',
   attachment: '',
+  questions: null,
+  editQuestion: null,
 };
 
 const ProjectContext = createContext<{

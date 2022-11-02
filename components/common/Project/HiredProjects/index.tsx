@@ -1,5 +1,4 @@
 import {useToggle} from '@hooks';
-import BodyCard from '../component/BodyCard';
 import HeaderBox from '../component/HeaderBox';
 var data = [
   {

@@ -46,10 +46,11 @@ const Applicant = () => {
   }
 
   if (!applicantData) return <></>;
+  console.log('Applicant :----: ', applicantData);
 
   return (
     <GeneralLayout hasNavbar>
-      <SideBar selectBar={'APPLICANT'} projectId={projectId as string} />
+      <SideBar selectBar="APPLICANT" projectId={projectId as string} />
       <ApplicantsContent
         applicant={applicantData}
         mutateApplicant={mutateApplicant}

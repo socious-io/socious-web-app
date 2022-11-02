@@ -13,7 +13,7 @@ export interface CheckboxProps
 }
 
 const defaultCheckboxClass =
-  'w-4 h-4 mr-2   focus:ring-transparent text-secondary accent-primary hover:accent-primaryLight cursor-pointer';
+  'w-4 h-4 mr-2 focus:ring-transparent text-secondary accent-primary hover:accent-primaryLight cursor-pointer';
 const disabledClass = 'border-gray-500 bg-gray-400';
 
 export function Checkbox({
@@ -27,7 +27,7 @@ export function Checkbox({
   return (
     <label
       className={`cursor-pointer ${
-        withAlignStart ? 'text-center' : 'align-center flex'
+        withAlignStart ? 'text-center' : 'flex items-center'
       }`}
     >
       {/* <label className="flex items-center cursor-pointer "> */}

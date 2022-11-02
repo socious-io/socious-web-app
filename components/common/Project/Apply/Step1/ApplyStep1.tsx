@@ -1,22 +1,39 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import {StepProps} from '@models/stepProps';
 import {useForm} from 'react-hook-form';
 import {TextInput, TextArea, Button, Avatar} from '@components/common';
 import {FromLayout} from '../../created/NewProject/Layout';
-import {schemaApplyProject, schemaLink} from '@api/projects/validation';
+import {schemaApplyProject} from '@api/projects/validation';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {useProjectContext} from '../../created/NewProject/context';
 import {LinkIcon, PaperClipIcon, TrashIcon} from '@heroicons/react/24/outline';
-import {Switch} from '@components/common';
+import {Switch, Checkbox} from '@components/common';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {Project} from 'models/project';
 import {twMerge} from 'tailwind-merge';
-import {PlusIcon} from '@heroicons/react/24/solid';
+import {ExclamationCircleIcon, PlusIcon} from '@heroicons/react/24/solid';
 import {useToggle} from '@hooks';
+import {Question} from '@models/question';
+
+export type TFormAnswer = {
+  id: string;
+  selected_option: number | null;
+  answer: string | null;
+  required: boolean;
+  checkbox: boolean;
+};
+
+type CheckBoxesProps = {
+  options: string[];
+  errorMessage?: string;
+  setSelectedOption: (id: number) => void;
+  selected: number | null;
+};
 
 interface ApplyStep extends StepProps {
   project: Project;
+  questions?: Question[];
 }
 export const TitlePart: FC<{
   title: string;
@@ -33,29 +50,63 @@ export const TitlePart: FC<{
     </div>
   );
 };
-export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
+
+export const CheckBoxes: FC<CheckBoxesProps> = ({
+  options,
+  errorMessage,
+  setSelectedOption,
+  selected,
+}) => {
+  return (
+    <div className="space-y-4">
+      {options.map((option, i) => (
+        <Checkbox
+          checked={selected === i + 1}
+          key={`option: ${i + 1} - ${option}`}
+          label={option}
+          onChange={() => setSelectedOption(i + 1)}
+          className="h-5 w-5 appearance-none text-primary"
+        />
+      ))}
+      {errorMessage && (
+        <div className="flex items-center text-error">
+          <ExclamationCircleIcon className="mr-1 h-5 w-5" /> {errorMessage}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const ApplyStep1 = ({onSubmit, project, questions}: ApplyStep) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
   const {data} = useSWR<any>(`/orgs/${project?.identity_id}`, get);
-  const [name, setName] = useState<string>(' ');
-  const [link, setLink] = useState<string>(' ');
 
   const {state: showLinkFields, handlers: linkFieldsHandlers} = useToggle();
 
   const {
-    formState: {errors: linkErrors},
-    setValue: linkSetValue,
+    handleSubmit,
+    register,
+    formState: {errors, isSubmitting},
+    setValue,
     watch,
   } = useForm({
-    resolver: joiResolver(schemaLink),
-  });
-  const cvLink = watch('cv_link');
-  console.log('CV Link', cvLink);
-  const {
-    handleSubmit,
-    formState: {isValid, errors},
-    setValue,
-  } = useForm({
     resolver: joiResolver(schemaApplyProject),
+    defaultValues: {
+      cover_letter: '',
+      cv_name: '',
+      cv_link: '',
+      answers:
+        questions?.map(
+          (question) =>
+            ({
+              id: question.id,
+              required: question.required ?? false,
+              checkbox: question.options?.length > 0,
+              selected_option: null as any,
+              answer: null as any,
+            } as TFormAnswer),
+        ) ?? null,
+    },
   });
 
   useEffect(() => {
@@ -64,20 +115,18 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
         shouldValidate: true,
       });
     } else if (ProjectContext?.cv_name) {
-      linkSetValue('cv_name', ProjectContext.cv_name, {
+      setValue('cv_name', ProjectContext.cv_name, {
         shouldValidate: true,
       });
-      setName(ProjectContext.cv_name);
     }
     if (ProjectContext?.cv_link) {
-      linkSetValue('cv_link', ProjectContext.cv_link, {
+      setValue('cv_link', ProjectContext.cv_link, {
         shouldValidate: true,
       });
-      setLink(ProjectContext.cv_link);
     }
-  }, [ProjectContext, linkSetValue, setValue]);
+  }, [ProjectContext, setValue]);
 
-  const handleChange = (field: string, input: string | boolean) => {
+  const handleChange = (field: any, input: string | boolean) => {
     setValue(field, input, {
       shouldDirty: true,
       shouldValidate: true,
@@ -88,24 +137,23 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
     });
   };
 
-  console.log('LINK ERROR :---: ', {
-    cv_name: linkErrors?.cv_name?.message,
-    cv_link: linkErrors?.cv_link?.message,
-  });
   return (
     <form
       className="flex h-full w-full grow flex-col sm:grow-0"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <FromLayout type="FULL">
-        <div className="overflow-y-scroll px-4 pt-4">
+      <FromLayout type="FULL" className="!grow">
+        <div className="hide-scrollbar overflow-y-scroll px-4 pt-4">
           <p className="font-bold text-black">{project?.title}</p>
           <div className="mt-3 flex flex-row space-x-2">
             <Avatar size="s" type="organizations" />
             <p className="text-black">{data?.name}</p>
           </div>
           <p className="mt-4 text-black">{project?.description}</p>
-          <TitlePart title="Cover letter" />
+          <TitlePart
+            title="Cover letter"
+            className="-mx-4 border-b-0 px-4 text-xl"
+          />
           <TextArea
             required
             label="Message"
@@ -114,14 +162,15 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
             value={ProjectContext.cover_letter}
             containerClassName="mt-6"
             className="border-gray border-1  overflow-y-scroll focus:border-none"
-            errorMessage={errors?.['content']?.message}
+            errorMessage={errors?.['cover_letter']?.message}
             onChange={(e) => handleChange('cover_letter', e.target.value)}
           />
 
-          {/* Attachment & Link Section */}
-          <TitlePart title="Attach CV" className="border-y-0 sm:hidden" />
-          <div className="hidden sm:block">
-            <TitlePart title="Resume" className="border-y-0" />
+          <div>
+            <TitlePart
+              title="Resume"
+              className="-mx-4 border-b-0 px-4 text-xl"
+            />
             {!ProjectContext.attachment?.type && (
               <>
                 <p className="text-black">Upload your resume</p>
@@ -137,7 +186,7 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
                 onClick={() =>
                   setProjectContext({
                     ...ProjectContext,
-                    formStep: 4,
+                    formStep: 2,
                   })
                 }
                 className="flex h-9 w-36 items-center justify-center p-0"
@@ -148,22 +197,6 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
                 Upload File
               </Button>
             )}
-
-            {/* Attach Link. Only for MOBILE */}
-            <Button
-              onClick={() =>
-                setProjectContext({
-                  ...ProjectContext,
-                  formStep: 3,
-                })
-              }
-              className="flex h-9 w-36 items-center justify-center p-0 sm:hidden"
-              type="button"
-              variant="outline"
-              leftIcon={() => <LinkIcon width={20} height={20} />}
-            >
-              Attach Link
-            </Button>
           </div>
           {ProjectContext.attachment?.type && (
             <div className="flex items-center space-x-2">
@@ -183,8 +216,8 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
             </div>
           )}
 
-          <div className="hidden sm:block">
-            <TitlePart title="Link" className="-mb-2 border-y-0" />
+          <div className="">
+            <TitlePart title="Link" className="-mx-4 border-b-0 px-4 text-xl" />
             {!showLinkFields ? (
               <Button
                 onClick={() => linkFieldsHandlers.on()}
@@ -199,77 +232,90 @@ export const ApplyStep1 = ({onSubmit, project}: ApplyStep) => {
               <>
                 <div className="mt-2 space-y-4 pl-0 ">
                   <TextInput
-                    required
                     label="Link name"
-                    placeholder="Link Url"
-                    value={name}
-                    containerClassName=""
+                    placeholder="Link name"
                     className="border-gray border-1  overflow-y-scroll focus:border-none"
-                    errorMessage={linkErrors?.['cv_name']?.message}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                      linkSetValue('cv_name', e.target.value, {
-                        shouldDirty: true,
-                        shouldValidate: true,
-                      });
-                      setProjectContext({
-                        ...ProjectContext,
-                        ['cv_name']: e.target.value,
-                      });
-                    }}
+                    errorMessage={errors?.['cv_name']?.message}
+                    onChange={(e) => handleChange('cv_name', e.target.value)}
                   />
                 </div>
                 <div className="mt-2 space-y-4 pl-0 ">
                   <TextInput
-                    required
                     label="Link URL"
                     placeholder="Link url"
-                    value={link}
-                    containerClassName=""
                     className="border-gray border-1  overflow-y-scroll focus:border-none"
-                    errorMessage={linkErrors?.['cv_link']?.message}
-                    onChange={(e) => {
-                      setLink(e.target.value);
-                      linkSetValue('cv_link', e.target.value, {
-                        shouldDirty: true,
-                        shouldValidate: true,
-                      });
-                      setProjectContext({
-                        ...ProjectContext,
-                        ['cv_link']: e.target.value,
-                      });
-                    }}
+                    errorMessage={errors?.['cv_link']?.message}
+                    onChange={(e) => handleChange('cv_link', e.target.value)}
                   />
                 </div>
               </>
             )}
           </div>
-          <TitlePart title="Contact info" />
+          {(questions?.length ?? 0) > 0 && (
+            <div>
+              <TitlePart
+                title="Screening questions"
+                className="-mx-4 border-b-0 px-4 text-xl"
+              />
+              <div className="mt-4 space-y-7">
+                {questions?.map((question, index) => (
+                  <div key={question.id} className="space-y-2">
+                    <p>
+                      {index + 1}. {question.question}{' '}
+                      {question.required && (
+                        <span className="text-error">*</span>
+                      )}
+                    </p>
+                    {question.options?.length > 0 ? (
+                      <CheckBoxes
+                        options={question.options}
+                        errorMessage={
+                          (errors?.answers as any)?.[index]?.selected_option
+                            ?.message
+                        }
+                        selected={watch(`answers.${index}.selected_option`)}
+                        setSelectedOption={(optionId) =>
+                          setValue(`answers.${index}.selected_option`, optionId)
+                        }
+                      />
+                    ) : (
+                      <TextArea
+                        register={register(`answers.${index}.answer`)}
+                        errorMessage={
+                          (errors?.answers as any)?.[index]?.answer?.message
+                        }
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          <TitlePart
+            title="Contact info"
+            className="-mx-4 border-b-0 px-4 text-xl"
+          />
 
-          <div className="my-4 flex w-full flex-row  justify-between">
+          <div className="mb-4 flex w-full flex-row  justify-between">
             <div>Share contact information with Organization?</div>
             <Switch
               onChange={(c) => handleChange('share_contact_info', c)}
               value={ProjectContext.share_contact_info}
             />
           </div>
+          <div className="-mx-4 flex items-end justify-center border-t p-4 pb-12">
+            <Button
+              disabled={isSubmitting}
+              className="flex h-11 w-full items-center justify-center"
+              type="submit"
+              variant="fill"
+              value="Submit"
+            >
+              Submit application
+            </Button>
+          </div>
         </div>
       </FromLayout>
-      <div className=" flex items-end justify-center border-t p-4 pb-12 sm:justify-end sm:pb-4">
-        <Button
-          disabled={
-            !isValid ||
-            !!linkErrors?.['cv_link']?.message ||
-            !!linkErrors['cv_name']?.message
-          }
-          className="flex h-11 w-full items-center justify-center sm:w-52"
-          type="submit"
-          variant="fill"
-          value="Submit"
-        >
-          Review application
-        </Button>
-      </div>
     </form>
   );
 };
