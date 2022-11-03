@@ -16,11 +16,17 @@ import getGlobalData from 'services/cacheSkills';
 import type {GetStaticPaths, GetStaticProps, NextPage} from 'next';
 import {ProjectProps} from '../../[id]';
 import {Project} from '@models/project';
+import {TQuestionsResponse} from '@models/question';
 
 const Overview: NextPage<ProjectProps> = ({skills}) => {
   const router = useRouter();
   const {id} = router.query;
   const {data} = useSWR<Project>(`/projects/${id}`, get);
+
+  const {data: questions} = useSWR<TQuestionsResponse>(
+    data?.id ? `/projects/${data.id}/questions` : null,
+    get,
+  );
 
   if (!data) return <SplashScreen />;
 
@@ -28,7 +34,13 @@ const Overview: NextPage<ProjectProps> = ({skills}) => {
     <ProjectContextProvider>
       <GeneralLayout hasDetailNavbar detailNavbarTitle="Project Overview">
         <SideBar data={data} />
-        <DetailContent project={data} rawSkills={skills} />
+        <DetailContent
+          project={data}
+          rawSkills={skills}
+          questions={questions?.questions?.sort(
+            (x, y) => Date.parse(x.created_at) - Date.parse(y.created_at),
+          )}
+        />
       </GeneralLayout>
     </ProjectContextProvider>
   );
