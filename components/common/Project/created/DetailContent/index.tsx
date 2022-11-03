@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useMemo} from 'react';
 import {toast} from 'react-toastify';
 import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
 import useSWR, {useSWRConfig} from 'swr';
@@ -41,7 +41,7 @@ import {Question} from '@models/question';
 // Library
 const libraries: Libraries = ['places'];
 
-const QuestionsCard: FC<{questions?: Question[]; goToEdit: () => void}> = ({
+const QuestionsCard: FC<{questions?: Question[]; goToEdit?: () => void}> = ({
   questions,
   goToEdit,
 }) => {
@@ -49,16 +49,18 @@ const QuestionsCard: FC<{questions?: Question[]; goToEdit: () => void}> = ({
     <div className="space-y-6 p-4">
       <div className="flex items-center justify-between ">
         <Title>Screening questions</Title>
-        <div className="relative  h-5 w-5 ">
-          <div className="cursor-pointer" onClick={goToEdit}>
-            <Image
-              src={editSrc}
-              className="fill-warning"
-              alt="dislike"
-              layout="fill"
-            />
+        {goToEdit && (
+          <div className="relative  h-5 w-5 ">
+            <div className="cursor-pointer" onClick={goToEdit}>
+              <Image
+                src={editSrc}
+                className="fill-warning"
+                alt="dislike"
+                layout="fill"
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
       {questions && (
         <div className="space-y-4">
@@ -105,6 +107,11 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
   const {state: avoidClose, handlers: avoidCloseHandlers} = useToggle();
   const {ProjectContext, setProjectContext} = useProjectContext();
   const {currentIdentity} = useUser();
+
+  const owner = useMemo(
+    () => !!currentIdentity && currentIdentity.id === project.identity_id,
+    [currentIdentity, project.identity_id],
+  );
 
   const {mutate} = useSWRConfig();
   const {mutate: getProject} = useSWR<Project>(
@@ -229,24 +236,26 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
         </div>
         <OverviewProjectCard
           project={project}
-          onclick={() => clickEditIcon(0)}
+          onclick={owner ? () => clickEditIcon(0) : undefined}
         />
         <ProjectItem
           items={causes_tags}
           title="Social causes"
-          isEdit
+          isEdit={owner}
           onclick={() => clickEditIcon(1)}
         />
         <ProjectItem
           items={skills}
           title="Skills"
-          isEdit
+          isEdit={owner}
           onclick={() => clickEditIcon(2)}
         />
-        <QuestionsCard
-          questions={questions}
-          goToEdit={() => clickEditIcon(3)}
-        />
+        {(owner || (questions && questions.length)) && (
+          <QuestionsCard
+            questions={questions}
+            goToEdit={owner ? () => clickEditIcon(3) : undefined}
+          />
+        )}
       </div>
       <Modal isOpen={closeProject} onClose={closeProjectHandlers.off}>
         <EditProjectModal onSubmit={() => {}} />
