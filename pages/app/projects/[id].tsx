@@ -11,7 +11,7 @@ import useSWR from 'swr';
 import {get} from 'utils/request';
 import {Project} from '@models/project';
 
-type ProjectProps = {
+export type ProjectProps = {
   skills: any[];
 };
 
