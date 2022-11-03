@@ -2,6 +2,7 @@ import {
   CreateProjectType,
   ApplyProjectType,
   AddQuestionType,
+  Project,
 } from '@models/project';
 import {Question} from '@models/question';
 import {post} from 'utils/request';
@@ -14,7 +15,7 @@ export function updateProjectById(
   projectId: string,
   projectBody: CreateProjectType,
 ) {
-  return post(`/projects/update/${projectId}`, projectBody);
+  return post<Project>(`/projects/update/${projectId}`, projectBody);
 }
 
 export function applyProject(projectId: string, projectBody: ApplyProjectType) {

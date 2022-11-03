@@ -10,7 +10,6 @@ export type TProjectIdentityMeta = Required<
   city?: string;
   country?: string;
 };
-
 export interface Project {
   id: string;
   title: string;
@@ -27,7 +26,6 @@ export interface Project {
   causes_tags: Array<string>;
   skills: Array<string>;
   payment_currency?: string;
-  questions?: Array<Question>;
   remote_preference: string;
   identity_id: string;
   identity_type: IdentityType;
@@ -40,6 +38,15 @@ export interface Project {
   commitment_hours_higher: string;
   commitment_hours_lower: string;
   city: string;
+  weekly_hours_lower: string | null;
+  weekly_hours_higher: string | null;
+  deleted_at: string | null;
+  old_id: string | null;
+  other_party_id: string | null;
+  other_party_title: string | null;
+  other_party_url: string | null;
+  search_tsv: string;
+  total_escrow_amount: null | string | number;
 }
 
 export interface CreateProjectType {
@@ -89,10 +96,10 @@ export interface ProjectProps {
 }
 
 export const defaultProject = {
-  payment_currency: '',
-  status: '',
-  causes_tags: [],
-  skills: [],
+  payment_currency: '';
+  status: '';
+  causes_tags: [];
+  skills: [];
 } as unknown as Project;
 
 export interface IProjectsResponse {
