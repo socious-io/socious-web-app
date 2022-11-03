@@ -1,18 +1,45 @@
+import {FC} from 'react';
+import {toast} from 'react-toastify';
+import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
+import useSWR, {useSWRConfig} from 'swr';
+import Image from 'next/image';
+
+// Components
+import {Modal} from '@components/common';
+import AlertCard from '@components/common/AlertCard/AlertCard';
+import {
+  useProjectContext,
+  initContext,
+} from '@components/common/Project/created/NewProject/context';
+
 import ProjectItem from '@components/common/UserProfile/MainContent/ProjectItem';
 import Title from '@components/common/UserProfile/MainContent/Title';
-
-import {Modal} from '@components/common';
 import OverviewProjectCard from '../../component/OverviewProjectCard';
-import {useToggle, useUser} from 'hooks';
-import AlertCard from '@components/common/AlertCard/AlertCard';
 import EditProjectModal from '../../component/EditProjectModal';
-import {ProjectProps} from 'models/project';
-import {useProjectContext} from '@components/common/Project/created/NewProject/context';
-import {FC} from 'react';
-import {Question} from '@models/question';
-import editSrc from 'asset/icons/edit.svg';
-import Image from 'next/image';
 import ProjectMobileTop from '../../ProjectMobileTop/ProjectMobileTop';
+import {
+  CreateProjectLayout,
+  ProjectInfo,
+  ProjectAbout,
+  ProjectSkill,
+  ProjectQuestion,
+  QuestionDetail,
+} from '@components/common/Project/created/NewProject';
+import editSrc from 'asset/icons/edit.svg';
+
+// Hooks
+import {useToggle, useUser} from 'hooks';
+
+// Utils/Actions
+import {updateProjectById} from '@api/projects/actions';
+import {get} from 'utils/request';
+
+// Types
+import {CreateProjectType, Project, ProjectProps} from 'models/project';
+import {Question} from '@models/question';
+
+// Library
+const libraries: Libraries = ['places'];
 
 const QuestionsCard: FC<{questions?: Question[]; goToEdit: () => void}> = ({
   questions,
@@ -49,8 +76,11 @@ const QuestionsCard: FC<{questions?: Question[]; goToEdit: () => void}> = ({
   );
 };
 
-export type DetailProps = ProjectProps & {questions?: Question[]};
-const Detail: FC<DetailProps> = ({project, questions}) => {
+interface DetailProps extends ProjectProps {
+  rawSkills: string[];
+}
+
+const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
   const {
     title,
     payment_range_higher,
@@ -75,6 +105,24 @@ const Detail: FC<DetailProps> = ({project, questions}) => {
   const {state: avoidClose, handlers: avoidCloseHandlers} = useToggle();
   const {ProjectContext, setProjectContext} = useProjectContext();
   const {currentIdentity} = useUser();
+
+  const {mutate} = useSWRConfig();
+  const {mutate: getProject} = useSWR<Project>(
+    `/projects?identity=${currentIdentity?.id}`,
+    get,
+  );
+
+  const {isLoaded} = useGoogleMapsScript({
+    googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
+    libraries,
+  });
+
+  // STEPS (Different Edit Mode)
+  const isStep0 = ProjectContext.formStep === 0;
+  const isStep1 = ProjectContext.formStep === 1;
+  const isStep2 = ProjectContext.formStep === 2;
+  const isStep3 = ProjectContext.formStep === 3;
+  const isStep4 = ProjectContext.formStep === 4;
 
   const clickEditIcon = (formStep: number) => {
     setProjectContext({
@@ -101,6 +149,70 @@ const Detail: FC<DetailProps> = ({project, questions}) => {
       city,
       questions: questions ?? null,
     });
+  };
+
+  const onSubmit = async (s?: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => {
+    const postBody: CreateProjectType = {
+      title: ProjectContext.title,
+      description: ProjectContext.description,
+      remote_preference: ProjectContext.remote_preference,
+      country: ProjectContext.country,
+      project_type: ProjectContext.project_type,
+      project_length: ProjectContext.project_length,
+      payment_type: ProjectContext.payment_type,
+      causes_tags: ProjectContext.causes_tags,
+      skills: ProjectContext.skills,
+      status: s ? s : ProjectContext.status,
+      experience_level: ProjectContext.experience_level,
+    };
+
+    if (ProjectContext.payment_currency)
+      postBody.payment_currency = ProjectContext.payment_currency;
+    if (ProjectContext.city) postBody.city = ProjectContext.city;
+
+    if (ProjectContext.payment_scheme) {
+      postBody.payment_scheme = ProjectContext.payment_scheme;
+      if (postBody.payment_scheme === 'HOURLY') {
+        if (ProjectContext.commitment_hours_higher)
+          postBody.commitment_hours_higher =
+            ProjectContext.commitment_hours_higher;
+        if (ProjectContext.commitment_hours_lower)
+          postBody.commitment_hours_lower =
+            ProjectContext.commitment_hours_lower;
+      }
+    }
+
+    if (postBody.payment_type === 'PAID') {
+      if (ProjectContext.payment_range_lower)
+        postBody.payment_range_lower = ProjectContext.payment_range_lower;
+      if (ProjectContext.payment_range_higher)
+        postBody.payment_range_higher = ProjectContext.payment_range_higher;
+    }
+
+    try {
+      const response = await updateProjectById(project.id, postBody);
+      console.log('PROJECT RESPONSE :---: ', response);
+      mutate(`/projects/${project.id}`);
+      getProject();
+      setProjectContext(initContext);
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  };
+
+  // EDIT MODALS
+  const PageDisplay = () => {
+    if (isStep0 && isLoaded) {
+      return <ProjectInfo onSubmit={onSubmit} />;
+    } else if (isStep1) {
+      return <ProjectAbout onSubmit={onSubmit} />;
+    } else if (isStep2) {
+      return <ProjectSkill onSubmit={onSubmit} rawSkills={rawSkills} />;
+    } else if (isStep3) {
+      return <ProjectQuestion onSubmit={onSubmit} type="EDIT" />;
+    } else if (isStep4) {
+      return <QuestionDetail projectId={project.id} />;
+    }
   };
 
   return (
@@ -153,6 +265,10 @@ const Detail: FC<DetailProps> = ({project, questions}) => {
           close={avoidCloseHandlers.off}
         />
       </Modal>
+      {/* EDIT PROJECT MODAL COLLECTIONS */}
+      <CreateProjectLayout isEdit title="Edit Project">
+        {PageDisplay()}
+      </CreateProjectLayout>
     </div>
   );
 };
