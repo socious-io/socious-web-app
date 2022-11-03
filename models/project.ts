@@ -96,10 +96,10 @@ export interface ProjectProps {
 }
 
 export const defaultProject = {
-  payment_currency: '';
-  status: '';
-  causes_tags: [];
-  skills: [];
+  payment_currency: '',
+  status: '',
+  causes_tags: [],
+  skills: [],
 } as unknown as Project;
 
 export interface IProjectsResponse {
