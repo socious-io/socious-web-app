@@ -11,5 +11,6 @@ export interface StepWithError {
   error: string;
 }
 export interface StepWithResendAndError extends StepWithError {
-  onResendCode: (onClickReset: any) => void;
+  onResendCode: (onClickReset?: any) => void;
+  email?: string;
 }

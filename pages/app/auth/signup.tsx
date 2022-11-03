@@ -12,6 +12,7 @@ import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
 import SignupStep1 from '@components/common/Auth/Signup/Step1/SignupStep1';
 import SignupStep2 from '@components/common/Auth/Signup/Step2/SignupStep2';
+import ForgotPasswordStep2 from '@components/common/Auth/ForgotPassword/Step2/ForgotPasswordStep2';
 import SignupStep3 from '@components/common/Auth/Signup/Step3/SignupStep3';
 import SignupStep4 from '@components/common/Auth/Signup/Step4/SignupStep4';
 
@@ -20,7 +21,7 @@ import {
   schemaSignupStep2,
   schemaSignupStep3,
 } from '@api/auth/validation';
-import {signup, checkEmailExist} from '@api/auth/actions';
+import {signup, checkEmailExist, sendOTP, confirmOTP} from '@api/auth/actions';
 
 const Signup: NextPage = () => {
   const router = useRouter();
@@ -31,6 +32,7 @@ const Signup: NextPage = () => {
   const [showError, setShowError] = useState<boolean>(false);
 
   const [errorMessage, setError] = useState<ErrorMessage>();
+  const [otpError, setOtpError] = useState<string>('');
 
   const formMethodsStep1 = useForm({
     resolver: joiResolver(schemaSignupStep1),
@@ -65,6 +67,10 @@ const Signup: NextPage = () => {
           setError(DefaultErrorMessage);
           handleErrorToggle();
         });
+      handleSendCode().catch((e) => {
+        setError(DefaultErrorMessage);
+        handleErrorToggle();
+      });
     } else {
       setStep(step + 1);
     }
@@ -79,9 +85,38 @@ const Signup: NextPage = () => {
   }, [router, showSuccess]);
 
   const handleErrorToggle = useCallback(
-    () => setShowError(!showError),
-    [showError],
+    () => setShowError((showError) => !showError),
+    [],
   );
+
+  const handleSendCode = useCallback(async () => {
+    const email = formMethodsStep2.getValues('email');
+    console.log('EMAIL :--: ', email);
+    try {
+      await sendOTP(email);
+    } catch (error: any) {
+      console.log('ERROR :--: ', error);
+    }
+  }, [formMethodsStep2]);
+
+  const handleConfirmOTPRequest = async (code: string) => {
+    const email = formMethodsStep2.getValues('email');
+    setOtpError('');
+    try {
+      await confirmOTP(email, code);
+      if (step === 2) {
+        setStep(step + 1);
+      }
+    } catch (e) {
+      const error = e as AxiosError<any>;
+      if (error.isAxiosError) {
+        if (error.response?.data?.error === 'Not matched') {
+          setOtpError('Incorrect verification code.');
+          return;
+        }
+      }
+    }
+  };
 
   const handleSignupRequest = async () => {
     const firstName = formMethodsStep1.getValues('firstName');
@@ -131,10 +166,18 @@ const Signup: NextPage = () => {
         <FormProvider {...formMethodsStep2}>
           {step === 2 && <SignupStep2 onSubmit={handleSubmit} />}
         </FormProvider>
+        {step === 3 && (
+          <ForgotPasswordStep2
+            onSubmit={handleSubmit}
+            onResendCode={handleSendCode}
+            error={otpError}
+            email={formMethodsStep2.getValues('email')}
+          />
+        )}
         <FormProvider {...formMethodsStep3}>
-          {step === 3 && <SignupStep3 onSubmit={handleSubmit} />}
+          {step === 4 && <SignupStep3 onSubmit={handleSubmit} />}
         </FormProvider>
-        {step === 4 && <SignupStep4 onSubmit={handleSubmit} />}
+        {step === 5 && <SignupStep4 onSubmit={handleSubmit} />}
 
         <Modal isOpen={showSuccess} onClose={handleSuccessToggle}>
           <Modal.Title>Signup successful</Modal.Title>
