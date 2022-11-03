@@ -17,6 +17,7 @@ import {get} from 'utils/request';
 import {TQuestionsResponse} from '@models/question';
 import {IOrganizationType} from 'models/organization';
 import {Project} from '@models/project';
+import ProjectMobileTop from '../../ProjectMobileTop/ProjectMobileTop';
 type CreateProjectMainType = {
   projectId: string;
   skills: any[];
@@ -51,32 +52,39 @@ const Detail: FC<CreateProjectMainType> = (props) => {
           )}
         />
       ) : (
-        <div
-          className={twMerge(
-            'divide-y rounded-2xl border border-grayLineBased bg-white ',
-            className,
-          )}
-        >
-          <OrganizationTopCard
-            project={data}
-            questions={questions?.questions?.sort(
-              (x, y) => Date.parse(x.created_at) - Date.parse(y.created_at),
+        <div className="w-full">
+          <ProjectMobileTop
+            selectedTab=""
+            projectId={data.id}
+            owner={data.identity_id === currentIdentity?.id}
+          />
+          <div
+            className={twMerge(
+              'divide-y rounded-2xl border border-grayLineBased bg-white ',
+              className,
             )}
-          />
-          {(data?.causes_tags || []).length > 0 && (
-            <ProjectItem items={data?.causes_tags} title="Social causes" />
-          )}
-          <BodyBox
-            title={'Project description'}
-            description={data?.description}
-          />
-          {data?.skills?.length > 0 && (
-            <ProjectItem title="Skills" items={data?.skills} />
-          )}
+          >
+            <OrganizationTopCard
+              project={data}
+              questions={questions?.questions?.sort(
+                (x, y) => Date.parse(x.created_at) - Date.parse(y.created_at),
+              )}
+            />
+            {(data?.causes_tags || []).length > 0 && (
+              <ProjectItem items={data?.causes_tags} title="Social causes" />
+            )}
+            <BodyBox
+              title={'Project description'}
+              description={data?.description}
+            />
+            {data?.skills?.length > 0 && (
+              <ProjectItem title="Skills" items={data?.skills} />
+            )}
 
-          {data?.identity_id && (
-            <OrganizationAbout organizationId={data.identity_id} />
-          )}
+            {data?.identity_id && (
+              <OrganizationAbout organizationId={data.identity_id} />
+            )}
+          </div>
         </div>
       )}
     </div>

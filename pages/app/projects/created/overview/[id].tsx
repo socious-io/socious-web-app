@@ -26,7 +26,7 @@ const Overview: NextPage<ProjectProps> = ({skills}) => {
 
   return (
     <ProjectContextProvider>
-      <GeneralLayout hasNavbar>
+      <GeneralLayout hasDetailNavbar detailNavbarTitle="Project Overview">
         <SideBar data={data} />
         <DetailContent project={data} rawSkills={skills} />
       </GeneralLayout>

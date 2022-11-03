@@ -224,7 +224,6 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
 
   return (
     <div className="mb-10 w-full ">
-      {/* <ProjectNav selectedTab="OVERVIEW" projectId={project.id} /> */}
       <ProjectMobileTop
         selectedTab="OVERVIEW"
         projectId={project.id}
