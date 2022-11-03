@@ -31,7 +31,7 @@ const SideBar = ({selectBar, data}: Props) => {
           </span>
         </div>
         <div className="cursor-pointer space-y-4 overflow-y-auto bg-gray-50">
-          <ProjectCard username={user?.username} projectDetail={data} />
+          <ProjectCard projectDetail={data} />
         </div>
         {selectBar == 'APPLICANT' && <ApplicantsContent projectId={data.id} />}
         {selectBar == 'HIRE' && <HiredContent projectId={data.id} />}

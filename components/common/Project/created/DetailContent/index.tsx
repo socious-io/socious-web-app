@@ -198,8 +198,7 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
 
     try {
       const response = await updateProjectById(project.id, postBody);
-      console.log('PROJECT RESPONSE :---: ', response);
-      mutate(`/projects/${project.id}`);
+      mutate(`/projects/${project.id}`, response, {revalidate: false});
       getProject();
       setProjectContext(initContext);
     } catch (error) {

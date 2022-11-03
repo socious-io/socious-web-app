@@ -22,15 +22,11 @@ type CreateProjectMainType = {
   projectId: string;
   skills: any[];
   className?: string;
-  data: {data: Project; mutate: KeyedMutator<Project>};
+  data: Project;
 };
 
 const Detail: FC<CreateProjectMainType> = (props) => {
-  const {className, skills} = props;
-  /* @desc: data will always be present in this component, so casting is safe */
-  const {data, mutate} = props.data as NonNullable<
-    CreateProjectMainType['data']
-  >;
+  const {className, skills, data} = props;
 
   const {currentIdentity} = useUser({redirect: false});
 
