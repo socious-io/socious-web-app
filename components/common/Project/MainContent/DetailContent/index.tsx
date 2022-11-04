@@ -1,64 +1,34 @@
+import {twMerge} from 'tailwind-merge';
+import {FC} from 'react';
+import useSWR, {KeyedMutator} from 'swr';
+
+// Components
 import BodyBox from '@components/common/Project/BodyBox/BodyBox';
 import ProjectItem from '@components/common/UserProfile/MainContent/ProjectItem';
 import OrganizationTopCard from '../../component/OrganizationTopCard';
-import useSWR, {KeyedMutator} from 'swr';
-import {IOrganizationType} from 'models/organization';
-import {useUser} from '@hooks';
 import DetailContent from '@components/common/Project/created/DetailContent';
-import {
-  CreateProjectLayout,
-  ProjectInfo,
-  ProjectAbout,
-  ProjectSkill,
-} from '@components/common/Project/created/NewProject';
-import {
-  useProjectContext,
-  initContext,
-} from '@components/common/Project/created/NewProject/context';
-import {FC} from 'react';
-import {updateProjectById} from '@api/projects/actions';
-import {CreateProjectType, Project} from '@models/project';
-import {toast} from 'react-toastify';
 import SplashScreen from 'layout/Splash';
-import {twMerge} from 'tailwind-merge';
-import {get} from 'utils/request';
-import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
-import ProjectQuestion from '../../created/NewProject/ProjectQuestions';
-import QuestionDetail from '../../created/NewProject/QuestionDetail';
-import {TQuestionsResponse} from '@models/question';
 
+// Hooks/ Utils
+import {useUser} from '@hooks';
+import {get} from 'utils/request';
+
+// Types
+import {TQuestionsResponse} from '@models/question';
+import {IOrganizationType} from 'models/organization';
+import {Project} from '@models/project';
+import ProjectMobileTop from '../../ProjectMobileTop/ProjectMobileTop';
 type CreateProjectMainType = {
   projectId: string;
   skills: any[];
   className?: string;
-  data: {data: Project; mutate: KeyedMutator<Project>};
+  data: Project;
 };
 
-const libraries: Libraries = ['places'];
-
 const Detail: FC<CreateProjectMainType> = (props) => {
-  const {className, skills} = props;
-  /* @desc: data will always be present in this component, so casting is safe */
-  const {data, mutate} = props.data as NonNullable<
-    CreateProjectMainType['data']
-  >;
-  const {isLoaded} = useGoogleMapsScript({
-    googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
-    libraries,
-  });
+  const {className, skills, data} = props;
 
   const {currentIdentity} = useUser({redirect: false});
-  const {ProjectContext, setProjectContext} = useProjectContext();
-  const isStep0 = ProjectContext.formStep === 0;
-  const isStep1 = ProjectContext.formStep === 1;
-  const isStep2 = ProjectContext.formStep === 2;
-  const isStep3 = ProjectContext.formStep === 3;
-  const isStep4 = ProjectContext.formStep === 4;
-
-  const {mutate: getProject} = useSWR<Project>(
-    `/projects?identity=${currentIdentity?.id}`,
-    get,
-  );
 
   const {data: questions} = useSWR<TQuestionsResponse>(
     data.id ? `/projects/${data.id}/questions` : null,
@@ -67,109 +37,52 @@ const Detail: FC<CreateProjectMainType> = (props) => {
 
   if (!data) return <SplashScreen />;
 
-  const onSubmit = async (s?: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => {
-    const postBody: CreateProjectType = {
-      title: ProjectContext.title,
-      description: ProjectContext.description,
-      remote_preference: ProjectContext.remote_preference,
-      country: ProjectContext.country,
-      project_type: ProjectContext.project_type,
-      project_length: ProjectContext.project_length,
-      payment_type: ProjectContext.payment_type,
-      causes_tags: ProjectContext.causes_tags,
-      skills: ProjectContext.skills,
-      status: s ? s : ProjectContext.status,
-      experience_level: ProjectContext.experience_level,
-    };
-
-    if (ProjectContext.payment_currency)
-      postBody.payment_currency = ProjectContext.payment_currency;
-    if (ProjectContext.city) postBody.city = ProjectContext.city;
-
-    if (ProjectContext.payment_scheme) {
-      postBody.payment_scheme = ProjectContext.payment_scheme;
-      if (postBody.payment_scheme === 'HOURLY') {
-        if (ProjectContext.commitment_hours_higher)
-          postBody.commitment_hours_higher =
-            ProjectContext.commitment_hours_higher;
-        if (ProjectContext.commitment_hours_lower)
-          postBody.commitment_hours_lower =
-            ProjectContext.commitment_hours_lower;
-      }
-    }
-
-    if (postBody.payment_type === 'PAID') {
-      if (ProjectContext.payment_range_lower)
-        postBody.payment_range_lower = ProjectContext.payment_range_lower;
-      if (ProjectContext.payment_range_higher)
-        postBody.payment_range_higher = ProjectContext.payment_range_higher;
-    }
-
-    try {
-      await updateProjectById(data!.id, postBody);
-      mutate();
-      getProject();
-      setProjectContext(initContext);
-    } catch (error) {
-      toast.error(`${error}`);
-    }
-  };
-
-  const PageDisplay = () => {
-    if (isStep0 && isLoaded) {
-      return <ProjectInfo onSubmit={onSubmit} />;
-    } else if (isStep1) {
-      return <ProjectAbout onSubmit={onSubmit} />;
-    } else if (isStep2) {
-      return <ProjectSkill onSubmit={onSubmit} rawSkills={skills} />;
-    } else if (isStep3) {
-      return <ProjectQuestion onSubmit={onSubmit} type="EDIT" />;
-    } else if (isStep4) {
-      return <QuestionDetail projectId={data.id} />;
-    }
-  };
-
   return (
     <div className="mb-10 w-full ">
       {currentIdentity?.id === data?.identity_id ? (
         <DetailContent
           project={data}
+          rawSkills={skills}
           questions={questions?.questions?.sort(
             (x, y) => Date.parse(x.created_at) - Date.parse(y.created_at),
           )}
         />
       ) : (
-        <div
-          className={twMerge(
-            'divide-y rounded-2xl border border-grayLineBased bg-white ',
-            className,
-          )}
-        >
-          <OrganizationTopCard
-            project={data}
-            questions={questions?.questions?.sort(
-              (x, y) => Date.parse(x.created_at) - Date.parse(y.created_at),
+        <div className="w-full">
+          <ProjectMobileTop
+            selectedTab=""
+            projectId={data.id}
+            owner={data.identity_id === currentIdentity?.id}
+          />
+          <div
+            className={twMerge(
+              'divide-y rounded-2xl border border-grayLineBased bg-white ',
+              className,
             )}
-          />
-          {(data?.causes_tags || []).length > 0 && (
-            <ProjectItem items={data?.causes_tags} title="Social causes" />
-          )}
-          <BodyBox
-            title={'Project description'}
-            description={data?.description}
-          />
-          {data?.skills?.length > 0 && (
-            <ProjectItem title="Skills" items={data?.skills} />
-          )}
+          >
+            <OrganizationTopCard
+              project={data}
+              questions={questions?.questions?.sort(
+                (x, y) => Date.parse(x.created_at) - Date.parse(y.created_at),
+              )}
+            />
+            {(data?.causes_tags || []).length > 0 && (
+              <ProjectItem items={data?.causes_tags} title="Social causes" />
+            )}
+            <BodyBox
+              title={'Project description'}
+              description={data?.description}
+            />
+            {data?.skills?.length > 0 && (
+              <ProjectItem title="Skills" items={data?.skills} />
+            )}
 
-          {data?.identity_id && (
-            <OrganizationAbout organizationId={data.identity_id} />
-          )}
+            {data?.identity_id && (
+              <OrganizationAbout organizationId={data.identity_id} />
+            )}
+          </div>
         </div>
       )}
-      <CreateProjectLayout isEdit title="Edit Project">
-        {PageDisplay()}
-      </CreateProjectLayout>
     </div>
   );
 };
