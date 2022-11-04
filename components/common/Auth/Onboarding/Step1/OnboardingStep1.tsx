@@ -15,7 +15,7 @@ const OnboardingStep1 = ({onSubmit}: StepProps) => {
         {' '}
         <h1 className="font-helmet text-center">Congratulations</h1>
         <p className="py-2 text-center text-base text-graySubtitle ">
-          You’ve successfully created an account
+          You&apos;ve successfully created an account
         </p>
       </div>
 

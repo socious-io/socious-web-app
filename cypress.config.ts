@@ -1,6 +1,10 @@
 import {defineConfig} from 'cypress';
 import webpack from '@cypress/webpack-preprocessor';
 import {addCucumberPreprocessorPlugin} from '@badeball/cypress-cucumber-preprocessor';
+import * as dotenv from 'dotenv';
+
+dotenv.config({path: '.env.local'});
+dotenv.config();
 
 module.exports = defineConfig({
   e2e: {
@@ -56,4 +60,7 @@ module.exports = defineConfig({
   },
 
   video: false,
+  env: {
+    API_BASE: process.env.NEXT_PUBLIC_API_BASE,
+  },
 });

@@ -5,8 +5,12 @@ import SignUpMethods from '../e2e/methods/SignUpMethods';
 const signUpMethods = new SignUpMethods();
 describe('Sign Up', () => {
   beforeEach('Navigate to the home page, then SignUp page', () => {
+    signUpMethods.logout();
     signUpMethods.navigateToHome();
     signUpMethods.clickOnSignUpButton();
+  });
+  afterEach('Log out', () => {
+    signUpMethods.logout();
   });
   specify(
     'User tries to SignUp without entering first name and last name',

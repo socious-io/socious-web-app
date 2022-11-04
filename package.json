@@ -113,7 +113,7 @@
     "android": "npx cap run android",
     "postinstall": "patch-package",
     "cypress": "cypress open",
-    "cypress:headless": "cypress run",
+    "cypress:headless": "cypress run --browser chrome",
     "test": "npm run build && start-server-and-test start http://localhost:3000 cypress:headless"
   },
   "lint-staged": {

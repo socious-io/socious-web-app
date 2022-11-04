@@ -1,11 +1,9 @@
 import SignUpElements from '../elements/SignUpElements';
+import AuthMethods from './AuthMethods';
 
-export const runEmail = `test-${new Date().valueOf()}@tests.example.com`;
+export const runEmail = `signup-${new Date().valueOf()}@tests.example.com`;
 
-class SignUpMethods {
-  navigateToHome() {
-    cy.visit('/app');
-  }
+class SignUpMethods extends AuthMethods {
   clickOnSignUpButton() {
     SignUpElements.elements.SignUpBtn().click();
   }
