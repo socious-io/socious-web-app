@@ -4,18 +4,20 @@ import {
   Chip,
   ImageUploader,
   InputFiled,
-  Modal,
   Combobox,
   TextArea,
 } from '@components/common';
 import profile_img_icon from 'asset/images/user.png';
-import {useFormContext} from 'react-hook-form';
-import {getText} from '@socious/data';
+import {FieldValues, useController, useFormContext} from 'react-hook-form';
 import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 import {getPhoneCode} from 'services/getPhoneCode';
 import {ExclamationCircleIcon} from '@heroicons/react/24/solid';
 import Image from 'next/future/image';
 import editIcon from 'asset/icons/edit.svg';
+
+// Socious Data
+import Data, {getText} from '@socious/data';
+const orgTypeData = Object.keys(Data.OrganizationType);
 
 // types
 interface EditMainMenuProps {
@@ -36,18 +38,25 @@ const EditMainMenu = ({
   avatar,
 }: EditMainMenuProps) => {
   const formMethods = useFormContext();
-  const {register, formState, watch, handleSubmit, setValue, getValues} =
-    formMethods;
+  const {
+    register,
+    control,
+    formState,
+    watch,
+    handleSubmit,
+    setValue,
+    getValues,
+  } = formMethods;
   const [countryKey, setCountryKey] = useState<string>();
   const [countryName, setCountryName] = useState<any>('');
 
   const bio = watch('bio');
-  const mission = watch('mission');
   const skills = watch('skills');
   const passions = watch('passions');
   const countryCode = watch('country');
   const selectedCity = watch('city');
   const countryNumber = watch('countryNumber');
+  const userType = watch('userType');
 
   const regionNames = useMemo(
     () => new Intl.DisplayNames(['en'], {type: 'region'}),
@@ -194,7 +203,23 @@ const EditMainMenu = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log('ERROR :---:', formState?.errors);
+  // Organization Types
+  //Passions
+  const orgTypes = useMemo(
+    () => {
+      return orgTypeData.map((id) => ({
+        id,
+        name: getText('en', `ORGTYPE.${id}`),
+      }));
+    },
+    [
+      // todo: language
+    ],
+  );
+  const orgTypeController = useController<FieldValues, string>({
+    control: control,
+    name: 'type',
+  });
   return (
     <>
       <form
@@ -247,33 +272,59 @@ const EditMainMenu = ({
                 Basic info
               </h3>
               <div className="space-y-8">
-                <InputFiled
-                  label="First name"
-                  type="text"
-                  placeholder="First name"
-                  register={register('firstName')}
-                  errorMessage={formState?.errors?.['firstName']?.message}
-                  required
-                  className="my-2"
-                />
-                <InputFiled
-                  label="Last name"
-                  type="text"
-                  placeholder="Last name"
-                  register={register('lastName')}
-                  errorMessage={formState?.errors?.['lastName']?.message}
-                  required
-                  className="my-2"
-                />
-                <InputFiled
-                  label="Username"
-                  type="text"
-                  placeholder="Username"
-                  register={register('userName')}
-                  errorMessage={formState?.errors?.['userName']?.message}
-                  required
-                  className="my-2"
-                />
+                {userType === 'users' ? (
+                  <>
+                    <InputFiled
+                      label="First name"
+                      type="text"
+                      placeholder="First name"
+                      register={register('firstName')}
+                      errorMessage={formState?.errors?.['firstName']?.message}
+                      required
+                      className="my-2"
+                    />
+                    <InputFiled
+                      label="Last name"
+                      type="text"
+                      placeholder="Last name"
+                      register={register('lastName')}
+                      errorMessage={formState?.errors?.['lastName']?.message}
+                      required
+                      className="my-2"
+                    />
+                    <InputFiled
+                      label="Username"
+                      type="text"
+                      placeholder="Username"
+                      register={register('userName')}
+                      errorMessage={formState?.errors?.['userName']?.message}
+                      required
+                      className="my-2"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Combobox
+                      required
+                      controller={orgTypeController}
+                      label="Organization Type"
+                      name="organization_type"
+                      items={orgTypes ?? []}
+                      placeholder="Organization Type"
+                      errorMessage={formState?.errors?.['type']?.message}
+                      className="mt-6"
+                    />
+                    <InputFiled
+                      label="Name"
+                      type="text"
+                      placeholder="Name"
+                      register={register('name')}
+                      errorMessage={formState?.errors?.['name']?.message}
+                      required
+                      className="my-2"
+                    />
+                  </>
+                )}
                 <div>
                   <TextArea
                     label="Bio"
@@ -288,19 +339,19 @@ const EditMainMenu = ({
                     {bio?.length ?? 0} / 160
                   </p>
                 </div>
-                <div>
-                  <TextArea
-                    label="Mission"
-                    placeholder="Tell us about your mission"
-                    register={register('mission')}
-                    errorMessage={formState?.errors?.['mission']?.message}
-                    className="my-2 border-2 border-grayLineBased"
-                    rows={5}
-                  />
-                  {/* <p className="text-sm text-graySubtitle">
-                    {mission?.length ?? 0} / 160
-                  </p> */}
-                </div>
+                {/* Mission for users */}
+                {userType === 'users' && (
+                  <div>
+                    <TextArea
+                      label="Mission"
+                      placeholder="Tell us about your mission"
+                      register={register('mission')}
+                      errorMessage={formState?.errors?.['mission']?.message}
+                      className="my-2 border-2 border-grayLineBased"
+                      rows={5}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Social causes */}
@@ -344,16 +395,17 @@ const EditMainMenu = ({
                 Contact
               </h3>
               <div className="space-y-8">
-                {/* Commenting out bc BE doesn't like it. Will have different process for changing it. */}
-                {/* <InputFiled
-                  label="Email"
-                  type="email"
-                  placeholder="Email"
-                  register={register('email')}
-                  errorMessage={formState?.errors?.['email']?.message}
-                  required
-                  className="my-6"
-                /> */}
+                {userType === 'organizations' && (
+                  <InputFiled
+                    label="Organization email"
+                    type="email"
+                    placeholder="Email"
+                    register={register('email')}
+                    errorMessage={formState?.errors?.['email']?.message}
+                    required
+                    className="my-6"
+                  />
+                )}
                 <Combobox
                   label="Country"
                   onSelected={onCountrySelected}
@@ -419,45 +471,89 @@ const EditMainMenu = ({
                     />
                   </div>
                 </div>
+                {userType === 'organizations' && (
+                  <InputFiled
+                    label="Website"
+                    type="text"
+                    placeholder="Website"
+                    register={register('website')}
+                    errorMessage={formState?.errors?.['website']?.message}
+                    className="my-2"
+                  />
+                )}
               </div>
 
               {/* Skills */}
-              <div className="mb-20 ">
-                <div className="mb-4 mt-12 flex justify-between">
-                  <h3 className=" text-xl font-semibold text-grayDisableButton">
-                    Skills
-                  </h3>
-                  <div
-                    className="m-2 h-5 w-5 cursor-pointer"
-                    onClick={() => goTo('SKILLS')}
-                  >
-                    <Image
-                      src={editIcon}
-                      alt={`edit icon`}
-                      width={100}
-                      height={100}
-                    />
-                  </div>
-                </div>
-                <div className="min-h-[144px] rounded-lg border border-grayLineBased p-3">
-                  <div className="flex flex-wrap gap-2">
-                    {skills?.map((skill: string) => (
-                      <Chip
-                        key={skill}
-                        content={getText('en', `SKILL.${skill}`)}
+              {userType === 'users' && (
+                <div className="mb-20 ">
+                  <div className="mb-4 mt-12 flex justify-between">
+                    <h3 className=" text-xl font-semibold text-grayDisableButton">
+                      Skills
+                    </h3>
+                    <div
+                      className="m-2 h-5 w-5 cursor-pointer"
+                      onClick={() => goTo('SKILLS')}
+                    >
+                      <Image
+                        src={editIcon}
+                        alt={`edit icon`}
+                        width={100}
+                        height={100}
                       />
-                    ))}
+                    </div>
                   </div>
+                  <div className="min-h-[144px] rounded-lg border border-grayLineBased p-3">
+                    <div className="flex flex-wrap gap-2">
+                      {skills?.map((skill: string) => (
+                        <Chip
+                          key={skill}
+                          content={getText('en', `SKILL.${skill}`)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  {formState?.errors?.['skills']?.message && (
+                    <div className="flex items-center text-error">
+                      <>
+                        <ExclamationCircleIcon className="mr-1 h-5 w-5" />
+                        {formState?.errors?.['skills']?.message}
+                      </>
+                    </div>
+                  )}
                 </div>
-                {formState?.errors?.['skills']?.message && (
-                  <div className="flex items-center text-error">
-                    <>
-                      <ExclamationCircleIcon className="mr-1 h-5 w-5" />
-                      {formState?.errors?.['skills']?.message}
-                    </>
+              )}
+
+              {/* Company Info only For Organization */}
+              {userType === 'organizations' && (
+                <>
+                  <h3 className="mb-4 text-xl font-semibold text-grayDisableButton">
+                    Company Info
+                  </h3>
+                  <div className="space-y-8">
+                    <div>
+                      <TextArea
+                        required
+                        label="Mission"
+                        placeholder="Tell us about your mission"
+                        register={register('mission')}
+                        errorMessage={formState?.errors?.['mission']?.message}
+                        className="my-2 border-2 border-grayLineBased"
+                        rows={5}
+                      />
+                    </div>
+                    <div>
+                      <TextArea
+                        label="Culture"
+                        placeholder="Tell us about your mission"
+                        register={register('culture')}
+                        errorMessage={formState?.errors?.['culture']?.message}
+                        className="my-2 border-2 border-grayLineBased"
+                        rows={3}
+                      />
+                    </div>
                   </div>
-                )}
-              </div>
+                </>
+              )}
             </div>
           </div>
         </div>

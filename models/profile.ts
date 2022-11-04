@@ -18,10 +18,15 @@ export interface UserProfile {
   country?: string;
   mobile_country_code?: string;
   avatar?: TMediaType;
-  cover_image?: string;
+  cover_image?: TMediaType;
   mission?: string;
   social_causes: Array<string>;
   skills: Array<string>;
+  impact_score: number;
+  followings: number;
+  created_at: string;
+  languages?: string | string[];
+  experiences?: string;
 }
 
 export type TUserByUsername = {
@@ -40,7 +45,6 @@ export type TUserByUsername = {
   social_causes: Array<string>;
   username: string;
 };
-
 export interface UserProfileBody {
   first_name?: string;
   last_name?: string;
@@ -106,24 +110,29 @@ export interface TermsPlace {
   value: string;
 }
 
-export interface UpdateProfileBodyType {
-  first_name: string;
-  last_name: string;
-  username: string;
-  email?: string;
-  bio: string;
-  mission?: string;
+export interface IUpdateProfileBody {
   social_causes: string[];
-  skills: string[];
+  bio: string;
   country: string;
   city: string;
   address?: string;
+  mission?: string;
   mobile_country_code?: string;
   phone?: string;
   cover_image?: string;
   avatar?: string;
 }
+export interface IUpdateUserBody extends IUpdateProfileBody {
+  first_name: string;
+  last_name: string;
+  username: string;
+  skills: string[];
+}
 
-export interface SimplifiedUserProfile extends UpdateProfileBodyType {
-  id: string;
+export interface IUpdateOrgBody extends IUpdateProfileBody {
+  name: string;
+  type: string;
+  email: string;
+  website?: string;
+  culture?: string;
 }
