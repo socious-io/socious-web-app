@@ -9,7 +9,7 @@ export const getPhoneCode = async (place: string) => {
     );
     const phoneInfo = response?.[0].idd;
     let code = phoneInfo.root;
-    if (phoneInfo.suffixes?.length) code += phoneInfo.suffixes[0];
+    if (phoneInfo.suffixes?.length === 1) code += phoneInfo.suffixes[0];
     return code;
   } catch (error) {
     console.log('ERROR for phone :---: ', error);
