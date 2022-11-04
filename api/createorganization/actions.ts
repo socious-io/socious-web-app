@@ -42,6 +42,5 @@ export function create_organization(data: any): any {
   if (address) postBody.address = address;
   if (website) postBody.website = website;
 
-  console.log('postbody', postBody);
   return post('/orgs', postBody);
 }
