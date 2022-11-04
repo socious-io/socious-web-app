@@ -1,5 +1,7 @@
 import SignUpElements from '../elements/SignUpElements';
 
+export const runEmail = `test-${new Date().valueOf()}@tests.example.com`;
+
 class SignUpMethods {
   navigateToHome() {
     cy.visit('/app');
@@ -67,7 +69,7 @@ class SignUpMethods {
     this.setEmail('testazintest4');
   }
   enterValidEmail() {
-    this.setEmail('testazintest60@outlook.com');
+    this.setEmail(runEmail);
   }
   assertValidationMsgForInvalidEmail() {
     SignUpElements.elements

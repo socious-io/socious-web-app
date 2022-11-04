@@ -1,5 +1,7 @@
 import OnboardingElements from '../elements/OnboardingElements';
 
+import {runEmail} from './SignUpMethods.js';
+
 class OnboardingMethods {
   navigateToHome() {
     cy.visit('/app');
@@ -11,10 +13,7 @@ class OnboardingMethods {
     OnboardingElements.elements.onboardingcontinueBtn().click();
   }
   setEmail(onboardingEmail) {
-    OnboardingElements.elements
-      .emailTxt()
-      .clear()
-      .type('testazintest60@outlook.com');
+    OnboardingElements.elements.emailTxt().clear().type(runEmail);
     return this;
   }
   setPassword(password) {

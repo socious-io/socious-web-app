@@ -105,7 +105,6 @@
     "export": "next export",
     "start": "next start",
     "lint": "next lint",
-    "test": "npm run lint && npm run cypress:headless",
     "prettier:check": "prettier --check **/*.ts **/*.tsx",
     "prettier:fix": "prettier --write  **/*.ts **/*.tsx cypress/**/*.js",
     "update-all": "ncu -u",
@@ -115,7 +114,7 @@
     "postinstall": "patch-package",
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
-    "ci": "start-server-and-test start http://localhost:3000 cypress:headless"
+    "test": "npm run build && start-server-and-test start http://localhost:3000 cypress:headless"
   },
   "lint-staged": {
     "*.js": "next lint",
