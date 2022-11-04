@@ -11,7 +11,7 @@ import useSWR from 'swr';
 import {get} from 'utils/request';
 import {Project} from '@models/project';
 
-type ProjectProps = {
+export type ProjectProps = {
   skills: any[];
 };
 
@@ -19,7 +19,7 @@ const Detail: NextPage<ProjectProps> = ({skills}) => {
   const router = useRouter();
   const {id} = router.query;
 
-  const {data, mutate} = useSWR<Project>(`/projects/${id}`, get);
+  const {data} = useSWR<Project>(`/projects/${id}`, get);
 
   if (!data) {
     return <></>;
@@ -30,11 +30,7 @@ const Detail: NextPage<ProjectProps> = ({skills}) => {
       <GeneralLayout hasDetailNavbar detailNavbarTitle="Project details">
         <SideBar data={data} projectId={data.id} />
         <DetailLayout>
-          <DetailContent
-            data={{data, mutate}}
-            skills={skills}
-            projectId={data.id}
-          />
+          <DetailContent data={data} skills={skills} projectId={data.id} />
         </DetailLayout>
       </GeneralLayout>
     </ProjectContextProvider>
