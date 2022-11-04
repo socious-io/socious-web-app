@@ -74,7 +74,7 @@
     "@types/react": "^18.0.21",
     "autoprefixer": "^10.4.12",
     "cypress": "^10.11.0",
-    "dotenv": "^16.0.2",
+    "dotenv": "^16.0.3",
     "eslint": "8",
     "eslint-config-next": "12.3.0",
     "hardhat": "^2.12.0",
