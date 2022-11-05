@@ -5,15 +5,18 @@ const config: CapacitorConfig = {
   appName: 'Socious',
   webDir: 'out',
   bundledWebRuntime: false,
+  server: {
+    // TODO: this should only be applied to iOS
+    hostname: 'dev.socious.io',
+  },
   plugins: {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
     },
+    CapacitorCookies: {
+      enabled: true,
+    },
   },
-  // server: {
-  //   url: 'http://192.168.1.3:3000',
-  //   cleartext: true,
-  // },
 };
 
 export default config;

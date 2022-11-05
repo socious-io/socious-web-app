@@ -3,7 +3,6 @@
 import {SWRConfig} from 'swr';
 import type {AppProps} from 'next/app';
 import Head from 'next/head';
-import {WalletProvider} from '../context/useWalletContext';
 import {get} from 'utils/request';
 import PushNotification from '@components/common/PushNotification/PushNotification';
 import '../asset/css/global.css';
@@ -20,47 +19,47 @@ import {
   Token,
 } from '@capacitor/push-notifications';
 import {useEffect} from 'react';
-import {Capacitor} from '@capacitor/core';
+// import {Capacitor} from '@capacitor/core';
 // function getLibrary(provider: any) {
 //   return new Web3(provider);
 // }
 
 function MyApp({Component, pageProps}: AppProps) {
-  useEffect(() => {
-    const onInit = () => {
-      PushNotifications.requestPermissions().then((result) => {
-        if (result.receive === 'granted') {
-          PushNotifications.register();
-        } else {
-          // Show some error
-        }
-      });
+  // useEffect(() => {
+  //   const onInit = () => {
+  //     PushNotifications.requestPermissions().then((result) => {
+  //       if (result.receive === 'granted') {
+  //         PushNotifications.register();
+  //       } else {
+  //         // Show some error
+  //       }
+  //     });
 
-      PushNotifications.addListener('registration', (token: Token) => {
-        console.log('Push registration success, token: ' + token.value);
-      });
+  //     PushNotifications.addListener('registration', (token: Token) => {
+  //       console.log('Push registration success, token: ' + token.value);
+  //     });
 
-      PushNotifications.addListener('registrationError', (error: any) => {
-        console.log('Error on registration: ' + JSON.stringify(error));
-      });
+  //     PushNotifications.addListener('registrationError', (error: any) => {
+  //       console.log('Error on registration: ' + JSON.stringify(error));
+  //     });
 
-      PushNotifications.addListener(
-        'pushNotificationReceived',
-        (notification: PushNotificationSchema) => {
-          console.log('Push received: ' + JSON.stringify(notification));
-        },
-      );
+  //     PushNotifications.addListener(
+  //       'pushNotificationReceived',
+  //       (notification: PushNotificationSchema) => {
+  //         console.log('Push received: ' + JSON.stringify(notification));
+  //       },
+  //     );
 
-      PushNotifications.addListener(
-        'pushNotificationActionPerformed',
-        (notification: ActionPerformed) => {
-          console.log('Push action performed: ' + JSON.stringify(notification));
-        },
-      );
-    };
+  //     PushNotifications.addListener(
+  //       'pushNotificationActionPerformed',
+  //       (notification: ActionPerformed) => {
+  //         console.log('Push action performed: ' + JSON.stringify(notification));
+  //       },
+  //     );
+  //   };
 
-    Capacitor.isNativePlatform() && onInit();
-  }, []);
+  //   Capacitor.isNativePlatform() && onInit();
+  // }, []);
 
   return (
     <>
@@ -73,6 +72,7 @@ function MyApp({Component, pageProps}: AppProps) {
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
         />
       </Head>
+      {/* @ts-ignore */}
       <SWRConfig
         value={{
           fetcher: get,

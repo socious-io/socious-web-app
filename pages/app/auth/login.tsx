@@ -1,30 +1,36 @@
 import type {NextPage} from 'next';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
-import {useState, useCallback, useContext, useEffect} from 'react';
+import {useState, useCallback} from 'react';
 import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 import Link from 'next/link';
 import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
 import {AxiosError} from 'axios';
 import {PreAuthLayout} from 'layout';
-
 import {login} from '@api/auth/actions';
 import {InputFiled, Button, Modal} from '@components/common';
 import {schemaLogin} from '@api/auth/validation';
-
 import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
 import {DefaultErrorMessage, ErrorMessage, get} from 'utils/request';
 import {useUser} from '@hooks';
-import {Capacitor} from '@capacitor/core';
+
+type Account = {
+  email: string;
+  password: string;
+};
+
+export type LoginResp = {
+  message?: 'success';
+  error?: 'Not matched';
+};
 
 const Login: NextPage = () => {
   const router = useRouter();
-  const {redirect_to} = router.query;
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const {user, mutateIdentities} = useUser({redirect: false});
+  const {mutateIdentities} = useUser({redirect: false});
 
   const [errorMessage, setError] = useState<ErrorMessage>();
 
@@ -32,25 +38,26 @@ const Login: NextPage = () => {
     resolver: joiResolver(schemaLogin),
   });
 
-  useEffect(() => {
-    if (user) {
-      if (!user.skills?.length && !user.social_causes?.length)
-        router.push('/app/auth/onboarding');
-      else {
-        if (
-          'Notification' in window &&
-          !Capacitor.isNativePlatform() &&
-          Notification.permission === 'default'
-        )
-          Notification.requestPermission();
-        if (redirect_to) router.push(redirect_to as string);
-        else router.push('/app');
-      }
+  const onLoginSucceed = (resp: LoginResp) => {
+    if (resp.message === 'success') {
+      console.log('success login');
+      router.push('/app/projects');
     }
-  }, [user, redirect_to, router]);
+    return resp;
+  };
 
-  const onSubmit = (data: any) => {
-    handleLoginRequest();
+  const onLoginError = (e: Error) => {
+    console.log('onLoginError: ', e);
+  };
+
+  const onSubmit = () => {
+    // handleLoginRequest();
+    const email = getValues('email');
+    const password = getValues('password');
+    login(email, password)
+      .then(onLoginSucceed)
+      .catch(onLoginError)
+      .finally(mutateIdentities);
   };
 
   const handleToggleModal = () => {
@@ -59,6 +66,7 @@ const Login: NextPage = () => {
   const handleLoginRequest = async () => {
     const email = getValues('email');
     const password = getValues('password');
+
     try {
       await login(email, password);
     } catch (e) {

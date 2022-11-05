@@ -1,7 +1,7 @@
-import React from 'react';
-import type {GetStaticProps, NextPage} from 'next';
+import React, {useEffect, useState} from 'react';
+import type {NextPage} from 'next';
 import {GeneralLayout} from 'layout';
-import getGlobalData from 'services/cacheSkills';
+import {skillsFetcher} from 'services/cacheSkills';
 import {
   Skill,
   SkillsProvider,
@@ -10,16 +10,13 @@ import {MobileSearch} from '@components/common/Search/Mobile/MobileSearch';
 import {DesktopSearch} from '@components/common/Search/Desktop/DesktopSearch';
 import {isMobile} from 'react-device-detect';
 
-export const getStaticProps: GetStaticProps = async () => {
-  const skills = await getGlobalData();
-  return {props: {skills}};
-};
+const Search: NextPage = () => {
+  const [skills, setSkills] = useState<Skill[]>([]);
 
-type SearchProps = {
-  skills: Skill[];
-};
+  useEffect(() => {
+    skillsFetcher().then(setSkills);
+  }, []);
 
-const Search: NextPage<SearchProps> = ({skills}) => {
   return (
     <GeneralLayout style={{marginTop: '56px'}}>
       <SkillsProvider skills={skills}>
