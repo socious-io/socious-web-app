@@ -3,7 +3,7 @@ import type {NextPage} from 'next';
 import {GeneralLayout} from 'layout';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import {useRouter} from 'next/router';
-import EscrowApplication from '@components/organisms/projects/EscrowApplication';
+import EscrowApplication from '@components/organisms/escrow/EscrowApplication';
 
 const EscrowPaymentPage: NextPage = () => {
   const router = useRouter();
