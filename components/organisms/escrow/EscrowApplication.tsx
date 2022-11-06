@@ -1,31 +1,48 @@
 import {Button, Combobox} from '@components/common';
 import Link from 'next/link';
-import React, {useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
+import Router from 'next/router';
 import {getAllISOCodes} from 'iso-country-currency';
 
-import Router from 'next/router';
-import EscrowCard from '../escrow/EscrowCard';
+import {useToggle} from '@hooks';
+import EscrowCard from './EscrowCard';
 import {CreditCardIcon} from '@heroicons/react/24/outline';
-
-function getFlagEmoji(countryCode: string) {
-  const codePoints = countryCode
-    .toUpperCase()
-    .split('')
-    .map((char) => 127397 + char.charCodeAt(0));
-  return String.fromCodePoint(...codePoints);
-}
+import CreditCardModal from './Modals/CreditCardModal';
+import Image from 'next/future/image';
 
 const EscrowApplication = () => {
+  const {state: addState, handlers: addHandlers} = useToggle();
   const isoCountries = useMemo(
     () =>
       getAllISOCodes()?.map((d) => ({
         name: d?.currency,
-        Symbol: d.symbol,
+        symbol: d.symbol,
         id: d?.iso,
       })),
     [],
   );
-  const [isoCountry, setIsoCountry] = useState<{name: string; id: string}>();
+  const [isoCountry, setIsoCountry] = useState<{
+    name: string;
+    symbol: string;
+    id: string;
+  }>();
+
+  const flagFromIso = useMemo(
+    () =>
+      isoCountry ? (
+        <div className="h-8 w-8 ">
+          <Image
+            src={`https://countryflagsapi.com/svg/${isoCountry?.id}`}
+            alt={`${isoCountry?.id} flag`}
+            width="100"
+            height="100"
+            className="h-8 w-8 rounded-full object-cover"
+          />
+        </div>
+      ) : null,
+    [isoCountry],
+  );
+
   return (
     <div className="w-full">
       <div className="mb-8 hidden items-center rounded-2xl border border-grayLineBased bg-white px-4 py-6 md:flex">
@@ -36,15 +53,18 @@ const EscrowApplication = () => {
         <div className="space-y-4 rounded-2xl  border border-b-grayLineBased bg-white px-4 py-6">
           <h1 className="text-base font-semibold">Input amount</h1>
           <div className="flex w-full items-center justify-between rounded-2xl bg-offWhite p-3">
-            <div className="flex">
-              {isoCountry?.id && getFlagEmoji(isoCountry.id)}
+            <div className="flex items-center gap-2">
+              {flagFromIso}
               <Combobox
                 items={isoCountries}
                 onSelected={(data) => setIsoCountry(data)}
                 className="w-28"
               />
             </div>
-            <div className="text-4xl">100</div>
+            <div className="text-4xl">
+              <span className="text-xl sm:text-4xl">{isoCountry?.symbol}</span>
+              100
+            </div>
           </div>
         </div>
         <div className="space-y-4 rounded-2xl border border-b-grayLineBased bg-white p-6">
@@ -55,7 +75,7 @@ const EscrowApplication = () => {
               <span>$0</span>
             </div>
             <div className="flex w-full items-center justify-between">
-              <span>Socious commision</span>
+              <span>Socious commission</span>
               <span>$0</span>
             </div>
           </div>
@@ -76,6 +96,7 @@ const EscrowApplication = () => {
             <Button
               className="flex w-full items-center justify-center gap-2"
               variant="outline"
+              onClick={addHandlers.on}
             >
               <CreditCardIcon className="w-5 text-black" />
               <span className="font-semibold text-primary">
@@ -117,6 +138,7 @@ const EscrowApplication = () => {
           </Button>
         </div>
       </div>
+      <CreditCardModal openState={addState} closeModal={addHandlers.off} />
     </div>
   );
 };
