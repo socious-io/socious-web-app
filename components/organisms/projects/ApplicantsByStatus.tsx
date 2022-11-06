@@ -5,7 +5,7 @@ import {TApplicant, TApplicantStatus} from '@models/applicant';
 import dayjs from 'dayjs';
 import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 import Link from 'next/link';
-import {FC, useMemo} from 'react';
+import {FC, memo, PropsWithChildren, useMemo} from 'react';
 import {twMerge} from 'tailwind-merge';
 import HeaderBox from '../../common/Project/component/HeaderBox';
 
@@ -17,34 +17,30 @@ type ApplicantsByStatusProps = {
   rounded?: boolean;
 };
 
-const ApplicantsByStatus: FC<ApplicantsByStatusProps> = ({
-  status,
-  projectId,
-  title,
-  goTo,
+type StatusApplicationSkeletonProps<T> = {
+  url: string | null;
+  renderList: (data: T[]) => JSX.Element;
+  rounded?: boolean;
+  title: string;
+};
+
+export const StatusApplicationSkeleton = <T = any,>({
+  renderList,
+  url,
   rounded = true,
-}) => {
+  title,
+}: StatusApplicationSkeletonProps<T>) => {
   const {state: expandState, handlers: expandHandler} = useToggle();
 
-  const {flattenData, loadMore, seeMore, rawResponse} =
-    useInfiniteSWR<TApplicant>(
-      projectId && status
-        ? `/projects/${projectId}/applicants?status=${
-            typeof status === 'string' ? status : status.join(',')
-          }`
-        : null,
-    );
-
-  const size = useMemo(
-    () => (rawResponse && rawResponse.length ? rawResponse[0].total_count : 0),
-    [rawResponse],
+  const {flattenData, loadMore, seeMore, totalCount} = useInfiniteSWR<T>(
+    url ? url : null,
   );
 
   return (
     <>
       <HeaderBox
         isRound={rounded}
-        title={`${title} (${size})`}
+        title={`${title} (${totalCount})`}
         isExpand={expandState}
         expandToggle={expandHandler.toggle}
         isExpandable={!!flattenData?.length}
@@ -55,29 +51,7 @@ const ApplicantsByStatus: FC<ApplicantsByStatusProps> = ({
           expandState && 'block h-auto',
         )}
       >
-        {flattenData.map((applicant) => (
-          <Link
-            key={applicant.id}
-            href={`/app/projects/created/${applicant.project_id}/${
-              goTo === 'HIRED' ? 'hired' : 'applicants'
-            }/${applicant.id}`}
-          >
-            <a>
-              <CardBoxComplete
-                name={applicant?.user?.name}
-                username={applicant?.user?.username ?? ''}
-                applicationDate={dayjs(applicant?.created_at)?.format('MMM D')}
-                message={
-                  applicant.cover_letter
-                    ? applicant.cover_letter.length > 50
-                      ? `${applicant.cover_letter?.slice(0, 50)}...}`
-                      : applicant.cover_letter
-                    : 'No message'
-                }
-              />
-            </a>
-          </Link>
-        ))}
+        {renderList(flattenData)}
         {seeMore && (
           <div className="flex justify-center">
             <Button
@@ -94,4 +68,61 @@ const ApplicantsByStatus: FC<ApplicantsByStatusProps> = ({
   );
 };
 
-export default ApplicantsByStatus;
+const ApplicantsByStatus: FC<ApplicantsByStatusProps> = ({
+  status,
+  projectId,
+  title,
+  goTo,
+  rounded = true,
+}) => {
+  const url = useMemo(
+    () =>
+      projectId && status
+        ? `/projects/${projectId}/applicants?status=${
+            typeof status === 'string' ? status : status.join(',')
+          }`
+        : null,
+    [projectId, status],
+  );
+
+  return (
+    <>
+      <StatusApplicationSkeleton<TApplicant>
+        url={url}
+        title={title}
+        rounded={rounded}
+        renderList={(data) => (
+          <>
+            {data.map((applicant) => (
+              <Link
+                key={applicant.id}
+                href={`/app/projects/created/${applicant.project_id}/${
+                  goTo === 'HIRED' ? 'hired' : 'applicants'
+                }/${applicant.id}`}
+              >
+                <a>
+                  <CardBoxComplete
+                    name={applicant?.user?.name}
+                    username={applicant?.user?.username ?? ''}
+                    applicationDate={dayjs(applicant?.created_at)?.format(
+                      'MMM D',
+                    )}
+                    message={
+                      applicant.cover_letter
+                        ? applicant.cover_letter.length > 50
+                          ? `${applicant.cover_letter?.slice(0, 50)}...}`
+                          : applicant.cover_letter
+                        : 'No message'
+                    }
+                  />
+                </a>
+              </Link>
+            ))}
+          </>
+        )}
+      />
+    </>
+  );
+};
+
+export default memo(ApplicantsByStatus);
