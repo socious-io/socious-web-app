@@ -17,3 +17,4 @@ export const rxNotNumber = /[^0-9]/g;
 export const rxParsedName = /~.*~/g;
 export const usernamePattern =
   /^(?=.{6,24}$)(?![_.])(?!.*[_.]{2})[a-z][a-z0-9._-]+$/;
+export const rxExpiryDate = /^(?:[2-9]|1[0-2]?)\/[0-9]{2}$/;
