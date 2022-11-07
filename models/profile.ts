@@ -121,6 +121,7 @@ export interface IUpdateProfileBody {
   phone?: string;
   cover_image?: string;
   avatar?: string;
+  image?: string;
 }
 export interface IUpdateUserBody extends IUpdateProfileBody {
   first_name: string;
