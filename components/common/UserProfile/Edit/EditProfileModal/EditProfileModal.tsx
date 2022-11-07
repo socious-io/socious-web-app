@@ -67,10 +67,12 @@ const EditProfileModal = ({
 
   useEffect(() => {
     if (user) {
-      setAvatar(user?.avatar?.id ?? null);
+      setAvatar(() =>
+        currentIdentity?.type === 'users' ? user?.avatar?.id : user?.image?.id,
+      );
       setCoverImage(user?.cover_image?.id ?? null);
     }
-  }, [user]);
+  }, [currentIdentity?.type, user]);
 
   //Passions
   const passions = useMemo(
@@ -179,7 +181,6 @@ const EditProfileModal = ({
       if (mobile_country_code)
         updateProfileBody.mobile_country_code = mobile_country_code;
       if (phone) updateProfileBody.phone = phone;
-      if (avatarId) updateProfileBody.avatar = avatarId;
       if (coverId) updateProfileBody.cover_image = coverId;
       if (mission) updateProfileBody.mission = mission;
 
@@ -187,6 +188,7 @@ const EditProfileModal = ({
       try {
         // Updating USER
         if (currentIdentity?.type === 'users') {
+          if (avatarId) updateProfileBody.avatar = avatarId;
           const response = await updateProfile({
             ...updateProfileBody,
             first_name,
@@ -208,6 +210,7 @@ const EditProfileModal = ({
           };
           if (culture) updateOrgBody.culture = culture;
           if (website) updateOrgBody.website = website;
+          if (avatarId) updateOrgBody.image = avatarId;
           const response = await updateOrganization(user.id, updateOrgBody);
           mutateUser(response);
           user?.shortname === response.shortname
@@ -309,7 +312,7 @@ const EditProfileModal = ({
             setNewCover={setCoverImage}
             setNewAvatar={setAvatar}
             coverImage={user?.cover_image?.url ?? null}
-            avatar={user?.avatar?.url ?? null}
+            avatar={user?.avatar?.url ?? user?.image?.url}
           />
         )}
         {editState === 'CAUSES' && (
