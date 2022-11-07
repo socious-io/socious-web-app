@@ -140,6 +140,7 @@ export const schemaProfileUpdate = Joi.object({
     'any.required': `Please enter a bio.`,
     'string.base': `Please enter a bio.`,
     'string.empty': `Please enter a bio.`,
+    'string.max': `Please enter 160 characters or below.`,
   }),
   mission: Joi.string().trim().label('Mission').messages({
     'any.required': `Please tell us about your mission.`,

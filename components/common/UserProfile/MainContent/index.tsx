@@ -128,10 +128,10 @@ const MainContent: React.FC<Props> = ({
           />
         )}
         <Description paragraph={data?.mission} title="Mission" />
+        <Description paragraph={data?.culture} title="Culture" />
         {status === 'users' && <Skills skills={data?.skills} />}
         <hr className="mb-20 border-grayLineBased" />
       </div>
-
       <div className="w-full md:w-2/6">
         <RightPaneContainer
           title="Activity"
