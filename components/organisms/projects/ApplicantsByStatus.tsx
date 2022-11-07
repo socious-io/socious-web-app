@@ -17,19 +17,19 @@ type ApplicantsByStatusProps = {
   rounded?: boolean;
 };
 
-type StatusApplicationSkeletonProps<T> = {
+type StatusListingSkeletonProps<T> = {
   url: string | null;
   renderList: (data: T[]) => JSX.Element;
   rounded?: boolean;
   title: string;
 };
 
-export const StatusApplicationSkeleton = <T = any,>({
+export const StatusListingSkeleton = <T = any,>({
   renderList,
   url,
   rounded = true,
   title,
-}: StatusApplicationSkeletonProps<T>) => {
+}: StatusListingSkeletonProps<T>) => {
   const {state: expandState, handlers: expandHandler} = useToggle();
 
   const {flattenData, loadMore, seeMore, totalCount} = useInfiniteSWR<T>(
@@ -87,7 +87,7 @@ const ApplicantsByStatus: FC<ApplicantsByStatusProps> = ({
 
   return (
     <>
-      <StatusApplicationSkeleton<TApplicant>
+      <StatusListingSkeleton<TApplicant>
         url={url}
         title={title}
         rounded={rounded}
