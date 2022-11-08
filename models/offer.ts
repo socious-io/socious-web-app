@@ -1,3 +1,11 @@
+export type TOfferStatus =
+  | 'PENDING'
+  | 'WITHDRAWN'
+  | 'APPROVED'
+  | 'HIRED'
+  | 'CLOSED'
+  | 'CANCELED';
+
 export interface IOffer {
   id: string;
   project_id: string;
@@ -7,7 +15,7 @@ export interface IOffer {
   assignment_total: string | null;
   offer_rate: string | null;
   offer_message: string;
-  status: string;
+  status: TOfferStatus;
   payment_type: string | null;
   due_date: string | null;
   payment_scheme: string | null;
