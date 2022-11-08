@@ -1,13 +1,16 @@
 import {useToggle, useUser} from '@hooks';
-import Image from 'next/image';
+import Image from 'next/future/image';
 import NewMemberModal from './NewMemberModal';
 import {UserPlusIcon} from '@heroicons/react/24/outline';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {GlobalResponseType, IOrganizationUserType} from '@models/organization';
 import {FC, PropsWithChildren} from 'react';
-import {Avatar} from '@components/common';
+import {Avatar, Button} from '@components/common';
 import Link from 'next/link';
+import {Popover} from '@headlessui/react';
+import moreSrc from 'asset/icons/more.svg';
+import removeUser from 'asset/icons/remove-user.svg';
 
 interface IMemberItemProps extends PropsWithChildren {
   member: IOrganizationUserType;
@@ -71,7 +74,38 @@ const TeamComponent = () => {
           {members?.items?.map((item, index) => (
             <MemberItem key={item.id} member={item}>
               {/* // TODO popup menu */}
-              <></>
+              <Popover className="md:relative">
+                <Popover.Button as="button">
+                  <div className="h-5 w-5">
+                    <Image
+                      alt="Option Button"
+                      src={moreSrc}
+                      width="100"
+                      height="100"
+                      className="h-5 w-5"
+                    />
+                  </div>
+                </Popover.Button>
+                <Popover.Overlay className="fixed inset-0 bg-black opacity-30 sm:hidden" />
+                <Popover.Panel
+                  as="div"
+                  className="md:min-h-auto fixed bottom-0 right-0 z-[50] w-full min-w-[18rem] rounded-t-2xl border bg-offWhite py-12 sm:absolute sm:bottom-auto sm:top-4 sm:right-4 sm:w-auto sm:rounded-b-2xl sm:py-0 md:overflow-hidden"
+                >
+                  <Button
+                    variant="link"
+                    className="gap-3 font-normal text-black"
+                  >
+                    <Image
+                      alt="Option Button"
+                      src={removeUser}
+                      width="100"
+                      height="100"
+                      className="h-5 w-5"
+                    />
+                    Remove user from organization
+                  </Button>
+                </Popover.Panel>
+              </Popover>
             </MemberItem>
           ))}
         </div>
