@@ -5,12 +5,13 @@ import {UserPlusIcon} from '@heroicons/react/24/outline';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {GlobalResponseType, IOrganizationUserType} from '@models/organization';
-import {FC, PropsWithChildren} from 'react';
+import {FC, PropsWithChildren, useState} from 'react';
 import {Avatar, Button} from '@components/common';
 import Link from 'next/link';
 import {Popover} from '@headlessui/react';
 import moreSrc from 'asset/icons/more.svg';
 import removeUser from 'asset/icons/remove-user.svg';
+import RemoveMemberModal from './RemoveMemberModal';
 
 interface IMemberItemProps extends PropsWithChildren {
   member: IOrganizationUserType;
@@ -38,6 +39,7 @@ const MemberItem: FC<IMemberItemProps> = ({member, children}) => {
 const TeamComponent = () => {
   const {currentIdentity} = useUser();
   const {state: addState, handlers: addHandlers} = useToggle();
+  const [toRemove, setToRemove] = useState<string | null>(null);
   const {data: members, mutate} = useSWR<
     GlobalResponseType<IOrganizationUserType>
   >(
@@ -46,7 +48,7 @@ const TeamComponent = () => {
     get,
   );
 
-  const onAddNewMember = () => {
+  const onChangeSuccessful = () => {
     mutate();
   };
 
@@ -54,6 +56,7 @@ const TeamComponent = () => {
     ? members.items.map((member) => member.id)
     : [];
 
+  console.log('Member ', members);
   return (
     <div className="w-full rounded-2xl border border-grayLineBased bg-white ">
       <div className="flex border-b p-4">
@@ -94,6 +97,7 @@ const TeamComponent = () => {
                   <Button
                     variant="link"
                     className="gap-3 font-normal text-black"
+                    onClick={() => setToRemove(item?.username)}
                   >
                     <Image
                       alt="Option Button"
@@ -113,11 +117,19 @@ const TeamComponent = () => {
 
       {currentIdentity && (
         <NewMemberModal
-          onAddNewMember={onAddNewMember}
+          onAddNewMember={onChangeSuccessful}
           memberIds={memberIds}
           open={addState}
           onClose={addHandlers.off}
           orgId={currentIdentity.id}
+        />
+      )}
+      {currentIdentity && toRemove && (
+        <RemoveMemberModal
+          username={toRemove}
+          orgId={currentIdentity.id}
+          onRemove={onChangeSuccessful}
+          onClose={() => setToRemove(null)}
         />
       )}
     </div>
