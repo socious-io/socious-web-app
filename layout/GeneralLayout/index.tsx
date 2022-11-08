@@ -174,7 +174,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
           needsBanner ? `h-44 flex-col` : 'h-16 bg-none'
         }`}
       >
-        <nav className="fixed top-0 z-50 flex h-14 min-h-[54px] w-full items-center justify-center bg-primary md:h-16 md:justify-start lg:h-16 ">
+        <nav className="fixed top-0 z-50 flex h-28 min-h-[54px] w-full items-end justify-center bg-primary pb-4 md:h-16 md:justify-start lg:h-16 ">
           <div className="container mx-6 w-full max-w-5xl sm:mx-2 md:mx-auto">
             <div className="flex w-full items-center justify-center gap-x-4 sm:gap-0">
               <div
