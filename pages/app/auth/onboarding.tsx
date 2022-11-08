@@ -213,12 +213,19 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 
   const handleNext = useCallback(() => {
     if (step === 7) {
-      console.log('I came here throught skip');
+      formMethodsStep7.reset();
       handleUpdateProfileRequest();
     } else {
+      step === 5 ? formMethodsStep5.reset() : formMethodsStep6.reset();
       setStep(step + 1);
     }
-  }, [handleUpdateProfileRequest, step]);
+  }, [
+    formMethodsStep5,
+    formMethodsStep6,
+    formMethodsStep7,
+    handleUpdateProfileRequest,
+    step,
+  ]);
 
   const requestNotificationPermission = async () => {
     if ('Notification' in window && !Capacitor.isNativePlatform())

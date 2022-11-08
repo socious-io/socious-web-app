@@ -3,18 +3,18 @@ import enums from '@socious/data';
 import {rxNotMobileNumber} from 'utils/regex';
 
 export const schemaCreateOrganization = Joi.object({
-  name: Joi.string().required().messages({
+  name: Joi.string().trim().required().messages({
     'string.empty': `Name is required`,
     'string.base': `Name is required.`,
   }),
-  bio: Joi.string().required().messages({
+  bio: Joi.string().trim().max(160).required().messages({
     'string.empty': `Bio is required.`,
     'string.base': `Bio is required.`,
   }),
   website: Joi.string().uri().allow(null, ''),
-  description: Joi.string().allow(null, ''),
-  mission: Joi.string().allow(null, ''),
-  culture: Joi.string().allow(null, ''),
+  description: Joi.string().trim().allow(null, ''),
+  mission: Joi.string().trim().allow(null, ''),
+  culture: Joi.string().trim().allow(null, ''),
   email: Joi.string()
     .email({tlds: {allow: false}})
     .messages({
@@ -29,7 +29,7 @@ export const schemaCreateOrganization = Joi.object({
   city: Joi.string().required().messages({
     'any.required': `cannot be an empty field`,
   }),
-  address: Joi.string().allow(null, ''),
+  address: Joi.string().trim().allow(null, ''),
   type: Joi.string().valid(...Object.values(enums.OrganizationType)),
   social_causes: Joi.array().items(
     Joi.string().valid(...Object.values(enums.SocialCauses)),

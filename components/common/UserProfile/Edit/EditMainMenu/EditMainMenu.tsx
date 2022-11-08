@@ -532,7 +532,6 @@ const EditMainMenu = ({
                   <div className="space-y-8">
                     <div>
                       <TextArea
-                        required
                         label="Mission"
                         placeholder="Tell us about your mission"
                         register={register('mission')}
