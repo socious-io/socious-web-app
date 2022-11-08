@@ -4,7 +4,13 @@ import {useToggle} from '@hooks';
 import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 import {TApplicant, TApplicantStatus} from '@models/applicant';
 import Button from '@components/common/Button/Button';
-import ApplicationMobileTop from '@components/organisms/applications/ApplicationMobileTop';
+import {StatusListingSkeleton} from '@components/molecules/StatusListingSkeleton/StatusListingSkeleton';
+import Link from 'next/link';
+import useSWR from 'swr';
+import {Project} from '@models/project';
+import {get} from 'utils/request';
+import SplashScreen from 'layout/Splash';
+import {IOffer} from '@models/offer';
 
 interface StatusApplicationsProps {
   name: any;
@@ -38,13 +44,15 @@ function StatusApplications({name, status, position}: StatusApplicationsProps) {
       {expandState && (
         <div>
           {flattenData?.map((item) => (
-            <BodyCard
-              key={item.id}
-              applicationId={item.id}
-              project={item.project}
-              name={item.organization.meta.name}
-              image={item.organization.meta.image}
-            />
+            <Link href={`/app/applications/${item.id}`} passHref key={item.id}>
+              <a>
+                <BodyCard
+                  project={item.project}
+                  name={item.organization.meta.name}
+                  image={item.organization.meta.image}
+                />
+              </a>
+            </Link>
           ))}
           {seeMore && (
             <div className="mb-4 flex justify-center">
@@ -73,11 +81,53 @@ function MyApplicationBoxes() {
       </div>
       <div className="divide-graylineBased mb-4 h-fit w-full divide-y border border-grayLineBased md:rounded-2xl">
         <StatusApplications name="Pending" status="PENDING" position="FIRST" />
-        <StatusApplications name="Awaiting review" status="OFFERED" />
-        <StatusApplications name="Declined" status="REJECTED" position="LAST" />
+        <StatusListingSkeleton<IOffer>
+          url={'/user/offers?status=PENDING'}
+          title={'Awaiting review'}
+          className="border-0"
+          renderList={(flattenData) => (
+            <>
+              {flattenData.map((offer) => (
+                <OfferedCard key={offer.id} offer={offer} />
+              ))}
+            </>
+          )}
+        />
+        {/* TODO: Rejected offers */}
+        <StatusListingSkeleton<IOffer>
+          url={'/user/offers?status=WITHDRAWN'}
+          title={'Awaiting review'}
+          className="rounded-b-2xl border-0"
+          renderList={(flattenData) => (
+            <>
+              {flattenData.map((offer) => (
+                <OfferedCard key={offer.id} offer={offer} />
+              ))}
+            </>
+          )}
+        />
       </div>
     </div>
   );
 }
 
 export default MyApplicationBoxes;
+
+const OfferedCard = ({offer}: {offer: IOffer}) => {
+  const {data: project} = useSWR<Project>(`/projects/${offer.project_id}`, get);
+  if (!project) return <SplashScreen />;
+
+  return (
+    // NOTE: temporary solution until offers/:id is working correctly
+    // <Link href={`/app/applications/offer/${offer.id}`} passHref>
+    <Link href={`/app/applications/offer/${offer.project_id}`} passHref>
+      <a>
+        <BodyCard
+          project={project}
+          name={project.identity_meta.name}
+          image={project.identity_meta.image}
+        />
+      </a>
+    </Link>
+  );
+};
