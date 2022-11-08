@@ -15,7 +15,7 @@ type StatusListingSkeletonProps<T> = {
 export const StatusListingSkeleton = <T = any,>({
   renderList,
   url,
-  rounded = true,
+  rounded = false,
   title,
   className,
 }: StatusListingSkeletonProps<T>) => {
@@ -33,7 +33,10 @@ export const StatusListingSkeleton = <T = any,>({
         isExpand={expandState}
         expandToggle={expandHandler.toggle}
         isExpandable={!!flattenData?.length}
-        className={className}
+        className={twMerge(
+          className && className,
+          expandState && 'rounded-b-none',
+        )}
       />
       <div
         className={twMerge(
