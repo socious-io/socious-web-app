@@ -23,13 +23,13 @@ export interface IMission {
   id: string;
   assignee_id: string;
   project_id: string;
-  applicant_id: string;
+  applicant_id: string | null;
   created_at: string;
   complete_at: null;
   updated_at: null;
   assigner_id: string;
   offer_id: string;
   status: TMissionStatus;
-  applicant: TMissionApplicant;
+  applicant: TMissionApplicant | null;
   project: Project;
 }
