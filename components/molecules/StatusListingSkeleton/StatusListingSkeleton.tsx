@@ -40,7 +40,7 @@ export const StatusListingSkeleton = <T = any,>({
       />
       <div
         className={twMerge(
-          'hidden h-0 ease-in-out',
+          'hidden h-0 p-4 ease-in-out',
           expandState && 'block h-auto',
         )}
       >
