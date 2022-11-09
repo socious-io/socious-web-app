@@ -1,3 +1,5 @@
+import {Project} from './project';
+
 export type TOfferStatus =
   | 'PENDING'
   | 'WITHDRAWN'
@@ -23,4 +25,8 @@ export interface IOffer {
   total_hours: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface IOfferWithProject extends IOffer {
+  project: Project;
 }
