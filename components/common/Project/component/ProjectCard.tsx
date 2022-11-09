@@ -8,6 +8,7 @@ import {isoToHumanTime} from 'services/toHumanTime';
 import {useFormattedLocation} from 'services/formatLocation';
 import Markdown, {MarkdownToJSX} from 'markdown-to-jsx';
 import Router from 'next/router';
+import {EXPERIENCE_LEVEL_OPTIONS} from '@components/common/Search/filterOptions';
 
 type ProjectCardProps = {
   project: Project;
@@ -83,6 +84,15 @@ export default function ProjectCard({
           {project.payment_type && (
             <p className="pl-2 text-sm text-graySubtitle ">
               {getText('en', `PAYMENT.${project.payment_type}`)}
+            </p>
+          )}
+          {project.experience_level !== null && (
+            <p className="pl-2 text-sm text-graySubtitle ">
+              {
+                EXPERIENCE_LEVEL_OPTIONS.find(
+                  (item, index) => index === project.experience_level,
+                )?.label
+              }
             </p>
           )}
         </div>
