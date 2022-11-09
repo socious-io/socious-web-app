@@ -21,9 +21,7 @@ import ProjectInfoWithWrapper from '@components/organisms/applications/ProjectIn
 
 type MyOfferProps = {
   offer: IOffer;
-  // NOTE: Temporary fix
-  // mutateOffer: KeyedMutator<IOffer>;
-  mutateOffer: KeyedMutator<GlobalResponseType<IOffer>>;
+  mutateOffer: KeyedMutator<IOffer>;
 };
 const MyOffer = ({offer, mutateOffer}: MyOfferProps) => {
   const {offer_message, payment_type, payment_scheme, status} = offer;

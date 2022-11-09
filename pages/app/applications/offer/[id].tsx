@@ -32,9 +32,8 @@ const OfferPage: NextPage = () => {
     if (currentIdentity?.type === 'organizations') router.push('/app/projects');
   }, [currentIdentity, router]);
 
-  // NOTE: temporary solution until offers/:id is working correctly
-  const {data, error, mutate} = useSWR<GlobalResponseType<IOffer>>(
-    id ? `/user/offers?filter.project_id=${id}` : null,
+  const {data, error, mutate} = useSWR<IOffer>(
+    id ? `/offers/${id}` : null,
     get,
   );
   if (!data && !error)
@@ -57,7 +56,7 @@ const OfferPage: NextPage = () => {
         }
         url={`/app/applications`}
       />
-      <MyOffer offer={data?.items[0]} mutateOffer={mutate} />
+      <MyOffer offer={data} mutateOffer={mutate} />
     </GeneralLayout>
   );
 };

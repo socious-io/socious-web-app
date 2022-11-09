@@ -82,9 +82,7 @@ export const OfferedCard = ({offer}: {offer: IOffer}) => {
   if (!project) return <SplashScreen />;
 
   return (
-    // NOTE: temporary solution until offers/:id is working correctly
-    // <Link href={`/app/applications/offer/${offer.id}`} passHref>
-    <Link href={`/app/applications/offer/${offer.project_id}`} passHref>
+    <Link href={`/app/applications/offer/${offer.id}`} passHref>
       <a>
         <BodyCard
           project={project}
