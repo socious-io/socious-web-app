@@ -3,11 +3,14 @@ import SignUpElements from '../e2e/elements/SignUpElements';
 import SignUpMethods from '../e2e/methods/SignUpMethods';
 
 const signUpMethods = new SignUpMethods();
-// TODO need email solution
-describe.skip('Sign Up', () => {
+describe('Sign Up', () => {
   beforeEach('Navigate to the home page, then SignUp page', () => {
+    signUpMethods.logout();
     signUpMethods.navigateToHome();
     signUpMethods.clickOnSignUpButton();
+  });
+  afterEach('Log out', () => {
+    signUpMethods.logout();
   });
   specify(
     'User tries to SignUp without entering first name and last name',
