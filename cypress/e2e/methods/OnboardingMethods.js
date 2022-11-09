@@ -1,8 +1,23 @@
 import OnboardingElements from '../elements/OnboardingElements';
+import {api} from './api.js';
+import AuthMethods from './AuthMethods';
 
-class OnboardingMethods {
-  navigateToHome() {
-    cy.visit('/app');
+export const runEmail = `onboarding-${new Date().valueOf()}@tests.example.com`;
+
+class OnboardingMethods extends AuthMethods {
+  setupTestUser() {
+    return cy
+      .request('POST', api('/auth/register'), {
+        first_name: 'Onboarding',
+        last_name: 'Test',
+        username: runEmail.split('@')[0],
+        password: 'Socious1234',
+        email: runEmail,
+      })
+      .then((response) => {
+        // response.body is automatically serialized into JSON
+        expect(response.status).to.equal(200);
+      });
   }
   clickOnLoginButton() {
     OnboardingElements.elements.loginBtn().click();
@@ -10,14 +25,11 @@ class OnboardingMethods {
   clickOnContinueButton() {
     OnboardingElements.elements.onboardingcontinueBtn().click();
   }
-  setEmail(onboardingEmail) {
-    OnboardingElements.elements
-      .emailTxt()
-      .clear()
-      .type('testazintest60@outlook.com');
+  setEmail() {
+    OnboardingElements.elements.emailTxt().clear().type(runEmail);
     return this;
   }
-  setPassword(password) {
+  setPassword() {
     OnboardingElements.elements.passwordTxt().clear().type('Socious1234');
     return this;
   }

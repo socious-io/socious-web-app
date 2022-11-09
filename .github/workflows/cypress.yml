@@ -22,11 +22,13 @@ jobs:
         with:
           browser: chrome
           build: npm run build
-          start: npm run ci
+          start: npm start
           # record: true
         env:
           # pass GitHub token to detect new build vs re-run build
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NEXT_PUBLIC_GOOGLE_API_KEY: ${{secrets.GOOGLE_API_KEY}}
+          NEXT_PUBLIC_FIREBASE_PUSH_CERT: ${{secrets.FIREBASE_PUSH_CERT}}
 
       # after the test run completes
       # store videos and any screenshots

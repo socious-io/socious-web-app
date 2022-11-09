@@ -1,10 +1,8 @@
 /// <reference types = "cypress"/>
 import LoginElements from '../elements/LoginElements';
+import AuthMethods from './AuthMethods';
 
-class LoginMethods {
-  navigateToHome() {
-    cy.visit('/app');
-  }
+class LoginMethods extends AuthMethods {
   clickOnLoginButton() {
     LoginElements.elements.loginBtn().click();
   }
@@ -27,10 +25,8 @@ class LoginMethods {
     LoginElements.elements.passwordTxt().clear().type(password);
     return this;
   }
-  // assertUrlAfterLogin(){
-  //     cy.url().should('equal','/app/projects')
-  //     //cy.url().should('equal','/app/auth/onboarding')
-  // // }
+  assertUrlAfterLogin() {
+    cy.location('pathname').should('equal', '/app/projects');
+  }
 }
-//module.exports = new LoginMethods();
 export default LoginMethods;

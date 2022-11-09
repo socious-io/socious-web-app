@@ -1,9 +1,9 @@
 import SignUpElements from '../elements/SignUpElements';
+import AuthMethods from './AuthMethods';
 
-class SignUpMethods {
-  navigateToHome() {
-    cy.visit('/app');
-  }
+export const runEmail = `signup-${new Date().valueOf()}@tests.example.com`;
+
+class SignUpMethods extends AuthMethods {
   clickOnSignUpButton() {
     SignUpElements.elements.SignUpBtn().click();
   }
@@ -67,7 +67,7 @@ class SignUpMethods {
     this.setEmail('testazintest4');
   }
   enterValidEmail() {
-    this.setEmail('testazintest60@outlook.com');
+    this.setEmail(runEmail);
   }
   assertValidationMsgForInvalidEmail() {
     SignUpElements.elements
@@ -119,7 +119,7 @@ class SignUpMethods {
     SignUpElements.elements.successfulCloseBtn().click();
   }
   enterExistingEmail() {
-    this.setEmail('testazintest4@yahoo.com');
+    this.setEmail('testazintest4@gmail.com');
   }
   assertValidationMsgForExistingEmail() {
     SignUpElements.elements
