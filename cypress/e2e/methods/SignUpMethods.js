@@ -119,7 +119,7 @@ class SignUpMethods extends AuthMethods {
     SignUpElements.elements.successfulCloseBtn().click();
   }
   enterExistingEmail() {
-    this.setEmail('testazintest4@yahoo.com');
+    this.setEmail('testazintest4@gmail.com');
   }
   assertValidationMsgForExistingEmail() {
     SignUpElements.elements
