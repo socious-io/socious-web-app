@@ -248,14 +248,7 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
         console.log('ERROR :---: ', error);
       }
     },
-    [
-      ProjectContext,
-      editQuestion?.id,
-      editQuestion?.project_id,
-      mutate,
-      project.id,
-      setProjectContext,
-    ],
+    [ProjectContext, editQuestion, mutate, project.id, setProjectContext],
   );
 
   // EDIT MODALS

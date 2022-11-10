@@ -119,7 +119,7 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
                   })
                 }
                 disabled={
-                  type === 'NEW'
+                  type === 'EDIT'
                     ? !!ProjectContext.questions &&
                       ProjectContext.questions.length >= 5
                     : !!ProjectContext.newQuestions &&
