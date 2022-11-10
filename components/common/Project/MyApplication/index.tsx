@@ -7,12 +7,12 @@ import {Project} from '@models/project';
 import {get} from 'utils/request';
 import SplashScreen from 'layout/Splash';
 import {IOffer} from '@models/offer';
+import ApplicationMobileTop from '@components/organisms/applications/ApplicationMobileTop';
 
 function MyApplicationBoxes() {
   return (
     <div className="w-full space-y-4">
-      {/* Uncomment after Hired done */}
-      {/* <ApplicationMobileTop selectedTab="APPLICATION" /> */}
+      <ApplicationMobileTop selectedTab="APPLICATION" />
       <div className="flex hidden items-center rounded-2xl border border-grayLineBased bg-white p-6 sm:block">
         <p className="text-xl font-semibold">My applications</p>
       </div>
@@ -20,6 +20,7 @@ function MyApplicationBoxes() {
         <StatusListingSkeleton<TApplicant>
           url={'/user/applicants?status=PENDING'}
           title={'Pending'}
+          rounded
           className="border-0"
           renderList={(flattenData) => (
             <>
