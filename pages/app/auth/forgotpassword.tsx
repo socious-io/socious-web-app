@@ -52,7 +52,7 @@ const reducer = (
 
 const ForgotPassword: NextPage = () => {
   const router = useRouter();
-  const [step, setStep] = useState<number>(2);
+  const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessages, dispatch] = useReducer(reducer, {
     emailCheckError: '',
@@ -101,7 +101,6 @@ const ForgotPassword: NextPage = () => {
 
   const handleConfirmOTPRequest = async (code: string) => {
     const email = formMethodsStep1.getValues('email');
-
     dispatch({type: 'OTP', error: ''});
     try {
       await confirmOTP(email, code);
