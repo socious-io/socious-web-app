@@ -9,3 +9,7 @@ export function getOrganization(identityId: string) {
 export function updateOrganization(orgId: string, orgBody: IUpdateOrgBody) {
   return post<IOrganization>(`/orgs/update/${orgId}`, orgBody);
 }
+
+export function removeMember(orgId: string, userId: string) {
+  return post(`/orgs/remove/${orgId}/members/${userId}`);
+}
