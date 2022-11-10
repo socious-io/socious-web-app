@@ -15,11 +15,16 @@ import {useUser, useApplication} from '@hooks';
 import SideBar from '@components/common/SimpleSideBar/Sidebar';
 import {GeneralLayout} from 'layout';
 import type {NextPage} from 'next';
-import MyApplication from '@components/pages/application/MyApplications/MyApplication';
+import MyOffer from '@components/pages/offer/MyOffer';
+import useSWR from 'swr';
+import {get} from 'utils/request';
+import SplashScreen from 'layout/Splash';
+import {GlobalResponseType} from '@models/organization';
+import {IOffer} from '@models/offer';
 
-const Applicant: NextPage = () => {
+const OfferPage: NextPage = () => {
   const router = useRouter();
-  const {aid} = router.query;
+  const {id} = router.query;
   const {currentIdentity} = useUser();
 
   // Go back if it is ORG.
@@ -27,39 +32,33 @@ const Applicant: NextPage = () => {
     if (currentIdentity?.type === 'organizations') router.push('/app/projects');
   }, [currentIdentity, router]);
 
-  const {data, error, mutate, isLoading} = useApplication(
-    aid ? (aid as string) : null,
+  const {data, error, mutate} = useSWR<IOffer>(
+    id ? `/offers/${id}` : null,
+    get,
   );
-
-  if (isLoading)
+  if (!data && !error)
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center">
         <GridLoader color="#36d7b7" />
       </div>
     );
 
-  if (!data) return <div>ERROR</div>;
+  if (!data) return <SplashScreen />;
 
   return (
-    <GeneralLayout
-      hasNavbar
-      hasDetailNavbar
-      detailNavbarTitle="Application Detail"
-    >
-      <div className="mx-6 flex w-full md:space-x-6">
-        <SideBar
-          title={
-            <p className="flex gap-2">
-              <ChevronLeftIcon className="w-5" />
-              <span className="whitespace-nowrap">Back to my applications</span>
-            </p>
-          }
-          url={`/app/applications`}
-        />
-        <MyApplication applicant={data} mutateApplication={mutate} />
-      </div>
+    <GeneralLayout hasNavbar>
+      <SideBar
+        title={
+          <p className="flex gap-2">
+            <ChevronLeftIcon className="w-5" />
+            <span className="whitespace-nowrap">Back to my applications</span>
+          </p>
+        }
+        url={`/app/applications`}
+      />
+      <MyOffer offer={data} mutateOffer={mutate} />
     </GeneralLayout>
   );
 };
 
-export default Applicant;
+export default OfferPage;

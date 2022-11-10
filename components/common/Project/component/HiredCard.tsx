@@ -16,7 +16,6 @@ type ApplicantHireCardProps = {
   username?: string;
   paymentType?: string;
   paymentRate?: string;
-  applicantId?: string;
   avatar?: string;
   endHire?: () => void;
 };
@@ -29,7 +28,6 @@ function HiredCard({
   username,
   paymentType,
   paymentRate,
-  applicantId,
   avatar,
   endHire,
 }: ApplicantHireCardProps) {
@@ -62,9 +60,9 @@ function HiredCard({
         </div>
       </div>
       {hasButtons && (
-        <div className="mt-4 flex justify-between space-x-2">
+        <div className="mt-4 flex justify-around space-x-2">
           <Button
-            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+            className="mt-4 flex w-full max-w-xs items-center justify-center align-middle "
             type="submit"
             size="lg"
             variant="outline"
@@ -84,7 +82,7 @@ function HiredCard({
             End hire
           </Button>
           <Button
-            className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
+            className="mt-4 flex w-full max-w-xs items-center justify-center align-middle "
             type="submit"
             size="lg"
             variant="outline"
