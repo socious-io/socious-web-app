@@ -123,7 +123,7 @@ export const MobileSearch = () => {
             }}
           />
         );
-      case 'location':
+      case 'locations':
         return (
           <LocationForm
             className="h-screen"
