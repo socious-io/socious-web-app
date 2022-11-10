@@ -37,6 +37,7 @@ import {AxiosError} from 'axios';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 import Router from 'next/router';
 import {checkAndUploadMedia} from 'services/ImageUpload';
+import {Capacitor} from '@capacitor/core';
 
 const schemaStep = {
   2: schemaOnboardingStep2,
@@ -212,15 +213,23 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 
   const handleNext = useCallback(() => {
     if (step === 7) {
-      console.log('I came here throught skip');
+      formMethodsStep7.reset();
       handleUpdateProfileRequest();
     } else {
+      step === 5 ? formMethodsStep5.reset() : formMethodsStep6.reset();
       setStep(step + 1);
     }
-  }, [handleUpdateProfileRequest, step]);
+  }, [
+    formMethodsStep5,
+    formMethodsStep6,
+    formMethodsStep7,
+    handleUpdateProfileRequest,
+    step,
+  ]);
 
   const requestNotificationPermission = async () => {
-    await Notification.requestPermission();
+    if ('Notification' in window && !Capacitor.isNativePlatform())
+      await Notification.requestPermission();
     Router.push('/app/projects');
   };
 

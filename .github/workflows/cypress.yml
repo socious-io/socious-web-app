@@ -1,0 +1,47 @@
+name: Cypress Tests using Cypress Docker Image
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency: fe-e2e-test-main
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node16.17.0-chrome106
+      options: --user 1001
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v4.2.0
+        with:
+          browser: chrome
+          build: npm run build
+          start: npm start
+          # record: true
+        env:
+          # pass GitHub token to detect new build vs re-run build
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NEXT_PUBLIC_GOOGLE_API_KEY: ${{secrets.GOOGLE_API_KEY}}
+          NEXT_PUBLIC_FIREBASE_PUSH_CERT: ${{secrets.FIREBASE_PUSH_CERT}}
+
+      # after the test run completes
+      # store videos and any screenshots
+      # NOTE: screenshots will be generated only if E2E test failed
+      # thus we store screenshots only on failures
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+      # Test run video was always captured, so this action uses "always()" condition
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos

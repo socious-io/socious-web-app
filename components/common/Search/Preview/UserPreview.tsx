@@ -12,7 +12,8 @@ interface UserPreviewProps {
 
 export const UserPreview: FC<UserPreviewProps> = ({id}) => {
   const {data: user} = useUserProfile(id);
-  const location = useFormattedLocation(user);
+  // Country & city is not included in response.
+  // const location = useFormattedLocation(user ?? {country: '', city: ''});
 
   if (!user) return null;
   return (
@@ -25,7 +26,7 @@ export const UserPreview: FC<UserPreviewProps> = ({id}) => {
               <p className="text-black">
                 {user.first_name} {user.last_name}
               </p>
-              {location && <p className=" text-graySubtitle">{location}</p>}
+              {/* {location && <p className=" text-graySubtitle">{location}</p>} */}
             </div>
           </div>
         </Link>

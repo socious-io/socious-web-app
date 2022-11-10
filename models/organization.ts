@@ -1,4 +1,4 @@
-import {IdentityMeta, IdentityType} from './identity';
+import {IdentityMeta, IdentityStatus, IdentityType} from './identity';
 import {TMediaType} from './media';
 
 export interface IOrganizationType {
@@ -27,6 +27,9 @@ export interface IOrganizationType {
   mobile_country_code?: string;
   created_by?: string;
   shortname: string;
+  old_id: string | null;
+  status: IdentityStatus;
+  search_tsv: string;
 }
 
 export interface IOrganizationUserType {
@@ -34,7 +37,7 @@ export interface IOrganizationUserType {
   first_name: string;
   last_name?: string;
   location: string;
-  username?: string;
+  username: string;
   email?: string;
   avatar: IAvatarInfo | null;
   requested: boolean;

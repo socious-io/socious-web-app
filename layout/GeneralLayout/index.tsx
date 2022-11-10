@@ -146,13 +146,18 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
     const keyword = e.currentTarget.value.trim();
     if (e.key === 'Enter' && keyword) {
       const type = getSearchType();
-      router.push(`/app/search/?type=${type}&keywords=${keyword}`);
+      if (type !== 'search')
+        router.push(`/app/search/?type=${type}&keywords=${keyword}`);
+      else {
+        router.query.keywords = keyword;
+        router.push(router);
+      }
     }
   };
 
   const getSearchType = () => {
     const currentPath = router.pathname.split('/')?.[2];
-    const {type} = router.query;
+    // const {type} = router.query;
     switch (currentPath) {
       case 'projects':
         return 'projects';
@@ -160,7 +165,8 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
       case 'post':
         return 'posts';
       case 'search':
-        if (type) return type;
+        // if (type) return type;
+        return 'search';
       default:
         return 'users';
     }

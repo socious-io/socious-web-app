@@ -1,0 +1,14 @@
+{
+  "EmailForLogin": "testazintest4@gmail.com",
+  "PasswordForLogin": "Socious1234",
+  "InvalidFirstName": "First$$Name",
+  "InvalidLastName": "Last$$Name",
+  "ValidFirstName": "valid first name",
+  "ValidLastName": "valid last name",
+  "InvalidEmail": "testazintest4",
+  "ValidEmail": "testazintest90@outlook.com",
+  "InvalidPassword": "12345678",
+  "ValidPassword": "Socious1234",
+  "ValidConfirmPassword": "Socious1234",
+  "ExistingEmail": "testazintest4@gmail.com"
+}

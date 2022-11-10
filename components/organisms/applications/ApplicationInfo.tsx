@@ -3,27 +3,13 @@ import {TApplicant} from '@models/applicant';
 import {TUserByUsername} from '@models/profile';
 import React from 'react';
 import {useFormattedLocation} from 'services/formatLocation';
-
-var data = [
-  {
-    id: 1,
-    projectId: '1',
-  },
-  {
-    id: 2,
-    projectId: '2',
-  },
-  {
-    id: 3,
-    projectId: '3',
-  },
-];
+import {twMerge} from 'tailwind-merge';
 
 const ApplicationInfo = ({
-  applicantInfo,
+  className,
   applicant,
 }: {
-  applicantInfo?: TUserByUsername;
+  className?: string;
   applicant: TApplicant;
 }) => {
   const {state: seeFullCoverLetter, handlers: coverLetterHandlers} =
@@ -34,7 +20,12 @@ const ApplicationInfo = ({
   );
 
   return (
-    <div className=" divide-y rounded-2xl border border-grayLineBased bg-white ">
+    <div
+      className={twMerge(
+        ' divide-y rounded-2xl border border-grayLineBased bg-white ',
+        className && className,
+      )}
+    >
       <div className=" divide-y p-4 ">
         <p className="py-4 font-semibold text-black">Cover Letter</p>
         <div>
@@ -60,8 +51,8 @@ const ApplicationInfo = ({
           <p className="py-4 font-semibold text-black">Screening questions</p>
         </div>
         <div>
-          {data.map((e) => (
-            <div key={e.id} className="my-4 flex flex-col">
+          {[1, 2, 3, 4].map((e) => (
+            <div key={e} className="my-4 flex flex-col">
               <p className="text-black">Question1</p>
               <p className="text-graySubtitle">Question</p>
             </div>

@@ -87,11 +87,11 @@ export const schemaCreateProjectStep3 = Joi.object({
   project_length: Joi.string()
     .required()
     .allow(...Object.values(enums.ProjectLengthType)),
-  country: Joi.string().required().min(2).max(3),
+  country: Joi.string().min(2).max(3),
   city: Joi.when('country', {
     is: 'XW',
     then: Joi.string(),
-    otherwise: Joi.string().required(),
+    otherwise: Joi.string(),
   }),
 });
 

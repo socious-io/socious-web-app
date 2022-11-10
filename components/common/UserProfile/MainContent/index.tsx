@@ -27,12 +27,12 @@ import {useUser} from '@hooks';
 
 // interfaces
 import {IdentityType, OtherIdentityMeta} from '@models/identity';
-import {IProjectsResponse, Project} from '@models/project';
+import {IProjectsResponse} from '@models/project';
 interface Props {
   data: any;
   status: IdentityType;
   profile_mutate: KeyedMutator<any>;
-  editProfile?: () => void;
+  editProfile: () => void;
 }
 
 const MainContent: React.FC<Props> = ({
@@ -78,8 +78,8 @@ const MainContent: React.FC<Props> = ({
   };
 
   return (
-    <div className="mb-8 flex w-full flex-col items-start gap-6 md:flex-row">
-      <div className="border-1 rounded-xl border border-grayLineBased bg-white md:w-4/6">
+    <div className="mb-8 flex w-full  flex-col items-start gap-6 md:flex-row">
+      <div className="border-1 min-w-full rounded-xl border border-grayLineBased bg-white md:w-4/6">
         <Header
           avatar={status === 'users' ? data?.avatar : data?.image}
           cover_image={data?.cover_image}
@@ -128,10 +128,12 @@ const MainContent: React.FC<Props> = ({
           />
         )}
         <Description paragraph={data?.mission} title="Mission" />
+        {currentIdentity?.type === 'organizations' && (
+          <Description paragraph={data?.culture} title="Culture" />
+        )}
         {status === 'users' && <Skills skills={data?.skills} />}
         <hr className="mb-20 border-grayLineBased" />
       </div>
-
       <div className="w-full md:w-2/6">
         <RightPaneContainer
           title="Activity"

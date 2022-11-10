@@ -1,100 +1,91 @@
 import BodyCard from '../component/BodyCard';
-import HeaderBox from '../component/HeaderBox';
-import {useToggle} from '@hooks';
-import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 import {TApplicant, TApplicantStatus} from '@models/applicant';
-import {useEffect, useMemo} from 'react';
-import Applicant from 'pages/app/applications/[aid]';
-
-interface StatusApplicationsProps {
-  name: any;
-  group: Array<TApplicant> | undefined;
-  expanded: boolean;
-  toggle: () => void;
-}
-
-function StatusApplications({
-  name,
-  group,
-  expanded,
-  toggle,
-}: StatusApplicationsProps) {
-  return (
-    <>
-      <HeaderBox
-        title={`${name} (${group?.length ?? 0})`}
-        isExpand={expanded}
-        expandToggle={toggle}
-        isExpandable={Boolean(group?.length)}
-        isRound={true}
-      />
-      {expanded &&
-        group?.map((item) => (
-          <BodyCard
-            key={item.id}
-            applicationId={item.id}
-            project={item.project}
-            name={item.organization.meta.name}
-            image={item.organization.meta.image}
-          />
-        ))}
-    </>
-  );
-}
+import {StatusListingSkeleton} from '@components/molecules/StatusListingSkeleton/StatusListingSkeleton';
+import Link from 'next/link';
+import useSWR from 'swr';
+import {Project} from '@models/project';
+import {get} from 'utils/request';
+import SplashScreen from 'layout/Splash';
+import {IOffer} from '@models/offer';
 
 function MyApplicationBoxes() {
-  const {state: showPending, handlers: showPendingHandler} = useToggle();
-  const {state: showDecline, handlers: showDeclineHandler} = useToggle();
-  const {state: showAwaiting, handlers: showAwaitingHandler} = useToggle();
-
-  const {flattenData: data, infiniteError} =
-    useInfiniteSWR<TApplicant>('/user/applicants');
-
-  // TODO show error message
-  // TODO load more (wait for filter by status)
-
-  const groupByStatus = useMemo(() => {
-    const map: Map<TApplicantStatus, Array<TApplicant>> = new Map();
-    for (const item of data) {
-      if (!map.has(item.status)) map.set(item.status, []);
-      map.get(item.status)!.push(item);
-    }
-    return map;
-  }, [data]);
-
-  useEffect(() => {
-    if (groupByStatus.get('PENDING')?.length) showPendingHandler.on();
-    else if (groupByStatus.get('OFFERED')?.length) showAwaitingHandler.on();
-    else if (groupByStatus.get('REJECTED')?.length) showDeclineHandler.on();
-  }, [
-    groupByStatus,
-    showAwaitingHandler,
-    showDeclineHandler,
-    showPendingHandler,
-  ]);
-
   return (
-    <div className="w-full rounded-2xl border border-grayLineBased pb-4">
-      <StatusApplications
-        group={groupByStatus.get('PENDING')}
-        name="Pending"
-        expanded={showPending}
-        toggle={showPendingHandler.toggle}
-      />
-      <StatusApplications
-        group={groupByStatus.get('OFFERED')}
-        name="Awaiting review"
-        expanded={showAwaiting}
-        toggle={showAwaitingHandler.toggle}
-      />
-      <StatusApplications
-        group={groupByStatus.get('REJECTED')}
-        name="Declined"
-        expanded={showDecline}
-        toggle={showDeclineHandler.toggle}
-      />
+    <div className="w-full space-y-4">
+      {/* Uncomment after Hired done */}
+      {/* <ApplicationMobileTop selectedTab="APPLICATION" /> */}
+      <div className="flex hidden items-center rounded-2xl border border-grayLineBased bg-white p-6 sm:block">
+        <p className="text-xl font-semibold">My applications</p>
+      </div>
+      <div className="divide-graylineBased mb-4 h-fit w-full divide-y border border-grayLineBased md:rounded-2xl">
+        <StatusListingSkeleton<TApplicant>
+          url={'/user/applicants?status=PENDING'}
+          title={'Pending'}
+          className="border-0"
+          renderList={(flattenData) => (
+            <>
+              {flattenData.map((applicant) => (
+                <Link
+                  href={`/app/applications/${applicant.id}`}
+                  passHref
+                  key={applicant.id}
+                >
+                  <a>
+                    <BodyCard
+                      project={applicant.project}
+                      name={applicant.organization.meta.name}
+                      image={applicant.organization.meta.image}
+                    />
+                  </a>
+                </Link>
+              ))}
+            </>
+          )}
+        />
+        <StatusListingSkeleton<IOffer>
+          url={'/user/offers?status=PENDING'}
+          title={'Awaiting review'}
+          className="border-0"
+          renderList={(flattenData) => (
+            <>
+              {flattenData.map((offer) => (
+                <OfferedCard key={offer.id} offer={offer} />
+              ))}
+            </>
+          )}
+        />
+        {/* TODO: Rejected offers */}
+        <StatusListingSkeleton<IOffer>
+          url={'/user/offers?status=WITHDRAWN'}
+          title={'Declined'}
+          className="rounded-b-2xl border-0"
+          renderList={(flattenData) => (
+            <>
+              {flattenData.map((offer) => (
+                <OfferedCard key={offer.id} offer={offer} />
+              ))}
+            </>
+          )}
+        />
+      </div>
     </div>
   );
 }
 
 export default MyApplicationBoxes;
+
+export const OfferedCard = ({offer}: {offer: IOffer}) => {
+  const {data: project} = useSWR<Project>(`/projects/${offer.project_id}`, get);
+  if (!project) return <SplashScreen />;
+
+  return (
+    <Link href={`/app/applications/offer/${offer.id}`} passHref>
+      <a>
+        <BodyCard
+          project={project}
+          name={project.identity_meta.name}
+          image={project.identity_meta.image}
+        />
+      </a>
+    </Link>
+  );
+};

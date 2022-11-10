@@ -35,7 +35,6 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
     id,
     applied,
   } = project;
-  // FIXME let's add this to identity_meta instead
   const orgLocation = useFormattedLocation(identity_meta);
   const {identities, currentIdentity} = useUser({redirect: false});
   const projectType = getText('en', `PROJECT.${project_type}`);

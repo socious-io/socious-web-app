@@ -12,8 +12,8 @@ interface UseToggleReturn {
   handlers: HandlersType;
 }
 
-export const useToggle = (defaultValue: boolean = false): UseToggleReturn => {
-  const [state, setState] = React.useState<boolean>(defaultValue);
+export const useToggle = (defaultState: boolean = false): UseToggleReturn => {
+  const [state, setState] = React.useState<boolean>(defaultState);
 
   const handlers = React.useMemo(
     () => ({
