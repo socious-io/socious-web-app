@@ -12,6 +12,7 @@ import {get} from 'utils/request';
 
 // Types
 import {TApplicant} from '@models/applicant';
+import {Project} from '@models/project';
 
 const Applicant = () => {
   const router = useRouter();
@@ -21,6 +22,11 @@ const Applicant = () => {
     error: applicantError,
     mutate: mutateApplicant,
   } = useSWR<TApplicant>(projectId && aid ? `/applicants/${aid}` : null, get);
+
+  const {data: project} = useSWR<Project>(
+    projectId ? `/projects/${projectId}` : null,
+    get,
+  );
 
   if (!applicantData && !applicantError)
     return (
@@ -46,11 +52,10 @@ const Applicant = () => {
   }
 
   if (!applicantData) return <></>;
-  console.log('Applicant :----: ', applicantData);
 
   return (
     <GeneralLayout hasNavbar>
-      <SideBar selectBar="APPLICANT" projectId={projectId as string} />
+      <SideBar selectBar="APPLICANT" data={project} />
       <ApplicantsContent
         applicant={applicantData}
         mutateApplicant={mutateApplicant}

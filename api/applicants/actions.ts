@@ -13,9 +13,9 @@ export function rejectApplicant(applicantId: string) {
 }
 
 export function approveOffer(applicantId: string) {
-  return post<TApplicant>(`/applicants/${applicantId}/approve`, {});
+  return post(`/offers/${applicantId}/approve`, {});
 }
 
 export function withdrawApplication(applicantId: string) {
-  return post<TApplicant>(`/applicants/${applicantId}/withdraw`, {});
+  return post(`/offers/${applicantId}/withdrawn`, {});
 }
