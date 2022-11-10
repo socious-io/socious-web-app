@@ -8,9 +8,9 @@ import {AxiosError} from 'axios';
 import {toast} from 'react-toastify';
 
 import {Button, Modal} from '@components/common';
-import ForgotPasswordStep1 from '@components/common/Auth/ForgotPassword/Step1/ForgotPasswordStep1';
-import ForgotPasswordStep2 from '@components/common/Auth/ForgotPassword/Step2/ForgotPasswordStep2';
-import ForgotPasswordStep3 from '@components/common/Auth/ForgotPassword/Step3/ForgotPasswordStep3';
+import ForgotPasswordStep1 from '@components/organisms/Auth/ForgotPassword/Step1/ForgotPasswordStep1';
+import ForgotPasswordStep2 from '@components/organisms/Auth/ForgotPassword/Step2/ForgotPasswordStep2';
+import ForgotPasswordStep3 from '@components/organisms/Auth/ForgotPassword/Step3/ForgotPasswordStep3';
 import {
   schemaForgotPasswordStep1,
   schemaForgotPasswordStep3,
@@ -52,7 +52,7 @@ const reducer = (
 
 const ForgotPassword: NextPage = () => {
   const router = useRouter();
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(2);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessages, dispatch] = useReducer(reducer, {
     emailCheckError: '',
