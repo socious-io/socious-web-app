@@ -36,24 +36,20 @@ import {addQuestion, updateQuestion} from '@api/projects/actions';
 import {get} from 'utils/request';
 
 // Types
-import {
-  AddQuestionType,
-  CreateProjectType,
-  Project,
-  ProjectProps,
-} from 'models/project';
-import {Question} from '@models/question';
-import {OptionType} from '../NewProject/QuestionDetail';
+import {CreateProjectType, Project, ProjectProps} from 'models/project';
+import {AddQuestionType, Question} from '@models/question';
+import {twMerge} from 'tailwind-merge';
 
 // Library
 const libraries: Libraries = ['places'];
 
-const QuestionsCard: FC<{questions?: Question[]; goToEdit?: () => void}> = ({
-  questions,
-  goToEdit,
-}) => {
+export const QuestionsCard: FC<{
+  questions?: Question[] | AddQuestionType[];
+  goToEdit?: () => void;
+  className?: string;
+}> = ({questions, goToEdit, className}) => {
   return (
-    <div className="space-y-6 p-4">
+    <div className={twMerge('space-y-6 p-4', className && className)}>
       <div className="flex items-center justify-between ">
         <Title>Screening questions</Title>
         {goToEdit && (
@@ -72,7 +68,7 @@ const QuestionsCard: FC<{questions?: Question[]; goToEdit?: () => void}> = ({
       {questions && (
         <div className="space-y-4">
           {questions.map((question, index) => (
-            <div key={question.id}>
+            <div key={index + ' ' + question.question}>
               <p>{'Question ' + (index + 1)}</p>
               <span className="font-worksans block  text-base text-graySubtitle sm:text-sm">
                 {question.question}
@@ -215,21 +211,11 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
     }
   };
 
-  const onSubmitQuestion: (data: any) => void = useCallback(
-    async (data: any) => {
+  const onSubmitQuestion: (questionBody: AddQuestionType) => void = useCallback(
+    async (questionBody: AddQuestionType) => {
       try {
-        const {question, required, options: rawOptions} = data;
-        const options: string[] | null =
-          rawOptions
-            ?.filter((item: OptionType) => !!item.option)
-            .map((item: OptionType) => item.option) ?? null;
-        const questionBody: AddQuestionType = {
-          question,
-          required,
-        };
-        if (!!options?.length) questionBody.options = options;
         let questions: Question[] | null = ProjectContext.questions;
-        if (editQuestion?.id) {
+        if (editQuestion && editQuestion.project_id) {
           const response = await updateQuestion(
             editQuestion.project_id,
             editQuestion.id,

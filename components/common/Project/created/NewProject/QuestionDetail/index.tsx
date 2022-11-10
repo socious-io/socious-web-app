@@ -15,13 +15,13 @@ import {useProjectContext} from '../context';
 
 // Types
 import {FromLayout} from '../Layout';
-import {AddQuestionType} from '@models/project';
+import {AddQuestionType} from '@models/question';
 export type OptionType = {
   id: number;
   option: string;
 };
 
-type QuestionAddProps = {onSubmit: (data: any) => void};
+type QuestionAddProps = {onSubmit: (data: AddQuestionType) => void};
 
 const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
   const {setProjectContext, ProjectContext} = useProjectContext();
@@ -100,6 +100,20 @@ const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
       );
   }, [options, setValue]);
 
+  const beforeSubmit = (data: any) => {
+    const {question, required, options: rawOptions} = data;
+    const options: string[] | null =
+      rawOptions
+        ?.filter((item: OptionType) => !!item.option)
+        .map((item: OptionType) => item.option) ?? null;
+    const questionBody: AddQuestionType = {
+      question,
+      required,
+    };
+    if (!!options?.length) questionBody.options = options;
+    onSubmit(questionBody);
+  };
+
   return (
     <div className="flex h-full w-full flex-col">
       <FromLayout type="FULL" className="!grow">
@@ -174,7 +188,7 @@ const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
 
         <div className="flex h-20 items-end justify-end border-t p-4">
           <Button
-            onClick={handleSubmit(onSubmit)}
+            onClick={handleSubmit(beforeSubmit)}
             disabled={!isDirty && isValid}
             type="button"
             className="'flex h-11 w-36 items-center justify-center"
