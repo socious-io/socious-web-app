@@ -1,4 +1,5 @@
 import type {NextPage} from 'next';
+import {FirebaseMessaging} from '@capacitor-firebase/messaging';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
 import {useState, useCallback} from 'react';
@@ -15,6 +16,13 @@ import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
 import {DefaultErrorMessage, ErrorMessage, get} from 'utils/request';
 import {useUser} from '@hooks';
+import {
+  ActionPerformed,
+  PushNotifications,
+  PushNotificationSchema,
+  Token,
+} from '@capacitor/push-notifications';
+// import {FCM} from '@capacitor-community/fcm';
 
 type Account = {
   email: string;
@@ -24,6 +32,91 @@ type Account = {
 export type LoginResp = {
   message?: 'success';
   error?: 'Not matched';
+};
+
+// const subToFCM = () => {
+//   // now you can subscribe to a specific topic
+//   FCM.subscribeTo({topic: 'test'})
+//     .then((r) => alert(`subscribed to topic`))
+//     .catch((err) => console.log(err));
+
+//   // Unsubscribe from a specific topic
+//   FCM.unsubscribeFrom({topic: 'test'})
+//     .then(() => alert(`unsubscribed from topic`))
+//     .catch((err) => console.log(err));
+
+//   // Get FCM token instead the APN one returned by Capacitor
+//   FCM.getToken()
+//     .then((r) => alert(`Token ${r.token}`))
+//     .catch((err) => console.log(err));
+
+//   // Remove FCM instance
+//   FCM.deleteInstance()
+//     .then(() => alert(`Token deleted`))
+//     .catch((err) => console.log(err));
+
+//   // Enable the auto initialization of the library
+//   FCM.setAutoInit({enabled: true}).then(() => alert(`Auto init enabled`));
+
+//   // Check the auto initialization status
+//   FCM.isAutoInitEnabled().then((r) => {
+//     console.log('Auto init is ' + (r.enabled ? 'enabled' : 'disabled'));
+//   });
+// };
+
+// this func working properly
+// const notificationInitializer = () => {
+//   console.log('initialize notification');
+//   PushNotifications.requestPermissions().then(({receive}) => {
+//     if (receive === 'granted') {
+//       PushNotifications.register().then(() => {
+//         console.log('register');
+//       });
+//     }
+//   });
+
+//   PushNotifications.addListener('registration', (token: Token) => {
+//     console.log('Push registration success, token: ' + token.value);
+//     // subToFCM();
+//   });
+
+//   PushNotifications.addListener('registrationError', (error: any) => {
+//     console.log('Error on registration: ' + JSON.stringify(error));
+//   });
+
+//   PushNotifications.addListener(
+//     'pushNotificationReceived',
+//     (notification: PushNotificationSchema) => {
+//       console.log('Push received: ' + JSON.stringify(notification));
+//     },
+//   );
+
+//   PushNotifications.addListener(
+//     'pushNotificationActionPerformed',
+//     (notification: ActionPerformed) => {
+//       console.log('Push action performed: ' + JSON.stringify(notification));
+//     },
+//   );
+// };
+
+const requestPermissions = async () => {
+  const result = await FirebaseMessaging.requestPermissions();
+  return result.receive;
+};
+
+const getToken = async () => {
+  const result = await FirebaseMessaging.getToken();
+  return result.token;
+};
+
+const subscribeToTopic = async () => {
+  await FirebaseMessaging.subscribeToTopic({topic: 'test'});
+};
+
+const addNotificationReceivedListener = async () => {
+  await FirebaseMessaging.addListener('notificationReceived', (event) => {
+    console.log('notificationReceived', {event});
+  });
 };
 
 const Login: NextPage = () => {
@@ -38,8 +131,17 @@ const Login: NextPage = () => {
     resolver: joiResolver(schemaLogin),
   });
 
-  const onLoginSucceed = (resp: LoginResp) => {
+  const onLoginSucceed = async (resp: LoginResp) => {
     if (resp.message === 'success') {
+      // await requestPermissions();
+      requestPermissions().then((resp) => {
+        if (resp === 'granted') {
+          const token = getToken();
+          console.log('FCM Token: ', token);
+          subscribeToTopic();
+          addNotificationReceivedListener();
+        }
+      });
       console.log('success login');
       router.push('/app/projects');
     }

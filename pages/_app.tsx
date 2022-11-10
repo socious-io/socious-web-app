@@ -1,10 +1,8 @@
-// import {Web3ReactProvider} from '@web3-react/core';
-// import Web3 from 'web3';
+// import {FCM} from '@capacitor-community/fcm';
 import {SWRConfig} from 'swr';
 import type {AppProps} from 'next/app';
 import Head from 'next/head';
 import {get} from 'utils/request';
-import PushNotification from '@components/common/PushNotification/PushNotification';
 import '../asset/css/global.css';
 import '../styles/index.css';
 import '../styles/bottom-sheet.css';
@@ -12,17 +10,43 @@ import '../styles/App.css';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {toast} from 'react-toastify';
+import {useEffect} from 'react';
 import {
   ActionPerformed,
-  PushNotificationSchema,
   PushNotifications,
+  PushNotificationSchema,
   Token,
 } from '@capacitor/push-notifications';
-import {useEffect} from 'react';
-// import {Capacitor} from '@capacitor/core';
-// function getLibrary(provider: any) {
-//   return new Web3(provider);
-// }
+
+// const subToNotifs = () => {
+//   // now you can subscribe to a specific topic
+//   FCM.subscribeTo({topic: 'test'})
+//     .then((r) => console.log(`subscribed to topic`))
+//     .catch((err) => console.log(err));
+
+//   // Unsubscribe from a specific topic
+//   FCM.unsubscribeFrom({topic: 'test'})
+//     .then(() => console.log(`unsubscribed from topic`))
+//     .catch((err) => console.log(err));
+
+//   // Get FCM token instead the APN one returned by Capacitor
+//   FCM.getToken()
+//     .then((r) => console.log(`Token ${r.token}`))
+//     .catch((err) => console.log(err));
+
+//   // Remove FCM instance
+//   FCM.deleteInstance()
+//     .then(() => console.log(`Token deleted`))
+//     .catch((err) => console.log(err));
+
+//   // Enable the auto initialization of the library
+//   FCM.setAutoInit({enabled: true}).then(() => console.log(`Auto init enabled`));
+
+//   // Check the auto initialization status
+//   FCM.isAutoInitEnabled().then((r) => {
+//     console.log('Auto init is ' + (r.enabled ? 'enabled' : 'disabled'));
+//   });
+// };
 
 function MyApp({Component, pageProps}: AppProps) {
   // useEffect(() => {
@@ -30,26 +54,24 @@ function MyApp({Component, pageProps}: AppProps) {
   //     PushNotifications.requestPermissions().then((result) => {
   //       if (result.receive === 'granted') {
   //         PushNotifications.register();
+  //         console.log('granted');
   //       } else {
   //         // Show some error
+  //         console.log('error');
   //       }
   //     });
-
   //     PushNotifications.addListener('registration', (token: Token) => {
   //       console.log('Push registration success, token: ' + token.value);
   //     });
-
   //     PushNotifications.addListener('registrationError', (error: any) => {
   //       console.log('Error on registration: ' + JSON.stringify(error));
   //     });
-
   //     PushNotifications.addListener(
   //       'pushNotificationReceived',
   //       (notification: PushNotificationSchema) => {
   //         console.log('Push received: ' + JSON.stringify(notification));
   //       },
   //     );
-
   //     PushNotifications.addListener(
   //       'pushNotificationActionPerformed',
   //       (notification: ActionPerformed) => {
@@ -57,7 +79,6 @@ function MyApp({Component, pageProps}: AppProps) {
   //       },
   //     );
   //   };
-
   //   Capacitor.isNativePlatform() && onInit();
   // }, []);
 
@@ -88,9 +109,9 @@ function MyApp({Component, pageProps}: AppProps) {
           },
         }}
       >
-        <PushNotification>
-          <Component {...pageProps} />
-        </PushNotification>
+        {/* <PushNotification> */}
+        <Component {...pageProps} />
+        {/* </PushNotification> */}
       </SWRConfig>
       <ToastContainer />
     </>

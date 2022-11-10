@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {getMessaging, MessagePayload, onMessage} from 'firebase/messaging';
-import {firebaseCloudMessaging} from '../../../utils/firebase';
+// import {firebaseCloudMessaging} from '../../../utils/firebase';
 import Toast from '../Toast/Toast';
 import {useToggle} from '@hooks';
 import {PushNotificationBody} from '@models/notification';
@@ -43,7 +43,7 @@ function PushNotificationLayout({children}: any) {
   // useEffect(() => {
   //   setToken();
 
-  //   // Event listener that listens for the push notification event in the background
+  //   //   // Event listener that listens for the push notification event in the background
   //   if ('serviceWorker' in navigator) {
   //     navigator.serviceWorker.addEventListener('message', (event) => {
   //       if (event?.data) {
@@ -67,17 +67,17 @@ function PushNotificationLayout({children}: any) {
   //       console.log('setToken: ', error);
   //     }
   //   }
-  // });
+  // }, []);
 
-  function getMessage() {
-    const messaging = getMessaging();
-    onMessage(messaging, (payload: MessagePayload) => {
-      if (payload) {
-        message.current = payload;
-        notifyHandler.on();
-      }
-    });
-  }
+  // function getMessage() {
+  //   const messaging = getMessaging();
+  //   onMessage(messaging, (payload: MessagePayload) => {
+  //     if (payload) {
+  //       // message.current = payload;
+  //       // notifyHandler.on();
+  //     }
+  //   });
+  // }
 
   return (
     <>

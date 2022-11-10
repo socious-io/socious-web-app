@@ -11,30 +11,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {twMerge} from 'tailwind-merge';
 import {useMediaQuery} from 'react-responsive';
-
-// Icons
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import ChatIcon from '@components/common/Icons/ChatIcon';
 import ProjectIcon from '@components/common/Icons/ProjectIcon';
 import FeedIcon from '@components/common/Icons/FeedIcon';
 import NotificationIcon from '@components/common/Icons/NotificationIcon';
-
-// Components
 import NavbarPopupMenu from '@components/common/NavbarPopupMenu';
 import {SearchBar} from '@components/common';
-
-// Imgs
 import imgSrc from '../../asset/icons/logo.svg';
 import feedImg from 'asset/images/socious_feed.png';
 import projectImg from 'asset/images/socious_project.png';
-
-// Hook
 import {useUser} from '@hooks';
-
-// Style
 import styles from './index.module.scss';
 
-// BannerType
 const bannerType = {
   feed: {
     title: 'Your Feed',
@@ -53,7 +42,6 @@ const bannerType = {
   },
 };
 
-// Types
 type TLayoutType = {
   hasNavbar?: boolean;
   style?: CSSProperties;
