@@ -23,10 +23,10 @@ export const schemaCreateOrganization = Joi.object({
       'any.required': `Email is a required field`,
       'string.email': `Email must be a valid email`,
     }),
-  country: Joi.string().required().messages({
+  country: Joi.string().messages({
     'any.required': `cannot be an empty field`,
   }),
-  city: Joi.string().required().messages({
+  city: Joi.string().messages({
     'any.required': `cannot be an empty field`,
   }),
   address: Joi.string().trim().allow(null, ''),

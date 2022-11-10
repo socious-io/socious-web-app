@@ -118,12 +118,12 @@ export const schemaProfileUpdate = Joi.object({
     'array.empty': `Please select {#limit} causes`,
   }),
 
-  country: Joi.string().required().label('Country').messages({
+  country: Joi.string().label('Country').messages({
     'any.required': `Please select a country`,
     'string.base': `Please select a country`,
     'string.empty': `Please select a country`,
   }),
-  city: Joi.string().required().label('City').messages({
+  city: Joi.string().label('City').messages({
     'any.required': `Please select a city`,
     'string.base': `Please select a city.`,
     'string.empty': `Please select a city.`,
