@@ -1,12 +1,19 @@
 import {useCallback, useRef} from 'react';
 
-import {useForm} from 'react-hook-form';
+import {Control, FieldValues, useController, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 // Validations
 import {schemaCreateProjectQuestion} from '@api/projects/validation';
 
 // Components/Icons
-import {Button, Checkbox, InputFiled, TextArea} from '@components/common';
+import {
+  Button,
+  Checkbox,
+  InputFiled,
+  TextArea,
+  Combobox,
+  Switch,
+} from '@components/common';
 import {PlusCircleIcon} from '@heroicons/react/24/outline';
 import {ExclamationCircleIcon, TrashIcon} from '@heroicons/react/24/solid';
 
@@ -22,7 +29,7 @@ export type OptionType = {
 };
 
 type QuestionAddProps = {onSubmit: (data: AddQuestionType) => void};
-
+type TDefaultQuestion = AddQuestionType<OptionType> & {type: 'CHOICE' | 'TEXT'};
 const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
   const {setProjectContext, ProjectContext} = useProjectContext();
   const lastInputRef = useRef<HTMLInputElement | null>(null);
@@ -34,20 +41,28 @@ const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
     setValue,
     getValues,
     watch,
+    control,
     formState: {errors, isDirty, isValid},
   } = useForm({
     resolver: joiResolver(schemaCreateProjectQuestion),
     defaultValues: {
+      type: editQuestion?.options?.length ? 'CHOICE' : 'TEXT',
       question: editQuestion?.question ?? '',
-      options: editQuestion?.options?.map((option, index) => ({
+      options: editQuestion?.options?.map((option: string, index: number) => ({
         id: index + 1,
         option,
       })),
       required: editQuestion?.required ?? false,
-    } as AddQuestionType<OptionType>,
+    } as TDefaultQuestion,
   });
 
+  console.log('ERRRORS :----: ', errors);
   const options = watch('options');
+  const type = watch('type');
+  const typeController = useController<FieldValues, string>({
+    control: control as unknown as Control<FieldValues, string>,
+    name: 'type',
+  });
 
   const removeItem = useCallback(
     (id: number) => {
@@ -110,7 +125,7 @@ const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
       question,
       required,
     };
-    if (!!options?.length) questionBody.options = options;
+    if (type === 'CHOICE' && !!options?.length) questionBody.options = options;
     onSubmit(questionBody);
   };
 
@@ -118,7 +133,16 @@ const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
     <div className="flex h-full w-full flex-col">
       <FromLayout type="FULL" className="!grow">
         <div className="grow overflow-y-scroll">
-          <div className="mx-4 my-4">
+          <div className="mx-4 my-4 space-y-8">
+            <Combobox
+              label="Question type"
+              required
+              items={[
+                {id: 'CHOICE', name: 'Multiple choice'},
+                {id: 'TEXT', name: 'Text'},
+              ]}
+              controller={typeController}
+            />
             <TextArea
               label="Question"
               placeholder="Question"
@@ -131,15 +155,17 @@ const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
               required
               rows={4}
             />
-            <Checkbox
-              checked={watch('required')}
-              className="items-center"
-              register={register('required')}
-              label="Require this question to be answered"
-            />
+            <div className="flex items-center justify-between">
+              <p>Require this question to be answered</p>
+              <Switch
+                value={watch('required')}
+                onChange={(status) => setValue('required', status)}
+              />
+            </div>
           </div>
           <div className="flex w-full grow flex-col bg-zinc-200">
-            {!!options?.length &&
+            {type === 'CHOICE' &&
+              !!options?.length &&
               options.map((option: OptionType, index: number) => (
                 <div key={option.id} className="flex items-center px-4">
                   <InputFiled
@@ -170,19 +196,22 @@ const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
                 </>
               </div>
             )}
-            <div className="flex items-center justify-center">
-              <Button
-                onClick={increaseCount}
-                variant="outline"
-                size="lg"
-                className="my-4 flex w-11/12 items-center justify-center bg-white font-semibold"
-                leftIcon={() => (
-                  <PlusCircleIcon width={20} height={20} color="#000000" />
-                )}
-              >
-                <div>Add choice</div>
-              </Button>
-            </div>
+            {type === 'CHOICE' && (
+              <div className="flex items-center justify-center">
+                <Button
+                  onClick={increaseCount}
+                  variant="outline"
+                  size="lg"
+                  disabled={!!options && options?.length >= 5}
+                  className="my-4 flex w-11/12 items-center justify-center bg-white font-semibold"
+                  leftIcon={() => (
+                    <PlusCircleIcon width={20} height={20} color="#000000" />
+                  )}
+                >
+                  <div>Add choice</div>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 
