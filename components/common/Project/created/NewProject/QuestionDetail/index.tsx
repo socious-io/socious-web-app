@@ -1,5 +1,4 @@
-import {useCallback, useEffect, useRef} from 'react';
-import {mutate} from 'swr';
+import {useCallback, useRef} from 'react';
 
 import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
@@ -13,19 +12,18 @@ import {ExclamationCircleIcon, TrashIcon} from '@heroicons/react/24/solid';
 
 // Context/Actions
 import {useProjectContext} from '../context';
-import {addQuestion, updateQuestion} from '@api/projects/actions';
 
 // Types
-import {AddQuestionType} from '@models/project';
-import {Question} from '@models/question';
 import {FromLayout} from '../Layout';
-type OptionType = {
+import {AddQuestionType} from '@models/project';
+export type OptionType = {
   id: number;
   option: string;
 };
-type QuestionAddProps = {projectId: string};
 
-const QuestionDetail = ({projectId}: QuestionAddProps) => {
+type QuestionAddProps = {onSubmit: (data: any) => void};
+
+const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
   const {setProjectContext, ProjectContext} = useProjectContext();
   const lastInputRef = useRef<HTMLInputElement | null>(null);
   const {editQuestion} = ProjectContext;
@@ -50,55 +48,6 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
   });
 
   const options = watch('options');
-
-  const handleAddUpdate = useCallback(async () => {
-    try {
-      const question = getValues('question');
-      const required = getValues('required');
-      const rawOptions = getValues('options');
-      const options: string[] | null =
-        rawOptions
-          ?.filter((item) => !!item.option)
-          .map((item: OptionType) => item.option) ?? null;
-      const questionBody: AddQuestionType = {
-        question,
-        required,
-      };
-      if (!!options?.length) questionBody.options = options;
-      let questions: Question[] | null = ProjectContext.questions;
-      if (editQuestion?.id) {
-        const response = await updateQuestion(
-          editQuestion.project_id,
-          editQuestion.id,
-          questionBody,
-        );
-        questions?.forEach((question, index) => {
-          if (questions)
-            questions[index] =
-              question.id === response.id ? response : question;
-        });
-      } else {
-        const response = await addQuestion(projectId, questionBody);
-        questions = [...(questions ?? []), response];
-      }
-      // Mutation for questionss
-      if (questions?.[0])
-        mutate(`/projects/${questions[0].project_id}/questions`, questions, {
-          populateCache: (result, _currentData) => {
-            return result;
-          },
-          revalidate: true,
-        });
-      setProjectContext({
-        ...ProjectContext,
-        editQuestion: null,
-        questions: questions,
-        formStep: 3,
-      });
-    } catch (error) {
-      console.log('ERROR :---: ', error);
-    }
-  }, [ProjectContext, editQuestion, getValues, projectId, setProjectContext]);
 
   const removeItem = useCallback(
     (id: number) => {
@@ -177,7 +126,7 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
           </div>
           <div className="flex w-full grow flex-col bg-zinc-200">
             {!!options?.length &&
-              options.map((option: OptionType, index) => (
+              options.map((option: OptionType, index: number) => (
                 <div key={option.id} className="flex items-center px-4">
                   <InputFiled
                     className="grow py-2 px-4"
@@ -201,9 +150,10 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
               ))}
             {errors?.options?.message && (
               <div className="flex items-center py-2 px-6 text-error">
-                {' '}
-                <ExclamationCircleIcon className="mr-1 h-5 w-5" />
-                {errors?.options?.message}
+                <>
+                  <ExclamationCircleIcon className="mr-1 h-5 w-5" />
+                  {errors?.options?.message}
+                </>
               </div>
             )}
             <div className="flex items-center justify-center">
@@ -224,7 +174,7 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
 
         <div className="flex h-20 items-end justify-end border-t p-4">
           <Button
-            onClick={handleSubmit(handleAddUpdate)}
+            onClick={handleSubmit(onSubmit)}
             disabled={!isDirty && isValid}
             type="button"
             className="'flex h-11 w-36 items-center justify-center"

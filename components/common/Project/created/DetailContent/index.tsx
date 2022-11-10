@@ -1,4 +1,4 @@
-import {FC, useMemo} from 'react';
+import {FC, useCallback, useMemo} from 'react';
 import {toast} from 'react-toastify';
 import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
 import useSWR, {useSWRConfig} from 'swr';
@@ -32,11 +32,18 @@ import {useToggle, useUser} from 'hooks';
 
 // Utils/Actions
 import {updateProjectById} from '@api/projects/actions';
+import {addQuestion, updateQuestion} from '@api/projects/actions';
 import {get} from 'utils/request';
 
 // Types
-import {CreateProjectType, Project, ProjectProps} from 'models/project';
+import {
+  AddQuestionType,
+  CreateProjectType,
+  Project,
+  ProjectProps,
+} from 'models/project';
 import {Question} from '@models/question';
+import {OptionType} from '../NewProject/QuestionDetail';
 
 // Library
 const libraries: Libraries = ['places'];
@@ -131,6 +138,8 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
   const isStep3 = ProjectContext.formStep === 3;
   const isStep4 = ProjectContext.formStep === 4;
 
+  const {editQuestion} = ProjectContext;
+
   const clickEditIcon = (formStep: number) => {
     setProjectContext({
       ...ProjectContext,
@@ -206,6 +215,63 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
     }
   };
 
+  const onSubmitQuestion: (data: any) => void = useCallback(
+    async (data: any) => {
+      try {
+        const {question, required, options: rawOptions} = data;
+        const options: string[] | null =
+          rawOptions
+            ?.filter((item: OptionType) => !!item.option)
+            .map((item: OptionType) => item.option) ?? null;
+        const questionBody: AddQuestionType = {
+          question,
+          required,
+        };
+        if (!!options?.length) questionBody.options = options;
+        let questions: Question[] | null = ProjectContext.questions;
+        if (editQuestion?.id) {
+          const response = await updateQuestion(
+            editQuestion.project_id,
+            editQuestion.id,
+            questionBody,
+          );
+          questions?.forEach((question, index) => {
+            if (questions)
+              questions[index] =
+                question.id === response.id ? response : question;
+          });
+        } else {
+          const response = await addQuestion(project.id, questionBody);
+          questions = [...(questions ?? []), response];
+        }
+        // Mutation for questionss
+        if (questions?.[0])
+          mutate(`/projects/${project.id}/questions`, questions, {
+            populateCache: (result, _currentData) => {
+              return result;
+            },
+            revalidate: true,
+          });
+        setProjectContext({
+          ...ProjectContext,
+          editQuestion: null,
+          questions: questions,
+          formStep: 3,
+        });
+      } catch (error) {
+        console.log('ERROR :---: ', error);
+      }
+    },
+    [
+      ProjectContext,
+      editQuestion?.id,
+      editQuestion?.project_id,
+      mutate,
+      project.id,
+      setProjectContext,
+    ],
+  );
+
   // EDIT MODALS
   const PageDisplay = () => {
     if (isStep0 && isLoaded) {
@@ -215,9 +281,14 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
     } else if (isStep2) {
       return <ProjectSkill onSubmit={onSubmit} rawSkills={rawSkills} />;
     } else if (isStep3) {
-      return <ProjectQuestion onSubmit={onSubmit} type="EDIT" />;
+      return (
+        <ProjectQuestion
+          onSubmit={() => setProjectContext(initContext)}
+          type="EDIT"
+        />
+      );
     } else if (isStep4) {
-      return <QuestionDetail projectId={project.id} />;
+      return <QuestionDetail onSubmit={onSubmitQuestion} />;
     }
   };
 
