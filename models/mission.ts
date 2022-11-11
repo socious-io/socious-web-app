@@ -1,5 +1,6 @@
 import {TApplicant} from './applicant';
-import {Project} from './project';
+import {MetaWithAddress, OtherIdentityMeta} from './identity';
+import {Project, TProjectIdentityMeta} from './project';
 
 export type TMissionStatus =
   | 'COMPLETE'
@@ -30,6 +31,14 @@ export interface IMission {
   assigner_id: string;
   offer_id: string;
   status: TMissionStatus;
+  project: Omit<Project, 'identity_meta'>;
+}
+
+export interface IInfiniteMission extends IMission {
   applicant: TMissionApplicant | null;
-  project: Project;
+  assignee: Omit<OtherIdentityMeta<MetaWithAddress>, 'following' | 'follower'>;
+  assigner: Omit<
+    OtherIdentityMeta<TProjectIdentityMeta>,
+    'following' | 'follower'
+  >;
 }
