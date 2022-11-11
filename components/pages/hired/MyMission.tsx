@@ -19,7 +19,7 @@ import ProjectInfoWithWrapper from '@components/organisms/applications/ProjectIn
 import {get} from 'utils/request';
 import {useUser} from '@hooks';
 import {getText} from '@socious/data';
-import {completeAssignment, stopAssignment} from '@api/employed/actions';
+import {completeAssignment, stopAssignment} from '@api/mission/actions';
 
 // Types
 import {IMission} from '@models/mission';
