@@ -50,12 +50,12 @@ const ProjectsCard: FC<ProjectsCardProps> = ({
                 <p>My applications</p>
               </li>
             </Link>
-            {/* <Link href={`/app/projects/hired/${username}`} passHref>
+            <Link href={`/app/hired/`} passHref>
               <li className="flex cursor-pointer items-center space-x-4">
                 <FolderIcon className="h-5" />
                 <p>Hired projects</p>
               </li>
-            </Link> */}
+            </Link>
           </>
         )}
       </ul>

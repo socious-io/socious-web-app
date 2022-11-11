@@ -1,11 +1,9 @@
-import {TApplicant, TApplicantStatus} from '@models/applicant';
 import {StatusListingSkeleton} from '@components/molecules/StatusListingSkeleton/StatusListingSkeleton';
 import Link from 'next/link';
 import useSWR from 'swr';
 import {Project} from '@models/project';
 import {get} from 'utils/request';
 import SplashScreen from 'layout/Splash';
-import {IOffer} from '@models/offer';
 import {IMission} from '@models/mission';
 import BodyCard from '@components/common/Project/component/BodyCard';
 import ApplicationMobileTop from '@components/organisms/applications/ApplicationMobileTop';
@@ -15,8 +13,8 @@ function UserHiredPositions() {
     <div className="w-full space-y-4">
       {/* Uncomment after Hired done */}
       <ApplicationMobileTop selectedTab="HIRED" />
-      <div className="flex hidden items-center rounded-2xl border border-grayLineBased bg-white p-6 sm:block">
-        <p className="text-xl font-semibold">My applications</p>
+      <div className="!mt-0 flex hidden items-center rounded-2xl border border-grayLineBased bg-white p-6 sm:block">
+        <p className="text-xl font-semibold">Hired projects</p>
       </div>
       <div className="divide-graylineBased mb-4 h-fit w-full divide-y border border-grayLineBased md:rounded-2xl">
         <StatusListingSkeleton<IMission>

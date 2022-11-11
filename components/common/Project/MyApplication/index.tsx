@@ -13,7 +13,7 @@ function MyApplicationBoxes() {
   return (
     <div className="w-full space-y-4">
       <ApplicationMobileTop selectedTab="APPLICATION" />
-      <div className="flex hidden items-center rounded-2xl border border-grayLineBased bg-white p-6 sm:block">
+      <div className="!mt-0 flex hidden items-center rounded-2xl border border-grayLineBased bg-white p-6 sm:block">
         <p className="text-xl font-semibold">My applications</p>
       </div>
       <div className="divide-graylineBased mb-4 h-fit w-full divide-y border border-grayLineBased md:rounded-2xl">
