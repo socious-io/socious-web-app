@@ -1,36 +1,32 @@
-import {FCM} from '@capacitor-community/fcm';
-import {PushNotifications} from '@capacitor/push-notifications';
+import {FirebaseMessaging} from '@capacitor-firebase/messaging';
 
-async function requestPermissions() {
-  await PushNotifications.requestPermissions();
-  await PushNotifications.register();
+export const checkPermissions = async () => {
+  const result = await FirebaseMessaging.checkPermissions();
+  return result.receive;
+};
 
-  FCM.subscribeTo({topic: 'test'})
-    .then((r) => console.log(`subscribed to topic`))
-    .catch((err) => console.log(err));
+export const requestPermissions = async () => {
+  const result = await FirebaseMessaging.requestPermissions();
+  return result.receive;
+};
 
-  // Unsubscribe from a specific topic
-  FCM.unsubscribeFrom({topic: 'test'})
-    .then(() => console.log(`unsubscribed from topic`))
-    .catch((err) => console.log(err));
+export const getToken = async (): Promise<string> => {
+  return FirebaseMessaging.getToken()
+    .then(({token}) => token)
+    .catch(() => '');
+};
 
-  // Get FCM token instead the APN one returned by Capacitor
-  FCM.getToken()
-    .then((r) => console.log(`Token ${r.token}`))
-    .catch((err) => console.log(err));
-
-  // Remove FCM instance
-  FCM.deleteInstance()
-    .then(() => console.log(`Token deleted`))
-    .catch((err) => console.log(err));
-
-  // Enable the auto initialization of the library
-  FCM.setAutoInit({enabled: true}).then(() => console.log(`Auto init enabled`));
-
-  // Check the auto initialization status
-  FCM.isAutoInitEnabled().then((r) => {
-    console.log('Auto init is ' + (r.enabled ? 'enabled' : 'disabled'));
+export const addNotificationReceivedListener = async () => {
+  await FirebaseMessaging.addListener('notificationReceived', (event) => {
+    console.log('notificationReceived', {event});
   });
-}
+};
 
-export {requestPermissions};
+export const getDeliveredNotifications = async () => {
+  const result = await FirebaseMessaging.getDeliveredNotifications();
+  return result.notifications;
+};
+
+export const subscribeToTopic = async (topic: string) => {
+  await FirebaseMessaging.subscribeToTopic({topic});
+};

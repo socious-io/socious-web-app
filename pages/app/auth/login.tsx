@@ -1,5 +1,4 @@
 import type {NextPage} from 'next';
-import {FirebaseMessaging} from '@capacitor-firebase/messaging';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
 import {useState, useCallback} from 'react';
@@ -14,15 +13,17 @@ import {InputFiled, Button, Modal} from '@components/common';
 import {schemaLogin} from '@api/auth/validation';
 import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
-import {DefaultErrorMessage, ErrorMessage, get} from 'utils/request';
+import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 import {useUser} from '@hooks';
 import {
-  ActionPerformed,
-  PushNotifications,
-  PushNotificationSchema,
-  Token,
-} from '@capacitor/push-notifications';
-// import {FCM} from '@capacitor-community/fcm';
+  addNotificationReceivedListener,
+  getDeliveredNotifications,
+  getToken,
+  requestPermissions,
+  subscribeToTopic,
+} from 'core/pushNotification';
+import {getDevices, saveDeviceToken} from '@api/devices/actions';
+import {DeviceBody} from '@models/devices';
 
 type Account = {
   email: string;
@@ -32,91 +33,6 @@ type Account = {
 export type LoginResp = {
   message?: 'success';
   error?: 'Not matched';
-};
-
-// const subToFCM = () => {
-//   // now you can subscribe to a specific topic
-//   FCM.subscribeTo({topic: 'test'})
-//     .then((r) => alert(`subscribed to topic`))
-//     .catch((err) => console.log(err));
-
-//   // Unsubscribe from a specific topic
-//   FCM.unsubscribeFrom({topic: 'test'})
-//     .then(() => alert(`unsubscribed from topic`))
-//     .catch((err) => console.log(err));
-
-//   // Get FCM token instead the APN one returned by Capacitor
-//   FCM.getToken()
-//     .then((r) => alert(`Token ${r.token}`))
-//     .catch((err) => console.log(err));
-
-//   // Remove FCM instance
-//   FCM.deleteInstance()
-//     .then(() => alert(`Token deleted`))
-//     .catch((err) => console.log(err));
-
-//   // Enable the auto initialization of the library
-//   FCM.setAutoInit({enabled: true}).then(() => alert(`Auto init enabled`));
-
-//   // Check the auto initialization status
-//   FCM.isAutoInitEnabled().then((r) => {
-//     console.log('Auto init is ' + (r.enabled ? 'enabled' : 'disabled'));
-//   });
-// };
-
-// this func working properly
-// const notificationInitializer = () => {
-//   console.log('initialize notification');
-//   PushNotifications.requestPermissions().then(({receive}) => {
-//     if (receive === 'granted') {
-//       PushNotifications.register().then(() => {
-//         console.log('register');
-//       });
-//     }
-//   });
-
-//   PushNotifications.addListener('registration', (token: Token) => {
-//     console.log('Push registration success, token: ' + token.value);
-//     // subToFCM();
-//   });
-
-//   PushNotifications.addListener('registrationError', (error: any) => {
-//     console.log('Error on registration: ' + JSON.stringify(error));
-//   });
-
-//   PushNotifications.addListener(
-//     'pushNotificationReceived',
-//     (notification: PushNotificationSchema) => {
-//       console.log('Push received: ' + JSON.stringify(notification));
-//     },
-//   );
-
-//   PushNotifications.addListener(
-//     'pushNotificationActionPerformed',
-//     (notification: ActionPerformed) => {
-//       console.log('Push action performed: ' + JSON.stringify(notification));
-//     },
-//   );
-// };
-
-const requestPermissions = async () => {
-  const result = await FirebaseMessaging.requestPermissions();
-  return result.receive;
-};
-
-const getToken = async () => {
-  const result = await FirebaseMessaging.getToken();
-  return result.token;
-};
-
-const subscribeToTopic = async () => {
-  await FirebaseMessaging.subscribeToTopic({topic: 'test'});
-};
-
-const addNotificationReceivedListener = async () => {
-  await FirebaseMessaging.addListener('notificationReceived', (event) => {
-    console.log('notificationReceived', {event});
-  });
 };
 
 const Login: NextPage = () => {
@@ -131,21 +47,70 @@ const Login: NextPage = () => {
     resolver: joiResolver(schemaLogin),
   });
 
-  const onLoginSucceed = async (resp: LoginResp) => {
-    if (resp.message === 'success') {
-      // await requestPermissions();
-      requestPermissions().then((resp) => {
-        if (resp === 'granted') {
-          const token = getToken();
-          console.log('FCM Token: ', token);
-          subscribeToTopic();
-          addNotificationReceivedListener();
-        }
-      });
-      console.log('success login');
+  const getFCMToken = async (
+    response: Awaited<ReturnType<typeof requestPermissions>>,
+  ): Promise<string> => {
+    if (response !== 'granted') {
+      console.log('User did not grant permission to use push notification');
+      throw Error;
+    }
+
+    return getToken().catch((e: Error) => {
+      console.log('error accrued during retrieving token', e);
+      return '';
+    });
+  };
+
+  const saveToken = async (token: string) => {
+    console.log('FCMToken: ', token);
+    if (!token) {
+      return;
+    }
+
+    const list = await getDevices();
+    console.log('list: ', list);
+    const savedToken = list.find(({id}) => id === token);
+
+    console.log('savedToken: ', savedToken);
+
+    if (savedToken) {
+      return savedToken;
+    }
+
+    const device: DeviceBody = {
+      token,
+      meta: {
+        os: 'IOS',
+      },
+    };
+    const resp = await saveDeviceToken(device);
+    console.log('saveDeviceToken: ', resp);
+    return resp.token;
+  };
+
+  const addListeners = () => {
+    console.log('addListeners');
+    addNotificationReceivedListener().then((n) =>
+      console.log('addNotificationReceivedListener: ', n),
+    );
+    getDeliveredNotifications().then((r) =>
+      console.log('getDeliveredNotifications', r),
+    );
+    subscribeToTopic('test-ios');
+  };
+
+  const onLoginSucceed = async ({message}: LoginResp) => {
+    if (message === 'success') {
+      // const alreadyGranted = (await checkPermissions()) === 'granted';
+
+      // if (alreadyGranted) {
+      //   router.push('/app/projects');
+      //   return;
+      // }
+
+      requestPermissions().then(getFCMToken).then(saveToken).then(addListeners);
       router.push('/app/projects');
     }
-    return resp;
   };
 
   const onLoginError = (e: Error) => {
@@ -153,7 +118,6 @@ const Login: NextPage = () => {
   };
 
   const onSubmit = () => {
-    // handleLoginRequest();
     const email = getValues('email');
     const password = getValues('password');
     login(email, password)
