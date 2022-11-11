@@ -1,7 +1,7 @@
 import {StatusListingSkeleton} from '@components/molecules/StatusListingSkeleton/StatusListingSkeleton';
 import Link from 'next/link';
 import useSWR from 'swr';
-import {Project} from '@models/project';
+import {Project, TProjectIdentityMeta} from '@models/project';
 import {get} from 'utils/request';
 import SplashScreen from 'layout/Splash';
 import {IMission} from '@models/mission';
@@ -18,9 +18,7 @@ function UserHiredPositions() {
       </div>
       <div className="divide-graylineBased mb-4 h-fit w-full divide-y border border-grayLineBased md:rounded-2xl">
         <StatusListingSkeleton<IMission>
-          // TODO: FIX
-          // url={'/user/missions?status=ACTIVE'}
-          url={'/user/missions'}
+          url={'/user/missions?status=ACTIVE'}
           title={'On-going'}
           rounded
           className="border-0"
@@ -34,9 +32,7 @@ function UserHiredPositions() {
         />
         {/* TODO: Completed offers */}
         <StatusListingSkeleton<IMission>
-          // TODO: FIX
-          // url={'/user/missions?status=COMPLETE'}
-          url={'/user/missions'}
+          url={'/user/missions?status=COMPLETE,CONFIRMED'}
           title={'Ended'}
           className="rounded-b-2xl border-0"
           renderList={(flattenData) => (
@@ -55,19 +51,16 @@ function UserHiredPositions() {
 export default UserHiredPositions;
 
 export const MissionCard = ({mission}: {mission: IMission}) => {
-  const {data: project} = useSWR<Project>(
-    `/projects/${mission.project_id}`,
-    get,
-  );
-  if (!project) return <SplashScreen />;
-
   return (
     <Link href={`/app/hired/${mission.id}`} passHref>
       <a>
         <BodyCard
-          project={project}
-          name={project.identity_meta.name}
-          image={project.identity_meta.image}
+          project={{
+            ...mission.project,
+            identity_meta: mission.assigner.meta,
+          }}
+          name={mission.assigner.meta.name}
+          image={mission.assigner.meta.image}
         />
       </a>
     </Link>

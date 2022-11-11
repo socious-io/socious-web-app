@@ -121,10 +121,15 @@ const MyOffer = ({offer, mutateOffer}: MyOfferProps) => {
               Withdraw
             </Button>
           </div>
-        ) : ['APPROVED', 'HIRED'].includes(status) ? (
+        ) : status === 'APPROVED' ? (
           <div className="m-4 rounded-2xl !border bg-offWhite p-4">
-            You have already <b>withdrawn</b> the offer from{' '}
+            You have already <b>approved</b> the offer from{' '}
             {project?.identity_meta?.name} for {project?.title}.
+          </div>
+        ) : status === 'HIRED' ? (
+          <div className="m-4 rounded-2xl !border bg-offWhite p-4">
+            You have already <b>hired</b> by {project?.identity_meta?.name} for{' '}
+            {project?.title}.
           </div>
         ) : (
           status === 'WITHDRAWN' && (
