@@ -55,10 +55,10 @@ const OfferPage: NextPage = () => {
         title={
           <p className="flex gap-2">
             <ChevronLeftIcon className="w-5" />
-            <span className="whitespace-nowrap">Back to my applications</span>
+            <span className="whitespace-nowrap">Back to hired projects</span>
           </p>
         }
-        url={`/app/applications`}
+        url={`/app/hired`}
       />
       <MyMission mission={mission} mutateMission={mutate} />
     </GeneralLayout>

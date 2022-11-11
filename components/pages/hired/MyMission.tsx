@@ -178,7 +178,9 @@ const MyMission = ({mission, mutateMission}: MyMissionProps) => {
       <ConfirmApplicantActionModal
         state={endingState === 'COMPLETED'}
         title="Mark as completed"
-        description={`Once the ${project?.identity_meta?.name} confirms the assignement completion, you will receive your payment.`}
+        description={`Once the ${
+          org?.name ?? 'organization'
+        } confirms the assignement completion, you will receive your payment.`}
         continueText="Confirm"
         nextStep={onAssignmentCompleted}
         cancel={() => setAssignmentEndState(null)}
