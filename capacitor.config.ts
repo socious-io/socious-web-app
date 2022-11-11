@@ -7,7 +7,7 @@ const config: CapacitorConfig = {
   bundledWebRuntime: false,
   server: {
     // TODO: this should only be applied to iOS
-    hostname: 'dev.socious.io',
+    hostname: 'socious.io',
   },
   plugins: {
     PushNotifications: {
