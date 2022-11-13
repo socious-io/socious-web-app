@@ -1,8 +1,12 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 
 import {Combobox, ComboBoxSelectionType} from '@components/common';
-import {countryISOtoName, countryOptions} from 'utils/country';
+import {countryISOtoName, countryOptions, formatCityName} from 'utils/geo';
+import useSWR from 'swr';
+import {GeoName} from '@models/geo';
+import useInfiniteSWR, {
+  TInfiniteResponse,
+} from 'hooks/useInfiniteSWR/useInfiniteSWR';
 
 /** Form fragment to edit country, city, and geoname_id */
 export function LocationFormFragment({
@@ -18,30 +22,23 @@ export function LocationFormFragment({
   const [countryName, setCountryName] = useState<string>(
     countryISOtoName.get(country) ?? '',
   );
+  const [filterCity, setFilterCity] = useState<string | null>(null);
 
-  //use-places-autocomplete: Method to get cities filtered by country. Returns Full city address.
-  const {
-    ready: cityReady,
-    value: cityValue,
-    suggestions: {status: cityStatus, data: cities},
-    setValue: setCitiesValue,
-  } = usePlacesAutocomplete({
-    requestOptions: {
-      language: 'en',
-      types: ['locality', 'administrative_area_level_3'],
-      componentRestrictions: {country: country},
-    },
-    debounce: 300,
-    cacheKey: `${country}-restricted`,
-  });
+  const {flattenData: cities} = useInfiniteSWR<GeoName>(
+    filterCity
+      ? `/geo/locations/country/${country}?limit=100&search=${encodeURIComponent(
+          filterCity,
+        )}`
+      : `/geo/locations/country/${country}?limit=100`,
+  );
 
   // Creating [] of cities for Combobox
   const filterCities = useMemo(
     () =>
-      cities.map(({place_id, description, structured_formatting}) => ({
-        id: place_id,
-        name: structured_formatting.main_text || description,
-      })) || [{id: 1, name: 'Tokyo'}],
+      cities?.map((city) => ({
+        id: city.id,
+        name: formatCityName(city),
+      })) || [{id: 1, name: 'Loading…'}],
     [cities],
   );
 
@@ -56,6 +53,7 @@ export function LocationFormFragment({
 
   const onCitySelected = useCallback(
     (data: ComboBoxSelectionType) => {
+      setFilterCity(null);
       setCity(data.name);
       setGeonameId(data.id);
     },
@@ -82,7 +80,7 @@ export function LocationFormFragment({
         label="City"
         selected={{id: geonameId, name: city}}
         onSelected={onCitySelected}
-        onChange={(e) => setCitiesValue(e.currentTarget.value || '')}
+        onChange={(e) => setFilterCity(e.currentTarget.value || null)}
         required
         name="city"
         items={filterCities}
