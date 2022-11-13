@@ -67,7 +67,7 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
           geonameId={selectedGeoId}
           setCountry={handleSetCountry}
           setCity={handleSetCity}
-          setGeonameId={undefined}
+          setGeonameId={handleSetGeoId}
           errorCity={formState?.errors?.['city']?.message}
           errorCountry={formState?.errors?.['country']?.message}
         />

@@ -29,6 +29,7 @@ export const schemaCreateOrganization = Joi.object({
   city: Joi.string().messages({
     'any.required': `cannot be an empty field`,
   }),
+  geoname_id: Joi.number().empty(null),
   address: Joi.string().trim().allow(null, ''),
   type: Joi.string().valid(...Object.values(enums.OrganizationType)),
   social_causes: Joi.array().items(

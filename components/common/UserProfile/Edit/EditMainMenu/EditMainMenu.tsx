@@ -17,6 +17,7 @@ import editIcon from 'asset/icons/edit.svg';
 
 // Socious Data
 import Data, {getText} from '@socious/data';
+import {LocationFormFragment} from '@components/organisms/data/location-form-fragment';
 const orgTypeData = Object.keys(Data.OrganizationType);
 
 // types
@@ -48,13 +49,13 @@ const EditMainMenu = ({
     getValues,
   } = formMethods;
   const [countryKey, setCountryKey] = useState<string>();
-  const [countryName, setCountryName] = useState<any>('');
 
   const bio = watch('bio');
   const skills = watch('skills');
   const passions = watch('passions');
   const countryCode = watch('country');
   const selectedCity = watch('city');
+  const geoId = watch('geoname_id');
   const countryNumber = watch('countryNumber');
   const userType = watch('userType');
 
@@ -67,33 +68,13 @@ const EditMainMenu = ({
 
   //use-places-autocomplete: Method to get countries.
   const {
-    ready: countryReady,
-    value: countryValue,
-    suggestions: {status: countryStatus, data: countries},
+    suggestions: {data: countries},
     setValue: setCountryValue,
   } = usePlacesAutocomplete({
     requestOptions: {language: 'en', types: ['country']},
     debounce: 300,
     cacheKey: 'country-restricted',
   });
-
-  //use-places-autocomplete: Method to get cities filtered by country. Returns Full city address.
-  const {
-    ready: cityReady,
-    value: cityValue,
-    suggestions: {status: cityStatus, data: cities},
-    setValue: setCitiesValue,
-  } = usePlacesAutocomplete({
-    requestOptions: {
-      language: 'en',
-      types: ['locality', 'administrative_area_level_3'],
-      componentRestrictions: {country: countryCode},
-    },
-    debounce: 300,
-    cacheKey: `${countryCode}-restricted`,
-  });
-
-  //Creating [] of countries for Combobox
   const filterCountries = useMemo(
     () =>
       countries.map(({place_id, description}) => ({
@@ -103,20 +84,9 @@ const EditMainMenu = ({
     [countries],
   );
 
-  // Creating [] of cities for Combobox
-  const filterCities = useMemo(
-    () =>
-      cities.map(({place_id, description, structured_formatting}) => ({
-        id: place_id,
-        name: structured_formatting.main_text || description,
-      })) || [{id: 1, name: 'Tokyo'}],
-    [cities],
-  );
-
-  //form-hook: Method for applying city to 'city'
-  const handleSetCity = useCallback(
-    (data: any) => {
-      setValue('city', data?.name, {
+  const handleSetGeoId = useCallback(
+    (data: number | null) => {
+      setValue('geoname_id', data, {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -124,19 +94,27 @@ const EditMainMenu = ({
     [setValue],
   );
 
-  //form-hook: Method for applying country to 'country'
-  const handleSetCountry = useCallback(
-    (countryCode: any) => {
-      setValue('country', countryCode, {
+  const handleSetCity = useCallback(
+    (data: string | null) => {
+      setValue('city', data, {
         shouldValidate: true,
         shouldDirty: true,
       });
-      if (selectedCity) handleSetCity('');
     },
-    [handleSetCity, selectedCity, setValue],
+    [setValue],
   );
 
-  //form-hook: Method for applying country to 'country'
+  const handleSetCountry = useCallback(
+    (newCountryCode: string | null) => {
+      setValue('country', newCountryCode, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      if (newCountryCode !== countryCode) handleSetCity('');
+    },
+    [countryCode, handleSetCity, setValue],
+  );
+
   const handleSetCountryNumber = useCallback(
     (data: string) => {
       setValue('countryNumber', data, {
@@ -147,7 +125,6 @@ const EditMainMenu = ({
     [setValue],
   );
 
-  //form-hook: Method for applying 'phoneNumber'
   const handleSetPhoneNumber = useCallback(
     (phoneNumber: string) => {
       setValue('phoneNumber', phoneNumber.replaceAll(/[ -]/g, '') || '', {
@@ -168,23 +145,6 @@ const EditMainMenu = ({
       .catch((error) => console.error(error));
   }, [countryKey, handleSetCountryNumber]);
 
-  // Method to get Country-Code('jp') on countrySelected and calls 'handleSetCountry'.
-  const onCountrySelected = useCallback(
-    (data: any) => {
-      setCountryName(data.name);
-      getGeocode({placeId: data.id})
-        .then((result: any) => {
-          const countryCode =
-            result?.[0]?.address_components[0]?.short_name?.toLowerCase();
-          handleSetCountry(countryCode);
-          // Remove this if no need to change countryNumber
-          setCountryKey(countryCode);
-        })
-        .catch((error: any) => console.error(error));
-    },
-    [handleSetCountry],
-  );
-
   //Set CountryKey for phoneNumber
   const onCountrySelectedForNumber = useCallback((data: any) => {
     getGeocode({placeId: data.id})
@@ -198,10 +158,8 @@ const EditMainMenu = ({
 
   //Set Default Country when country is available.
   useEffect(() => {
-    if (countryCode)
-      setCountryName(regionNames.of(countryCode?.toUpperCase() ?? 'JP'));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (countryCode) setCountryKey(countryCode);
+  }, [countryCode, regionNames]);
 
   // Organization Types
   //Passions
@@ -406,29 +364,15 @@ const EditMainMenu = ({
                     className="my-6"
                   />
                 )}
-                <Combobox
-                  label="Country"
-                  onSelected={onCountrySelected}
-                  selected={{id: countryCode ?? 123, name: countryName}}
-                  onChange={(e) => setCountryValue(e.currentTarget.value || '')}
-                  required
-                  name="country"
-                  items={filterCountries}
-                  placeholder="Country"
-                  errorMessage={formState?.errors?.['country']?.message}
-                  className="my-6"
-                />
-                <Combobox
-                  label="City"
-                  selected={{id: countryCode ?? 123, name: selectedCity}}
-                  onSelected={handleSetCity}
-                  onChange={(e) => setCitiesValue(e.currentTarget.value || '')}
-                  required
-                  name="city"
-                  items={filterCities}
-                  placeholder="City"
-                  errorMessage={formState?.errors?.['city']?.message}
-                  className="my-6"
+                <LocationFormFragment
+                  country={countryCode}
+                  city={selectedCity}
+                  geonameId={geoId}
+                  setCountry={handleSetCountry}
+                  setCity={handleSetCity}
+                  setGeonameId={handleSetGeoId}
+                  errorCity={formState?.errors?.['city']?.message}
+                  errorCountry={formState?.errors?.['country']?.message}
                 />
                 <InputFiled
                   label="Address"

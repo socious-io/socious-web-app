@@ -151,6 +151,7 @@ export function Combobox({
                         }`
                       }
                       value={item}
+                      title={item.name}
                     >
                       {({selected, active}) => (
                         <>

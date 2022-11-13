@@ -166,6 +166,7 @@ const EditProfileModal = ({
         passions: social_causes,
         country,
         city,
+        geoname_id,
         address,
         countryNumber: mobile_country_code,
         phoneNumber: phone,
@@ -177,6 +178,7 @@ const EditProfileModal = ({
         social_causes,
         country,
         city,
+        geoname_id,
       };
       if (address) updateProfileBody.address = address;
       if (mobile_country_code)

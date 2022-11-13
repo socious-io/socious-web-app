@@ -3,9 +3,14 @@ import {getAllISOCodes} from 'iso-country-currency';
 import {ComboBoxSelectionType} from '@components/common';
 import {GeoName} from '@models/geo';
 
+interface CountryComboBoxSelectionType extends ComboBoxSelectionType {
+  /** Lowercase name, for search/filter */
+  lower: string;
+}
+
 export const countryISOtoName = new Map<string, string>();
 export const countryNameToISO = new Map<string, string>();
-export const countryOptions: Array<ComboBoxSelectionType> = [];
+export const countryOptions: Array<CountryComboBoxSelectionType> = [];
 
 for (const iso of getAllISOCodes()) {
   countryISOtoName.set(iso.iso, iso.countryName);
@@ -13,6 +18,7 @@ for (const iso of getAllISOCodes()) {
   countryOptions.push({
     id: iso.iso,
     name: iso.countryName,
+    lower: iso.countryName.toLowerCase(),
   });
 }
 

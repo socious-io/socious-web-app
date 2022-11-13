@@ -115,6 +115,7 @@ export interface IUpdateProfileBody {
   bio: string;
   country: string;
   city: string;
+  geoname_id: number | null;
   address?: string;
   mission?: string;
   mobile_country_code?: string;

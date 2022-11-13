@@ -128,6 +128,7 @@ export const schemaProfileUpdate = Joi.object({
     'string.base': `Please select a city.`,
     'string.empty': `Please select a city.`,
   }),
+  geoname_id: Joi.number().empty(null),
   countryNumber: Joi.string().allow(null, '').label('countryNumber'),
   phoneNumber: Joi.string()
     .allow(null, '')

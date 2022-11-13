@@ -2,11 +2,20 @@ import React, {SyntheticEvent, useCallback, useMemo, useState} from 'react';
 
 import {Combobox, ComboBoxSelectionType} from '@components/common';
 import {countryISOtoName, countryOptions, formatCityName} from 'utils/geo';
-import useSWR from 'swr';
 import {GeoName} from '@models/geo';
-import useInfiniteSWR, {
-  TInfiniteResponse,
-} from 'hooks/useInfiniteSWR/useInfiniteSWR';
+import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
+import {FieldError, Merge, FieldErrorsImpl} from 'react-hook-form';
+
+export interface LocationFormFragmentProps {
+  country: string | null;
+  city: string | null;
+  geonameId?: number | null;
+  setCountry: (value: string) => void;
+  setCity: (value: string) => void;
+  setGeonameId?: (value: number) => void;
+  errorCity?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
+  errorCountry?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
+}
 
 /** Form fragment to edit country, city, and geoname_id */
 export function LocationFormFragment({
@@ -18,9 +27,9 @@ export function LocationFormFragment({
   setGeonameId,
   errorCity,
   errorCountry,
-}: any): JSX.Element {
+}: LocationFormFragmentProps): JSX.Element {
   const [countryName, setCountryName] = useState<string>(
-    countryISOtoName.get(country) ?? '',
+    country ? countryISOtoName.get(country) ?? '' : '',
   );
   const [filterCity, setFilterCity] = useState<string | null>(null);
 
@@ -59,7 +68,7 @@ export function LocationFormFragment({
     (data: ComboBoxSelectionType) => {
       setFilterCity(null);
       setCity(data.name);
-      setGeonameId && setGeonameId(data.id);
+      setGeonameId && setGeonameId(Number(data.id));
     },
     [setCity, setGeonameId],
   );
