@@ -190,7 +190,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 
     if (bio) profileBody.bio = bio;
     if (city) profileBody.city = city;
-    if (country?.code) profileBody.country = country.code;
+    if (country) profileBody.country = country;
 
     updateProfile(profileBody)
       .then(() => {

@@ -124,6 +124,7 @@ const EditProfileModal = ({
       passions: user?.social_causes ?? [],
       country: user?.country,
       city: user?.city,
+      geoname_id: user?.geoname_id ?? null,
       address: user?.address,
       countryNumber: user?.mobile_country_code,
       phoneNumber: user?.phone,
