@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {Fragment, useEffect, useState} from 'react';
+import {Fragment, UIEventHandler, useEffect, useState} from 'react';
 import {Combobox as UiCombobox, Transition} from '@headlessui/react';
 import {CheckIcon, ChevronDownIcon} from '@heroicons/react/24/solid';
 import {twMerge} from 'tailwind-merge';
@@ -27,6 +27,7 @@ export interface ComboboxProps
   selected?: any;
   onSelected?: (value: any) => void;
   onChangeInputSearch?: (value: any) => void;
+  onScrollOptions?: UIEventHandler<HTMLUListElement>;
   items: Array<ComboBoxSelectionType | any>;
 }
 
@@ -43,7 +44,7 @@ export function Combobox({
   controller,
   onSelected,
   onChangeInputSearch,
-  onScroll,
+  onScrollOptions,
   ...props
 }: ComboboxProps) {
   const [query, setQuery] = useState('');
@@ -132,7 +133,7 @@ export function Combobox({
             >
               <UiCombobox.Options
                 className="absolute top-full right-0 z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                onScroll={onScroll}
+                onScroll={onScrollOptions}
               >
                 {filteredItems.length === 0 && query !== '' ? (
                   <div className="relative cursor-default select-none py-2 px-4 text-gray-700">

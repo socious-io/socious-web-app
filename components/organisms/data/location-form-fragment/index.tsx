@@ -97,7 +97,7 @@ export function LocationFormFragment({
         selected={{id: geonameId, name: city}}
         onSelected={onCitySelected}
         onChange={(e) => setFilterCity(e.currentTarget.value || null)}
-        onScroll={onCityScroll}
+        onScrollOptions={onCityScroll}
         required
         name="city"
         items={filterCities}
