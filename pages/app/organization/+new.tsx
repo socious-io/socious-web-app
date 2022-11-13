@@ -67,7 +67,6 @@ const CreateOrganization = () => {
   };
 
   const requestHandler = async (data: CreateOrganizationType) => {
-    console.log('data', data);
     try {
       const response = await create_organization(data);
       //set organization name

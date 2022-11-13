@@ -18,7 +18,7 @@ const ProjectMobileTop = ({
     {
       id: 'OVERVIEW',
       value: 'Overview',
-      url: `/app/projects/${projectId}`,
+      url: `/app/projects/created/overview/${projectId}`,
     },
   ];
   const privateList = [

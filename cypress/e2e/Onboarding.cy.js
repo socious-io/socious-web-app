@@ -3,11 +3,15 @@ import OnboardingElements from '../e2e/elements/OnboardingElements';
 import OnboardingMethods from '../e2e/methods/OnboardingMethods';
 
 const onboardingMethods = new OnboardingMethods();
-// TODO need email solution
-describe.skip('User Onboarding', () => {
+describe('User Onboarding', () => {
   beforeEach('Navigate to the home page, then Login page', () => {
+    onboardingMethods.setupTestUser();
+    onboardingMethods.logout();
     onboardingMethods.navigateToHome();
     onboardingMethods.clickOnLoginButton();
+  });
+  afterEach('Log out', () => {
+    onboardingMethods.logout();
   });
   specify('User logs in for the first time', () => {
     onboardingMethods.setEmail();

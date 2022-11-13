@@ -32,7 +32,7 @@ interface Props {
   data: any;
   status: IdentityType;
   profile_mutate: KeyedMutator<any>;
-  editProfile?: () => void;
+  editProfile: () => void;
 }
 
 const MainContent: React.FC<Props> = ({
@@ -128,10 +128,12 @@ const MainContent: React.FC<Props> = ({
           />
         )}
         <Description paragraph={data?.mission} title="Mission" />
+        {currentIdentity?.type === 'organizations' && (
+          <Description paragraph={data?.culture} title="Culture" />
+        )}
         {status === 'users' && <Skills skills={data?.skills} />}
         <hr className="mb-20 border-grayLineBased" />
       </div>
-
       <div className="w-full md:w-2/6">
         <RightPaneContainer
           title="Activity"

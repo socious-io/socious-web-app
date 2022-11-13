@@ -18,7 +18,7 @@ interface ProjectPreviewProps {
 
 export const ProjectPreview = ({id}: ProjectPreviewProps) => {
   const {skills} = useSkills();
-  const {data, mutate} = useSWR<Project>(`/projects/${id}`, get);
+  const {data} = useSWR<Project>(`/projects/${id}`, get);
 
   if (!data) {
     return <>Loading</>;
@@ -30,7 +30,7 @@ export const ProjectPreview = ({id}: ProjectPreviewProps) => {
         skills={skills}
         projectId={id}
         className="rounded-none border-0"
-        data={{data, mutate}}
+        data={data}
       />
     </ProjectContextProvider>
   );

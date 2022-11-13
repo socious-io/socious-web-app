@@ -1,4 +1,14 @@
-export type TOffer = {
+import {Project} from './project';
+
+export type TOfferStatus =
+  | 'PENDING'
+  | 'WITHDRAWN'
+  | 'APPROVED'
+  | 'HIRED'
+  | 'CLOSED'
+  | 'CANCELED';
+
+export interface IOffer {
   id: string;
   project_id: string;
   recipient_id: string;
@@ -15,4 +25,8 @@ export type TOffer = {
   total_hours: number | null;
   created_at: string;
   updated_at: string;
-};
+}
+
+export interface IOfferWithProject extends IOffer {
+  project: Project;
+}

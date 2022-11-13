@@ -138,8 +138,9 @@ export const schemaOnboardingStep6 = Joi.object({
     }),
 });
 export const schemaOnboardingStep7 = Joi.object({
-  bio: Joi.string().max(160).required().label('Bio').messages({
+  bio: Joi.string().trim().max(160).required().label('Bio').messages({
     'any.required': `cannot be an empty field`,
+    'string.max': `Please enter 160 characters or below.`,
   }),
 });
 

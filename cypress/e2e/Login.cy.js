@@ -2,10 +2,14 @@
 import LoginMethods from '/cypress/e2e/methods/LoginMethods';
 
 const loginMethods = new LoginMethods();
-describe.skip('Login', () => {
+describe('Login', () => {
   beforeEach('Navigate to the home page, then login page', () => {
+    loginMethods.logout();
     loginMethods.navigateToHome();
-    // loginMethods.clickOnLoginButton();
+    loginMethods.clickOnLoginButton();
+  });
+  afterEach('Log out', () => {
+    loginMethods.logout();
   });
   specify("User can't login without entering email and password", () => {
     loginMethods.clickOnContinueButton();

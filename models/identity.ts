@@ -6,7 +6,7 @@ export type IdentityMeta = {
   username?: string;
   shortname?: string;
   image?: string;
-  status?: string;
+  status?: IdentityStatus;
 };
 
 export type MetaWithAddress = IdentityMeta & {
@@ -34,3 +34,5 @@ export type LoginIdentity = {
   primary?: boolean;
   current?: boolean;
 };
+
+export type IdentityStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPEND';

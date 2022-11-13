@@ -12,12 +12,14 @@ import {get} from 'utils/request';
 // Types
 import {Project} from '@models/project';
 interface ProjectsCardProps {
-  username: string;
   projectDetail: Project;
 }
 
 const HiredLink = ({id}: {id: string}) => {
-  const {data: missions} = useSWR<any>(`/projects/${id}/missions`, get);
+  const {data: missions} = useSWR<any>(
+    `/projects/${id}/offers?status=APPROVED,HIRED`,
+    get,
+  );
   return (
     <Link href={`/app/projects/created/${id}/hired`} passHref>
       <li className="flex items-center space-x-4">
@@ -29,7 +31,7 @@ const HiredLink = ({id}: {id: string}) => {
 };
 
 const ProjectCard: FC<ProjectsCardProps> = (props) => {
-  const {username, projectDetail} = props;
+  const {projectDetail} = props;
   const {currentIdentity} = useUser();
 
   const applicantLink = (
@@ -59,7 +61,10 @@ const ProjectCard: FC<ProjectsCardProps> = (props) => {
       </Link>
       <ul className="list-none space-y-4">
         <>
-          <Link href={`/app/projects/created/overview/${username}`} passHref>
+          <Link
+            href={`/app/projects/created/overview/${projectDetail.id}`}
+            passHref
+          >
             <li className="flex items-center space-x-4">
               <UserCircleIcon className="h-4" />
               <p>Overview</p>
