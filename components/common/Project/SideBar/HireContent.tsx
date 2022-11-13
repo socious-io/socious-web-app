@@ -24,13 +24,6 @@ function HiredContent({projectId, type}: HireContentProps) {
           type === 'FULL' && 'my-0 w-full',
         )}
       >
-        {/* // <StatusListingSkeleton<IOffer>
-        //   url={'/user/offers?status=APPROVED,HIRED'}
-        //   title="Hired"
-        //   renderList={(data) => (
-        //     <>
-        //       {data.map((offer) => (
-        //         <EscrowCard key={offer.id} offer={offer} /> */}
         <StatusListingSkeleton<IOffer>
           url={
             projectId

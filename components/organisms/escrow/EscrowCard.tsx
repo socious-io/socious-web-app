@@ -5,10 +5,10 @@ import {
   CurrencyDollarIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
-import {TOffer} from '@models/offer';
+import {IOffer} from '@models/offer';
 
 type EscrowCardType = {
-  offer?: TOffer;
+  offer?: IOffer;
 };
 
 const EscrowCard = ({offer}: EscrowCardType) => {

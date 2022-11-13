@@ -2,7 +2,6 @@ import ProjectMobileTop from '@components/common/Project/ProjectMobileTop/Projec
 import HiredContent from '@components/common/Project/SideBar/HireContent';
 import SideBar from '@components/common/Project/SideBar/SideBar';
 import {useUser} from '@hooks';
-import {TApplicantsResponse} from '@models/applicant';
 import {Project} from '@models/project';
 import {GeneralLayout} from 'layout';
 import {useRouter} from 'next/router';

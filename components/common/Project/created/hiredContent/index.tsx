@@ -25,7 +25,7 @@ function HiredInfo({offer, user}: HiredInfoProps) {
         name={user.first_name + ` ${user.last_name}`}
         avatar={user.avatar?.url}
         username={user?.username ?? ''}
-        paymentRate={offer.offer_rate ?? undefined}
+        paymentRate={offer.offer_rate?.toString() ?? undefined}
         paymentType={offer.payment_type ?? undefined}
         endHire={() => console.log('ENDHIRE')}
       />
