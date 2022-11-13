@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {SyntheticEvent, useCallback, useMemo, useState} from 'react';
 
 import {Combobox, ComboBoxSelectionType} from '@components/common';
 import {countryISOtoName, countryOptions, formatCityName} from 'utils/geo';
@@ -24,12 +24,16 @@ export function LocationFormFragment({
   );
   const [filterCity, setFilterCity] = useState<string | null>(null);
 
-  const {flattenData: cities} = useInfiniteSWR<GeoName>(
+  const {
+    flattenData: cities,
+    loadMore,
+    seeMore,
+  } = useInfiniteSWR<GeoName>(
     filterCity
-      ? `/geo/locations/country/${country}?limit=100&search=${encodeURIComponent(
+      ? `/geo/locations/country/${country}?limit=50&search=${encodeURIComponent(
           filterCity,
         )}`
-      : `/geo/locations/country/${country}?limit=100`,
+      : `/geo/locations/country/${country}?limit=50`,
   );
 
   // Creating [] of cities for Combobox
@@ -55,9 +59,21 @@ export function LocationFormFragment({
     (data: ComboBoxSelectionType) => {
       setFilterCity(null);
       setCity(data.name);
-      setGeonameId(data.id);
+      setGeonameId && setGeonameId(data.id);
     },
     [setCity, setGeonameId],
+  );
+
+  const onCityScroll = useCallback(
+    (event: SyntheticEvent) => {
+      if (seeMore) {
+        const {scrollTop, scrollHeight, clientHeight} = event.currentTarget;
+        if (scrollTop >= scrollHeight - clientHeight * 2) {
+          loadMore();
+        }
+      }
+    },
+    [loadMore, seeMore],
   );
 
   return (
@@ -81,6 +97,7 @@ export function LocationFormFragment({
         selected={{id: geonameId, name: city}}
         onSelected={onCitySelected}
         onChange={(e) => setFilterCity(e.currentTarget.value || null)}
+        onScroll={onCityScroll}
         required
         name="city"
         items={filterCities}

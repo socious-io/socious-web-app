@@ -43,6 +43,7 @@ export function Combobox({
   controller,
   onSelected,
   onChangeInputSearch,
+  onScroll,
   ...props
 }: ComboboxProps) {
   const [query, setQuery] = useState('');
@@ -129,7 +130,10 @@ export function Combobox({
               leaveTo="transform scale-95 opacity-0"
               afterLeave={() => setQuery('')}
             >
-              <UiCombobox.Options className="absolute top-full right-0 z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              <UiCombobox.Options
+                className="absolute top-full right-0 z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                onScroll={onScroll}
+              >
                 {filteredItems.length === 0 && query !== '' ? (
                   <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                     Nothing found.

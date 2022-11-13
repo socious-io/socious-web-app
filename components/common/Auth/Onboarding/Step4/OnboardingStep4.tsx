@@ -17,10 +17,9 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
   const selectedCity = watch('city');
   const selectedGeoId = watch('geoname_id');
 
-  //form-hook: Method for applying city to 'city'
   const handleSetCity = useCallback(
-    (data: any) => {
-      setValue('city', data?.name, {
+    (data: string | null) => {
+      setValue('city', data, {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -28,9 +27,18 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
     [setValue],
   );
 
-  //form-hook: Method for applying country to 'country'
+  const handleSetGeoId = useCallback(
+    (data: number | null) => {
+      setValue('geoname_id', data, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    [setValue],
+  );
+
   const handleSetCountry = useCallback(
-    (countryCode: any) => {
+    (countryCode: string | null) => {
       setValue('country', countryCode, {
         shouldValidate: true,
         shouldDirty: true,
