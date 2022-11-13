@@ -38,6 +38,8 @@ import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 import Router from 'next/router';
 import {checkAndUploadMedia} from 'services/ImageUpload';
 import {Capacitor} from '@capacitor/core';
+import useSWR from 'swr';
+import {GeoIP} from '@models/geo';
 
 const schemaStep = {
   2: schemaOnboardingStep2,
@@ -63,6 +65,8 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   });
 
   const {user} = useUser();
+  const {data: geoIp, error: geoIpError} = useSWR<GeoIP>('/geo/ip');
+
   const [errorMessage, setError] = useState<ErrorMessage>();
 
   const [step, setStep] = useState<number>(1);
@@ -92,7 +96,15 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     },
   });
 
-  const formMethodsStep4 = useForm({resolver: joiResolver(schemaStep[4])});
+  const formMethodsStep4 = useForm({
+    resolver: joiResolver(schemaStep[4]),
+  });
+  if (geoIp && !formMethodsStep4.getValues('country'))
+    formMethodsStep4.setValue('country', geoIp.country);
+  if (geoIp && !formMethodsStep4.getValues('geoname_id')) {
+    formMethodsStep4.setValue('city', geoIp.city);
+    formMethodsStep4.setValue('geoname_id', geoIp.id);
+  }
   const formMethodsStep5 = useForm({
     defaultValues: {
       availableProject: 'true',
@@ -175,6 +187,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     const bio = formMethodsStep7.getValues('bio');
     const passions = formMethodsStep2.getValues('passions');
     const city = formMethodsStep4.getValues('city');
+    const geoname_id = formMethodsStep4.getValues('geoname_id');
     const country = formMethodsStep4.getValues('country');
     const skills = formMethodsStep3.getValues('skills');
 
@@ -190,6 +203,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 
     if (bio) profileBody.bio = bio;
     if (city) profileBody.city = city;
+    if (geoname_id) profileBody.geoname_id = geoname_id;
     if (country) profileBody.country = country;
 
     updateProfile(profileBody)
@@ -316,7 +330,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
         </FormProvider>
         <FormProvider {...formMethodsStep6}>
           {step === 6 && (
-            <OnboardingStep6 onSubmit={handleSubmit} defaultCountry={placeId} />
+            <OnboardingStep6 onSubmit={handleSubmit} geoIp={geoIp} />
           )}
         </FormProvider>
         <FormProvider {...formMethodsStep7}>

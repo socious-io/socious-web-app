@@ -2,6 +2,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 
 import {Combobox} from '@components/common';
+import {countryISOtoName} from 'utils/country';
 
 /** Form fragment to edit country, city, and geoname_id */
 export function LocationFormFragment({
@@ -14,7 +15,9 @@ export function LocationFormFragment({
   errorCity,
   errorCountry,
 }: any): JSX.Element {
-  const [countryName, setCountryName] = useState<string>('');
+  const [countryName, setCountryName] = useState<string>(
+    countryISOtoName.get(country) ?? '',
+  );
 
   //use-places-autocomplete: Method to get countries.
   const {
@@ -70,8 +73,7 @@ export function LocationFormFragment({
       setCountryName(data.name);
       getGeocode({placeId: data.id})
         .then((result: any) => {
-          const countryCode =
-            result?.[0]?.address_components[0]?.short_name?.toLowerCase();
+          const countryCode = result?.[0]?.address_components[0]?.short_name;
           if (country) setCity('');
           setCountry(countryCode);
         })

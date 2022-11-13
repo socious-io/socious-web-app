@@ -15,7 +15,7 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
 
   const selectedCountryCode = watch('country');
   const selectedCity = watch('city');
-  const selectedGeoId = watch('geonameId');
+  const selectedGeoId = watch('geoname_id');
 
   //form-hook: Method for applying city to 'city'
   const handleSetCity = useCallback(
@@ -54,7 +54,7 @@ const OnboardingStep4 = ({onSubmit}: StepProps) => {
           you
         </p>
         <LocationFormFragment
-          country={selectedCountryCode?.code}
+          country={selectedCountryCode}
           city={selectedCity}
           geonameId={selectedGeoId}
           setCountry={handleSetCountry}

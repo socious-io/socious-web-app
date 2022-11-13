@@ -11,17 +11,14 @@ import {getPhoneCode} from 'services/getPhoneCode';
 
 // Types
 import {StepProps} from '@models/stepProps';
-interface OnboardingStep6Props extends StepProps {
-  defaultCountry: string;
-}
 
-const OnboardingStep6 = ({onSubmit, defaultCountry}: OnboardingStep6Props) => {
+const OnboardingStep6 = ({onSubmit, geoIp}: StepProps) => {
   const formMethods = useFormContext();
   const {handleSubmit, formState, getValues, setValue, watch} = formMethods;
 
   const countryNumber = watch('countryNumber');
   const phoneNumber = watch('phoneNumber');
-  const [countryKey, setCountryKey] = useState<string>(defaultCountry);
+  const [countryKey, setCountryKey] = useState<string>(geoIp?.country || '');
 
   //use-places-autocomplete: Method to get countries.
   const {
