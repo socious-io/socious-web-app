@@ -1,8 +1,8 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 
-import {Combobox} from '@components/common';
-import {countryISOtoName} from 'utils/country';
+import {Combobox, ComboBoxSelectionType} from '@components/common';
+import {countryISOtoName, countryOptions} from 'utils/country';
 
 /** Form fragment to edit country, city, and geoname_id */
 export function LocationFormFragment({
@@ -18,18 +18,6 @@ export function LocationFormFragment({
   const [countryName, setCountryName] = useState<string>(
     countryISOtoName.get(country) ?? '',
   );
-
-  //use-places-autocomplete: Method to get countries.
-  const {
-    ready: countryReady,
-    value: countryValue,
-    suggestions: {status: countryStatus, data: countries},
-    setValue: setCountryValue,
-  } = usePlacesAutocomplete({
-    requestOptions: {language: 'en', types: ['country']},
-    debounce: 300,
-    cacheKey: 'country-restricted',
-  });
 
   //use-places-autocomplete: Method to get cities filtered by country. Returns Full city address.
   const {
@@ -47,16 +35,6 @@ export function LocationFormFragment({
     cacheKey: `${country}-restricted`,
   });
 
-  //Creating [] of countries for Combobox
-  const filterCountries = useMemo(
-    () =>
-      countries.map(({place_id, description}) => ({
-        id: place_id,
-        name: description,
-      })) || [{id: '1', name: 'Japan'}],
-    [countries],
-  );
-
   // Creating [] of cities for Combobox
   const filterCities = useMemo(
     () =>
@@ -67,19 +45,21 @@ export function LocationFormFragment({
     [cities],
   );
 
-  // Method to get Country-Code('jp') on countrySelected and calls 'handleSetCountry'.
   const onCountrySelected = useCallback(
-    (data: any) => {
+    (data: ComboBoxSelectionType) => {
       setCountryName(data.name);
-      getGeocode({placeId: data.id})
-        .then((result: any) => {
-          const countryCode = result?.[0]?.address_components[0]?.short_name;
-          if (country) setCity('');
-          setCountry(countryCode);
-        })
-        .catch((error: any) => console.error(error));
+      setCountry(data.id);
+      if (data.id != country) setCity('');
     },
     [setCity, setCountry, country],
+  );
+
+  const onCitySelected = useCallback(
+    (data: ComboBoxSelectionType) => {
+      setCity(data.name);
+      setGeonameId(data.id);
+    },
+    [setCity, setGeonameId],
   );
 
   return (
@@ -91,10 +71,9 @@ export function LocationFormFragment({
           name: countryName,
         }}
         onSelected={onCountrySelected}
-        onChange={(e) => setCountryValue(e.currentTarget.value || '')}
         required
         name="country"
-        items={filterCountries}
+        items={countryOptions}
         placeholder="Country"
         errorMessage={errorCountry}
         className="my-6"
@@ -102,7 +81,7 @@ export function LocationFormFragment({
       <Combobox
         label="City"
         selected={{id: geonameId, name: city}}
-        onSelected={setCity}
+        onSelected={onCitySelected}
         onChange={(e) => setCitiesValue(e.currentTarget.value || '')}
         required
         name="city"

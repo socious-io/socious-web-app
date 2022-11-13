@@ -27,7 +27,7 @@ export interface ComboboxProps
   selected?: any;
   onSelected?: (value: any) => void;
   onChangeInputSearch?: (value: any) => void;
-  items: Array<any>;
+  items: Array<ComboBoxSelectionType | any>;
 }
 
 export function Combobox({
