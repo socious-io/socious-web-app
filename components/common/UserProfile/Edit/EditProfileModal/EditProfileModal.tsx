@@ -55,7 +55,7 @@ const EditProfileModal = ({
   skillsData,
   closeModal,
 }: EditProfileModalProps) => {
-  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [_ignored, forceUpdate] = useReducer((x) => x + 1, 0);
   const [editState, setEditState] = useState<'MAIN' | 'CAUSES' | 'SKILLS'>(
     'MAIN',
   );

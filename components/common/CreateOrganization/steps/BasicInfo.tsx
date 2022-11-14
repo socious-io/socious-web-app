@@ -14,11 +14,17 @@ import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
 //interfaces
 import {StepProps} from '@models/stepProps';
 
+export interface BasicInfoProps extends StepProps {
+  user: UserProfile;
+}
+
 //services
 import {getPhoneCode} from 'services/getPhoneCode';
+import {LocationFormFragment} from '@components/organisms/data/location-form-fragment';
+import {UserProfile} from '@models/profile';
 
-const BasicInfo = ({onSubmit}: StepProps) => {
-  const [country_code, set_country_code] = useState<string>();
+const BasicInfo = ({onSubmit, user}: BasicInfoProps) => {
+  const [country_code, set_country_code] = useState<string>(user.country || '');
 
   const formMethods = useFormContext();
   const {register, handleSubmit, formState, watch, setValue} = formMethods;
@@ -26,8 +32,9 @@ const BasicInfo = ({onSubmit}: StepProps) => {
   // watch form inputs
   const country = watch('country');
   const city = watch('city');
-  const mobile = watch('phone');
-  const mobile_country_code = watch('mobile_country_code');
+  const geoId = watch('geoname_id');
+  const phone = watch('phone');
+  const phone_country_code = watch('mobile_country_code');
 
   ///////////////////////////////////////////////////////////////////////////
   //   **********   get list of cities & countries & methodes    **********//
@@ -81,10 +88,9 @@ const BasicInfo = ({onSubmit}: StepProps) => {
     [cities],
   );
 
-  //set city in form
-  const handleSetCity = useCallback(
-    (data: any) => {
-      setValue('city', data?.name, {
+  const handleSetGeoId = useCallback(
+    (data: number | null) => {
+      setValue('geoname_id', data, {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -92,16 +98,25 @@ const BasicInfo = ({onSubmit}: StepProps) => {
     [setValue],
   );
 
-  //set country-code('jp') in form
-  const handleSetCountry = useCallback(
-    (countryCode: any) => {
-      setValue('country', countryCode, {
+  const handleSetCity = useCallback(
+    (data: string | null) => {
+      setValue('city', data, {
         shouldValidate: true,
         shouldDirty: true,
       });
-      if (city) handleSetCity('');
     },
-    [handleSetCity, city, setValue],
+    [setValue],
+  );
+
+  const handleSetCountry = useCallback(
+    (newCountryCode: string | null) => {
+      setValue('country', newCountryCode, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      if (newCountryCode !== country) handleSetCity('');
+    },
+    [country, handleSetCity, setValue],
   );
 
   //get country-code('jp') of country
@@ -185,27 +200,15 @@ const BasicInfo = ({onSubmit}: StepProps) => {
             className="my-3"
             required
           />
-          <Combobox
-            label="Country"
-            onSelected={onCountrySelected}
-            onChange={(e) => setCountryValue(e.currentTarget.value || '')}
-            required
-            name="Country"
-            items={filterCountries}
-            placeholder="Country"
-            errorMessage={formState?.errors?.['country']?.message}
-            className="my-6"
-          />
-          <Combobox
-            label="City"
-            onSelected={handleSetCity}
-            onChange={(e) => setCitiesValue(e.currentTarget.value || '')}
-            required
-            name="city"
-            items={filterCities}
-            placeholder="City"
-            errorMessage={formState?.errors?.['city']?.message}
-            className="my-6"
+          <LocationFormFragment
+            country={country}
+            setCountry={onCountrySelected}
+            errorCountry={formState?.errors?.['country']?.message}
+            city={city}
+            setCity={handleSetCity}
+            errorCity={formState?.errors?.['city']?.message}
+            geonameId={geoId}
+            setGeonameId={handleSetGeoId}
           />
           <InputFiled
             label="Address"
@@ -220,7 +223,7 @@ const BasicInfo = ({onSubmit}: StepProps) => {
           </p>
           <div className="flex h-fit gap-x-4 ">
             <Combobox
-              selected={{id: country_code, name: mobile_country_code}}
+              selected={{id: country_code, name: phone_country_code}}
               onChange={(e) => setCountryValue(e.currentTarget.value || '')}
               onSelected={onCountrySelected}
               items={filterCountries}

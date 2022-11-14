@@ -1,10 +1,19 @@
-import React, {SyntheticEvent, useCallback, useMemo, useState} from 'react';
+import React, {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import {Combobox, ComboBoxSelectionType} from '@components/common';
 import {countryISOtoName, countryOptions, formatCityName} from 'utils/geo';
 import {GeoName} from '@models/geo';
-import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
+import useInfiniteSWR, {
+  TInfiniteResponse,
+} from 'hooks/useInfiniteSWR/useInfiniteSWR';
 import {FieldError, Merge, FieldErrorsImpl} from 'react-hook-form';
+import {get} from 'utils/request';
 
 export interface LocationFormFragmentProps {
   country: string | null;
@@ -33,6 +42,28 @@ export function LocationFormFragment({
   );
   const [filterCity, setFilterCity] = useState<string | null>(null);
 
+  // handle old profiles/projects that have no geoname_id
+  useEffect(() => {
+    if (city && country && !geonameId && setGeonameId) {
+      const set = setGeonameId;
+      async function fillGeoID() {
+        const {items: cities} = await get<TInfiniteResponse<GeoName>>(
+          `/geo/locations/country/${country}?search=${encodeURIComponent(
+            city as string,
+          )}&sort=-population`,
+        );
+        for (const candidate of cities) {
+          if (candidate.name === city) {
+            set(candidate.id);
+            return;
+          }
+        }
+        if (cities.length) set(cities[0].id);
+      }
+      fillGeoID();
+    }
+  }, [city, country, geonameId, setGeonameId]);
+
   const {
     flattenData: cities,
     loadMore,
@@ -45,7 +76,6 @@ export function LocationFormFragment({
       : `/geo/locations/country/${country}?limit=50`,
   );
 
-  // Creating [] of cities for Combobox
   const filterCities = useMemo(
     () =>
       cities?.map((city) => ({
@@ -114,6 +144,7 @@ export function LocationFormFragment({
         errorMessage={errorCity}
         className="my-6"
       />
+      <input type="hidden" name="geoname_id" value={geonameId || ''} />
     </>
   );
 }

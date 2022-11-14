@@ -27,6 +27,7 @@ export interface UserProfile {
   created_at: string;
   languages?: string | string[];
   experiences?: string;
+  password_expired?: boolean;
 }
 
 export type TUserByUsername = {
