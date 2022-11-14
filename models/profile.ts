@@ -16,6 +16,7 @@ export interface UserProfile {
   address?: string;
   city?: string;
   country?: string;
+  geoname_id?: number | null;
   mobile_country_code?: string;
   avatar?: TMediaType;
   cover_image?: TMediaType;

@@ -18,12 +18,14 @@ import {get} from 'utils/request';
 export interface LocationFormFragmentProps {
   country: string | null;
   city: string | null;
-  geonameId?: number | null;
+  geonameId: number | null;
   setCountry: (value: string) => void;
   setCity: (value: string) => void;
-  setGeonameId?: (value: number) => void;
+  setGeonameId: (value: number) => void;
   errorCity?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
   errorCountry?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
+  allowWorldwide?: boolean;
+  allowCityClear?: boolean;
 }
 
 /** Form fragment to edit country, city, and geoname_id */
@@ -36,6 +38,8 @@ export function LocationFormFragment({
   setGeonameId,
   errorCity,
   errorCountry,
+  allowWorldwide = false,
+  allowCityClear = false,
 }: LocationFormFragmentProps): JSX.Element {
   const [countryName, setCountryName] = useState<string>(
     country ? countryISOtoName.get(country) ?? '' : '',
@@ -89,9 +93,8 @@ export function LocationFormFragment({
     (data: ComboBoxSelectionType) => {
       setCountryName(data.name);
       setCountry(data.id);
-      if (data.id != country) setCity('');
     },
-    [setCity, setCountry, country],
+    [setCountry],
   );
 
   const onCitySelected = useCallback(
