@@ -84,12 +84,6 @@ export interface ApplyProjectType {
   answers?: TAnswer[];
 }
 
-export interface AddQuestionType<T = string> {
-  question: string;
-  required: boolean;
-  options?: T[] | null;
-}
-
 export interface ProjectProps {
   project: Project;
   questions?: Question[];

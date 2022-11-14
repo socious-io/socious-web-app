@@ -5,24 +5,25 @@ import {
   PlusCircleIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  TrashIcon,
 } from '@heroicons/react/24/outline';
 import {initContext, useProjectContext} from '../context';
 import {TOnSubmit} from '../sharedType';
 import {FromLayout} from '../Layout';
-import {Question} from '@models/question';
+import {AddQuestionTypeWithId, Question} from '@models/question';
 import Image from 'next/future/image';
 import editIcon from 'asset/icons/edit.svg';
 import {useToggle} from '@hooks';
 
 interface ProjectQuestionProps extends TOnSubmit {
   type?: 'EDIT' | 'NEW';
+  stepToEdit?: number;
 }
 
 const QuestionBox: FC<{
-  question: Question;
+  question: Question | AddQuestionTypeWithId;
   title: string;
-}> = ({question, title}) => {
+  editStep?: number;
+}> = ({question, title, editStep = 4}) => {
   const {state: show, handlers: showHandlers} = useToggle();
   const {ProjectContext, setProjectContext} = useProjectContext();
 
@@ -51,7 +52,7 @@ const QuestionBox: FC<{
                 setProjectContext({
                   ...ProjectContext,
                   editQuestion: question,
-                  formStep: 4,
+                  formStep: editStep,
                 })
               }
             >
@@ -73,6 +74,7 @@ const QuestionBox: FC<{
 const ProjectQuestion: FC<ProjectQuestionProps> = ({
   onSubmit,
   type = 'NEW',
+  stepToEdit,
 }) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
 
@@ -89,13 +91,23 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
           </Title>
           <div className="scroll-y-auto grow bg-offWhite">
             <div className="space-y-4 divide-y py-4">
-              {ProjectContext.questions?.map((question, index) => (
-                <QuestionBox
-                  key={question.id}
-                  title={`Question ${index + 1}`}
-                  question={question}
-                />
-              ))}
+              {type === 'EDIT'
+                ? ProjectContext.questions?.map((question, index) => (
+                    <QuestionBox
+                      key={question.id}
+                      title={`Question ${index + 1}`}
+                      question={question}
+                      editStep={4}
+                    />
+                  ))
+                : ProjectContext.newQuestions?.map((question, index) => (
+                    <QuestionBox
+                      key={question.id}
+                      title={`Question ${index + 1}`}
+                      question={question}
+                      editStep={stepToEdit}
+                    />
+                  ))}
             </div>
             <div className="flex items-center justify-center">
               <Button
@@ -103,12 +115,15 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
                   setProjectContext({
                     ...ProjectContext,
                     editQuestion: null,
-                    formStep: 4,
+                    formStep: type === 'NEW' ? 6 : 4,
                   })
                 }
                 disabled={
-                  !!ProjectContext.questions &&
-                  ProjectContext.questions.length >= 5
+                  type === 'EDIT'
+                    ? !!ProjectContext.questions &&
+                      ProjectContext.questions.length >= 5
+                    : !!ProjectContext.newQuestions &&
+                      ProjectContext.newQuestions.length >= 5
                 }
                 variant="outline"
                 size="lg"
@@ -128,6 +143,12 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
               <Button
                 type="submit"
                 className="flex h-11 w-36 items-center justify-center"
+                onClick={() =>
+                  setProjectContext({
+                    ...ProjectContext,
+                    formStep: 4,
+                  })
+                }
               >
                 Continue
               </Button>
@@ -135,7 +156,13 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
                 type="submit"
                 variant="outline"
                 className="ml-2 flex h-11 w-36 items-center justify-center"
-                onClick={() => setProjectContext(initContext)}
+                onClick={() =>
+                  setProjectContext({
+                    ...ProjectContext,
+                    questions: null,
+                    formStep: 4,
+                  })
+                }
               >
                 skip
               </Button>

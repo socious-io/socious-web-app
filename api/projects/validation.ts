@@ -96,28 +96,35 @@ export const schemaCreateProjectStep3 = Joi.object({
 });
 
 export const schemaCreateProjectQuestion = Joi.object({
+  type: Joi.string().allow('TEXT', 'CHOICE'),
   question: Joi.string().required().messages({
     'any.required': 'Question cannot be empty.',
     'string.base': 'Question cannot be empty.',
     'string.empty': 'Question cannot be empty.',
   }),
   required: Joi.boolean(),
-  options: Joi.array()
-    .allow(null, '')
-    .min(2)
-    .max(5)
-    .items({
-      id: Joi.number(),
-      option: Joi.string().trim().required().messages({
-        'string.base': 'Option cannot be empty.',
-        'string.empty': 'Option cannot be empty.',
-        'any.required': 'Option cannot be empty.',
+  options: Joi.array().when('type', {
+    is: 'TEXT',
+    then: Joi.array().allow(null, ''),
+    otherwise: Joi.array()
+      .required()
+      .items({
+        id: Joi.number(),
+        option: Joi.string().trim().required().messages({
+          'string.base': 'Option cannot be empty.',
+          'string.empty': 'Option cannot be empty.',
+          'any.required': 'Option cannot be empty.',
+        }),
+      })
+      .min(2)
+      .max(5)
+      .messages({
+        'any.required': 'Minimum of 2 choices required.',
+        'array.base': 'Minimum of 2 choices required.',
+        'array.min': 'Minimum of 2 choices required.',
+        'array.max': 'Maximum of 5 choices allowed.',
       }),
-    })
-    .messages({
-      'array.min': 'Minimum of 2 choices required.',
-      'array.max': 'Maximum of 5 choices allowed.',
-    }),
+  }),
 });
 
 export const schemaCreateProjectQuestionBody = Joi.object({
