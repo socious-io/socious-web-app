@@ -9,6 +9,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import {twMerge} from 'tailwind-merge';
 import {get} from 'utils/request';
+import {Project} from '@models/project';
 
 type HireContentProps = {
   projectId: string;
@@ -30,25 +31,24 @@ function HiredContent({projectId, type}: HireContentProps) {
               ? `/projects/${projectId}/offers?status=APPROVED,HIRED`
               : null
           }
-          title={'Hired'}
+          title="Hired"
           rounded
           className="border-0"
           renderList={(flattenData) => (
             <>
               {flattenData.map((offer) => (
-                <OfferInfoCard offer={offer} key={offer.id} />
+                <EscrowWithAdditional key={offer.id} offer={offer} />
               ))}
             </>
           )}
         />
-        {/* TODO:// CHANGE BASED ON MISSION DESIGN (New page required.) */}
         <StatusListingSkeleton<IMission>
           url={
             projectId
               ? `/projects/${projectId}/missions?status=COMPLETE,CANCELED,KICKED_OUT`
               : null
           }
-          title={'End-Hired'}
+          title="End-Hired"
           className="rounded-b-2xl border-0"
           renderList={(flattenData) => (
             <>
@@ -98,6 +98,32 @@ export const OfferInfoCard = ({offer}: {offer: IOffer}) => {
           applicationDate={dayjs(offer.created_at)?.format('MMM D')}
           message={'No message'}
         />
+      </a>
+    </Link>
+  );
+};
+
+export const EscrowWithAdditional = ({offer}: {offer: IOffer}) => {
+  const {data: user, error: userError} = useSWR<TUserByUsername>(
+    `/user/${offer.recipient_id}/profile`,
+    get,
+  );
+  const {data: project, error: projectError} = useSWR<Project>(
+    `/projects/${offer.project_id}`,
+    get,
+  );
+  if ((!user && !userError) || (!project && !projectError))
+    return <p>Loading....</p>;
+  if (!user || !project) return <p>Error in fetch.</p>;
+
+  return (
+    <Link
+      key={offer.id}
+      href={`/app/projects/created/${offer.project_id}/escrow/${offer.id}`}
+      passHref
+    >
+      <a>
+        <EscrowCard offer={offer} project={project} user={user} />
       </a>
     </Link>
   );

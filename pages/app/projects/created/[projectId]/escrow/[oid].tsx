@@ -4,10 +4,19 @@ import {GeneralLayout} from 'layout';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import {useRouter} from 'next/router';
 import EscrowApplication from '@components/organisms/escrow/EscrowApplication';
+import useSWR from 'swr';
+import {get} from 'utils/request';
+import {IOffer} from '@models/offer';
 
 const EscrowPaymentPage: NextPage = () => {
   const router = useRouter();
   const {projectId, oid} = router.query;
+
+  const {data: offer} = useSWR<IOffer>(`/offers/${oid}`, get);
+
+  const loadEscrowApplication = offer ? (
+    <EscrowApplication offer={offer} />
+  ) : null;
 
   return (
     <GeneralLayout hasDetailNavbar detailNavbarTitle="Escrow payment">
@@ -24,7 +33,7 @@ const EscrowPaymentPage: NextPage = () => {
           </div>
         </div>
       </div>
-      <EscrowApplication />
+      {loadEscrowApplication}
     </GeneralLayout>
   );
 };

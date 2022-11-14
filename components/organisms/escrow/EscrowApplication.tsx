@@ -1,6 +1,6 @@
 import {Button, Combobox} from '@components/common';
 import Link from 'next/link';
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import Router from 'next/router';
 import {getAllISOCodes} from 'iso-country-currency';
 
@@ -9,10 +9,31 @@ import EscrowCard from './EscrowCard';
 import {CreditCardIcon} from '@heroicons/react/24/outline';
 import CreditCardModal from './Modals/CreditCardModal';
 import Image from 'next/future/image';
+import {IOffer} from '@models/offer';
+import useSWR from 'swr';
+import {TUserByUsername} from '@models/profile';
+import {Project} from '@models/project';
+import {get} from 'utils/request';
 
-const EscrowApplication = () => {
+type EscrowApplicationProps = {offer: IOffer};
+type TIsoCountry = {
+  name: string;
+  symbol: string;
+  id: string;
+};
+
+const EscrowApplication = ({offer}: EscrowApplicationProps) => {
   const {state: addState, handlers: addHandlers} = useToggle();
-  const isoCountries = useMemo(
+  const {data: user, error: userError} = useSWR<TUserByUsername>(
+    `/user/${offer.recipient_id}/profile`,
+    get,
+  );
+  const {data: project, error: projectError} = useSWR<Project>(
+    `/projects/${offer.project_id}`,
+    get,
+  );
+
+  const isoCountries: TIsoCountry[] = useMemo(
     () =>
       getAllISOCodes()?.map((d) => ({
         name: d?.currency,
@@ -21,11 +42,17 @@ const EscrowApplication = () => {
       })),
     [],
   );
-  const [isoCountry, setIsoCountry] = useState<{
-    name: string;
-    symbol: string;
-    id: string;
-  }>();
+  const [isoCountry, setIsoCountry] = useState<TIsoCountry | null>();
+
+  useEffect(
+    () =>
+      setIsoCountry(
+        isoCountries.find(
+          (currency) => currency.name === project?.payment_currency,
+        ) || null,
+      ),
+    [isoCountries, project?.payment_currency],
+  );
 
   const flagFromIso = useMemo(
     () =>
@@ -43,13 +70,17 @@ const EscrowApplication = () => {
     [isoCountry],
   );
 
+  if ((!user && !userError) || (!project && !projectError))
+    return <p>Loading....</p>;
+  if (!user || !project) return <p>Error in fetch.</p>;
+
   return (
     <div className="w-full">
       <div className="mb-8 hidden items-center rounded-2xl border border-grayLineBased bg-white px-4 py-6 md:flex">
         <p className="text-xl font-semibold">Escrow payment</p>
       </div>
       <div className="space-y-4 px-4">
-        <EscrowCard />
+        <EscrowCard offer={offer} project={project} user={user} />
         <div className="space-y-4 rounded-2xl  border border-b-grayLineBased bg-white px-4 py-6">
           <h1 className="text-base font-semibold">Input amount</h1>
           <div className="flex w-full items-center justify-between rounded-2xl bg-offWhite p-3">
@@ -58,6 +89,7 @@ const EscrowApplication = () => {
               <Combobox
                 items={isoCountries}
                 onSelected={(data) => setIsoCountry(data)}
+                selected={isoCountry}
                 className="w-28"
               />
             </div>

@@ -25,7 +25,7 @@ export interface Project {
   experience_level: number;
   causes_tags: Array<string>;
   skills: Array<string>;
-  payment_currency?: string;
+  payment_currency: string;
   remote_preference: string;
   identity_id: string;
   identity_type: IdentityType;
