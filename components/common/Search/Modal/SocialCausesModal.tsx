@@ -21,7 +21,6 @@ export const SocialCausesModal: FC<SocialCausesModalProps> = ({
   const {social_causes} = route.query;
 
   useEffect(() => {
-    console.log('SOCIAL CAUSES :---: ', social_causes);
     if (social_causes)
       methods.setValue('social_causes', (social_causes as string)?.split(','));
     else methods.setValue('social_causes', null);
