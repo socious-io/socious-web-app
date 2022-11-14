@@ -37,7 +37,7 @@ export interface IOrganizationUserType {
   first_name: string;
   last_name?: string;
   location: string;
-  username?: string;
+  username: string;
   email?: string;
   avatar: IAvatarInfo | null;
   requested: boolean;

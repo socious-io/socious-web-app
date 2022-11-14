@@ -16,7 +16,10 @@ interface ProjectsCardProps {
 }
 
 const HiredLink = ({id}: {id: string}) => {
-  const {data: missions} = useSWR<any>(`/projects/${id}/missions`, get);
+  const {data: missions} = useSWR<any>(
+    `/projects/${id}/offers?status=APPROVED,HIRED`,
+    get,
+  );
   return (
     <Link href={`/app/projects/created/${id}/hired`} passHref>
       <li className="flex items-center space-x-4">
