@@ -13,6 +13,7 @@ export function create_organization(data: any): any {
     email,
     country,
     city,
+    geoname_id,
     phone,
     mission,
     description,
@@ -31,6 +32,7 @@ export function create_organization(data: any): any {
     email: email,
     country: country,
     city: city,
+    geoname_id,
   };
 
   //post body for not empty not required data

@@ -3,6 +3,7 @@ export type CreateOrganizationType = {
   bio: string;
   city: string;
   country: string;
+  geoname_id: number;
   description?: string;
   mission?: string;
   culture?: string;
