@@ -34,14 +34,17 @@ export const SocialCausesFilters: FC<SocialCausesFiltersProps> = ({onEdit}) => {
         />
       </div>
       <div className="h-36 space-y-2 overflow-auto rounded-xl border border-grayLineBased bg-white p-4">
-        {selectedSocialCauses?.map((cause) => (
-          <Chip
-            value={cause}
-            key={cause}
-            content={getText('en', `PASSION.${cause}`)}
-            onRemove={removeSocialCause}
-          />
-        ))}
+        {selectedSocialCauses?.map(
+          (cause) =>
+            cause && (
+              <Chip
+                value={cause}
+                key={cause}
+                content={getText('en', `PASSION.${cause}`)}
+                onRemove={removeSocialCause}
+              />
+            ),
+        )}
       </div>
     </div>
   );

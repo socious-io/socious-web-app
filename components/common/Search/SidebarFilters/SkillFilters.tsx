@@ -32,14 +32,17 @@ export const SkillFilters: FC<SkillFiltersProps> = ({onEdit}) => {
         />
       </div>
       <div className="h-36 gap-2 space-y-2 overflow-y-auto overflow-x-hidden rounded-xl border border-grayLineBased bg-white p-4">
-        {selectedSkills?.map((skill) => (
-          <Chip
-            value={skill}
-            key={skill}
-            content={getText('en', `SKILL.${skill}`)}
-            onRemove={removeSkillsQuery}
-          />
-        ))}
+        {selectedSkills?.map(
+          (skill) =>
+            skill && (
+              <Chip
+                value={skill}
+                key={skill}
+                content={getText('en', `SKILL.${skill}`)}
+                onRemove={removeSkillsQuery}
+              />
+            ),
+        )}
       </div>
     </div>
   );

@@ -46,6 +46,7 @@ export default function ProjectCard({
   previewItem,
 }: ProjectCardProps) {
   const location = useFormattedLocation(project);
+  console.log(project.title, ':---: ', project);
 
   return (
     <div
@@ -86,7 +87,7 @@ export default function ProjectCard({
               {getText('en', `PAYMENT.${project.payment_type}`)}
             </p>
           )}
-          {project.experience_level !== null && (
+          {[0, 1, 2, 3, 4].includes(project.experience_level) && (
             <p className="pl-2 text-sm text-graySubtitle ">
               {
                 EXPERIENCE_LEVEL_OPTIONS.find(

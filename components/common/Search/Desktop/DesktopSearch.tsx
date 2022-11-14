@@ -1,7 +1,7 @@
 import {useToggle} from '@hooks';
 import {DetailLayout} from 'layout';
 import {useRouter} from 'next/router';
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {SkillsModal} from '../Modal/SkillsModal';
 import {SocialCausesModal} from '../Modal/SocialCausesModal';
 import {SearchResults} from '../Results/SearchResults';
@@ -16,6 +16,11 @@ export const DesktopSearch: FC = () => {
   const {state: showSkillsModal, handlers: skillsHanlder} = useToggle();
   const {state: showLocationModal, handlers: locationHander} = useToggle();
   const route = useRouter();
+  const {type} = route.query;
+
+  useEffect(() => {
+    if (type === 'posts') sidebarHandler.on();
+  }, [sidebarHandler, type]);
 
   const resetFilters = () => {
     route.query = {

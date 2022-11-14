@@ -16,9 +16,11 @@ interface SkillsFormProps {
 
 export const SkillsForm: FC<SkillsFormProps> = ({onSubmit}) => {
   const route = useRouter();
-  const {handleSubmit, setValue, control} = useForm();
+  const {handleSubmit, setValue, control, watch} = useForm();
   const {skills} = useSkills();
-  const paramSkills = (route.query.skills as string)?.split(',');
+  const paramSkills = route.query.skills
+    ? (route.query.skills as string)?.split(',')
+    : null;
 
   const selectedSkills = useWatch({
     name: 'skills',
@@ -45,10 +47,8 @@ export const SkillsForm: FC<SkillsFormProps> = ({onSubmit}) => {
   };
 
   const onSubmitSkills = (data: FieldValues) => {
-    if (data.skills.length) {
-      route.query.skills = data.skills.join(',');
-      route.push(route);
-    }
+    route.query.skills = data.skills?.join(',');
+    route.push(route);
     onSubmit?.(data);
   };
 
