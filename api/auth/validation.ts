@@ -201,6 +201,7 @@ export const schemaSignupStep3 = Joi.object({
 });
 
 export const schemaSignupCompact = Joi.object({
+  username: Joi.string(),
   firstName: Joi.string()
     .required()
     .label('FirstName')

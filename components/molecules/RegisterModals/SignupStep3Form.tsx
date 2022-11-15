@@ -3,21 +3,26 @@ import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
 import {Button, InputFiled} from '@components/common';
 import {useFormContext} from 'react-hook-form';
 import {useRegisterContext} from './RegisterContext';
-import {useMemo} from 'react';
+import {useEffect, useMemo} from 'react';
 import {rxHasLowerCase, rxHasNumber, rxHasUpperCase} from 'utils/regex';
 import {twMerge} from 'tailwind-merge';
-import {useToggle} from '@hooks';
+import {useToggle, useUser} from '@hooks';
 import Link from 'next/link';
 
 const SignupStep3Form = ({onSubmit}: StepProps) => {
+  const {user} = useUser();
   const {
     state: passwordShown,
     handlers: {toggle: onTogglePassword},
   } = useToggle();
 
-  const {formState, register, watch, handleSubmit} = useFormContext();
+  const {formState, register, watch, handleSubmit, setValue} = useFormContext();
   const {setRegisterContext} = useRegisterContext();
   const password = watch('password');
+
+  useEffect(() => {
+    if (user) setValue('username', user.username);
+  }, [setValue, user]);
 
   const isValidPasswordLength = useMemo<boolean>(
     () => password && password.length >= 8,
@@ -41,10 +46,7 @@ const SignupStep3Form = ({onSubmit}: StepProps) => {
     <div className="py-16 px-6 sm:px-[72px]">
       <h1 className="m-0 text-2xl font-semibold">Join Socious</h1>
       <p className="mb-10 text-graySubtitle ">Complete your profile</p>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex grow flex-col justify-between sm:grow-0"
-      >
+      <form className="flex grow flex-col justify-between sm:grow-0">
         <div className="flex grow flex-col space-y-4">
           <div>
             <p className="m-0 p-0">Your First Name</p>
@@ -149,6 +151,7 @@ const SignupStep3Form = ({onSubmit}: StepProps) => {
             size="lg"
             variant="fill"
             value="Submit"
+            onClick={handleSubmit(onSubmit)}
           >
             Join
           </Button>
