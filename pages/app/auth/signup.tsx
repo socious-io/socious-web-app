@@ -10,11 +10,11 @@ import {PreAuthLayout} from 'layout';
 import {Button, Modal} from '@components/common';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
-import ForgotPasswordStep2 from '@components/organisms/Auth/ForgotPassword/Step2/ForgotPasswordStep2';
 import SignupStep1 from '@components/organisms/Auth/Signup/Step1/SignupStep1';
 import SignupStep2 from '@components/organisms/Auth/Signup/Step2/SignupStep2';
 import SignupStep3 from '@components/organisms/Auth/Signup/Step3/SignupStep3';
 import SignupStep4 from '@components/organisms/Auth/Signup/Step4/SignupStep4';
+import SignupStep5 from '@components/organisms/Auth/Signup/Step5/SignupStep5';
 
 import {
   schemaSignupStep1,
@@ -32,7 +32,6 @@ const Signup: NextPage = () => {
   const [showError, setShowError] = useState<boolean>(false);
 
   const [errorMessage, setError] = useState<ErrorMessage>();
-  const [otpError, setOtpError] = useState<string>('');
 
   const formMethodsStep1 = useForm({
     resolver: joiResolver(schemaSignupStep1),
@@ -101,7 +100,6 @@ const Signup: NextPage = () => {
 
   const handleConfirmOTPRequest = async (code: string) => {
     const email = formMethodsStep2.getValues('email');
-    setOtpError('');
     try {
       await confirmOTP(email, code);
       if (step === 2) {
@@ -111,7 +109,7 @@ const Signup: NextPage = () => {
       const error = e as AxiosError<any>;
       if (error.isAxiosError) {
         if (error.response?.data?.error === 'Not matched') {
-          setOtpError('Incorrect verification code.');
+          // setOtpError('Incorrect verification code.');
           return;
         }
       }
@@ -165,19 +163,17 @@ const Signup: NextPage = () => {
         </FormProvider>
         <FormProvider {...formMethodsStep2}>
           {step === 2 && <SignupStep2 onSubmit={handleSubmit} />}
+          {step === 3 && (
+            <SignupStep3
+              onSubmit={handleSubmit}
+              onResendCode={handleSendCode}
+            />
+          )}
         </FormProvider>
-        {step === 3 && (
-          <ForgotPasswordStep2
-            onSubmit={handleSubmit}
-            onResendCode={handleSendCode}
-            error={otpError}
-            email={formMethodsStep2.getValues('email')}
-          />
-        )}
         <FormProvider {...formMethodsStep3}>
-          {step === 4 && <SignupStep3 onSubmit={handleSubmit} />}
+          {step === 4 && <SignupStep4 onSubmit={handleSubmit} />}
         </FormProvider>
-        {step === 5 && <SignupStep4 onSubmit={handleSubmit} />}
+        {step === 5 && <SignupStep5 onSubmit={handleSubmit} />}
 
         <Modal isOpen={showSuccess} onClose={handleSuccessToggle}>
           <Modal.Title>Signup successful</Modal.Title>

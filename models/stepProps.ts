@@ -10,6 +10,10 @@ export interface StepWithError {
   onSubmit: (value: any) => any;
   error: string;
 }
+
+export interface StepWithResend extends StepProps {
+  onResendCode: (onClickReset?: any) => void;
+}
 export interface StepWithResendAndError extends StepWithError {
   onResendCode: (onClickReset?: any) => void;
   email?: string;
