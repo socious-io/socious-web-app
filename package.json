@@ -63,7 +63,7 @@
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^13.0.3",
     "@capacitor/cli": "^4.3.0",
-    "@cypress/webpack-preprocessor": "^5.15.2",
+    "@cypress/webpack-preprocessor": "^5.15.5",
     "@headlessui/react": "^1.7.3",
     "@heroicons/react": "^2.0.11",
     "@testing-library/react": "^13.4.0",
