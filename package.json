@@ -41,7 +41,7 @@
     "react-responsive": "^9.0.0",
     "react-spinners": "^0.13.4",
     "react-spring-bottom-sheet": "^3.4.1",
-    "react-toastify": "^9.0.8",
+    "react-toastify": "^9.1.1",
     "react-tooltip": "^4.4.2",
     "sass": "^1.55.0",
     "sharp": "^0.31.1",
