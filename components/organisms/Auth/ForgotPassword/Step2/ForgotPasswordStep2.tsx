@@ -1,5 +1,5 @@
-import {useState, useRef, useEffect, useCallback} from 'react';
-import {Button, TextInput} from '@components/common';
+import {useState, useCallback} from 'react';
+import {Button} from '@components/common';
 
 import Timer from '@components/common/Timer/Timer';
 import {StepWithResendAndError} from '@models/stepProps';
@@ -36,7 +36,6 @@ const ForgotPasswordStep2 = ({
       className="flex grow flex-col justify-between pl-0 pr-10 sm:grow-0 sm:pl-10"
     >
       <div className="flex h-[28rem] flex-col">
-        {' '}
         <h1 className="font-helmet">Making sure it’s you</h1>
         <p className="text-base">
           A message with a verification code has been sent to your email. Enter
