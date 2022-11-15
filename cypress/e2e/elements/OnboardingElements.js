@@ -12,7 +12,7 @@ class OnboardingElements {
     skillsLbl: () => cy.contains('What skills do you have?'),
     skillSearchTxt: () => cy.get('[data-testid="undefined-testid"]'),
     searchedSkills: () => cy.get('.inline-flex > .text-secondary'),
-    locationLbl: () => cy.contains('What&apos;s your location?'),
+    locationLbl: () => cy.contains("What's your location?"),
     countryNullValMsg: () => cy.get(':nth-child(5) > .flex.text-error'),
     cityNullValMsg: () => cy.get(':nth-child(8) > .flex.text-error'),
     countryTxt: () => cy.get('input[name=country-input]'),
