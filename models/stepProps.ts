@@ -1,6 +1,8 @@
 import {UseFormReturn} from 'react-hook-form';
+import {GeoIP} from './geo';
 export interface StepProps {
   onSubmit: (value: any) => void;
+  geoIp?: GeoIP;
 }
 export interface StepFormProps {
   formMethods: UseFormReturn;

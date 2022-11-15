@@ -117,6 +117,7 @@ export const schemaOnboardingStep4 = Joi.object({
   city: Joi.required().label('City').messages({
     'any.required': `cannot be an empty field`,
   }),
+  geoname_id: Joi.number().empty(null),
 });
 export const schemaOnboardingStep5 = Joi.object({
   availableProject: Joi.required().label('availableProject').messages({

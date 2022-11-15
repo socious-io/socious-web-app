@@ -57,6 +57,7 @@ export interface IOrganization {
   bio: string;
   city: string;
   country: string;
+  geoname_id?: number | null;
   cover_image: TMediaType | null;
   created_at: string;
   created_by: string;

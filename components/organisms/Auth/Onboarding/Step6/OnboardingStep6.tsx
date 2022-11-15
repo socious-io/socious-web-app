@@ -11,17 +11,14 @@ import {getPhoneCode} from 'services/getPhoneCode';
 
 // Types
 import {StepProps} from '@models/stepProps';
-interface OnboardingStep6Props extends StepProps {
-  defaultCountry: string;
-}
 
-const OnboardingStep6 = ({onSubmit, defaultCountry}: OnboardingStep6Props) => {
+const OnboardingStep6 = ({onSubmit, geoIp}: StepProps) => {
   const formMethods = useFormContext();
   const {handleSubmit, formState, getValues, setValue, watch} = formMethods;
 
   const countryNumber = watch('countryNumber');
   const phoneNumber = watch('phoneNumber');
-  const [countryKey, setCountryKey] = useState<string>(defaultCountry);
+  const [countryKey, setCountryKey] = useState<string>(geoIp?.country || '');
 
   //use-places-autocomplete: Method to get countries.
   const {
@@ -109,7 +106,7 @@ const OnboardingStep6 = ({onSubmit, defaultCountry}: OnboardingStep6Props) => {
     >
       <div className="flex grow flex-col">
         {' '}
-        <h1 className="font-helmet mb-6">What’s your phone number?</h1>
+        <h1 className="font-helmet mb-6">What&apos;s your phone number?</h1>
         <p className="text-base text-graySubtitle">
           Share your phone number with organisations you’d like to work together
           with

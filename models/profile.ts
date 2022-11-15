@@ -16,6 +16,7 @@ export interface UserProfile {
   address?: string;
   city?: string;
   country?: string;
+  geoname_id?: number | null;
   mobile_country_code?: string;
   avatar?: TMediaType;
   cover_image?: TMediaType;
@@ -27,6 +28,7 @@ export interface UserProfile {
   created_at: string;
   languages?: string | string[];
   experiences?: string;
+  password_expired?: boolean;
 }
 
 export type TUserByUsername = {
@@ -115,6 +117,7 @@ export interface IUpdateProfileBody {
   bio: string;
   country: string;
   city: string;
+  geoname_id: number | null;
   address?: string;
   mission?: string;
   mobile_country_code?: string;
