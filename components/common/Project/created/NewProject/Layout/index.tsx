@@ -27,14 +27,18 @@ export const CreateProjectLayout: FC<PropsWithChildren<TLayoutType>> = ({
           onClick={() =>
             setProjectContext({
               ...ProjectContext,
-              formStep: ProjectContext.formStep - 1,
+              formStep: !isEdit
+                ? ProjectContext.formStep === 6
+                  ? 3
+                  : ProjectContext.formStep - 1
+                : ProjectContext.formStep - 1,
             })
           }
           className="cursor-pointer"
         >
           {!(
             ProjectContext.formStep === 0 ||
-            ProjectContext.formStep === 4 ||
+            ProjectContext.formStep === 5 ||
             isEdit
           ) && <ChevronLeftIcon width={30} height={30} />}
         </div>

@@ -1,4 +1,4 @@
-import {FC, useMemo} from 'react';
+import {FC, useCallback, useMemo} from 'react';
 import {toast} from 'react-toastify';
 import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
 import useSWR, {useSWRConfig} from 'swr';
@@ -32,21 +32,24 @@ import {useToggle, useUser} from 'hooks';
 
 // Utils/Actions
 import {updateProjectById} from '@api/projects/actions';
+import {addQuestion, updateQuestion} from '@api/projects/actions';
 import {get} from 'utils/request';
 
 // Types
 import {CreateProjectType, Project, ProjectProps} from 'models/project';
-import {Question} from '@models/question';
+import {AddQuestionType, Question} from '@models/question';
+import {twMerge} from 'tailwind-merge';
 
 // Library
 const libraries: Libraries = ['places'];
 
-const QuestionsCard: FC<{questions?: Question[]; goToEdit?: () => void}> = ({
-  questions,
-  goToEdit,
-}) => {
+export const QuestionsCard: FC<{
+  questions?: Question[] | AddQuestionType[];
+  goToEdit?: () => void;
+  className?: string;
+}> = ({questions, goToEdit, className}) => {
   return (
-    <div className="space-y-6 p-4">
+    <div className={twMerge('space-y-6 p-4', className && className)}>
       <div className="flex items-center justify-between ">
         <Title>Screening questions</Title>
         {goToEdit && (
@@ -65,7 +68,7 @@ const QuestionsCard: FC<{questions?: Question[]; goToEdit?: () => void}> = ({
       {questions && (
         <div className="space-y-4">
           {questions.map((question, index) => (
-            <div key={question.id}>
+            <div key={index + ' ' + question.question}>
               <p>{'Question ' + (index + 1)}</p>
               <span className="font-worksans block  text-base text-graySubtitle sm:text-sm">
                 {question.question}
@@ -130,6 +133,8 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
   const isStep2 = ProjectContext.formStep === 2;
   const isStep3 = ProjectContext.formStep === 3;
   const isStep4 = ProjectContext.formStep === 4;
+
+  const {editQuestion} = ProjectContext;
 
   const clickEditIcon = (formStep: number) => {
     setProjectContext({
@@ -206,6 +211,46 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
     }
   };
 
+  const onSubmitQuestion: (questionBody: AddQuestionType) => void = useCallback(
+    async (questionBody: AddQuestionType) => {
+      try {
+        let questions: Question[] | null = ProjectContext.questions;
+        if (editQuestion && editQuestion.project_id) {
+          const response = await updateQuestion(
+            editQuestion.project_id,
+            editQuestion.id,
+            questionBody,
+          );
+          questions?.forEach((question, index) => {
+            if (questions)
+              questions[index] =
+                question.id === response.id ? response : question;
+          });
+        } else {
+          const response = await addQuestion(project.id, questionBody);
+          questions = [...(questions ?? []), response];
+        }
+        // Mutation for questionss
+        if (questions?.[0])
+          mutate(`/projects/${project.id}/questions`, questions, {
+            populateCache: (result, _currentData) => {
+              return result;
+            },
+            revalidate: true,
+          });
+        setProjectContext({
+          ...ProjectContext,
+          editQuestion: null,
+          questions: questions,
+          formStep: 3,
+        });
+      } catch (error) {
+        console.log('ERROR :---: ', error);
+      }
+    },
+    [ProjectContext, editQuestion, mutate, project.id, setProjectContext],
+  );
+
   // EDIT MODALS
   const PageDisplay = () => {
     if (isStep0 && isLoaded) {
@@ -215,9 +260,14 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
     } else if (isStep2) {
       return <ProjectSkill onSubmit={onSubmit} rawSkills={rawSkills} />;
     } else if (isStep3) {
-      return <ProjectQuestion onSubmit={onSubmit} type="EDIT" />;
+      return (
+        <ProjectQuestion
+          onSubmit={() => setProjectContext(initContext)}
+          type="EDIT"
+        />
+      );
     } else if (isStep4) {
-      return <QuestionDetail projectId={project.id} />;
+      return <QuestionDetail onSubmit={onSubmitQuestion} />;
     }
   };
 

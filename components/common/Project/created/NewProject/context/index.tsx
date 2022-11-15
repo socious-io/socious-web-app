@@ -1,5 +1,5 @@
 import {TProjectStatus} from '@models/project';
-import {Question} from '@models/question';
+import {AddQuestionTypeWithId, Question} from '@models/question';
 import {
   FC,
   createContext,
@@ -39,7 +39,8 @@ export type TProjectContext = {
   status: TProjectStatus;
   attachment: any;
   questions: Question[] | null;
-  editQuestion: Question | null;
+  editQuestion: any | null;
+  newQuestions: AddQuestionTypeWithId[] | null;
 };
 
 export const initContext: TProjectContext = {
@@ -72,6 +73,7 @@ export const initContext: TProjectContext = {
   attachment: '',
   questions: null,
   editQuestion: null,
+  newQuestions: null,
 };
 
 const ProjectContext = createContext<{

@@ -118,12 +118,12 @@ export const schemaProfileUpdate = Joi.object({
     'array.empty': `Please select {#limit} causes`,
   }),
 
-  country: Joi.string().required().label('Country').messages({
+  country: Joi.string().label('Country').messages({
     'any.required': `Please select a country`,
     'string.base': `Please select a country`,
     'string.empty': `Please select a country`,
   }),
-  city: Joi.string().required().label('City').messages({
+  city: Joi.string().label('City').messages({
     'any.required': `Please select a city`,
     'string.base': `Please select a city.`,
     'string.empty': `Please select a city.`,
@@ -140,8 +140,9 @@ export const schemaProfileUpdate = Joi.object({
     'any.required': `Please enter a bio.`,
     'string.base': `Please enter a bio.`,
     'string.empty': `Please enter a bio.`,
+    'string.max': `Please enter 160 characters or below.`,
   }),
-  mission: Joi.string().trim().label('Mission').messages({
+  mission: Joi.string().trim().allow('', null).label('Mission').messages({
     'any.required': `Please tell us about your mission.`,
     'string.base': `Please tell us about your mission.`,
     'string.empty': `Please tell us about your mission.`,

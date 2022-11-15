@@ -12,10 +12,10 @@ import {ChevronLeftIcon} from '@heroicons/react/24/solid';
 import {useUser, useApplication} from '@hooks';
 
 // Components
-import MyApplication from '@components/common/Applications/MyApplications/MyApplication';
 import SideBar from '@components/common/SimpleSideBar/Sidebar';
 import {GeneralLayout} from 'layout';
 import type {NextPage} from 'next';
+import MyApplication from '@components/pages/application/MyApplications/MyApplication';
 
 const Applicant: NextPage = () => {
   const router = useRouter();
@@ -41,17 +41,23 @@ const Applicant: NextPage = () => {
   if (!data) return <div>ERROR</div>;
 
   return (
-    <GeneralLayout hasNavbar>
-      <SideBar
-        title={
-          <p className="flex gap-2">
-            <ChevronLeftIcon className="w-5" />
-            <span className="whitespace-nowrap">Back to my applications</span>
-          </p>
-        }
-        url={`/app/applications`}
-      />
-      <MyApplication applicant={data} mutateApplication={mutate} />
+    <GeneralLayout
+      hasNavbar
+      hasDetailNavbar
+      detailNavbarTitle="Application Detail"
+    >
+      <div className="mx-6 flex w-full md:space-x-6">
+        <SideBar
+          title={
+            <p className="flex gap-2">
+              <ChevronLeftIcon className="w-5" />
+              <span className="whitespace-nowrap">Back to my applications</span>
+            </p>
+          }
+          url={`/app/applications`}
+        />
+        <MyApplication applicant={data} mutateApplication={mutate} />
+      </div>
     </GeneralLayout>
   );
 };
