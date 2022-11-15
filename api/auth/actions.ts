@@ -17,6 +17,10 @@ export function signup(
   });
 }
 
+export function register(email: string) {
+  return post('/auth/register', {email});
+}
+
 export function checkEmailExist(email: string) {
   return post('/auth/preregister', {email});
 }
@@ -27,6 +31,10 @@ export function login(email: string, password: string) {
 
 export function forgetPassword(email: string) {
   return post('/auth/forget-password', {email});
+}
+
+export function sendOTP(email: string) {
+  return post('/auth/otp', {email});
 }
 
 export function confirmOTP(email: string, code: string) {

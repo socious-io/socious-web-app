@@ -35,7 +35,7 @@ import getGlobalData from 'services/cacheSkills';
 import {uploadMedia} from '@api/media/actions';
 import {AxiosError} from 'axios';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
-import Router from 'next/router';
+import {useRouter} from 'next/router';
 import {checkAndUploadMedia} from 'services/ImageUpload';
 import {Capacitor} from '@capacitor/core';
 import useSWR from 'swr';
@@ -64,6 +64,8 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     libraries,
   });
 
+  const router = useRouter();
+  const {redirect_to} = router.query;
   const {user} = useUser();
   const {data: geoIp, error: geoIpError} = useSWR<GeoIP>('/geo/ip');
 
@@ -171,13 +173,13 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
         return;
       }
       try {
-        if (Notification.permission !== 'default') Router.push('/app/projects');
+        if (Notification.permission !== 'default') router.push('/app/projects');
         else {
           setStep(step + 1);
         }
       } catch (error) {
         // Notification interface not available
-        Router.push('/app/projects');
+        router.push('/app/projects');
       }
     },
     [handleToggleModal, step, user],
@@ -244,7 +246,9 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   const requestNotificationPermission = async () => {
     if ('Notification' in window && !Capacitor.isNativePlatform())
       await Notification.requestPermission();
-    Router.push('/app/projects');
+    redirect_to
+      ? router.push(redirect_to as string)
+      : router.push('/app/projects');
   };
 
   return (

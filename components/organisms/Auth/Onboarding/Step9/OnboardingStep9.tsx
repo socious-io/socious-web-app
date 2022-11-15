@@ -2,7 +2,10 @@ import {Button} from '@components/common';
 import {BellIcon} from '@heroicons/react/24/outline';
 import {StepProps} from '@models/stepProps';
 import Link from 'next/link';
+import Router from 'next/router';
 const OnboardingStep9 = ({onSubmit}: StepProps) => {
+  const {redirect_to} = Router.query;
+
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     onSubmit('true');
@@ -35,7 +38,7 @@ const OnboardingStep9 = ({onSubmit}: StepProps) => {
         >
           Allow notifications
         </Button>
-        <Link href="/app" passHref>
+        <Link href={redirect_to ? (redirect_to as string) : '/app'} passHref>
           <a className="block">
             <Button
               className="mt-4 flex  w-full max-w-xs items-center justify-center py-0 align-middle text-white"
