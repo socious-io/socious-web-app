@@ -188,6 +188,7 @@ const Signup: NextPage = () => {
             {step === 2 && <SignupStep2 onSubmit={handleSubmit} />}
             {step === 3 && (
               <SignupStep3
+                goBack={handleBack}
                 onSubmit={handleSubmit}
                 onResendCode={handleSendCode}
               />

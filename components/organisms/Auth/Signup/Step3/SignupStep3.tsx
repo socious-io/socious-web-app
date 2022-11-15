@@ -7,7 +7,11 @@ import Link from 'next/link';
 import CodeFields from '@components/common/CodeFields/CodeFields';
 import {useFormContext} from 'react-hook-form';
 
-const SignupStep3 = ({onSubmit, onResendCode}: StepWithResend) => {
+interface SignupStep3Props extends StepWithResend {
+  goBack: () => void;
+}
+
+const SignupStep3 = ({onSubmit, onResendCode, goBack}: SignupStep3Props) => {
   const [code, setCode] = useState<string | null>(null);
   const {
     formState: {errors},
@@ -81,6 +85,7 @@ const SignupStep3 = ({onSubmit, onResendCode}: StepWithResend) => {
           size="lg"
           variant="outline"
           value="Submit"
+          onClick={goBack}
         >
           Back
         </Button>
