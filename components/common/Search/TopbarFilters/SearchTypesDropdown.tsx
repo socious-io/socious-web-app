@@ -41,6 +41,7 @@ export const SearchTypesDropdown: FC<SearchTypeDropdownProps> = ({
 
   return (
     <Dropdown
+      dropdownClass="fixed"
       display={
         <Button size="sm" rightIcon={() => <ChevronDownIcon className="w-4" />}>
           {selectedOption?.label}

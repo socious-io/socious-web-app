@@ -1,14 +1,9 @@
-import {
-  CreateProjectType,
-  ApplyProjectType,
-  AddQuestionType,
-  Project,
-} from '@models/project';
-import {Question} from '@models/question';
+import {CreateProjectType, ApplyProjectType, Project} from '@models/project';
+import {AddQuestionType, Question} from '@models/question';
 import {post} from 'utils/request';
 
 export function createProject(projectBody: CreateProjectType) {
-  return post(`/projects`, projectBody);
+  return post<Project>(`/projects`, projectBody);
 }
 
 export function updateProjectById(
