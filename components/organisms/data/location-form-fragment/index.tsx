@@ -132,7 +132,7 @@ export function LocationFormFragment({
         items={countryOptions}
         placeholder="Country"
         errorMessage={errorCountry}
-        className="my-6"
+        className="location-form-country my-6"
       />
       <Combobox
         label="City"
@@ -145,9 +145,14 @@ export function LocationFormFragment({
         items={filterCities}
         placeholder="City"
         errorMessage={errorCity}
-        className="my-6"
+        className="location-form-city my-6"
       />
-      <input type="hidden" name="geoname_id" value={geonameId || ''} />
+      <input
+        type="hidden"
+        name="geoname_id"
+        className="location-form-geoid"
+        value={geonameId || ''}
+      />
     </>
   );
 }

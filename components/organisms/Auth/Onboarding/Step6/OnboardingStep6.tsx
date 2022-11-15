@@ -106,7 +106,7 @@ const OnboardingStep6 = ({onSubmit, geoIp}: StepProps) => {
     >
       <div className="flex grow flex-col">
         {' '}
-        <h1 className="font-helmet mb-6">What’s your phone number?</h1>
+        <h1 className="font-helmet mb-6">What&apos;s your phone number?</h1>
         <p className="text-base text-graySubtitle">
           Share your phone number with organisations you’d like to work together
           with
