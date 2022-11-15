@@ -1,10 +1,11 @@
-import {useState, useRef, useEffect} from 'react';
+import {useState, useRef, useEffect, useCallback} from 'react';
 import {Button, TextInput} from '@components/common';
 
 import Timer from '@components/common/Timer/Timer';
 import {StepWithResendAndError} from '@models/stepProps';
 import {ExclamationCircleIcon} from '@heroicons/react/24/solid';
 import Link from 'next/link';
+import CodeFields from '@components/common/CodeFields/CodeFields';
 
 const ForgotPasswordStep2 = ({
   onSubmit,
@@ -12,44 +13,31 @@ const ForgotPasswordStep2 = ({
   error,
   email,
 }: StepWithResendAndError) => {
-  const [code, setCode] = useState<any>([null, null, null, null]);
+  const [code, setCode] = useState<string | null>(null);
 
   const [blockVerify, setBlockVerify] = useState<boolean>(true);
 
-  useEffect(
-    () => setBlockVerify(() => code.includes(null) || code.includes('')),
-    [code],
+  const handleBlockVerify = useCallback(
+    (state: boolean) => setBlockVerify(state),
+    [],
+  );
+
+  const handleCodeChange = useCallback(
+    (newCode: string) => setCode(newCode),
+    [],
   );
 
   const handleSubmitCheckCode = (e: any) => {
     e.preventDefault();
-    onSubmit(code?.join(''));
+    onSubmit(code);
   };
 
-  const handleCodeInputChange = (e: any, codeIndex: number) => {
-    setCode(
-      code?.map((codeItem: any, indexCodeItem: number) =>
-        indexCodeItem === codeIndex
-          ? e.target.value !== ''
-            ? Math.max(0, parseInt(e.target.value)).toString().slice(0, 1)
-            : null
-          : code[indexCodeItem],
-      ),
-    );
-
-    codeIndex !== 3 &&
-      e.target.value !== '' &&
-      codeInputRef.current.children[codeIndex + 1].children[0].select();
-  };
-
-  const codeInputRef: any = useRef(null);
   return (
     <form
       onSubmit={handleSubmitCheckCode}
       className="flex grow flex-col justify-between pl-0 sm:pr-10 sm:pl-10"
     >
       <div className="flex max-h-[28rem] grow flex-col">
-        {' '}
         {email ? (
           <>
             <h1 className="font-helmet">Please check your email</h1>
@@ -64,21 +52,7 @@ const ForgotPasswordStep2 = ({
             </p>
           </>
         )}
-        <div
-          className="codes mx-auto flex flex-row justify-center space-x-3 pt-10 pb-5"
-          ref={codeInputRef}
-        >
-          {[0, 1, 2, 3].map((codeIndex) => (
-            <TextInput
-              key={`opt-code-${codeIndex}`}
-              value={code[codeIndex]}
-              onChange={(e) => handleCodeInputChange(e, codeIndex)}
-              type="number"
-              maxLength={1}
-              className="h-16 w-16 border-2 border-grayLineBased text-center "
-            />
-          ))}
-        </div>
+        <CodeFields sendCode={handleCodeChange} setBlock={handleBlockVerify} />
         {error && (
           <p className="text-error">
             <ExclamationCircleIcon className="inline h-5 w-5" /> {error}

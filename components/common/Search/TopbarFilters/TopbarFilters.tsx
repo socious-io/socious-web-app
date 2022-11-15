@@ -91,6 +91,7 @@ export const TopbarFilters: FC<TopbarFiltersProps> = ({
             <SkillsDropdown onClick={onShowSkillsModal} />
             <LocationDropdown onClick={onShowLocationModal} />
             {/* <PaymentTypeDropdown onChange={changePaymentType} /> */}
+            <AllFilters onClick={onToggleAllFilters} selected={allFilterOpen} />
           </>
         );
       case 'organizations':
@@ -100,6 +101,7 @@ export const TopbarFilters: FC<TopbarFiltersProps> = ({
             <LocationDropdown onClick={onShowLocationModal} />
             {/* <ProjectsDropdown onChange={changeProjects} /> */}
             {/* <OrganizationTypeDropdown onChange={changeOrganizationType} /> */}
+            <AllFilters onClick={onToggleAllFilters} selected={allFilterOpen} />
           </>
         );
       case 'projects':
@@ -109,6 +111,7 @@ export const TopbarFilters: FC<TopbarFiltersProps> = ({
             <SocialCausesDropdown onClick={onShowSocialCausesModal} />
             <SkillsDropdown onClick={onShowSkillsModal} />
             {/* <ProjectTypeDropdown onChange={changeProjectType} /> */}
+            <AllFilters onClick={onToggleAllFilters} selected={allFilterOpen} />
           </>
         );
       default:
@@ -124,7 +127,6 @@ export const TopbarFilters: FC<TopbarFiltersProps> = ({
           onChange={changeSearchType}
         />
         {renderFilters()}
-        <AllFilters onClick={onToggleAllFilters} selected={allFilterOpen} />
         <ResetFilters onClick={onResetFilters} />
       </div>
     </div>

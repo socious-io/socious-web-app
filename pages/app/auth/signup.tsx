@@ -10,11 +10,11 @@ import {PreAuthLayout} from 'layout';
 import {Button, Modal} from '@components/common';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
-import SignupStep1 from '@components/common/Auth/Signup/Step1/SignupStep1';
-import SignupStep2 from '@components/common/Auth/Signup/Step2/SignupStep2';
-import ForgotPasswordStep2 from '@components/common/Auth/ForgotPassword/Step2/ForgotPasswordStep2';
-import SignupStep3 from '@components/common/Auth/Signup/Step3/SignupStep3';
-import SignupStep4 from '@components/common/Auth/Signup/Step4/SignupStep4';
+import ForgotPasswordStep2 from '@components/organisms/Auth/ForgotPassword/Step2/ForgotPasswordStep2';
+import SignupStep1 from '@components/organisms/Auth/Signup/Step1/SignupStep1';
+import SignupStep2 from '@components/organisms/Auth/Signup/Step2/SignupStep2';
+import SignupStep3 from '@components/organisms/Auth/Signup/Step3/SignupStep3';
+import SignupStep4 from '@components/organisms/Auth/Signup/Step4/SignupStep4';
 
 import {
   schemaSignupStep1,

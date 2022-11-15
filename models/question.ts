@@ -9,4 +9,13 @@ export interface Question {
   old_id: string | null;
 }
 
+export interface AddQuestionType<T = string> {
+  question: string;
+  required: boolean;
+  options?: T[] | null;
+}
+
+export interface AddQuestionTypeWithId extends AddQuestionType {
+  id: string;
+}
 export type TQuestionsResponse = {questions: Question[]};

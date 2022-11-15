@@ -27,15 +27,16 @@ export const DesktopSidebar: FC<DesktopSidebarProps> = ({
   useEffect(() => {
     setStyles({
       top: rect?.top,
-      left: rect?.left,
-      width: rect?.width,
-      height: window.innerHeight - 120,
+      left: rect?.width < 154 ? '0' : rect?.left,
+      width: rect?.width < 154 ? '100%' : rect?.width,
+      height:
+        rect?.width < 154 ? window.innerHeight - 180 : window.innerHeight - 120,
     });
   }, [rect]);
 
   return (
     <div className="relative flex-1" ref={ref}>
-      <div className={`fixed`} style={styles}>
+      <div className="fixed" style={styles}>
         <div className="relative h-full">
           {showSidebarFilters ? (
             <SidebarFilters

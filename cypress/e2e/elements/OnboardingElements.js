@@ -4,7 +4,7 @@ class OnboardingElements {
     emailTxt: () => cy.get('[data-testid="Email-testid"]'),
     passwordTxt: () => cy.get('[data-testid="Password-testid"]'),
     onboardingcontinueBtn: () => cy.contains('Continue'),
-    congratulationsLbl: () => cy.get('.font-helmet'),
+    congratulationsLbl: () => cy.contains('Congratulations'),
     completeProfileBtn: () => cy.contains('Complete your profile'),
     socialCauseLbl: () => cy.contains('What are your social causes?'),
     socialCauseSearchTxt: () => cy.get('[data-testid="undefined-testid"]'),

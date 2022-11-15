@@ -3,15 +3,15 @@ import {GetStaticProps} from 'next';
 import {useCallback, useMemo, useState} from 'react';
 import {Button, Modal} from '@components/common';
 import {twMerge} from 'tailwind-merge';
-import OnboardingStep1 from '@components/common/Auth/Onboarding/Step1/OnboardingStep1';
-import OnboardingStep2 from '@components/common/Auth/Onboarding/Step2/OnboardingStep2';
-import OnboardingStep3 from '@components/common/Auth/Onboarding/Step3/OnboardingStep3';
-import OnboardingStep4 from '@components/common/Auth/Onboarding/Step4/OnboardingStep4';
-import OnboardingStep5 from '@components/common/Auth/Onboarding/Step5/OnboardingStep5';
-import OnboardingStep6 from '@components/common/Auth/Onboarding/Step6/OnboardingStep6';
-import OnboardingStep7 from '@components/common/Auth/Onboarding/Step7/OnboardingStep7';
-import OnboardingStep8 from '@components/common/Auth/Onboarding/Step8/OnboardingStep8';
-import OnboardingStep9 from '@components/common/Auth/Onboarding/Step9/OnboardingStep9';
+import OnboardingStep1 from '@components/organisms/Auth/Onboarding/Step1/OnboardingStep1';
+import OnboardingStep2 from '@components/organisms/Auth/Onboarding/Step2/OnboardingStep2';
+import OnboardingStep3 from '@components/organisms/Auth/Onboarding/Step3/OnboardingStep3';
+import OnboardingStep4 from '@components/organisms/Auth/Onboarding/Step4/OnboardingStep4';
+import OnboardingStep5 from '@components/organisms/Auth/Onboarding/Step5/OnboardingStep5';
+import OnboardingStep6 from '@components/organisms/Auth/Onboarding/Step6/OnboardingStep6';
+import OnboardingStep7 from '@components/organisms/Auth/Onboarding/Step7/OnboardingStep7';
+import OnboardingStep8 from '@components/organisms/Auth/Onboarding/Step8/OnboardingStep8';
+import OnboardingStep9 from '@components/organisms/Auth/Onboarding/Step9/OnboardingStep9';
 import {PreAuthLayout} from 'layout';
 
 import {useForm, FormProvider} from 'react-hook-form';
@@ -213,12 +213,19 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 
   const handleNext = useCallback(() => {
     if (step === 7) {
-      console.log('I came here throught skip');
+      formMethodsStep7.reset();
       handleUpdateProfileRequest();
     } else {
+      step === 5 ? formMethodsStep5.reset() : formMethodsStep6.reset();
       setStep(step + 1);
     }
-  }, [handleUpdateProfileRequest, step]);
+  }, [
+    formMethodsStep5,
+    formMethodsStep6,
+    formMethodsStep7,
+    handleUpdateProfileRequest,
+    step,
+  ]);
 
   const requestNotificationPermission = async () => {
     if ('Notification' in window && !Capacitor.isNativePlatform())

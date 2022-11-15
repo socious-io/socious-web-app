@@ -1,18 +1,21 @@
 import {CreateProjectLayout} from '../Layout';
-import React, {FC, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import ProjectAbout from '../ProjectAbout';
 import ProjectReview from '../ProjectReview';
 import Congrats from '../Congrats';
 import ProjectSkill from '../ProjectSkill';
 import ProjectInfo from '../ProjectInfo';
 import {useProjectContext, initContext} from '../context';
-import {createProject} from '@api/projects/actions';
-import {CreateProjectType} from '@models/project';
+import {addQuestion, createProject} from '@api/projects/actions';
+import {CreateProjectType, Project} from '@models/project';
 import {toast} from 'react-toastify';
 import {useGoogleMapsScript, Libraries} from 'use-google-maps-script';
 import useSWR from 'swr';
 import {get} from 'utils/request';
 import {useUser} from '@hooks';
+import ProjectQuestion from '../ProjectQuestions';
+import QuestionDetail from '../QuestionDetail';
+import {AddQuestionType, AddQuestionTypeWithId} from '@models/question';
 
 type CreateProjectMainType = {
   skills: any[];
@@ -37,9 +40,11 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
   const isStep2 = ProjectContext.formStep === 2;
   const isStep3 = ProjectContext.formStep === 3;
   const isStep4 = ProjectContext.formStep === 4;
+  const isStep5 = ProjectContext.formStep === 5;
+  const isStep6 = ProjectContext.formStep === 6;
 
   const onSubmit = async (s?: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => {
-    if (isStep3 && s) {
+    if (isStep4 && s) {
       const postBody: CreateProjectType = {
         title: ProjectContext.title,
         description: ProjectContext.description,
@@ -77,17 +82,56 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
         postBody.payment_currency = ProjectContext.payment_currency;
 
       try {
-        await createProject(postBody);
+        const project: Project = await createProject(postBody);
+        console.log('PROJECT :---: ', project);
+        // Adding Questions if any
+        ProjectContext.newQuestions?.forEach(async (question, i) => {
+          const {id, ...questionBody} = question;
+          await addQuestion(project.id, questionBody);
+          console.log('ADD QUESTION :__:', i);
+        });
         mutate();
       } catch (error) {
+        console.log('ERROR :---: ', error);
         toast.error(`${error}`);
       }
     }
+
     setProjectContext({
       ...ProjectContext,
-      formStep: ProjectContext.formStep + 1,
+      formStep: isStep5
+        ? ProjectContext.formStep + 2
+        : ProjectContext.formStep + 1,
     });
   };
+
+  const onQuestionSubmit = useCallback(
+    (newQuestion: AddQuestionType) => {
+      if (ProjectContext.editQuestion?.id)
+        setProjectContext({
+          ...ProjectContext,
+          newQuestions:
+            ProjectContext.newQuestions?.map((question) =>
+              question.id === ProjectContext.editQuestion?.id
+                ? {...question, ...newQuestion}
+                : question,
+            ) || null,
+          formStep: 3,
+          editQuestion: null,
+        });
+      else
+        setProjectContext({
+          ...ProjectContext,
+          newQuestions: [
+            ...(ProjectContext.newQuestions ?? []),
+            {id: Date.now().toString(), ...newQuestion},
+          ],
+          formStep: 3,
+        });
+    },
+    [ProjectContext, setProjectContext],
+  );
+
   useEffect(() => {
     if (!ProjectContext.isModalOpen) {
       setProjectContext(initContext);
@@ -102,9 +146,13 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
     } else if (isStep2) {
       return <ProjectInfo onSubmit={onSubmit} />;
     } else if (isStep3) {
-      return <ProjectReview onSubmit={onSubmit} />;
+      return <ProjectQuestion onSubmit={onSubmit} stepToEdit={6} />;
     } else if (isStep4) {
+      return <ProjectReview onSubmit={onSubmit} />;
+    } else if (isStep5) {
       return <Congrats />;
+    } else if (isStep6) {
+      return <QuestionDetail onSubmit={onQuestionSubmit} />;
     }
   };
 

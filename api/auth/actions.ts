@@ -1,4 +1,4 @@
-import {UpdateProfileBodyType} from '@models/profile';
+import {IUpdateUserBody, UserProfile} from '@models/profile';
 import {get, post} from 'utils/request';
 
 export function signup(
@@ -48,8 +48,8 @@ export function changePassword(currentPassword: string, newPassword: string) {
   });
 }
 
-export function updateProfile(userBody: UpdateProfileBodyType) {
-  return post('/user/update/profile', userBody);
+export function updateProfile(userBody: IUpdateUserBody) {
+  return post<UserProfile>('/user/update/profile', userBody);
 }
 
 export function logout() {
