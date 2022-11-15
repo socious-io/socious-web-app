@@ -1,4 +1,4 @@
-import {confirmOTP, login, signup} from '@api/auth/actions';
+import {confirmOTP, login, register, sendOTP} from '@api/auth/actions';
 import {
   schemaLogin,
   schemaSignupCompact,
@@ -57,14 +57,17 @@ const RegisterModal = ({show, onClose}: RegisterModalProps) => {
     [forceClose, mutateIdentities],
   );
 
-  const signupUser = useCallback(async (data: any) => {
+  const registerWithEmail = useCallback(async () => {
+    const email = emailMethods.getValues('email');
     try {
-      // await signup(data);
+      await register(email);
     } catch (error: any) {
       if (error.isAxiosError && error.response.data)
         toast.error(error.response?.data?.error);
+      return;
     }
-  }, []);
+    setRegisterContext({...registerContext, step: 2});
+  }, [emailMethods, registerContext, setRegisterContext]);
 
   const handleConfirmOTPRequest = useCallback(
     async (code: string) => {
@@ -77,7 +80,14 @@ const RegisterModal = ({show, onClose}: RegisterModalProps) => {
         const error = e as AxiosError<any>;
         if (error.isAxiosError) {
           if (error.response?.data?.error === 'Not matched') {
-            toast.error('Incorrect verification code.');
+            emailMethods.setError(
+              'code',
+              {
+                type: 'value',
+                message: 'Incorrect verification code.',
+              },
+              {shouldFocus: false},
+            );
           } else {
             toast.error(error.response?.data?.error);
           }
@@ -87,36 +97,29 @@ const RegisterModal = ({show, onClose}: RegisterModalProps) => {
     [emailMethods, registerContext, setRegisterContext],
   );
 
-  const sendOTP = useCallback(async () => {
+  const handleSendOTP = useCallback(async () => {
+    const email = emailMethods.getValues('email');
     try {
-      await sendOTP();
+      await sendOTP(email);
     } catch (error: any) {
       if (error.isAxiosError && error.response.data)
         toast.error(error.response?.data?.error);
     }
-  }, []);
+  }, [emailMethods]);
+
+  const handleNameAndPassword = useCallback(() => {
+    const firstName = compactMethods.getValues('firstName');
+    const lastName = compactMethods.getValues('lastName');
+    const password = compactMethods.getValues('password');
+  }, [compactMethods]);
 
   const submitSignup = useCallback(
-    (data?: any) => {
-      if (step === 1) setRegisterContext({...registerContext, step: 2});
+    async (data?: any) => {
+      if (step === 1) registerWithEmail();
       else if (step === 2) handleConfirmOTPRequest(data);
-      else {
-        const firstName = compactMethods.getValues('firstName');
-        const lastName = compactMethods.getValues('lastName');
-        const email = emailMethods.getValues('email');
-        const password = compactMethods.getValues('password');
-        signupUser({firstName, lastName, email, password});
-      }
+      else if (step === 3) handleNameAndPassword();
     },
-    [
-      compactMethods,
-      emailMethods,
-      handleConfirmOTPRequest,
-      registerContext,
-      setRegisterContext,
-      signupUser,
-      step,
-    ],
+    [handleConfirmOTPRequest, handleNameAndPassword, step],
   );
 
   return (
@@ -134,7 +137,9 @@ const RegisterModal = ({show, onClose}: RegisterModalProps) => {
           <SignupStep1Form onSubmit={submitSignup} />
         </FormProvider>
       ) : step === 2 ? (
-        <SignupStep2Form onSubmit={submitSignup} resendCode={sendOTP} />
+        <FormProvider {...emailMethods}>
+          <SignupStep2Form onSubmit={submitSignup} resendCode={handleSendOTP} />
+        </FormProvider>
       ) : (
         <FormProvider {...compactMethods}>
           <SignupStep3Form onSubmit={submitSignup} />
