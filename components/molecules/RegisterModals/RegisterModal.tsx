@@ -1,22 +1,41 @@
-import {confirmOTP, login, register, sendOTP} from '@api/auth/actions';
+import {useCallback} from 'react';
+import Router from 'next/router';
+import {BottomSheet} from 'react-spring-bottom-sheet';
+import {isMobile} from 'react-device-detect';
+import {joiResolver} from '@hookform/resolvers/joi';
+import {FormProvider, useForm} from 'react-hook-form';
+import {toast} from 'react-toastify';
+
+// Components
+import {Modal} from '@components/common';
+import SignupStep1Form from './SignupStep1Form';
+import SignupStep3Form from './SignupStep3Form';
+import SignupStep2Form from './SignupStep2Form';
+import LoginForm from './LoginForm';
+import {useRegisterContext} from './RegisterContext';
+
+// Functions
+import {
+  confirmOTP,
+  directChangePassword,
+  login,
+  register,
+  sendOTP,
+  updateProfile,
+} from '@api/auth/actions';
+
+// Hooks
+import {useUser} from '@hooks';
+
+// Validations
 import {
   schemaLogin,
   schemaSignupCompact,
   schemaSignupStep2,
 } from '@api/auth/validation';
-import {Modal} from '@components/common';
-import {joiResolver} from '@hookform/resolvers/joi';
-import {useUser} from '@hooks';
-import {AxiosError} from 'axios';
-import React, {useCallback} from 'react';
-import {FormProvider, useForm} from 'react-hook-form';
-import {toast} from 'react-toastify';
-import LoginForm from './LoginForm';
-import {useRegisterContext} from './RegisterContext';
-import SignupStep1Form from './SignupStep1Form';
-import SignupStep3Form from './SignupStep3Form';
-import SignupStep2Form from './SignupStep2Form';
 
+// Types
+import {AxiosError} from 'axios';
 type RegisterModalProps = {
   show: boolean;
   onClose: () => void;
@@ -25,11 +44,11 @@ type RegisterModalProps = {
 const RegisterModal = ({show, onClose}: RegisterModalProps) => {
   const {registerContext, setRegisterContext} = useRegisterContext();
   const {mutateIdentities} = useUser({redirect: false});
+  const {id} = Router.query;
 
   const loginMethods = useForm({resolver: joiResolver(schemaLogin)});
   const emailMethods = useForm({resolver: joiResolver(schemaSignupStep2)});
   const compactMethods = useForm({resolver: joiResolver(schemaSignupCompact)});
-
   const {state, step} = registerContext;
   const forceClose = useCallback(() => {
     setRegisterContext({state: 'LOGIN', step: 1});
@@ -107,44 +126,69 @@ const RegisterModal = ({show, onClose}: RegisterModalProps) => {
     }
   }, [emailMethods]);
 
-  const handleNameAndPassword = useCallback(() => {
-    const firstName = compactMethods.getValues('firstName');
-    const lastName = compactMethods.getValues('lastName');
-    const password = compactMethods.getValues('password');
-  }, [compactMethods]);
+  const handleNameAndPassword = useCallback(
+    async (data: any) => {
+      try {
+        const {
+          password,
+          firstName: first_name,
+          lastName: last_name,
+          username,
+        } = data;
+        await updateProfile({first_name, last_name, username} as any);
+        await directChangePassword(password);
+        forceClose();
+        Router.push(`/auth/onboarding?redirect_to=/app/projects/${id}`);
+      } catch (error: any) {
+        if (error.isAxiosError && error.response.data)
+          toast.error(error.response?.data?.error);
+      }
+    },
+    [forceClose, id],
+  );
 
   const submitSignup = useCallback(
     async (data?: any) => {
-      if (step === 1) registerWithEmail();
-      else if (step === 2) handleConfirmOTPRequest(data);
-      else if (step === 3) handleNameAndPassword();
+      if (step === 1) await registerWithEmail();
+      else if (step === 2) await handleConfirmOTPRequest(data);
+      else if (step === 3) {
+        await handleNameAndPassword(data);
+      }
     },
-    [handleConfirmOTPRequest, handleNameAndPassword, step],
+    [handleConfirmOTPRequest, handleNameAndPassword, registerWithEmail, step],
   );
 
-  return (
+  const formBody = () => {
+    return state === 'LOGIN' ? (
+      <FormProvider {...loginMethods}>
+        <LoginForm onSubmit={loginUser} />
+      </FormProvider>
+    ) : step === 1 ? (
+      <FormProvider {...emailMethods}>
+        <SignupStep1Form onSubmit={submitSignup} />
+      </FormProvider>
+    ) : step === 2 ? (
+      <FormProvider {...emailMethods}>
+        <SignupStep2Form onSubmit={submitSignup} resendCode={handleSendOTP} />
+      </FormProvider>
+    ) : (
+      <FormProvider {...compactMethods}>
+        <SignupStep3Form onSubmit={submitSignup} />
+      </FormProvider>
+    );
+  };
+
+  return isMobile ? (
+    <BottomSheet open={show} onDismiss={forceClose}>
+      <>{formBody()}</>
+    </BottomSheet>
+  ) : (
     <Modal
       isOpen={show}
       onClose={forceClose}
       className="-m-4 mt-16 flex w-screen max-w-2xl flex-col self-end rounded-b-none p-0 sm:m-0 sm:w-full sm:max-w-lg sm:self-auto sm:rounded-2xl sm:pt-0"
     >
-      {state === 'LOGIN' ? (
-        <FormProvider {...loginMethods}>
-          <LoginForm onSubmit={loginUser} />
-        </FormProvider>
-      ) : step === 1 ? (
-        <FormProvider {...emailMethods}>
-          <SignupStep1Form onSubmit={submitSignup} />
-        </FormProvider>
-      ) : step === 2 ? (
-        <FormProvider {...emailMethods}>
-          <SignupStep2Form onSubmit={submitSignup} resendCode={handleSendOTP} />
-        </FormProvider>
-      ) : (
-        <FormProvider {...compactMethods}>
-          <SignupStep3Form onSubmit={submitSignup} />
-        </FormProvider>
-      )}
+      {formBody()}
     </Modal>
   );
 };
