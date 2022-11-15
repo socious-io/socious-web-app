@@ -80,12 +80,20 @@ const RegisterModal = ({show, onClose}: RegisterModalProps) => {
     const email = emailMethods.getValues('email');
     try {
       await register(email);
+      setRegisterContext({...registerContext, step: 2});
     } catch (error: any) {
-      if (error.isAxiosError && error.response.data)
-        toast.error(error.response?.data?.error);
-      return;
+      if (error.isAxiosError) {
+        if (
+          error.response?.data?.error ===
+          'duplicate key value violates unique constraint "users_email_key"'
+        ) {
+          emailMethods.setError('email', {
+            type: 'value',
+            message: 'This email is already registered',
+          });
+        } else toast.error(error.response?.data?.error);
+      }
     }
-    setRegisterContext({...registerContext, step: 2});
   }, [emailMethods, registerContext, setRegisterContext]);
 
   const handleConfirmOTPRequest = useCallback(
@@ -138,7 +146,7 @@ const RegisterModal = ({show, onClose}: RegisterModalProps) => {
         await updateProfile({first_name, last_name, username} as any);
         await directChangePassword(password);
         forceClose();
-        Router.push(`/auth/onboarding?redirect_to=/app/projects/${id}`);
+        Router.push(`/app/auth/onboarding?redirect_to=/app/projects/${id}`);
       } catch (error: any) {
         if (error.isAxiosError && error.response.data)
           toast.error(error.response?.data?.error);
