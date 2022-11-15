@@ -17,6 +17,10 @@ export function signup(
   });
 }
 
+export function register(email: string) {
+  return post('/auth/register', {email});
+}
+
 export function checkEmailExist(email: string) {
   return post('/auth/preregister', {email});
 }
