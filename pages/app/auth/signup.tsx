@@ -8,11 +8,11 @@ import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import {AxiosError} from 'axios';
 
 // Components
-import SignupStep1 from '@components/organisms/Auth/Signup/Step1/SignupStep1';
-import SignupStep2 from '@components/organisms/Auth/Signup/Step2/SignupStep2';
-import SignupStep3 from '@components/organisms/Auth/Signup/Step3/SignupStep3';
-import SignupStep4 from '@components/organisms/Auth/Signup/Step4/SignupStep4';
-import SignupStep5 from '@components/organisms/Auth/Signup/Step5/SignupStep5';
+import SignupStep1 from '@components/pages/auth/Signup/Step1/SignupStep1';
+import SignupStep2 from '@components/pages/auth/Signup/Step2/SignupStep2';
+import SignupStep3 from '@components/pages/auth/Signup/Step3/SignupStep3';
+import SignupStep4 from '@components/pages/auth/Signup/Step4/SignupStep4';
+import SignupStep5 from '@components/pages/auth/Signup/Step5/SignupStep5';
 import {Button, Modal} from '@components/common';
 import {PreAuthLayout} from 'layout';
 
