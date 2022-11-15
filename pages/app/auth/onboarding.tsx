@@ -62,6 +62,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     libraries,
   });
 
+  const {redirect_to} = Router.query;
   const {user} = useUser();
   const [errorMessage, setError] = useState<ErrorMessage>();
 
@@ -230,7 +231,9 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   const requestNotificationPermission = async () => {
     if ('Notification' in window && !Capacitor.isNativePlatform())
       await Notification.requestPermission();
-    Router.push('/app/projects');
+    redirect_to
+      ? Router.push(redirect_to as string)
+      : Router.push('/app/projects');
   };
 
   return (
