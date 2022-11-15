@@ -29,10 +29,6 @@ export function forgetPassword(email: string) {
   return post('/auth/forget-password', {email});
 }
 
-export function sendOTP(email: string) {
-  return post('/auth/otp', {email});
-}
-
 export function confirmOTP(email: string, code: string) {
   return get(`/auth/otp/confirm/web?email=${email}&code=${code}`);
 }
