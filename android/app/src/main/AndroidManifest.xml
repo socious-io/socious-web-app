@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
+<manifest
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  package="jp.socious.network"
+>
 
     <application
     android:allowBackup="true"
@@ -41,21 +43,6 @@
     </application>
 
     <!-- Permissions -->
-
-    <meta-data
-    android:name="com.google.firebase.messaging.default_notification_icon"
-    android:resource="@mipmap/push_icon_name"
-  />
-
-<meta-data
-    android:name="firebase_messaging_auto_init_enabled"
-    android:value="false"
-  />
-<meta-data
-    android:name="firebase_analytics_collection_enabled"
-    android:value="false"
-  />
-
 
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

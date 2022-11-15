@@ -67,7 +67,10 @@ const Login: NextPage = () => {
       return;
     }
 
-    const list = await getDevices();
+    const list = await getDevices().catch((err) => {
+      console.log('error on getting list of devices', err);
+      return [];
+    });
     console.log('list: ', list);
     const savedToken = list.find(({id}) => id === token);
 
@@ -83,7 +86,10 @@ const Login: NextPage = () => {
         os: 'IOS',
       },
     };
-    const resp = await saveDeviceToken(device);
+    const resp = await saveDeviceToken(device).catch((err) => {
+      console.log('error saving token to the db: ', err);
+      return {token: ''};
+    });
     console.log('saveDeviceToken: ', resp);
     return resp.token;
   };
@@ -108,7 +114,13 @@ const Login: NextPage = () => {
       //   return;
       // }
 
-      requestPermissions().then(getFCMToken).then(saveToken).then(addListeners);
+      requestPermissions()
+        .then(getFCMToken)
+        .then(saveToken)
+        .then(addListeners)
+        .catch((err) => {
+          console.log('err during permission request ', err);
+        });
       router.push('/app/projects');
     }
   };
