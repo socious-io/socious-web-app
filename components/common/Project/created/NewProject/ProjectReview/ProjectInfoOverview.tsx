@@ -3,7 +3,6 @@ import {getText} from '@socious/data';
 import {useFormattedLocation} from 'services/formatLocation';
 import {EXPERIENCE_LEVEL_OPTIONS} from '@components/common/Search/filterOptions';
 import Markdown from 'markdown-to-jsx';
-import Project from 'pages/app/feed';
 
 type TProject = {
   project: {
