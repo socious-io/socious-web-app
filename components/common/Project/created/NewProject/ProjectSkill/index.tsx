@@ -3,13 +3,13 @@ import Chip from '@components/common/Chip/Chip';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import {useForm} from 'react-hook-form';
 import useFilter from 'hooks/auth/useFilter';
-import Title from '@components/common/CreateOrganization/components/Title';
+import Title from '@components/molecules/Title';
 import {useProjectContext} from '../context';
 import {toast} from 'react-toastify';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {schemaCreateProjectStep2} from '@api/projects/validation';
 import {Button} from '@components/common';
-import {FromLayout} from '../Layout';
+import {FormLayout} from '../Layout';
 import {TOnSubmit} from '../sharedType';
 import type {NextPage} from 'next';
 import {getText} from '@socious/data';
@@ -84,7 +84,7 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
 
   return (
     <form className="flex h-full w-full flex-col">
-      <FromLayout>
+      <FormLayout>
         <Title description="Skills used in this project" border={false}>
           Select up to 10 relevant skills
         </Title>
@@ -112,7 +112,7 @@ const ProjectSkill: NextPage<ProjectSkillType> = ({onSubmit, rawSkills}) => {
             })}
           </div>
         </div>
-      </FromLayout>
+      </FormLayout>
       <div className=" flex items-end justify-end  border-t p-4">
         <Button
           disabled={ProjectContext.isEditModalOpen ? false : !isValid}

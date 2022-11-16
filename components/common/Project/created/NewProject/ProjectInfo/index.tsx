@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useMemo} from 'react';
 import {useForm} from 'react-hook-form';
-import Title from '@components/common/CreateOrganization/components/Title';
+import Title from '@components/molecules/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
 import TextArea from '@components/common/TextArea/TextArea';
 import {Combobox} from '@components/common';
@@ -8,7 +8,7 @@ import useGetData from '../../../../../../hooks/useGetData';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {schemaCreateProjectStep3} from '@api/projects/validation';
 import {useProjectContext} from '../context';
-import {FromLayout} from '../Layout';
+import {FormLayout} from '../Layout';
 import {TOnSubmit} from '../sharedType';
 import {Button} from '@components/common';
 import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
@@ -135,7 +135,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
 
   return (
     <form className="flex h-full w-full flex-col">
-      <FromLayout>
+      <FormLayout>
         <div className="overflow-y-scroll">
           <Title description="Describe your project in detail." border>
             Tell us more about your project.
@@ -365,7 +365,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
             </div>
           </div>
         </div>
-      </FromLayout>
+      </FormLayout>
       <div className=" flex items-end justify-end  border-t p-4">
         {ProjectContext.isEditModalOpen ? (
           <>

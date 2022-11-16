@@ -6,7 +6,6 @@ import useSWR from 'swr';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {useForm} from 'react-hook-form';
 
-import ProjectAbout from '../ProjectAbout';
 import ProjectReview from '../ProjectReview';
 import Congrats from '../Congrats';
 import ProjectSkill from '../ProjectSkill';
@@ -26,6 +25,8 @@ import {
 } from '@api/projects/validation';
 import {FormWizard} from '@components/organisms/forms/FormWizard';
 import ProjectQuestions from '@components/pages/project/create/ProjectQuestions';
+import Causes from '@components/pages/project/create/Causes';
+import Skills from '@components/pages/project/create/Skills';
 
 type CreateProjectMainType = {
   skills: any[];
@@ -67,8 +68,8 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
         project_type: ProjectContext.project_type,
         project_length: ProjectContext.project_length,
         payment_type: ProjectContext.payment_type,
-        causes_tags: ProjectContext.causes_tags,
-        skills: ProjectContext.skills,
+        causes_tags: wizard.methods[0].getValues().causes_tags,
+        skills: wizard.methods[1].getValues().skills,
         status: s,
         experience_level: ProjectContext.experience_level,
       };
@@ -141,17 +142,15 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
   return (
     <CreateProjectModal
       title={wizard.step === 4 ? '' : 'Create Project'}
-      onBack={
-        wizard.step > 0 ? () => wizard.setStep(wizard.step - 1) : undefined
-      }
+      onBack={wizard.step > 0 ? wizard.back : undefined}
       onClose={() => setShowCreate(false)}
     >
       {showQuestionDetail ? (
         <QuestionDetail onSubmit={onQuestionSubmit} />
       ) : (
         <FormWizard wizard={wizard}>
-          <ProjectAbout onSubmit={wizard.advance} />
-          <ProjectSkill onSubmit={wizard.advance} rawSkills={skills} />
+          <Causes onSubmit={wizard.advance} />
+          <Skills onSubmit={wizard.advance} rawSkills={skills} />
           <ProjectInfo onSubmit={wizard.advance} />
           <ProjectQuestions
             onSubmit={wizard.advance}

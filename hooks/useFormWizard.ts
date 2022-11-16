@@ -6,7 +6,7 @@ export interface FormWizardData {
   step: number;
   setStep: (step: number) => void;
   advance: () => void;
-  next: () => void;
+  back: () => void;
   // schemas: Array<any>;
   methods: Array<UseFormReturn<FieldValues, any>>;
 }
@@ -26,7 +26,7 @@ export function useFormWizard(options: FormWizardOptions): FormWizardData {
   const advance = useCallback(() => {
     setStep(step + 1);
   }, [step, setStep]);
-  const next = useCallback(() => {
+  const back = useCallback(() => {
     if (step > 0) setStep(step - 1);
   }, [step, setStep]);
 
@@ -34,7 +34,7 @@ export function useFormWizard(options: FormWizardOptions): FormWizardData {
     step,
     setStep,
     advance,
-    next,
+    back,
     // schemas,
     methods,
   };

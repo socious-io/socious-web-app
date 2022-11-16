@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import Title from '@components/common/CreateOrganization/components/Title';
+import Title from '@components/molecules/Title';
 import {Button} from '@components/common';
 import {
   PlusCircleIcon,
@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/24/outline';
 import {initContext, useProjectContext} from '../context';
 import {TOnSubmit} from '../sharedType';
-import {FromLayout} from '../Layout';
+import {FormLayout} from '../Layout';
 import {AddQuestionTypeWithId, Question} from '@models/question';
 import Image from 'next/future/image';
 import editIcon from 'asset/icons/edit.svg';
@@ -80,7 +80,7 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
 
   return (
     <form className="flex h-full w-full flex-col">
-      <FromLayout type="FULL" className="!grow">
+      <FormLayout type="FULL" className="!grow">
         <div className="flex h-full w-full flex-col overflow-y-scroll bg-zinc-200">
           <Title
             description="Add up to 5 screener questions."
@@ -177,7 +177,7 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
             </Button>
           )}
         </div>
-      </FromLayout>
+      </FormLayout>
     </form>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 
 //components
-import Title from '../components/Title';
+import Title from '../../../molecules/Title';
 import TextArea from '@components/common/TextArea/TextArea';
 import {Button} from '@components/common/Button/Button';
 

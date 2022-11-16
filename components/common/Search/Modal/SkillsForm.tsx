@@ -1,6 +1,6 @@
 import Button from '@components/common/Button/Button';
 import Chip from '@components/common/Chip/Chip';
-import {FromLayout} from '@components/common/Project/created/NewProject/Layout';
+import {FormLayout} from '@components/common/Project/created/NewProject/Layout';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import useFilter, {ObjectType} from 'hooks/auth/useFilter';
 import {useRouter} from 'next/router';
@@ -57,7 +57,7 @@ export const SkillsForm: FC<SkillsFormProps> = ({onSubmit}) => {
       onSubmit={handleSubmit(onSubmitSkills)}
       className="flex h-full w-full flex-col"
     >
-      <FromLayout>
+      <FormLayout>
         <SearchBar
           type="text"
           placeholder="Search"
@@ -84,7 +84,7 @@ export const SkillsForm: FC<SkillsFormProps> = ({onSubmit}) => {
             })}
           </div>
         </div>
-      </FromLayout>
+      </FormLayout>
       <div className=" flex items-end justify-end  border-t p-4">
         <Button
           type="submit"

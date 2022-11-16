@@ -3,7 +3,7 @@ import {useMemo} from 'react';
 import {StepProps} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
 import useFilter from 'hooks/auth/useFilter';
-import useHandleSelected from 'hooks/auth/useHandleSelected';
+import useHandleSelected from 'hooks/useHandleSelected';
 
 import Data, {getText} from '@socious/data';
 

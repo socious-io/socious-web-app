@@ -3,14 +3,14 @@ import Chip from '@components/common/Chip/Chip';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import {useForm} from 'react-hook-form';
 import useFilter from 'hooks/auth/useFilter';
-import Title from '@components/common/CreateOrganization/components/Title';
+import Title from '@components/molecules/Title';
 import useGetData from '../../../../../../hooks/useGetData';
 import {useProjectContext} from '../context';
 import {toast} from 'react-toastify';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {schemaCreateProjectStep1} from '@api/projects/validation';
 import {Button} from '@components/common';
-import {FromLayout} from '../Layout';
+import {FormLayout} from '../Layout';
 import {TOnSubmit} from '../sharedType';
 
 const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
@@ -68,7 +68,7 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
       // onSubmit={handleSubmit(onSubmit)}
       className="flex h-full w-full flex-col"
     >
-      <FromLayout>
+      <FormLayout>
         <Title description="Select up to 5 social causes" border={false}>
           What is your project about?
         </Title>
@@ -96,7 +96,7 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
             })}
           </div>
         </div>
-      </FromLayout>
+      </FormLayout>
       <div className=" flex items-end justify-end  border-t p-4">
         <Button
           disabled={ProjectContext.isEditModalOpen ? false : !isValid}

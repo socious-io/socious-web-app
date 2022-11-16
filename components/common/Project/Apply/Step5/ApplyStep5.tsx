@@ -3,7 +3,7 @@ import {DocumentIcon} from '@heroicons/react/24/outline';
 import {ClockIcon} from '@heroicons/react/24/outline';
 import {useEffect, useState} from 'react';
 import {useProjectContext} from '../../created/NewProject/context';
-import {FromLayout} from '../../created/NewProject/Layout';
+import {FormLayout} from '../../created/NewProject/Layout';
 
 const MAXFILELIMIT: number = 10485760;
 
@@ -24,7 +24,7 @@ const RecentGallery = () => {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <FromLayout type="FULL" className="!grow">
+      <FormLayout type="FULL" className="!grow">
         <div className="border-offSetColor border-b py-2 px-4">
           <SearchBar bgColor="offWhite" placeholder="Search" />
         </div>
@@ -66,7 +66,7 @@ const RecentGallery = () => {
             }}
           </ImageUploader>
         </div>
-      </FromLayout>
+      </FormLayout>
     </div>
   );
 };

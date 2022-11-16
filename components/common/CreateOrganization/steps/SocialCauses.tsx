@@ -3,7 +3,7 @@ import React, {useMemo} from 'react';
 //components
 import Chip from '@components/common/Chip/Chip';
 import SearchBar from '@components/common/SearchBar/SearchBar';
-import Title from '../components/Title';
+import Title from '../../../molecules/Title';
 import {Button} from '@components/common/Button/Button';
 
 //interfaces
@@ -13,7 +13,7 @@ import {StepProps} from '@models/stepProps';
 import {useFormContext} from 'react-hook-form';
 
 //hooks
-import useHandleSelected from 'hooks/auth/useHandleSelected';
+import useHandleSelected from 'hooks/useHandleSelected';
 import useFilter from 'hooks/auth/useFilter';
 
 //get social causes constant data
