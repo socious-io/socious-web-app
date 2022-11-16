@@ -83,12 +83,10 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
 
       try {
         const project: Project = await createProject(postBody);
-        console.log('PROJECT :---: ', project);
         // Adding Questions if any
         ProjectContext.newQuestions?.forEach(async (question, i) => {
           const {id, ...questionBody} = question;
           await addQuestion(project.id, questionBody);
-          console.log('ADD QUESTION :__:', i);
         });
         mutate();
       } catch (error) {
@@ -138,6 +136,19 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
     }
   }, [ProjectContext, setProjectContext]);
 
+  const handleDeleteQuestion = useCallback(
+    (id: string) => {
+      setProjectContext({
+        ...ProjectContext,
+        newQuestions:
+          ProjectContext.newQuestions?.filter(
+            (question) => question.id !== id,
+          ) ?? null,
+      });
+    },
+    [ProjectContext, setProjectContext],
+  );
+
   const pageDisplay = () => {
     if (isStep0) {
       return <ProjectAbout onSubmit={onSubmit} />;
@@ -146,7 +157,13 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
     } else if (isStep2) {
       return <ProjectInfo onSubmit={onSubmit} />;
     } else if (isStep3) {
-      return <ProjectQuestion onSubmit={onSubmit} stepToEdit={6} />;
+      return (
+        <ProjectQuestion
+          onSubmit={onSubmit}
+          stepToEdit={6}
+          deleteQuestion={handleDeleteQuestion}
+        />
+      );
     } else if (isStep4) {
       return <ProjectReview onSubmit={onSubmit} />;
     } else if (isStep5) {
@@ -159,7 +176,11 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({skills}) => {
   return (
     <>
       {isLoaded && (
-        <CreateProjectLayout title={isStep4 ? '' : 'Create Project'}>
+        <CreateProjectLayout
+          title={
+            isStep4 ? '' : isStep6 ? 'Add screener question' : 'Create Project'
+          }
+        >
           {pageDisplay()}
         </CreateProjectLayout>
       )}
