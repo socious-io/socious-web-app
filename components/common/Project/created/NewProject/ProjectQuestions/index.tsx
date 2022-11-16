@@ -5,6 +5,7 @@ import {
   PlusCircleIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline';
 import {initContext, useProjectContext} from '../context';
 import {TOnSubmit} from '../sharedType';
@@ -17,13 +18,15 @@ import {useToggle} from '@hooks';
 interface ProjectQuestionProps extends TOnSubmit {
   type?: 'EDIT' | 'NEW';
   stepToEdit?: number;
+  deleteQuestion: (id: string) => void;
 }
 
 const QuestionBox: FC<{
   question: Question | AddQuestionTypeWithId;
   title: string;
   editStep?: number;
-}> = ({question, title, editStep = 4}) => {
+  deleteQuestion: (id: string) => void;
+}> = ({question, title, editStep = 4, deleteQuestion}) => {
   const {state: show, handlers: showHandlers} = useToggle();
   const {ProjectContext, setProjectContext} = useProjectContext();
 
@@ -63,7 +66,10 @@ const QuestionBox: FC<{
                 height={100}
               />
             </div>
-            {/* <TrashIcon className="w-5" /> */}
+            <TrashIcon
+              onClick={() => deleteQuestion(question.id)}
+              className="w-5 text-primary"
+            />
           </div>
         </>
       )}
@@ -75,6 +81,7 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
   onSubmit,
   type = 'NEW',
   stepToEdit,
+  deleteQuestion,
 }) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
 
@@ -82,13 +89,15 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
     <form className="flex h-full w-full flex-col">
       <FromLayout type="FULL" className="!grow">
         <div className="flex h-full w-full flex-col overflow-y-scroll bg-zinc-200">
-          <Title
-            description="Add up to 5 screener questions."
-            border
-            className="bg-white"
-          >
-            Screener questions
-          </Title>
+          {type === 'NEW' && (
+            <Title
+              description="Add up to 5 screener questions."
+              border
+              className="bg-white"
+            >
+              Screener questions
+            </Title>
+          )}
           <div className="scroll-y-auto grow bg-offWhite">
             <div className="space-y-4 divide-y py-4">
               {type === 'EDIT'
@@ -98,6 +107,7 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
                       title={`Question ${index + 1}`}
                       question={question}
                       editStep={4}
+                      deleteQuestion={deleteQuestion}
                     />
                   ))
                 : ProjectContext.newQuestions?.map((question, index) => (
@@ -106,6 +116,7 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
                       title={`Question ${index + 1}`}
                       question={question}
                       editStep={stepToEdit}
+                      deleteQuestion={deleteQuestion}
                     />
                   ))}
             </div>
