@@ -27,7 +27,7 @@ const NotificationContainer = () => {
   const totalCount = flattenData.length;
 
   return (
-    <div className="w-full px-4 lg:w-4/6 lg:space-y-2 lg:px-0">
+    <div className="w-full px-4 pb-4 lg:w-4/6 lg:space-y-2 lg:px-0">
       <div>
         {flattenData.map((notification, index) => (
           <Notification
