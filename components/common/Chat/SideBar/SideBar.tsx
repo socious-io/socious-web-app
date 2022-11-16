@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -58,6 +59,12 @@ const SideBarToBe = (
     }
   }, [loadMore, seeMore]);
 
+  const sortedChats = useMemo(
+    () =>
+      chats.sort((x, y) => Date.parse(y.updated_at) - Date.parse(x.updated_at)),
+    [chats],
+  );
+
   return (
     <div
       className={twMerge(
@@ -88,15 +95,15 @@ const SideBarToBe = (
         />
       </div>
       {/* USER-CARD BOX */}
-      {query || (!query && chats?.length > 0) ? (
-        chats?.length > 0 ? (
+      {query || (!query && sortedChats?.length > 0) ? (
+        sortedChats?.length > 0 ? (
           <div
             className="grow overflow-y-auto sm:w-80"
             ref={chatListRef}
             onScroll={onScroll}
           >
             {/* USER-CARD */}
-            {chats?.map((chat: any) => (
+            {sortedChats?.map((chat: any) => (
               <ChatCard
                 key={chat.id}
                 chat={chat}
