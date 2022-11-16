@@ -1,8 +1,8 @@
 name: Cypress Tests using Cypress Docker Image
 
-on:
-  pull_request:
-    branches: []
+on: {}
+#  pull_request:
+#    branches:
 #      - main
 
 concurrency: fe-e2e-test-main
