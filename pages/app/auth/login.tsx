@@ -102,7 +102,6 @@ const Login: NextPage = () => {
     getDeliveredNotifications().then((r) =>
       console.log('getDeliveredNotifications', r),
     );
-    subscribeToTopic('test-ios');
   };
 
   const onLoginSucceed = async ({message}: LoginResp) => {

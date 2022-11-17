@@ -11,7 +11,8 @@ const config: CapacitorConfig = {
   webDir: 'out',
   bundledWebRuntime: false,
   server: {
-    hostname: defineHostname(),
+    androidScheme: 'https',
+    hostname: 'socious.io',
   },
   plugins: {
     PushNotifications: {
