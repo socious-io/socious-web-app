@@ -1,5 +1,5 @@
 import CardBoxComplete from '@components/common/CardBoxComplete/CardBoxComplete';
-import {StatusListingSkeleton} from '@components/molecules/StatusListingSkeleton/StatusListingSkeleton';
+import {StatusListingSkeleton} from '@components/organisms/StatusListingSkeleton/StatusListingSkeleton';
 import {IMission} from '@models/mission';
 import {IOffer} from '@models/offer';
 import {TUserByUsername, UserProfile} from '@models/profile';

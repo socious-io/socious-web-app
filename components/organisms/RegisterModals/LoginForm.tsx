@@ -14,9 +14,13 @@ const LoginForm = ({onSubmit}: StepProps) => {
 
   const {setRegisterContext} = useRegisterContext();
 
-  const {formState, register, handleSubmit} = useFormContext();
+  const {
+    formState: {errors, isDirty},
+    register,
+    handleSubmit,
+  } = useFormContext();
   return (
-    <div className="py-16 px-6 sm:px-[72px]">
+    <div className=" px-6 pt-16 pb-14 sm:px-[72px]">
       <h1 className="mb-10 text-2xl font-semibold">Sign in to Socious</h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -28,7 +32,7 @@ const LoginForm = ({onSubmit}: StepProps) => {
             type="email"
             placeholder="Email"
             register={register('email')}
-            errorMessage={formState?.errors?.['email']?.message}
+            errorMessage={errors?.['email']?.message}
             inputType="borderBottom"
             className="py-2 pl-0"
           />
@@ -37,7 +41,7 @@ const LoginForm = ({onSubmit}: StepProps) => {
             type={passwordShown ? 'text' : 'password'}
             placeholder="Password"
             register={register('password')}
-            errorMessage={formState?.errors?.['password']?.message}
+            errorMessage={errors?.['password']?.message}
             inputType="borderBottom"
             className="py-2 pl-0"
             suffixContent={
@@ -60,13 +64,14 @@ const LoginForm = ({onSubmit}: StepProps) => {
             </Link>
           </div>
         </div>
-        <div className="-mx-14 space-y-4 p-4 pt-12">
+        <div className="-mx-14 space-y-4 px-4 pt-12">
           <Button
             className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle"
             type="submit"
             size="lg"
             variant="fill"
             value="Submit"
+            disabled={!isDirty}
           >
             Continue
           </Button>

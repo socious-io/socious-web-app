@@ -3,7 +3,7 @@ import {ProjectProps} from 'models/project';
 import {Button} from '@components/common';
 import {ApplyStep1, TFormAnswer} from '../Apply/Step1/ApplyStep1';
 import ApplyStep3 from '../Apply/Step3/ApplyStep3';
-import {FC, useState} from 'react';
+import {FC, useCallback, useState} from 'react';
 import useUser from 'hooks/useUser/useUser';
 import {getText} from '@socious/data';
 import {
@@ -22,8 +22,8 @@ import {useFormattedLocation} from 'services/formatLocation';
 import Link from 'next/link';
 import RecentGallery from '../Apply/Step5/ApplyStep5';
 import {checkAndUploadMedia} from 'services/ImageUpload';
-import {RegisterContextProvider} from '@components/molecules/RegisterModals/RegisterContext';
-import RegisterModal from '@components/molecules/RegisterModals/RegisterModal';
+import {RegisterContextProvider} from '@components/organisms/RegisterModals/RegisterContext';
+import RegisterModal from '@components/organisms/RegisterModals/RegisterModal';
 
 const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
   const {
@@ -47,6 +47,8 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
+
+  const mutateProject = useCallback(() => mutate(`/projects/${id}`), [id]);
 
   const onSubmit = async (data?: any) => {
     if (isStep0) {
@@ -96,7 +98,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
       // Applying
       try {
         if (id) await applyProject(id, postBody);
-        mutate(`/projects/${id}`);
+        mutateProject();
         setProjectContext({
           ...ProjectContext,
           formStep: ProjectContext.formStep + 1,
@@ -240,7 +242,11 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
 
       <ApplyLayout title={getTitle()}>{pageDisplay()}</ApplyLayout>
       <RegisterContextProvider>
-        <RegisterModal show={loginStep} onClose={() => setLoginStep(false)} />
+        <RegisterModal
+          show={loginStep}
+          onClose={() => setLoginStep(false)}
+          mutateProject={mutateProject}
+        />
       </RegisterContextProvider>
     </div>
   );
