@@ -43,7 +43,7 @@ const SignupStep2Form = ({onSubmit, resendCode}: SignupStep2FormProps) => {
   };
 
   return (
-    <div className="py-16 px-6 sm:px-[72px]">
+    <div className="px-6 pt-16 pb-14 sm:px-[72px]">
       <h1 className="m-0 text-2xl font-semibold">Please check your email</h1>
       <p className="mb-10 text-graySubtitle ">We’ve sent a code to {email}.</p>
       <form
@@ -74,7 +74,7 @@ const SignupStep2Form = ({onSubmit, resendCode}: SignupStep2FormProps) => {
             </Button>
           </p>
         </div>
-        <div className="-mx-14 space-y-4 p-4 pt-12">
+        <div className="-mx-14 space-y-4 px-4 pt-12">
           <Button
             className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle"
             type="submit"

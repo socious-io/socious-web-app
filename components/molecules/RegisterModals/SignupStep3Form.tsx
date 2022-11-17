@@ -43,7 +43,7 @@ const SignupStep3Form = ({onSubmit}: StepProps) => {
   );
 
   return (
-    <div className="py-16 px-6 sm:px-[72px]">
+    <div className="px-6 pt-16 pb-14 sm:px-[72px]">
       <h1 className="m-0 text-2xl font-semibold">Join Socious</h1>
       <p className="mb-10 text-graySubtitle ">Complete your profile</p>
       <form className="flex grow flex-col justify-between sm:grow-0">
@@ -101,7 +101,10 @@ const SignupStep3Form = ({onSubmit}: StepProps) => {
                   !isValidPasswordLength && 'border-opacity-40',
                 )}
               >
-                <p className="text-sm">・8 characters </p>
+                <p className="flex flex-col text-sm">
+                  <span>・8</span>
+                  <span>characters </span>
+                </p>
               </div>
               <div
                 className={twMerge(
@@ -109,7 +112,10 @@ const SignupStep3Form = ({onSubmit}: StepProps) => {
                   !isValidPasswordHasNumber && 'border-opacity-40',
                 )}
               >
-                <p className="text-sm">・1 number </p>
+                <p className="flex flex-col text-sm">
+                  <span>・1</span>
+                  <span>number </span>
+                </p>
               </div>
               <div
                 className={twMerge(
@@ -117,7 +123,10 @@ const SignupStep3Form = ({onSubmit}: StepProps) => {
                   !isValidPasswordHasUpCase && 'border-opacity-40',
                 )}
               >
-                <p className="text-sm">・1 uppercase </p>
+                <p className="flex flex-col text-sm">
+                  <span>・1</span>
+                  <span>uppercase </span>
+                </p>
               </div>
               <div
                 className={twMerge(
@@ -125,12 +134,15 @@ const SignupStep3Form = ({onSubmit}: StepProps) => {
                   !isValidPasswordHasLowCase && 'border-opacity-40',
                 )}
               >
-                <p className="text-sm">・1 lowercase </p>
+                <p className="flex flex-col text-sm">
+                  <span>・1</span>
+                  <span>lowercase </span>
+                </p>
               </div>
             </div>
           </div>
         </div>
-        <div className="-mx-14 space-y-4 p-4 pt-14">
+        <div className="-mx-14 space-y-4 px-4 pt-14">
           <p className="mx-10 text-center">
             By signing up, you agree to Socious’{' '}
             <Link href="https://socious.io/user-agreement/">
