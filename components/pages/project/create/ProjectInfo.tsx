@@ -14,11 +14,10 @@ import {
   projectRemotePreferenceItems,
 } from 'utils/socious-data';
 import {FormLayout} from '@components/common/Project/created/NewProject/Layout';
-import {TOnSubmit} from '@components/common/Project/created/NewProject/sharedType';
 import {Button} from '@components/common';
 import {LocationFormFragment} from '@components/organisms/data/location-form-fragment';
 
-const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
+const ProjectInfo: FC<{onSubmit: () => void}> = ({onSubmit}) => {
   const {
     setValue,
     watch,

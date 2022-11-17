@@ -6,7 +6,6 @@ import useSWR from 'swr';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {useForm} from 'react-hook-form';
 
-import ProjectReview from '../ProjectReview';
 import Congrats from '../Congrats';
 import {useProjectContext} from '../context';
 import {CreateProjectType, Project} from '@models/project';
@@ -26,6 +25,7 @@ import ProjectQuestions from '@components/pages/project/create/ProjectQuestions'
 import Causes from '@components/pages/project/create/Causes';
 import Skills from '@components/pages/project/create/Skills';
 import ProjectInfo from '@components/pages/project/create/ProjectInfo';
+import {Preview} from '@components/pages/project/create/Preview';
 
 type CreateProjectMainType = {
   skills: any[];
@@ -60,8 +60,8 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
     libraries,
   });
 
-  const onSubmit = async (s?: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => {
-    if (s) {
+  const getProject = useCallback(
+    (s: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => {
       const projectInfo = wizard.methods[2].getValues();
       const postBody: CreateProjectType = {
         title: projectInfo.title,
@@ -99,8 +99,15 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
       if (projectInfo.payment_currency)
         postBody.payment_currency = projectInfo.payment_currency;
 
+      return postBody;
+    },
+    [wizard.methods],
+  );
+
+  const onSubmit = async (s?: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => {
+    if (s) {
       try {
-        const project: Project = await createProject(postBody);
+        const project: Project = await createProject(getProject(s));
         console.log('PROJECT :---: ', project);
         // Adding Questions if any
         ProjectContext.newQuestions?.forEach(async (question, i) => {
@@ -163,7 +170,7 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
             onSubmit={wizard.advance}
             onEditDetail={() => setShowQuestionDetail(true)}
           />
-          <ProjectReview onSubmit={onSubmit} />
+          <Preview onSubmit={onSubmit} getProject={getProject} />
           <Congrats />
         </FormWizard>
       )}
