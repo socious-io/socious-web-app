@@ -5,6 +5,7 @@ import {
   PlusCircleIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline';
 import {
   initContext,
@@ -20,13 +21,15 @@ import {useToggle} from '@hooks';
 interface ProjectQuestionProps extends TOnSubmit {
   type?: 'EDIT' | 'NEW';
   onEditDetail: () => void;
+  deleteQuestion: (id: string) => void;
 }
 
 const QuestionBox: FC<{
   question: Question | AddQuestionTypeWithId;
   title: string;
   onEditDetail: () => void;
-}> = ({question, title, onEditDetail}) => {
+  deleteQuestion: (id: string) => void;
+}> = ({question, title, onEditDetail, deleteQuestion}) => {
   const {state: show, handlers: showHandlers} = useToggle();
   const {ProjectContext, setProjectContext} = useProjectContext();
 
@@ -66,7 +69,10 @@ const QuestionBox: FC<{
                 height={100}
               />
             </div>
-            {/* <TrashIcon className="w-5" /> */}
+            <TrashIcon
+              onClick={() => deleteQuestion(question.id)}
+              className="w-5 text-primary"
+            />
           </div>
         </>
       )}
@@ -78,6 +84,7 @@ const ProjectQuestions: FC<ProjectQuestionProps> = ({
   onSubmit,
   type = 'NEW',
   onEditDetail,
+  deleteQuestion,
 }) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
 
@@ -100,6 +107,7 @@ const ProjectQuestions: FC<ProjectQuestionProps> = ({
                   title={`Question ${index + 1}`}
                   question={question}
                   onEditDetail={onEditDetail}
+                  deleteQuestion={deleteQuestion}
                 />
               ))}
             </div>

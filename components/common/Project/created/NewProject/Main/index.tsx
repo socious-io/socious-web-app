@@ -186,7 +186,7 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
           <ProjectQuestions
             onSubmit={wizard.advance}
             onEditDetail={() => setShowQuestionDetail(true)}
-            // deleteQuestion={handleDeleteQuestion}
+            deleteQuestion={handleDeleteQuestion}
           />
           <Preview onSubmit={onSubmit} getProject={getProject} />
           <Congrats />
