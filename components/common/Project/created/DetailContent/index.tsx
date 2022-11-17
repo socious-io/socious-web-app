@@ -31,13 +31,13 @@ import editSrc from 'asset/icons/edit.svg';
 import {useToggle, useUser} from 'hooks';
 
 // Utils/Actions
-import {updateProjectById} from '@api/projects/actions';
+import {removeQuestion, updateProjectById} from '@api/projects/actions';
 import {addQuestion, updateQuestion} from '@api/projects/actions';
 import {get} from 'utils/request';
 
 // Types
 import {CreateProjectType, Project, ProjectProps} from 'models/project';
-import {AddQuestionType, Question} from '@models/question';
+import {AddQuestionType, Question, TQuestionsResponse} from '@models/question';
 import {twMerge} from 'tailwind-merge';
 
 // Library
@@ -232,23 +232,51 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
         }
         // Mutation for questionss
         if (questions?.[0])
-          mutate(`/projects/${project.id}/questions`, questions, {
-            populateCache: (result, _currentData) => {
-              return result;
+          mutate(
+            `/projects/${project.id}/questions`,
+            async () => ({questions: questions}),
+            {
+              revalidate: false,
             },
-            revalidate: true,
-          });
+          );
         setProjectContext({
           ...ProjectContext,
           editQuestion: null,
           questions: questions,
           formStep: 3,
         });
-      } catch (error) {
-        console.log('ERROR :---: ', error);
+      } catch (error: any) {
+        if (error.isAxiosError && error.response?.data?.error)
+          toast.error(`Error: ${error.response?.data?.error}`);
       }
     },
     [ProjectContext, editQuestion, mutate, project.id, setProjectContext],
+  );
+
+  const handleDeleteQuestion = useCallback(
+    async (id: string) => {
+      try {
+        await removeQuestion(project.id, id);
+        const newQuestions =
+          ProjectContext.questions?.filter((question) => question.id !== id) ??
+          null;
+        mutate(
+          `/projects/${project.id}/questions`,
+          async () => ({questions: newQuestions}),
+          {
+            revalidate: false,
+          },
+        );
+        setProjectContext({
+          ...ProjectContext,
+          questions: newQuestions,
+        });
+      } catch (error: any) {
+        if (error.isAxiosError && error.response?.data?.error)
+          toast.error(`Error: ${error.response?.data?.error}`);
+      }
+    },
+    [ProjectContext, mutate, project.id, setProjectContext],
   );
 
   // EDIT MODALS
@@ -263,7 +291,7 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
       return (
         <ProjectQuestion
           onSubmit={() => setProjectContext(initContext)}
-          type="EDIT"
+          deleteQuestion={handleDeleteQuestion}
         />
       );
     } else if (isStep4) {
@@ -323,7 +351,16 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
         />
       </Modal>
       {/* EDIT PROJECT MODAL COLLECTIONS */}
-      <CreateProjectLayout isEdit title="Edit Project">
+      <CreateProjectLayout
+        isEdit
+        title={
+          isStep3
+            ? 'Screening questions'
+            : isStep4
+            ? 'Add screener question'
+            : 'Edit Project'
+        }
+      >
         {PageDisplay()}
       </CreateProjectLayout>
     </div>

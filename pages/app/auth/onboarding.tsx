@@ -3,15 +3,15 @@ import {GetStaticProps} from 'next';
 import {useCallback, useMemo, useState} from 'react';
 import {Button, Modal} from '@components/common';
 import {twMerge} from 'tailwind-merge';
-import OnboardingStep1 from '@components/organisms/Auth/Onboarding/Step1/OnboardingStep1';
-import OnboardingStep2 from '@components/organisms/Auth/Onboarding/Step2/OnboardingStep2';
-import OnboardingStep3 from '@components/organisms/Auth/Onboarding/Step3/OnboardingStep3';
-import OnboardingStep4 from '@components/organisms/Auth/Onboarding/Step4/OnboardingStep4';
-import OnboardingStep5 from '@components/organisms/Auth/Onboarding/Step5/OnboardingStep5';
-import OnboardingStep6 from '@components/organisms/Auth/Onboarding/Step6/OnboardingStep6';
-import OnboardingStep7 from '@components/organisms/Auth/Onboarding/Step7/OnboardingStep7';
-import OnboardingStep8 from '@components/organisms/Auth/Onboarding/Step8/OnboardingStep8';
-import OnboardingStep9 from '@components/organisms/Auth/Onboarding/Step9/OnboardingStep9';
+import OnboardingStep1 from '@components/pages/auth/Onboarding/Step1/OnboardingStep1';
+import OnboardingStep2 from '@components/pages/auth/Onboarding/Step2/OnboardingStep2';
+import OnboardingStep3 from '@components/pages/auth/Onboarding/Step3/OnboardingStep3';
+import OnboardingStep4 from '@components/pages/auth/Onboarding/Step4/OnboardingStep4';
+import OnboardingStep5 from '@components/pages/auth/Onboarding/Step5/OnboardingStep5';
+import OnboardingStep6 from '@components/pages/auth/Onboarding/Step6/OnboardingStep6';
+import OnboardingStep7 from '@components/pages/auth/Onboarding/Step7/OnboardingStep7';
+import OnboardingStep8 from '@components/pages/auth/Onboarding/Step8/OnboardingStep8';
+import OnboardingStep9 from '@components/pages/auth/Onboarding/Step9/OnboardingStep9';
 import {PreAuthLayout} from 'layout';
 
 import {useForm, FormProvider} from 'react-hook-form';
@@ -35,9 +35,11 @@ import getGlobalData from 'services/cacheSkills';
 import {uploadMedia} from '@api/media/actions';
 import {AxiosError} from 'axios';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
-import Router from 'next/router';
+import {useRouter} from 'next/router';
 import {checkAndUploadMedia} from 'services/ImageUpload';
 import {Capacitor} from '@capacitor/core';
+import useSWR from 'swr';
+import {GeoIP} from '@models/geo';
 
 const schemaStep = {
   2: schemaOnboardingStep2,
@@ -62,7 +64,11 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     libraries,
   });
 
+  const router = useRouter();
+  const {redirect_to} = router.query;
   const {user} = useUser();
+  const {data: geoIp, error: geoIpError} = useSWR<GeoIP>('/geo/ip');
+
   const [errorMessage, setError] = useState<ErrorMessage>();
 
   const [step, setStep] = useState<number>(1);
@@ -92,7 +98,15 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
     },
   });
 
-  const formMethodsStep4 = useForm({resolver: joiResolver(schemaStep[4])});
+  const formMethodsStep4 = useForm({
+    resolver: joiResolver(schemaStep[4]),
+  });
+  if (geoIp && !formMethodsStep4.getValues('country'))
+    formMethodsStep4.setValue('country', geoIp.country);
+  if (geoIp && !formMethodsStep4.getValues('geoname_id')) {
+    formMethodsStep4.setValue('city', geoIp.city);
+    formMethodsStep4.setValue('geoname_id', geoIp.id);
+  }
   const formMethodsStep5 = useForm({
     defaultValues: {
       availableProject: 'true',
@@ -159,22 +173,23 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
         return;
       }
       try {
-        if (Notification.permission !== 'default') Router.push('/app/projects');
+        if (Notification.permission !== 'default') router.push('/app/projects');
         else {
           setStep(step + 1);
         }
       } catch (error) {
         // Notification interface not available
-        Router.push('/app/projects');
+        router.push('/app/projects');
       }
     },
-    [handleToggleModal, step, user],
+    [handleToggleModal, router, step, user],
   );
 
   const handleUpdateProfileRequest = useCallback(() => {
     const bio = formMethodsStep7.getValues('bio');
     const passions = formMethodsStep2.getValues('passions');
     const city = formMethodsStep4.getValues('city');
+    const geoname_id = formMethodsStep4.getValues('geoname_id');
     const country = formMethodsStep4.getValues('country');
     const skills = formMethodsStep3.getValues('skills');
 
@@ -190,7 +205,8 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 
     if (bio) profileBody.bio = bio;
     if (city) profileBody.city = city;
-    if (country?.code) profileBody.country = country.code;
+    if (geoname_id) profileBody.geoname_id = geoname_id;
+    if (country) profileBody.country = country;
 
     updateProfile(profileBody)
       .then(() => {
@@ -230,7 +246,9 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   const requestNotificationPermission = async () => {
     if ('Notification' in window && !Capacitor.isNativePlatform())
       await Notification.requestPermission();
-    Router.push('/app/projects');
+    redirect_to
+      ? router.push(redirect_to as string)
+      : router.push('/app/projects');
   };
 
   return (
@@ -316,7 +334,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
         </FormProvider>
         <FormProvider {...formMethodsStep6}>
           {step === 6 && (
-            <OnboardingStep6 onSubmit={handleSubmit} defaultCountry={placeId} />
+            <OnboardingStep6 onSubmit={handleSubmit} geoIp={geoIp} />
           )}
         </FormProvider>
         <FormProvider {...formMethodsStep7}>

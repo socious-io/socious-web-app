@@ -29,6 +29,7 @@ export type TUseInfiniteSWRReturn<R> = {
 const useInfiniteSWR = <R = any,>(
   url: string | null,
   configs: SWRInfiniteConfiguration = {},
+  deps: Array<any> = [],
 ): TUseInfiniteSWRReturn<R> => {
   const getKey = useCallback(
     (initialSize: number, previousData: TInfiniteResponse<R>) => {
@@ -38,7 +39,8 @@ const useInfiniteSWR = <R = any,>(
         url && `${url + (url.includes('?') ? '&' : '?')}page=${initialSize + 1}`
       );
     },
-    [url],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [url, ...deps],
   );
 
   const {

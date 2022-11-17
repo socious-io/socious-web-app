@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import TextArea from '@components/common/TextArea/TextArea';
 import Button from '@components/common/Button/Button';
-import {FromLayout} from '../../created/NewProject/Layout';
+import {FormLayout} from '../../created/NewProject/Layout';
 import {useProjectContext} from '../../created/NewProject/context';
 // import {joiResolver} from '@hookform/resolvers/joi';
 // import {schemaLink} from '@api/projects/validation';
@@ -36,7 +36,7 @@ const AddLink = () => {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <FromLayout type="FULL">
+      <FormLayout type="FULL">
         <div className="mt-2 flex h-full flex-col space-y-4 px-4">
           <div className="mt-2 space-y-4 pl-0 ">
             <TextInput
@@ -75,7 +75,7 @@ const AddLink = () => {
             />
           </div>
         </div>
-      </FromLayout>
+      </FormLayout>
       <div className="flex items-end justify-center border-t p-4 px-4 pb-12 sm:justify-end sm:pb-4">
         <Button
           type="button"

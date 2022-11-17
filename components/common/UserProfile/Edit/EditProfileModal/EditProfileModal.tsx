@@ -55,7 +55,7 @@ const EditProfileModal = ({
   skillsData,
   closeModal,
 }: EditProfileModalProps) => {
-  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [_ignored, forceUpdate] = useReducer((x) => x + 1, 0);
   const [editState, setEditState] = useState<'MAIN' | 'CAUSES' | 'SKILLS'>(
     'MAIN',
   );
@@ -124,6 +124,7 @@ const EditProfileModal = ({
       passions: user?.social_causes ?? [],
       country: user?.country,
       city: user?.city,
+      geoname_id: user?.geoname_id ?? null,
       address: user?.address,
       countryNumber: user?.mobile_country_code,
       phoneNumber: user?.phone,
@@ -165,6 +166,7 @@ const EditProfileModal = ({
         passions: social_causes,
         country,
         city,
+        geoname_id,
         address,
         countryNumber: mobile_country_code,
         phoneNumber: phone,
@@ -176,6 +178,7 @@ const EditProfileModal = ({
         social_causes,
         country,
         city,
+        geoname_id,
       };
       if (address) updateProfileBody.address = address;
       if (mobile_country_code)

@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 //components
 import {Button} from '@components/common/Button/Button';
-import Title from '../components/Title';
+import Title from '../../../molecules/Title';
 import VerifyCard from '../components/VerifyCard';
 
 //interfaces

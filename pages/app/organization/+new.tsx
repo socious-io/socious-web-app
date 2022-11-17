@@ -1,4 +1,4 @@
-import React, {useState, memo} from 'react';
+import React, {useState, memo, useEffect} from 'react';
 import {useRouter} from 'next/router';
 
 // components
@@ -33,6 +33,7 @@ import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 
 //interfaces
 import {CreateOrganizationType} from '@models/createOrganization';
+import {useUser} from '@hooks';
 
 //libraries for GoogleMaps
 const libraries: Libraries = ['places'];
@@ -42,11 +43,20 @@ const CreateOrganization = () => {
   const [errorMessage, setError] = useState<ErrorMessage>();
   const [step, setStep] = useState<number>(0);
   const [company_name, set_company_name] = useState<string>();
+  const {user} = useUser();
 
   const router = useRouter();
   const methods = useForm({
     resolver: joiResolver(schemaCreateOrganization),
   });
+  useEffect(() => {
+    if (user && !methods.getValues('country'))
+      methods.setValue('country', user.country);
+    if (user && !methods.getValues('geoname_id')) {
+      methods.setValue('city', user.city);
+      methods.setValue('geoname_id', user.geoname_id);
+    }
+  }, [methods, user]);
 
   //Loading Map
   const {isLoaded, loadError} = useGoogleMapsScript({
@@ -143,7 +153,7 @@ const CreateOrganization = () => {
           ) : step === 2 ? (
             <SocialCauses onSubmit={handleSubmit} />
           ) : step === 3 ? (
-            <BasicInfo onSubmit={handleSubmit} />
+            <BasicInfo onSubmit={handleSubmit} user={user} />
           ) : step === 4 ? (
             <Mission onSubmit={handleSubmit} />
           ) : step === 5 ? (

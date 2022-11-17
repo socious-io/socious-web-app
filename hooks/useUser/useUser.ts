@@ -6,6 +6,8 @@ import Router, {useRouter} from 'next/router';
 import {LoginIdentity} from './../../models/identity';
 import {get} from 'utils/request';
 import {logout} from '@api/auth/actions';
+import {UserProfile} from '@models/profile';
+import {IOrganization} from '@models/organization';
 
 interface UseUserOptions {
   redirect: boolean;
@@ -22,7 +24,9 @@ function authFetcher<T>(url: string) {
   });
 }
 
-export const useUser = (options?: UseUserOptions) => {
+export type UserOrOrg = UserProfile | IOrganization | undefined;
+
+export function useUser<T = any>(options?: UseUserOptions) {
   const {redirect} = {...defaultValues, ...options};
   const {pathname} = useRouter();
 
@@ -46,12 +50,8 @@ export const useUser = (options?: UseUserOptions) => {
     (identity: LoginIdentity) => identity.current,
   );
 
-  // TODO type defs for user/org
-  const {
-    data: user,
-    error: userError,
-    mutate: mutateUser,
-  } = useSWR<any, AxiosError, string | null>(
+  // TS goes insane if I try to set a type for user, thus this hack
+  const profileRes = useSWR<any | null, AxiosError, string | null>(
     identities
       ? currentIdentity?.type === 'users'
         ? '/user/profile'
@@ -66,6 +66,8 @@ export const useUser = (options?: UseUserOptions) => {
       },
     },
   );
+  const {error: userError, mutate: mutateUser} = profileRes;
+  const user: T = profileRes.data;
 
   useEffect(() => {
     // for emergencies
@@ -88,7 +90,7 @@ export const useUser = (options?: UseUserOptions) => {
     // if user authorized
     if (user && userError?.response?.status !== 401) {
       // if user has requested forgot password.
-      if (user.password_expired) {
+      if ((user as any).password_expired) {
         Router.push('/app/auth/forgotpassword');
         return;
       } else if (pathname.startsWith('/auth/forgotpassword')) {
@@ -115,7 +117,7 @@ export const useUser = (options?: UseUserOptions) => {
     identitiesError,
     mutateIdentities,
   };
-};
+}
 
 export default useUser;
 

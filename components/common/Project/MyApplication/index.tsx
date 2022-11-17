@@ -1,29 +1,26 @@
 import BodyCard from '../component/BodyCard';
-import HeaderBox from '../component/HeaderBox';
-import {useToggle} from '@hooks';
-import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 import {TApplicant, TApplicantStatus} from '@models/applicant';
-import Button from '@components/common/Button/Button';
-import {StatusListingSkeleton} from '@components/molecules/StatusListingSkeleton/StatusListingSkeleton';
+import {StatusListingSkeleton} from '@components/organisms/StatusListingSkeleton/StatusListingSkeleton';
 import Link from 'next/link';
 import useSWR from 'swr';
 import {Project} from '@models/project';
 import {get} from 'utils/request';
 import SplashScreen from 'layout/Splash';
 import {IOffer} from '@models/offer';
+import ApplicationMobileTop from '@components/organisms/applications/ApplicationMobileTop';
 
 function MyApplicationBoxes() {
   return (
     <div className="w-full space-y-4">
-      {/* Uncomment after Hired done */}
-      {/* <ApplicationMobileTop selectedTab="APPLICATION" /> */}
-      <div className="flex hidden items-center rounded-2xl border border-grayLineBased bg-white p-6 sm:block">
+      <ApplicationMobileTop selectedTab="APPLICATION" />
+      <div className="!mt-0 flex hidden items-center rounded-2xl border border-grayLineBased bg-white p-6 sm:block">
         <p className="text-xl font-semibold">My applications</p>
       </div>
       <div className="divide-graylineBased mb-4 h-fit w-full divide-y border border-grayLineBased md:rounded-2xl">
         <StatusListingSkeleton<TApplicant>
           url={'/user/applicants?status=PENDING'}
           title={'Pending'}
+          rounded
           className="border-0"
           renderList={(flattenData) => (
             <>

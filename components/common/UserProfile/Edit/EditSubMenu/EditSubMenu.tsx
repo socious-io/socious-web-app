@@ -10,7 +10,7 @@ import SearchBar from '@components/common/SearchBar/SearchBar';
 
 // Hooks
 import useFilter from 'hooks/auth/useFilter';
-import useHandleSelected from 'hooks/auth/useHandleSelected';
+import useHandleSelected from 'hooks/useHandleSelected';
 import Chip from '@components/common/Chip/Chip';
 
 interface EditSubMenuProps {

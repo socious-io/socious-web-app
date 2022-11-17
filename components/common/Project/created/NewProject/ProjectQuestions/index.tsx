@@ -1,29 +1,31 @@
 import React, {FC} from 'react';
-import Title from '@components/common/CreateOrganization/components/Title';
+import Title from '@components/molecules/Title';
 import {Button} from '@components/common';
 import {
   PlusCircleIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline';
 import {initContext, useProjectContext} from '../context';
 import {TOnSubmit} from '../sharedType';
-import {FromLayout} from '../Layout';
+import {FormLayout} from '../Layout';
 import {AddQuestionTypeWithId, Question} from '@models/question';
 import Image from 'next/future/image';
 import editIcon from 'asset/icons/edit.svg';
 import {useToggle} from '@hooks';
 
 interface ProjectQuestionProps extends TOnSubmit {
-  type?: 'EDIT' | 'NEW';
   stepToEdit?: number;
+  deleteQuestion: (id: string) => void;
 }
 
 const QuestionBox: FC<{
   question: Question | AddQuestionTypeWithId;
   title: string;
   editStep?: number;
-}> = ({question, title, editStep = 4}) => {
+  deleteQuestion: (id: string) => void;
+}> = ({question, title, editStep = 4, deleteQuestion}) => {
   const {state: show, handlers: showHandlers} = useToggle();
   const {ProjectContext, setProjectContext} = useProjectContext();
 
@@ -63,7 +65,10 @@ const QuestionBox: FC<{
                 height={100}
               />
             </div>
-            {/* <TrashIcon className="w-5" /> */}
+            <TrashIcon
+              onClick={() => deleteQuestion(question.id)}
+              className="w-5 text-primary"
+            />
           </div>
         </>
       )}
@@ -73,41 +78,26 @@ const QuestionBox: FC<{
 
 const ProjectQuestion: FC<ProjectQuestionProps> = ({
   onSubmit,
-  type = 'NEW',
   stepToEdit,
+  deleteQuestion,
 }) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
 
   return (
     <form className="flex h-full w-full flex-col">
-      <FromLayout type="FULL" className="!grow">
+      <FormLayout type="FULL" className="!grow">
         <div className="flex h-full w-full flex-col overflow-y-scroll bg-zinc-200">
-          <Title
-            description="Add up to 5 screener questions."
-            border
-            className="bg-white"
-          >
-            Screener questions
-          </Title>
           <div className="scroll-y-auto grow bg-offWhite">
             <div className="space-y-4 divide-y py-4">
-              {type === 'EDIT'
-                ? ProjectContext.questions?.map((question, index) => (
-                    <QuestionBox
-                      key={question.id}
-                      title={`Question ${index + 1}`}
-                      question={question}
-                      editStep={4}
-                    />
-                  ))
-                : ProjectContext.newQuestions?.map((question, index) => (
-                    <QuestionBox
-                      key={question.id}
-                      title={`Question ${index + 1}`}
-                      question={question}
-                      editStep={stepToEdit}
-                    />
-                  ))}
+              {ProjectContext.questions?.map((question, index) => (
+                <QuestionBox
+                  key={question.id}
+                  title={`Question ${index + 1}`}
+                  question={question}
+                  editStep={4}
+                  deleteQuestion={deleteQuestion}
+                />
+              ))}
             </div>
             <div className="flex items-center justify-center">
               <Button
@@ -115,15 +105,12 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
                   setProjectContext({
                     ...ProjectContext,
                     editQuestion: null,
-                    formStep: type === 'NEW' ? 6 : 4,
+                    formStep: 4,
                   })
                 }
                 disabled={
-                  type === 'EDIT'
-                    ? !!ProjectContext.questions &&
-                      ProjectContext.questions.length >= 5
-                    : !!ProjectContext.newQuestions &&
-                      ProjectContext.newQuestions.length >= 5
+                  !!ProjectContext.questions &&
+                  ProjectContext.questions.length >= 5
                 }
                 variant="outline"
                 size="lg"
@@ -138,36 +125,7 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
           </div>
         </div>
         <div className="flex items-end justify-end border-t p-4">
-          {type === 'NEW' ? (
-            <>
-              <Button
-                type="submit"
-                className="flex h-11 w-36 items-center justify-center"
-                onClick={() =>
-                  setProjectContext({
-                    ...ProjectContext,
-                    formStep: 4,
-                  })
-                }
-              >
-                Continue
-              </Button>
-              <Button
-                type="submit"
-                variant="outline"
-                className="ml-2 flex h-11 w-36 items-center justify-center"
-                onClick={() =>
-                  setProjectContext({
-                    ...ProjectContext,
-                    questions: null,
-                    formStep: 4,
-                  })
-                }
-              >
-                skip
-              </Button>
-            </>
-          ) : (
+          {
             <Button
               type="submit"
               className="ml-2 flex h-11 w-36 items-center justify-center"
@@ -175,9 +133,9 @@ const ProjectQuestion: FC<ProjectQuestionProps> = ({
             >
               Done
             </Button>
-          )}
+          }
         </div>
-      </FromLayout>
+      </FormLayout>
     </form>
   );
 };

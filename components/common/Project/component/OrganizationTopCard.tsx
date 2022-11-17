@@ -3,7 +3,7 @@ import {ProjectProps} from 'models/project';
 import {Button} from '@components/common';
 import {ApplyStep1, TFormAnswer} from '../Apply/Step1/ApplyStep1';
 import ApplyStep3 from '../Apply/Step3/ApplyStep3';
-import {FC} from 'react';
+import {FC, useCallback, useState} from 'react';
 import useUser from 'hooks/useUser/useUser';
 import {getText} from '@socious/data';
 import {
@@ -22,6 +22,8 @@ import {useFormattedLocation} from 'services/formatLocation';
 import Link from 'next/link';
 import RecentGallery from '../Apply/Step5/ApplyStep5';
 import {checkAndUploadMedia} from 'services/ImageUpload';
+import {RegisterContextProvider} from '@components/organisms/RegisterModals/RegisterContext';
+import RegisterModal from '@components/organisms/RegisterModals/RegisterModal';
 
 const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
   const {
@@ -41,9 +43,12 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
   const location = useFormattedLocation(project);
 
+  const [loginStep, setLoginStep] = useState<boolean>(false);
   const isStep0 = ProjectContext.formStep === 0;
   const isStep1 = ProjectContext.formStep === 1;
   const isStep2 = ProjectContext.formStep === 2;
+
+  const mutateProject = useCallback(() => mutate(`/projects/${id}`), [id]);
 
   const onSubmit = async (data?: any) => {
     if (isStep0) {
@@ -93,7 +98,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
       // Applying
       try {
         if (id) await applyProject(id, postBody);
-        mutate(`/projects/${id}`);
+        mutateProject();
         setProjectContext({
           ...ProjectContext,
           formStep: ProjectContext.formStep + 1,
@@ -206,8 +211,8 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
       </div>
 
       <div className="mt-4 flex justify-between">
-        {identities !== null &&
-          currentIdentity?.type === 'users' &&
+        {((identities !== null && currentIdentity?.type === 'users') ||
+          identities == null) &&
           (applied ? (
             <div className="w-full rounded-2xl bg-offWhite p-4">
               Application submitted
@@ -221,11 +226,13 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
               variant="fill"
               value="Submit"
               onClick={() =>
-                setProjectContext({
-                  ...ProjectContext,
-                  isApplyModalOpen: true,
-                  formStep: 0,
-                })
+                identities === null
+                  ? setLoginStep(true)
+                  : setProjectContext({
+                      ...ProjectContext,
+                      isApplyModalOpen: true,
+                      formStep: 0,
+                    })
               }
             >
               Apply now
@@ -234,6 +241,13 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
       </div>
 
       <ApplyLayout title={getTitle()}>{pageDisplay()}</ApplyLayout>
+      <RegisterContextProvider>
+        <RegisterModal
+          show={loginStep}
+          onClose={() => setLoginStep(false)}
+          mutateProject={mutateProject}
+        />
+      </RegisterContextProvider>
     </div>
   );
 };

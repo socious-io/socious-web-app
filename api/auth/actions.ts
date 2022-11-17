@@ -1,20 +1,16 @@
 import {IUpdateUserBody, UserProfile} from '@models/profile';
 import {get, post} from 'utils/request';
 
-export function signup(
-  firstName: string,
-  lastName: string,
-  email: string,
-  password: string,
-  username?: string,
-) {
+export function signup(firstName: string, lastName: string, email: string) {
   return post('/auth/register', {
     first_name: firstName,
     last_name: lastName,
     email,
-    username,
-    password,
   });
+}
+
+export function register(email: string) {
+  return post('/auth/register', {email});
 }
 
 export function checkEmailExist(email: string) {
@@ -23,6 +19,10 @@ export function checkEmailExist(email: string) {
 
 export function login(email: string, password: string) {
   return post('/auth/web/login', {email, password});
+}
+
+export function sendOTP(email: string) {
+  return post('/auth/otp', {email});
 }
 
 export function forgetPassword(email: string) {

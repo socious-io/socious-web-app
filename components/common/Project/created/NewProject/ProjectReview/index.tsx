@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Button} from '@components/common';
 import {useProjectContext} from '../context';
 import {TOnSubmit} from '../sharedType';
-import {FromLayout} from '../Layout';
+import {FormLayout} from '../Layout';
 import {getText} from '@socious/data';
 import Chip from 'components/common/UserProfile/MainContent/Chip';
 import ProjectInfoOverview from './ProjectInfoOverview';
@@ -18,7 +18,7 @@ const ProjectPreview: FC<TOnSubmit> = ({onSubmit}) => {
 
   return (
     <form className="flex h-full w-full flex-col">
-      <FromLayout>
+      <FormLayout>
         <div className="overflow-y-scroll">
           <h2 className="mb-5 px-4">Project description</h2>
           <div className="px-4">
@@ -69,7 +69,7 @@ const ProjectPreview: FC<TOnSubmit> = ({onSubmit}) => {
             )}
           </div>
         </div>
-      </FromLayout>
+      </FormLayout>
       <div className=" flex items-end justify-end border-t p-4">
         <Button
           type="button"

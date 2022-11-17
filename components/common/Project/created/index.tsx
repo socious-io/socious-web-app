@@ -4,10 +4,14 @@ import {PlusIcon} from '@heroicons/react/24/solid';
 import {FC} from 'react';
 import {useProjectContext} from '../created/NewProject/context';
 import ProjectsByStatus from '../ProjectsByStatus/ProjectByStatus';
+import {PropsWithoutRef} from 'react';
 
-const MyApplicationBoxes: FC = () => {
+interface MyApplicationBoxesProps {
+  setShowCreate: (show: boolean) => void;
+}
+
+const MyApplicationBoxes: FC<MyApplicationBoxesProps> = ({setShowCreate}) => {
   const {currentIdentity} = useUser();
-  const {ProjectContext, setProjectContext} = useProjectContext();
 
   return (
     <div className="w-full pb-4 sm:w-2/3">
@@ -22,12 +26,9 @@ const MyApplicationBoxes: FC = () => {
         variant="fill"
         value="Submit"
         leftIcon={() => <PlusIcon width={20} height={20} />}
-        onClick={() =>
-          setProjectContext({
-            ...ProjectContext,
-            isModalOpen: !ProjectContext.isModalOpen,
-          })
-        }
+        onClick={() => {
+          setShowCreate(true);
+        }}
       >
         Create Project
       </Button>
