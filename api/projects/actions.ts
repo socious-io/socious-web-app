@@ -31,3 +31,7 @@ export function updateQuestion(
     questionBody,
   );
 }
+
+export function removeQuestion(projectId: string, questionId: string) {
+  return post(`projects/remove/${projectId}/questions/${questionId}`);
+}

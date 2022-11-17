@@ -108,7 +108,6 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
     if (s) {
       try {
         const project: Project = await createProject(getProject(s));
-        console.log('PROJECT :---: ', project);
         // Adding Questions if any
         ProjectContext.newQuestions?.forEach(async (question, i) => {
           const {id, ...questionBody} = question;
@@ -116,7 +115,6 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
             console.log('ERROR :---: ', error);
             toast.error(`${error}`);
           });
-          console.log('ADD QUESTION :__:', i);
         });
         mutate();
         setShowCreate(false);
@@ -153,9 +151,28 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
     [ProjectContext, setProjectContext],
   );
 
+  const handleDeleteQuestion = useCallback(
+    (id: string) => {
+      setProjectContext({
+        ...ProjectContext,
+        newQuestions:
+          ProjectContext.newQuestions?.filter(
+            (question) => question.id !== id,
+          ) ?? null,
+      });
+    },
+    [ProjectContext, setProjectContext],
+  );
+
   return (
     <CreateProjectModal
-      title={wizard.step === 4 ? '' : 'Create Project'}
+      title={
+        wizard.step === 4
+          ? ''
+          : showQuestionDetail
+          ? 'Add screener question'
+          : 'Create Project'
+      }
       onBack={wizard.step > 0 ? wizard.back : undefined}
       onClose={() => setShowCreate(false)}
     >
@@ -169,6 +186,7 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
           <ProjectQuestions
             onSubmit={wizard.advance}
             onEditDetail={() => setShowQuestionDetail(true)}
+            // deleteQuestion={handleDeleteQuestion}
           />
           <Preview onSubmit={onSubmit} getProject={getProject} />
           <Congrats />

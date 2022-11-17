@@ -56,7 +56,6 @@ const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
     } as TDefaultQuestion,
   });
 
-  console.log('ERRRORS :----: ', errors);
   const options = watch('options');
   const type = watch('type');
   const typeController = useController<FieldValues, string>({
