@@ -22,8 +22,8 @@ import {useFormattedLocation} from 'services/formatLocation';
 import Link from 'next/link';
 import RecentGallery from '../Apply/Step5/ApplyStep5';
 import {checkAndUploadMedia} from 'services/ImageUpload';
-import {RegisterContextProvider} from '@components/molecules/RegisterModals/RegisterContext';
-import RegisterModal from '@components/molecules/RegisterModals/RegisterModal';
+import {RegisterContextProvider} from '@components/organisms/RegisterModals/RegisterContext';
+import RegisterModal from '@components/organisms/RegisterModals/RegisterModal';
 
 const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
   const {

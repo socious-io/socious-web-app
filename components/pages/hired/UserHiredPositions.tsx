@@ -1,4 +1,4 @@
-import {StatusListingSkeleton} from '@components/molecules/StatusListingSkeleton/StatusListingSkeleton';
+import {StatusListingSkeleton} from '@components/organisms/StatusListingSkeleton/StatusListingSkeleton';
 import Link from 'next/link';
 import {IInfiniteMission} from '@models/mission';
 import BodyCard from '@components/common/Project/component/BodyCard';

@@ -1,6 +1,6 @@
 import BodyCard from '../component/BodyCard';
 import {TApplicant, TApplicantStatus} from '@models/applicant';
-import {StatusListingSkeleton} from '@components/molecules/StatusListingSkeleton/StatusListingSkeleton';
+import {StatusListingSkeleton} from '@components/organisms/StatusListingSkeleton/StatusListingSkeleton';
 import Link from 'next/link';
 import useSWR from 'swr';
 import {Project} from '@models/project';
