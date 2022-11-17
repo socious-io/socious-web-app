@@ -7,7 +7,12 @@ import React, {
 } from 'react';
 
 import {Combobox, ComboBoxSelectionType} from '@components/common';
-import {countryISOtoName, countryOptions, formatCityName} from 'utils/geo';
+import {
+  countryISOtoName,
+  countryOptions,
+  countryOptionsWithXW,
+  formatCityName,
+} from 'utils/geo';
 import {GeoName} from '@models/geo';
 import useInfiniteSWR, {
   TInfiniteResponse,
@@ -129,24 +134,33 @@ export function LocationFormFragment({
         onSelected={onCountrySelected}
         required
         name="country"
-        items={countryOptions}
+        items={allowWorldwide ? countryOptionsWithXW : countryOptions}
         placeholder="Country"
         errorMessage={errorCountry}
         className="location-form-country my-6"
       />
-      <Combobox
-        label="City"
-        selected={{id: geonameId, name: city}}
-        onSelected={onCitySelected}
-        onChange={(e) => setFilterCity(e.currentTarget.value || null)}
-        onScrollOptions={onCityScroll}
-        required
-        name="city"
-        items={filterCities}
-        placeholder="City"
-        errorMessage={errorCity}
-        className="location-form-city my-6"
-      />
+      {allowWorldwide && country === 'XW' ? (
+        <input
+          type="hidden"
+          name="city"
+          className="location-form-city-hidden"
+          value=""
+        />
+      ) : (
+        <Combobox
+          label="City"
+          selected={{id: geonameId, name: city}}
+          onSelected={onCitySelected}
+          onChange={(e) => setFilterCity(e.currentTarget.value || null)}
+          onScrollOptions={onCityScroll}
+          required
+          name="city"
+          items={filterCities}
+          placeholder="City"
+          errorMessage={errorCity}
+          className="location-form-city my-6"
+        />
+      )}
       <input
         type="hidden"
         name="geoname_id"

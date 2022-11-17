@@ -8,8 +8,6 @@ import {useForm} from 'react-hook-form';
 
 import ProjectReview from '../ProjectReview';
 import Congrats from '../Congrats';
-import ProjectSkill from '../ProjectSkill';
-import ProjectInfo from '../ProjectInfo';
 import {useProjectContext} from '../context';
 import {CreateProjectType, Project} from '@models/project';
 import {get} from 'utils/request';
@@ -27,6 +25,7 @@ import {FormWizard} from '@components/organisms/forms/FormWizard';
 import ProjectQuestions from '@components/pages/project/create/ProjectQuestions';
 import Causes from '@components/pages/project/create/Causes';
 import Skills from '@components/pages/project/create/Skills';
+import ProjectInfo from '@components/pages/project/create/ProjectInfo';
 
 type CreateProjectMainType = {
   skills: any[];
@@ -44,7 +43,10 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
     methods: [
       useForm({resolver: joiResolver(schemaCreateProjectStep1)}),
       useForm({resolver: joiResolver(schemaCreateProjectStep2)}),
-      useForm({resolver: joiResolver(schemaCreateProjectStep3)}),
+      useForm({
+        resolver: joiResolver(schemaCreateProjectStep3),
+        mode: 'onTouched',
+      }),
     ],
   });
   const {currentIdentity} = useUser();
@@ -60,41 +62,42 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
 
   const onSubmit = async (s?: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => {
     if (s) {
+      const projectInfo = wizard.methods[2].getValues();
       const postBody: CreateProjectType = {
-        title: ProjectContext.title,
-        description: ProjectContext.description,
-        remote_preference: ProjectContext.remote_preference,
-        country: ProjectContext.country,
-        project_type: ProjectContext.project_type,
-        project_length: ProjectContext.project_length,
-        payment_type: ProjectContext.payment_type,
+        title: projectInfo.title,
+        description: projectInfo.description,
+        remote_preference: projectInfo.remote_preference,
+        country: projectInfo.country,
+        project_type: projectInfo.project_type,
+        project_length: projectInfo.project_length,
+        payment_type: projectInfo.payment_type,
         causes_tags: wizard.methods[0].getValues().causes_tags,
         skills: wizard.methods[1].getValues().skills,
         status: s,
-        experience_level: ProjectContext.experience_level,
+        experience_level: projectInfo.experience_level,
       };
 
-      if (ProjectContext.payment_scheme) {
-        postBody.payment_scheme = ProjectContext.payment_scheme;
+      if (projectInfo.payment_scheme) {
+        postBody.payment_scheme = projectInfo.payment_scheme;
         if (postBody.payment_scheme === 'HOURLY') {
-          if (ProjectContext.commitment_hours_higher)
+          if (projectInfo.commitment_hours_higher)
             postBody.commitment_hours_higher =
-              ProjectContext.commitment_hours_higher;
-          if (ProjectContext.commitment_hours_lower)
+              projectInfo.commitment_hours_higher;
+          if (projectInfo.commitment_hours_lower)
             postBody.commitment_hours_lower =
-              ProjectContext.commitment_hours_lower;
+              projectInfo.commitment_hours_lower;
         }
       }
       if (postBody.payment_type === 'PAID') {
-        if (ProjectContext.payment_range_lower)
-          postBody.payment_range_lower = ProjectContext.payment_range_lower;
-        if (ProjectContext.payment_range_higher)
-          postBody.payment_range_higher = ProjectContext.payment_range_higher;
+        if (projectInfo.payment_range_lower)
+          postBody.payment_range_lower = projectInfo.payment_range_lower;
+        if (projectInfo.payment_range_higher)
+          postBody.payment_range_higher = projectInfo.payment_range_higher;
       }
 
-      if (ProjectContext.city) postBody.city = ProjectContext.city;
-      if (ProjectContext.payment_currency)
-        postBody.payment_currency = ProjectContext.payment_currency;
+      if (projectInfo.city) postBody.city = projectInfo.city;
+      if (projectInfo.payment_currency)
+        postBody.payment_currency = projectInfo.payment_currency;
 
       try {
         const project: Project = await createProject(postBody);
@@ -102,10 +105,14 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
         // Adding Questions if any
         ProjectContext.newQuestions?.forEach(async (question, i) => {
           const {id, ...questionBody} = question;
-          await addQuestion(project.id, questionBody);
+          await addQuestion(project.id, questionBody).catch((error) => {
+            console.log('ERROR :---: ', error);
+            toast.error(`${error}`);
+          });
           console.log('ADD QUESTION :__:', i);
         });
         mutate();
+        setShowCreate(false);
       } catch (error) {
         console.log('ERROR :---: ', error);
         toast.error(`${error}`);
