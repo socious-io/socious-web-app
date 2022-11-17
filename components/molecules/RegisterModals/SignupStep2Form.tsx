@@ -64,8 +64,12 @@ const SignupStep2Form = ({onSubmit, resendCode}: SignupStep2FormProps) => {
             </p>
           )}
           <p className="text-graySubtitle">
-            Didn’t received a code?
-            <Button variant="link" onClick={() => resendCode()}>
+            Didn’t receive a code?
+            <Button
+              variant="link"
+              onClick={() => resendCode()}
+              className="underline"
+            >
               Click to resend
             </Button>
           </p>

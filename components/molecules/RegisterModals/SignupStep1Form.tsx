@@ -10,7 +10,7 @@ const SignupStep1Form = ({onSubmit}: StepProps) => {
 
   return (
     <div className="py-16 px-6 sm:px-[72px]">
-      <h1 className="m-0 text-2xl font-semibold">Join Socious</h1>
+      <h1 className="mb-2 text-2xl font-semibold">Join Socious</h1>
       <p className="mb-10 text-graySubtitle ">Create an account and start</p>
       <form
         onSubmit={handleSubmit(onSubmit)}

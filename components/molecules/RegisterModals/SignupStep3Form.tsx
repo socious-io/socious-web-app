@@ -134,15 +134,21 @@ const SignupStep3Form = ({onSubmit}: StepProps) => {
           <p className="mx-10 text-center">
             By signing up, you agree to Socious’{' '}
             <Link href="https://socious.io/user-agreement/">
-              <span className="cursor-pointer whitespace-nowrap text-primary">
+              <a
+                target="_blank"
+                className="cursor-pointer whitespace-nowrap text-primary"
+              >
                 Terms of Service
-              </span>
+              </a>
             </Link>{' '}
             and{' '}
             <Link href="https://socious.io/privacy-policy/">
-              <span className="cursor-pointer whitespace-nowrap text-primary">
+              <a
+                target="_blank"
+                className="cursor-pointer whitespace-nowrap text-primary"
+              >
                 Privacy Policy
-              </span>
+              </a>
             </Link>
           </p>
           <Button
