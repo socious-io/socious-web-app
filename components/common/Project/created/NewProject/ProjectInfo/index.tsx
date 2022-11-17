@@ -4,7 +4,7 @@ import Title from '@components/molecules/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
 import TextArea from '@components/common/TextArea/TextArea';
 import {Combobox} from '@components/common';
-import useGetData from '../../../../../../hooks/useGetData';
+import useGetData from '../../../../../../utils/socious-data';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {schemaCreateProjectStep3} from '@api/projects/validation';
 import {useProjectContext} from '../context';

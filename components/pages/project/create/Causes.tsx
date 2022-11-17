@@ -5,7 +5,7 @@ import Chip from '@components/common/Chip/Chip';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import useFilter from 'hooks/auth/useFilter';
 import Title from '@components/molecules/Title';
-import useGetData from 'hooks/useGetData';
+import useGetData from 'utils/socious-data';
 import {Button} from '@components/common';
 import {FormLayout} from '@components/common/Project/created/NewProject/Layout';
 import useHandleSelected from 'hooks/useHandleSelected';
