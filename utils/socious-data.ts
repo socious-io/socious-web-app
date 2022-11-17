@@ -1,8 +1,7 @@
 import Data, {getText} from '@socious/data';
-import {useMemo} from 'react';
 import {getAllISOCodes} from 'iso-country-currency';
 import {EXPERIENCE_LEVEL_OPTIONS} from '@components/common/Search/filterOptions';
-import {countryOptions, countryOptionsWithXW} from './geo';
+import {countryOptionsWithXW} from './geo';
 import {ComboBoxSelectionType} from '@components/common';
 
 const projectRemotePreferenceType = Object.keys(
@@ -78,9 +77,9 @@ export const currencyOptions: Array<ComboBoxSelectionType> = Array.from(
   id: m,
 }));
 
-const experienceLevelOptions: Array<ComboBoxSelectionType> =
+export const experienceLevelOptions: Array<{id: number; name: string}> =
   EXPERIENCE_LEVEL_OPTIONS.map(({value, label: name}, index) => ({
-    id: index.toString(),
+    id: index,
     name,
   }));
 
@@ -96,9 +95,3 @@ const items = {
   allCurrencies: currencyOptions,
   experienceLevelOptions,
 };
-
-const useGetData = () => {
-  return {items};
-};
-
-export default useGetData;

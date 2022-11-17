@@ -4,9 +4,8 @@ import SearchBar from '@components/common/SearchBar/SearchBar';
 import {useForm} from 'react-hook-form';
 import useFilter from 'hooks/auth/useFilter';
 import Title from '@components/molecules/Title';
-import useGetData from '../../../../../../utils/socious-data';
+import {passionDataItems} from 'utils/socious-data';
 import {useProjectContext} from '../context';
-import {toast} from 'react-toastify';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {schemaCreateProjectStep1} from '@api/projects/validation';
 import {Button} from '@components/common';
@@ -21,11 +20,10 @@ const ProjectAbout: FC<TOnSubmit> = ({onSubmit}) => {
     resolver: joiResolver(schemaCreateProjectStep1),
   });
 
-  const {items} = useGetData();
   const {ProjectContext, setProjectContext} = useProjectContext();
 
   const maxCauses = 5;
-  const [filteredItems, filterWith] = useFilter(items?.passionDataItems);
+  const [filteredItems, filterWith] = useFilter(passionDataItems);
   useEffect(() => {
     if (ProjectContext) {
       setValue('causes_tags', ProjectContext.causes_tags, {

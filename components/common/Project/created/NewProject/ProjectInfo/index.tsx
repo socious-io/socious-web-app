@@ -1,10 +1,10 @@
-import React, {FC, useEffect, useMemo} from 'react';
+import React, {FC, useMemo} from 'react';
 import {useForm} from 'react-hook-form';
 import Title from '@components/molecules/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
 import TextArea from '@components/common/TextArea/TextArea';
 import {Combobox} from '@components/common';
-import useGetData from '../../../../../../utils/socious-data';
+import * as data from 'utils/socious-data';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {schemaCreateProjectStep3} from '@api/projects/validation';
 import {useProjectContext} from '../context';
@@ -12,6 +12,7 @@ import {FormLayout} from '../Layout';
 import {TOnSubmit} from '../sharedType';
 import {Button} from '@components/common';
 import usePlacesAutocomplete, {getGeocode} from 'use-places-autocomplete';
+import {countryOptionsWithXW} from 'utils/geo';
 
 const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
   const {setProjectContext, ProjectContext} = useProjectContext();
@@ -40,8 +41,6 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
       city: ProjectContext.city,
     },
   });
-
-  const {items} = useGetData();
 
   const paymentType = watch('payment_type');
   const paymentScheme = watch('payment_scheme');
@@ -170,7 +169,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               <Combobox
                 label="Country"
                 onSelected={(e) => onCountrySelected(e)}
-                selected={items.countries?.find(
+                selected={countryOptionsWithXW.find(
                   (x) =>
                     x?.id.toLowerCase() ===
                     ProjectContext.country.toLowerCase(),
@@ -210,10 +209,10 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 required
                 name="remote_preference"
                 onSelected={(e) => handleChange('remote_preference', e?.id)}
-                items={items.projectRemotePreferenceItems}
+                items={data.projectRemotePreferenceItems}
                 placeholder="Remote Preference"
                 className="mt-6"
-                selected={items.projectRemotePreferenceItems?.find(
+                selected={data.projectRemotePreferenceItems?.find(
                   (x) => x?.id === ProjectContext.remote_preference,
                 )}
               />
@@ -221,11 +220,11 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 required
                 label="Project Type"
                 name="project_type"
-                items={items.projectItems}
+                items={data.projectItems}
                 placeholder="Project Type"
                 className="mt-6"
                 onSelected={(e) => handleChange('project_type', e?.id)}
-                selected={items.projectItems?.find(
+                selected={data.projectItems?.find(
                   (x) => x?.id === ProjectContext.project_type,
                 )}
               />
@@ -233,11 +232,11 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 required
                 label="Project Length"
                 name="project_length"
-                items={items.projectLengthItems}
+                items={data.projectLengthItems}
                 placeholder="Project Length"
                 className="mt-6"
                 onSelected={(e) => handleChange('project_length', e?.id)}
-                selected={items.projectLengthItems?.find(
+                selected={data.projectLengthItems?.find(
                   (x) => x?.id === ProjectContext.project_length,
                 )}
               />
@@ -249,11 +248,11 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
               <Combobox
                 label="Payment Currency"
                 name="payment_currency"
-                items={items.allCurrencies}
+                items={data.currencyOptions}
                 placeholder="Payment Currency"
                 className="mt-6"
                 onSelected={(e) => handleChange('payment_currency', e?.id)}
-                selected={items.allCurrencies?.find(
+                selected={data.currencyOptions?.find(
                   (x) => x?.id === ProjectContext.payment_currency,
                 )}
               />
@@ -261,11 +260,11 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 required
                 label="Payment Type"
                 name="payment_type"
-                items={items.projectPaymentTypeItems}
+                items={data.projectPaymentTypeItems}
                 placeholder="Payment Type"
                 className="mt-6"
                 onSelected={(e) => handleChange('payment_type', e?.id)}
-                selected={items.projectPaymentTypeItems?.find(
+                selected={data.projectPaymentTypeItems?.find(
                   (x) => x?.id === ProjectContext.payment_type,
                 )}
               />
@@ -273,11 +272,11 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 required
                 label="Payment Scheme"
                 name="payment_scheme"
-                items={items.projectPaymentSchemeItems}
+                items={data.projectPaymentSchemeItems}
                 placeholder="Payment Scheme"
                 className="mt-6"
                 onSelected={(e) => handleChange('payment_scheme', e?.id)}
-                selected={items.projectPaymentSchemeItems?.find(
+                selected={data.projectPaymentSchemeItems?.find(
                   (x) => x?.id === ProjectContext.payment_scheme,
                 )}
               />
@@ -354,11 +353,11 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 required
                 label="Experience level"
                 name="experience_level"
-                items={items.experienceLevelOptions}
+                items={data.experienceLevelOptions}
                 placeholder="Experience level"
                 className="mt-6"
                 onSelected={(e) => handleChange('experience_level', e?.id)}
-                selected={items.experienceLevelOptions?.find(
+                selected={data.experienceLevelOptions?.find(
                   (x) => x?.id === ProjectContext.experience_level,
                 )}
               />

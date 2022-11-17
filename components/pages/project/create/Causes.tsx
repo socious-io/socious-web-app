@@ -5,10 +5,10 @@ import Chip from '@components/common/Chip/Chip';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import useFilter from 'hooks/auth/useFilter';
 import Title from '@components/molecules/Title';
-import useGetData from 'utils/socious-data';
 import {Button} from '@components/common';
 import {FormLayout} from '@components/common/Project/created/NewProject/Layout';
 import useHandleSelected from 'hooks/useHandleSelected';
+import {passionDataItems} from 'utils/socious-data';
 
 const Causes: FC<{onSubmit: () => void}> = ({onSubmit}) => {
   const maxCauses = 5;
@@ -17,9 +17,6 @@ const Causes: FC<{onSubmit: () => void}> = ({onSubmit}) => {
     handleSubmit,
   } = useFormContext();
   const [selected, onSelect] = useHandleSelected('causes_tags', maxCauses);
-  const {
-    items: {passionDataItems},
-  } = useGetData();
   const [filteredItems, filterWith] = useFilter(passionDataItems);
 
   return (
