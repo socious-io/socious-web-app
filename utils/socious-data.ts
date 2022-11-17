@@ -13,20 +13,6 @@ const projectStatusType = Object.keys(Data.ProjectStatusType);
 const projectType = Object.keys(Data.ProjectType);
 const projectLengthType = Object.keys(Data.ProjectLengthType);
 const passionData = Object.keys(Data.SocialCauses);
-const getProjectLength = (k: string) => {
-  switch (k) {
-    case 'LESS_THAN_A_DAY':
-      return 'Less than a day';
-    case 'LESS_THAN_A_MONTH':
-      return 'Less than a month';
-    case '1_3_MONTHS':
-      return '1-3 months';
-    case '3_6_MONTHS':
-      return '3-6 months';
-    default:
-      return 'More than 6 months';
-  }
-};
 
 export const projectPaymentTypeItems: Array<ComboBoxSelectionType> =
   projectPaymentType.map((id) => ({
@@ -57,8 +43,7 @@ export const projectItems: Array<ComboBoxSelectionType> = projectType.map(
 export const projectLengthItems: Array<ComboBoxSelectionType> =
   projectLengthType.map((id: string) => ({
     id: id,
-    name: getProjectLength(id),
-    //  getText('en', `PROJECT.${id?.[0]}`),
+    name: getText('en', `PROJECT.${Data.ProjectLengthType[id]}`),
   }));
 
 export const passionDataItems: Array<ComboBoxSelectionType> = passionData.map(
