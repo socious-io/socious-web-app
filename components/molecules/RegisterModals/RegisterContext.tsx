@@ -9,12 +9,12 @@ import {
 } from 'react';
 
 export type TRegisterContext = {
-  state: 'SIGNUP' | 'LOGIN';
+  state: 'SIGNUP' | 'LOGIN' | null;
   step: number;
 };
 
 const initContext: TRegisterContext = {
-  state: 'LOGIN',
+  state: null,
   step: 1,
 };
 
