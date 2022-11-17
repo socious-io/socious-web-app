@@ -291,7 +291,6 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
       return (
         <ProjectQuestion
           onSubmit={() => setProjectContext(initContext)}
-          type="EDIT"
           deleteQuestion={handleDeleteQuestion}
         />
       );

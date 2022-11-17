@@ -1,7 +1,7 @@
 import Button from '@components/common/Button/Button';
 import SocialCauses from '@components/common/CreateOrganization/steps/SocialCauses';
 import Modal from '@components/common/Modal/Modal';
-import {FromLayout} from '@components/common/Project/created/NewProject/Layout';
+import {FormLayout} from '@components/common/Project/created/NewProject/Layout';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import {useRouter} from 'next/router';
 import {FC, useEffect} from 'react';
@@ -48,7 +48,7 @@ export const SocialCausesModal: FC<SocialCausesModalProps> = ({
       </Modal.Title>
       <Modal.Description>
         <FormProvider {...methods}>
-          <FromLayout>
+          <FormLayout>
             <SocialCauses
               onSubmit={methods.handleSubmit(onsubmit)}
               showTitle={false}
@@ -60,7 +60,7 @@ export const SocialCausesModal: FC<SocialCausesModalProps> = ({
                 </footer>
               )}
             />
-          </FromLayout>
+          </FormLayout>
         </FormProvider>
       </Modal.Description>
     </Modal>

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import type {NextPage} from 'next';
 import {GeneralLayout} from 'layout';
 import SideBar from '@components/common/Feed/SideBar';
@@ -19,13 +19,16 @@ const ProjectApplications: NextPage<ProjectApplicationsProps> = ({skills}) => {
   useEffect(() => {
     if (currentIdentity?.type === 'users') Router.push('/app/projects');
   }, [currentIdentity?.type]);
+  const [showCreate, setShowCreate] = useState<boolean>();
 
   return (
     <ProjectContextProvider>
       <GeneralLayout hasNavbar>
         <SideBar />
-        <MyApplicationBoxes />
-        <CreateProjectMain skills={skills} />
+        <MyApplicationBoxes setShowCreate={setShowCreate} />
+        {showCreate && (
+          <CreateProjectMain skills={skills} setShowCreate={setShowCreate} />
+        )}
       </GeneralLayout>
     </ProjectContextProvider>
   );

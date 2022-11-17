@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react';
 import {StepProps} from '@models/stepProps';
 import {useForm} from 'react-hook-form';
 import {TextInput, TextArea, Button, Avatar} from '@components/common';
-import {FromLayout} from '../../created/NewProject/Layout';
+import {FormLayout} from '../../created/NewProject/Layout';
 import {schemaApplyProject} from '@api/projects/validation';
 import {joiResolver} from '@hookform/resolvers/joi';
 import {useProjectContext} from '../../created/NewProject/context';
@@ -142,7 +142,7 @@ export const ApplyStep1 = ({onSubmit, project, questions}: ApplyStep) => {
       className="flex h-full w-full grow flex-col sm:grow-0"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <FromLayout type="FULL" className="!grow">
+      <FormLayout type="FULL" className="!grow">
         <div className="hide-scrollbar overflow-y-scroll px-4 pt-4">
           <p className="font-bold text-black">{project?.title}</p>
           <div className="mt-3 flex flex-row space-x-2">
@@ -315,7 +315,7 @@ export const ApplyStep1 = ({onSubmit, project, questions}: ApplyStep) => {
             </Button>
           </div>
         </div>
-      </FromLayout>
+      </FormLayout>
     </form>
   );
 };

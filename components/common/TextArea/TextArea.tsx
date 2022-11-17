@@ -62,7 +62,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           {...props}
           disabled={disabled}
           id={id || name}
-          name={name || id}
+          name={name || register?.name || id}
           placeholder={placeholder || label}
           aria-label={label}
           data-testid={`${label}-testid`}

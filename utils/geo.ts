@@ -3,7 +3,7 @@ import {getAllISOCodes} from 'iso-country-currency';
 import {ComboBoxSelectionType} from '@components/common';
 import {GeoName} from '@models/geo';
 
-interface CountryComboBoxSelectionType extends ComboBoxSelectionType {
+export interface CountryComboBoxSelectionType extends ComboBoxSelectionType {
   /** Lowercase name, for search/filter */
   lower: string;
 }
@@ -21,6 +21,11 @@ for (const iso of getAllISOCodes()) {
     lower: iso.countryName.toLowerCase(),
   });
 }
+
+export const countryOptionsWithXW = [
+  {name: 'Worldwide', id: 'XW', lower: 'worldwide'},
+  ...countryOptions,
+];
 
 export function formatCityName(geoname: GeoName): string {
   const parts = [];

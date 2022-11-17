@@ -21,7 +21,7 @@ import {ExclamationCircleIcon, TrashIcon} from '@heroicons/react/24/solid';
 import {useProjectContext} from '../context';
 
 // Types
-import {FromLayout} from '../Layout';
+import {FormLayout} from '../Layout';
 import {AddQuestionType} from '@models/question';
 export type OptionType = {
   id: number;
@@ -130,7 +130,7 @@ const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <FromLayout type="FULL" className="!grow">
+      <FormLayout type="FULL" className="!grow">
         <div className="grow overflow-y-scroll">
           <div className="mx-4 my-4 space-y-8">
             <Combobox
@@ -238,7 +238,7 @@ const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
             Cancel
           </Button>
         </div>
-      </FromLayout>
+      </FormLayout>
     </div>
   );
 };

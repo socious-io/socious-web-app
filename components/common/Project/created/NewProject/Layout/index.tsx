@@ -64,7 +64,7 @@ export const CreateProjectLayout: FC<PropsWithChildren<TLayoutType>> = ({
   );
 };
 
-export const FromLayout: FC<
+export const FormLayout: FC<
   PropsWithChildren<{type?: 'FULL'; className?: string}>
 > = ({children, type, className}) => {
   return (

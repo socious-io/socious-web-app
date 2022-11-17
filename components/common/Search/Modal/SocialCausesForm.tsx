@@ -1,6 +1,6 @@
 import Button from '@components/common/Button/Button';
 import SocialCauses from '@components/common/CreateOrganization/steps/SocialCauses';
-import {FromLayout} from '@components/common/Project/created/NewProject/Layout';
+import {FormLayout} from '@components/common/Project/created/NewProject/Layout';
 import {useRouter} from 'next/router';
 import {FC} from 'react';
 import {useForm, FieldValues, FormProvider} from 'react-hook-form';
@@ -23,7 +23,7 @@ export const SocialCausesForm: FC<SocialCausesFormProps> = ({onSubmit}) => {
 
   return (
     <FormProvider {...methods}>
-      <FromLayout>
+      <FormLayout>
         <SocialCauses
           onSubmit={methods.handleSubmit(onsubmit)}
           showTitle={false}
@@ -35,7 +35,7 @@ export const SocialCausesForm: FC<SocialCausesFormProps> = ({onSubmit}) => {
             </footer>
           )}
         />
-      </FromLayout>
+      </FormLayout>
     </FormProvider>
   );
 };

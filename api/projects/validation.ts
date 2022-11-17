@@ -91,7 +91,12 @@ export const schemaCreateProjectStep3 = Joi.object({
   city: Joi.when('country', {
     is: 'XW',
     then: Joi.string(),
-    otherwise: Joi.string(),
+    otherwise: Joi.string().required(),
+  }),
+  geoname_id: Joi.when('country', {
+    is: 'XW',
+    then: Joi.number(),
+    otherwise: Joi.number().required(),
   }),
 });
 
