@@ -107,7 +107,10 @@ export const MediaBubble = ({
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       })
-      .catch((error) => toast.error('download failed'));
+      .catch((error) => {
+        console.log('ERROR In DOWNLOAD :---: ', error);
+        toast.error('download failed');
+      });
   };
 
   return (
