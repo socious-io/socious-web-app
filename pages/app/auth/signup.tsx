@@ -28,9 +28,9 @@ import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 import {
   signup,
   checkEmailExist,
-  sendOTP,
   confirmOTP,
   directChangePassword,
+  resendVerifyCode,
 } from '@api/auth/actions';
 
 const Signup: NextPage = () => {
@@ -104,7 +104,7 @@ const Signup: NextPage = () => {
   const handleSendCode = useCallback(async () => {
     const email = formMethodsStep2.getValues('email');
     try {
-      await sendOTP(email);
+      await resendVerifyCode(email);
     } catch (error: any) {
       setError(DefaultErrorMessage);
       handleErrorToggle();
@@ -157,7 +157,7 @@ const Signup: NextPage = () => {
     <PreAuthLayout>
       <div className="mx-auto flex min-h-screen w-screen flex-col items-stretch border border-grayLineBased bg-background px-6 pt-12 sm:my-auto sm:h-[45rem] sm:min-h-0 sm:max-w-xl sm:rounded-3xl sm:py-7">
         <div className="relative  flex  h-20 justify-center">
-          {![1, 5].includes(step) && (
+          {step === 2 && (
             <span
               className="absolute left-0 cursor-pointer"
               title="Back"

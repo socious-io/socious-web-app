@@ -25,6 +25,10 @@ export function sendOTP(email: string) {
   return post('/auth/otp', {email});
 }
 
+export function resendVerifyCode(email: string) {
+  return post('/auth/resend-verify-code', {email});
+}
+
 export function forgetPassword(email: string) {
   return post('/auth/forget-password', {email});
 }
