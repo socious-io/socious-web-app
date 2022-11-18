@@ -3,7 +3,7 @@ import {StepProps} from '@models/stepProps';
 import {useForm} from 'react-hook-form';
 import Button from '@components/common/Button/Button';
 import Avatar from '@components/common/Avatar/Avatar';
-import {FromLayout} from '../../created/NewProject/Layout';
+import {FormLayout} from '../../created/NewProject/Layout';
 import {useProjectContext} from '../../created/NewProject/context';
 import useSWR from 'swr';
 import {get} from 'utils/request';
@@ -23,7 +23,7 @@ const ApplicationReview = ({onSubmit, project}: ApplyStep) => {
       className="flex h-full w-full flex-col "
       onSubmit={handleSubmit(onSubmit)}
     >
-      <FromLayout type="FULL">
+      <FormLayout type="FULL">
         <div className="overflow-y-scroll px-4 pt-4">
           <p className="font-bold text-black">{project?.title}</p>
           <div className="mt-3 flex flex-row space-x-2">
@@ -46,7 +46,7 @@ const ApplicationReview = ({onSubmit, project}: ApplyStep) => {
             </>
           )}
         </div>
-      </FromLayout>
+      </FormLayout>
       <div className=" flex items-end justify-center border-t p-4 pb-12 sm:justify-end sm:pb-4">
         <Button
           className="flex h-11 w-full items-center justify-center sm:w-52"

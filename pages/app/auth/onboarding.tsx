@@ -182,7 +182,7 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
         router.push('/app/projects');
       }
     },
-    [handleToggleModal, step, user],
+    [handleToggleModal, router, step, user],
   );
 
   const handleUpdateProfileRequest = useCallback(() => {

@@ -36,12 +36,14 @@ import {
 
 // Types
 import {AxiosError} from 'axios';
+import FirstForm from './FirstForm';
 type RegisterModalProps = {
   show: boolean;
   onClose: () => void;
+  mutateProject: () => void;
 };
 
-const RegisterModal = ({show, onClose}: RegisterModalProps) => {
+const RegisterModal = ({show, onClose, mutateProject}: RegisterModalProps) => {
   const {registerContext, setRegisterContext} = useRegisterContext();
   const {mutateIdentities} = useUser({redirect: false});
   const {id} = Router.query;
@@ -51,7 +53,7 @@ const RegisterModal = ({show, onClose}: RegisterModalProps) => {
   const compactMethods = useForm({resolver: joiResolver(schemaSignupCompact)});
   const {state, step} = registerContext;
   const forceClose = useCallback(() => {
-    setRegisterContext({state: 'LOGIN', step: 1});
+    setRegisterContext({state: null, step: 1});
     onClose();
   }, [onClose, setRegisterContext]);
 
@@ -60,6 +62,7 @@ const RegisterModal = ({show, onClose}: RegisterModalProps) => {
       try {
         await login(email, password);
         mutateIdentities();
+        mutateProject();
         forceClose();
       } catch (error) {
         const data: any = (error as AxiosError).response?.data;
@@ -73,7 +76,7 @@ const RegisterModal = ({show, onClose}: RegisterModalProps) => {
         }
       }
     },
-    [forceClose, mutateIdentities],
+    [forceClose, mutateIdentities, mutateProject],
   );
 
   const registerWithEmail = useCallback(async () => {
@@ -167,7 +170,9 @@ const RegisterModal = ({show, onClose}: RegisterModalProps) => {
   );
 
   const formBody = () => {
-    return state === 'LOGIN' ? (
+    return state === null ? (
+      <FirstForm />
+    ) : state === 'LOGIN' ? (
       <FormProvider {...loginMethods}>
         <LoginForm onSubmit={loginUser} />
       </FormProvider>

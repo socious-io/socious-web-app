@@ -1,7 +1,7 @@
 import React, {useState, useMemo, useCallback, useEffect} from 'react';
 
 //components
-import Title from '../components/Title';
+import Title from '../../../molecules/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
 import {Button, Combobox} from '@components/common';
 import FormTitle from '../components/FormTitle';

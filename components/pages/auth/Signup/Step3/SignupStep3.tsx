@@ -58,7 +58,7 @@ const SignupStep3 = ({onSubmit, onResendCode, goBack}: SignupStep3Props) => {
           </p>
         )}
         <p className="text-base text-graySubtitle">
-          Didn’t receive a code?{' '}
+          Didn&apos;t receive a code?{' '}
           <span
             className="cursor-pointer px-2 text-primary underline underline-offset-2"
             onClick={onResendCode}
