@@ -12,7 +12,7 @@ interface MessageFieldProps {
 }
 import Button from '../../Button/Button';
 import ImageUploader from '@components/common/ImageUploader/ImageUploader';
-import {ConsoleView} from 'react-device-detect';
+import {toast} from 'react-toastify';
 
 const MessageField = ({onSend}: MessageFieldProps) => {
   const [message, setMessage] = useState<string>('');
@@ -28,8 +28,10 @@ const MessageField = ({onSend}: MessageFieldProps) => {
           setMessage('');
           setFile(null);
           if (inputField.current) inputField.current.innerHTML = '';
-        } catch (error) {
+        } catch (error: any) {
           console.log('ERROR IN MSG FIELD :---: ', error);
+          if (error.isAxiosError && error.code === 'ERR_NETWORK')
+            toast.error('File size too large.');
         }
       }
     },

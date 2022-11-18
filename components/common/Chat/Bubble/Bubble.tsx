@@ -90,7 +90,6 @@ export const MediaBubble = ({
   self: boolean;
   mediaUrl: string;
 }) => {
-  // Media/:id is not working.
   // const {data, error} = useSWR<any>(`/media/${mediaId}`, get);
 
   const imgType = /(?:.jpg|.jpeg|.png)$/i.test(mediaUrl);
@@ -100,18 +99,15 @@ export const MediaBubble = ({
     fetch(mediaUrl)
       .then((res) => res.blob())
       .then((file) => {
-        console.log('FILE ', file);
         const a = document.createElement('a');
         const url = URL.createObjectURL(file);
         a.href = url;
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
         URL.revokeObjectURL(url);
       })
-      .catch((error) => {
-        console.log('ERROR :--: ', error);
-        if (error?.response?.data)
-          toast.error(error?.response?.data || 'download failed');
-      });
+      .catch((error) => toast.error('download failed'));
   };
 
   return (
