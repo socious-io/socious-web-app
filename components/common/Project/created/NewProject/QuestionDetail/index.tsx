@@ -8,7 +8,6 @@ import {schemaCreateProjectQuestion} from '@api/projects/validation';
 // Components/Icons
 import {
   Button,
-  Checkbox,
   InputFiled,
   TextArea,
   Combobox,

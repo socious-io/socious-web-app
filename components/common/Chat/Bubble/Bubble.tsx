@@ -1,12 +1,13 @@
 import Avatar from '@components/common/Avatar/Avatar';
-import {EllipsisHorizontalCircleIcon} from '@heroicons/react/24/outline';
 import Image from 'next/future/image';
 import React from 'react';
 import {twMerge} from 'tailwind-merge';
 import HorizontalDots from 'asset/icons/horizontal-dots.svg';
 import {Popover} from '@headlessui/react';
 import Button from '@components/common/Button/Button';
-import {toast} from 'react-toastify';
+// import {toast} from 'react-toastify';
+import useSWR from 'swr';
+import {get} from 'utils/request';
 interface BubbleProps {
   self?: boolean;
   content?: string;
@@ -90,28 +91,28 @@ export const MediaBubble = ({
   self: boolean;
   mediaUrl: string;
 }) => {
-  // const {data, error} = useSWR<any>(`/media/${mediaId}`, get);
+  const {data, error} = useSWR<any>(`/media/${mediaId}`, get);
 
   const imgType = /(?:.jpg|.jpeg|.png)$/i.test(mediaUrl);
 
-  console.table({imgType, mediaId, mediaUrl});
-  const downloadMedia = () => {
-    fetch(mediaUrl)
-      .then((res) => res.blob())
-      .then((file) => {
-        const a = document.createElement('a');
-        const url = URL.createObjectURL(file);
-        a.href = url;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      })
-      .catch((error) => {
-        console.log('ERROR In DOWNLOAD :---: ', error);
-        toast.error('download failed');
-      });
-  };
+  // Might need to create a downloadable url for AWS S3.
+  // const downloadMedia = () => {
+  //   fetch(mediaUrl)
+  //     .then((res: any) => res.blob())
+  //     .then((file: any) => {
+  //       const a = document.createElement('a');
+  //       const url = URL.createObjectURL(file);
+  //       a.download = data?.filename ?? url.replace(/^.*[\\\/]/, '');
+  //       a.href = url;
+  //       document.body.appendChild(a);
+  //       a.click();
+  //       document.body.removeChild(a);
+  //       URL.revokeObjectURL(url);
+  //     })
+  //     .catch((error: any) => {
+  //       toast.error('download failed');
+  //     });
+  // };
 
   return (
     <div
@@ -140,14 +141,15 @@ export const MediaBubble = ({
         </Popover.Button>
         <Popover.Panel
           as="div"
-          className="absolute right-[-180%] bottom-full mb-2 min-w-[8rem] rounded-2xl border border-grayLineBased bg-white py-2 px-3"
+          className="absolute right-[-180%] bottom-full mb-2 min-w-[8rem] rounded-2xl border border-grayLineBased bg-white"
         >
           <Button
             variant="link"
             className="gap-3 font-normal text-black"
-            onClick={downloadMedia}
+            // onClick={downloadMedia}
           >
-            Download
+            {/* This is temporary fix. */}
+            <a download={mediaUrl}>Download</a>
           </Button>
         </Popover.Panel>
       </Popover>
@@ -165,7 +167,7 @@ export const MediaBubble = ({
           )}
         />
       ) : (
-        <div>{mediaId + '.file'}</div>
+        <div>{data?.filename ?? mediaId + '.file'}</div>
       )}
     </div>
   );
