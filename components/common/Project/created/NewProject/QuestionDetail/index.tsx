@@ -27,8 +27,13 @@ export type OptionType = {
   id: number;
   option: string;
 };
-
 type QuestionAddProps = {onSubmit: (data: AddQuestionType) => void};
+
+const types = [
+  {id: 'TEXT', name: 'Text'},
+  {id: 'CHOICE', name: 'Multiple choice'},
+];
+
 type TDefaultQuestion = AddQuestionType<OptionType> & {type: 'CHOICE' | 'TEXT'};
 const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
   const {setProjectContext, ProjectContext} = useProjectContext();
@@ -136,10 +141,8 @@ const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
             <Combobox
               label="Question type"
               required
-              items={[
-                {id: 'CHOICE', name: 'Multiple choice'},
-                {id: 'TEXT', name: 'Text'},
-              ]}
+              items={types}
+              selected={types.find((item) => item.id === type)}
               controller={typeController}
             />
             <TextArea
@@ -158,7 +161,12 @@ const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
               <p>Require this question to be answered</p>
               <Switch
                 value={watch('required')}
-                onChange={(status) => setValue('required', status)}
+                onChange={(status) =>
+                  setValue('required', status, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }
               />
             </div>
           </div>
