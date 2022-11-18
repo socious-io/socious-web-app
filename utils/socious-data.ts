@@ -11,7 +11,9 @@ const projectPaymentSchemeType = Object.keys(Data.ProjectPaymentSchemeType);
 const projectPaymentType = Object.keys(Data.ProjectPaymentType);
 const projectStatusType = Object.keys(Data.ProjectStatusType);
 const projectType = Object.keys(Data.ProjectType);
-const projectLengthType = Object.keys(Data.ProjectLengthType);
+const projectLengthType = Object.values(
+  Data.ProjectLengthType,
+) as Array<string>;
 const passionData = Object.keys(Data.SocialCauses);
 
 export const projectPaymentTypeItems: Array<ComboBoxSelectionType> =
@@ -41,9 +43,9 @@ export const projectItems: Array<ComboBoxSelectionType> = projectType.map(
   }),
 );
 export const projectLengthItems: Array<ComboBoxSelectionType> =
-  projectLengthType.map((id: string) => ({
-    id: id,
-    name: getText('en', `PROJECT.${Data.ProjectLengthType[id]}`),
+  projectLengthType.map((value: string) => ({
+    id: value,
+    name: getText('en', `PROJECT.${value}`),
   }));
 
 export const passionDataItems: Array<ComboBoxSelectionType> = passionData.map(
