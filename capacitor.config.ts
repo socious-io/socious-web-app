@@ -1,18 +1,21 @@
 import {Capacitor} from '@capacitor/core';
 import {CapacitorConfig} from '@capacitor/cli';
+import {hostname} from 'os';
 
 const defineHostname = (): 'socious.io' | 'localhost' => {
   return Capacitor.getPlatform() === 'android' ? 'localhost' : 'socious.io';
 };
 
+console.log('hostname: ', hostname());
+
 const config: CapacitorConfig = {
+  // appId: 'jp.socious.network',
   appId: 'jp.socious.network',
   appName: 'Socious',
   webDir: 'out',
   bundledWebRuntime: false,
   server: {
-    androidScheme: 'https',
-    hostname: 'socious.io',
+    hostname: 'localhost',
   },
   plugins: {
     PushNotifications: {
