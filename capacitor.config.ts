@@ -11,11 +11,7 @@ const config: CapacitorConfig = {
   webDir: 'out',
   bundledWebRuntime: false,
   server: {
-    //   // url: 'http://192.168.1.4:3000',
-    //   // cleartext: true,
-    // hostname: 'capacitor',
-    // hostname: 'android',
-    // androidScheme: 'native',
+    hostname: 'socious.io',
   },
   plugins: {
     PushNotifications: {

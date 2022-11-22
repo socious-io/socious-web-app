@@ -114,7 +114,7 @@
     "update-all": "ncu -u",
     "build-mobile": "next build && next export && npx cap sync",
     "ios": "next build && next export && npx cap sync ios && npx cap run ios",
-    "android": "next build && next export && npx cap sync android && npx cap run android",
+    "android": "next build && next export && npx cap sync android && npx cap open android",
     "postinstall": "patch-package",
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
