@@ -18,7 +18,7 @@ module.exports = withImages({
   },
   webpack: (
     config,
-    { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack },
+    // { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack },
   ) => {
     config.resolve = {
       ...config.resolve,

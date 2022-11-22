@@ -10,18 +10,19 @@ const config: CapacitorConfig = {
   appName: 'Socious',
   webDir: 'out',
   bundledWebRuntime: false,
-  android: {
-    allowMixedContent: true,
-  },
   server: {
-    hostname: 'socious.io',
-    androidScheme: 'https',
-    cleartext: true,
-    allowNavigation: ['https://socious.io/api/v2/*'],
+    //   // url: 'http://192.168.1.4:3000',
+    //   // cleartext: true,
+    // hostname: 'capacitor',
+    // hostname: 'android',
+    // androidScheme: 'native',
   },
   plugins: {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
+    },
+    CapacitorHttp: {
+      enabled: true,
     },
     // CapacitorCookies: {
     //   enabled: true,
