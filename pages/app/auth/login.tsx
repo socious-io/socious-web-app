@@ -20,15 +20,10 @@ import {
   getDeliveredNotifications,
   getToken,
   requestPermissions,
-  subscribeToTopic,
 } from 'core/pushNotification';
 import {getDevices, saveDeviceToken} from '@api/devices/actions';
 import {DeviceBody} from '@models/devices';
-
-type Account = {
-  email: string;
-  password: string;
-};
+import {Capacitor} from '@capacitor/core';
 
 export type LoginResp = {
   message?: 'success';
@@ -37,12 +32,9 @@ export type LoginResp = {
 
 const Login: NextPage = () => {
   const router = useRouter();
-  const [passwordShown, setPasswordShown] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const {mutateIdentities} = useUser({redirect: false});
-
-  const [errorMessage, setError] = useState<ErrorMessage>();
-
   const {register, handleSubmit, formState, getValues} = useForm({
     resolver: joiResolver(schemaLogin),
   });
@@ -106,21 +98,17 @@ const Login: NextPage = () => {
 
   const onLoginSucceed = async ({message}: LoginResp) => {
     if (message === 'success') {
-      // const alreadyGranted = (await checkPermissions()) === 'granted';
-
-      // if (alreadyGranted) {
-      //   router.push('/app/projects');
-      //   return;
-      // }
-
-      requestPermissions()
-        .then(getFCMToken)
-        .then(saveToken)
-        .then(addListeners)
-        .catch((err) => {
-          console.log('err during permission request ', err);
-        });
-      router.push('/app/projects');
+      if (Capacitor.isNativePlatform()) {
+        // TODO: do not ask for permission if user already granted permission
+        requestPermissions()
+          .then(getFCMToken)
+          .then(saveToken)
+          .then(addListeners)
+          .catch((err) => {
+            console.log('err during permission request ', err);
+          });
+      }
+      router.push('/app/projects').then(() => mutateIdentities());
     }
   };
 
@@ -131,36 +119,11 @@ const Login: NextPage = () => {
   const onSubmit = () => {
     const email = getValues('email');
     const password = getValues('password');
-    login(email, password)
-      .then(onLoginSucceed)
-      .catch(onLoginError)
-      .finally(mutateIdentities);
+    login(email, password).then(onLoginSucceed).catch(onLoginError);
   };
 
   const handleToggleModal = () => {
     setShowModal(!showModal);
-  };
-  const handleLoginRequest = async () => {
-    const email = getValues('email');
-    const password = getValues('password');
-
-    try {
-      await login(email, password);
-    } catch (e) {
-      const error = e as AxiosError<any>;
-      let msg = DefaultErrorMessage;
-      if (error.isAxiosError) {
-        if (error.response?.data?.error === 'Not matched')
-          msg = {
-            title: 'Invalid login',
-            message: 'Email or password is incorrect',
-          };
-      }
-      setError(msg);
-      setShowModal(!showModal);
-      return;
-    }
-    await mutateIdentities();
   };
 
   const onTogglePassword = useCallback(() => {
@@ -259,14 +222,6 @@ const Login: NextPage = () => {
         </form>
 
         <Modal isOpen={showModal} onClose={handleToggleModal}>
-          <Modal.Title>
-            <h2 className="text-center text-error">{errorMessage?.title}</h2>
-          </Modal.Title>
-          <Modal.Description>
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">{errorMessage?.message}</p>
-            </div>
-          </Modal.Description>
           <div className="mt-4">
             <Button
               className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
