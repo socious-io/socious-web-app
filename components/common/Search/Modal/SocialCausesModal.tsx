@@ -1,10 +1,10 @@
 import Button from '@components/common/Button/Button';
 import SocialCauses from '@components/common/CreateOrganization/steps/SocialCauses';
 import Modal from '@components/common/Modal/Modal';
-import {FromLayout} from '@components/common/Project/created/NewProject/Layout';
+import {FormLayout} from '@components/common/Project/created/NewProject/Layout';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import {useRouter} from 'next/router';
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {FieldValues, FormProvider, useForm} from 'react-hook-form';
 
 interface SocialCausesModalProps {
@@ -18,6 +18,13 @@ export const SocialCausesModal: FC<SocialCausesModalProps> = ({
 }) => {
   const route = useRouter();
   const methods = useForm();
+  const {social_causes} = route.query;
+
+  useEffect(() => {
+    if (social_causes)
+      methods.setValue('social_causes', (social_causes as string)?.split(','));
+    else methods.setValue('social_causes', null);
+  }, [methods, route.query, social_causes]);
 
   const onsubmit = (data: FieldValues) => {
     route.query.social_causes = data.social_causes.join(',');
@@ -41,7 +48,7 @@ export const SocialCausesModal: FC<SocialCausesModalProps> = ({
       </Modal.Title>
       <Modal.Description>
         <FormProvider {...methods}>
-          <FromLayout>
+          <FormLayout>
             <SocialCauses
               onSubmit={methods.handleSubmit(onsubmit)}
               showTitle={false}
@@ -53,7 +60,7 @@ export const SocialCausesModal: FC<SocialCausesModalProps> = ({
                 </footer>
               )}
             />
-          </FromLayout>
+          </FormLayout>
         </FormProvider>
       </Modal.Description>
     </Modal>

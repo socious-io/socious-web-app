@@ -23,11 +23,13 @@ export type TUseInfiniteSWRReturn<R> = {
   size: number;
   infiniteError: any;
   loadMore: () => void;
+  totalCount: number;
 };
 
 const useInfiniteSWR = <R = any,>(
   url: string | null,
   configs: SWRInfiniteConfiguration = {},
+  deps: Array<any> = [],
 ): TUseInfiniteSWRReturn<R> => {
   const getKey = useCallback(
     (initialSize: number, previousData: TInfiniteResponse<R>) => {
@@ -37,7 +39,8 @@ const useInfiniteSWR = <R = any,>(
         url && `${url + (url.includes('?') ? '&' : '?')}page=${initialSize + 1}`
       );
     },
-    [url],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [url, ...deps],
   );
 
   const {
@@ -62,6 +65,12 @@ const useInfiniteSWR = <R = any,>(
     [noMoreData, setSize],
   );
 
+  const totalCount = useMemo(
+    () =>
+      infiniteData && infiniteData.length ? infiniteData[0].total_count : 0,
+    [infiniteData],
+  );
+
   return {
     rawResponse: infiniteData,
     flattenData,
@@ -72,6 +81,7 @@ const useInfiniteSWR = <R = any,>(
     size,
     infiniteError,
     loadMore,
+    totalCount,
   };
 };
 

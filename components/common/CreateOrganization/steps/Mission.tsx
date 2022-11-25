@@ -1,7 +1,7 @@
 import React from 'react';
 
 //components
-import Title from '../components/Title';
+import Title from '../../../molecules/Title';
 import TextArea from '@components/common/TextArea/TextArea';
 import {Button} from '@components/common/Button/Button';
 
@@ -24,7 +24,7 @@ const Mission = ({onSubmit}: StepProps) => {
 
   return (
     <>
-      <Title border={false}>What’s your organization’s mission?</Title>
+      <Title border={false}>What&apos;s your organization’s mission?</Title>
       <form onSubmit={handleOnSubmit} className="flex h-full flex-col">
         <div className="h-14 w-full grow overflow-y-scroll px-4 py-2">
           <TextArea

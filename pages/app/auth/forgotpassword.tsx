@@ -8,9 +8,9 @@ import {AxiosError} from 'axios';
 import {toast} from 'react-toastify';
 
 import {Button, Modal} from '@components/common';
-import ForgotPasswordStep1 from '@components/common/Auth/ForgotPassword/Step1/ForgotPasswordStep1';
-import ForgotPasswordStep2 from '@components/common/Auth/ForgotPassword/Step2/ForgotPasswordStep2';
-import ForgotPasswordStep3 from '@components/common/Auth/ForgotPassword/Step3/ForgotPasswordStep3';
+import ForgotPasswordStep1 from '@components/pages/auth/ForgotPassword/Step1/ForgotPasswordStep1';
+import ForgotPasswordStep2 from '@components/pages/auth/ForgotPassword/Step2/ForgotPasswordStep2';
+import ForgotPasswordStep3 from '@components/pages/auth/ForgotPassword/Step3/ForgotPasswordStep3';
 import {
   schemaForgotPasswordStep1,
   schemaForgotPasswordStep3,
@@ -101,7 +101,6 @@ const ForgotPassword: NextPage = () => {
 
   const handleConfirmOTPRequest = async (code: string) => {
     const email = formMethodsStep1.getValues('email');
-
     dispatch({type: 'OTP', error: ''});
     try {
       await confirmOTP(email, code);

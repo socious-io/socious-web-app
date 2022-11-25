@@ -30,3 +30,11 @@ export const getDeliveredNotifications = async () => {
 export const subscribeToTopic = async (topic: string) => {
   await FirebaseMessaging.subscribeToTopic({topic});
 };
+
+export const unsubscribeToPushNotifs = async () => {
+  await FirebaseMessaging.removeAllListeners();
+};
+
+export const deletePushNotifToken = async () => {
+  await FirebaseMessaging.deleteToken();
+};

@@ -51,6 +51,18 @@ export type TApplicant = {
     created_at: string;
     meta: IdentityMeta;
   };
+  answers: TAnswer[];
+};
+
+export type TAnswer = {
+  id: string;
+  project_id: string;
+  question_id: string;
+  applicant_id: string;
+  answer: string | null;
+  selected_option: number | null;
+  created_at: string;
+  updated_at: string;
 };
 
 export type TOfferApplicant = {

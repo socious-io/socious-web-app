@@ -28,6 +28,7 @@ import {getOrganization} from '@api/organizations/actions';
 
 // Types
 import {LoginIdentity} from '@models/identity';
+import {removeAllListeners} from 'process';
 
 const NavbarPopupMenu = () => {
   const {identities, currentIdentity, mutateIdentities, mutateUser} = useUser({
@@ -54,7 +55,10 @@ const NavbarPopupMenu = () => {
   const onLogout = async () => {
     const res = await logout();
     mutateIdentities();
+    unsubscribeToPushNotifs();
+    deletePushNotifToken();
     mutateUser();
+    console.log('logout');
     if (res) Router.push('/app');
   };
 
@@ -159,5 +163,9 @@ const NavbarPopupMenu = () => {
     </>
   );
 };
+import {
+  deletePushNotifToken,
+  unsubscribeToPushNotifs,
+} from 'core/pushNotification';
 
 export default NavbarPopupMenu;

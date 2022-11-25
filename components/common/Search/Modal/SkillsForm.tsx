@@ -1,6 +1,6 @@
 import Button from '@components/common/Button/Button';
 import Chip from '@components/common/Chip/Chip';
-import {FromLayout} from '@components/common/Project/created/NewProject/Layout';
+import {FormLayout} from '@components/common/Project/created/NewProject/Layout';
 import SearchBar from '@components/common/SearchBar/SearchBar';
 import useFilter, {ObjectType} from 'hooks/auth/useFilter';
 import {useRouter} from 'next/router';
@@ -16,9 +16,11 @@ interface SkillsFormProps {
 
 export const SkillsForm: FC<SkillsFormProps> = ({onSubmit}) => {
   const route = useRouter();
-  const {handleSubmit, setValue, control} = useForm();
+  const {handleSubmit, setValue, control, watch} = useForm();
   const {skills} = useSkills();
-  const paramSkills = (route.query.skills as string)?.split(',');
+  const paramSkills = route.query.skills
+    ? (route.query.skills as string)?.split(',')
+    : null;
 
   const selectedSkills = useWatch({
     name: 'skills',
@@ -45,10 +47,8 @@ export const SkillsForm: FC<SkillsFormProps> = ({onSubmit}) => {
   };
 
   const onSubmitSkills = (data: FieldValues) => {
-    if (data.skills.length) {
-      route.query.skills = data.skills.join(',');
-      route.push(route);
-    }
+    route.query.skills = data.skills?.join(',');
+    route.push(route);
     onSubmit?.(data);
   };
 
@@ -57,7 +57,7 @@ export const SkillsForm: FC<SkillsFormProps> = ({onSubmit}) => {
       onSubmit={handleSubmit(onSubmitSkills)}
       className="flex h-full w-full flex-col"
     >
-      <FromLayout>
+      <FormLayout>
         <SearchBar
           type="text"
           placeholder="Search"
@@ -84,7 +84,7 @@ export const SkillsForm: FC<SkillsFormProps> = ({onSubmit}) => {
             })}
           </div>
         </div>
-      </FromLayout>
+      </FormLayout>
       <div className=" flex items-end justify-end  border-t p-4">
         <Button
           type="submit"

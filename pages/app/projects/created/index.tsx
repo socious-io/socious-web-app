@@ -17,6 +17,7 @@ const ProjectApplications: NextPage = () => {
   useEffect(() => {
     if (currentIdentity?.type === 'users') Router.push('/app/projects');
   }, [currentIdentity?.type]);
+  const [showCreate, setShowCreate] = useState<boolean>();
 
   useEffect(() => {
     skillsFetcher().then(setSkills);
@@ -26,8 +27,10 @@ const ProjectApplications: NextPage = () => {
     <ProjectContextProvider>
       <GeneralLayout hasNavbar>
         <SideBar />
-        <MyApplicationBoxes />
-        <CreateProjectMain skills={skills} />
+        <MyApplicationBoxes setShowCreate={setShowCreate} />
+        {showCreate && (
+          <CreateProjectMain skills={skills} setShowCreate={setShowCreate} />
+        )}
       </GeneralLayout>
     </ProjectContextProvider>
   );

@@ -1,31 +1,41 @@
-import {useCallback, useEffect, useRef} from 'react';
-import {mutate} from 'swr';
+import {useCallback, useRef} from 'react';
 
-import {useForm} from 'react-hook-form';
+import {Control, FieldValues, useController, useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 // Validations
 import {schemaCreateProjectQuestion} from '@api/projects/validation';
 
 // Components/Icons
-import {Button, Checkbox, InputFiled, TextArea} from '@components/common';
+import {
+  Button,
+  Checkbox,
+  InputFiled,
+  TextArea,
+  Combobox,
+  Switch,
+} from '@components/common';
 import {PlusCircleIcon} from '@heroicons/react/24/outline';
 import {ExclamationCircleIcon, TrashIcon} from '@heroicons/react/24/solid';
 
 // Context/Actions
 import {useProjectContext} from '../context';
-import {addQuestion, updateQuestion} from '@api/projects/actions';
 
 // Types
-import {AddQuestionType} from '@models/project';
-import {Question} from '@models/question';
-import {FromLayout} from '../Layout';
-type OptionType = {
+import {FormLayout} from '../Layout';
+import {AddQuestionType} from '@models/question';
+export type OptionType = {
   id: number;
   option: string;
 };
-type QuestionAddProps = {projectId: string};
+type QuestionAddProps = {onSubmit: (data: AddQuestionType) => void};
 
-const QuestionDetail = ({projectId}: QuestionAddProps) => {
+const types = [
+  {id: 'TEXT', name: 'Text'},
+  {id: 'CHOICE', name: 'Multiple choice'},
+];
+
+type TDefaultQuestion = AddQuestionType<OptionType> & {type: 'CHOICE' | 'TEXT'};
+const QuestionDetail = ({onSubmit}: QuestionAddProps) => {
   const {setProjectContext, ProjectContext} = useProjectContext();
   const lastInputRef = useRef<HTMLInputElement | null>(null);
   const {editQuestion} = ProjectContext;
@@ -36,69 +46,27 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
     setValue,
     getValues,
     watch,
+    control,
     formState: {errors, isDirty, isValid},
   } = useForm({
     resolver: joiResolver(schemaCreateProjectQuestion),
     defaultValues: {
+      type: editQuestion?.options?.length ? 'CHOICE' : 'TEXT',
       question: editQuestion?.question ?? '',
-      options: editQuestion?.options?.map((option, index) => ({
+      options: editQuestion?.options?.map((option: string, index: number) => ({
         id: index + 1,
         option,
       })),
       required: editQuestion?.required ?? false,
-    } as AddQuestionType<OptionType>,
+    } as TDefaultQuestion,
   });
 
   const options = watch('options');
-
-  const handleAddUpdate = useCallback(async () => {
-    try {
-      const question = getValues('question');
-      const required = getValues('required');
-      const rawOptions = getValues('options');
-      const options: string[] | null =
-        rawOptions
-          ?.filter((item) => !!item.option)
-          .map((item: OptionType) => item.option) ?? null;
-      const questionBody: AddQuestionType = {
-        question,
-        required,
-      };
-      if (!!options?.length) questionBody.options = options;
-      let questions: Question[] | null = ProjectContext.questions;
-      if (editQuestion?.id) {
-        const response = await updateQuestion(
-          editQuestion.project_id,
-          editQuestion.id,
-          questionBody,
-        );
-        questions?.forEach((question, index) => {
-          if (questions)
-            questions[index] =
-              question.id === response.id ? response : question;
-        });
-      } else {
-        const response = await addQuestion(projectId, questionBody);
-        questions = [...(questions ?? []), response];
-      }
-      // Mutation for questionss
-      if (questions?.[0])
-        mutate(`/projects/${questions[0].project_id}/questions`, questions, {
-          populateCache: (result, _currentData) => {
-            return result;
-          },
-          revalidate: true,
-        });
-      setProjectContext({
-        ...ProjectContext,
-        editQuestion: null,
-        questions: questions,
-        formStep: 3,
-      });
-    } catch (error) {
-      console.log('ERROR :---: ', error);
-    }
-  }, [ProjectContext, editQuestion, getValues, projectId, setProjectContext]);
+  const type = watch('type');
+  const typeController = useController<FieldValues, string>({
+    control: control as unknown as Control<FieldValues, string>,
+    name: 'type',
+  });
 
   const removeItem = useCallback(
     (id: number) => {
@@ -151,11 +119,32 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
       );
   }, [options, setValue]);
 
+  const beforeSubmit = (data: any) => {
+    const {question, required, options: rawOptions} = data;
+    const options: string[] | null =
+      rawOptions
+        ?.filter((item: OptionType) => !!item.option)
+        .map((item: OptionType) => item.option) ?? null;
+    const questionBody: AddQuestionType = {
+      question,
+      required,
+    };
+    if (type === 'CHOICE' && !!options?.length) questionBody.options = options;
+    onSubmit(questionBody);
+  };
+
   return (
     <div className="flex h-full w-full flex-col">
-      <FromLayout type="FULL" className="!grow">
+      <FormLayout type="FULL" className="!grow">
         <div className="grow overflow-y-scroll">
-          <div className="mx-4 my-4">
+          <div className="mx-4 my-4 space-y-8">
+            <Combobox
+              label="Question type"
+              required
+              items={types}
+              selected={types.find((item) => item.id === type)}
+              controller={typeController}
+            />
             <TextArea
               label="Question"
               placeholder="Question"
@@ -168,16 +157,23 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
               required
               rows={4}
             />
-            <Checkbox
-              checked={watch('required')}
-              className="items-center"
-              register={register('required')}
-              label="Require this question to be answered"
-            />
+            <div className="flex items-center justify-between">
+              <p>Require this question to be answered</p>
+              <Switch
+                value={watch('required')}
+                onChange={(status) =>
+                  setValue('required', status, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }
+              />
+            </div>
           </div>
           <div className="flex w-full grow flex-col bg-zinc-200">
-            {!!options?.length &&
-              options.map((option: OptionType, index) => (
+            {type === 'CHOICE' &&
+              !!options?.length &&
+              options.map((option: OptionType, index: number) => (
                 <div key={option.id} className="flex items-center px-4">
                   <InputFiled
                     className="grow py-2 px-4"
@@ -201,30 +197,34 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
               ))}
             {errors?.options?.message && (
               <div className="flex items-center py-2 px-6 text-error">
-                {' '}
-                <ExclamationCircleIcon className="mr-1 h-5 w-5" />
-                {errors?.options?.message}
+                <>
+                  <ExclamationCircleIcon className="mr-1 h-5 w-5" />
+                  {errors?.options?.message}
+                </>
               </div>
             )}
-            <div className="flex items-center justify-center">
-              <Button
-                onClick={increaseCount}
-                variant="outline"
-                size="lg"
-                className="my-4 flex w-11/12 items-center justify-center bg-white font-semibold"
-                leftIcon={() => (
-                  <PlusCircleIcon width={20} height={20} color="#000000" />
-                )}
-              >
-                <div>Add choice</div>
-              </Button>
-            </div>
+            {type === 'CHOICE' && (
+              <div className="flex items-center justify-center">
+                <Button
+                  onClick={increaseCount}
+                  variant="outline"
+                  size="lg"
+                  disabled={!!options && options?.length >= 5}
+                  className="my-4 flex w-11/12 items-center justify-center bg-white font-semibold"
+                  leftIcon={() => (
+                    <PlusCircleIcon width={20} height={20} color="#000000" />
+                  )}
+                >
+                  <div>Add choice</div>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 
         <div className="flex h-20 items-end justify-end border-t p-4">
           <Button
-            onClick={handleSubmit(handleAddUpdate)}
+            onClick={handleSubmit(beforeSubmit)}
             disabled={!isDirty && isValid}
             type="button"
             className="'flex h-11 w-36 items-center justify-center"
@@ -246,7 +246,7 @@ const QuestionDetail = ({projectId}: QuestionAddProps) => {
             Cancel
           </Button>
         </div>
-      </FromLayout>
+      </FormLayout>
     </div>
   );
 };

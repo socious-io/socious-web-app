@@ -3,18 +3,18 @@ import enums from '@socious/data';
 import {rxNotMobileNumber} from 'utils/regex';
 
 export const schemaCreateOrganization = Joi.object({
-  name: Joi.string().required().messages({
+  name: Joi.string().trim().required().messages({
     'string.empty': `Name is required`,
     'string.base': `Name is required.`,
   }),
-  bio: Joi.string().required().messages({
+  bio: Joi.string().trim().max(160).required().messages({
     'string.empty': `Bio is required.`,
     'string.base': `Bio is required.`,
   }),
   website: Joi.string().uri().allow(null, ''),
-  description: Joi.string().allow(null, ''),
-  mission: Joi.string().allow(null, ''),
-  culture: Joi.string().allow(null, ''),
+  description: Joi.string().trim().allow(null, ''),
+  mission: Joi.string().trim().allow(null, ''),
+  culture: Joi.string().trim().allow(null, ''),
   email: Joi.string()
     .email({tlds: {allow: false}})
     .messages({
@@ -23,13 +23,14 @@ export const schemaCreateOrganization = Joi.object({
       'any.required': `Email is a required field`,
       'string.email': `Email must be a valid email`,
     }),
-  country: Joi.string().required().messages({
+  country: Joi.string().messages({
     'any.required': `cannot be an empty field`,
   }),
-  city: Joi.string().required().messages({
+  city: Joi.string().messages({
     'any.required': `cannot be an empty field`,
   }),
-  address: Joi.string().allow(null, ''),
+  geoname_id: Joi.number().empty(null),
+  address: Joi.string().trim().allow(null, ''),
   type: Joi.string().valid(...Object.values(enums.OrganizationType)),
   social_causes: Joi.array().items(
     Joi.string().valid(...Object.values(enums.SocialCauses)),

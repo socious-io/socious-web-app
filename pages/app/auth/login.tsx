@@ -1,19 +1,16 @@
 import type {NextPage} from 'next';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
-import {useState, useCallback} from 'react';
 import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 import Link from 'next/link';
 import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
-import {AxiosError} from 'axios';
 import {PreAuthLayout} from 'layout';
 import {login} from '@api/auth/actions';
 import {InputFiled, Button, Modal} from '@components/common';
 import {schemaLogin} from '@api/auth/validation';
 import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
-import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 import {useUser} from '@hooks';
 import {
   addNotificationReceivedListener,
@@ -24,6 +21,7 @@ import {
 import {getDevices, saveDeviceToken} from '@api/devices/actions';
 import {DeviceBody} from '@models/devices';
 import {Capacitor} from '@capacitor/core';
+import {useCallback, useState} from 'react';
 
 export type LoginResp = {
   message?: 'success';
@@ -127,7 +125,7 @@ const Login: NextPage = () => {
   };
 
   const onTogglePassword = useCallback(() => {
-    setPasswordShown((v) => !v);
+    setPasswordShown((v: boolean) => !v);
   }, []);
 
   return (

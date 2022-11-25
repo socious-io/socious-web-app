@@ -20,7 +20,7 @@ const Detail: NextPage = () => {
     skillsFetcher().then(setSkills);
   }, []);
 
-  const {data, mutate} = useSWR<Project>(`/projects/${id}`, get);
+  const {data} = useSWR<Project>(`/projects/${id}`, get);
 
   if (!data) {
     return <></>;
@@ -29,13 +29,9 @@ const Detail: NextPage = () => {
   return (
     <ProjectContextProvider>
       <GeneralLayout hasDetailNavbar detailNavbarTitle="Project details">
-        <SideBar selectBar="PROJECT_DETAIL" data={data} projectId={data.id} />
+        <SideBar data={data} projectId={data.id} />
         <DetailLayout>
-          <DetailContent
-            data={{data, mutate}}
-            skills={skills}
-            projectId={data.id}
-          />
+          <DetailContent data={data} skills={skills} projectId={data.id} />
         </DetailLayout>
       </GeneralLayout>
     </ProjectContextProvider>
