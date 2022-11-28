@@ -39,7 +39,7 @@
     "react-headless-pagination": "^0.2.1",
     "react-hook-form": "^7.35.0",
     "react-responsive": "^9.0.0",
-    "react-spinners": "^0.13.4",
+    "react-spinners": "^0.13.6",
     "react-spring-bottom-sheet": "^3.4.1",
     "react-toastify": "^9.1.1",
     "react-tooltip": "^4.4.2",
