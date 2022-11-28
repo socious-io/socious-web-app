@@ -71,7 +71,7 @@
     "@types/luxon": "^3.0.1",
     "@types/mocha": "^9.1.1",
     "@types/node": "^18.11.2",
-    "@types/react": "^18.0.21",
+    "@types/react": "^18.0.25",
     "autoprefixer": "^10.4.12",
     "cypress": "^10.11.0",
     "dotenv": "^16.0.3",
