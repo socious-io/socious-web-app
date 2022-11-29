@@ -7,7 +7,16 @@ module.exports = {
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
-    '@storybook/preset-scss'
+    '@storybook/preset-scss',
+    {
+      name: "@storybook/preset-scss",
+      options: {
+        sassLoaderOptions: {
+          additionalData:
+            '@import "../src/design-system/color-palette.scss";',
+        },
+      },
+    },
 
   ],
   "framework": "@storybook/react",

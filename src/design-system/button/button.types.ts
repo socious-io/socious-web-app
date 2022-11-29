@@ -1,4 +1,4 @@
 export type ButtonProps = {
-  color: 'green' | 'white';
+  color: 'blue' | 'red' | 'white';
   children: React.ReactNode;
 };
