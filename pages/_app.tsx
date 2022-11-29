@@ -10,7 +10,7 @@ import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {toast} from 'react-toastify';
 // TODO: move color-palette file to a general place
-import '../src/design-system/color-palette.scss';
+import '../src/design-system/variables.scss';
 
 function MyApp({Component, pageProps}: AppProps) {
   return (

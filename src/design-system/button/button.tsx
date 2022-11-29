@@ -2,8 +2,6 @@ import css from './button.module.scss';
 import {ButtonProps} from './button.types';
 import {CSSProperties} from 'react';
 
-import '../color-palette.scss';
-
 const style: Record<ButtonProps['color'], CSSProperties> = {
   blue: {
     backgroundColor: 'var(--color-primary-01)',

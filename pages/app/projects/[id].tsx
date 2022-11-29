@@ -10,7 +10,6 @@ import useSWR from 'swr';
 import {get} from 'utils/request';
 import {Project} from '@models/project';
 import {Skill} from '@components/common/Search/Providers/SkillsProvider';
-import {Button} from 'src/design-system/button/button';
 
 const Detail: NextPage = () => {
   const router = useRouter();
@@ -32,7 +31,6 @@ const Detail: NextPage = () => {
       <GeneralLayout hasDetailNavbar detailNavbarTitle="Project details">
         <SideBar data={data} projectId={data.id} />
         <DetailLayout>
-          <Button color="white">btn</Button>
           <DetailContent data={data} skills={skills} projectId={data.id} />
         </DetailLayout>
       </GeneralLayout>

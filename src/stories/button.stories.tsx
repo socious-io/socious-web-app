@@ -1,5 +1,5 @@
 import React from 'react';
-import {ComponentMeta} from '@storybook/react';
+import {ComponentMeta, ComponentStory} from '@storybook/react';
 import {Button} from '../design-system/button/button';
 
 export default {
@@ -7,4 +7,10 @@ export default {
   component: Button,
 } as ComponentMeta<typeof Button>;
 
-export const Primary = () => <Button color="red">Button</Button>;
+const Template: ComponentStory<typeof Button> = (args) => (
+  <Button {...args}>Button</Button>
+);
+
+export const Primary = Template.bind({});
+
+Primary.args = {color: 'blue'};
