@@ -22,6 +22,11 @@ export function login(email: string, password: string): Promise<LoginResp> {
   return post('/auth/web/login', {email, password});
 }
 
+export function deleteUser(): Promise<unknown> {
+  const payload = {reason: ' '};
+  return post('/user/delete', payload);
+}
+
 export function sendOTP(email: string) {
   return post('/auth/otp', {email});
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import {ComponentMeta, ComponentStory} from '@storybook/react';
-import {Button} from '../design-system/button/button';
+import {Button} from '../design-system/atoms/button/button';
 
 export default {
   title: 'UI/Button',

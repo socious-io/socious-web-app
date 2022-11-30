@@ -5,6 +5,7 @@ export type TypographyProps = {
   size?: 'm' | 'l';
   type?: 'heading' | 'body';
   style?: CSSProperties;
+  className?: string;
 };
 
 export type TypeList = Record<

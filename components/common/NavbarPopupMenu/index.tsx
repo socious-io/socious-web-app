@@ -55,10 +55,7 @@ const NavbarPopupMenu = () => {
   const onLogout = async () => {
     const res = await logout();
     mutateIdentities();
-    unsubscribeToPushNotifs();
-    deletePushNotifToken();
     mutateUser();
-    console.log('logout');
     if (res) Router.push('/app');
   };
 

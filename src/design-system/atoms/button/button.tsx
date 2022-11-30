@@ -18,7 +18,11 @@ const style: Record<ButtonProps['color'], CSSProperties> = {
 
 export function Button(props: ButtonProps): JSX.Element {
   return (
-    <button style={style[props.color]} className={css.button}>
+    <button
+      onClick={props.onClick}
+      style={style[props.color]}
+      className={`${css.button} ${props.className}`}
+    >
       {props.children}
     </button>
   );

@@ -7,6 +7,7 @@ const path = require('path');
 const withImages = require('next-images');
 
 module.exports = withImages({
+  eslint: { ignoreDuringBuilds: true },
   output: 'standalone',
   images: {
     disableStaticImages: true,

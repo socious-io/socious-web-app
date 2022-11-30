@@ -11,14 +11,14 @@ export const Typography = (props: TypographyProps): JSX.Element => {
   };
 
   const typeList: TypeList = {
-    heading: {fontFamily: 'Hahmlet'},
+    heading: {fontFamily: 'Hahmlet', fontWeight: 600},
     body: {fontFamily: 'Hahmlet, sans-serif'},
   };
 
   const styles = {...sizeList[size], ...typeList[type], ...props.style};
 
   return (
-    <p style={styles} className={css.container}>
+    <p style={styles} className={`${css.container} ${props?.className}`}>
       {props.children}
     </p>
   );
