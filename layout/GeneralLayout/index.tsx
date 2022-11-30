@@ -74,7 +74,6 @@ export const NavbarItem: FC<TNavbarItem> = ({label, route, icon, isActive}) => {
   );
 };
 
-// Main Default Layout
 const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   children,
   hasNavbar = false,
@@ -116,7 +115,6 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
 
   const userLoggedOut = useMemo(() => identities === null, [identities]);
 
-  // Check if they need banner
   const needsBanner = useMemo<'feed' | 'network' | 'project' | null>(() => {
     switch (router?.pathname) {
       case '/app/feed':
@@ -132,20 +130,23 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
 
   const goToSearchPage: KeyboardEventHandler<HTMLInputElement> = (e) => {
     const keyword = e.currentTarget.value.trim();
-    if (e.key === 'Enter' && keyword) {
-      const type = getSearchType();
-      if (type !== 'search')
-        router.push(`/app/search/?type=${type}&keywords=${keyword}`);
-      else {
-        router.query.keywords = keyword;
-        router.push(router);
-      }
+    const pressedEnter = e.key === 'Enter';
+    const isNotInSearchPage = router.pathname !== '/app/search';
+    const type = getSearchType();
+
+    if (pressedEnter && isNotInSearchPage) {
+      // router.query.keywords = keyword;
+      router.push(`/app/search/?type=${type}&keywords=${keyword}`);
+    }
+
+    if (pressedEnter) {
+      router.query.keywords = keyword;
+      router.push(router);
     }
   };
 
   const getSearchType = () => {
     const currentPath = router.pathname.split('/')?.[2];
-    // const {type} = router.query;
     switch (currentPath) {
       case 'projects':
         return 'projects';
@@ -153,7 +154,6 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
       case 'post':
         return 'posts';
       case 'search':
-        // if (type) return type;
         return 'search';
       default:
         return 'users';
@@ -229,28 +229,6 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     }
                     isActive={isActiveTab('Projects')}
                   />
-                  {/* TODO: Uncomment for Network */}
-                  {/* <NavbarItem
-                    label="Network"
-                    route="/app/network"
-                    icon={
-                      <NetworkIcon
-                        className={
-                          isActiveTab('Network')
-                            ? isBottomNav
-                              ? 'white'
-                              : '#2F4786'
-                            : undefined
-                        }
-                        strokeColor={
-                              isActiveTab('Network')
-                                ? 'transparent'
-                                : undefined
-                            }
-                      />
-                    }
-                    isActive={isActiveTab('Network')}
-                  /> */}
                   <NavbarItem
                     label="Feeds"
                     route="/app/feed"
