@@ -1,23 +1,18 @@
 import {twMerge} from 'tailwind-merge';
 import {FC} from 'react';
 import useSWR, {KeyedMutator} from 'swr';
-
-// Components
 import BodyBox from '@components/common/Project/BodyBox/BodyBox';
 import ProjectItem from '@components/common/UserProfile/MainContent/ProjectItem';
 import OrganizationTopCard from '../../component/OrganizationTopCard';
 import DetailContent from '@components/common/Project/created/DetailContent';
 import SplashScreen from 'layout/Splash';
-
-// Hooks/ Utils
 import {useUser} from '@hooks';
 import {get} from 'utils/request';
-
-// Types
 import {TQuestionsResponse} from '@models/question';
 import {IOrganizationType} from 'models/organization';
 import {Project} from '@models/project';
 import ProjectMobileTop from '../../ProjectMobileTop/ProjectMobileTop';
+
 type CreateProjectMainType = {
   projectId: string;
   skills: any[];

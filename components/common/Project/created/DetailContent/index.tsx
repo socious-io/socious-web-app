@@ -138,6 +138,7 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
   const {editQuestion} = ProjectContext;
 
   const clickEditIcon = (formStep: number) => {
+    console.log('editicon');
     setProjectContext({
       ...ProjectContext,
       isEditModalOpen: !ProjectContext.isEditModalOpen,
@@ -203,6 +204,7 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
     }
 
     try {
+      console.log('postBody: ', postBody);
       const response = await updateProjectById(project.id, postBody);
       mutate(`/projects/${project.id}`, response, {revalidate: false});
       getProject();
