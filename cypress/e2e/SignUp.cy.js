@@ -38,7 +38,6 @@ describe('Sign Up', () => {
     signUpMethods.assertValidationMsgForNullEmail();
     signUpMethods.setEmail(TestingData.InvalidEmail);
     signUpMethods.assertValidationMsgForInvalidEmail();
-    // signUpMethods.setEmail(runEmail);/*----Unique Email?runEmail?----------*/
     signUpMethods.setValidEmail();
     signUpMethods.clickOnContinueButton();
     signUpMethods.assertShowingPasswordAfterPassingSecondStep();
