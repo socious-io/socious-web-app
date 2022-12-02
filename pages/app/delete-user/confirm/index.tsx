@@ -1,3 +1,4 @@
+// TODO: move these pages to atomic structure
 import css from './confirm.module.scss';
 import {NextPage} from 'next';
 import {Article} from 'src/design-system/molecules/article/article';
@@ -7,8 +8,12 @@ import {InputFiled} from '@components/common';
 import {deleteUser, login} from '@api/auth/actions';
 import {useUser} from '@hooks';
 import {useState} from 'react';
-import {LoginResp} from './confirm.types';
 import {useRouter} from 'next/router';
+
+export type LoginResp = {
+  message?: 'success';
+  error?: 'Not matched';
+};
 
 const title = 'Delete account';
 const body = 'Please enter your password to delete your account.';

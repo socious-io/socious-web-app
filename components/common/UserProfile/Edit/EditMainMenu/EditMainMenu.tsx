@@ -1,4 +1,10 @@
-import React, {useState, useCallback, useMemo, useEffect} from 'react';
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  MutableRefObject,
+} from 'react';
 import {
   Button,
   Chip,
@@ -28,9 +34,11 @@ interface EditMainMenuProps {
   setNewCover: React.Dispatch<any>;
   coverImage?: string;
   avatar?: string;
+  observer: MutableRefObject<(() => Promise<unknown>)[]>;
 }
 
 const EditMainMenu = ({
+  observer,
   goTo,
   editProfile,
   setNewAvatar,
@@ -178,6 +186,14 @@ const EditMainMenu = ({
     control: control,
     name: 'type',
   });
+
+  useEffect(() => {
+    console.log('observer: ', observer);
+    if (observer.current.length === 0) {
+      observer.current.push(handleSubmit(editProfile));
+    }
+  }, []);
+
   return (
     <>
       <form
@@ -187,7 +203,10 @@ const EditMainMenu = ({
         <div className="grow overflow-y-auto">
           <div>
             {/* Images Upload */}
-            <div className="border-b-2 border-grayLineBased bg-offWhite pb-4">
+            <div className="relative border-b-2 border-grayLineBased bg-offWhite pb-4">
+              <div className="pointer-events-none	absolute left-4 top-4 rounded-md  bg-[#dcdcdc] p-1 text-xs">
+                upload profile cover image
+              </div>
               <ImageUploader
                 onChange={(file: any) => setNewCover(file)}
                 src={coverImage}
@@ -215,7 +234,10 @@ const EditMainMenu = ({
                   </div>
                 )}
               </ImageUploader>
-              <div className="mx-4 -mt-8">
+              <div className="relative mx-4 -mt-8">
+                <div className="size-1 pointer-events-none absolute left-0 bottom-4 z-10 rounded-md bg-[#dcdcdc] p-1 text-xs">
+                  upload profile image
+                </div>
                 <ImageUploader
                   onChange={(file: any) => setNewAvatar(file)}
                   src={avatar ?? profile_img_icon}

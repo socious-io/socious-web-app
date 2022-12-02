@@ -1,7 +1,3 @@
-/*
- * user profile page with dynamic route
- */
-
 import type {NextPage} from 'next';
 import {GeneralLayout} from 'layout';
 import {useCallback, useEffect, useState} from 'react';
