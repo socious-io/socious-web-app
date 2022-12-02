@@ -14,7 +14,7 @@
     "@capacitor/assets": "^1.0.14",
     "@capacitor/core": "^4.3.0",
     "@capacitor/ios": "^4.3.0",
-    "@capacitor/push-notifications": "^4.1.0",
+    "@capacitor/push-notifications": "^4.1.2",
     "@hookform/resolvers": "^2.9.8",
     "@socious/data": "^1.0.19",
     "@svgr/webpack": "^6.5.0",
@@ -85,7 +85,7 @@
     "ts-generator": "^0.1.1",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.0",
-    "typescript": "^4.8.3"
+    "typescript": "^4.9.3"
   },
   "disabled-web3-devdeps-please-fix": {
     "@ethersproject/abi": "^5.7.0",
@@ -121,5 +121,16 @@
   "lint-staged": {
     "*.js": "next lint",
     "*.{js,css,md}": "prettier --write"
-  }
+  },
+  "description": "![CodeQL](https://github.com/socious-io/socious-web-app/actions/workflows/codeql-analysis.yml/badge.svg)\r ![Cypress](https://github.com/socious-io/socious-web-app/actions/workflows/cypress.yml/badge.svg)",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/socious-io/socious-web-app.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/socious-io/socious-web-app/issues"
+  },
+  "homepage": "https://github.com/socious-io/socious-web-app#readme"
 }
