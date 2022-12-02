@@ -14,7 +14,7 @@
     "@capacitor/assets": "^1.0.14",
     "@capacitor/core": "^4.3.0",
     "@capacitor/ios": "^4.3.0",
-    "@capacitor/push-notifications": "^4.1.0",
+    "@capacitor/push-notifications": "^4.1.2",
     "@hookform/resolvers": "^2.9.8",
     "@socious/data": "^1.0.19",
     "@svgr/webpack": "^6.5.0",
