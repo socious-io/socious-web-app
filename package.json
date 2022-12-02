@@ -121,5 +121,16 @@
   "lint-staged": {
     "*.js": "next lint",
     "*.{js,css,md}": "prettier --write"
-  }
+  },
+  "description": "![CodeQL](https://github.com/socious-io/socious-web-app/actions/workflows/codeql-analysis.yml/badge.svg)\r ![Cypress](https://github.com/socious-io/socious-web-app/actions/workflows/cypress.yml/badge.svg)",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/socious-io/socious-web-app.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/socious-io/socious-web-app/issues"
+  },
+  "homepage": "https://github.com/socious-io/socious-web-app#readme"
 }

@@ -1,5 +1,6 @@
 /// <reference types = "cypress"/>
 import LoginMethods from '/cypress/e2e/methods/LoginMethods';
+import TestingData from '/cypress/fixtures/TestingData.json'
 
 const loginMethods = new LoginMethods();
 describe('Login', () => {
@@ -15,14 +16,15 @@ describe('Login', () => {
     loginMethods.clickOnContinueButton();
     loginMethods.assertValidationMsgsForEmailPassword();
   });
-  specify("User can't login with invalid email and password", () => {
-    loginMethods.setEmail('testazintest444@gmail.com');
-    loginMethods.setPassword('12345678');
+  specify("User can't login with invalid email and invalid password", () => {
+    loginMethods.setEmail(TestingData.InvalidEmailForLogin);
+    loginMethods.setPassword(TestingData.InvalidPassword);
     loginMethods.clickOnContinueButton();
+    loginMethods.assertValidationMsgsForInvalidEmailInvalidPassword();
   });
-  specify('User logs in with valid email and password', () => {
-    loginMethods.setEmail('testazintest4@gmail.com');
-    loginMethods.setPassword('Socious1234');
+  specify('User logs in with valid email and valid password', () => {
+    loginMethods.setEmail(TestingData.EmailForLogin);
+    loginMethods.setPassword(TestingData.PasswordForLogin);
     loginMethods.clickOnContinueButton();
     loginMethods.assertUrlAfterLogin();
   });

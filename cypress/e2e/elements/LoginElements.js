@@ -7,6 +7,7 @@ class LoginElements {
     passwordValMsg: () => cy.get(':nth-child(3) > .relative > .flex'),
     emailTxt: () => cy.get('[data-testid="Email-testid"]'),
     passwordTxt: () => cy.get('[data-testid="Password-testid"]'),
+    invalidLoginMsg: () => cy.get('.text-sm')
   };
 }
 module.exports = new LoginElements();
