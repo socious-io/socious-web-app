@@ -39,6 +39,7 @@ import {get} from 'utils/request';
 import {CreateProjectType, Project, ProjectProps} from 'models/project';
 import {AddQuestionType, Question, TQuestionsResponse} from '@models/question';
 import {twMerge} from 'tailwind-merge';
+import {Skill} from '@components/common/Search/Providers/SkillsProvider';
 
 // Library
 const libraries: Libraries = ['places'];
@@ -82,7 +83,7 @@ export const QuestionsCard: FC<{
 };
 
 interface DetailProps extends ProjectProps {
-  rawSkills: string[];
+  rawSkills: Skill[];
 }
 
 const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
@@ -137,6 +138,7 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
   const {editQuestion} = ProjectContext;
 
   const clickEditIcon = (formStep: number) => {
+    console.log('editicon');
     setProjectContext({
       ...ProjectContext,
       isEditModalOpen: !ProjectContext.isEditModalOpen,
@@ -202,6 +204,7 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
     }
 
     try {
+      console.log('postBody: ', postBody);
       const response = await updateProjectById(project.id, postBody);
       mutate(`/projects/${project.id}`, response, {revalidate: false});
       getProject();

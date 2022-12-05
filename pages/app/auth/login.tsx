@@ -1,85 +1,131 @@
 import type {NextPage} from 'next';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
-import {useState, useCallback, useContext, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import {joiResolver} from '@hookform/resolvers/joi';
 import Link from 'next/link';
 import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
-import {AxiosError} from 'axios';
 import {PreAuthLayout} from 'layout';
-
 import {login} from '@api/auth/actions';
 import {InputFiled, Button, Modal} from '@components/common';
 import {schemaLogin} from '@api/auth/validation';
-
 import logoCompony from 'asset/icons/logo-color.svg';
 import typoCompony from 'asset/icons/typo-company.svg';
-import {DefaultErrorMessage, ErrorMessage, get} from 'utils/request';
 import {useUser} from '@hooks';
+import {
+  addNotificationReceivedListener,
+  getDeliveredNotifications,
+  getToken,
+  requestPermissions,
+} from 'core/pushNotification';
+import {getDevices, saveDeviceToken} from '@api/devices/actions';
+import {DeviceBody} from '@models/devices';
 import {Capacitor} from '@capacitor/core';
+import {useCallback, useState} from 'react';
+
+export type LoginResp = {
+  message?: 'success';
+  error?: 'Not matched';
+};
 
 const Login: NextPage = () => {
   const router = useRouter();
-  const {redirect_to} = router.query;
-  const [passwordShown, setPasswordShown] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const {user, mutateIdentities} = useUser({redirect: false});
-
-  const [errorMessage, setError] = useState<ErrorMessage>();
-
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const {mutateIdentities} = useUser({redirect: false});
   const {register, handleSubmit, formState, getValues} = useForm({
     resolver: joiResolver(schemaLogin),
   });
 
-  useEffect(() => {
-    if (user) {
-      if (!user.skills?.length && !user.social_causes?.length)
-        router.push('/app/auth/onboarding');
-      else {
-        if (
-          'Notification' in window &&
-          !Capacitor.isNativePlatform() &&
-          Notification.permission === 'default'
-        )
-          Notification.requestPermission();
-        if (redirect_to) router.push(redirect_to as string);
-        else router.push('/app');
-      }
+  const getFCMToken = async (
+    response: Awaited<ReturnType<typeof requestPermissions>>,
+  ): Promise<string> => {
+    if (response !== 'granted') {
+      console.log('User did not grant permission to use push notification');
+      throw Error;
     }
-  }, [user, redirect_to, router]);
 
-  const onSubmit = (data: any) => {
-    handleLoginRequest();
+    return getToken().catch((e: Error) => {
+      console.log('error accrued during retrieving token', e);
+      return '';
+    });
+  };
+
+  const saveToken = async (token: string) => {
+    console.log('FCMToken: ', token);
+    if (!token) {
+      return;
+    }
+
+    const list = await getDevices().catch((err) => {
+      console.log('error on getting list of devices', err);
+      return [];
+    });
+    console.log('list: ', list);
+    const savedToken = list.find(({id}) => id === token);
+
+    console.log('savedToken: ', savedToken);
+
+    if (savedToken) {
+      return savedToken;
+    }
+
+    const device: DeviceBody = {
+      token,
+      meta: {
+        os: 'IOS',
+      },
+    };
+    const resp = await saveDeviceToken(device).catch((err) => {
+      console.log('error saving token to the db: ', err);
+      return {token: ''};
+    });
+    console.log('saveDeviceToken: ', resp);
+    return resp.token;
+  };
+
+  const addListeners = () => {
+    console.log('addListeners');
+    addNotificationReceivedListener().then((n) =>
+      console.log('addNotificationReceivedListener: ', n),
+    );
+    getDeliveredNotifications().then((r) =>
+      console.log('getDeliveredNotifications', r),
+    );
+  };
+
+  const onLoginSucceed = async ({message}: LoginResp) => {
+    if (message === 'success') {
+      if (Capacitor.isNativePlatform()) {
+        // TODO: do not ask for permission if user already granted permission
+        requestPermissions()
+          .then(getFCMToken)
+          .then(saveToken)
+          .then(addListeners)
+          .catch((err) => {
+            console.log('err during permission request ', err);
+          });
+      }
+      router.push('/app/projects').then(() => mutateIdentities());
+    }
+  };
+
+  const onLoginError = (e: Error) => {
+    console.log('onLoginError: ', e);
+  };
+
+  const onSubmit = () => {
+    const email = getValues('email');
+    const password = getValues('password');
+    login(email, password).then(onLoginSucceed).catch(onLoginError);
   };
 
   const handleToggleModal = () => {
     setShowModal(!showModal);
   };
-  const handleLoginRequest = async () => {
-    const email = getValues('email');
-    const password = getValues('password');
-    try {
-      await login(email, password);
-    } catch (e) {
-      const error = e as AxiosError<any>;
-      let msg = DefaultErrorMessage;
-      if (error.isAxiosError) {
-        if (error.response?.data?.error === 'Not matched')
-          msg = {
-            title: 'Invalid login',
-            message: 'Email or password is incorrect',
-          };
-      }
-      setError(msg);
-      setShowModal(!showModal);
-      return;
-    }
-    await mutateIdentities();
-  };
 
   const onTogglePassword = useCallback(() => {
-    setPasswordShown((v) => !v);
+    setPasswordShown((v: boolean) => !v);
   }, []);
 
   return (
@@ -174,14 +220,6 @@ const Login: NextPage = () => {
         </form>
 
         <Modal isOpen={showModal} onClose={handleToggleModal}>
-          <Modal.Title>
-            <h2 className="text-center text-error">{errorMessage?.title}</h2>
-          </Modal.Title>
-          <Modal.Description>
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">{errorMessage?.message}</p>
-            </div>
-          </Modal.Description>
           <div className="mt-4">
             <Button
               className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "

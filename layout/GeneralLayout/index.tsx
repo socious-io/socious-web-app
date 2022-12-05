@@ -11,30 +11,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {twMerge} from 'tailwind-merge';
 import {useMediaQuery} from 'react-responsive';
-
-// Icons
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
 import ChatIcon from '@components/common/Icons/ChatIcon';
 import ProjectIcon from '@components/common/Icons/ProjectIcon';
 import FeedIcon from '@components/common/Icons/FeedIcon';
 import NotificationIcon from '@components/common/Icons/NotificationIcon';
-
-// Components
 import NavbarPopupMenu from '@components/common/NavbarPopupMenu';
 import {SearchBar} from '@components/common';
-
-// Imgs
 import imgSrc from '../../asset/icons/logo.svg';
 import feedImg from 'asset/images/socious_feed.png';
 import projectImg from 'asset/images/socious_project.png';
-
-// Hook
 import {useUser} from '@hooks';
-
-// Style
 import styles from './index.module.scss';
 
-// BannerType
 const bannerType = {
   feed: {
     title: 'Your Feed',
@@ -53,7 +42,6 @@ const bannerType = {
   },
 };
 
-// Types
 type TLayoutType = {
   hasNavbar?: boolean;
   style?: CSSProperties;
@@ -86,7 +74,6 @@ export const NavbarItem: FC<TNavbarItem> = ({label, route, icon, isActive}) => {
   );
 };
 
-// Main Default Layout
 const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
   children,
   hasNavbar = false,
@@ -128,7 +115,6 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
 
   const userLoggedOut = useMemo(() => identities === null, [identities]);
 
-  // Check if they need banner
   const needsBanner = useMemo<'feed' | 'network' | 'project' | null>(() => {
     switch (router?.pathname) {
       case '/app/feed':
@@ -144,20 +130,23 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
 
   const goToSearchPage: KeyboardEventHandler<HTMLInputElement> = (e) => {
     const keyword = e.currentTarget.value.trim();
-    if (e.key === 'Enter' && keyword) {
-      const type = getSearchType();
-      if (type !== 'search')
-        router.push(`/app/search/?type=${type}&keywords=${keyword}`);
-      else {
-        router.query.keywords = keyword;
-        router.push(router);
-      }
+    const pressedEnter = e.key === 'Enter';
+    const isNotInSearchPage = router.pathname !== '/app/search';
+    const type = getSearchType();
+
+    if (pressedEnter && isNotInSearchPage) {
+      // router.query.keywords = keyword;
+      router.push(`/app/search/?type=${type}&keywords=${keyword}`);
+    }
+
+    if (pressedEnter) {
+      router.query.keywords = keyword;
+      router.push(router);
     }
   };
 
   const getSearchType = () => {
     const currentPath = router.pathname.split('/')?.[2];
-    // const {type} = router.query;
     switch (currentPath) {
       case 'projects':
         return 'projects';
@@ -165,7 +154,6 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
       case 'post':
         return 'posts';
       case 'search':
-        // if (type) return type;
         return 'search';
       default:
         return 'users';
@@ -180,7 +168,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
           needsBanner ? `h-44 flex-col` : 'h-16 bg-none'
         }`}
       >
-        <nav className="fixed top-0 z-50 flex h-14 min-h-[54px] w-full items-center justify-center bg-primary md:h-16 md:justify-start lg:h-16 ">
+        <nav className="fixed top-0 z-50 flex h-28 min-h-[54px] w-full items-end justify-center bg-primary pb-4 md:h-16 md:justify-start lg:h-16 ">
           <div className="container mx-6 w-full max-w-5xl sm:mx-2 md:mx-auto">
             <div className="flex w-full items-center justify-center gap-x-4 sm:gap-0">
               <div
@@ -241,28 +229,6 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                     }
                     isActive={isActiveTab('Projects')}
                   />
-                  {/* TODO: Uncomment for Network */}
-                  {/* <NavbarItem
-                    label="Network"
-                    route="/app/network"
-                    icon={
-                      <NetworkIcon
-                        className={
-                          isActiveTab('Network')
-                            ? isBottomNav
-                              ? 'white'
-                              : '#2F4786'
-                            : undefined
-                        }
-                        strokeColor={
-                              isActiveTab('Network')
-                                ? 'transparent'
-                                : undefined
-                            }
-                      />
-                    }
-                    isActive={isActiveTab('Network')}
-                  /> */}
                   <NavbarItem
                     label="Feeds"
                     route="/app/feed"

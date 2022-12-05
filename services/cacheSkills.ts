@@ -1,4 +1,5 @@
 import {get, post} from 'utils/request';
+
 const fetchSkills = (page: number) => {
   return get(`/skills?limit=100&page=${page}`);
 };
@@ -28,3 +29,5 @@ export default async function getGlobalData() {
   const data = await fetcher();
   return data;
 }
+
+export {fetcher as skillsFetcher};

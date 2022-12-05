@@ -1,4 +1,5 @@
 import {IUpdateUserBody, UserProfile} from '@models/profile';
+import {LoginResp} from 'pages/app/auth/login';
 import {get, post} from 'utils/request';
 
 export function signup(firstName: string, lastName: string, email: string) {
@@ -17,8 +18,13 @@ export function checkEmailExist(email: string) {
   return post('/auth/preregister', {email});
 }
 
-export function login(email: string, password: string) {
+export function login(email: string, password: string): Promise<LoginResp> {
   return post('/auth/web/login', {email, password});
+}
+
+export function deleteUser(): Promise<unknown> {
+  const payload = {reason: ' '};
+  return post('/user/delete', payload);
 }
 
 export function sendOTP(email: string) {

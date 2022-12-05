@@ -13,22 +13,30 @@ import EditProfileModal from '@components/common/UserProfile/Edit/EditProfileMod
 //utils
 import {get} from 'utils/request';
 import {useToggle, useUser} from '@hooks';
-import getGlobalData from 'services/cacheSkills';
+import getGlobalData, {skillsFetcher} from 'services/cacheSkills';
 
 // Type
 import {IOrganizationType} from 'models/organization';
 import {Skill} from '@components/common/Search/Providers/SkillsProvider';
+import {useEffect} from 'react';
+import {useState} from 'react';
 type OrganizationProfileProps = {
   skills: Skill[];
 };
 // Libraries
 const libraries: Libraries = ['places'];
 
-const OrganizationProfile: NextPage<OrganizationProfileProps> = ({skills}) => {
+const OrganizationProfile: NextPage<OrganizationProfileProps> = () => {
   // get id from route
   const router = useRouter();
   const {id} = router.query;
   const {state: editState, handlers: editHandlers} = useToggle();
+
+  const [skills, setSkills] = useState<Skill[]>([]);
+
+  useEffect(() => {
+    skillsFetcher().then(setSkills);
+  }, []);
 
   const {user} = useUser();
 

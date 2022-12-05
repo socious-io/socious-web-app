@@ -17,16 +17,21 @@ function searchFetcher<T>(url: string, params: SearchParams) {
   }).toString();
   const searchURL = `${url}?${searchParams}`;
   const data = {
-    q: params.keywords,
     type: params.type,
     filter: params.filter,
   };
+
+  if (params.keywords) {
+    Object.assign(data, {q: params.keywords});
+  }
+
   return post<T>(searchURL, {...data});
 }
 
 export const useSearch = (params: SearchParams) => {
-  return useSWR<GlobalResponseType<any>>(
-    params.keywords ? ['/search', params] : null,
-    searchFetcher,
-  );
+  return useSWR<GlobalResponseType<any>>(['/search', params], searchFetcher);
+  // return useSWR<GlobalResponseType<any>>(
+  //   params.keywords ? ['/search', params] : null,
+  //   searchFetcher,
+  // );
 };
