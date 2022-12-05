@@ -67,7 +67,7 @@
     "@capacitor/cli": "^4.3.0",
     "@cypress/webpack-preprocessor": "^5.15.5",
     "@headlessui/react": "^1.7.3",
-    "@heroicons/react": "^2.0.11",
+    "@heroicons/react": "^2.0.13",
     "@storybook/addon-actions": "^6.5.13",
     "@storybook/addon-essentials": "^6.5.13",
     "@storybook/addon-interactions": "^6.5.13",
