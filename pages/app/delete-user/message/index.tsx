@@ -4,9 +4,12 @@ import {useRouter} from 'next/router';
 import {Typography} from 'src/design-system/atoms/typography/typography';
 import {Button} from 'src/design-system/atoms/button/button';
 import TypoCompany from '../../../../asset/icons/logo-vertical.svg';
+import {useUser} from '@hooks';
 
 const Message: NextPage = () => {
   const router = useRouter();
+  const {currentIdentity} = useUser();
+  const email = currentIdentity?.meta?.email || '';
 
   return (
     <div className={css.container}>
@@ -15,7 +18,7 @@ const Message: NextPage = () => {
         Your account has been deleted.
       </Typography>
       <Typography type="body" className={css.body}>
-        You will receive a confirmation email at: user@email.com
+        You will receive a confirmation email at: {email}
       </Typography>
       <Button
         className={css.btn}

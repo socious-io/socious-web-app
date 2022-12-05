@@ -191,7 +191,7 @@ export const MobileTopbarFilters: FC<MobileTopbarFiltersProps> = ({
   };
 
   return (
-    <div className="fixed left-0 top-14 z-10 flex h-14 w-full items-center justify-center border-b border-grayLineBased bg-white md:top-16 md:justify-start">
+    <div className="top-18 fixed left-0 z-10 flex h-14 w-full items-center justify-center border-b border-grayLineBased bg-white md:top-16 md:justify-start">
       <div className="container mx-6 flex w-full max-w-5xl items-center gap-2 overflow-x-auto sm:mx-2 md:mx-auto md:justify-center md:overflow-x-visible md:px-0">
         <Button
           size="sm"

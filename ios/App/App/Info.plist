@@ -28,16 +28,16 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true />
 	<key>NSCameraUsageDescription</key>
-	<string>"Socious" Would Like to Access Your Camera
-     Allow access to camera to take photos from your camera.
+	<string>“Socious” Would Like to Access Your Camera.
+  Allow access to camera to upload photos from your camera in order to add your profile photo or attach images to your post.”
      </string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>"Socious" Would Like to Access Your Photos 
-     Allow access to photos to upload photos from your library.
+	<string>“Socious” Would Like to Access Your Photos.
+  Allow access to photos to upload photos from your library in order to add your profile photo or attach images to your post.”
      </string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>"Socious" Would Like to Access Your Photos 
-     Allow access to photos to upload photos from your library.
+	<string>“Socious” Would Like to Access Your Photos.
+  Allow access to photos to upload photos from your library in order to add your profile photo or attach images to your post.”
      </string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
