@@ -11,6 +11,7 @@ const config: CapacitorConfig = {
   webDir: 'out',
   bundledWebRuntime: false,
   server: {
+    // capacitor.native
     hostname: 'socious.io',
   },
   plugins: {
