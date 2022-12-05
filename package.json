@@ -138,7 +138,8 @@
     "cypress:headless": "cypress run --browser chrome",
     "test": "npm run build && start-server-and-test start http://localhost:3000 cypress:headless",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "ci": "start-server-and-test start http://localhost:3000 cypress:headless"
   },
   "lint-staged": {
     "*.js": "next lint",
