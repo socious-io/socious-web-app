@@ -51,7 +51,6 @@ export const SearchResults: FC<SearchResultsProps> = ({
   closeFilter,
 }) => {
   const route = useRouter();
-  console.log('q: ', route.query);
   const {type = '', page = 1, keywords = '', ...filter} = route.query;
 
   const {data: searchResults} = useSearch({

@@ -21,7 +21,6 @@ interface SocialShareBarProps {
 export const SocialShareBar = ({onCopied}: SocialShareBarProps) => {
   const link = window.location.href;
   const copyToClipBoard = useCallback(() => {
-    console.log('I am here');
     navigator.clipboard.writeText(link).then(() => onCopied());
   }, [link, onCopied]);
 

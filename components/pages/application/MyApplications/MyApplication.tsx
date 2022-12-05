@@ -63,7 +63,6 @@ export const WrapperWithHead: FC<
 const MyApplication = ({applicant, mutateApplication}: MyApplicationProps) => {
   const {offer_message, payment_type, payment_rate, status} = applicant;
 
-  console.log('Application :---: ', applicant);
   // Fetch Project
   const {data: project} = useSWR<Project>(
     applicant.project_id ? `/projects/${applicant.project_id}` : null,

@@ -38,7 +38,6 @@ const Confirm: NextPage = () => {
   }
 
   function onDeleteAccount() {
-    console.log('currentIdentity', currentIdentity);
     const email = currentIdentity?.meta?.email || '';
     login(email, password).then(onSuccessSubmit).catch(console.log);
   }

@@ -14,7 +14,6 @@ const DeleteModal = ({
   const onDelete = useCallback(async () => {
     try {
       await deletePost(pid);
-      console.log('Deleted');
       Router.push('/');
     } catch (error) {
       console.error(error);

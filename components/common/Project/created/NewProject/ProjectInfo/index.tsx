@@ -43,8 +43,6 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
   const countryCode = form.watch('country');
 
   const handleChange = (field: any, input: string) => {
-    console.log('form: ', form);
-    console.log('values: ', form.getValues());
     form.setValue(field, input, {
       shouldValidate: true,
       shouldDirty: true,

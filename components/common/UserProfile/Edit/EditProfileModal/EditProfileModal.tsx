@@ -303,7 +303,6 @@ const EditProfileModal = ({
             <span
               className="absolute top-6 right-3 cursor-pointer text-base text-primary sm:hidden"
               onClick={() => {
-                console.log('observer.current', observer.current);
                 if (observer.current.length) {
                   observer.current[0]().then(console.log).catch(console.log);
                 }

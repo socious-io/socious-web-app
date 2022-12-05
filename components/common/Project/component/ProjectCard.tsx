@@ -51,7 +51,6 @@ export default function ProjectCard({
   previewItem,
 }: ProjectCardProps) {
   const location = useFormattedLocation(project);
-  console.log(project.title, ':---: ', project);
 
   const paymentRange: PaymentRange = function (low, high) {
     const isOfTypeVolunteer = project.payment_type === 'VOLUNTEER';
