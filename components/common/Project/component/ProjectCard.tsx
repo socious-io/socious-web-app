@@ -54,7 +54,7 @@ export default function ProjectCard({
   console.log(project.title, ':---: ', project);
 
   const paymentRange: PaymentRange = function (low, high) {
-    const isOfTypeVolunteer = project.project_type === 'VOLUNTEER';
+    const isOfTypeVolunteer = project.payment_type === 'VOLUNTEER';
     const hasTruthyValue = low && high;
 
     if (hasTruthyValue && !isOfTypeVolunteer) {

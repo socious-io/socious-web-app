@@ -30,6 +30,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
   const {
     title,
     identity_meta,
+    payment_type,
     payment_range_higher,
     payment_range_lower,
     remote_preference,
@@ -155,7 +156,7 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
   ) => JSX.Element;
 
   const paymentRange: PaymentRange = function (low, high) {
-    const isOfTypeVolunteer = project_type === 'VOLUNTEER';
+    const isOfTypeVolunteer = payment_type === 'VOLUNTEER';
     const hasTruthyValue = low && high;
 
     if (hasTruthyValue && !isOfTypeVolunteer) {
