@@ -61,7 +61,6 @@ const Login: NextPage = () => {
       console.log('error on getting list of devices', err);
       return [];
     });
-    console.log('list: ', list);
     const savedToken = list.find(({id}) => id === token);
 
     console.log('savedToken: ', savedToken);
@@ -85,7 +84,6 @@ const Login: NextPage = () => {
   };
 
   const addListeners = () => {
-    console.log('addListeners');
     addNotificationReceivedListener().then((n) =>
       console.log('addNotificationReceivedListener: ', n),
     );

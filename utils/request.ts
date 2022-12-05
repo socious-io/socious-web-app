@@ -14,7 +14,6 @@ export const request = axios.create({
 });
 
 export async function get<T>(url: string) {
-  console.log(`get ${url}`);
   const response = await request.get<T>(url);
   return response.data;
 }

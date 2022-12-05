@@ -10,7 +10,6 @@ const fetcher = async () => {
   let toFetch = true;
   while (toFetch) {
     try {
-      console.log('FeTCHING page: ', i);
       const data: any = await fetchSkills(i);
       skills = [...skills, ...data.items];
       if (data.total_count <= data.limit * data.page) {

@@ -53,7 +53,6 @@ export const TopbarFilters: FC<TopbarFiltersProps> = ({
   };
 
   const changePaymentType = (values: FieldValues) => {
-    console.log(values);
     updateRoute('payment_type', values.payment_type.join(','));
   };
 

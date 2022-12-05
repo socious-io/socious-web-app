@@ -13,7 +13,7 @@ const config: CapacitorConfig = {
   server: {
     // capacitor.native
     androidScheme: 'https',
-    hostname: 'socious.io',
+    // hostname: 'socious.io',
   },
   plugins: {
     PushNotifications: {

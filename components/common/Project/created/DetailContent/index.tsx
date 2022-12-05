@@ -138,7 +138,6 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
   const {editQuestion} = ProjectContext;
 
   const clickEditIcon = (formStep: number) => {
-    console.log('editicon');
     setProjectContext({
       ...ProjectContext,
       isEditModalOpen: !ProjectContext.isEditModalOpen,
