@@ -12,15 +12,16 @@ const config: CapacitorConfig = {
   bundledWebRuntime: false,
   server: {
     // capacitor.native
+    androidScheme: 'https',
     hostname: 'socious.io',
   },
   plugins: {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
     },
-    CapacitorHttp: {
-      enabled: true,
-    },
+    // CapacitorHttp: {
+    //   enabled: true,
+    // },
     // CapacitorCookies: {
     //   enabled: true,
     // },

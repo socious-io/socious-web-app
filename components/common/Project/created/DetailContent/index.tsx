@@ -148,7 +148,9 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
       payment_type,
       experience_level,
       payment_currency: payment_currency || '',
+      // @ts-ignore
       payment_range_higher,
+      // @ts-ignore
       payment_range_lower,
       payment_scheme,
       project_length,
