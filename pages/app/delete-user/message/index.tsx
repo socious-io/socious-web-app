@@ -3,7 +3,7 @@ import {NextPage} from 'next';
 import {useRouter} from 'next/router';
 import {Typography} from 'src/design-system/atoms/typography/typography';
 import {Button} from 'src/design-system/atoms/button/button';
-import TypoCompany from '../../../../asset/icons/logo-vertical.svg';
+import TypoCompany from 'asset/icons/logo-vertical.svg';
 import {useUser} from '@hooks';
 
 const Message: NextPage = () => {
