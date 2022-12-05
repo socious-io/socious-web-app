@@ -10,12 +10,11 @@ class LoginMethods extends AuthMethods {
     LoginElements.elements.logincontinueBtn().click();
   }
   assertValidationMsgsForEmailPassword() {
-    LoginElements.elements
-      .emailValMsg()
-      .should('contain', 'Email cannot be an empty field');
-    LoginElements.elements
-      .passwordValMsg()
-      .should('contain', 'Password cannot be an empty field');
+    LoginElements.elements.emailValMsg().should('contain', 'Email cannot be an empty field');
+    LoginElements.elements.passwordValMsg().should('contain', 'Password cannot be an empty field');
+  }
+  assertValidationMsgsForInvalidEmailInvalidPassword() {
+    LoginElements.elements.invalidLoginMsg().should('contain', 'Email or password is incorrect');
   }
   setEmail(username) {
     LoginElements.elements.emailTxt().clear().type(username);

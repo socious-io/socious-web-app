@@ -10,6 +10,10 @@ class SignUpMethods extends AuthMethods {
   clickOnContinueButton() {
     SignUpElements.elements.SignUpcontinueBtn().click();
   }
+  setValidEmail() {
+    SignUpElements.elements.emailTxt().clear().type(runEmail);
+    return this;
+  }
   assertValidationMsgsForNullFirstNameLastName() {
     SignUpElements.elements
       .firstNameNullValMsg()
@@ -38,18 +42,6 @@ class SignUpMethods extends AuthMethods {
     SignUpElements.elements.lastNameTxt().clear().type(lastname);
     return this;
   }
-  enterInvalidFirstName() {
-    this.setFirstName('First$$Name');
-  }
-  enterInvalidLastName() {
-    this.setLastName('Last$$Name');
-  }
-  enterValidFirstName() {
-    this.setFirstName('valid first name');
-  }
-  enterValidLastName() {
-    this.setLastName('valid last name');
-  }
 
   assertShowingEmailAfterPassingFirstStep() {
     SignUpElements.elements.emailTxt().should('be.visible');
@@ -63,12 +55,7 @@ class SignUpMethods extends AuthMethods {
     SignUpElements.elements.emailTxt().clear().type(email);
     return this;
   }
-  enterInvalidEmail() {
-    this.setEmail('testazintest4');
-  }
-  enterValidEmail() {
-    this.setEmail(runEmail);
-  }
+
   assertValidationMsgForInvalidEmail() {
     SignUpElements.elements
       .emailInvaliEmailValMsg()
@@ -86,12 +73,7 @@ class SignUpMethods extends AuthMethods {
     SignUpElements.elements.passwordTxt().clear().type(password);
     return this;
   }
-  enterInvalidPassword() {
-    this.setPassword('12345678');
-  }
-  enterValidPassword() {
-    this.setPassword('Socious1234');
-  }
+
   assertValidationMsgForNotStrongPassword() {
     SignUpElements.elements
       .passwordStrongValMsg()
@@ -106,9 +88,7 @@ class SignUpMethods extends AuthMethods {
     SignUpElements.elements.confirmPasswordTxt().clear().type(confirmPassword);
     return this;
   }
-  enterValidConfirmPassword() {
-    this.setConfirmPassword('Socious1234');
-  }
+
   assertShowingAgreementChkAfterPassingThirdStep() {
     SignUpElements.elements.agreementChk().should('be.visible');
   }
@@ -118,9 +98,7 @@ class SignUpMethods extends AuthMethods {
   clickOnSuccessfulCloseBtn() {
     SignUpElements.elements.successfulCloseBtn().click();
   }
-  enterExistingEmail() {
-    this.setEmail('testazintest4@gmail.com');
-  }
+
   assertValidationMsgForExistingEmail() {
     SignUpElements.elements
       .existingEmailValMsg()
