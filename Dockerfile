@@ -4,6 +4,7 @@ WORKDIR /usr/src/app
 
 # Install dependencies
 COPY package.json package-lock.json ./
+RUN npm install
 # RUN npm ci
 
 COPY . .
@@ -22,8 +23,9 @@ ENV NEXT_PUBLIC_FIREBASE_PUSH_CERT=${FIREBASE_PUSH_CERT}
 
 RUN npx next build 
 RUN pwd && ls -1a
+RUN ls /usr/src/app/.next/
 # next standalone tree-shakes the json file out of socious-data for some reason
-RUN cp -r node_modules/@socious/data/src/translations .next/standalone/node_modules/@socious/data/src
+# RUN cp -r node_modules/@socious/data/src/translations .next/standalone/node_modules/@socious/data/src
 
 # Production image, copy all the files and run next
 FROM node:18 AS runner
