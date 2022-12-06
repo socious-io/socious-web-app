@@ -21,6 +21,7 @@ ENV NEXT_PUBLIC_GOOGLE_API_KEY=${GOOGLE_API_KEY}
 ENV NEXT_PUBLIC_FIREBASE_PUSH_CERT=${FIREBASE_PUSH_CERT}
 
 RUN npx next build 
+RUN pwd && ls -1a
 # next standalone tree-shakes the json file out of socious-data for some reason
 RUN cp -r node_modules/@socious/data/src/translations .next/standalone/node_modules/@socious/data/src
 
@@ -44,7 +45,7 @@ COPY --from=builder /usr/src/app/public ./public
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=node:node /usr/src/app/.next/standalone ./
-COPY --from=builder --chown=node:node /usr/src/app/.next/static ./.next/static
+# COPY --from=builder --chown=node:node /usr/src/app/.next/static ./.next/static
 
 USER node
 
