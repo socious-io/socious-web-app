@@ -20,7 +20,7 @@ ENV NEXT_PUBLIC_API_BASE=${API_BASE}
 ENV NEXT_PUBLIC_GOOGLE_API_KEY=${GOOGLE_API_KEY}
 ENV NEXT_PUBLIC_FIREBASE_PUSH_CERT=${FIREBASE_PUSH_CERT}
 
-RUN npm run build
+RUN npx next build 
 # next standalone tree-shakes the json file out of socious-data for some reason
 RUN cp -r node_modules/@socious/data/src/translations .next/standalone/node_modules/@socious/data/src
 
