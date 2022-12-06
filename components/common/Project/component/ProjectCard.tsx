@@ -1,7 +1,10 @@
 import {Avatar, Chip} from '@components/common';
 import {Project} from 'models/project';
 import Link from 'next/link';
-import {ChevronRightIcon} from '@heroicons/react/24/outline';
+import {
+  ChevronRightIcon,
+  CurrencyDollarIcon,
+} from '@heroicons/react/24/outline';
 import {getText} from '@socious/data';
 import {FC} from 'react';
 import {isoToHumanTime} from 'services/toHumanTime';
@@ -15,6 +18,8 @@ type ProjectCardProps = {
   type?: 'NORMAL' | 'SEARCH';
   previewItem?: () => void;
 };
+
+type PaymentRange = (low?: string | null, high?: string | null) => JSX.Element;
 
 export const GroupsOfChips: FC<{causes_tags?: string[]}> = ({causes_tags}) => {
   return (
@@ -46,8 +51,20 @@ export default function ProjectCard({
   previewItem,
 }: ProjectCardProps) {
   const location = useFormattedLocation(project);
-  console.log(project.title, ':---: ', project);
 
+  const paymentRange: PaymentRange = function (low, high) {
+    const isOfTypeVolunteer = project.payment_type === 'VOLUNTEER';
+    const hasTruthyValue = low && high;
+
+    if (hasTruthyValue && !isOfTypeVolunteer) {
+      return (
+        <div className="flex flex-row">
+          <p className="pl-2 text-sm text-graySubtitle ">{`$${low}-$${high} / hr`}</p>
+        </div>
+      );
+    }
+    return <></>;
+  };
   return (
     <div
       className="cursor-pointer rounded-2xl border border-grayLineBased bg-white p-4"
@@ -76,7 +93,7 @@ export default function ProjectCard({
         <div className="">
           <p className="font-semibold">{project.title}</p>
         </div>
-        <div className="mt-4 flex flex-row space-x-2 divide-x divide-solid divide-graySubtitle">
+        <div className="mt-4 flex flex-row flex-wrap space-x-2 divide-x divide-solid divide-graySubtitle">
           {project.project_type && (
             <p className="text-sm text-graySubtitle ">
               {getText('en', `PROJECT.${project.project_type}`)}
@@ -86,6 +103,10 @@ export default function ProjectCard({
             <p className="pl-2 text-sm text-graySubtitle ">
               {getText('en', `PAYMENT.${project.payment_type}`)}
             </p>
+          )}
+          {paymentRange(
+            project.payment_range_lower,
+            project.payment_range_higher,
           )}
           {[0, 1, 2, 3, 4].includes(project.experience_level) && (
             <p className="pl-2 text-sm text-graySubtitle ">

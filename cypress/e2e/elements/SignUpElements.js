@@ -17,9 +17,9 @@ class SignUpElements {
     confirmPasswordTxt: () => cy.get('[data-testid="Confirm password-testid"]'),
     passwordNullValMsg: () => cy.contains('Password cannot be an empty field'),
     passwordStrongValMsg: () => cy.contains('Password is not strong enough'),
-    confirmPasswordValMsg: () =>
-      cy.contains('The passwords you entered do not match'),
+    confirmPasswordValMsg: () => cy.contains('The passwords you entered do not match'),
     agreementChk: () => cy.get('.ml-10 > .grow > .flex > .text-center'),
+    // agreementChk: () => cy.contains('By signing up, I agree to the Terms of Service and Privacy Policy'),
     selectAgreementChk: () => cy.get('.w-4'),
     successfulCloseBtn: () => cy.get('div.mt-4 > .font-medium'),
     existingEmailValMsg: () => cy.contains('This email is already registered'),

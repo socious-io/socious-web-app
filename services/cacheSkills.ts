@@ -1,4 +1,5 @@
 import {get, post} from 'utils/request';
+
 const fetchSkills = (page: number) => {
   return get(`/skills?limit=100&page=${page}`);
 };
@@ -9,7 +10,6 @@ const fetcher = async () => {
   let toFetch = true;
   while (toFetch) {
     try {
-      console.log('FeTCHING page: ', i);
       const data: any = await fetchSkills(i);
       skills = [...skills, ...data.items];
       if (data.total_count <= data.limit * data.page) {
@@ -28,3 +28,5 @@ export default async function getGlobalData() {
   const data = await fetcher();
   return data;
 }
+
+export {fetcher as skillsFetcher};

@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
+  useRef,
   useState,
 } from 'react';
 import {twMerge} from 'tailwind-merge';
@@ -64,6 +65,7 @@ const EditProfileModal = ({
   const {mutateUser} = useUser();
   const [avatar, setAvatar] = useState<any>();
   const [coverImage, setCoverImage] = useState<any>();
+  const observer = useRef<Array<() => Promise<unknown>>>([]);
 
   useEffect(() => {
     if (user) {
@@ -300,7 +302,11 @@ const EditProfileModal = ({
 
             <span
               className="absolute top-6 right-3 cursor-pointer text-base text-primary sm:hidden"
-              onClick={() => closeModal()}
+              onClick={() => {
+                if (observer.current.length) {
+                  observer.current[0]().then(console.log).catch(console.log);
+                }
+              }}
             >
               Save
             </span>
@@ -312,6 +318,7 @@ const EditProfileModal = ({
           <EditMainMenu
             goTo={(data: 'SKILLS' | 'CAUSES') => setEditState(data)}
             editProfile={onSubmit}
+            observer={observer}
             setNewCover={setCoverImage}
             setNewAvatar={setAvatar}
             coverImage={user?.cover_image?.url ?? null}

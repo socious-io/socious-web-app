@@ -1,6 +1,5 @@
 import type {NextPage} from 'next';
-import {GetStaticProps} from 'next';
-import {useCallback, useMemo, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {Button, Modal} from '@components/common';
 import {twMerge} from 'tailwind-merge';
 import OnboardingStep1 from '@components/pages/auth/Onboarding/Step1/OnboardingStep1';
@@ -13,13 +12,9 @@ import OnboardingStep7 from '@components/pages/auth/Onboarding/Step7/OnboardingS
 import OnboardingStep8 from '@components/pages/auth/Onboarding/Step8/OnboardingStep8';
 import OnboardingStep9 from '@components/pages/auth/Onboarding/Step9/OnboardingStep9';
 import {PreAuthLayout} from 'layout';
-
 import {useForm, FormProvider} from 'react-hook-form';
-
 import {joiResolver} from '@hookform/resolvers/joi';
-
 import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
-
 import {
   schemaOnboardingStep2,
   schemaOnboardingStep3,
@@ -31,8 +26,7 @@ import {
 import {updateProfile} from '@api/auth/actions';
 import useUser from 'hooks/useUser/useUser';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
-import getGlobalData from 'services/cacheSkills';
-import {uploadMedia} from '@api/media/actions';
+import {skillsFetcher} from 'services/cacheSkills';
 import {AxiosError} from 'axios';
 import {DefaultErrorMessage, ErrorMessage} from 'utils/request';
 import {useRouter} from 'next/router';
@@ -40,6 +34,7 @@ import {checkAndUploadMedia} from 'services/ImageUpload';
 import {Capacitor} from '@capacitor/core';
 import useSWR from 'swr';
 import {GeoIP} from '@models/geo';
+import {Skill} from '@components/common/Search/Providers/SkillsProvider';
 
 const schemaStep = {
   2: schemaOnboardingStep2,
@@ -50,14 +45,10 @@ const schemaStep = {
   7: schemaOnboardingStep7,
 };
 
-type OnBoardingProps = {
-  skills: any[];
-};
-
 // IMP: This needs to be constant.
 const libraries: Libraries = ['places'];
 
-const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
+const Onboarding: NextPage = () => {
   //Loading Map
   const {isLoaded, loadError} = useGoogleMapsScript({
     googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
@@ -70,10 +61,14 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
   const {data: geoIp, error: geoIpError} = useSWR<GeoIP>('/geo/ip');
 
   const [errorMessage, setError] = useState<ErrorMessage>();
-
+  const [skills, setSkills] = useState<Skill[]>([]);
   const [step, setStep] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [placeId, setPlaceId] = useState<string>('');
+
+  useEffect(() => {
+    skillsFetcher().then(setSkills);
+  }, []);
 
   const handleBack = useCallback(() => {
     setStep(step - 1);
@@ -348,8 +343,3 @@ const Onboarding: NextPage<OnBoardingProps> = ({skills}) => {
 };
 
 export default Onboarding;
-
-export const getStaticProps: GetStaticProps = async () => {
-  const skills = await getGlobalData();
-  return {props: {skills}, revalidate: 60 * 60 * 24};
-};

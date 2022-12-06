@@ -56,7 +56,6 @@ const TeamComponent = () => {
     ? members.items.map((member) => member.id)
     : [];
 
-  console.log('Member ', members);
   return (
     <div className="w-full rounded-2xl border border-grayLineBased bg-white ">
       <div className="flex border-b p-4">

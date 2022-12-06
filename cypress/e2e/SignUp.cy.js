@@ -1,6 +1,7 @@
 /// <reference types = "cypress"/>
 import SignUpElements from '../e2e/elements/SignUpElements';
 import SignUpMethods from '../e2e/methods/SignUpMethods';
+import TestingData from '/cypress/fixtures/TestingData.json'
 
 const signUpMethods = new SignUpMethods();
 describe('Sign Up', () => {
@@ -13,54 +14,50 @@ describe('Sign Up', () => {
     signUpMethods.logout();
   });
   specify(
-    'User tries to SignUp without entering first name and last name',
-    () => {
+    'User tries to SignUp without entering first name and last name', () => {
       signUpMethods.clickOnContinueButton();
       signUpMethods.assertValidationMsgsForNullFirstNameLastName();
     },
   );
   specify('User enters invalid first name', () => {
-    signUpMethods.enterInvalidFirstName();
+    signUpMethods.setFirstName(TestingData.InvalidFirstName);
     signUpMethods.clickOnContinueButton();
     signUpMethods.assertValidationMsgForSpecialCharacterInFirstName();
   });
   specify('User enters invalid last name', () => {
-    signUpMethods.enterInvalidLastName();
+    signUpMethods.setLastName(TestingData.InvalidLastName);
     signUpMethods.clickOnContinueButton();
     signUpMethods.assertValidationMsgForSpecialCharacterInLastName();
   });
-  specify(
-    'User enters valid first name and last name (Successfully Sign up)',
-    () => {
-      signUpMethods.enterValidFirstName();
-      signUpMethods.enterValidLastName();
-      signUpMethods.clickOnContinueButton();
-      signUpMethods.assertShowingEmailAfterPassingFirstStep();
-      signUpMethods.clickOnContinueButton();
-      signUpMethods.assertValidationMsgForNullEmail();
-      signUpMethods.enterInvalidEmail();
-      signUpMethods.assertValidationMsgForInvalidEmail();
-      signUpMethods.enterValidEmail();
-      signUpMethods.clickOnContinueButton();
-      signUpMethods.assertShowingPasswordAfterPassingSecondStep();
-      signUpMethods.clickOnContinueButton();
-      signUpMethods.assertValidationMsgForNullPassword();
-      signUpMethods.enterInvalidPassword();
-      signUpMethods.assertValidationMsgForNotStrongPassword();
-      signUpMethods.enterValidPassword();
-      signUpMethods.enterValidConfirmPassword();
-      signUpMethods.clickOnContinueButton();
-      signUpMethods.assertShowingAgreementChkAfterPassingThirdStep();
-      signUpMethods.checkAgreementChk();
-      signUpMethods.clickOnContinueButton();
-      signUpMethods.clickOnSuccessfulCloseBtn();
-    },
-  );
-  specify('User enters an existing email', () => {
-    signUpMethods.enterValidFirstName();
-    signUpMethods.enterValidLastName();
+  specify('User enters valid first name and last name (Successfully Sign up)', () => {
+    signUpMethods.setFirstName(TestingData.ValidFirstName);
+    signUpMethods.setLastName(TestingData.ValidLastName);
     signUpMethods.clickOnContinueButton();
-    signUpMethods.enterExistingEmail();
+    signUpMethods.assertShowingEmailAfterPassingFirstStep();
+    signUpMethods.clickOnContinueButton();
+    signUpMethods.assertValidationMsgForNullEmail();
+    signUpMethods.setEmail(TestingData.InvalidEmail);
+    signUpMethods.assertValidationMsgForInvalidEmail();
+    signUpMethods.setValidEmail();
+    signUpMethods.clickOnContinueButton();
+    signUpMethods.assertShowingPasswordAfterPassingSecondStep();
+    signUpMethods.clickOnContinueButton();
+    signUpMethods.assertValidationMsgForNullPassword();
+    signUpMethods.setPassword(TestingData.InvalidPassword);
+    signUpMethods.assertValidationMsgForNotStrongPassword();
+    signUpMethods.setPassword(TestingData.ValidPassword);
+    signUpMethods.setConfirmPassword(TestingData.ValidConfirmPassword);
+    signUpMethods.clickOnContinueButton();
+    signUpMethods.assertShowingAgreementChkAfterPassingThirdStep();
+    signUpMethods.checkAgreementChk();
+    signUpMethods.clickOnContinueButton();
+    signUpMethods.clickOnSuccessfulCloseBtn();
+  });
+  specify('User enters an existing email', () => {
+    signUpMethods.setFirstName(TestingData.ValidFirstName);
+    signUpMethods.setLastName(TestingData.ValidLastName);
+    signUpMethods.clickOnContinueButton();
+    signUpMethods.setEmail(TestingData.ExistingEmail);
     signUpMethods.clickOnContinueButton();
     signUpMethods.assertValidationMsgForExistingEmail();
   });

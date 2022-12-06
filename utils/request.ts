@@ -4,14 +4,16 @@ export type AxiosRequestHeaders = {
   [x: string]: string | number | boolean;
 };
 
+// NEXT_PUBLIC_API_BASE='https://dev.socious.io/api/v2'
 export const request = axios.create({
+  // TODO: use a proper env for web/mobile
+  // baseURL: 'https://socious.io/api/v2',
   baseURL: process.env.NEXT_PUBLIC_API_BASE,
   withCredentials: true,
   timeout: 40000,
 });
 
 export async function get<T>(url: string) {
-  console.log(`get ${url}`);
   const response = await request.get<T>(url);
   return response.data;
 }

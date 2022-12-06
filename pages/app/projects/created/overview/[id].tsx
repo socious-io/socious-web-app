@@ -10,18 +10,25 @@ import SplashScreen from 'layout/Splash';
 
 // Services/Utils
 import {get} from 'utils/request';
-import getGlobalData from 'services/cacheSkills';
+import getGlobalData, {skillsFetcher} from 'services/cacheSkills';
 
 // Types
 import type {GetStaticPaths, GetStaticProps, NextPage} from 'next';
-import {ProjectProps} from '../../[id]';
-import {Project} from '@models/project';
+import {Project, ProjectProps} from '@models/project';
 import {TQuestionsResponse} from '@models/question';
+import {Skill} from '@components/common/Search/Providers/SkillsProvider';
+import {useEffect, useState} from 'react';
 
-const Overview: NextPage<ProjectProps> = ({skills}) => {
+const Overview: NextPage<ProjectProps> = () => {
   const router = useRouter();
   const {id} = router.query;
   const {data} = useSWR<Project>(`/projects/${id}`, get);
+
+  const [skills, setSkills] = useState<Skill[]>([]);
+
+  useEffect(() => {
+    skillsFetcher().then(setSkills);
+  }, []);
 
   const {data: questions} = useSWR<TQuestionsResponse>(
     data?.id ? `/projects/${data.id}/questions` : null,
