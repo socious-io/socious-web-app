@@ -1,10 +1,10 @@
 # Install dependencies only when needed
-FROM node:16 AS builder
+FROM node:18 AS builder
 WORKDIR /usr/src/app
 
 # Install dependencies
 COPY package.json package-lock.json ./
-RUN npm ci
+# RUN npm ci
 
 COPY . .
 
@@ -25,7 +25,7 @@ RUN npm run build
 RUN cp -r node_modules/@socious/data/src/translations .next/standalone/node_modules/@socious/data/src
 
 # Production image, copy all the files and run next
-FROM node:16 AS runner
+FROM node:18 AS runner
 
 # Add Tini
 ENV TINI_VERSION v0.19.0
