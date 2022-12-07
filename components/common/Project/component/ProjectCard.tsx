@@ -1,10 +1,7 @@
 import {Avatar, Chip} from '@components/common';
 import {Project} from 'models/project';
 import Link from 'next/link';
-import {
-  ChevronRightIcon,
-  CurrencyDollarIcon,
-} from '@heroicons/react/24/outline';
+import {ChevronRightIcon} from '@heroicons/react/24/outline';
 import {getText} from '@socious/data';
 import {FC} from 'react';
 import {isoToHumanTime} from 'services/toHumanTime';

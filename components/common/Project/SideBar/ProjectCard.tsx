@@ -1,15 +1,9 @@
 import {FC} from 'react';
 import useSWR from 'swr';
 import Link from 'next/link';
-
-// Icons
 import {FolderIcon, UserCircleIcon} from '@heroicons/react/24/outline';
-
-// Hooks/Utils
 import {useUser} from '@hooks';
 import {get} from 'utils/request';
-
-// Types
 import {Project} from '@models/project';
 interface ProjectsCardProps {
   projectDetail: Project;
