@@ -1,33 +1,27 @@
 import React, {useCallback} from 'react';
-import type {GetStaticPaths, GetStaticProps, NextPage} from 'next';
+import type {NextPage} from 'next';
 import {useRouter} from 'next/router';
 import useSWR from 'swr';
 import {Libraries, useGoogleMapsScript} from 'use-google-maps-script';
-
-//components
 import {GeneralLayout} from 'layout';
 import MainContent from '@components/common/UserProfile/MainContent';
 import SplashScreen from 'layout/Splash';
 import EditProfileModal from '@components/common/UserProfile/Edit/EditProfileModal/EditProfileModal';
-
-//utils
 import {get} from 'utils/request';
 import {useToggle, useUser} from '@hooks';
-import getGlobalData, {skillsFetcher} from 'services/cacheSkills';
-
-// Type
+import {skillsFetcher} from 'services/cacheSkills';
 import {IOrganizationType} from 'models/organization';
 import {Skill} from '@components/common/Search/Providers/SkillsProvider';
 import {useEffect} from 'react';
 import {useState} from 'react';
+
 type OrganizationProfileProps = {
   skills: Skill[];
 };
-// Libraries
+
 const libraries: Libraries = ['places'];
 
 const OrganizationProfile: NextPage<OrganizationProfileProps> = () => {
-  // get id from route
   const router = useRouter();
   const {id} = router.query;
   const {state: editState, handlers: editHandlers} = useToggle();
@@ -40,7 +34,6 @@ const OrganizationProfile: NextPage<OrganizationProfileProps> = () => {
 
   const {user} = useUser();
 
-  // Loading The Map
   const {isLoaded} = useGoogleMapsScript({
     googleMapsApiKey: process.env['NEXT_PUBLIC_GOOGLE_API_KEY'] ?? '',
     libraries,
@@ -88,18 +81,6 @@ const OrganizationProfile: NextPage<OrganizationProfileProps> = () => {
       )}
     </GeneralLayout>
   );
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: 'blocking',
-  };
-};
-
-export const getStaticProps: GetStaticProps = async () => {
-  const skills = await getGlobalData();
-  return {props: {skills}, revalidate: 60};
 };
 
 export default OrganizationProfile;
