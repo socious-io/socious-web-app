@@ -14,9 +14,14 @@ import {useProjectContext} from '@components/common/Project/created/NewProject/c
 type TOnSubmit = {
   getProject: (s: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => CreateProjectType;
   onSubmit: (s?: 'DRAFT' | 'EXPIRE' | 'ACTIVE') => void;
+  jobCategories: any[];
 };
 
-export const Preview: FC<TOnSubmit> = ({onSubmit, getProject}) => {
+export const Preview: FC<TOnSubmit> = ({
+  onSubmit,
+  getProject,
+  jobCategories,
+}) => {
   const {
     handleSubmit,
     formState: {isSubmitting},
@@ -127,6 +132,16 @@ export const Preview: FC<TOnSubmit> = ({onSubmit, getProject}) => {
                       EXPERIENCE_LEVEL_OPTIONS.find(
                         (item, index) => index === project.experience_level,
                       )?.label
+                    }
+                  />
+                )}
+                {project.job_category_id && (
+                  <PreviewItem
+                    label="Job Category"
+                    text={
+                      jobCategories.find(
+                        (item) => item.id === project.job_category_id,
+                      )?.name
                     }
                   />
                 )}

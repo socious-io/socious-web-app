@@ -29,12 +29,14 @@ import {Preview} from '@components/pages/project/create/Preview';
 
 type CreateProjectMainType = {
   skills: any[];
+  jobCategories: any[];
   setShowCreate: (show: boolean) => void;
 };
 const libraries: Libraries = ['places'];
 
 const CreateProjectMain: FC<CreateProjectMainType> = ({
   skills,
+  jobCategories,
   setShowCreate,
 }) => {
   const {ProjectContext, setProjectContext} = useProjectContext();
@@ -75,6 +77,7 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
         skills: wizard.methods[1].getValues().skills,
         status: s,
         experience_level: projectInfo.experience_level,
+        job_category_id: projectInfo.job_category_id,
       };
 
       if (projectInfo.payment_scheme) {
@@ -182,13 +185,20 @@ const CreateProjectMain: FC<CreateProjectMainType> = ({
         <FormWizard wizard={wizard}>
           <Causes onSubmit={wizard.advance} />
           <Skills onSubmit={wizard.advance} rawSkills={skills} />
-          <ProjectInfo onSubmit={wizard.advance} />
+          <ProjectInfo
+            onSubmit={wizard.advance}
+            jobCategories={jobCategories}
+          />
           <ProjectQuestions
             onSubmit={wizard.advance}
             onEditDetail={() => setShowQuestionDetail(true)}
             deleteQuestion={handleDeleteQuestion}
           />
-          <Preview onSubmit={onSubmit} getProject={getProject} />
+          <Preview
+            onSubmit={onSubmit}
+            getProject={getProject}
+            jobCategories={jobCategories}
+          />
           <Congrats />
         </FormWizard>
       )}
