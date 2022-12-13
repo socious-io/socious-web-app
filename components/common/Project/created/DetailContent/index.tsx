@@ -179,6 +179,7 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
       skills: ProjectContext.skills,
       status: s ? s : ProjectContext.status,
       experience_level: ProjectContext.experience_level,
+      job_category_id: ProjectContext.job_category_id,
     };
 
     if (ProjectContext.payment_currency)
