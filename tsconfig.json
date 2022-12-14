@@ -16,6 +16,12 @@
     "jsx": "preserve",
     "incremental": true,
     "declaration": true,
+    "types": [
+      "node",
+      "jest",
+      "@testing-library/jest-dom",
+      "@types/testing-library__jest-dom"
+    ],
     "baseUrl": ".",
     "paths": {
       "@icons/*": ["asset/icons/*"],
@@ -25,6 +31,14 @@
       "@api/*": ["api/*"]
     }
   },
-  "include": ["index.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "next-env.d.ts", "dist"]
+  "include": ["index.d.ts", "**/*.ts", "**/*.tsx", "jest-setup.ts"],
+  "exclude": [
+    "**/*.test.tsx",
+    "node_modules",
+    "next-env.d.ts",
+    "dist",
+    "webpack",
+    "jest",
+    "cypress"
+  ]
 }
