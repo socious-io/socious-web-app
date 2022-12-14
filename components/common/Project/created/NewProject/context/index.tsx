@@ -25,6 +25,7 @@ export type TProjectContext = {
   commitment_hours_higher: string;
   commitment_hours_lower: string;
   experience_level: number;
+  job_category_id: string;
   project_type: string;
   project_length: string;
   country: string;
@@ -58,6 +59,7 @@ export const initContext: TProjectContext = {
   commitment_hours_higher: '',
   commitment_hours_lower: '',
   experience_level: 0,
+  job_category_id: '',
   project_type: '',
   project_length: '',
   country: '',

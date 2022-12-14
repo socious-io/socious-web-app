@@ -25,6 +25,7 @@ export interface Project {
   experience_level: number;
   causes_tags: Array<string>;
   skills: Array<string>;
+  job_category_id: string;
   payment_currency?: string;
   remote_preference: string;
   identity_id: string;
@@ -66,6 +67,7 @@ export interface CreateProjectType {
   project_length: string;
   project_type?: string;
   skills: Array<string>;
+  job_category_id: string;
   city?: string;
   status: string;
 }

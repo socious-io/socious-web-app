@@ -6,6 +6,7 @@ import MyApplicationBoxes from '@components/common/Project/created';
 import CreateProjectMain from '@components/common/Project/created/NewProject';
 import {ProjectContextProvider} from 'components/common/Project/created/NewProject/context';
 import {skillsFetcher} from 'services/cacheSkills';
+import {jobCategoryFetcher} from 'services/cacheJobCategories';
 import useUser from 'hooks/useUser/useUser';
 import Router from 'next/router';
 import {Skill} from '@components/common/Search/Providers/SkillsProvider';
@@ -13,6 +14,7 @@ import {Skill} from '@components/common/Search/Providers/SkillsProvider';
 const ProjectApplications: NextPage = () => {
   const {currentIdentity} = useUser({redirect: false});
   const [skills, setSkills] = useState<Skill[]>([]);
+  const [jobCategories, setJobCategories] = useState<any[]>([]);
 
   useEffect(() => {
     if (currentIdentity?.type === 'users') Router.push('/app/projects');
@@ -21,6 +23,7 @@ const ProjectApplications: NextPage = () => {
 
   useEffect(() => {
     skillsFetcher().then(setSkills);
+    jobCategoryFetcher().then(setJobCategories);
   }, []);
 
   return (
@@ -29,7 +32,11 @@ const ProjectApplications: NextPage = () => {
         <SideBar />
         <MyApplicationBoxes setShowCreate={setShowCreate} />
         {showCreate && (
-          <CreateProjectMain skills={skills} setShowCreate={setShowCreate} />
+          <CreateProjectMain
+            jobCategories={jobCategories}
+            skills={skills}
+            setShowCreate={setShowCreate}
+          />
         )}
       </GeneralLayout>
     </ProjectContextProvider>
