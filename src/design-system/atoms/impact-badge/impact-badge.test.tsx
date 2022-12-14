@@ -4,8 +4,8 @@ import '@testing-library/jest-dom';
 
 describe('impact-badge', () => {
   test('should set proper badge color', () => {
-    render(<ImpactBadge color="red" iconUrl="" />);
+    render(<ImpactBadge color="#756475" iconUrl="" />);
     const element = screen.getByRole('button');
-    expect(element).toHaveStyle('background-color: red');
+    expect(element).toHaveStyle('background-color: #756475');
   });
 });

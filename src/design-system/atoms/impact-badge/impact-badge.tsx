@@ -6,14 +6,10 @@ export const ImpactBadge = (props: ImpactBadgeProps): JSX.Element => {
   const styles: CSSProperties = {
     backgroundColor: props.color,
   };
+
   return (
     <div role="button" style={styles} className={css.container}>
-      <img
-        width={48}
-        height={24}
-        src="/asset/icons/impact-icon-test.svg"
-        alt=""
-      />
+      <img width={48} height={24} src="" />
     </div>
   );
 };
