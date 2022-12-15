@@ -3,7 +3,7 @@ import {ComponentMeta, ComponentStory} from '@storybook/react';
 import {ImpactBadge} from '../../src/design-system/atoms/impact-badge/impact-badge';
 
 export default {
-  title: 'UI/ImpactBadge',
+  title: 'ATOM/ImpactBadge',
   component: ImpactBadge,
 } as ComponentMeta<typeof ImpactBadge>;
 

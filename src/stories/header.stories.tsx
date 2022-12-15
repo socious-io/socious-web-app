@@ -3,7 +3,7 @@ import {ComponentMeta, ComponentStory} from '@storybook/react';
 import {Header} from '../../src/design-system/atoms/header/header';
 
 export default {
-  title: 'UI/Header',
+  title: 'ATOM/Header',
   component: Header,
 } as ComponentMeta<typeof Header>;
 

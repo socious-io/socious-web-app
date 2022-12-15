@@ -3,7 +3,7 @@ import {ComponentMeta, ComponentStory} from '@storybook/react';
 import {Typography} from '../design-system/atoms/typography/typography';
 
 export default {
-  title: 'UI/Typography',
+  title: 'ATOM/Typography',
   component: Typography,
 } as ComponentMeta<typeof Typography>;
 

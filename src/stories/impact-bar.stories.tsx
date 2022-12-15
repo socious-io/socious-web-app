@@ -3,7 +3,7 @@ import {ComponentMeta, ComponentStory} from '@storybook/react';
 import {ImpactBar} from '../../src/design-system/atoms/impact-bar/impact-bar';
 
 export default {
-  title: 'UI/ImpactBar',
+  title: 'ATOM/ImpactBar',
   component: ImpactBar,
 } as ComponentMeta<typeof ImpactBar>;
 
