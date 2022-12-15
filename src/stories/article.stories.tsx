@@ -3,7 +3,7 @@ import {ComponentMeta, ComponentStory} from '@storybook/react';
 import {Article} from '../design-system/molecules/article/article';
 
 export default {
-  title: 'UI/Article',
+  title: 'MOLECULES/Article',
   component: Article,
 } as ComponentMeta<typeof Article>;
 

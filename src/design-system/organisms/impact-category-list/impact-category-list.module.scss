@@ -1,0 +1,7 @@
+.container {
+  border: 3px solid #000;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem 0;
+  justify-items: center;
+}

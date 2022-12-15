@@ -1,6 +1,7 @@
 import {CSSProperties} from 'react';
 import css from './impact-badge.module.scss';
 import {ImpactBadgeProps} from './impact-badge.types';
+import icon from '/asset/icons/impact-category-list/10 Reduce Inequalities.svg';
 
 export const ImpactBadge = (props: ImpactBadgeProps): JSX.Element => {
   const styles: CSSProperties = {
@@ -9,7 +10,7 @@ export const ImpactBadge = (props: ImpactBadgeProps): JSX.Element => {
 
   return (
     <div role="button" style={styles} className={css.container}>
-      <img width={48} height={24} src="" />
+      <img alt="impact icon" src={icon} />
     </div>
   );
 };

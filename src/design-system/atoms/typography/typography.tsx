@@ -6,6 +6,7 @@ export const Typography = (props: TypographyProps): JSX.Element => {
   const {size = 'm', type = 'body'} = props;
 
   const sizeList: Record<string, CSSProperties> = {
+    s: {fontSize: 'var(--font-size-s)'},
     m: {fontSize: 'var(--font-size-m)'},
     l: {fontSize: 'var(--font-size-l)'},
   };

@@ -2,7 +2,7 @@ import {CSSProperties} from 'react';
 
 export type TypographyProps = {
   children: React.ReactNode;
-  size?: 'm' | 'l';
+  size?: 'm' | 'l' | 's';
   type?: 'heading' | 'body';
   style?: CSSProperties;
   className?: string;
