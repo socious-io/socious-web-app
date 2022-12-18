@@ -20,11 +20,12 @@ export interface Project {
   project_length: string;
   payment_type: string;
   payment_scheme: string;
-  payment_range_lower: string;
-  payment_range_higher: string;
+  payment_range_lower?: string | null;
+  payment_range_higher?: string | null;
   experience_level: number;
   causes_tags: Array<string>;
   skills: Array<string>;
+  job_category_id: string;
   payment_currency?: string;
   remote_preference: string;
   identity_id: string;
@@ -66,6 +67,7 @@ export interface CreateProjectType {
   project_length: string;
   project_type?: string;
   skills: Array<string>;
+  job_category_id: string;
   city?: string;
   status: string;
 }

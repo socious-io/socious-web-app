@@ -1,0 +1,26 @@
+.container {
+  height: 100vh;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  max-width: 14rem !important;
+}
+
+.heading {
+  // TODO: fix the priorities of typography component
+  padding: 3rem 0 0.5rem 0 !important;
+  text-align: center;
+  color: var(--color-primary-01) !important;
+}
+
+.body {
+  // TODO: fix the priorities of typography component
+  color: var(--color-gray-01) !important;
+  text-align: center;
+  margin-bottom: 4rem !important;
+}

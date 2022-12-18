@@ -1,4 +1,3 @@
-import {boolean} from 'joi';
 import React from 'react';
 
 export type HandlersType = {

@@ -39,6 +39,7 @@ import {get} from 'utils/request';
 import {CreateProjectType, Project, ProjectProps} from 'models/project';
 import {AddQuestionType, Question, TQuestionsResponse} from '@models/question';
 import {twMerge} from 'tailwind-merge';
+import {Skill} from '@components/common/Search/Providers/SkillsProvider';
 
 // Library
 const libraries: Libraries = ['places'];
@@ -82,7 +83,7 @@ export const QuestionsCard: FC<{
 };
 
 interface DetailProps extends ProjectProps {
-  rawSkills: string[];
+  rawSkills: Skill[];
 }
 
 const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
@@ -146,7 +147,9 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
       payment_type,
       experience_level,
       payment_currency: payment_currency || '',
+      // @ts-ignore
       payment_range_higher,
+      // @ts-ignore
       payment_range_lower,
       payment_scheme,
       project_length,
@@ -176,6 +179,7 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
       skills: ProjectContext.skills,
       status: s ? s : ProjectContext.status,
       experience_level: ProjectContext.experience_level,
+      job_category_id: ProjectContext.job_category_id,
     };
 
     if (ProjectContext.payment_currency)
@@ -202,6 +206,7 @@ const Detail: FC<DetailProps> = ({project, questions, rawSkills}) => {
     }
 
     try {
+      console.log('postBody: ', postBody);
       const response = await updateProjectById(project.id, postBody);
       mutate(`/projects/${project.id}`, response, {revalidate: false});
       getProject();

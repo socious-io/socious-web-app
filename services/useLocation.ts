@@ -17,7 +17,6 @@ const useLocation = () => {
               id: country.place_id,
               name: country.description,
             }));
-            console.log('LIST COUNTRIES :---: ', listCountries);
             resolve(listCountries);
           })
           .catch((error: any) => {

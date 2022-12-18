@@ -1,27 +1,28 @@
 import {useRouter} from 'next/router';
 import useSWR from 'swr';
-
-// Components
 import {ProjectContextProvider} from '@components/common/Project/created/NewProject/context';
 import DetailContent from '@components/common/Project/created/DetailContent';
 import SideBar from '@components/common/Project/SideBar/SideBar';
 import {GeneralLayout} from 'layout';
 import SplashScreen from 'layout/Splash';
-
-// Services/Utils
 import {get} from 'utils/request';
-import getGlobalData from 'services/cacheSkills';
-
-// Types
-import type {GetStaticPaths, GetStaticProps, NextPage} from 'next';
-import {ProjectProps} from '../../[id]';
-import {Project} from '@models/project';
+import {skillsFetcher} from 'services/cacheSkills';
+import type {NextPage} from 'next';
+import {Project, ProjectProps} from '@models/project';
 import {TQuestionsResponse} from '@models/question';
+import {Skill} from '@components/common/Search/Providers/SkillsProvider';
+import {useEffect, useState} from 'react';
 
-const Overview: NextPage<ProjectProps> = ({skills}) => {
+const Overview: NextPage<ProjectProps> = () => {
   const router = useRouter();
   const {id} = router.query;
   const {data} = useSWR<Project>(`/projects/${id}`, get);
+
+  const [skills, setSkills] = useState<Skill[]>([]);
+
+  useEffect(() => {
+    skillsFetcher().then(setSkills);
+  }, []);
 
   const {data: questions} = useSWR<TQuestionsResponse>(
     data?.id ? `/projects/${data.id}/questions` : null,
@@ -47,12 +48,3 @@ const Overview: NextPage<ProjectProps> = ({skills}) => {
 };
 
 export default Overview;
-
-export const getStaticProps: GetStaticProps = async () => {
-  const skills = await getGlobalData();
-  return {props: {skills}};
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {paths: [], fallback: true};
-};

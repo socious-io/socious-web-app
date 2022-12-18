@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {getMessaging, MessagePayload, onMessage} from 'firebase/messaging';
-import {firebaseCloudMessaging} from '../../../utils/firebase';
+// import {firebaseCloudMessaging} from '../../../utils/firebase';
 import Toast from '../Toast/Toast';
 import {useToggle} from '@hooks';
 import {PushNotificationBody} from '@models/notification';
@@ -40,44 +40,44 @@ function PushNotificationLayout({children}: any) {
   const message = useRef<MessagePayload & {link?: string}>(
     {} as MessagePayload,
   );
-  useEffect(() => {
-    setToken();
+  // useEffect(() => {
+  //   setToken();
 
-    // Event listener that listens for the push notification event in the background
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event?.data) {
-          const link = getNotificationLink(event.data);
-          message.current = {...event.data, link};
-          notifyHandler.on();
-        }
-      });
-    }
+  //   //   // Event listener that listens for the push notification event in the background
+  //   if ('serviceWorker' in navigator) {
+  //     navigator.serviceWorker.addEventListener('message', (event) => {
+  //       if (event?.data) {
+  //         const link = getNotificationLink(event.data);
+  //         message.current = {...event.data, link};
+  //         notifyHandler.on();
+  //       }
+  //     });
+  //   }
 
-    // Calls the getMessage() function if the token is there
-    async function setToken() {
-      try {
-        const token = await firebaseCloudMessaging.init();
-        if (token) {
-          // console.log('set Token======>', token);
-          getMessage();
-          //getBackground();
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  });
+  //   // Calls the getMessage() function if the token is there
+  //   async function setToken() {
+  //     try {
+  //       const token = await firebaseCloudMessaging.init();
+  //       if (token) {
+  //         // console.log('set Token======>', token);
+  //         getMessage();
+  //         //getBackground();
+  //       }
+  //     } catch (error) {
+  //       console.log('setToken: ', error);
+  //     }
+  //   }
+  // }, []);
 
-  function getMessage() {
-    const messaging = getMessaging();
-    onMessage(messaging, (payload: MessagePayload) => {
-      if (payload) {
-        message.current = payload;
-        notifyHandler.on();
-      }
-    });
-  }
+  // function getMessage() {
+  //   const messaging = getMessaging();
+  //   onMessage(messaging, (payload: MessagePayload) => {
+  //     if (payload) {
+  //       // message.current = payload;
+  //       // notifyHandler.on();
+  //     }
+  //   });
+  // }
 
   return (
     <>

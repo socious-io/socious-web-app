@@ -107,7 +107,6 @@ const Post = () => {
       shareHandler.off();
       deleteHandler.off();
       editHandler.off();
-      console.log('TYPE: ', type);
       switch (type) {
         case 'EDIT':
           editHandler.on();
@@ -136,7 +135,6 @@ const Post = () => {
     () => commentFieldRef.current?.focusField(),
     [],
   );
-  console.log('Post :--: ', post);
 
   // Toggle Like
   const toggleLike = useCallback(

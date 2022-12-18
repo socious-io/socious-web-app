@@ -4,11 +4,11 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
+    "module": "commonjs",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -22,7 +22,7 @@
       "@components/*": ["components/*"],
       "@hooks": ["hooks/index.ts"],
       "@models/*": ["models/*"],
-      "@api/*": ["api/*"],
+      "@api/*": ["api/*"]
     }
   },
   "include": ["index.d.ts", "**/*.ts", "**/*.tsx"],

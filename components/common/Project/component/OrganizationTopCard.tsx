@@ -24,11 +24,13 @@ import RecentGallery from '../Apply/Step5/ApplyStep5';
 import {checkAndUploadMedia} from 'services/ImageUpload';
 import {RegisterContextProvider} from '@components/organisms/RegisterModals/RegisterContext';
 import RegisterModal from '@components/organisms/RegisterModals/RegisterModal';
+import LineSmall from 'asset/icons/line-small.svg';
 
 const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
   const {
     title,
     identity_meta,
+    payment_type,
     payment_range_higher,
     payment_range_lower,
     remote_preference,
@@ -148,6 +150,27 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
     }
   };
 
+  type PaymentRange = (
+    low?: string | null,
+    high?: string | null,
+  ) => JSX.Element;
+
+  const paymentRange: PaymentRange = function (low, high) {
+    const isOfTypeVolunteer = payment_type === 'VOLUNTEER';
+    const hasTruthyValue = low && high;
+
+    if (hasTruthyValue && !isOfTypeVolunteer) {
+      return (
+        <div className="flex flex-row">
+          <CurrencyDollarIcon width={20} height={20} className="text-primary" />
+          <p className="pl-2 text-sm text-graySubtitle ">{`$${low}-$${high} / hr`}</p>
+          <img className="ml-2" src={LineSmall} alt="" />
+        </div>
+      );
+    }
+    return <></>;
+  };
+
   return (
     <div className="space-y-6 p-4">
       <div className="flex flex-row items-center justify-between ">
@@ -166,44 +189,34 @@ const OrganizationTopCard: FC<ProjectProps> = ({project, questions}) => {
           <p className="cursor-pointer font-semibold">{title}</p>
         </Link>
       </div>
-      <div className="mt-4 flex space-x-5">
+      <div className="mt-4 flex flex-wrap gap-2">
         {location && (
           <div className="flex flex-row">
             <MapPinIcon width={20} height={20} className="text-primary" />
             <p className="ml-2 text-sm text-graySubtitle">{location}</p>
+            <img className="ml-2" src={LineSmall} alt="" />
           </div>
         )}
         {projectType && (
           <div className="flex flex-row">
             <CalendarDaysIcon width={20} height={20} className="text-primary" />
             <p className="ml-2 text-sm text-graySubtitle">{projectType}</p>
+            <img className="ml-2" src={LineSmall} alt="" />
           </div>
         )}
-        {projectType === 'PAID' &&
-          (payment_range_lower || payment_range_higher) && (
-            <div className="flex flex-row">
-              <CurrencyDollarIcon
-                width={20}
-                height={20}
-                className="text-primary"
-              />
-              <p className="pl-2 text-sm text-graySubtitle ">{`$${
-                payment_range_lower || ''
-              }-$${payment_range_higher || ''}`}</p>
-            </div>
-          )}
-      </div>
-      <div className="mt-4 flex space-x-5">
-        {/* <p className="pl-2 text-sm text-graySubtitle ">{experience_level}</p> */}
+        {paymentRange(payment_range_lower, payment_range_higher)}
         {remote_preference && (
-          <p className="pl-2 text-sm text-graySubtitle ">
-            {getText('en', `PROJECT.${remote_preference}`)}
-          </p>
+          <div className="flex flex-row">
+            <p className="text-sm text-graySubtitle">
+              {getText('en', `PROJECT.${remote_preference}`)}
+            </p>
+            <img className="ml-2" src={LineSmall} alt="" />
+          </div>
         )}
         {project_length && (
           <div className="flex flex-row">
             <ClockIcon width={20} height={20} className="text-primary" />
-            <p className="pl-2 text-sm text-graySubtitle">
+            <p className="ml-2 text-sm text-graySubtitle">
               {getText('en', `PROJECT.${project_length}`)}
             </p>
           </div>

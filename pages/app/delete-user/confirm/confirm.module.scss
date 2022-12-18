@@ -1,0 +1,28 @@
+.container {
+  min-height: 100vh;
+  background: var(--color-white);
+}
+
+.article {
+  margin-top: 2.5rem;
+  padding: 2rem;
+}
+
+.actions {
+  width: 100%;
+  height: 10rem;
+  position: absolute;
+  bottom: 0;
+  padding: 1rem 1rem 0 1rem;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(228, 230, 237, 1);
+}
+
+.continueBtn {
+  margin-bottom: 0.5rem;
+}
+
+.passwordInput {
+  padding: 0 2rem;
+}

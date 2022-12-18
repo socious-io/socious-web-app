@@ -17,12 +17,8 @@ import {countryOptionsWithXW} from 'utils/geo';
 const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
   const {setProjectContext, ProjectContext} = useProjectContext();
 
-  const {
-    setValue,
-    watch,
-    formState: {errors, isValid, isDirty},
-  } = useForm({
-    resolver: joiResolver(schemaCreateProjectStep3),
+  const form = useForm({
+    // resolver: joiResolver(schemaCreateProjectStep3),
     defaultValues: {
       title: ProjectContext.title,
       description: ProjectContext.description,
@@ -38,16 +34,17 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
       project_length: ProjectContext.project_length,
       country: ProjectContext.country,
       experience_level: ProjectContext.experience_level,
+      job_category_id: ProjectContext.job_category_id,
       city: ProjectContext.city,
     },
   });
 
-  const paymentType = watch('payment_type');
-  const paymentScheme = watch('payment_scheme');
-  const countryCode = watch('country');
+  const paymentType = form.watch('payment_type');
+  const paymentScheme = form.watch('payment_scheme');
+  const countryCode = form.watch('country');
 
   const handleChange = (field: any, input: string) => {
-    setValue(field, input, {
+    form.setValue(field, input, {
       shouldValidate: true,
       shouldDirty: true,
     });
@@ -98,7 +95,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
   );
 
   const handleSetCity = (data: any) => {
-    setValue('city', data?.name, {
+    form.setValue('city', data?.name, {
       shouldValidate: true,
       shouldDirty: true,
     });
@@ -119,7 +116,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
       } else {
         countryCode = 'XW';
       }
-      setValue('country', countryCode, {
+      form.setValue('country', countryCode, {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -152,7 +149,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 value={ProjectContext.title}
                 placeholder="Title"
                 onChange={(e) => handleChange('title', e.target.value)}
-                errorMessage={errors?.['title']?.message}
+                errorMessage={form.formState.errors?.['title']?.message}
                 className="my-3"
                 required
               />
@@ -161,7 +158,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 placeholder="Description"
                 value={ProjectContext.description}
                 onChange={(e) => handleChange('description', e.target.value)}
-                errorMessage={errors?.['description']?.message}
+                errorMessage={form.formState.errors?.['description']?.message}
                 className="my-3"
                 required
                 rows={4}
@@ -177,7 +174,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                 onChange={(e) => setCountryValue(e.target.value)}
                 required
                 name="country"
-                errorMessage={errors?.['country']?.message}
+                errorMessage={form.formState.errors?.['country']?.message}
                 items={
                   countryValue.toLowerCase().includes?.('wo')
                     ? [{id: 'XW', name: 'Worldwide'}]
@@ -194,7 +191,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                       ? {id: ProjectContext.city, name: ProjectContext.city}
                       : {id: ProjectContext.city, name: ProjectContext.city}
                   }
-                  errorMessage={errors?.['city']?.message}
+                  errorMessage={form.formState.errors?.['city']?.message}
                   onSelected={(e) => handleSetCity(e)}
                   onChange={(e) => setCitiesValue(e.currentTarget.value)}
                   required
@@ -288,7 +285,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                   type="number"
                   placeholder="Payment Range Lower"
                   value={ProjectContext.payment_range_lower}
-                  errorMessage={errors?.['payment_range_lower']?.message}
+                  errorMessage={
+                    form.formState.errors?.['payment_range_lower']?.message
+                  }
                   className="my-3"
                   onChange={(e) => {
                     if (e.target.value)
@@ -304,7 +303,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                   type="number"
                   placeholder="Payment Range Higher"
                   value={ProjectContext.payment_range_higher}
-                  errorMessage={errors?.['payment_range_higher']?.message}
+                  errorMessage={
+                    form.formState.errors?.['payment_range_higher']?.message
+                  }
                   className="my-3"
                   onChange={(e) => {
                     if (e.target.value)
@@ -320,7 +321,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                   type="number"
                   placeholder="Total commitment Lower"
                   value={ProjectContext.commitment_hours_lower}
-                  errorMessage={errors?.['commitment_hours_lower']?.message}
+                  errorMessage={
+                    form.formState.errors?.['commitment_hours_lower']?.message
+                  }
                   className="my-3"
                   onChange={(e) => {
                     if (e.target.value)
@@ -336,7 +339,9 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
                   type="number"
                   placeholder="Total commitment Higher"
                   value={ProjectContext.commitment_hours_higher}
-                  errorMessage={errors?.['commitment_hours_higher']?.message}
+                  errorMessage={
+                    form.formState.errors?.['commitment_hours_higher']?.message
+                  }
                   className="my-3"
                   onChange={(e) => {
                     if (e.target.value)
@@ -369,15 +374,19 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
         {ProjectContext.isEditModalOpen ? (
           <>
             <Button
-              disabled={!isValid}
+              disabled={!form.formState.isValid}
               type="button"
-              onClick={() => onSubmit('ACTIVE')}
+              onClick={() => {
+                onSubmit('ACTIVE');
+              }}
               className="'flex h-11 w-44 items-center justify-center"
             >
               Save and publish
             </Button>
             <Button
-              disabled={!isDirty || ProjectContext.status !== 'DRAFT'}
+              disabled={
+                !form.formState.isDirty || ProjectContext.status !== 'DRAFT'
+              }
               variant="outline"
               type="button"
               onClick={() => onSubmit('DRAFT')}
@@ -388,7 +397,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
           </>
         ) : (
           <Button
-            disabled={!isValid}
+            disabled={!form.formState.isValid}
             type="button"
             onClick={() => onSubmit()}
             className="flex h-11 w-52 items-center justify-center"

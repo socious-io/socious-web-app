@@ -12,6 +12,7 @@ export const schemaCreateProjectStep1 = Joi.object({
 export const schemaCreateProjectStep2 = Joi.object({
   skills: Joi.array().required().items(Joi.string()).min(1).max(10),
 });
+
 export const schemaCreateProjectStep3 = Joi.object({
   title: Joi.string().trim().required().messages({
     'string.empty': `Title is required for Project.`,
@@ -57,7 +58,6 @@ export const schemaCreateProjectStep3 = Joi.object({
         'number.greater': 'Commitment range is invalid',
       }),
   }),
-
   payment_range_lower: Joi.when('payment_type', {
     is: 'PAID',
     then: Joi.number().positive().integer().required().messages({
@@ -81,6 +81,7 @@ export const schemaCreateProjectStep3 = Joi.object({
       }),
   }),
   experience_level: Joi.number(),
+  job_category_id: Joi.string().required(),
   project_type: Joi.string()
     .required()
     .allow(...Object.values(enums.ProjectType)),

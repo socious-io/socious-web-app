@@ -72,7 +72,6 @@ const MyOffer = ({offer, mutateOffer}: MyOfferProps) => {
         theme: 'colored',
       });
     } catch (err) {
-      console.log('ERROR :---: ', err);
       console.error(err);
     }
   }, [mutateOffer, offer, rejectOfferHandlers]);

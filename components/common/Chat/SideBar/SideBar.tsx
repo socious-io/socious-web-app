@@ -52,7 +52,6 @@ const SideBarToBe = (
   const onScroll = useCallback(() => {
     if (!(chatListRef?.current && seeMore)) return;
     const {scrollTop, scrollHeight, clientHeight} = chatListRef.current;
-    console.log(Math.floor(scrollTop), scrollHeight - clientHeight);
     if (Math.floor(scrollTop) >= scrollHeight - clientHeight - 80) {
       loadMore();
     }

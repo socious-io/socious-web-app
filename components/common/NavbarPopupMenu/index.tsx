@@ -28,6 +28,7 @@ import {getOrganization} from '@api/organizations/actions';
 
 // Types
 import {LoginIdentity} from '@models/identity';
+import {removeAllListeners} from 'process';
 
 const NavbarPopupMenu = () => {
   const {identities, currentIdentity, mutateIdentities, mutateUser} = useUser({
@@ -159,5 +160,9 @@ const NavbarPopupMenu = () => {
     </>
   );
 };
+import {
+  deletePushNotifToken,
+  unsubscribeToPushNotifs,
+} from 'core/pushNotification';
 
 export default NavbarPopupMenu;

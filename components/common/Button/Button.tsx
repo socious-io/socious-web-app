@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {twMerge} from 'tailwind-merge';
 
 /* eslint-disable-next-line */
@@ -8,6 +7,10 @@ export interface ButtonProps
     HTMLButtonElement
   > {
   variant?: 'fill' | 'outline' | 'ghost' | 'link' | 'simple' | 'filter';
+  children?: any;
+  disabled?: boolean;
+  className?: string;
+  value?: string;
   size?: 'lg' | 'md' | 'sm';
   leftIcon?: (width: number, height: number) => JSX.Element;
   rightIcon?: (width: number, height: number) => JSX.Element;
@@ -56,6 +59,7 @@ const getIconSize = (s: ButtonProps['size']) => {
       return 16;
   }
 };
+
 export function Button({
   children = 'Button',
   disabled = false,
