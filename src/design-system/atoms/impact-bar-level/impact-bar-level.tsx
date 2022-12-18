@@ -9,6 +9,7 @@ export const ImpactBarLevel = (props: ImpactBarLevelProps): JSX.Element => {
   const diff = end - start;
   const result = (curr / diff) * 100;
 
+  // TODO: clean up this logic
   const calculateTransformation = (value: number) => {
     const v = value - 100;
 

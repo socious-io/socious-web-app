@@ -1,0 +1,11 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bottom {
+  min-height: 100%;
+  overflow: scroll;
+}
