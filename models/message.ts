@@ -1,5 +1,6 @@
-export type messageBodyType = {
+export type MessageBodyType = {
   text: string;
+  media?: string;
 };
 
 export interface CreateMessageResponseType {
@@ -8,7 +9,7 @@ export interface CreateMessageResponseType {
   deleted_at: string | null;
   id: string;
   identity_id: string;
-  media: null | string | any[];
+  media: null | string;
   replied: boolean;
   reply_id: string | null;
   text: string;
@@ -18,5 +19,5 @@ export interface CreateMessageResponseType {
 export type ReadResponse = {message: 'success'};
 
 export interface MessageType extends CreateMessageResponseType {
-  media_url: string | null | any[];
+  media_url: string | null;
 }

@@ -40,13 +40,13 @@ const ChatLayout = ({children, page}: ChatLayoutProps) => {
   }, [connectionsData]);
 
   return (
-    <div className="h-full w-full sm:flex sm:space-x-4 sm:px-4">
+    <div className="h-full max-h-screen w-full sm:flex sm:space-x-4 sm:px-4">
       <SideBar
         ref={sideBarRefresh}
         page={page}
         toggleAddChat={addHandlers.on}
       />
-      {children(handleRefresh)}
+      <div className="w-full max-w-[40.75rem]">{children(handleRefresh)}</div>
 
       {/* Add Chat Modal */}
       <Modal

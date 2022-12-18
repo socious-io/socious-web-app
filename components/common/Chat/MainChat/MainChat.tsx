@@ -2,7 +2,11 @@ import {readMessage, sendMessage} from '@api/chat/message/actions';
 import Avatar from '@components/common/Avatar/Avatar';
 import CommentField from '@components/common/Post/CommentField/CommentField';
 import {ChevronLeftIcon} from '@heroicons/react/24/outline';
-import {CreateMessageResponseType, MessageType} from '@models/message';
+import {
+  CreateMessageResponseType,
+  MessageBodyType,
+  MessageType,
+} from '@models/message';
 import {useCallback, useEffect, useMemo, useRef} from 'react';
 import Messages from '../Messages/Messages';
 import {useUser} from '@hooks';
@@ -13,6 +17,8 @@ import {isoToHumanTime} from 'services/toHumanTime';
 import Link from 'next/link';
 import useInfiniteSWR from 'hooks/useInfiniteSWR/useInfiniteSWR';
 import {IChat, IParticipantsResponse} from '@models/chat';
+import MessageField from '../MessageField/MessageField';
+import {checkAndUploadMedia} from 'services/ImageUpload';
 
 const INVALID_UUID = 'invalid input syntax for type uuid:';
 
@@ -56,14 +62,18 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
   );
 
   const onSendMessage = useCallback(
-    async (message: string) => {
+    async ({message, file}: {message: string; file: File | null}) => {
       try {
         // SENDING NEW MESSAGE
+        const messageBody: MessageBodyType = {
+          text: message,
+        };
+        const media = await checkAndUploadMedia(file);
+        if (media) messageBody.media = media;
+        console.log('Message :---: ', messageBody);
         const response: CreateMessageResponseType = await sendMessage(
           activeChat.id,
-          {
-            text: message,
-          },
+          messageBody,
         );
         // READING NEW SEND MESSAGE
         await readMessage(activeChat.id, response.id);
@@ -77,7 +87,8 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
           {revalidate: false},
         );
       } catch (error) {
-        console.error(error);
+        console.log(error);
+        throw error;
       }
     },
     [activeChat?.id, mutateInfinite],
@@ -134,7 +145,7 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
   return (
     <>
       {/* ON CHAT SELECTED */}
-      <div className="flex h-screen w-full flex-col border-grayLineBased bg-background sm:mb-10 sm:h-[48rem] sm:rounded-2xl sm:border">
+      <div className="flex  h-screen w-full max-w-[40.75rem] flex-col border-grayLineBased bg-background sm:mb-10 sm:h-[48rem] sm:rounded-2xl sm:border">
         {/* ON CONVERSATION ALREADY STARTED */}
         <div className="border-offsetcolor flex items-center space-x-2 border-b-[1px] px-4 pt-12 pb-2.5 sm:pt-6">
           <span
@@ -177,19 +188,7 @@ const MainChat = ({activeChat, refreshSideBar}: MainChatProps) => {
           activeChat={activeChat}
           otherParticipants={otherParticipants ?? []}
         />
-        <CommentField
-          src={
-            currentIdentity?.type === 'users'
-              ? user?.avatar?.url
-              : user?.image?.url
-          }
-          type={currentIdentity?.type}
-          avatarSize="m"
-          onSend={onSendMessage}
-          placeholder="Write a message"
-          className="border-offsetcolor rounded-none rounded-b-2xl border-0 border-t-[1px]"
-          row={1}
-        />
+        <MessageField onSend={onSendMessage} />
       </div>
     </>
   );

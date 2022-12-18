@@ -1,0 +1,9 @@
+.placeholder:empty {
+  position: relative;
+}
+
+.placeholder:empty:before {
+  position: absolute;
+  content: attr(placeholder);
+  color: #BEC0C7; 
+}
