@@ -17,13 +17,15 @@ const style: Record<ButtonProps['color'], CSSProperties> = {
 };
 
 export function Button(props: ButtonProps): JSX.Element {
+  const {onClick, color, children, className, ...rest} = props;
+
   return (
     <button
-      onClick={props.onClick}
-      style={style[props.color]}
-      className={`${css.button} ${props.className}`}
+      onClick={onClick}
+      style={{...style[color], ...rest}}
+      className={`${css.button} ${className}`}
     >
-      {props.children}
+      {children}
     </button>
   );
 }

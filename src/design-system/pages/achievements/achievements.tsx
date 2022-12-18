@@ -1,11 +1,7 @@
-import {useEffect} from 'react';
-import {getBadges} from './achievements.service';
+import {TwoThird} from '../../../../src/design-system/templates/two-third/two-third';
 import {AchievementsProps} from './achievements.types';
+import {Header} from './header/header';
 
 export const Achievements = (props: AchievementsProps): JSX.Element => {
-  useEffect(() => {
-    getBadges().then(console.log);
-  });
-
-  return <div>Achievements Page</div>;
+  return <TwoThird top={<Header point={35} />} bottom={'bottom'} />;
 };
