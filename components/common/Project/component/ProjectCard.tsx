@@ -1,10 +1,7 @@
 import {Avatar, Chip} from '@components/common';
 import {Project} from 'models/project';
 import Link from 'next/link';
-import {
-  ChevronRightIcon,
-  CurrencyDollarIcon,
-} from '@heroicons/react/24/outline';
+import {ChevronRightIcon} from '@heroicons/react/24/outline';
 import {getText} from '@socious/data';
 import {FC} from 'react';
 import {isoToHumanTime} from 'services/toHumanTime';
@@ -93,7 +90,7 @@ export default function ProjectCard({
         <div className="">
           <p className="font-semibold">{project.title}</p>
         </div>
-        <div className="mt-4 flex flex-row space-x-2 divide-x divide-solid divide-graySubtitle">
+        <div className="mt-4 flex flex-row flex-wrap space-x-2 divide-x divide-solid divide-graySubtitle">
           {project.project_type && (
             <p className="text-sm text-graySubtitle ">
               {getText('en', `PROJECT.${project.project_type}`)}

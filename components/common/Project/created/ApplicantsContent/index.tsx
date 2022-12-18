@@ -85,6 +85,8 @@ function MyApplicationBoxes({
       if (weekly_limit) offerBody.weekly_limit = weekly_limit;
     }
 
+    if (payment_type === 'VOLUNTEER')  offerBody.assignment_total = 1;
+
     offerApplicant(applicant.id, offerBody)
       .then((response: any) => {
         confirmOfferHandlers.off();

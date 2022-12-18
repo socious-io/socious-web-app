@@ -1,20 +1,12 @@
 import React, {useMemo} from 'react';
 import {useRouter} from 'next/router';
 import Link from 'next/link';
-
-//libraries
 import dayjs from 'dayjs';
 import useSWR from 'swr';
-
-//components
 import {GeneralLayout} from 'layout';
 import {Avatar, Button} from '@components/common';
 import ProjectItem from '@components/common/UserProfile/RightPane/ProjectItem';
-
-// Utils/Services
 import {get} from 'utils/request';
-
-//types
 import type {NextPage} from 'next';
 import {Project} from '@models/project';
 import {IOrganizationType} from 'models/organization';
