@@ -184,9 +184,7 @@ const GeneralLayout: FC<PropsWithChildren<TLayoutType>> = ({
                             src={imgSrc}
                             className="fill-warning"
                             alt="socious logo"
-                            layout="fill" // required
-                            width={32}
-                            height={32}
+                            layout="fill"
                           />
                         </a>
                       </Link>
