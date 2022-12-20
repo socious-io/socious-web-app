@@ -13,4 +13,6 @@ const Template: ComponentStory<typeof ImpactCategoryItem> = (args) => (
 
 export const Primary = Template.bind({});
 
-Primary.args = {};
+Primary.args = {
+  category: 'HEALTH',
+};

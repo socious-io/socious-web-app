@@ -1,5 +1,4 @@
 import css from './job-history-item.module.scss';
-// import {JobHistoryItem} from './job-history-item/job-history-item';
 import {JobHistoryItem as JobHistoryItemNormal} from './job-history-item/job-history-item';
 import {JobHistoryItemProps} from './job-history-item.types';
 

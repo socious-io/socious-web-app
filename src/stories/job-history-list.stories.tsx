@@ -1,9 +1,17 @@
-import css from './body.module.scss';
-import {Tab} from '../../../../../src/design-system/atoms/tabs/tabs.types';
-import {Tabs} from '../../../../../src/design-system/atoms/tabs/tabs';
-import {BodyProps} from './body.types';
-import {ImpactCategoryList} from '../../../../../src/design-system/organisms/impact-category-list/impact-category-list';
-import {JobHistoryList} from '../../../../../src/design-system/organisms/job-history-list/job-history-list';
+import React from 'react';
+import {ComponentMeta, ComponentStory} from '@storybook/react';
+import {JobHistoryList} from '../../src/design-system/organisms/job-history-list/job-history-list';
+
+export default {
+  title: 'MOLECULES/JobHistoryItem',
+  component: JobHistoryList,
+} as ComponentMeta<typeof JobHistoryList>;
+
+const Template: ComponentStory<typeof JobHistoryList> = (args) => (
+  <JobHistoryList {...args} />
+);
+
+export const Primary = Template.bind({});
 
 const list = [
   {
@@ -57,19 +65,7 @@ const list = [
     dataEnd: 'Mar 10',
   },
 ];
-const tabs: Tab[] = [
-  {
-    name: 'Achievements',
-    content: <ImpactCategoryList paddingTop="2rem" data={[]} />,
-    default: true,
-  },
-  {
-    name: 'History',
-    content: <JobHistoryList paddingTop="2rem" data={list} />,
-    default: true,
-  },
-];
 
-export const Body = (props: BodyProps): JSX.Element => {
-  return <Tabs tabs={tabs} />;
+Primary.args = {
+  data: list,
 };

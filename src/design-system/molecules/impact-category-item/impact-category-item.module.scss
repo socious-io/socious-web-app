@@ -1,11 +1,11 @@
 .container {
   width: 6.875rem;
-  border: 4px solid blue;
   display: flex;
   justify-content: center;
   align-items: center;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .impactBarContainer {
@@ -15,10 +15,10 @@
 
 .label {
   height: 40px;
+  font-weight: 600;
   text-align: center;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  border: 1px solid #000;
 }

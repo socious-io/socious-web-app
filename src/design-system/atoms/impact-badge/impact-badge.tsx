@@ -1,16 +1,22 @@
-import {CSSProperties} from 'react';
+import {LIST} from './impact-badge.constant';
 import css from './impact-badge.module.scss';
 import {ImpactBadgeProps} from './impact-badge.types';
-import icon from '/asset/icons/impact-category-list/10 Reduce Inequalities.svg';
 
-export const ImpactBadge = (props: ImpactBadgeProps): JSX.Element => {
-  const styles: CSSProperties = {
-    backgroundColor: props.color,
-  };
+export const ImpactBadge = ({name}: ImpactBadgeProps): JSX.Element => {
+  console.log('name: ', name);
+
+  const color = LIST[name].color;
 
   return (
-    <div role="button" style={styles} className={css.container}>
-      <img alt="impact icon" src={icon} />
+    <div
+      role="button"
+      style={{backgroundColor: color}}
+      className={css.container}
+    >
+      <img
+        alt="impact icon"
+        src={require(`/public/static/impact-category-list/${name}.svg`)}
+      />
     </div>
   );
 };

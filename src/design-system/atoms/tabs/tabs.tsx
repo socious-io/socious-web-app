@@ -33,7 +33,7 @@ export const Tabs = ({tabs}: TabsProps): JSX.Element => {
           </li>
         ))}
       </ul>
-      <div>{tab.content}</div>
+      <div className={css.tabContent}>{tab.content}</div>
     </>
   );
 };
