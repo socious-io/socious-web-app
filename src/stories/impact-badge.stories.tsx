@@ -14,6 +14,5 @@ const Template: ComponentStory<typeof ImpactBadge> = (args) => (
 export const Primary = Template.bind({});
 
 Primary.args = {
-  iconUrl: '',
-  color: '#DD1367',
+  name: 'HEALTH',
 };
