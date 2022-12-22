@@ -8,9 +8,9 @@ export const LevelItem = ({level}: LevelsProps): JSX.Element => {
   return (
     <div className={css.container}>
       <LevelBadge level={level} size="s" />
-      <div className={css.impactBarContainer}>
+      {/* <div className={css.impactBarContainer}>
         <ImpactBar start={0} end={100} current={50} />
-      </div>
+      </div> */}
       <Typography className={css.label} type="body" size="s">
         Level {level}
       </Typography>

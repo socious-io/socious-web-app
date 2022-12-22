@@ -5,6 +5,14 @@
 const path = require('path');
 //const withPlugins = require("next-compose-plugins");
 const withImages = require('next-images');
+const withReactSvg = require('next-react-svg');
+
+module.exports = withReactSvg({
+  include: path.resolve(__dirname, 'asset/icons/'),
+  webpack(config, options) {
+    return config;
+  },
+});
 
 module.exports = withImages({
   eslint: { ignoreDuringBuilds: true },

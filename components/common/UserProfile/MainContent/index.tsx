@@ -28,6 +28,7 @@ import {useUser} from '@hooks';
 // interfaces
 import {IdentityType, OtherIdentityMeta} from '@models/identity';
 import {IProjectsResponse} from '@models/project';
+
 interface Props {
   data: any;
   status: IdentityType;
@@ -71,10 +72,14 @@ const MainContent: React.FC<Props> = ({
         'invalid input syntax for type uuid',
       ))
   )
-    return <p>invalid user identitiy</p>;
+    return <p>invalid user identity</p>;
 
   const handleProjectsFooterClick = () => {
     router.push(`/app/organization/${data.shortname}/projects`);
+  };
+
+  const navigateToImpactPoints = () => {
+    router.push(`/app/impact-points`);
   };
 
   return (
@@ -102,6 +107,14 @@ const MainContent: React.FC<Props> = ({
           followings={data?.followings}
           followers={data?.followers}
         />
+
+        <div
+          onClick={navigateToImpactPoints}
+          className="align-center m-3 flex h-16 items-center justify-end	 rounded-lg bg-slate-100 p-3"
+        >
+          <div className="text-[primary]">achievements</div>
+          <img src={require('/asset/icons/IconRight.svg')} alt="" />
+        </div>
 
         {/* if user/organization is current user/organization show 'You' */}
         {user?.id === data?.id && (

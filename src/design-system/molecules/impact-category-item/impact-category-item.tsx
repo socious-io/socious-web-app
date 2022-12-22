@@ -11,9 +11,9 @@ export const ImpactCategoryItem = ({
   return (
     <div className={css.container}>
       <ImpactBadge name={category} />
-      <div className={css.impactBarContainer}>
+      {/* <div className={css.impactBarContainer}>
         <ImpactBar start={0} end={100} current={50} />
-      </div>
+      </div> */}
       <Typography className={css.label} type="body" size="s">
         {LIST[category].name}
       </Typography>

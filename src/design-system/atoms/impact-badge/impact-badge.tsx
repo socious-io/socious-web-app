@@ -3,8 +3,6 @@ import css from './impact-badge.module.scss';
 import {ImpactBadgeProps} from './impact-badge.types';
 
 export const ImpactBadge = ({name}: ImpactBadgeProps): JSX.Element => {
-  console.log('name: ', name);
-
   const color = LIST[name].color;
 
   return (
@@ -13,10 +11,10 @@ export const ImpactBadge = ({name}: ImpactBadgeProps): JSX.Element => {
       style={{backgroundColor: color}}
       className={css.container}
     >
-      <img
+      {/* <img
         alt="impact icon"
-        src={require(`/public/static/impact-category-list/${name}.svg`)}
-      />
+        src={require(`../../../../asset/icons/impact-category-list/${name}.svg`)}
+      /> */}
     </div>
   );
 };
