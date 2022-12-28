@@ -74,7 +74,6 @@ const OrganizationProjects: NextPage = () => {
                 <ProjectItem
                   title={project.title}
                   applicants={project.applicants}
-                  hired={3}
                   date={dayjs(project?.updated_at)?.format('MMM D')}
                   border
                   first={index === 0}

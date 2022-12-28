@@ -1,5 +1,5 @@
 import {Project} from './project';
-import {TA, TApplicant} from './applicant';
+import {TApplicant} from './applicant';
 import {LoginIdentity} from './identity';
 
 export type TOfferStatus =

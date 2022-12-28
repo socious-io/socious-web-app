@@ -61,6 +61,7 @@ const Hire = () => {
 
   if (!offer) return <></>;
   if (!user) return <></>;
+  if (!mission) return <></>;
 
   return (
     <GeneralLayout>
