@@ -9,16 +9,37 @@ interface ProjectsCardProps {
   projectDetail: Project;
 }
 
-const HiredLink = ({id}: {id: string}) => {
-  const {data: missions} = useSWR<any>(
-    `/projects/${id}/offers?status=APPROVED,HIRED`,
-    get,
+const ApplicantLink = ({id}: {id: string}) => {
+  const {data: response} = useSWR<any>(`/projects/${id}/applicants`, get);
+  return (
+    <Link href={`/app/projects/created/${id}/applicants`} passHref>
+      <li className="flex items-center space-x-4">
+        <FolderIcon className="h-4" />
+        <p>Applicants ({response?.total_count ?? 0})</p>
+      </li>
+    </Link>
   );
+};
+
+const HiredLink = ({id}: {id: string}) => {
+  const {data: response} = useSWR<any>(`/projects/${id}/missions`, get);
   return (
     <Link href={`/app/projects/created/${id}/hired`} passHref>
       <li className="flex items-center space-x-4">
         <FolderIcon className="h-4" />
-        <p>Hired ({missions?.total_count ?? 0})</p>
+        <p>Hired ({response?.total_count ?? 0})</p>
+      </li>
+    </Link>
+  );
+};
+
+const OfferedLink = ({id}: {id: string}) => {
+  const {data: response} = useSWR<any>(`/projects/${id}/offers`, get);
+  return (
+    <Link href={`/app/projects/created/${id}/offered`} passHref>
+      <li className="flex items-center space-x-4">
+        <FolderIcon className="h-4" />
+        <p>Offered ({response?.total_count ?? 0})</p>
       </li>
     </Link>
   );
@@ -27,18 +48,6 @@ const HiredLink = ({id}: {id: string}) => {
 const ProjectCard: FC<ProjectsCardProps> = (props) => {
   const {projectDetail} = props;
   const {currentIdentity} = useUser();
-
-  const applicantLink = (
-    <Link
-      href={`/app/projects/created/${projectDetail.id}/applicants`}
-      passHref
-    >
-      <li className="flex items-center space-x-4">
-        <FolderIcon className="h-4" />
-        <p>Applicants ({projectDetail.applicants})</p>
-      </li>
-    </Link>
-  );
 
   const showIfBelongToOrganization = (
     link: JSX.Element,
@@ -64,7 +73,8 @@ const ProjectCard: FC<ProjectsCardProps> = (props) => {
               <p>Overview</p>
             </li>
           </Link>
-          {showIfBelongToOrganization(applicantLink)}
+          {showIfBelongToOrganization(<ApplicantLink id={projectDetail.id} />)}
+          {showIfBelongToOrganization(<OfferedLink id={projectDetail.id} />)}
           {showIfBelongToOrganization(<HiredLink id={projectDetail.id} />)}
         </>
       </ul>

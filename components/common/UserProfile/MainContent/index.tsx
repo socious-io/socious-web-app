@@ -101,6 +101,7 @@ const MainContent: React.FC<Props> = ({
           bio={data?.bio}
           followings={data?.followings}
           followers={data?.followers}
+          impact_points={data?.impact_points}
         />
 
         {/* if user/organization is current user/organization show 'You' */}

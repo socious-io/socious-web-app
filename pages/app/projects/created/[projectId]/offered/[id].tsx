@@ -1,9 +1,8 @@
-import HiredContent from '@components/common/Project/created/hiredContent';
+import OfferedContent from '@components/common/Project/created/offeredContent';
 import SideBar from '@components/common/Project/SideBar/SideBar';
 import {useUser} from '@hooks';
 import {TApplicant} from '@models/applicant';
 import {IOffer, IOfferWithProject} from '@models/offer';
-import {IMission} from '@models/mission';
 import {TUserByUsername} from '@models/profile';
 import {Project} from '@models/project';
 import {identity} from 'cypress/types/lodash';
@@ -12,31 +11,17 @@ import {useRouter} from 'next/router';
 import {GridLoader} from 'react-spinners';
 import useSWR from 'swr';
 import {get} from 'utils/request';
+import {hire, cancel} from '@api/offers/actions';
 
-const Hire = () => {
+const Offer = () => {
   const router = useRouter();
-  const {projectId, id} = router.query;
-  const {data: mission, error: missionError} = useSWR<IMission>(
-    id ? `/missions/${id}` : null,
-    get,
-  );
-
+  const {id} = router.query;
   const {data: offer, error: offerError} = useSWR<IOffer>(
-    `/offers/${mission?.offer_id}`,
+    id ? `/offers/${id}` : null,
     get,
   );
 
-  const {data: user, error: userError} = useSWR<TUserByUsername>(
-    offer ? `/user/${offer.recipient_id}/profile` : null,
-    get,
-  );
-
-  const {data: project} = useSWR<Project>(
-    projectId ? `/projects/${projectId}` : null,
-    get,
-  );
-
-  if (!mission && !offer && !offerError && !user && !offerError)
+  if (!offer && !offerError)
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center">
         <GridLoader color="#36d7b7" />
@@ -45,10 +30,8 @@ const Hire = () => {
 
   // 404 || 500 || Invalid Post, redirect to home
   if (
-    (offerError?.response?.status &&
-      [400, 404, 500].includes(offerError.response?.status)) ||
-    (userError?.response?.status &&
-      [400, 404, 500].includes(userError.response?.status))
+    offerError?.response?.status &&
+    [400, 404, 500].includes(offerError.response?.status)
   ) {
     router.push('/app/projects/created');
     return (
@@ -60,15 +43,14 @@ const Hire = () => {
   }
 
   if (!offer) return <></>;
-  if (!user) return <></>;
 
   return (
     <GeneralLayout>
       {/*  hasDetailNavbar detailNavbarTitle={offer.username} */}
-      <SideBar selectBar={'HIRE'} data={project} />
-      <HiredContent offer={offer} user={user} mission={mission} />
+      <SideBar selectBar={'OFFER'} data={offer.project} />
+      <OfferedContent offer={offer} />
     </GeneralLayout>
   );
 };
 
-export default Hire;
+export default Offer;

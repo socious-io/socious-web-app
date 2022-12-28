@@ -35,9 +35,7 @@ const ProjectItem: React.FC<Props> = ({
       <div className="flex items-center ">
         <UserCircles number={applicants + hired} />
         <p className="text-sm">
-          {applicants === 0
-            ? 'No applicants'
-            : `${applicants} applicants, ${hired} hired`}
+          {applicants === 0 ? 'No applicants' : `${applicants} applicants`}
         </p>
       </div>
       <label className="text-sm text-graySubtitle">{date}</label>

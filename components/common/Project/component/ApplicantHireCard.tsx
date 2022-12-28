@@ -52,14 +52,14 @@ function ApplicantHiredCard({
       </div>
 
       <div className="mt-4 flex justify-between space-x-2">
-        {status !== 'REJECTED' && (
+        {status === 'PENDING' && (
           <Button
             className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
             type="submit"
             size="lg"
             variant="outline"
             value="Submit"
-            onClick={() => status === 'PENDING' && showOfferForm()}
+            onClick={showOfferForm}
           >
             <div className="relative mx-2 h-5 w-5 ">
               <Image
@@ -69,7 +69,7 @@ function ApplicantHiredCard({
                 layout="fill" // required
               />
             </div>
-            {status === 'PENDING' ? 'Hire' : 'End hire'}
+            Offer
           </Button>
         )}
         {status === 'PENDING' && (
@@ -91,9 +91,10 @@ function ApplicantHiredCard({
                 />
               </a>
             </div>
-            reject
+            Reject
           </Button>
         )}
+
         <Button
           className="m-auto mt-4  flex w-full max-w-xs items-center justify-center align-middle "
           type="submit"

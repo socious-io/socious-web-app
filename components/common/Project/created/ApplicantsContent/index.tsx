@@ -85,7 +85,7 @@ function MyApplicationBoxes({
       if (weekly_limit) offerBody.weekly_limit = weekly_limit;
     }
 
-    if (payment_type === 'VOLUNTEER')  offerBody.assignment_total = 1;
+    if (payment_type === 'VOLUNTEER') offerBody.assignment_total = 1;
 
     offerApplicant(applicant.id, offerBody)
       .then((response: any) => {
@@ -135,7 +135,6 @@ function MyApplicationBoxes({
         />
       </div>
       <ApplicationInfo applicant={applicant} />
-
       {/* Offer */}
       <FormProvider {...offerApplicantFormData}>
         <HireApplicantModal

@@ -60,7 +60,6 @@ const ProjectsByStatus: FC<ProjectByStatusProps> = ({
                 title={item.title}
                 border
                 applicants={item.applicants}
-                hired={item.engagements || 0}
                 date={dayjs(item?.updated_at)?.format('MMM D')}
               />
             </a>
