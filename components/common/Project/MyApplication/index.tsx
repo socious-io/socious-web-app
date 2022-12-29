@@ -43,7 +43,7 @@ function MyApplicationBoxes() {
           )}
         />
         <StatusListingSkeleton<IOffer>
-          url={'/user/offers?status=PENDING'}
+          url={'/user/offers?status=PENDING,APPROVED'}
           title={'Awaiting review'}
           className="border-0"
           renderList={(flattenData) => (

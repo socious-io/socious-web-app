@@ -1,4 +1,6 @@
 import {Project} from './project';
+import {TApplicant} from './applicant';
+import {LoginIdentity} from './identity';
 
 export type TOfferStatus =
   | 'PENDING'
@@ -13,7 +15,11 @@ export interface IOffer {
   project_id: string;
   recipient_id: string;
   offerer_id: string;
+  offerer: LoginIdentity;
+  recipient: LoginIdentity;
+  project: Project;
   applicant_id: string | null;
+  applicant: TApplicant | null;
   assignment_total: string | null;
   offer_rate: string | null;
   offer_message: string;

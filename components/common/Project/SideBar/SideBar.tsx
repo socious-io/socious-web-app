@@ -3,11 +3,12 @@ import {Project} from '@models/project';
 import useUser from 'hooks/useUser/useUser';
 import router from 'next/router';
 import ApplicantsContent from './ApplicantsContent';
+import OffersContent from './OffersContent';
 import HiredContent from './HireContent';
 import ProjectCard from './ProjectCard';
 
 interface Props {
-  selectBar?: 'APPLICANT' | 'HIRE';
+  selectBar?: 'APPLICANT' | 'HIRE' | 'OFFER';
   data?: Project;
   projectId?: string;
 }
@@ -34,6 +35,7 @@ const SideBar = ({selectBar, data}: Props) => {
           <ProjectCard projectDetail={data} />
         </div>
         {selectBar == 'APPLICANT' && <ApplicantsContent projectId={data.id} />}
+        {selectBar == 'OFFER' && <OffersContent projectId={data.id} />}
         {selectBar == 'HIRE' && <HiredContent projectId={data.id} />}
       </div>
     </div>

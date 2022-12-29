@@ -41,7 +41,7 @@ const ConfirmApplicantActionModal = ({
         <div className="space-y-2 pb-4 pt-10">
           <Button
             className={twMerge(
-              'mx-auto flex w-full items-center justify-center align-middle',
+              'bg-danger mx-auto flex w-full items-center justify-center align-middle',
               continueText === 'Reject' && 'bg-error hover:bg-red-500',
             )}
             type="submit"

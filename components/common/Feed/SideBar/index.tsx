@@ -71,6 +71,7 @@ const SideBar = ({selectBar = 'DEFAULT'}: Props) => {
                   ? user?.username
                   : user?.shortname
               }
+              impact_points={user?.impact_points}
               isUser={isUser}
             />
             {selectBar != 'PROJECT_DETAIL' && (

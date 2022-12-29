@@ -11,6 +11,7 @@ interface Props {
   bio: string;
   followings: number;
   followers: number;
+  impact_points: number;
 }
 const ProfileInfo: React.FC<Props> = ({
   first_name,
@@ -18,6 +19,7 @@ const ProfileInfo: React.FC<Props> = ({
   bio,
   followings,
   followers,
+  impact_points,
 }) => {
   return (
     <div className="px-4">
@@ -25,8 +27,9 @@ const ProfileInfo: React.FC<Props> = ({
         {first_name} {last_name}
       </h1>
       <div className="font-base mt-1 mb-4 flex gap-x-4">
-        <p className="text-grayInputField">{followings} Conections</p>
+        <p className="text-grayInputField">{followings} Connections</p>
         <p className="text-grayInputField">{followers} Followers</p>
+        <p className="text-grayInputField">{impact_points} Impact points</p>
       </div>
       <p className="whitespace-pre-line break-all text-left text-sm text-black">
         {bio}

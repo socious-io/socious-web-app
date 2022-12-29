@@ -1,4 +1,4 @@
-import {TApplicant, TOfferApplicant} from '@models/applicant';
+import {TOfferApplicant} from '@models/applicant';
 import {post} from 'utils/request';
 
 export function offerApplicant(
@@ -12,8 +12,12 @@ export function rejectApplicant(applicantId: string) {
   return post(`/applicants/${applicantId}/reject`, {});
 }
 
-export function approveOffer(applicantId: string) {
-  return post(`/offers/${applicantId}/approve`, {});
+export function approveOffer(offerId: string) {
+  return post(`/offers/${offerId}/approve`, {});
+}
+
+export function hire(offerId: string) {
+  return post(`/offers/${offerId}/hire`, {});
 }
 
 export function withdrawApplication(applicantId: string) {

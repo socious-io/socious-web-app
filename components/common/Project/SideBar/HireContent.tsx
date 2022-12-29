@@ -5,11 +5,9 @@ import {IOffer} from '@models/offer';
 import {TUserByUsername, UserProfile} from '@models/profile';
 import dayjs from 'dayjs';
 import Link from 'next/link';
-import Offer from 'pages/app/offer';
 import useSWR from 'swr';
 import {twMerge} from 'tailwind-merge';
 import {get} from 'utils/request';
-import ApplicationByStatus from '../../../organisms/projects/ApplicantsByStatus';
 
 type HireContentProps = {
   projectId: string;
@@ -25,10 +23,10 @@ function HiredContent({projectId, type}: HireContentProps) {
           type === 'FULL' && 'my-0 w-full',
         )}
       >
-        <StatusListingSkeleton<IOffer>
+        <StatusListingSkeleton<IMission>
           url={
             projectId
-              ? `/projects/${projectId}/offers?status=APPROVED,HIRED`
+              ? `/projects/${projectId}/missions?filter.status=ACTIVE,COMPLETE`
               : null
           }
           title={'Hired'}
@@ -36,8 +34,19 @@ function HiredContent({projectId, type}: HireContentProps) {
           className="border-0"
           renderList={(flattenData) => (
             <>
-              {flattenData.map((offer) => (
-                <OfferInfoCard offer={offer} key={offer.id} />
+              {flattenData.map((mission) => (
+                <OfferInfoCard
+                  offer={
+                    {
+                      id: mission.offer_id,
+                      project_id: mission.project_id,
+                      recipient_id: mission.assignee_id,
+                      created_at: mission.created_at,
+                    } as IOffer
+                  }
+                  key={mission.id}
+                  missionId={mission.id}
+                />
               ))}
             </>
           )}
@@ -46,7 +55,7 @@ function HiredContent({projectId, type}: HireContentProps) {
         <StatusListingSkeleton<IMission>
           url={
             projectId
-              ? `/projects/${projectId}/missions?status=COMPLETE,CANCELED,KICKED_OUT`
+              ? `/projects/${projectId}/missions?filter.status=CONFIRMED,CANCELED,KICKED_OUT`
               : null
           }
           title={'End-Hired'}
@@ -63,6 +72,7 @@ function HiredContent({projectId, type}: HireContentProps) {
                       created_at: mission.created_at,
                     } as IOffer
                   }
+                  missionId={mission.id}
                   key={mission.id}
                 />
               ))}
@@ -76,7 +86,12 @@ function HiredContent({projectId, type}: HireContentProps) {
 
 export default HiredContent;
 
-export const OfferInfoCard = ({offer}: {offer: IOffer}) => {
+type OfferInfoCardProps = {
+  offer: IOffer;
+  missionId: string;
+};
+
+export const OfferInfoCard = ({offer, missionId}: OfferInfoCardProps) => {
   const {data: user, error} = useSWR<TUserByUsername>(
     `/user/${offer.recipient_id}/profile`,
     get,
@@ -88,7 +103,7 @@ export const OfferInfoCard = ({offer}: {offer: IOffer}) => {
 
   return (
     <Link
-      href={`/app/projects/created/${offer.project_id}/hired/${offer.id}`}
+      href={`/app/projects/created/${offer.project_id}/hired/${missionId}`}
       passHref
     >
       <a>
