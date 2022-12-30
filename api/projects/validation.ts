@@ -81,6 +81,7 @@ export const schemaCreateProjectStep3 = Joi.object({
       }),
   }),
   experience_level: Joi.number(),
+  job_category_id: Joi.string().required(),
   project_type: Joi.string()
     .required()
     .allow(...Object.values(enums.ProjectType)),

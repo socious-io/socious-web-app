@@ -43,7 +43,6 @@ export const UserResults: FC<UserResultsProps> = ({items, onPreviewItem}) => {
                   <p className="text-graySubtitle">{formattedLocation(user)}</p>
                 </div>
               </div>
-              {/* <EllipsisHorizontalIcon className="w-5" /> */}
             </div>
             {user.bio && (
               <div className="flex flex-row">
@@ -58,17 +57,6 @@ export const UserResults: FC<UserResultsProps> = ({items, onPreviewItem}) => {
                 <ChevronRightIcon className="w-6 text-primary" />
               </span>
             </div>
-            {/* RATE & VOLUNTEER */}
-            {/* <div className="flex justify-between text-sm">
-              <div className="flex">
-                <CurrencyDollarIcon className="mr-1 w-5 text-primary" />
-                $45-65 / hr
-              </div>
-              <div className="flex text-primary">
-                <HeartIcon className="mr-1 w-5" />
-                Open to volunteer
-              </div>
-            </div> */}
           </div>
         </div>
       ))}

@@ -4,7 +4,6 @@ import React from 'react';
 interface Props {
   title: string;
   applicants: number;
-  hired: number;
   date: string;
   border?: boolean;
   first?: boolean;
@@ -14,7 +13,6 @@ interface Props {
 const ProjectItem: React.FC<Props> = ({
   title,
   applicants,
-  hired,
   date,
   border = false,
   first = false,
@@ -33,11 +31,9 @@ const ProjectItem: React.FC<Props> = ({
         {title}
       </h2>
       <div className="flex items-center ">
-        <UserCircles number={applicants + hired} />
+        <UserCircles number={applicants} />
         <p className="text-sm">
-          {applicants === 0
-            ? 'No applicants'
-            : `${applicants} applicants, ${hired} hired`}
+          {applicants === 0 ? 'No applicants' : `${applicants} applicants`}
         </p>
       </div>
       <label className="text-sm text-graySubtitle">{date}</label>

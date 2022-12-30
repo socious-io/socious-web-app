@@ -1,11 +1,11 @@
 import {
-  messageBodyType,
+  MessageBodyType,
   CreateMessageResponseType,
   ReadResponse,
 } from '@models/message';
 import {post} from 'utils/request';
 
-export function sendMessage(chatId: string, messageBody: messageBodyType) {
+export function sendMessage(chatId: string, messageBody: MessageBodyType) {
   return post<CreateMessageResponseType>(
     `/chats/${chatId}/messages`,
     messageBody,

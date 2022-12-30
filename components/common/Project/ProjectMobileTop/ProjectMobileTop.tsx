@@ -29,6 +29,11 @@ const ProjectMobileTop = ({
       url: `/app/projects/created/${projectId}/applicants`,
     },
     {
+      id: 'OFFERS',
+      value: 'Offers',
+      url: `/app/projects/created/${projectId}/offers`,
+    },
+    {
       id: 'HIRED',
       value: 'Hired',
       url: `/app/projects/created/${projectId}/hired`,

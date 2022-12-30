@@ -11,6 +11,7 @@ export interface ProfileCardProps {
   avatar?: string;
   following?: number;
   followers?: number;
+  impact_points?: number;
   isUser?: boolean;
 }
 
@@ -22,6 +23,7 @@ export function ProfileCard({
   avatar,
   following,
   followers,
+  impact_points,
   isUser,
 }: ProfileCardProps) {
   const defaultCard = useMemo(() => type === 'DEFAULT', [type]);
@@ -65,6 +67,13 @@ export function ProfileCard({
           </div>
           <div>
             <p className="text-grayInputField">{followers ?? 0} Followers</p>
+          </div>
+        </div>
+        <div className="flex flex-row space-x-2">
+          <div>
+            <p className="text-grayInputField">
+              Impact Points {impact_points ?? 0}
+            </p>
           </div>
         </div>
       </div>

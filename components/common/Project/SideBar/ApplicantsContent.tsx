@@ -22,7 +22,7 @@ function ApplicantsContent({projectId, type}: ApplicantsContentProps) {
         />
         <ApplicationByStatus
           projectId={projectId}
-          status={'OFFERED'}
+          status={['OFFERED', 'APPROVED']}
           title={`Saved`}
           rounded={false}
         />

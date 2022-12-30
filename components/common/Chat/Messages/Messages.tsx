@@ -1,6 +1,6 @@
 import {MessageType} from '@models/message';
 import {useUser} from '@hooks';
-import {useCallback, useEffect, useMemo, useRef} from 'react';
+import {useCallback, useMemo, useRef} from 'react';
 import {isoToHumanTime} from 'services/toHumanTime';
 import Bubble from '../Bubble/Bubble';
 import Avatar from '@components/common/Avatar/Avatar';
@@ -86,6 +86,8 @@ const Messages = ({
                           (x: any) => x.identity_id === message.identity_id,
                         )
                   }
+                  mediaId={message.media}
+                  mediaUrl={message.media_url}
                 />
                 {/* OLDEST MESSAGE */}
                 {oldestMessage === message && (

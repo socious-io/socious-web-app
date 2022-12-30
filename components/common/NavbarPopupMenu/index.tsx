@@ -50,6 +50,7 @@ const NavbarPopupMenu = () => {
     } catch (error) {
       console.error(error);
     }
+    Router.push('/app');
   };
 
   const onLogout = async () => {

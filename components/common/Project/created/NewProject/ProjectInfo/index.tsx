@@ -34,6 +34,7 @@ const ProjectInfo: FC<TOnSubmit> = ({onSubmit}) => {
       project_length: ProjectContext.project_length,
       country: ProjectContext.country,
       experience_level: ProjectContext.experience_level,
+      job_category_id: ProjectContext.job_category_id,
       city: ProjectContext.city,
     },
   });

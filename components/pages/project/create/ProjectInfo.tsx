@@ -4,6 +4,7 @@ import Title from '@components/molecules/Title';
 import InputFiled from '@components/common/InputFiled/InputFiled';
 import TextArea from '@components/common/TextArea/TextArea';
 import {Combobox} from '@components/common';
+import {get} from 'utils/request';
 import {
   currencyOptions,
   experienceLevelOptions,
@@ -17,7 +18,12 @@ import {FormLayout} from '@components/common/Project/created/NewProject/Layout';
 import {Button} from '@components/common';
 import {LocationFormFragment} from '@components/organisms/data/location-form-fragment';
 
-const ProjectInfo: FC<{onSubmit: () => void}> = ({onSubmit}) => {
+interface ProjectInfoType {
+  onSubmit: () => void;
+  jobCategories: any[];
+}
+
+const ProjectInfo: FC<ProjectInfoType> = ({onSubmit, jobCategories}) => {
   const {
     setValue,
     watch,
@@ -262,6 +268,22 @@ const ProjectInfo: FC<{onSubmit: () => void}> = ({onSubmit}) => {
                 selected={experienceLevelOptions?.find(
                   (x) => x?.id === current.experience_level,
                 )}
+              />
+            </div>
+            <div className="p-4">
+              <h1 className="pt-4 text-xl font-semibold text-neutral-300">
+                Job Category
+              </h1>
+              <Combobox
+                required
+                label="Job Category"
+                name="job_category_id"
+                items={jobCategories.map((j: any) => {
+                  return {value: j.id, name: j.name};
+                })}
+                placeholder="Job category"
+                className="mt-6"
+                onSelected={(e) => handleChange('job_category_id', e.value)}
               />
             </div>
           </div>

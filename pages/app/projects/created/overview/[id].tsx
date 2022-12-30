@@ -1,19 +1,13 @@
 import {useRouter} from 'next/router';
 import useSWR from 'swr';
-
-// Components
 import {ProjectContextProvider} from '@components/common/Project/created/NewProject/context';
 import DetailContent from '@components/common/Project/created/DetailContent';
 import SideBar from '@components/common/Project/SideBar/SideBar';
 import {GeneralLayout} from 'layout';
 import SplashScreen from 'layout/Splash';
-
-// Services/Utils
 import {get} from 'utils/request';
-import getGlobalData, {skillsFetcher} from 'services/cacheSkills';
-
-// Types
-import type {GetStaticPaths, GetStaticProps, NextPage} from 'next';
+import {skillsFetcher} from 'services/cacheSkills';
+import type {NextPage} from 'next';
 import {Project, ProjectProps} from '@models/project';
 import {TQuestionsResponse} from '@models/question';
 import {Skill} from '@components/common/Search/Providers/SkillsProvider';
@@ -54,12 +48,3 @@ const Overview: NextPage<ProjectProps> = () => {
 };
 
 export default Overview;
-
-export const getStaticProps: GetStaticProps = async () => {
-  const skills = await getGlobalData();
-  return {props: {skills}};
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {paths: [], fallback: true};
-};
