@@ -23,7 +23,7 @@ const Detail: NextPage = () => {
   const {data} = useSWR<Project>(`/projects/${id}`, get);
 
   if (!data) {
-    return <>..</>;
+    return <></>;
   }
 
   return (
