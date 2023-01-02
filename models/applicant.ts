@@ -1,3 +1,4 @@
+import {type} from 'os';
 import {IdentityMeta} from './identity';
 import {Project} from './project';
 
@@ -19,6 +20,12 @@ export type TApplicantStatus =
 export type TApplicantIdentity = IdentityMeta & {
   country: string;
   city: string;
+};
+
+export type TAttachment = {
+  id: string;
+  filename: string;
+  url: string;
 };
 
 export type TApplicant = {
@@ -43,7 +50,7 @@ export type TApplicant = {
   cv_link: string | null;
   cv_name: string | null;
   share_contact_info: string | null;
-  attachment: string | null;
+  attachment: TAttachment | null;
   user: TApplicantIdentity;
   project: Project;
   organization: {
