@@ -19,7 +19,7 @@ import ProjectInfoWithWrapper from '@components/organisms/applications/ProjectIn
 import {get} from 'utils/request';
 import {useUser} from '@hooks';
 import {getText} from '@socious/data';
-import {completeAssignment, stopAssignment} from '@api/mission/actions';
+import {completeAssignment, cancelAssignment} from '@api/mission/actions';
 
 // Types
 import {IMission} from '@models/mission';
@@ -67,7 +67,7 @@ const MyMission = ({mission, mutateMission}: MyMissionProps) => {
 
   const onAssignmentStopped = useCallback(async () => {
     try {
-      await stopAssignment(mission.id);
+      await cancelAssignment(mission.id);
       setAssignmentEndState(null);
       mutateMission();
       toast.success('Assignment stopped information send to organization.');
