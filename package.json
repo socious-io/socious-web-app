@@ -27,7 +27,7 @@
     "fs-extra": "^11.1.0",
     "iso-country-currency": "^0.6.0",
     "joi": "^17.6.2",
-    "luxon": "^3.0.4",
+    "luxon": "^3.2.1",
     "markdown-to-jsx": "^7.1.7",
     "next": "^12.3.1",
     "next-images": "^1.8.4",
