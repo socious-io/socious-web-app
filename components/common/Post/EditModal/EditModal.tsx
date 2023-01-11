@@ -140,6 +140,7 @@ const EditModal = ({
               type={post.identity_type}
               showAction={false}
               shared={post.shared_post.shared}
+              reported={post.reported}
             />
           )}
         </Modal.Description>
