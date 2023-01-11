@@ -107,7 +107,6 @@ const MainContent = () => {
           </div>
         </Modal.Description>
       </Modal>
-
       {/* Add Post Modal */}
       <Modal
         isOpen={addPostState}

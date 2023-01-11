@@ -25,6 +25,7 @@ export interface PostCardProps {
   optionClicked?: (data: string) => void;
   username?: string;
   type?: IdentityType;
+  reported: boolean;
 }
 
 export function PostCard({
@@ -39,6 +40,7 @@ export function PostCard({
   media,
   shared,
   showAction = true,
+  reported = false,
   toggleLike,
   focusCommentField,
   optionClicked,
@@ -51,7 +53,14 @@ export function PostCard({
         src={src}
         onOptionClicked={optionClicked}
       />
-      <PostContent content={content} passion={passion} media={media} noBorder />
+      <PostContent
+        id={id}
+        content={content}
+        passion={passion}
+        media={media}
+        reported={reported}
+        noBorder
+      />
       {showAction && toggleLike && (
         <PostAction
           liked={liked}

@@ -122,6 +122,7 @@ export const ShareModalStep2 = ({onShare}: shareModalStep2Props) => {
                 liked={post.liked}
                 likes={post.likes}
                 showAction={false}
+                reported={post.reported}
                 sharedPost={{
                   ...post.shared_post,
                   identity_meta: post.shared_from_identity.meta,
@@ -142,6 +143,7 @@ export const ShareModalStep2 = ({onShare}: shareModalStep2Props) => {
                 likes={post.likes}
                 showAction={false}
                 shared={post.shared}
+                reported={post.reported}
               />
             </div>
           )}

@@ -29,3 +29,17 @@ export function editPost(postBody: EditPostBodyType, postId: string) {
 export function deletePost(postId: string) {
   return post(`/posts/remove/${postId}`);
 }
+
+export function reportPost(postId: string) {
+  return post(`/posts/${postId}/report`, {
+    comment: 'WebappV1 empty comment',
+    blocked: false,
+  });
+}
+
+export function blockPost(postId: string) {
+  return post(`/posts/${postId}/report`, {
+    comment: 'WebappV1 empty comment',
+    blocked: true,
+  });
+}

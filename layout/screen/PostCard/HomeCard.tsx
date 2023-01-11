@@ -17,6 +17,7 @@ export function HomeCard({
   src,
   type,
   username,
+  reported,
 }: PostCardProps) {
   return (
     <div className="space-y-5 border-b border-neutralGray py-4">
@@ -29,7 +30,13 @@ export function HomeCard({
         src={src}
       />
       {/* Image container */}
-      <PostContent content={content} passion={passion} media={media} />
+      <PostContent
+        id={id}
+        content={content}
+        passion={passion}
+        media={media}
+        reported={reported}
+      />
       {toggleLike && (
         <PostAction
           liked={liked}
