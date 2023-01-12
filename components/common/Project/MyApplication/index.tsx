@@ -56,7 +56,7 @@ function MyApplicationBoxes() {
         />
         {/* TODO: Rejected offers */}
         <StatusListingSkeleton<IOffer>
-          url={'/user/offers?status=WITHDRAWN'}
+          url={'/user/applicants?status=REJECTED'}
           title={'Declined'}
           className="rounded-b-2xl border-0"
           renderList={(flattenData) => (
