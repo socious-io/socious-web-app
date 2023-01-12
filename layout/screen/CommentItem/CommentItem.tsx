@@ -140,13 +140,13 @@ export function CommentItem({
                     className={actionClass}
                     onClick={async () => await block()}
                   >
-                    Block post
+                    Block comment
                   </li>
                   <li
                     className={reportClass}
                     onClick={async () => await report()}
                   >
-                    Report post
+                    Report comment
                   </li>
                 </ul>
               </div>
