@@ -5,7 +5,6 @@
 import React, {useState} from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-
 // components
 import Button from '@components/common/Button/Button';
 import Avatar from '@components/common/Avatar/Avatar';
@@ -13,7 +12,7 @@ import {Modal} from '@components/common';
 
 // Icon
 import MessageIcon from 'asset/icons/message.svg';
-
+import {reportUser, blockUser} from '@api/user/actions';
 // actions
 import {followUser, unfollowUser} from '@api/network/action';
 
@@ -44,6 +43,7 @@ interface Props {
   profile_mutate: KeyedMutator<any>;
   loggedIn: boolean;
   editProfile?: () => void;
+  reported: boolean;
 }
 
 const Header: React.FC<Props> = ({
@@ -58,11 +58,33 @@ const Header: React.FC<Props> = ({
   profile_mutate,
   loggedIn,
   editProfile,
+  reported,
 }) => {
   const [disabled, setDisabled] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [reportedBut, setReportedBut] = useState<boolean>(reported);
 
   const {currentIdentity} = useUser();
+
+  const report = async () => {
+    if (reported) {
+      return;
+    }
+    try {
+      await reportUser(id);
+    } catch (err) {
+      console.log(err);
+    }
+    setReportedBut(true);
+  };
+  const block = async () => {
+    try {
+      await blockUser(id);
+    } catch (err) {
+      console.log(err);
+    }
+    window.location.reload();
+  };
 
   // backgground image not exist svg
   const bg_icon = require('../../../../asset/icons/bg-image.svg');
@@ -132,6 +154,24 @@ const Header: React.FC<Props> = ({
               </div>
             </Link>
           )}
+        {loggedIn && !own_user && (
+          <div>
+            <Button
+              onClick={async () => await report()}
+              disabled={reportedBut}
+              variant={'outline'}
+            >
+              Report
+            </Button>
+            <Button
+              onClick={async () => await block()}
+              variant={'outline'}
+              className="hover:bg-error hover:text-offWhite"
+            >
+              Block
+            </Button>
+          </div>
+        )}
 
         {/* show connect or following button */}
         {loggedIn && !own_user && following ? (

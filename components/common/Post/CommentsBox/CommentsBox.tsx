@@ -103,6 +103,7 @@ const CommentsBox = forwardRef<InsertNewComment, CommentsBoxProps>(
               liked={comment?.liked}
               likes={comment?.likes}
               time={comment?.created_at}
+              reported={comment?.reported}
               onLikeToggle={onCommentLikeToggle}
             />
           )),

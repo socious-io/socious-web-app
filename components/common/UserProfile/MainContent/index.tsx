@@ -94,6 +94,7 @@ const MainContent: React.FC<Props> = ({
           loggedIn={user ? true : false}
           own_user={user?.id === data?.id}
           editProfile={editProfile}
+          reported={data?.reported}
         />
         <ProfileInfo
           first_name={data?.first_name}
