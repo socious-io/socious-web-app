@@ -41,6 +41,7 @@ const Posts = ({infinitePosts, toggleLike}: PostsProps) => {
                 : post.identity_meta.shortname
             }
             toggleLike={toggleLike}
+            reported={post.reported}
           />
         ) : (
           <HomeCard
@@ -66,6 +67,7 @@ const Posts = ({infinitePosts, toggleLike}: PostsProps) => {
             }
             media={post.media}
             toggleLike={toggleLike}
+            reported={post.reported}
           />
         ),
       )}

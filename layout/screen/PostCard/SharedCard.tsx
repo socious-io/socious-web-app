@@ -43,7 +43,14 @@ export function SharedCard({
         src={src}
         onOptionClicked={optionClicked}
       />
-      <PostContent content={content} passion={passion} media={media} noBorder />
+      <PostContent
+        id={id}
+        content={content}
+        passion={passion}
+        media={media}
+        noBorder
+        reported={sharedPost.reported}
+      />
       <PostCard
         id={sharedPost?.id}
         content={sharedPost?.content}
@@ -53,6 +60,7 @@ export function SharedCard({
         src={
           sharedPost.identity_meta.avatar ?? sharedPost?.identity_meta?.image
         }
+        reported={sharedPost.reported}
         likes={sharedPost?.likes}
         liked={sharedPost?.liked}
         shared={sharedPost?.shared}

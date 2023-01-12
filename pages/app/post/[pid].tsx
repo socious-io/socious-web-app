@@ -210,6 +210,7 @@ const Post = () => {
             toggleLike={toggleLike}
             focusCommentField={focusCommentField}
             showAction={user != null}
+            reported={post.reported}
           />
         ) : (
           <PostCard
@@ -231,6 +232,7 @@ const Post = () => {
             toggleLike={toggleLike}
             focusCommentField={focusCommentField}
             showAction={user != null}
+            reported={post.reported}
           />
         )}
         {user ? (

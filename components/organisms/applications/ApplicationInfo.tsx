@@ -5,7 +5,11 @@ import React from 'react';
 import {useFormattedLocation} from 'services/formatLocation';
 import useSWR from 'swr';
 import {twMerge} from 'tailwind-merge';
+import {useRouter} from 'next/router';
 import {get} from 'utils/request';
+import Button from '@components/common/Button/Button';
+import Image from 'next/image';
+import cvIcon from 'asset/icons/feeds.svg';
 
 const ApplicationInfo = ({
   className,
@@ -25,6 +29,11 @@ const ApplicationInfo = ({
     applicant.project_id ? `/projects/${applicant.project_id}/questions` : null,
     get,
   );
+
+  const openInNewTab = (url: string | null) => {
+    if (!url) return;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <div
@@ -56,6 +65,30 @@ const ApplicationInfo = ({
             )}
           </p>
         </div>
+        {(applicant.attachment?.id || applicant.cv_link) && (
+          <div>
+            <p className="border-b py-4 font-semibold text-black">Resume</p>
+            <Button
+              variant="link"
+              className="font-semibold text-primary"
+              onClick={() =>
+                openInNewTab(applicant.attachment?.url || applicant.cv_link)
+              }
+            >
+              <div className="relative h-5 w-5 ">
+                <a>
+                  <Image
+                    src={cvIcon}
+                    className="fill-warning"
+                    alt="cv icon"
+                    layout="fill" // required
+                  />
+                </a>
+              </div>
+              {applicant.attachment?.filename || 'resume'}
+            </Button>
+          </div>
+        )}
 
         {applicant.answers && !!questions?.questions?.length && (
           <ApplicationAnswers

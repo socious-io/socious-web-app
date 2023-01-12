@@ -120,6 +120,7 @@ const Offer = () => {
           time="1 hour ago"
           passion="Child Health"
           content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh aliquet nullam odio maecenas semper. Dui felis suspendisse nunc, in vel enim nunc adipiscing donec. Pellentesque a magna venenatis ut ut semper dictum sit sem. Suspendisse lacus, pulvinar elit ipsum fermentum. Ipsum, orci, faucibus nibh et commodo et, dignissim erat. Adipiscing fusce et fames aliquam condimentum. "
+          reported={false}
         />
 
         {/* <CommentItem name="User" time="1 min ago" /> */}

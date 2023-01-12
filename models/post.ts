@@ -32,6 +32,7 @@ export type EditPostBodyType = LoosePostBodyType;
 export type ISharedPost = {
   id: string;
   content: string;
+  reported: boolean;
   identity_id: string;
   created_at: string;
   updated_at: string;

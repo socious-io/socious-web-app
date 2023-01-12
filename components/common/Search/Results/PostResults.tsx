@@ -42,6 +42,7 @@ export const PostResults: FC<PostResultsProps> = ({items}) => {
                 : post.identity_meta.shortname
             }
             toggleLike={toggleLike}
+            reported={post.reported}
           />
         ) : (
           <HomeCard
@@ -67,6 +68,7 @@ export const PostResults: FC<PostResultsProps> = ({items}) => {
             }
             media={post.media}
             toggleLike={toggleLike}
+            reported={post.reported}
           />
         ),
       )}
