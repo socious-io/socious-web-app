@@ -61,7 +61,6 @@ const ProfilePage: NextPage = () => {
         <GridLoader color="#36d7b7" />
       </div>
     );
-
   return (
     <GeneralLayout>
       <div className="flex w-full flex-col justify-center md:flex-row  md:px-8  lg:px-0 ">

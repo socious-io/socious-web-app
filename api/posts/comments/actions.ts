@@ -12,3 +12,17 @@ export function onLikedComment(postId: string, commentId: string) {
 export function onUnlikedComment(postId: string, commentId: string) {
   return post(`/posts/${postId}/comments/${commentId}/unlike`);
 }
+
+export function reportComment(commentId: string) {
+  return post(`/posts/comments/${commentId}/report`, {
+    comment: 'WebappV1 empty comment',
+    blocked: false,
+  });
+}
+
+export function blockComment(commentId: string) {
+  return post(`/posts/comments/${commentId}/report`, {
+    comment: 'WebappV1 empty comment',
+    blocked: true,
+  });
+}

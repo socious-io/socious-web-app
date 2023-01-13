@@ -18,4 +18,5 @@ export interface IComment {
   liked: boolean;
   identity_meta: MetaWithAddress;
   identity_type: IdentityType;
+  reported: boolean;
 }
