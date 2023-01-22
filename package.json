@@ -46,6 +46,7 @@
     "react-toastify": "^9.1.1",
     "react-tooltip": "^4.4.2",
     "sharp": "^0.31.1",
+    "ssi-auth-lib": "^0.0.3",
     "swr": "^1.3.0",
     "tailwind-merge": "^1.6.0",
     "tailwind-scrollbar-hide": "^1.1.7",

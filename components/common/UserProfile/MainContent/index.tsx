@@ -95,6 +95,7 @@ const MainContent: React.FC<Props> = ({
           own_user={user?.id === data?.id}
           editProfile={editProfile}
           reported={data?.reported}
+          impactPoints={data.impact_points}
         />
         <ProfileInfo
           first_name={data?.first_name}
