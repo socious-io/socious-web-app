@@ -5,6 +5,7 @@
 import React, {useState} from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import {WebLinker} from 'ssi-auth-lib';
 // components
 import Button from '@components/common/Button/Button';
 import Avatar from '@components/common/Avatar/Avatar';
@@ -19,6 +20,7 @@ import {followUser, unfollowUser} from '@api/network/action';
 // interfaces
 import {KeyedMutator} from 'swr';
 import {useUser} from '@hooks';
+
 interface Props {
   cover_image: null | {
     created_at: string;
@@ -44,6 +46,7 @@ interface Props {
   loggedIn: boolean;
   editProfile?: () => void;
   reported: boolean;
+  impactPoints: number;
 }
 
 const Header: React.FC<Props> = ({
@@ -59,6 +62,7 @@ const Header: React.FC<Props> = ({
   loggedIn,
   editProfile,
   reported,
+  impactPoints,
 }) => {
   const [disabled, setDisabled] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -114,6 +118,30 @@ const Header: React.FC<Props> = ({
 
   const handleToggleModal = () => {
     setShowModal(!showModal);
+  };
+
+  const showQR = () => {
+    const el = document.getElementById('app-web-link') as HTMLDivElement;
+    WebLinker.start(
+      el,
+      {
+        serviceDid: '8DXffTYfukQsk3NZZP3ypS',
+        interactionId: '1',
+        instanceId: '6374a508515f5a539afd400c',
+      },
+      [
+        {
+          credentialId: '8DXffTYfukQsk3NZZP3ypS:3:CL:266:tag',
+          attributes: [
+            {name: 'Socious User ID', value: id},
+            {
+              name: 'Credential Issue Date',
+              value: `${new Date().getTime()}`,
+            },
+          ],
+        },
+      ],
+    );
   };
 
   return (
@@ -194,6 +222,11 @@ const Header: React.FC<Props> = ({
             Edit profile
           </Button>
         )}
+
+        {loggedIn && own_user && impactPoints > 0 && (
+          <Button onClick={showQR}>Claim Impact Points</Button>
+        )}
+        <div id="app-web-link"></div>
       </div>
 
       {/* show modal before unfollow */}
